@@ -19,5 +19,6 @@ class TMColors {
       900: const Color(0xFFF0F0F0),
     },
   );
-  static const Color primary = const Color(0xFF8AFD2E);
+  static const Color accent = const Color(0xFF4caf50);
+  static const Color primary = const Color(0xFF4caf50);
 }
