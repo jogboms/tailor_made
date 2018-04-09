@@ -1,6 +1,6 @@
-# tailor_made
+# TailorMade
 
-A new Flutter project.
+A Flutter experiment.
 
 ## Getting Started
 
