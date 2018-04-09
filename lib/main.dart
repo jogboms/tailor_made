@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/ui/tm_colors.dart';
-import 'package:tailor_made/ui/tm_fonts.dart';
+import 'package:tailor_made/utils/tm_colors.dart';
+import 'package:tailor_made/utils/tm_fonts.dart';
 import 'package:tailor_made/pages/homepage.dart';
 
 void main() => runApp(new MyApp());
