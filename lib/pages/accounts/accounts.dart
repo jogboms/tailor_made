@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/ui/back_button.dart';
+import 'package:tailor_made/ui/app_bar.dart';
 
 class AccountsPage extends StatefulWidget {
   @override
@@ -11,18 +11,9 @@ class _AccountsPageState extends State<AccountsPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        // elevation: 0.0,
-        leading: backButton(context),
-        title: new Text(
-          "Account",
-          style: new TextStyle(
-            color: Colors.grey.shade800,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 0.95,
-          ),
-        ),
-        // centerTitle: true,
+      appBar: appBar(
+        context,
+        title: "Account",
       ),
       body: new Column(
         mainAxisAlignment: MainAxisAlignment.start,

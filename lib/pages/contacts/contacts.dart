@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/contacts/ui/contacts_item.dart';
-import 'package:tailor_made/ui/back_button.dart';
+import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
+import 'package:tailor_made/pages/contacts/contacts_create.dart';
 
 class ContactsPage extends StatefulWidget {
   @override
@@ -59,17 +60,9 @@ class _ContactsPageState extends State<ContactsPage> {
     }
 
     AppBar buildAppBar() {
-      return AppBar(
-        leading: backButton(context),
-        title: new Text(
-          "Clients",
-          style: new TextStyle(
-            color: Colors.grey.shade800,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 0.95,
-          ),
-        ),
-        // centerTitle: true,
+      return appBar(
+        context,
+        title: "Clients",
         actions: <Widget>[
           new IconButton(
             icon: new Icon(
@@ -86,18 +79,11 @@ class _ContactsPageState extends State<ContactsPage> {
       // backgroundColor: Colors.white,
       backgroundColor: Colors.grey.shade100,
       appBar: _isSearching ? buildSearchBar() : buildAppBar(),
-      // body: new Column(
-      //   mainAxisAlignment: MainAxisAlignment.start,
-      //   children: <Widget>[],
-      // ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 10.0),
-        // padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        // padding: EdgeInsets.all(0.0),
-        // padding: EdgeInsets.all(15.0),
+        padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
         child: GridView.count(
           primary: false,
-          padding: EdgeInsets.all(2.0),
+          padding: EdgeInsets.fromLTRB(2.0, 2.0, 2.0, 80.0),
           // childAspectRatio: 0.75,
           childAspectRatio: 0.925,
           crossAxisSpacing: 8.0,
@@ -105,6 +91,17 @@ class _ContactsPageState extends State<ContactsPage> {
           crossAxisCount: 2,
           children: contactList.map((ContactModel contact) => ContactsItem(contact: contact)).toList(),
         ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: new FloatingActionButton(
+        child: new Icon(Icons.add),
+        notchMargin: 200.0,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => ContactsCreatePage()),
+          );
+        },
       ),
     );
   }
