@@ -7,6 +7,20 @@ BorderSide borderSide = new BorderSide(
   width: 1.0,
 );
 
+Widget gridTile({IconData icon, Color color, String title, String subTitle, VoidCallback onPressed}) {
+  return FlatButton(
+    padding: EdgeInsets.only(left: 20.0),
+    splashColor: color.withOpacity(.25),
+    child: new Row(
+      children: <Widget>[
+        circleIcon(icon: icon, color: color),
+        textTile(title: title, subTitle: subTitle),
+      ],
+    ),
+    onPressed: onPressed,
+  );
+}
+
 Widget circleIcon({IconData icon, Color color: TMColors.accent}) {
   return new Align(
     child: new Padding(
@@ -19,7 +33,7 @@ Widget circleIcon({IconData icon, Color color: TMColors.accent}) {
           color: Colors.white,
         ),
       ),
-      // padding: EdgeInsets.only(left: 10.0, right: 10.0),
+      // padding: EdgeInsets.only(left: 2.5, right: 10.0),
       padding: EdgeInsets.only(right: 10.0),
     ),
     alignment: Alignment.center,
@@ -33,11 +47,11 @@ Widget textTile({String title, String subTitle}) {
     children: <Widget>[
       new Text(
         title,
-        style: new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+        style: new TextStyle(fontSize: 18.0),
       ),
       new Text(
         subTitle,
-        style: new TextStyle(fontSize: 14.0, fontWeight: FontWeight.w300),
+        style: new TextStyle(fontSize: 12.0, fontWeight: FontWeight.w300),
       ),
     ],
   );

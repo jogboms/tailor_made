@@ -5,52 +5,44 @@ import 'package:tailor_made/pages/contacts/contacts.dart';
 class TopRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    void onTapProjects() {}
+    void onTapContacts() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => ContactsPage()),
+      );
+    }
+
     return new Container(
+      height: 120.0,
       decoration: new BoxDecoration(
-        border: new Border(
-          bottom: borderSide,
-        ),
+        border: new Border(bottom: borderSide),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Expanded(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (BuildContext context) => ContactsPage()),
-                );
-              },
-              child: Container(
-                margin: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                padding: EdgeInsets.fromLTRB(20.0, 35.0, 25.0, 35.0),
-                child: Row(
-                  children: <Widget>[
-                    circleIcon(icon: Icons.supervisor_account, color: Colors.orangeAccent),
-                    textTile(title: "Clients", subTitle: "21 Contacts"),
-                  ],
-                ),
+            child: Container(
+              decoration: new BoxDecoration(
+                border: new Border(right: borderSide),
               ),
-            ),
-          ),
-          Container(
-            width: 5.0,
-            decoration: new BoxDecoration(
-              color: Colors.red,
-              border: new Border(
-                right: borderSide,
+              child: gridTile(
+                icon: Icons.supervisor_account,
+                color: Colors.orangeAccent,
+                title: "Clients",
+                subTitle: "21 Contacts",
+                onPressed: onTapContacts,
               ),
             ),
           ),
           Expanded(
             child: Container(
-              padding: EdgeInsets.fromLTRB(20.0, 35.0, 25.0, 35.0),
-              child: Row(
-                children: <Widget>[
-                  circleIcon(icon: Icons.usb),
-                  textTile(title: "Projects", subTitle: "6 Pending"),
-                ],
+              child: gridTile(
+                icon: Icons.usb,
+                color: Colors.greenAccent.shade400,
+                title: "Projects",
+                subTitle: "6 Pending",
+                onPressed: onTapProjects,
               ),
             ),
           ),
