@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/contacts/contact.model.dart';
-import 'package:tailor_made/pages/contacts/contacts_item.dart';
+import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/pages/contacts/ui/contacts_item.dart';
 import 'package:tailor_made/ui/back_button.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
 

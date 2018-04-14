@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/homepage/helpers.dart';
-import 'package:tailor_made/pages/contacts.dart';
-import 'package:tailor_made/utils/tm_colors.dart';
+import 'package:tailor_made/pages/homepage/ui/helpers.dart';
+import 'package:tailor_made/pages/contacts/contacts.dart';
 
 class TopRowWidget extends StatelessWidget {
   @override
@@ -38,7 +37,7 @@ class TopRowWidget extends StatelessWidget {
           Container(
             width: 5.0,
             decoration: new BoxDecoration(
-            color: Colors.red,
+              color: Colors.red,
               border: new Border(
                 right: borderSide,
               ),

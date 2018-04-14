@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/homepage/helpers.dart';
+import 'package:tailor_made/pages/homepage/ui/helpers.dart';
 
 class BottomRowWidget extends StatelessWidget {
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/contacts/contact.model.dart';
+import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 
 class Contact extends StatefulWidget {
   final ContactModel contact;

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/homepage/bottom_row.dart';
-import 'package:tailor_made/pages/homepage/header.dart';
-import 'package:tailor_made/pages/homepage/stats.dart';
-import 'package:tailor_made/pages/homepage/top_row.dart';
-import 'package:tailor_made/pages/accounts.dart';
+import 'package:tailor_made/pages/homepage/ui/bottom_row.dart';
+import 'package:tailor_made/pages/homepage/ui/header.dart';
+import 'package:tailor_made/pages/homepage/ui/stats.dart';
+import 'package:tailor_made/pages/homepage/ui/top_row.dart';
+import 'package:tailor_made/pages/accounts/accounts.dart';
 
 class HomePage extends StatefulWidget {
   @override
