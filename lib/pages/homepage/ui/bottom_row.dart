@@ -1,11 +1,96 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';
+import 'package:tailor_made/pages/payments/payments.dart';
+import 'package:tailor_made/pages/contacts/contacts_create.dart';
+import 'package:tailor_made/pages/projects/projects_create.dart';
+import 'package:tailor_made/pages/payments/payments_create.dart';
+
+enum CreateOptions {
+  clients,
+  projects,
+  payments,
+}
 
 class BottomRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    void onTapCreate() {}
-    void onTapPayments() {}
+    Future onTapCreate() async {
+      CreateOptions result = await showDialog<CreateOptions>(
+        context: context,
+        builder: (BuildContext context) {
+          return new SimpleDialog(
+            title: const Text('Select action', style: const TextStyle(fontSize: 14.0)),
+            children: <Widget>[
+              new SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, CreateOptions.clients);
+                },
+                child: listTile(
+                  color: Colors.orangeAccent,
+                  icon: Icons.supervisor_account,
+                  title: "Clients",
+                ),
+              ),
+              new SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, CreateOptions.projects);
+                },
+                child: listTile(
+                  color: Colors.greenAccent.shade400,
+                  icon: Icons.attach_money,
+                  title: "Projects",
+                ),
+              ),
+              new SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, CreateOptions.payments);
+                },
+                child: listTile(
+                  color: Colors.redAccent,
+                  icon: Icons.usb,
+                  title: "Payments",
+                ),
+              ),
+            ],
+          );
+        },
+      );
+      switch (result) {
+        case CreateOptions.clients:
+          {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (BuildContext context) => ContactsCreatePage()),
+            );
+            break;
+          }
+        case CreateOptions.projects:
+          {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (BuildContext context) => ProjectsCreatePage()),
+            );
+            break;
+          }
+        case CreateOptions.payments:
+          {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (BuildContext context) => PaymentsCreatePage()),
+            );
+            break;
+          }
+      }
+    }
+
+    void onTapPayments() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => PaymentsPage()),
+      );
+    }
 
     return new Container(
       height: 120.0,

@@ -7,6 +7,15 @@ BorderSide borderSide = new BorderSide(
   width: 1.0,
 );
 
+Widget listTile({IconData icon, Color color, String title}) {
+  return new Row(
+    children: <Widget>[
+      circleIcon(icon: icon, color: color, small: true),
+      textTile(title: title, small: true),
+    ],
+  );
+}
+
 Widget gridTile({IconData icon, Color color, String title, String subTitle, VoidCallback onPressed}) {
   return FlatButton(
     padding: EdgeInsets.only(left: 20.0),
@@ -21,38 +30,40 @@ Widget gridTile({IconData icon, Color color, String title, String subTitle, Void
   );
 }
 
-Widget circleIcon({IconData icon, Color color: TMColors.accent}) {
+Widget circleIcon({IconData icon, Color color: TMColors.accent, bool small: false}) {
   return new Align(
     child: new Padding(
       child: new CircleAvatar(
         backgroundColor: color,
-        radius: 20.0,
+        radius: small == true ? 14.0 : 20.0,
         child: new Icon(
           icon,
-          size: 20.0,
+          size: small == true ? 14.0 : 20.0,
           color: Colors.white,
         ),
       ),
       // padding: EdgeInsets.only(left: 2.5, right: 10.0),
-      padding: EdgeInsets.only(right: 10.0),
+      padding: new EdgeInsets.only(right: (small == true ? 8.0 : 10.0)),
     ),
     alignment: Alignment.center,
   );
 }
 
-Widget textTile({String title, String subTitle}) {
+Widget textTile({String title, String subTitle, bool small: false}) {
   return new Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
       new Text(
         title,
-        style: new TextStyle(fontSize: 18.0),
+        style: new TextStyle(fontSize: small == true ? 14.0 : 18.0),
       ),
-      new Text(
-        subTitle,
-        style: new TextStyle(fontSize: 12.0, fontWeight: FontWeight.w300),
-      ),
+      subTitle != null
+          ? new Text(
+              subTitle,
+              style: new TextStyle(fontSize: 12.0, fontWeight: FontWeight.w300),
+            )
+          : new Container(),
     ],
   );
 }
