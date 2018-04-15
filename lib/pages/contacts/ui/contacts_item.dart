@@ -3,6 +3,7 @@ import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 
 class ContactsItem extends StatefulWidget {
   final ContactModel contact;
@@ -16,6 +17,8 @@ class ContactsItem extends StatefulWidget {
 class _ContactsItemState extends State<ContactsItem> {
   @override
   Widget build(BuildContext context) {
+    final TMTheme theme = TMTheme.of(context);
+
     void onTapCard() {
       TMNavigate.ios(context, Contact(contact: widget.contact));
     }
@@ -36,7 +39,7 @@ class _ContactsItemState extends State<ContactsItem> {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 13.0, horizontal: 8.0),
         child: InkResponse(
-          child: new Icon(icon, size: 18.0, color: Colors.grey.shade700),
+          child: new Icon(icon, size: 18.0, color: theme.textColor),
           onTap: onTap,
           radius: 20.0,
           splashColor: TMColors.primary.withOpacity(.25),
@@ -46,7 +49,7 @@ class _ContactsItemState extends State<ContactsItem> {
 
     return Material(
       elevation: 1.5,
-      color: Colors.white,
+      color: theme.scaffoldColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -61,7 +64,7 @@ class _ContactsItemState extends State<ContactsItem> {
                   new Hero(
                     tag: widget.contact,
                     child: new CircleAvatar(
-                      backgroundColor: Colors.grey.shade300,
+                      backgroundColor: theme.scaffoldColor.withOpacity(.5),
                       backgroundImage: NetworkImage("https://placeimg.com/640/640/people"),
                       radius: 48.5,
                       child: new Align(
@@ -72,7 +75,7 @@ class _ContactsItemState extends State<ContactsItem> {
                                 height: 22.5,
                                 decoration: new BoxDecoration(
                                   color: TMColors.primary,
-                                  border: Border.all(color: Colors.white, style: BorderStyle.solid, width: 3.5),
+                                  border: Border.all(color: theme.scaffoldColor, style: BorderStyle.solid, width: 3.5),
                                   shape: BoxShape.circle,
                                 ),
                               )
@@ -87,6 +90,7 @@ class _ContactsItemState extends State<ContactsItem> {
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                      style: new TextStyle(color: theme.textColor),
                     ),
                   ),
                 ],
@@ -95,9 +99,9 @@ class _ContactsItemState extends State<ContactsItem> {
           ),
           new Container(
             decoration: new BoxDecoration(
-              color: Colors.grey.withOpacity(.05),
+              color: Colors.grey.withOpacity(.35),
               border: new Border(
-                top: new BorderSide(color: Colors.grey.shade100, style: BorderStyle.solid, width: 1.0),
+                top: new BorderSide(color: Colors.grey.withOpacity(.5), style: BorderStyle.solid, width: 1.0),
               ),
             ),
             child: new Row(

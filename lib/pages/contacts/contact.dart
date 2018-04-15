@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 
 class Contact extends StatefulWidget {
   final ContactModel contact;
@@ -13,6 +14,8 @@ class Contact extends StatefulWidget {
 class _ContactState extends State<Contact> {
   @override
   Widget build(BuildContext context) {
+    final TMTheme theme = TMTheme.of(context);
+
     void onTapGoBack() {
       Navigator.pop(context);
     }
@@ -21,6 +24,7 @@ class _ContactState extends State<Contact> {
       preferredSize: new Size.fromHeight(kToolbarHeight),
       child: Material(
         elevation: 4.0,
+        color: theme.appBarBackgroundColor,
         child: SafeArea(
           top: true,
           child: Row(
@@ -33,7 +37,7 @@ class _ContactState extends State<Contact> {
                   children: <Widget>[
                     new Icon(
                       Icons.arrow_back,
-                      color: Colors.grey.shade800,
+                      color: theme.appBarColor,
                     ),
                     const SizedBox(width: 4.0),
                     new Hero(
@@ -60,8 +64,8 @@ class _ContactState extends State<Contact> {
                       overflow: TextOverflow.ellipsis,
                       style: new TextStyle(
                         fontSize: 18.0,
-                        color: Colors.grey.shade800,
-                        fontWeight: FontWeight.w900,
+                        color: theme.appBarColor,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     widget.contact.pending > 1
@@ -81,7 +85,7 @@ class _ContactState extends State<Contact> {
                             overflow: TextOverflow.ellipsis,
                             style: new TextStyle(
                               fontSize: 13.0,
-                              color: Colors.grey.shade800,
+                              color: theme.appBarColor,
                             ),
                           )
                         : new Container(),
@@ -91,7 +95,7 @@ class _ContactState extends State<Contact> {
               new IconButton(
                 icon: new Icon(
                   Icons.more_vert,
-                  color: Colors.grey.shade800,
+                  color: theme.appBarColor,
                 ),
                 onPressed: () {},
               )
@@ -102,7 +106,7 @@ class _ContactState extends State<Contact> {
     );
 
     return new Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldColor,
       appBar: appBar,
       body: new Column(
         mainAxisAlignment: MainAxisAlignment.start,

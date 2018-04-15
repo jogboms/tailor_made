@@ -5,6 +5,7 @@ import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 
 class ContactsPage extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class _ContactsPageState extends State<ContactsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final TMTheme theme = TMTheme.of(context);
     List<ContactModel> contactList = <ContactModel>[
       ContactModel(title: "Princess", pending: 4, image: "https://placeimg.com/640/640/people"),
       ContactModel(title: "Winnie", pending: 2, image: "https://placeimg.com/640/640/nature"),
@@ -68,7 +70,7 @@ class _ContactsPageState extends State<ContactsPage> {
           new IconButton(
             icon: new Icon(
               Icons.search,
-              color: Colors.grey.shade800,
+              color: theme.appBarColor,
             ),
             onPressed: onTapSearch,
           )
@@ -77,8 +79,7 @@ class _ContactsPageState extends State<ContactsPage> {
     }
 
     return new Scaffold(
-      // backgroundColor: Colors.white,
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: theme.scaffoldColorAlt,
       appBar: _isSearching ? buildSearchBar() : buildAppBar(),
       body: Padding(
         padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
