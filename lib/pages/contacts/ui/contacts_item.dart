@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
 
 class ContactsItem extends StatefulWidget {
   final ContactModel contact;
@@ -16,12 +17,7 @@ class _ContactsItemState extends State<ContactsItem> {
   @override
   Widget build(BuildContext context) {
     void onTapCard() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (BuildContext context) {
-          return Contact(contact: widget.contact);
-        }),
-      );
+      TMNavigate.ios(context, Contact(contact: widget.contact));
     }
 
     void onTapCall() {

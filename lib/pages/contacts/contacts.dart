@@ -4,6 +4,7 @@ import 'package:tailor_made/pages/contacts/ui/contacts_item.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
 
 class ContactsPage extends StatefulWidget {
   @override
@@ -95,13 +96,7 @@ class _ContactsPageState extends State<ContactsPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: new FloatingActionButton(
         child: new Icon(Icons.add),
-        notchMargin: 200.0,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (BuildContext context) => ContactsCreatePage()),
-          );
-        },
+        onPressed: () => TMNavigate.ios(context, ContactsCreatePage()),
       ),
     );
   }

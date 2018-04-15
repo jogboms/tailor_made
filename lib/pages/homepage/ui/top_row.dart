@@ -2,22 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';
 import 'package:tailor_made/pages/contacts/contacts.dart';
 import 'package:tailor_made/pages/projects/projects.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
 
 class TopRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onTapProjects() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (BuildContext context) => ProjectsPage()),
-      );
+      TMNavigate.ios(context, ProjectsPage());
     }
 
     void onTapContacts() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (BuildContext context) => ContactsPage()),
-      );
+      TMNavigate.ios(context, ContactsPage());
     }
 
     return new Container(

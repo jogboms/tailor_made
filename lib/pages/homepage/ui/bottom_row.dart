@@ -6,6 +6,7 @@ import 'package:tailor_made/pages/payments/payments.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/pages/projects/projects_create.dart';
 import 'package:tailor_made/pages/payments/payments_create.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
 
 enum CreateOptions {
   clients,
@@ -60,36 +61,24 @@ class BottomRowWidget extends StatelessWidget {
       switch (result) {
         case CreateOptions.clients:
           {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (BuildContext context) => ContactsCreatePage()),
-            );
+            TMNavigate.ios(context, ContactsCreatePage());
             break;
           }
         case CreateOptions.projects:
           {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (BuildContext context) => ProjectsCreatePage()),
-            );
+            TMNavigate.ios(context, ProjectsCreatePage());
             break;
           }
         case CreateOptions.payments:
           {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (BuildContext context) => PaymentsCreatePage()),
-            );
+            TMNavigate.ios(context, PaymentsCreatePage());
             break;
           }
       }
     }
 
     void onTapPayments() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (BuildContext context) => PaymentsPage()),
-      );
+      TMNavigate.ios(context, PaymentsPage());
     }
 
     return new Container(

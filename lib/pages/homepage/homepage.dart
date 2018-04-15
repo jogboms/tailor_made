@@ -4,6 +4,7 @@ import 'package:tailor_made/pages/homepage/ui/header.dart';
 import 'package:tailor_made/pages/homepage/ui/stats.dart';
 import 'package:tailor_made/pages/homepage/ui/top_row.dart';
 import 'package:tailor_made/pages/accounts/accounts.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -23,14 +24,7 @@ class _HomePageState extends State<HomePage> {
               Icons.person,
               color: Colors.grey.shade800,
             ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (BuildContext context) {
-                  return AccountsPage();
-                }),
-              );
-            },
+            onPressed: () => TMNavigate.ios(context, AccountsPage()),
           )
         ],
       ),
