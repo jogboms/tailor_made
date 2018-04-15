@@ -28,7 +28,7 @@ class TopRowWidget extends StatelessWidget {
               decoration: new BoxDecoration(
                 border: new Border(right: borderSide),
               ),
-              child: gridTile(
+              child: TMGridTile(
                 icon: Icons.supervisor_account,
                 color: Colors.orangeAccent,
                 title: "Clients",
@@ -39,7 +39,7 @@ class TopRowWidget extends StatelessWidget {
           ),
           Expanded(
             child: Container(
-              child: gridTile(
+              child: TMGridTile(
                 icon: Icons.usb,
                 color: Colors.greenAccent.shade400,
                 title: "Projects",

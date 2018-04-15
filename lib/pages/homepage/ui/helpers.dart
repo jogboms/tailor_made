@@ -1,33 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 
+Color borderSideColor = Colors.grey.withOpacity(.25);
 BorderSide borderSide = new BorderSide(
-  color: Colors.grey.shade300,
+  color: borderSideColor,
   style: BorderStyle.solid,
   width: 1.0,
 );
 
-Widget listTile({IconData icon, Color color, String title}) {
-  return new Row(
-    children: <Widget>[
-      circleIcon(icon: icon, color: color, small: true),
-      textTile(title: title, small: true),
-    ],
-  );
+class TMListTile extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final String title;
+  final VoidCallback onPressed;
+  TMListTile({this.icon, this.color, this.title, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    final TMTheme theme = TMTheme.of(context);
+    return new Row(
+      children: <Widget>[
+        circleIcon(icon: icon, color: color, small: true),
+        textTile(theme, title: title, small: true),
+      ],
+    );
+  }
 }
 
-Widget gridTile({IconData icon, Color color, String title, String subTitle, VoidCallback onPressed}) {
-  return FlatButton(
-    padding: EdgeInsets.only(left: 20.0),
-    splashColor: color.withOpacity(.25),
-    child: new Row(
-      children: <Widget>[
-        circleIcon(icon: icon, color: color),
-        textTile(title: title, subTitle: subTitle),
-      ],
-    ),
-    onPressed: onPressed,
-  );
+class TMGridTile extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final String title;
+  final String subTitle;
+  final VoidCallback onPressed;
+  TMGridTile({this.icon, this.color, this.title, this.subTitle, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    final TMTheme theme = TMTheme.of(context);
+    return new FlatButton(
+      padding: EdgeInsets.only(left: 20.0),
+      splashColor: color.withOpacity(.25),
+      child: new Row(
+        children: <Widget>[
+          circleIcon(icon: icon, color: color),
+          textTile(theme, title: title, subTitle: subTitle),
+        ],
+      ),
+      onPressed: onPressed,
+    );
+  }
 }
 
 Widget circleIcon({IconData icon, Color color: TMColors.accent, bool small: false}) {
@@ -49,26 +72,21 @@ Widget circleIcon({IconData icon, Color color: TMColors.accent, bool small: fals
   );
 }
 
-Widget textTile({String title, String subTitle, bool small: false}) {
+Widget textTile(TMTheme theme, {String title, String subTitle, bool small: false}) {
   return new Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
       new Text(
         title,
-        style: new TextStyle(fontSize: small == true ? 14.0 : 18.0),
+        style: new TextStyle(color: theme?.textColor, fontSize: small == true ? 14.0 : 18.0),
       ),
       subTitle != null
           ? new Text(
               subTitle,
-              style: new TextStyle(fontSize: 12.0, fontWeight: FontWeight.w300),
+              style: new TextStyle(color: theme?.textColor, fontSize: 12.0, fontWeight: FontWeight.w300),
             )
           : new Container(),
     ],
   );
 }
-
-// MaterialColor themeTextColor = Colors.grey;
-// MaterialColor themeTextColor = TMColors.white;
-// MaterialColor themeTextColor = Colors.teal;
-// MaterialColor themeTextColor = Colors.blueGrey;

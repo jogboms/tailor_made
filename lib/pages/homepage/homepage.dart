@@ -5,6 +5,7 @@ import 'package:tailor_made/pages/homepage/ui/stats.dart';
 import 'package:tailor_made/pages/homepage/ui/top_row.dart';
 import 'package:tailor_made/pages/accounts/accounts.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,15 +15,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final TMTheme theme = TMTheme.of(context);
     return new Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldColor,
       appBar: AppBar(
         elevation: 0.0,
+        backgroundColor: theme.scaffoldColor,
         actions: <Widget>[
           new IconButton(
             icon: new Icon(
               Icons.person,
-              color: Colors.grey.shade800,
+              color: theme.appBarColor,
             ),
             onPressed: () => TMNavigate.ios(context, AccountsPage()),
           )

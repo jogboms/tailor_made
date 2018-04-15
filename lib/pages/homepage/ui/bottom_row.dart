@@ -7,6 +7,7 @@ import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/pages/projects/projects_create.dart';
 import 'package:tailor_made/pages/payments/payments_create.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 
 enum CreateOptions {
   clients,
@@ -17,6 +18,8 @@ enum CreateOptions {
 class BottomRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final TMTheme theme = TMTheme.of(context);
+
     Future onTapCreate() async {
       CreateOptions result = await showDialog<CreateOptions>(
         context: context,
@@ -28,7 +31,7 @@ class BottomRowWidget extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context, CreateOptions.clients);
                 },
-                child: listTile(
+                child: TMListTile(
                   color: Colors.orangeAccent,
                   icon: Icons.supervisor_account,
                   title: "Clients",
@@ -38,7 +41,7 @@ class BottomRowWidget extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context, CreateOptions.projects);
                 },
-                child: listTile(
+                child: TMListTile(
                   color: Colors.greenAccent.shade400,
                   icon: Icons.attach_money,
                   title: "Projects",
@@ -48,7 +51,7 @@ class BottomRowWidget extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context, CreateOptions.payments);
                 },
-                child: listTile(
+                child: TMListTile(
                   color: Colors.redAccent,
                   icon: Icons.usb,
                   title: "Payments",
@@ -95,7 +98,7 @@ class BottomRowWidget extends StatelessWidget {
                   right: borderSide,
                 ),
               ),
-              child: gridTile(
+              child: TMGridTile(
                 color: Colors.redAccent,
                 icon: Icons.attach_money,
                 title: "Payments",
@@ -112,12 +115,12 @@ class BottomRowWidget extends StatelessWidget {
                   new Icon(
                     Icons.add,
                     size: 38.0,
-                    color: Colors.grey.shade300,
+                    color: theme.textColor,
                   ),
                   new Text(
                     "CREATE",
                     style: new TextStyle(
-                      color: Colors.grey.shade500,
+                      color: theme.textColor,
                       fontSize: 10.0,
                       fontWeight: FontWeight.w300,
                     ),

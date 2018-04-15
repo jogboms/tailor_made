@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/pages/homepage/ui/helpers.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 
 class StatsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget statsTile({int count, String title, String subTitle}) {
+      final TMTheme theme = TMTheme.of(context);
       return new Row(
         children: <Widget>[
           new Padding(
-            child: new Text(count.toString(), style: new TextStyle(fontSize: 18.0)),
+            child: new Text(
+              count.toString(),
+              style: new TextStyle(color: theme.textColor, fontSize: 18.0),
+            ),
             padding: EdgeInsets.only(right: 10.0),
           ),
           new Column(
@@ -15,11 +21,11 @@ class StatsWidget extends StatelessWidget {
             children: <Widget>[
               new Text(
                 title,
-                style: new TextStyle(fontSize: 13.0, fontWeight: FontWeight.w300),
+                style: new TextStyle(color: theme.textColor, fontSize: 13.0, fontWeight: FontWeight.w300),
               ),
               new Text(
                 subTitle,
-                style: new TextStyle(fontSize: 13.0, fontWeight: FontWeight.w300),
+                style: new TextStyle(color: theme.textColor, fontSize: 13.0, fontWeight: FontWeight.w300),
               ),
             ],
           )
@@ -31,11 +37,7 @@ class StatsWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       decoration: new BoxDecoration(
         border: new Border(
-          bottom: new BorderSide(
-            color: Colors.grey.shade300,
-            style: BorderStyle.solid,
-            width: 1.0,
-          ),
+          bottom: borderSide,
         ),
       ),
       child: Row(
@@ -44,7 +46,7 @@ class StatsWidget extends StatelessWidget {
             child: statsTile(count: 43, title: "Created", subTitle: "Projects"),
           ),
           Container(
-            color: Colors.grey.shade300,
+            color: borderSideColor,
             width: 1.0,
             height: 40.0,
             margin: EdgeInsets.only(left: 30.0, right: 30.0),
