@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/ui/app_bar.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 
 class ProjectsPage extends StatefulWidget {
   @override
@@ -9,8 +10,9 @@ class ProjectsPage extends StatefulWidget {
 class _ProjectsPageState extends State<ProjectsPage> {
   @override
   Widget build(BuildContext context) {
+    final TMTheme theme = TMTheme.of(context);
     return new Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldColor,
       appBar: appBar(
         context,
         title: "Projects",
