@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/homepage/ui/helpers.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class HeaderWidget extends StatelessWidget {
@@ -12,7 +11,7 @@ class HeaderWidget extends StatelessWidget {
         width: double.infinity,
         decoration: new BoxDecoration(
           border: new Border(
-            bottom: borderSide,
+            bottom: TMBorderSide(),
           ),
         ),
         child: Column(

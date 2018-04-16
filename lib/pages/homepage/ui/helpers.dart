@@ -2,13 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-Color borderSideColor = Colors.grey.withOpacity(.25);
-BorderSide borderSide = new BorderSide(
-  color: borderSideColor,
-  style: BorderStyle.solid,
-  width: 1.0,
-);
-
 class TMListTile extends StatelessWidget {
   final IconData icon;
   final Color color;

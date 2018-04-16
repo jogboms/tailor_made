@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
               Icons.person,
               color: theme.appBarColor,
             ),
-            onPressed: () => TMNavigate.ios(context, AccountsPage()),
+            onPressed: () => TMNavigate(context, AccountsPage()),
           )
         ],
       ),

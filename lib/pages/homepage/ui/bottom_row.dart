@@ -64,30 +64,30 @@ class BottomRowWidget extends StatelessWidget {
       switch (result) {
         case CreateOptions.clients:
           {
-            TMNavigate.ios(context, ContactsCreatePage());
+            TMNavigate(context, ContactsCreatePage());
             break;
           }
         case CreateOptions.projects:
           {
-            TMNavigate.ios(context, ProjectsCreatePage());
+            TMNavigate(context, ProjectsCreatePage());
             break;
           }
         case CreateOptions.payments:
           {
-            TMNavigate.ios(context, PaymentsCreatePage());
+            TMNavigate(context, PaymentsCreatePage());
             break;
           }
       }
     }
 
     void onTapPayments() {
-      TMNavigate.ios(context, PaymentsPage());
+      TMNavigate(context, PaymentsPage());
     }
 
     return new Container(
       height: 120.0,
       decoration: new BoxDecoration(
-        border: new Border(bottom: borderSide),
+        border: new Border(bottom: TMBorderSide()),
       ),
       child: new Row(
         children: <Widget>[
@@ -95,7 +95,7 @@ class BottomRowWidget extends StatelessWidget {
             child: new Container(
               decoration: new BoxDecoration(
                 border: new Border(
-                  right: borderSide,
+                  right: TMBorderSide(),
                 ),
               ),
               child: TMGridTile(
@@ -115,12 +115,12 @@ class BottomRowWidget extends StatelessWidget {
                   new Icon(
                     Icons.add,
                     size: 38.0,
-                    color: theme.textColor,
+                    color: theme.textMutedColor,
                   ),
                   new Text(
                     "CREATE",
                     style: new TextStyle(
-                      color: theme.textColor,
+                      color: theme.textMutedColor,
                       fontSize: 10.0,
                       fontWeight: FontWeight.w300,
                     ),

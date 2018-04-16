@@ -97,7 +97,7 @@ class _ContactsPageState extends State<ContactsPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: new FloatingActionButton(
         child: new Icon(Icons.add),
-        onPressed: () => TMNavigate.ios(context, ContactsCreatePage()),
+        onPressed: () => TMNavigate(context, ContactsCreatePage()),
       ),
     );
   }

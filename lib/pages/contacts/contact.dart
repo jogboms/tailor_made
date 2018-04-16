@@ -44,9 +44,7 @@ class _ContactState extends State<Contact> {
                       tag: widget.contact,
                       child: new CircleAvatar(
                         backgroundColor: Colors.grey.shade400,
-                        // backgroundImage: NetworkImage("https://placeimg.com/640/640/people"),
-                        // backgroundImage: NetworkImage(widget.contact.image),
-                        backgroundImage: NetworkImage("https://placeimg.com/640/640/people"),
+                        backgroundImage: NetworkImage(widget.contact.image),
                       ),
                     ),
                   ],

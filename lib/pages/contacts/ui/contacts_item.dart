@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
-import 'package:tailor_made/utils/tm_colors.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -20,7 +19,7 @@ class _ContactsItemState extends State<ContactsItem> {
     final TMTheme theme = TMTheme.of(context);
 
     void onTapCard() {
-      TMNavigate.ios(context, Contact(contact: widget.contact));
+      TMNavigate(context, Contact(contact: widget.contact));
     }
 
     void onTapCall() {
@@ -42,7 +41,7 @@ class _ContactsItemState extends State<ContactsItem> {
           child: new Icon(icon, size: 18.0, color: theme.textColor),
           onTap: onTap,
           radius: 20.0,
-          splashColor: TMColors.primary.withOpacity(.25),
+          splashColor: accentColor.withOpacity(.25),
         ),
       );
     }
@@ -57,7 +56,7 @@ class _ContactsItemState extends State<ContactsItem> {
             child: InkWell(
               onTap: onTapCard,
               highlightColor: Colors.transparent,
-              splashColor: TMColors.primary.withOpacity(.25),
+              splashColor: accentColor.withOpacity(.25),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -65,7 +64,7 @@ class _ContactsItemState extends State<ContactsItem> {
                     tag: widget.contact,
                     child: new CircleAvatar(
                       backgroundColor: theme.scaffoldColor.withOpacity(.5),
-                      backgroundImage: NetworkImage("https://placeimg.com/640/640/people"),
+                      backgroundImage: NetworkImage(widget.contact.image),
                       radius: 48.5,
                       child: new Align(
                         alignment: Alignment.topRight,
@@ -74,7 +73,7 @@ class _ContactsItemState extends State<ContactsItem> {
                                 width: 22.5,
                                 height: 22.5,
                                 decoration: new BoxDecoration(
-                                  color: TMColors.primary,
+                                  color: accentColor,
                                   border: Border.all(color: theme.scaffoldColor, style: BorderStyle.solid, width: 3.5),
                                   shape: BoxShape.circle,
                                 ),

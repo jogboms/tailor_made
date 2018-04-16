@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/homepage/ui/helpers.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class StatsWidget extends StatelessWidget {
@@ -37,7 +36,7 @@ class StatsWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       decoration: new BoxDecoration(
         border: new Border(
-          bottom: borderSide,
+          bottom: TMBorderSide(),
         ),
       ),
       child: Row(
