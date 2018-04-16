@@ -61,7 +61,7 @@ class _ContactsItemState extends State<ContactsItem> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   new Hero(
-                    tag: widget.contact,
+                    tag: widget.contact.image,
                     child: new CircleAvatar(
                       backgroundColor: theme.scaffoldColor.withOpacity(.5),
                       backgroundImage: NetworkImage(widget.contact.image),
@@ -100,7 +100,7 @@ class _ContactsItemState extends State<ContactsItem> {
             decoration: new BoxDecoration(
               color: Colors.grey.withOpacity(.35),
               border: new Border(
-                top: new BorderSide(color: Colors.grey.withOpacity(.5), style: BorderStyle.solid, width: 1.0),
+                top: TMBorderSide(),
               ),
             ),
             child: new Row(

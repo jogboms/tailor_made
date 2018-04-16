@@ -41,7 +41,7 @@ class _ContactState extends State<Contact> {
                     ),
                     const SizedBox(width: 4.0),
                     new Hero(
-                      tag: widget.contact,
+                      tag: widget.contact.image,
                       child: new CircleAvatar(
                         backgroundColor: Colors.grey.shade400,
                         backgroundImage: NetworkImage(widget.contact.image),
