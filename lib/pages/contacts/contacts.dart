@@ -79,22 +79,16 @@ class _ContactsPageState extends State<ContactsPage> {
     }
 
     return new Scaffold(
-      backgroundColor: theme.scaffoldColorAlt,
+      backgroundColor: theme.scaffoldColor,
       appBar: _isSearching ? buildSearchBar() : buildAppBar(),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-        child: GridView.count(
-          primary: false,
-          padding: EdgeInsets.fromLTRB(2.0, 2.0, 2.0, 80.0),
-          // childAspectRatio: 0.75,
-          childAspectRatio: 0.925,
-          crossAxisSpacing: 8.0,
-          mainAxisSpacing: 8.0,
-          crossAxisCount: 2,
+        padding: EdgeInsets.zero,
+        child: ListView(
+          shrinkWrap: true,
+          itemExtent: null,
           children: contactList.map((ContactModel contact) => ContactsItem(contact: contact)).toList(),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: new FloatingActionButton(
         child: new Icon(Icons.add),
         onPressed: () => TMNavigate(context, ContactsCreatePage()),

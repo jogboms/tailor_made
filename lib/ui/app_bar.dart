@@ -5,7 +5,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 AppBar appBar(BuildContext context, {String title, List<Widget> actions}) {
   final TMTheme theme = TMTheme.of(context);
   return AppBar(
-    // elevation: 0.0,
+    elevation: 1.0,
     backgroundColor: theme.appBarBackgroundColor,
     leading: backButton(context),
     title: new Text(
