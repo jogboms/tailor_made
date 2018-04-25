@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/pages/jobs/job.dart';
 
 class JobsListWidget extends StatelessWidget {
   @override
@@ -8,17 +10,13 @@ class JobsListWidget extends StatelessWidget {
 
     SliverChildBuilderDelegate delegate = new SliverChildBuilderDelegate(
       (BuildContext context, int index) {
-        // return new Container(
-        //   alignment: Alignment.center,
-        //   color: Colors.lightBlue[100 * (index % 9)],
-        //   child: new Text('list item $index'),
-        // );
         onTapCheck() {
           print("onTapCheck");
         }
 
         onTapList() {
           print("onTapList");
+          TMNavigate(context, JobPage());
         }
 
         return new Container(
@@ -27,10 +25,8 @@ class JobsListWidget extends StatelessWidget {
           ),
           child: new InkWell(
             onTap: onTapList,
-            child: new Container(
-              // padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: new Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-              // margin: EdgeInsets.symmetric(vertical: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
