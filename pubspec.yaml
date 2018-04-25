@@ -8,6 +8,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.0
+  carousel: ^0.0.1
 
 dev_dependencies:
   flutter_test:
@@ -58,10 +59,13 @@ flutter:
   fonts:
     - family: Raleway
       fonts:
-        - asset: assets/fonts/Raleway-Regular.ttf
         - asset: assets/fonts/Raleway-Thin.ttf
-          weight: 200
+          weight: 100
         - asset: assets/fonts/Raleway-Light.ttf
           weight: 300
+        - asset: assets/fonts/Raleway-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Raleway-Medium.ttf
+          weight: 500
         - asset: assets/fonts/Raleway-SemiBold.ttf
           weight: 600

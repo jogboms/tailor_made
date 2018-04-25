@@ -6,6 +6,8 @@ import 'package:tailor_made/pages/payments/payments.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/pages/projects/projects_create.dart';
 import 'package:tailor_made/pages/payments/payments_create.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 
 enum CreateOptions {
   clients,
@@ -16,6 +18,8 @@ enum CreateOptions {
 class BottomRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final TMTheme theme = TMTheme.of(context);
+
     Future onTapCreate() async {
       CreateOptions result = await showDialog<CreateOptions>(
         context: context,
@@ -27,7 +31,7 @@ class BottomRowWidget extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context, CreateOptions.clients);
                 },
-                child: listTile(
+                child: TMListTile(
                   color: Colors.orangeAccent,
                   icon: Icons.supervisor_account,
                   title: "Clients",
@@ -37,7 +41,7 @@ class BottomRowWidget extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context, CreateOptions.projects);
                 },
-                child: listTile(
+                child: TMListTile(
                   color: Colors.greenAccent.shade400,
                   icon: Icons.attach_money,
                   title: "Projects",
@@ -47,7 +51,7 @@ class BottomRowWidget extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context, CreateOptions.payments);
                 },
-                child: listTile(
+                child: TMListTile(
                   color: Colors.redAccent,
                   icon: Icons.usb,
                   title: "Payments",
@@ -60,42 +64,30 @@ class BottomRowWidget extends StatelessWidget {
       switch (result) {
         case CreateOptions.clients:
           {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (BuildContext context) => ContactsCreatePage()),
-            );
+            TMNavigate(context, ContactsCreatePage());
             break;
           }
         case CreateOptions.projects:
           {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (BuildContext context) => ProjectsCreatePage()),
-            );
+            TMNavigate(context, ProjectsCreatePage());
             break;
           }
         case CreateOptions.payments:
           {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (BuildContext context) => PaymentsCreatePage()),
-            );
+            TMNavigate(context, PaymentsCreatePage());
             break;
           }
       }
     }
 
     void onTapPayments() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (BuildContext context) => PaymentsPage()),
-      );
+      TMNavigate(context, PaymentsPage());
     }
 
     return new Container(
       height: 120.0,
       decoration: new BoxDecoration(
-        border: new Border(bottom: borderSide),
+        border: new Border(bottom: TMBorderSide()),
       ),
       child: new Row(
         children: <Widget>[
@@ -103,10 +95,10 @@ class BottomRowWidget extends StatelessWidget {
             child: new Container(
               decoration: new BoxDecoration(
                 border: new Border(
-                  right: borderSide,
+                  right: TMBorderSide(),
                 ),
               ),
-              child: gridTile(
+              child: TMGridTile(
                 color: Colors.redAccent,
                 icon: Icons.attach_money,
                 title: "Payments",
@@ -123,12 +115,12 @@ class BottomRowWidget extends StatelessWidget {
                   new Icon(
                     Icons.add,
                     size: 38.0,
-                    color: Colors.grey.shade300,
+                    color: theme.textMutedColor,
                   ),
                   new Text(
                     "CREATE",
                     style: new TextStyle(
-                      color: Colors.grey.shade500,
+                      color: theme.textMutedColor,
                       fontSize: 10.0,
                       fontWeight: FontWeight.w300,
                     ),

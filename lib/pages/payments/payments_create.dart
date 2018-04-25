@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/ui/app_bar.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 
 class PaymentsCreatePage extends StatefulWidget {
   @override
@@ -9,9 +10,9 @@ class PaymentsCreatePage extends StatefulWidget {
 class _PaymentsCreatePageState extends State<PaymentsCreatePage> {
   @override
   Widget build(BuildContext context) {
+    final TMTheme theme = TMTheme.of(context);
     return new Scaffold(
-      backgroundColor: Colors.white,
-      //   backgroundColor: Colors.grey.shade100,
+      backgroundColor: theme.scaffoldColor,
       appBar: appBar(
         context,
         title: "Create Payments",
