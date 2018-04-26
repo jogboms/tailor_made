@@ -75,7 +75,7 @@ class PaymentGrids extends StatelessWidget {
           ],
         ),
         new Container(
-          height: _kGridWidth + 16,
+          height: _kGridWidth + 8,
           child: new ListView(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             scrollDirection: Axis.horizontal,
