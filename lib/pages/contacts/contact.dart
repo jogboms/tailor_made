@@ -3,9 +3,11 @@ import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_appbar.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_header.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_jobs_list.dart';
-import 'package:tailor_made/pages/contacts/ui/contact_references_grid.dart';
+import 'package:tailor_made/pages/contacts/ui/contact_payments_list.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_gallery_grid.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
+
+const TABS = const ["Jobs", "Gallery", "Payments"];
 
 class Contact extends StatefulWidget {
   final ContactModel contact;
@@ -56,9 +58,9 @@ class _ContactState extends State<Contact> {
           },
           body: new TabBarView(
             children: [
-              tabView(name: "jobs", child: JobsListWidget()),
-              tabView(name: "gallery", child: GalleryGridWidget()),
-              tabView(name: "references", child: ReferencesGridWidget()),
+              tabView(name: TABS[0].toLowerCase(), child: JobsListWidget()),
+              tabView(name: TABS[1].toLowerCase(), child: GalleryGridWidget()),
+              tabView(name: TABS[2].toLowerCase(), child: PaymentsListWidget()),
             ],
           ),
         ),
@@ -82,9 +84,9 @@ Widget tabTitles({Color backgroundColor}) {
         // indicatorSize: TabBarIndicatorSize.label,
         unselectedLabelColor: Colors.grey.withOpacity(.7),
         tabs: [
-          Tab(child: Text("Jobs")),
-          Tab(child: Text("Gallery")),
-          Tab(child: Text("References")),
+          Tab(child: Text(TABS[0])),
+          Tab(child: Text(TABS[1])),
+          Tab(child: Text(TABS[2])),
         ],
       ),
     ),
