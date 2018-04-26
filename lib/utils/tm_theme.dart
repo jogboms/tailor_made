@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
 
 const Color accentColor = TMColors.primary;
-// const Color accentColor = Colors.red;
 const MaterialColor primarySwatch = TMColors.white;
 const Color borderSideColor = const Color(0x3A9E9E9E);
 const MaterialColor textBaseColor = Colors.grey;
+const MaterialColor titleBaseColor = TMColors.dark;
 const MaterialColor backgroundBaseColor = TMColors.white;
 
 class TMBorderSide extends BorderSide {
@@ -48,7 +48,7 @@ class TMTheme extends InheritedWidget {
 
   final Color scaffoldColor = backgroundBaseColor;
   final Color scaffoldColorAlt = textBaseColor.shade100;
-  final Color appBarColor = textBaseColor.shade800;
+  final Color appBarColor = titleBaseColor;
   final Color textColor = textBaseColor.shade800;
   final Color textMutedColor = textBaseColor.shade500;
 
@@ -58,6 +58,7 @@ class TMTheme extends InheritedWidget {
   // final Color textColor = Color(0xFF39796b);
 
   TextStyle get appBarStyle => ralewayMedium(20.0, appBarColor);
+  TextStyle get titleStyle => ralewayMedium(18.0, titleBaseColor);
 
   static TMTheme of(BuildContext context) => context.inheritFromWidgetOfExactType(TMTheme);
 

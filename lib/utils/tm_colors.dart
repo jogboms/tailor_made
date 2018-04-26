@@ -4,6 +4,21 @@ import 'package:flutter/widgets.dart';
 class TMColors {
   TMColors._();
 
+  static const MaterialColor dark = const MaterialColor(
+    0xFF444444,
+    const <int, Color>{
+      50: const Color(0xFF444444),
+      100: const Color(0xFF888888),
+      200: const Color(0xFF777777),
+      300: const Color(0xFF666666),
+      400: const Color(0xFF555555),
+      500: const Color(0xFF444444),
+      600: const Color(0xFF333333),
+      700: const Color(0xFF222222),
+      800: const Color(0xFF111111),
+      900: const Color(0xFF000000),
+    },
+  );
   static const MaterialColor white = const MaterialColor(
     0xFFFFFFFF,
     const <int, Color>{

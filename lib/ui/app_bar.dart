@@ -8,6 +8,7 @@ AppBar appBar(BuildContext context, {String title, List<Widget> actions}) {
     elevation: 1.0,
     backgroundColor: theme.appBarBackgroundColor,
     leading: backButton(context),
+    centerTitle: false,
     title: new Text(
       title,
       style: theme.appBarStyle.copyWith(
