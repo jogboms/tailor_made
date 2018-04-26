@@ -3,11 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class TMNavigate {
-  TMNavigate(BuildContext context, Widget widget) {
+  TMNavigate(
+    BuildContext context,
+    Widget widget, {
+    RouteSettings settings,
+    maintainState: true,
+    bool fullscreenDialog: false,
+    hostRoute,
+  }) {
     Navigator.push(
       context,
       // TMNavigateRoute(builder: (BuildContext context) => TMTheme(child: widget)),
-      CupertinoPageRoute(builder: (BuildContext context) => TMTheme(child: widget)),
+      CupertinoPageRoute(
+        builder: (BuildContext context) => TMTheme(child: widget),
+        settings: settings,
+        maintainState: maintainState,
+        fullscreenDialog: fullscreenDialog,
+        hostRoute: hostRoute,
+      ),
     );
   }
 }
