@@ -107,7 +107,7 @@ Widget tabView({name: String, child: Widget}) {
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
             ),
             new SliverPadding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
               sliver: child,
             ),
           ],

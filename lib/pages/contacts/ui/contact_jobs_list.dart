@@ -26,7 +26,7 @@ class JobsListWidget extends StatelessWidget {
           child: new InkWell(
             onTap: onTapList,
             child: new Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+              padding: EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -63,6 +63,7 @@ class JobsListWidget extends StatelessWidget {
                     ),
                   ),
                   new IconButton(
+                    padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 4.0),
                     icon: new Icon(Icons.check_circle_outline, color: Colors.green),
                     onPressed: onTapCheck,
                   ),
@@ -72,6 +73,7 @@ class JobsListWidget extends StatelessWidget {
           ),
         );
       },
+      childCount: 10,
     );
 
     return SliverList(
