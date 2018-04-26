@@ -58,7 +58,7 @@ class TMTheme extends InheritedWidget {
   // final Color textColor = Color(0xFF39796b);
 
   TextStyle get appBarStyle => ralewayMedium(20.0, appBarColor);
-  TextStyle get titleStyle => ralewayMedium(20.0, titleBaseColor);
+  TextStyle get titleStyle => ralewayMedium(18.0, titleBaseColor);
 
   static TMTheme of(BuildContext context) => context.inheritFromWidgetOfExactType(TMTheme);
 
