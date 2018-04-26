@@ -3,36 +3,43 @@ import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/ui/blank.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 
+const _kGridWidth = 120.0;
+
 class PaymentGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      width: 100.0,
+      width: _kGridWidth,
       margin: EdgeInsets.only(right: 8.0),
       child: new Material(
+        elevation: 4.0,
         borderRadius: BorderRadius.circular(5.0),
         color: accentColor.withOpacity(.8),
         child: new InkWell(
           onTap: () => TMNavigate(context, BlankPage(), fullscreenDialog: true),
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
+            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(text: "15", style: ralewayLight(25.0, Colors.white)),
-                      TextSpan(text: "\n"),
-                      TextSpan(text: "MAY, 2018", style: ralewayMedium(10.0, Colors.white)),
-                    ],
+                new Align(
+                  alignment: Alignment.topRight,
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(text: "15", style: ralewayLight(25.0, Colors.white)),
+                        TextSpan(text: "\n"),
+                        TextSpan(text: "MAY, 2018", style: ralewayMedium(10.0, Colors.white)),
+                      ],
+                    ),
+                    textAlign: TextAlign.right,
                   ),
                 ),
                 Text(
                   "\$15,000",
-                  style: ralewayBold(20.0, Colors.white).copyWith(
-                    height: 1.25,
+                  style: ralewayBold(30.0, Colors.white).copyWith(
+                    height: 1.000025,
                   ),
                 )
               ],
@@ -60,21 +67,17 @@ class PaymentGrids extends StatelessWidget {
         new Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("Payments", style: theme.titleStyle),
-            ),
+            Text("Payments", style: theme.titleStyle),
             FlatButton(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("SHOW ALL"),
+              child: Text("SHOW ALL", style: TextStyle(fontSize: 11.0)),
               onPressed: () => TMNavigate(context, BlankPage(), fullscreenDialog: true),
             ),
           ],
         ),
         new Container(
-          padding: const EdgeInsets.all(8.0),
-          height: 120.0,
+          height: _kGridWidth + 16,
           child: new ListView(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
             scrollDirection: Axis.horizontal,
             children: [PaymentGrids.newGrid()]..addAll(paymentList),
           ),
@@ -85,7 +88,7 @@ class PaymentGrids extends StatelessWidget {
 
   static Widget newGrid() {
     return new Container(
-      width: 100.0,
+      width: _kGridWidth,
       margin: EdgeInsets.only(right: 8.0),
       child: new Material(
         borderRadius: BorderRadius.circular(5.0),
@@ -93,7 +96,7 @@ class PaymentGrids extends StatelessWidget {
         child: new InkWell(
           onTap: () {},
           child: Icon(
-            Icons.add_circle_outline,
+            Icons.add_circle,
             size: 30.0,
             color: textBaseColor.withOpacity(.35),
           ),
