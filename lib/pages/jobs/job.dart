@@ -32,11 +32,11 @@ class _JobPageState extends State<JobPage> {
           children: <Widget>[
             new Expanded(child: header),
             new Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+              padding: const EdgeInsets.only(top: 8.0),
               child: GalleryGrids(),
             ),
             new Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+              padding: const EdgeInsets.only(top: 8.0),
               child: PaymentGrids(),
             ),
           ],

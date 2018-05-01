@@ -45,7 +45,10 @@ class GalleryGrids extends StatelessWidget {
         new Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text("Gallery", style: theme.titleStyle),
+            new Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: Text("Gallery", style: theme.titleStyle),
+            ),
             FlatButton(
               child: Text("SHOW ALL", style: TextStyle(fontSize: 11.0)),
               onPressed: () => TMNavigate(context, BlankPage(), fullscreenDialog: true),
@@ -54,6 +57,7 @@ class GalleryGrids extends StatelessWidget {
         ),
         new Container(
           height: _kGridWidth + 8,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: new ListView(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             scrollDirection: Axis.horizontal,
