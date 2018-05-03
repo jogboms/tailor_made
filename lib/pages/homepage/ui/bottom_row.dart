@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';
 import 'package:tailor_made/pages/payments/payments.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
-import 'package:tailor_made/pages/projects/projects_create.dart';
+import 'package:tailor_made/pages/jobs/jobs_create.dart';
 import 'package:tailor_made/pages/payments/payments_create.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -69,7 +69,7 @@ class BottomRowWidget extends StatelessWidget {
           }
         case CreateOptions.projects:
           {
-            TMNavigate(context, ProjectsCreatePage());
+            TMNavigate(context, JobsCreatePage());
             break;
           }
         case CreateOptions.payments:

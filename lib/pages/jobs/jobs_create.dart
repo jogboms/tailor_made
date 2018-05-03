@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 import 'ui/slide_down.dart';
 
-class JobCreate extends StatefulWidget {
+class JobsCreatePage extends StatefulWidget {
   @override
-  _JobCreateState createState() => new _JobCreateState();
+  _JobsCreatePageState createState() => new _JobsCreatePageState();
 }
 
-class _JobCreateState extends State<JobCreate> {
+class _JobsCreatePageState extends State<JobsCreatePage> {
   @override
   Widget build(BuildContext context) {
     final int length = 1;

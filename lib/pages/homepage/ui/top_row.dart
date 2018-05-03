@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';
 import 'package:tailor_made/pages/contacts/contacts.dart';
-import 'package:tailor_made/pages/projects/projects.dart';
+import 'package:tailor_made/pages/jobs/jobs.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class TopRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    void onTapProjects() {
-      TMNavigate(context, ProjectsPage());
+    void onTapJobs() {
+      TMNavigate(context, JobsPage());
     }
 
     void onTapContacts() {
@@ -43,9 +43,9 @@ class TopRowWidget extends StatelessWidget {
               child: TMGridTile(
                 icon: Icons.usb,
                 color: Colors.greenAccent.shade400,
-                title: "Projects",
+                title: "Jobs",
                 subTitle: "6 Pending",
-                onPressed: onTapProjects,
+                onPressed: onTapJobs,
               ),
             ),
           ),

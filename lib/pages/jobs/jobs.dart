@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-class ProjectsCreatePage extends StatefulWidget {
+class JobsPage extends StatefulWidget {
   @override
-  _ProjectsCreatePageState createState() => new _ProjectsCreatePageState();
+  _JobsPageState createState() => new _JobsPageState();
 }
 
-class _ProjectsCreatePageState extends State<ProjectsCreatePage> {
+class _JobsPageState extends State<JobsPage> {
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
@@ -15,9 +15,12 @@ class _ProjectsCreatePageState extends State<ProjectsCreatePage> {
       backgroundColor: theme.scaffoldColor,
       appBar: appBar(
         context,
-        title: "Create Projects",
+        title: "Jobs",
       ),
-      body: Container(),
+      body: new Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[],
+      ),
     );
   }
 }
