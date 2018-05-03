@@ -11,7 +11,7 @@ class GalleryView extends StatelessWidget {
     print(id);
     return new Scaffold(
       body: Container(
-        color: Colors.black,
+        color: Colors.grey[900],
         child: new SafeArea(
           child: Stack(
             children: [
