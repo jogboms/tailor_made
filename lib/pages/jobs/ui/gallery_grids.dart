@@ -73,7 +73,7 @@ class GalleryGrids extends StatelessWidget {
             ),
             CupertinoButton(
               child: Text("SHOW ALL", style: ralewayRegular(11.0, textBaseColor)),
-              onPressed: () => TMNavigate(context, Gallery(), fullscreenDialog: true),
+              onPressed: () => TMNavigate(context, GalleryPage(), fullscreenDialog: true),
             ),
           ],
         ),
