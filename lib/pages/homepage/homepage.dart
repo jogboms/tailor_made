@@ -15,7 +15,7 @@ import 'package:tailor_made/pages/payments/payments_create.dart';
 
 enum CreateOptions {
   clients,
-  projects,
+  jobs,
   payments,
 }
 
@@ -48,12 +48,12 @@ class _HomePageState extends State<HomePage> {
               ),
               new SimpleDialogOption(
                 onPressed: () {
-                  Navigator.pop(context, CreateOptions.projects);
+                  Navigator.pop(context, CreateOptions.jobs);
                 },
                 child: TMListTile(
                   color: Colors.greenAccent.shade400,
                   icon: Icons.attach_money,
-                  title: "Projects",
+                  title: "Job",
                 ),
               ),
               new SimpleDialogOption(
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
             TMNavigate(context, ContactsCreatePage());
             break;
           }
-        case CreateOptions.projects:
+        case CreateOptions.jobs:
           {
             TMNavigate(context, JobsCreatePage());
             break;
