@@ -33,7 +33,18 @@ class GalleryGrid extends StatelessWidget {
           elevation: 2.0,
           color: Colors.transparent,
           child: new InkWell(
-            onTap: () => TMNavigate(context, GalleryView(image, "-$image-$id-$id2"), fullscreenDialog: true),
+            onTap: () {
+              Navigator.of(context).push(new PageRouteBuilder(
+                  opaque: false,
+                  pageBuilder: (BuildContext context, _, __) => GalleryView(image, "-$image-$id-$id2"),
+                  transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                    return new FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    );
+                  }));
+              // TMNavigate(context, GalleryView(image, "-$image-$id-$id2"), fullscreenDialog: true)
+            },
           ),
         ),
       ),
