@@ -104,22 +104,25 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: new Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          HeaderWidget(),
-          StatsWidget(),
-          TopRowWidget(),
-          BottomRowWidget(),
-          new FlatButton(
-            padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
-            child: new Text(
-              "CREATE",
-              style: ralewayMedium(14.0, theme.textMutedColor),
-            ),
-            onPressed: onTapCreate,
-          )
-        ],
+      body: new SafeArea(
+        top: false,
+        child: new Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            HeaderWidget(),
+            StatsWidget(),
+            TopRowWidget(),
+            BottomRowWidget(),
+            new FlatButton(
+              padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
+              child: new Text(
+                "CREATE",
+                style: ralewayMedium(14.0, theme.textMutedColor),
+              ),
+              onPressed: onTapCreate,
+            )
+          ],
+        ),
       ),
     );
   }
