@@ -1,11 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 import 'gallery_view.dart';
-
-const _kGridWidth = 70.0;
 
 class Gallery extends StatelessWidget {
   @override
@@ -13,10 +10,6 @@ class Gallery extends StatelessWidget {
     final TMTheme theme = TMTheme.of(context);
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
-      // appBar: appBar(
-      //   context,
-      //   title: "Gallery",
-      // ),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -42,7 +35,6 @@ class Gallery extends StatelessWidget {
               return new Hero(
                 tag: "-$image-$id-$id2",
                 child: Container(
-                  width: _kGridWidth,
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     image: DecorationImage(
