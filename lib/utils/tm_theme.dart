@@ -14,9 +14,9 @@ const MaterialColor titleBaseColor = TMColors.dark;
 const MaterialColor backgroundBaseColor = TMColors.white;
 
 class TMBorderSide extends BorderSide {
-  TMBorderSide()
+  TMBorderSide({Color color})
       : super(
-          color: borderSideColor,
+          color: color != null ? color : borderSideColor,
           style: BorderStyle.solid,
           width: 1.0,
         );
