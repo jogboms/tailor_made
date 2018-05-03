@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
-import 'gallery.dart';
-import 'gallery_view.dart';
+import 'package:tailor_made/pages/gallery/gallery.dart';
+import 'package:tailor_made/pages/gallery/gallery_view.dart';
 
 const _kGridWidth = 70.0;
 
