@@ -27,11 +27,11 @@ class TMStyle extends TextStyle {
       : super(inherit: false, color: color, fontFamily: 'Raleway', fontSize: size, fontWeight: weight, textBaseline: TextBaseline.alphabetic);
 }
 
-TextStyle ralewayThin(double fontSize, Color color) => new TMStyle.raleway(fontSize, FontWeight.w100, color);
-TextStyle ralewayLight(double fontSize, Color color) => new TMStyle.raleway(fontSize, FontWeight.w300, color);
-TextStyle ralewayRegular(double fontSize, Color color) => new TMStyle.raleway(fontSize, FontWeight.w400, color);
-TextStyle ralewayMedium(double fontSize, Color color) => new TMStyle.raleway(fontSize, FontWeight.w500, color);
-TextStyle ralewayBold(double fontSize, Color color) => new TMStyle.raleway(fontSize, FontWeight.w700, color);
+TextStyle ralewayThin(double fontSize, [Color color = textBaseColor]) => new TMStyle.raleway(fontSize, FontWeight.w100, color);
+TextStyle ralewayLight(double fontSize, [Color color = textBaseColor]) => new TMStyle.raleway(fontSize, FontWeight.w300, color);
+TextStyle ralewayRegular(double fontSize, [Color color = textBaseColor]) => new TMStyle.raleway(fontSize, FontWeight.w400, color);
+TextStyle ralewayMedium(double fontSize, [Color color = textBaseColor]) => new TMStyle.raleway(fontSize, FontWeight.w500, color);
+TextStyle ralewayBold(double fontSize, [Color color = textBaseColor]) => new TMStyle.raleway(fontSize, FontWeight.w700, color);
 
 /// The TextStyles and Colors used for titles, labels, and descriptions. This
 /// InheritedWidget is shared by all of the routes and widgets created for
@@ -57,7 +57,7 @@ class TMTheme extends InheritedWidget {
   // final Color appBarColor = Color(0xFF39796b);
   // final Color textColor = Color(0xFF39796b);
 
-  TextStyle get appBarStyle => ralewayMedium(20.0, appBarColor);
+  TextStyle get appBarStyle => ralewayBold(20.0, appBarColor);
   TextStyle get titleStyle => ralewayMedium(18.0, titleBaseColor);
 
   static TMTheme of(BuildContext context) => context.inheritFromWidgetOfExactType(TMTheme);

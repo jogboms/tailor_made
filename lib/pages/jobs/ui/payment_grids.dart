@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/ui/blank.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -28,7 +29,7 @@ class PaymentGrid extends StatelessWidget {
                   child: Text.rich(
                     TextSpan(
                       children: [
-                        TextSpan(text: "15", style: ralewayLight(25.0, Colors.white)),
+                        TextSpan(text: "15", style: ralewayLight(24.0, Colors.white)),
                         TextSpan(text: "\n"),
                         TextSpan(text: "MAY, 2018", style: ralewayMedium(10.0, Colors.white)),
                       ],
@@ -38,9 +39,7 @@ class PaymentGrid extends StatelessWidget {
                 ),
                 Text(
                   "\$15,000",
-                  style: ralewayBold(30.0, Colors.white).copyWith(
-                    height: 1.000025,
-                  ),
+                  style: ralewayBold(24.0, Colors.white),
                 )
               ],
             ),
@@ -67,15 +66,19 @@ class PaymentGrids extends StatelessWidget {
         new Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text("Payments", style: theme.titleStyle),
-            FlatButton(
-              child: Text("SHOW ALL", style: TextStyle(fontSize: 11.0)),
+            new Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: Text("Payments", style: theme.titleStyle),
+            ),
+            CupertinoButton(
+              child: Text("SHOW ALL", style: ralewayRegular(11.0, textBaseColor)),
               onPressed: () => TMNavigate(context, BlankPage(), fullscreenDialog: true),
             ),
           ],
         ),
         new Container(
           height: _kGridWidth + 8,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: new ListView(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             scrollDirection: Axis.horizontal,
