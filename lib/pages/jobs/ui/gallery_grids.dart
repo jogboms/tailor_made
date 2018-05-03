@@ -3,9 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
-import 'package:tailor_made/ui/blank.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
-import 'gallery_view.dart';
+import 'package:tailor_made/pages/gallery/gallery.dart';
+import 'package:tailor_made/pages/gallery/gallery_view.dart';
+import 'package:tailor_made/pages/gallery/models/gallery_image.model.dart';
 
 const _kGridWidth = 70.0;
 
@@ -33,7 +34,18 @@ class GalleryGrid extends StatelessWidget {
           elevation: 2.0,
           color: Colors.transparent,
           child: new InkWell(
-            onTap: () => TMNavigate(context, GalleryView(image, "-$image-$id-$id2"), fullscreenDialog: true),
+            onTap: () {
+              Navigator.of(context).push(new PageRouteBuilder(
+                  opaque: false,
+                  pageBuilder: (BuildContext context, _, __) => GalleryView(image, "-$image-$id-$id2"),
+                  transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                    return new FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    );
+                  }));
+              // TMNavigate(context, GalleryView(image, "-$image-$id-$id2"), fullscreenDialog: true)
+            },
           ),
         ),
       ),
@@ -45,6 +57,13 @@ class GalleryGrids extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
+    List<GalleryImageModel> pageImagesList = List
+        .generate(
+          40,
+          (int) => GalleryImageModel(src: "https://placeimg.com/640/640/nature"),
+        )
+        .toList();
+
     List<Widget> imagesList = List
         .generate(
           10,
@@ -62,7 +81,7 @@ class GalleryGrids extends StatelessWidget {
             ),
             CupertinoButton(
               child: Text("SHOW ALL", style: ralewayRegular(11.0, textBaseColor)),
-              onPressed: () => TMNavigate(context, BlankPage(), fullscreenDialog: true),
+              onPressed: () => TMNavigate(context, GalleryPage(images: pageImagesList), fullscreenDialog: true),
             ),
           ],
         ),
