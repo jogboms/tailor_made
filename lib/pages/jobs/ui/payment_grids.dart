@@ -38,7 +38,7 @@ class PaymentGrid extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "\$15,000",
+                  "₦15,000",
                   style: ralewayBold(24.0, Colors.white),
                 )
               ],
