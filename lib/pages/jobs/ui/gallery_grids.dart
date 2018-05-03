@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
-import 'package:tailor_made/ui/blank.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
+import 'gallery.dart';
 import 'gallery_view.dart';
 
 const _kGridWidth = 70.0;
@@ -73,7 +73,7 @@ class GalleryGrids extends StatelessWidget {
             ),
             CupertinoButton(
               child: Text("SHOW ALL", style: ralewayRegular(11.0, textBaseColor)),
-              onPressed: () => TMNavigate(context, BlankPage(), fullscreenDialog: true),
+              onPressed: () => TMNavigate(context, Gallery(), fullscreenDialog: true),
             ),
           ],
         ),
