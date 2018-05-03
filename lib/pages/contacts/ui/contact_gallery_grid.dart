@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/gallery/gallery_grid_item.dart';
+import 'package:tailor_made/pages/gallery/models/gallery_image.model.dart';
+import 'package:tailor_made/pages/gallery/gallery_grid.dart';
 
 class GalleryGridWidget extends StatelessWidget {
   @override
   build(BuildContext context) {
-    return SliverGrid.count(
-      crossAxisCount: 3,
-      crossAxisSpacing: 1.5,
-      mainAxisSpacing: 1.5,
-      children: List.generate(40, (i) => GalleryGridItem()).toList(),
+    return GalleryGrid(
+      images: List
+          .generate(
+            40,
+            (int) => GalleryImageModel(src: "https://placeimg.com/640/640/tech"),
+          )
+          .toList(),
     );
   }
 }

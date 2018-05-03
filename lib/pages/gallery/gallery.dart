@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
-import 'package:tailor_made/pages/gallery/gallery_grid_item.dart';
+import 'gallery_grid.dart';
+import 'models/gallery_image.model.dart';
 
 class GalleryPage extends StatelessWidget {
+  final List<GalleryImageModel> images;
+
+  GalleryPage({this.images});
+
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
@@ -21,12 +26,7 @@ class GalleryPage extends StatelessWidget {
             ),
             floating: true,
           ),
-          SliverGrid.count(
-            crossAxisCount: 3,
-            crossAxisSpacing: 1.5,
-            mainAxisSpacing: 1.5,
-            children: List.generate(40, (i) => GalleryGridItem()).toList(),
-          ),
+          GalleryGrid(images: images),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/pages/gallery/models/gallery_image.model.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';
 import 'package:tailor_made/pages/payments/payments.dart';
 import 'package:tailor_made/pages/gallery/gallery.dart';
@@ -13,7 +14,14 @@ class BottomRowWidget extends StatelessWidget {
     }
 
     void onTapGallery() {
-      TMNavigate(context, GalleryPage());
+      List<GalleryImageModel> pageImagesList = List
+          .generate(
+            40,
+            (int) => GalleryImageModel(src: "https://placeimg.com/640/640/people"),
+          )
+          .toList();
+
+      TMNavigate(context, GalleryPage(images: pageImagesList));
     }
 
     return new Container(

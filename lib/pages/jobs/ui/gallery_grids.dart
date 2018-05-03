@@ -6,6 +6,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/pages/gallery/gallery.dart';
 import 'package:tailor_made/pages/gallery/gallery_view.dart';
+import 'package:tailor_made/pages/gallery/models/gallery_image.model.dart';
 
 const _kGridWidth = 70.0;
 
@@ -56,6 +57,13 @@ class GalleryGrids extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
+    List<GalleryImageModel> pageImagesList = List
+        .generate(
+          40,
+          (int) => GalleryImageModel(src: "https://placeimg.com/640/640/nature"),
+        )
+        .toList();
+
     List<Widget> imagesList = List
         .generate(
           10,
@@ -73,7 +81,7 @@ class GalleryGrids extends StatelessWidget {
             ),
             CupertinoButton(
               child: Text("SHOW ALL", style: ralewayRegular(11.0, textBaseColor)),
-              onPressed: () => TMNavigate(context, GalleryPage(), fullscreenDialog: true),
+              onPressed: () => TMNavigate(context, GalleryPage(images: pageImagesList), fullscreenDialog: true),
             ),
           ],
         ),
