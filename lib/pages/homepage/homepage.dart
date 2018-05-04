@@ -15,7 +15,7 @@ import 'package:tailor_made/pages/payments/payments_create.dart';
 
 enum CreateOptions {
   clients,
-  projects,
+  jobs,
   payments,
 }
 
@@ -48,12 +48,12 @@ class _HomePageState extends State<HomePage> {
               ),
               new SimpleDialogOption(
                 onPressed: () {
-                  Navigator.pop(context, CreateOptions.projects);
+                  Navigator.pop(context, CreateOptions.jobs);
                 },
                 child: TMListTile(
                   color: Colors.greenAccent.shade400,
                   icon: Icons.attach_money,
-                  title: "Projects",
+                  title: "Job",
                 ),
               ),
               new SimpleDialogOption(
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
             TMNavigate(context, ContactsCreatePage());
             break;
           }
-        case CreateOptions.projects:
+        case CreateOptions.jobs:
           {
             TMNavigate(context, JobsCreatePage());
             break;
@@ -104,22 +104,25 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: new Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          HeaderWidget(),
-          StatsWidget(),
-          TopRowWidget(),
-          BottomRowWidget(),
-          new FlatButton(
-            padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
-            child: new Text(
-              "CREATE",
-              style: ralewayMedium(14.0, theme.textMutedColor),
-            ),
-            onPressed: onTapCreate,
-          )
-        ],
+      body: new SafeArea(
+        top: false,
+        child: new Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            HeaderWidget(),
+            StatsWidget(),
+            TopRowWidget(),
+            BottomRowWidget(),
+            new FlatButton(
+              padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
+              child: new Text(
+                "CREATE",
+                style: ralewayMedium(14.0, theme.textMutedColor),
+              ),
+              onPressed: onTapCreate,
+            )
+          ],
+        ),
       ),
     );
   }
