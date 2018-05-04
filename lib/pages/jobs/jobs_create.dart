@@ -21,13 +21,19 @@ class _JobsCreatePageState extends State<JobsCreatePage> {
       //   ),
     ];
 
-    Widget makeHeader(String title) {
+    Widget makeHeader(String title, [String trailing = ""]) {
       return new Container(
         color: Colors.grey[100].withOpacity(.4),
         margin: const EdgeInsets.only(top: 8.0),
-        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0),
+        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
         alignment: AlignmentDirectional.centerStart,
-        child: Text(title.toUpperCase(), style: ralewayLight(12.0, textBaseColor.shade800)),
+        child: new Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(title.toUpperCase(), style: ralewayLight(12.0, textBaseColor.shade800)),
+            Text(trailing, style: ralewayLight(12.0, textBaseColor.shade800)),
+          ],
+        ),
       );
     }
 
@@ -54,10 +60,54 @@ class _JobsCreatePageState extends State<JobsCreatePage> {
       ),
     );
 
-    children.add(makeHeader("Measurements"));
+    children.add(makeHeader("Style Name"));
+    children.add(
+      new Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+        child: new TextField(
+          keyboardType: TextInputType.text,
+          style: TextStyle(fontSize: 22.0, color: Colors.black),
+          decoration: new InputDecoration(
+            contentPadding: EdgeInsets.only(bottom: 8.0),
+            hintText: "Enter Name",
+            hintStyle: TextStyle(fontSize: 12.0),
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: borderSideColor,
+                width: 0.0,
+                style: BorderStyle.solid,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    children.add(makeHeader("Measurements", "Inches (In)"));
     children..addAll(JobCreateItem.getList());
 
-    children.add(makeHeader("Payment"));
+    children.add(makeHeader("Payment", "Naira (₦)"));
+    children.add(
+      new Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+        child: new TextField(
+          keyboardType: TextInputType.text,
+          style: TextStyle(fontSize: 22.0, color: Colors.black),
+          decoration: new InputDecoration(
+            contentPadding: EdgeInsets.only(bottom: 8.0),
+            hintText: "Enter Amount",
+            hintStyle: TextStyle(fontSize: 12.0),
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: borderSideColor,
+                width: 0.0,
+                style: BorderStyle.solid,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
 
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
@@ -167,7 +217,17 @@ class JobCreateItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(title, style: TextStyle(fontSize: 12.0)),
-                    Text("29", style: TextStyle(fontSize: 24.0)),
+                    // Text("29", style: TextStyle(fontSize: 24.0)),
+                    new TextField(
+                      keyboardType: TextInputType.number,
+                      style: TextStyle(fontSize: 22.0, color: Colors.black),
+                      decoration: new InputDecoration(
+                        contentPadding: EdgeInsets.zero,
+                        hintText: "Enter Value",
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(fontSize: 12.0),
+                      ),
+                    ),
                   ],
                 ),
               );
