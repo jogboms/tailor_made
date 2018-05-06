@@ -6,7 +6,6 @@ import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/pages/gallery/gallery.dart';
 import 'package:tailor_made/pages/gallery/gallery_view.dart';
-import 'package:tailor_made/pages/gallery/models/gallery_image.model.dart';
 
 const _kGridWidth = 70.0;
 
@@ -16,7 +15,7 @@ class GalleryGrid extends StatelessWidget {
     Random rand = new Random();
     int id = rand.nextInt(10000);
     int id2 = rand.nextInt(10000);
-    const image = "https://placeimg.com/640/640/nature";
+    String image = "https://placeimg.com/640/640/nature/$id";
     return new Hero(
       tag: "-$image-$id-$id2",
       child: Container(

@@ -40,7 +40,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> {
     // children.add(makeHeader("Metadata"));
     children.add(
       Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        margin: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
+        // margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
         child: Row(
           children: <Widget>[
             CircleAvatar(
@@ -135,7 +136,16 @@ class _JobsCreatePageState extends State<JobsCreatePage> {
 
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
-      appBar: appBar(context, title: "", elevation: 0.0),
+      appBar: appBar(
+        context,
+        title: "",
+        actions: [
+          FlatButton(
+            child: Text("SAVE"),
+            onPressed: () {},
+          ),
+        ],
+      ),
       body: new SafeArea(
         top: false,
         child: new SingleChildScrollView(
@@ -167,7 +177,7 @@ class JobCreateItem extends StatelessWidget {
           "Shoulder - Under Burst",
           "Shoulder - Waist",
         ]),
-        isExpanded: true,
+        // isExpanded: true,
       ),
       new SlideDownItem(
         title: "Trouser",
