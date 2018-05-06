@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/pages/gallery/gallery.dart';
 import 'package:tailor_made/pages/gallery/models/gallery_image.model.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';
 import 'package:tailor_made/pages/payments/payments.dart';
-import 'package:tailor_made/pages/gallery/gallery.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -17,7 +17,9 @@ class BottomRowWidget extends StatelessWidget {
       List<GalleryImageModel> pageImagesList = List
           .generate(
             40,
-            (int) => GalleryImageModel(src: "https://placeimg.com/640/640/people"),
+            (int index) => GalleryImageModel(
+                src: "https://placeimg.com/640/640/people/$index"),
+//            (int) => GalleryImageModel(src: "https://source.unsplash.com/100x100?people"),
           )
           .toList();
 
