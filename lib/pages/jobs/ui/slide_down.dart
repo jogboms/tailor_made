@@ -29,41 +29,36 @@ class SlideDownItemState extends State<SlideDownItem> {
 
     Widget body = new AnimatedCrossFade(
       firstChild: new Container(height: 0.0),
-      secondChild: new Padding(
-        padding: EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0),
-        child: widget.body,
-      ),
+      secondChild: widget.body,
       firstCurve: const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
       secondCurve: const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
       sizeCurve: Curves.fastOutSlowIn,
       crossFadeState: isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-      duration: Duration(microseconds: 5000),
+      duration: Duration(milliseconds: 350),
     );
 
     Widget header = new Material(
       color: Colors.white,
-      elevation: 1.5,
-      child: new Row(
-        children: <Widget>[
-          new Expanded(
-            child: new AnimatedContainer(
-              curve: Curves.fastOutSlowIn,
-              duration: Duration(seconds: 1),
-              margin: isExpanded ? EdgeInsets.symmetric(vertical: 16.0) : EdgeInsets.zero,
-              padding: EdgeInsets.only(left: 16.0),
-              child: Text(
-                widget.title,
-                style: theme.titleStyle.copyWith(fontSize: 14.0),
+      elevation: isExpanded ? 1.0 : 0.0,
+      child: new InkWell(
+        child: new Row(
+          children: <Widget>[
+            new Expanded(
+              child: new Container(
+                padding: EdgeInsets.only(left: 16.0, top: 16.0, bottom: 16.0),
+                child: Text(
+                  widget.title,
+                  style: theme.titleStyle.copyWith(fontSize: 14.0),
+                ),
               ),
             ),
-          ),
-          IconButton(
-            icon: Icon(isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down),
-            onPressed: () {
-              setState(() => isExpanded = !isExpanded);
-            },
-          ),
-        ],
+            new Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Icon(isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+            ),
+          ],
+        ),
+        onTap: () => setState(() => isExpanded = !isExpanded),
       ),
     );
 
@@ -71,7 +66,7 @@ class SlideDownItemState extends State<SlideDownItem> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         header,
-        isExpanded ? body : Container(),
+        body,
       ],
     );
   }

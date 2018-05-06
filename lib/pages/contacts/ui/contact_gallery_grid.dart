@@ -9,7 +9,7 @@ class GalleryGridWidget extends StatelessWidget {
       images: List
           .generate(
             40,
-            (int) => GalleryImageModel(src: "https://placeimg.com/640/640/tech"),
+            (int index) => GalleryImageModel(src: "https://placeimg.com/640/640/tech/$index"),
           )
           .toList(),
     );

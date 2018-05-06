@@ -21,20 +21,27 @@ class _JobsCreatePageState extends State<JobsCreatePage> {
       //   ),
     ];
 
-    Widget makeHeader(String title) {
+    Widget makeHeader(String title, [String trailing = ""]) {
       return new Container(
         color: Colors.grey[100].withOpacity(.4),
         margin: const EdgeInsets.only(top: 8.0),
-        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0),
+        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
         alignment: AlignmentDirectional.centerStart,
-        child: Text(title.toUpperCase(), style: ralewayLight(12.0, textBaseColor.shade800)),
+        child: new Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(title.toUpperCase(), style: ralewayLight(12.0, textBaseColor.shade800)),
+            Text(trailing, style: ralewayLight(12.0, textBaseColor.shade800)),
+          ],
+        ),
       );
     }
 
     // children.add(makeHeader("Metadata"));
     children.add(
       Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        margin: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
+        // margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
         child: Row(
           children: <Widget>[
             CircleAvatar(
@@ -54,14 +61,103 @@ class _JobsCreatePageState extends State<JobsCreatePage> {
       ),
     );
 
-    children.add(makeHeader("Measurements"));
+    children.add(makeHeader("Style Name"));
+    children.add(
+      new Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+        child: new TextField(
+          keyboardType: TextInputType.text,
+          style: TextStyle(fontSize: 22.0, color: Colors.black),
+          decoration: new InputDecoration(
+            isDense: true,
+            hintText: "Enter Name",
+            hintStyle: TextStyle(fontSize: 12.0),
+            // border: UnderlineInputBorder(
+            //   borderSide: BorderSide(
+            //     // color: borderSideColor,
+            //     color: Colors.red,
+            //     width: 10.0,
+            //     style: BorderStyle.solid,
+            //   ),
+            // ),
+          ),
+        ),
+      ),
+    );
+
+    children.add(makeHeader("Measurements", "Inches (In)"));
     children..addAll(JobCreateItem.getList());
 
-    children.add(makeHeader("Payment"));
+    children.add(makeHeader("Payment", "Naira (₦)"));
+    children.add(
+      new Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+        child: new TextField(
+          keyboardType: TextInputType.text,
+          style: TextStyle(fontSize: 22.0, color: Colors.black),
+          decoration: new InputDecoration(
+            isDense: true,
+            hintText: "Enter Amount",
+            hintStyle: TextStyle(fontSize: 12.0),
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: borderSideColor,
+                width: 0.0,
+                style: BorderStyle.solid,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    children.add(makeHeader("Additional Notes"));
+    children.add(
+      new Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+        child: new TextField(
+          keyboardType: TextInputType.text,
+          style: TextStyle(fontSize: 22.0, color: Colors.black),
+          maxLines: 6,
+          decoration: new InputDecoration(
+            isDense: true,
+            hintText: "Fabric color, size, special requirements...",
+            hintStyle: TextStyle(fontSize: 12.0),
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: borderSideColor,
+                width: 0.0,
+                style: BorderStyle.solid,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    children.add(SizedBox(height: 50.0));
 
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
-      appBar: appBar(context, title: "", elevation: 0.0),
+      appBar: appBar(
+        context,
+        title: "",
+        actions: [
+          IconButton(
+            // icon: Icon(Icons.add_a_photo),
+            icon: Icon(Icons.add_photo_alternate),
+            onPressed: () {},
+          ),
+          // IconButton(
+          //   icon: Icon(Icons.check),
+          //   onPressed: () {},
+          // ),
+          // FlatButton(
+          //   child: Text("SAVE"),
+          //   onPressed: () {},
+          // ),
+        ],
+      ),
       body: new SafeArea(
         top: false,
         child: new SingleChildScrollView(
@@ -93,7 +189,7 @@ class JobCreateItem extends StatelessWidget {
           "Shoulder - Under Burst",
           "Shoulder - Waist",
         ]),
-        isExpanded: true,
+        // isExpanded: true,
       ),
       new SlideDownItem(
         title: "Trouser",
@@ -133,7 +229,6 @@ class JobCreateItem extends StatelessWidget {
     int length = list.length;
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.only(top: 8.0),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -151,14 +246,18 @@ class JobCreateItem extends StatelessWidget {
             builder: (BuildContext context, BoxConstraints constraints) {
               final removeBorder = (length % 2 != 0 && (index == length - 1)) || (length % 2 == 0 && (index == length - 1 || index == length - 2));
               return new Container(
-                margin: EdgeInsets.only(bottom: 8.0),
-                padding: EdgeInsets.only(bottom: 8.0),
+                padding: EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0),
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
                       color: borderSideColor,
                       width: 1.0,
                       style: removeBorder ? BorderStyle.none : BorderStyle.solid,
+                    ),
+                    right: BorderSide(
+                      color: borderSideColor,
+                      width: 1.0,
+                      style: index % 2 == 0 ? BorderStyle.solid : BorderStyle.none,
                     ),
                   ),
                 ),
@@ -167,7 +266,16 @@ class JobCreateItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(title, style: TextStyle(fontSize: 12.0)),
-                    Text("29", style: TextStyle(fontSize: 24.0)),
+                    new TextField(
+                      keyboardType: TextInputType.number,
+                      style: TextStyle(fontSize: 22.0, color: Colors.black),
+                      decoration: new InputDecoration(
+                        contentPadding: EdgeInsets.zero,
+                        hintText: "Enter Value",
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(fontSize: 12.0),
+                      ),
+                    ),
                   ],
                 ),
               );
