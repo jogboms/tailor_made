@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
 
 const Color accentColor = TMColors.primary;
+const Color accentColorAlt = Colors.blueGrey;
 const MaterialColor primarySwatch = TMColors.white;
 const Color borderSideColor = const Color(0x3A9E9E9E);
 const MaterialColor textBaseColor = Colors.grey;
