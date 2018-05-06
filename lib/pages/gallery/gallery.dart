@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/ui/back_button.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
+
 import 'gallery_grid.dart';
 import 'models/gallery_image.model.dart';
 
@@ -21,9 +23,13 @@ class GalleryPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text("Gallery"),
-                Text("21 Photos", style: TextStyle(fontSize: 11.0, color: textBaseColor)),
+                Text("21 Photos",
+                    style: TextStyle(fontSize: 11.0, color: textBaseColor)),
               ],
             ),
+            automaticallyImplyLeading: false,
+            leading: backButton(context),
+            centerTitle: false,
             floating: true,
           ),
           GalleryGrid(images: images),
