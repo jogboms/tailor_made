@@ -109,6 +109,30 @@ class _JobsCreatePageState extends State<JobsCreatePage> {
       ),
     );
 
+    children.add(makeHeader("Additional Notes"));
+    children.add(
+      new Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+        child: new TextField(
+          keyboardType: TextInputType.text,
+          style: TextStyle(fontSize: 22.0, color: Colors.black),
+          maxLines: 6,
+          decoration: new InputDecoration(
+            contentPadding: EdgeInsets.only(bottom: 8.0),
+            hintText: "Fabric color, size, special requirements...",
+            hintStyle: TextStyle(fontSize: 12.0),
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: borderSideColor,
+                width: 0.0,
+                style: BorderStyle.solid,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
       appBar: appBar(context, title: "", elevation: 0.0),
