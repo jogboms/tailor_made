@@ -170,7 +170,7 @@ class _JobPageState extends State<JobPage> {
               elevation: 0.0,
               automaticallyImplyLeading: false,
               centerTitle: false,
-              backgroundColor: accentColor,
+              backgroundColor: accentColorAlt,
               leading: backButton(context, color: Colors.white),
               title: appBar,
             ),

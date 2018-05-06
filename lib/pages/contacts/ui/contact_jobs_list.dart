@@ -32,7 +32,7 @@ class JobsListWidget extends StatelessWidget {
                 children: <Widget>[
                   new Container(
                     decoration: new BoxDecoration(
-                      color: accentColor,
+                      color: accentColorAlt,
                       borderRadius: BorderRadius.all(Radius.circular(2.0)),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
