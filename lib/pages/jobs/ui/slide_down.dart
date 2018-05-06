@@ -29,10 +29,7 @@ class SlideDownItemState extends State<SlideDownItem> {
 
     Widget body = new AnimatedCrossFade(
       firstChild: new Container(height: 0.0),
-      secondChild: new Padding(
-        padding: EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0),
-        child: widget.body,
-      ),
+      secondChild: widget.body,
       firstCurve: const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
       secondCurve: const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
       sizeCurve: Curves.fastOutSlowIn,

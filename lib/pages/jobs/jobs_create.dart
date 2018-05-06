@@ -69,16 +69,17 @@ class _JobsCreatePageState extends State<JobsCreatePage> {
           keyboardType: TextInputType.text,
           style: TextStyle(fontSize: 22.0, color: Colors.black),
           decoration: new InputDecoration(
-            contentPadding: EdgeInsets.only(bottom: 8.0),
+            isDense: true,
             hintText: "Enter Name",
             hintStyle: TextStyle(fontSize: 12.0),
-            border: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: borderSideColor,
-                width: 0.0,
-                style: BorderStyle.solid,
-              ),
-            ),
+            // border: UnderlineInputBorder(
+            //   borderSide: BorderSide(
+            //     // color: borderSideColor,
+            //     color: Colors.red,
+            //     width: 10.0,
+            //     style: BorderStyle.solid,
+            //   ),
+            // ),
           ),
         ),
       ),
@@ -95,7 +96,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> {
           keyboardType: TextInputType.text,
           style: TextStyle(fontSize: 22.0, color: Colors.black),
           decoration: new InputDecoration(
-            contentPadding: EdgeInsets.only(bottom: 8.0),
+            isDense: true,
             hintText: "Enter Amount",
             hintStyle: TextStyle(fontSize: 12.0),
             border: UnderlineInputBorder(
@@ -119,7 +120,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> {
           style: TextStyle(fontSize: 22.0, color: Colors.black),
           maxLines: 6,
           decoration: new InputDecoration(
-            contentPadding: EdgeInsets.only(bottom: 8.0),
+            isDense: true,
             hintText: "Fabric color, size, special requirements...",
             hintStyle: TextStyle(fontSize: 12.0),
             border: UnderlineInputBorder(
@@ -134,16 +135,27 @@ class _JobsCreatePageState extends State<JobsCreatePage> {
       ),
     );
 
+    children.add(SizedBox(height: 50.0));
+
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
       appBar: appBar(
         context,
         title: "",
         actions: [
-          FlatButton(
-            child: Text("SAVE"),
+          IconButton(
+            // icon: Icon(Icons.add_a_photo),
+            icon: Icon(Icons.add_photo_alternate),
             onPressed: () {},
           ),
+          // IconButton(
+          //   icon: Icon(Icons.check),
+          //   onPressed: () {},
+          // ),
+          // FlatButton(
+          //   child: Text("SAVE"),
+          //   onPressed: () {},
+          // ),
         ],
       ),
       body: new SafeArea(
@@ -217,7 +229,6 @@ class JobCreateItem extends StatelessWidget {
     int length = list.length;
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.only(top: 8.0),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -235,14 +246,18 @@ class JobCreateItem extends StatelessWidget {
             builder: (BuildContext context, BoxConstraints constraints) {
               final removeBorder = (length % 2 != 0 && (index == length - 1)) || (length % 2 == 0 && (index == length - 1 || index == length - 2));
               return new Container(
-                margin: EdgeInsets.only(bottom: 8.0),
-                padding: EdgeInsets.only(bottom: 8.0),
+                padding: EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0),
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
                       color: borderSideColor,
                       width: 1.0,
                       style: removeBorder ? BorderStyle.none : BorderStyle.solid,
+                    ),
+                    right: BorderSide(
+                      color: borderSideColor,
+                      width: 1.0,
+                      style: index % 2 == 0 ? BorderStyle.solid : BorderStyle.none,
                     ),
                   ),
                 ),
@@ -251,7 +266,6 @@ class JobCreateItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(title, style: TextStyle(fontSize: 12.0)),
-                    // Text("29", style: TextStyle(fontSize: 24.0)),
                     new TextField(
                       keyboardType: TextInputType.number,
                       style: TextStyle(fontSize: 22.0, color: Colors.black),

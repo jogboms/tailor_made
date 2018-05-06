@@ -30,9 +30,7 @@ class _JobsPageState extends State<JobsPage> {
         top: false,
         child: CustomScrollView(
           slivers: <Widget>[
-            JobList(
-              lists: list,
-            ),
+            JobList(lists: list),
           ],
         ),
       ),

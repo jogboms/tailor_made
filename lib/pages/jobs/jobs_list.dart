@@ -44,7 +44,7 @@ class JobListItem extends StatelessWidget {
       child: new InkWell(
         onTap: onTapList,
         child: new Padding(
-          padding: EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 8.0),
+          padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
