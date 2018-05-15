@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
@@ -157,7 +158,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> {
                     ]
                   : null,
             )
-          : null,
+          : appBar(context),
       body: widget.contact != null
           ? new SafeArea(
               top: false,
