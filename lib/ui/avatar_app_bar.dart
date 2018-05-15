@@ -5,17 +5,15 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String tag;
   final ImageProvider image;
-  final TextStyle titleStyle;
-  final String title;
-  final List<Widget> actions;
-  final Text subtitle;
+  final Widget title;
+  final Widget subtitle;
   final Color iconColor;
+  final List<Widget> actions;
 
   AvatarAppBar({
     @required this.tag,
     @required this.image,
-    this.titleStyle,
-    this.title = "",
+    this.title,
     this.actions,
     this.iconColor,
     this.subtitle,
@@ -53,18 +51,11 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
       onPressed: onTapGoBack,
     );
 
-    List<Widget> titles = <Widget>[
-      new Text(
-        title,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: new TextStyle(
-          fontSize: 18.0,
-          color: theme.appBarColor,
-          fontWeight: FontWeight.w500,
-        ).merge(titleStyle),
-      ),
-    ];
+    List<Widget> titles = <Widget>[];
+
+    if (title != null) {
+      titles.add(title);
+    }
 
     if (subtitle != null) {
       titles.add(subtitle);
