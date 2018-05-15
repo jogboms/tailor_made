@@ -8,7 +8,7 @@ import 'package:tailor_made/utils/tm_colors.dart';
 
 const Color accentColor = TMColors.primary;
 const Color accentColorAlt = Colors.blueGrey;
-const MaterialColor primarySwatch = TMColors.white;
+const MaterialColor primarySwatch = TMColors.green;
 const Color borderSideColor = const Color(0x3A9E9E9E);
 const MaterialColor textBaseColor = Colors.grey;
 const MaterialColor titleBaseColor = TMColors.dark;
@@ -28,11 +28,11 @@ class TMStyle extends TextStyle {
       : super(inherit: false, color: color, fontFamily: 'Raleway', fontSize: size, fontWeight: weight, textBaseline: TextBaseline.alphabetic);
 }
 
-TextStyle ralewayThin(double fontSize, [Color color = textBaseColor]) => new TMStyle.raleway(fontSize, FontWeight.w100, color);
-TextStyle ralewayLight(double fontSize, [Color color = textBaseColor]) => new TMStyle.raleway(fontSize, FontWeight.w300, color);
-TextStyle ralewayRegular(double fontSize, [Color color = textBaseColor]) => new TMStyle.raleway(fontSize, FontWeight.w400, color);
-TextStyle ralewayMedium(double fontSize, [Color color = textBaseColor]) => new TMStyle.raleway(fontSize, FontWeight.w500, color);
-TextStyle ralewayBold(double fontSize, [Color color = textBaseColor]) => new TMStyle.raleway(fontSize, FontWeight.w700, color);
+TextStyle ralewayThin(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w100, color ?? textBaseColor);
+TextStyle ralewayLight(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w300, color ?? textBaseColor);
+TextStyle ralewayRegular(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w400, color ?? textBaseColor);
+TextStyle ralewayMedium(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w500, color ?? textBaseColor);
+TextStyle ralewayBold(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w700, color ?? textBaseColor);
 
 /// The TextStyles and Colors used for titles, labels, and descriptions. This
 /// InheritedWidget is shared by all of the routes and widgets created for

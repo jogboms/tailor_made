@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/pages/jobs/jobs_create.dart';
+
+enum Choice {
+  CreateJob,
+}
 
 class ContactAppBar extends StatefulWidget {
   final ContactModel contact;
@@ -42,6 +48,29 @@ class ContactAppBarState extends State<ContactAppBar> {
   Widget build(BuildContext context) {
     void onTapGoBack() {
       Navigator.pop(context);
+    }
+
+    void _select(Choice choice) {
+      switch (choice) {
+        case Choice.CreateJob:
+          {
+            TMNavigate(
+              context,
+              JobsCreatePage(
+                contact: ContactModel(
+                  title: "Princess",
+                  pending: 4,
+                  totalJobs: 40,
+                  image: "https://placeimg.com/640/640/animals",
+                ),
+              ),
+            );
+            break;
+          }
+        default:
+          break;
+      }
+      print(choice);
     }
 
     Widget appBarLeading = new FlatButton(
@@ -148,10 +177,18 @@ class ContactAppBarState extends State<ContactAppBar> {
                 icon: Icons.message,
                 onTap: () {},
               ),
-              appBarIcon(
-                icon: Icons.more_vert,
-                onTap: () {},
-              )
+              new PopupMenuButton<Choice>(
+                icon: Icon(Icons.more_vert, color: Colors.white),
+                onSelected: _select,
+                itemBuilder: (BuildContext context) {
+                  return [
+                    new PopupMenuItem<Choice>(
+                      value: Choice.CreateJob,
+                      child: new Text("Create Job"),
+                    ),
+                  ];
+                },
+              ),
             ],
           ),
         ),
