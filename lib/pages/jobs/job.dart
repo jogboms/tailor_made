@@ -3,7 +3,6 @@ import 'package:flutter/rendering.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
-import 'package:tailor_made/ui/back_button.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:flutter/cupertino.dart';
