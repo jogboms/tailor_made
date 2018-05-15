@@ -26,10 +26,11 @@ class GalleryPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text("Gallery"),
+                Text("Gallery", style: theme.appBarStyle),
                 Text("21 Photos", style: TextStyle(fontSize: 11.0, color: textBaseColor)),
               ],
             ),
+            backgroundColor: theme.appBarBackgroundColor,
             automaticallyImplyLeading: false,
             leading: backButton(context),
             centerTitle: false,
