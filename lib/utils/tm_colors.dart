@@ -34,6 +34,21 @@ class TMColors {
       900: const Color(0xFFF0F0F0),
     },
   );
+  static const MaterialColor green = const MaterialColor(
+    0xFF4caf50,
+    const <int, Color>{
+      50: const Color(0xFF4caf50),
+      100: const Color(0xFF4caf50),
+      200: const Color(0xFF4caf50),
+      300: const Color(0xFF4caf50),
+      400: const Color(0xFF4caf50),
+      500: const Color(0xFF4caf50),
+      600: const Color(0xFF4caf50),
+      700: const Color(0xFF4caf50),
+      800: const Color(0xFF4caf50),
+      900: const Color(0xFF4caf50),
+    },
+  );
   static const Color accent = const Color(0xFF4caf50);
   static const Color primary = const Color(0xFF4caf50);
 }
