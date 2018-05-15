@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/ui/avatar_app_bar.dart';
 import 'package:tailor_made/ui/back_button.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -125,50 +126,38 @@ class _JobPageState extends State<JobPage> {
       children: items.map((Measure item) => new MeasureItem(item)).toList(),
     );
 
-    Widget appBar = new GestureDetector(
-      onTap: () {
-        TMNavigate(
-          context,
-          Contact(
-            contact: contact,
-          ),
-        );
-      },
-      child: new Row(
-        children: <Widget>[
-          new CircleAvatar(
-            backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(contact.image),
-          ),
-          SizedBox(width: 8.0),
-          new Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              new Text(contact.title, style: ralewayBold(20.0, Colors.white)),
-              new Text.rich(
-                new TextSpan(
-                  children: [
-                    new TextSpan(
-                      text: "Sunday",
-                      style: new TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                    new TextSpan(text: ", 12"),
-                    new TextSpan(
-                      text: "nd",
-                      style: new TextStyle(fontSize: 12.0),
-                    ),
-                    new TextSpan(text: " March"),
-                  ],
-                ),
-                style: new TextStyle(
-                  color: Colors.white,
-                  fontSize: 12.0,
-                ),
-              ),
-            ],
-          ),
-        ],
+    Widget appBar = AvatarAppBar(
+      tag: contact.image,
+      image: NetworkImage(contact.image),
+      title: new GestureDetector(
+        onTap: () => TMNavigate(context, Contact(contact: contact)),
+        child: new Text(
+          contact.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: ralewayRegular(18.0, Colors.white),
+        ),
+      ),
+      iconColor: Colors.white,
+      subtitle: new Text.rich(
+        new TextSpan(
+          children: [
+            new TextSpan(
+              text: "Sunday",
+              style: new TextStyle(fontWeight: FontWeight.w500),
+            ),
+            new TextSpan(text: ", 12"),
+            new TextSpan(
+              text: "nd",
+              style: new TextStyle(fontSize: 12.0),
+            ),
+            new TextSpan(text: " March"),
+          ],
+        ),
+        style: new TextStyle(
+          color: Colors.white,
+          fontSize: 12.0,
+        ),
       ),
     );
 
@@ -186,7 +175,6 @@ class _JobPageState extends State<JobPage> {
               automaticallyImplyLeading: false,
               centerTitle: false,
               backgroundColor: accentColorAlt,
-              leading: backButton(context, color: Colors.white),
               title: appBar,
             ),
           ];

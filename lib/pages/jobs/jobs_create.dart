@@ -132,7 +132,12 @@ class _JobsCreatePageState extends State<JobsCreatePage> {
           ? AvatarAppBar(
               tag: widget.contact.image,
               image: NetworkImage(widget.contact.image),
-              title: widget.contact.title,
+              title: new Text(
+                widget.contact.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: ralewayRegular(18.0, theme.appBarColor),
+              ),
               subtitle: Text("${widget.contact.totalJobs} Jobs", style: theme.smallTextStyle),
               actions: widget.contact != null
                   ? [
