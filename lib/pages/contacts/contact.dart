@@ -51,7 +51,7 @@ class _ContactState extends State<Contact> {
                   flexibleSpace: ContactHeaderCarouselWidget(),
                   expandedHeight: 300.0,
                   forceElevated: true,
-                  bottom: tabTitles(backgroundColor: theme.appBarBackgroundColor),
+                  bottom: tabTitles(),
                 ),
               ),
             ];
@@ -69,20 +69,25 @@ class _ContactState extends State<Contact> {
   }
 }
 
-Widget tabTitles({Color backgroundColor}) {
+Widget tabTitles() {
   return PreferredSize(
     child: Container(
       decoration: BoxDecoration(
-        color: backgroundColor,
-        boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(.25), offset: Offset(0.0, 2.0), spreadRadius: 0.0, blurRadius: 3.0),
-          // BoxShadow(color: Colors.white, offset: Offset(0.0, -3.0), spreadRadius: 2.0, blurRadius: 0.0),
-        ],
+        gradient: LinearGradient(
+          colors: [
+            Colors.transparent,
+            Colors.black.withOpacity(.25),
+            Colors.black.withOpacity(.375),
+            Colors.black.withOpacity(.4),
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
       ),
-      margin: EdgeInsets.symmetric(horizontal: 0.0),
+      // padding: EdgeInsets.symmetric(horizontal: 32.0),
       child: TabBar(
         // indicatorSize: TabBarIndicatorSize.label,
-        unselectedLabelColor: Colors.grey.withOpacity(.7),
+        labelStyle: ralewayMedium(14.0),
         tabs: [
           Tab(child: Text(TABS[0])),
           Tab(child: Text(TABS[1])),

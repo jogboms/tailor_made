@@ -42,118 +42,119 @@ class _JobsCreatePageState extends State<JobsCreatePage> {
       );
     }
 
-    // children.add(makeHeader("Metadata"));
-    children.add(
-      Container(
-        margin: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
-        // margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-        child: Row(
-          children: <Widget>[
-            CircleAvatar(
-              radius: 30.0,
-              backgroundColor: Colors.grey[200],
-            ),
-            SizedBox(width: 8.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(widget.contact.title, style: theme.mediumTextStyle),
-                Text("${widget.contact.totalJobs} Jobs", style: theme.smallTextStyle),
-              ],
-            )
-          ],
+    if (widget.contact != null) {
+      // children.add(makeHeader("Metadata"));
+      children.add(
+        Container(
+          margin: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
+          // margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+          child: Row(
+            children: <Widget>[
+              CircleAvatar(
+                radius: 30.0,
+                backgroundColor: Colors.grey[200],
+              ),
+              SizedBox(width: 8.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(widget.contact.title, style: theme.mediumTextStyle),
+                  Text("${widget.contact.totalJobs} Jobs", style: theme.smallTextStyle),
+                ],
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
 
-    children.add(makeHeader("Style Name"));
-    children.add(
-      new Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-        child: new TextField(
-          keyboardType: TextInputType.text,
-          style: TextStyle(fontSize: 18.0, color: Colors.black),
-          decoration: new InputDecoration(
-            isDense: true,
-            hintText: "Enter Name",
-            hintStyle: TextStyle(fontSize: 12.0),
-            // border: InputBorder.none,
-            border: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: borderSideColor,
-                width: 1.0,
-                style: BorderStyle.solid,
+      children.add(makeHeader("Style Name"));
+      children.add(
+        new Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+          child: new TextField(
+            keyboardType: TextInputType.text,
+            style: TextStyle(fontSize: 18.0, color: Colors.black),
+            decoration: new InputDecoration(
+              isDense: true,
+              hintText: "Enter Name",
+              hintStyle: TextStyle(fontSize: 12.0),
+              // border: InputBorder.none,
+              border: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: borderSideColor,
+                  width: 1.0,
+                  style: BorderStyle.solid,
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
 
-    children.add(makeHeader("Measurements", "Inches (In)"));
-    children..addAll(JobCreateItem.getList());
+      children.add(makeHeader("Measurements", "Inches (In)"));
+      children..addAll(JobCreateItem.getList());
 
-    children.add(makeHeader("Payment", "Naira (₦)"));
-    children.add(
-      new Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-        child: new TextField(
-          keyboardType: TextInputType.number,
-          style: TextStyle(fontSize: 18.0, color: Colors.black),
-          decoration: new InputDecoration(
-            isDense: true,
-            hintText: "Enter Amount",
-            hintStyle: TextStyle(fontSize: 12.0),
-            border: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: borderSideColor,
-                width: 0.0,
-                style: BorderStyle.solid,
+      children.add(makeHeader("Payment", "Naira (₦)"));
+      children.add(
+        new Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+          child: new TextField(
+            keyboardType: TextInputType.number,
+            style: TextStyle(fontSize: 18.0, color: Colors.black),
+            decoration: new InputDecoration(
+              isDense: true,
+              hintText: "Enter Amount",
+              hintStyle: TextStyle(fontSize: 12.0),
+              border: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: borderSideColor,
+                  width: 0.0,
+                  style: BorderStyle.solid,
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
 
-    children.add(makeHeader("Additional Notes"));
-    children.add(
-      new Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-        child: new TextField(
-          keyboardType: TextInputType.text,
-          style: TextStyle(fontSize: 18.0, color: Colors.black),
-          maxLines: 6,
-          decoration: new InputDecoration(
-            isDense: true,
-            hintText: "Fabric color, size, special requirements...",
-            hintStyle: TextStyle(fontSize: 12.0),
-            border: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: borderSideColor,
-                width: 0.0,
-                style: BorderStyle.solid,
+      children.add(makeHeader("Additional Notes"));
+      children.add(
+        new Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+          child: new TextField(
+            keyboardType: TextInputType.text,
+            style: TextStyle(fontSize: 18.0, color: Colors.black),
+            maxLines: 6,
+            decoration: new InputDecoration(
+              isDense: true,
+              hintText: "Fabric color, size, special requirements...",
+              hintStyle: TextStyle(fontSize: 12.0),
+              border: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: borderSideColor,
+                  width: 0.0,
+                  style: BorderStyle.solid,
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
 
-    children.add(
-      Padding(
-        child: RaisedButton(
-          color: accentColor,
-          child: Text(
-            "FINISH",
-            style: TextStyle(color: Colors.white),
+      children.add(
+        Padding(
+          child: RaisedButton(
+            color: accentColor,
+            child: Text(
+              "FINISH",
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: () {},
           ),
-          onPressed: () {},
+          padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
         ),
-        padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
-      ),
-    );
-
+      );
+    }
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
       appBar: appBar(
