@@ -22,8 +22,7 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.tailormade"
+        applicationId "io.github.jogboms.tailormade"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
