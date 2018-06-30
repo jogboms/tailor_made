@@ -131,10 +131,10 @@ class _JobsCreatePageState extends State<JobsCreatePage> {
       backgroundColor: theme.scaffoldColor,
       appBar: widget.contact != null
           ? AvatarAppBar(
-              tag: widget.contact.image,
-              image: NetworkImage(widget.contact.image),
+              tag: widget.contact.imageUrl,
+              image: NetworkImage(widget.contact.imageUrl),
               title: new Text(
-                widget.contact.title,
+                widget.contact.fullname,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: ralewayRegular(18.0, theme.appBarColor),
