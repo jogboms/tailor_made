@@ -20,11 +20,11 @@ class _ContactsPageState extends State<ContactsPage> {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
     List<ContactModel> contactList = <ContactModel>[
-      ContactModel(title: "Princess", pending: 4, image: "https://placeimg.com/640/640/animals"),
-      ContactModel(title: "Winnie", pending: 2, image: "https://placeimg.com/640/640/nature"),
-      ContactModel(title: "Joy", pending: 0, image: "https://placeimg.com/640/640/arch"),
+      ContactModel(fullname: "Princess", hasPending: 4, imageUrl: "https://placeimg.com/640/640/animals"),
+      ContactModel(fullname: "Winnie", hasPending: 2, imageUrl: "https://placeimg.com/640/640/nature"),
+      ContactModel(fullname: "Joy", hasPending: 0, imageUrl: "https://placeimg.com/640/640/arch"),
       // ContactModel(title: "Princess", pending: 3, image: "https://placeimg.com/640/640/people"),
-      ContactModel(title: "Mikun", pending: 5, image: "https://placeimg.com/640/640/people"),
+      ContactModel(fullname: "Mikun", hasPending: 5, imageUrl: "https://placeimg.com/640/640/people"),
       // ContactModel(title: "Joy", pending: 0, image: "https://placeimg.com/640/640/people"),
       // ContactModel(title: "Princess", pending: 6, image: "https://placeimg.com/640/640/tech"),
       // ContactModel(title: "Mikun", pending: 1, image: "https://placeimg.com/640/640/arch"),

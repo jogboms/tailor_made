@@ -1,8 +1,8 @@
 class ContactModel {
-  final String title;
-  final String image;
+  final String fullname;
+  final String imageUrl;
   final int totalJobs;
-  final int pending;
+  final int hasPending;
 
-  ContactModel({this.title, this.image, this.totalJobs, this.pending});
+  ContactModel({this.fullname, this.imageUrl, this.totalJobs, this.hasPending});
 }
