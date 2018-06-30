@@ -8,6 +8,8 @@ dependencies:
   firebase_analytics: ^1.0.1
   cloud_firestore: ^0.7.3
   cloud_functions: ^0.0.1
+  image_picker: ^0.4.5
+  firebase_storage: ^0.3.7
 
 dev_dependencies:
   flutter_test:
@@ -16,21 +18,19 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
-  # assets:
-  #  - images/a_dot_burr.jpeg
-  #  - images/a_dot_ham.jpeg
+assets:
+  - assets/images/
 
-  fonts:
-    - family: Raleway
-      fonts:
-        - asset: assets/fonts/Raleway-Thin.ttf
-          weight: 100
-        - asset: assets/fonts/Raleway-Light.ttf
-          weight: 300
-        - asset: assets/fonts/Raleway-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/Raleway-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Raleway-SemiBold.ttf
-          weight: 600
+fonts:
+  - family: Raleway
+    fonts:
+      - asset: assets/fonts/Raleway-Thin.ttf
+        weight: 100
+      - asset: assets/fonts/Raleway-Light.ttf
+        weight: 300
+      - asset: assets/fonts/Raleway-Regular.ttf
+        weight: 400
+      - asset: assets/fonts/Raleway-Medium.ttf
+        weight: 500
+      - asset: assets/fonts/Raleway-SemiBold.ttf
+        weight: 600
