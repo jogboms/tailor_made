@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/jobs/jobs_list.dart';
-import 'package:tailor_made/pages/jobs/models/job_model.dart';
+import 'package:tailor_made/pages/jobs/models/job.model.dart';
 
 class JobsListWidget extends StatelessWidget {
   @override

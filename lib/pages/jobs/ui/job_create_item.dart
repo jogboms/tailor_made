@@ -1,57 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/pages/jobs/models/measure.model.dart';
 import 'package:tailor_made/pages/jobs/ui/slide_down.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class JobMeasures extends StatelessWidget {
-  JobMeasures(dynamic job);
+  final JobModel job;
+
+  JobMeasures(this.job);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         new SlideDownItem(
-          title: "Blouse",
-          body: new JobMeasureBlock([
-            MeasureModel(name: "Arm Hole"),
-            MeasureModel(name: "Shoulder"),
-            MeasureModel(name: "Burst"),
-            MeasureModel(name: "Burst Point"),
-            MeasureModel(name: "Shoulder - Burst Point"),
-            MeasureModel(name: "Shoulder - Under Burst"),
-            MeasureModel(name: "Shoulder - Waist"),
-          ]),
+          title: MeasureModelType.blouse,
+          body: new JobMeasureBlock(
+            job.measurements.where((measure) => measure.type == MeasureModelType.blouse).toList(),
+          ),
           // isExpanded: true,
         ),
         new SlideDownItem(
-          title: "Trouser",
-          body: new JobMeasureBlock([
-            MeasureModel(name: "Length"),
-            MeasureModel(name: "Waist"),
-            MeasureModel(name: "Crouch"),
-            MeasureModel(name: "Thigh"),
-            MeasureModel(name: "Body Rise"),
-            MeasureModel(name: "Width"),
-            MeasureModel(name: "Hip"),
-          ]),
+          title: MeasureModelType.trouser,
+          body: new JobMeasureBlock(
+            job.measurements.where((measure) => measure.type == MeasureModelType.trouser).toList(),
+          ),
         ),
         new SlideDownItem(
-          title: "Skirts",
-          body: new JobMeasureBlock([
-            MeasureModel(name: "Full Length"),
-            MeasureModel(name: "Short Length"),
-            MeasureModel(name: "Knee Length"),
-            MeasureModel(name: "Hip"),
-          ]),
+          title: MeasureModelType.skirts,
+          body: new JobMeasureBlock(
+            job.measurements.where((measure) => measure.type == MeasureModelType.skirts).toList(),
+          ),
         ),
         new SlideDownItem(
-          title: "Gown",
-          body: new JobMeasureBlock([
-            MeasureModel(name: "Waist"),
-            MeasureModel(name: "Long Length"),
-            MeasureModel(name: "Short Length"),
-            MeasureModel(name: "Knee Length"),
-          ]),
+          title: MeasureModelType.gown,
+          body: new JobMeasureBlock(
+            job.measurements.where((measure) => measure.type == MeasureModelType.gown).toList(),
+          ),
         ),
       ],
     );
