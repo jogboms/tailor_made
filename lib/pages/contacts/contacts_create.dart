@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
@@ -31,16 +30,13 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
   void initState() {
     super.initState();
     contact = new ContactModel();
-    FirebaseAuth.instance.signInAnonymously().then((r) {
-      print(r);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
     return new Scaffold(
-      key: scaffoldKey,
+      // key: scaffoldKey,
       backgroundColor: theme.scaffoldColor,
       //   backgroundColor: Colors.grey.shade100,
       appBar: appBar(
@@ -102,7 +98,8 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
               FlatButton(
                 onPressed: _handleSubmit,
                 child: Text("SUBMIT"),
-              )
+              ),
+              SizedBox(height: 32.0),
             ],
           ),
         ),

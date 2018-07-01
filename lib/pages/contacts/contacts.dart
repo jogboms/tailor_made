@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/contacts/ui/contacts_item.dart';
+import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
@@ -19,16 +21,6 @@ class _ContactsPageState extends State<ContactsPage> {
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
-    List<ContactModel> contactList = <ContactModel>[
-      ContactModel(fullname: "Princess", hasPending: 4, imageUrl: "https://placeimg.com/640/640/animals"),
-      ContactModel(fullname: "Winnie", hasPending: 2, imageUrl: "https://placeimg.com/640/640/nature"),
-      ContactModel(fullname: "Joy", hasPending: 0, imageUrl: "https://placeimg.com/640/640/arch"),
-      // ContactModel(title: "Princess", pending: 3, image: "https://placeimg.com/640/640/people"),
-      ContactModel(fullname: "Mikun", hasPending: 5, imageUrl: "https://placeimg.com/640/640/people"),
-      // ContactModel(title: "Joy", pending: 0, image: "https://placeimg.com/640/640/people"),
-      // ContactModel(title: "Princess", pending: 6, image: "https://placeimg.com/640/640/tech"),
-      // ContactModel(title: "Mikun", pending: 1, image: "https://placeimg.com/640/640/arch"),
-    ];
 
     void onTapSearch() {
       setState(() {
@@ -81,13 +73,22 @@ class _ContactsPageState extends State<ContactsPage> {
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
       appBar: _isSearching ? buildSearchBar() : buildAppBar(),
-      body: Padding(
-        padding: EdgeInsets.zero,
-        child: ListView(
-          shrinkWrap: true,
-          itemExtent: null,
-          children: contactList.map((ContactModel contact) => ContactsItem(contact: contact)).toList(),
-        ),
+      body: StreamBuilder(
+        stream: Cloudstore.contacts.snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return const Text('Loading...');
+          List<DocumentSnapshot> _data = snapshot.data.documents;
+          var data = _data.where((doc) => doc.data.containsKey("fullname")).toList();
+
+          return new ListView.builder(
+            itemCount: data.length,
+            shrinkWrap: true,
+            itemExtent: null,
+            itemBuilder: (context, index) {
+              return ContactsItem(contact: ContactModel.fromJson(data[index].data));
+            },
+          );
+        },
       ),
       floatingActionButton: new FloatingActionButton(
         child: new Icon(Icons.add),
