@@ -58,10 +58,10 @@ class ContactAppBarState extends State<ContactAppBar> {
               context,
               JobsCreatePage(
                 contact: ContactModel(
-                  title: "Princess",
-                  pending: 4,
+                  fullname: "Princess",
+                  hasPending: 4,
                   totalJobs: 40,
-                  image: "https://placeimg.com/640/640/animals",
+                  imageUrl: "https://placeimg.com/640/640/animals",
                 ),
               ),
             );
@@ -85,11 +85,11 @@ class ContactAppBarState extends State<ContactAppBar> {
           ),
           new SizedBox(width: isAtTop ? 0.0 : 4.0),
           new Hero(
-            tag: widget.contact.image,
+            tag: widget.contact.imageUrl,
             child: new CircleAvatar(
               radius: isAtTop ? 0.0 : null,
               backgroundColor: Colors.grey.shade400,
-              backgroundImage: NetworkImage(widget.contact.image),
+              backgroundImage: NetworkImage(widget.contact.imageUrl),
             ),
           ),
         ],
@@ -102,7 +102,7 @@ class ContactAppBarState extends State<ContactAppBar> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         new Text(
-          widget.contact.title,
+          widget.contact.fullname,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: new TextStyle(
@@ -111,13 +111,13 @@ class ContactAppBarState extends State<ContactAppBar> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        isAtTop || (widget.contact.pending < 1)
+        isAtTop || (widget.contact.hasPending < 1)
             ? new Container()
             : new Text.rich(
                 new TextSpan(
                   children: [
                     new TextSpan(
-                      text: widget.contact.pending.toString(),
+                      text: widget.contact.hasPending.toString(),
                       style: new TextStyle(fontWeight: FontWeight.w600),
                     ),
                     new TextSpan(
