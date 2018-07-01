@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/jobs/jobs_list.dart';
-import 'package:tailor_made/pages/jobs/models/job_list.model.dart';
+import 'package:tailor_made/pages/jobs/models/job_model.dart';
 
 class JobsListWidget extends StatelessWidget {
   @override
@@ -9,7 +9,7 @@ class JobsListWidget extends StatelessWidget {
       lists: List
           .generate(
             40,
-            (int) => JobListModel(),
+            (int) => JobModel(),
           )
           .toList(),
     );

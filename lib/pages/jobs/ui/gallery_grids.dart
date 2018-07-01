@@ -10,14 +10,19 @@ import 'package:tailor_made/pages/gallery/gallery_view.dart';
 const _kGridWidth = 70.0;
 
 class GalleryGrid extends StatelessWidget {
+  final String tag;
+  final String imageUrl;
+
+  GalleryGrid({
+    Key key,
+    @required this.tag,
+    @required this.imageUrl,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    Random rand = new Random();
-    int id = rand.nextInt(10000);
-    int id2 = rand.nextInt(10000);
-    String image = "https://placeimg.com/640/640/nature/$id";
     return new Hero(
-      tag: "-$image-$id-$id2",
+      tag: tag,
       child: Container(
         width: _kGridWidth,
         margin: EdgeInsets.only(right: 8.0),
@@ -25,7 +30,7 @@ class GalleryGrid extends StatelessWidget {
           color: Colors.grey[200],
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: new NetworkImage(image),
+            image: new NetworkImage(imageUrl),
           ),
           borderRadius: BorderRadius.circular(5.0),
         ),
@@ -34,15 +39,18 @@ class GalleryGrid extends StatelessWidget {
           color: Colors.transparent,
           child: new InkWell(
             onTap: () {
-              Navigator.of(context).push(new PageRouteBuilder(
-                  opaque: false,
-                  pageBuilder: (BuildContext context, _, __) => GalleryView(image, "-$image-$id-$id2"),
-                  transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-                    return new FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    );
-                  }));
+              Navigator.of(context).push(
+                    new PageRouteBuilder(
+                      opaque: false,
+                      pageBuilder: (BuildContext context, _, __) => GalleryView(imageUrl, tag),
+                      transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                        return new FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
               // TMNavigate(context, GalleryView(image, "-$image-$id-$id2"), fullscreenDialog: true)
             },
           ),
@@ -57,12 +65,17 @@ class GalleryGrids extends StatelessWidget {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    List<Widget> imagesList = List
-        .generate(
-          10,
-          (int index) => GalleryGrid(),
-        )
-        .toList();
+    List<Widget> imagesList = List.generate(10, (int index) {
+      Random rand = new Random();
+      int id = rand.nextInt(10000);
+      int id2 = rand.nextInt(10000);
+      String image = "https://placeimg.com/640/640/nature/$id";
+
+      return GalleryGrid(
+        imageUrl: image,
+        tag: "$image-$id-$id2",
+      );
+    }).toList();
     return new Column(
       children: <Widget>[
         new Row(
