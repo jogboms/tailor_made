@@ -72,7 +72,7 @@ class _ContactsItemState extends State<ContactsItem> {
     }
 
     Row icons = new Row(
-      // mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         iconCircle(Icons.call, onTapCall),
