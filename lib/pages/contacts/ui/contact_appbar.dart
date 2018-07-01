@@ -50,29 +50,6 @@ class ContactAppBarState extends State<ContactAppBar> {
       Navigator.pop(context);
     }
 
-    void _select(Choice choice) {
-      switch (choice) {
-        case Choice.CreateJob:
-          {
-            TMNavigate(
-              context,
-              JobsCreatePage(
-                contact: ContactModel(
-                  fullname: "Princess",
-                  hasPending: 4,
-                  totalJobs: 40,
-                  imageUrl: "https://placeimg.com/640/640/animals",
-                ),
-              ),
-            );
-            break;
-          }
-        default:
-          break;
-      }
-      print(choice);
-    }
-
     Widget appBarLeading = new FlatButton(
       padding: EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
       child: new Row(
@@ -137,7 +114,7 @@ class ContactAppBarState extends State<ContactAppBar> {
 
     Widget appBarIcon({IconData icon, VoidCallback onTap}) {
       return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(12.0),
         child: InkResponse(
           child: new Icon(icon, color: Colors.white),
           onTap: onTap,
@@ -177,16 +154,10 @@ class ContactAppBarState extends State<ContactAppBar> {
                 icon: Icons.message,
                 onTap: () {},
               ),
-              new PopupMenuButton<Choice>(
-                icon: Icon(Icons.more_vert, color: Colors.white),
-                onSelected: _select,
-                itemBuilder: (BuildContext context) {
-                  return [
-                    new PopupMenuItem<Choice>(
-                      value: Choice.CreateJob,
-                      child: new Text("Create Job"),
-                    ),
-                  ];
+              appBarIcon(
+                icon: Icons.add,
+                onTap: () {
+                  TMNavigate(context, JobsCreatePage(contact: widget.contact));
                 },
               ),
             ],

@@ -16,7 +16,7 @@ import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 
-const _kGridWidth = 70.0;
+const _kGridWidth = 85.0;
 
 class FireImage {
   String imageUrl;
@@ -44,30 +44,33 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   @override
   void initState() {
     super.initState();
-    job = new JobModel(measurements: [
-      MeasureModel(name: "Arm Hole", type: MeasureModelType.blouse),
-      MeasureModel(name: "Shoulder", type: MeasureModelType.blouse),
-      MeasureModel(name: "Burst", type: MeasureModelType.blouse),
-      MeasureModel(name: "Burst Point", type: MeasureModelType.blouse),
-      MeasureModel(name: "Shoulder - Burst Point", type: MeasureModelType.blouse),
-      MeasureModel(name: "Shoulder - Under Burst", type: MeasureModelType.blouse),
-      MeasureModel(name: "Shoulder - Waist", type: MeasureModelType.blouse),
-      MeasureModel(name: "Length", type: MeasureModelType.trouser),
-      MeasureModel(name: "Waist", type: MeasureModelType.trouser),
-      MeasureModel(name: "Crouch", type: MeasureModelType.trouser),
-      MeasureModel(name: "Thigh", type: MeasureModelType.trouser),
-      MeasureModel(name: "Body Rise", type: MeasureModelType.trouser),
-      MeasureModel(name: "Width", type: MeasureModelType.trouser),
-      MeasureModel(name: "Hip", type: MeasureModelType.trouser),
-      MeasureModel(name: "Full Length", type: MeasureModelType.skirts),
-      MeasureModel(name: "Short Length", type: MeasureModelType.skirts),
-      MeasureModel(name: "Knee Length", type: MeasureModelType.skirts),
-      MeasureModel(name: "Hip", type: MeasureModelType.skirts),
-      MeasureModel(name: "Waist", type: MeasureModelType.gown),
-      MeasureModel(name: "Long Length", type: MeasureModelType.gown),
-      MeasureModel(name: "Short Length", type: MeasureModelType.gown),
-      MeasureModel(name: "Knee Length", type: MeasureModelType.gown),
-    ]);
+    job = new JobModel(
+      contact: widget.contact,
+      measurements: [
+        MeasureModel(name: "Arm Hole", type: MeasureModelType.blouse),
+        MeasureModel(name: "Shoulder", type: MeasureModelType.blouse),
+        MeasureModel(name: "Burst", type: MeasureModelType.blouse),
+        MeasureModel(name: "Burst Point", type: MeasureModelType.blouse),
+        MeasureModel(name: "Shoulder - Burst Point", type: MeasureModelType.blouse),
+        MeasureModel(name: "Shoulder - Under Burst", type: MeasureModelType.blouse),
+        MeasureModel(name: "Shoulder - Waist", type: MeasureModelType.blouse),
+        MeasureModel(name: "Length", type: MeasureModelType.trouser),
+        MeasureModel(name: "Waist", type: MeasureModelType.trouser),
+        MeasureModel(name: "Crouch", type: MeasureModelType.trouser),
+        MeasureModel(name: "Thigh", type: MeasureModelType.trouser),
+        MeasureModel(name: "Body Rise", type: MeasureModelType.trouser),
+        MeasureModel(name: "Width", type: MeasureModelType.trouser),
+        MeasureModel(name: "Hip", type: MeasureModelType.trouser),
+        MeasureModel(name: "Full Length", type: MeasureModelType.skirts),
+        MeasureModel(name: "Short Length", type: MeasureModelType.skirts),
+        MeasureModel(name: "Knee Length", type: MeasureModelType.skirts),
+        MeasureModel(name: "Hip", type: MeasureModelType.skirts),
+        MeasureModel(name: "Waist", type: MeasureModelType.gown),
+        MeasureModel(name: "Long Length", type: MeasureModelType.gown),
+        MeasureModel(name: "Short Length", type: MeasureModelType.gown),
+        MeasureModel(name: "Knee Length", type: MeasureModelType.gown),
+      ],
+    );
   }
 
   @override
@@ -120,9 +123,12 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
         ),
       );
+
+      children.add(SizedBox(height: 32.0));
     }
 
     return new Scaffold(
+      key: scaffoldKey,
       backgroundColor: theme.scaffoldColor,
       appBar: buildAppBar(theme),
       body: buildBody(children),
@@ -179,6 +185,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       form.save();
       showLoadingSnackBar();
 
+      job.images = fireImages.map((img) => img.imageUrl).toList();
       try {
         var data = await Cloudstore.jobs.add(job.toMap());
         closeLoadingSnackBar();
@@ -246,6 +253,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       return GalleryGrid(
         imageUrl: image,
         tag: "$image-$index",
+        size: _kGridWidth,
       );
     }).toList();
 

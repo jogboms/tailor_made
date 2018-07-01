@@ -17,9 +17,9 @@ class JobModel extends Model {
     this.price,
     this.notes,
     this.images,
-    this.createdAt,
+    createdAt,
     this.measurements,
-  });
+  }) : createdAt = DateTime.now();
 
   factory JobModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
@@ -47,9 +47,9 @@ class JobModel extends Model {
       "name": name,
       "price": price,
       "notes": notes,
-      "images": images.toString(),
-      "createdAt": createdAt.toString(),
-      "measurements": measurements.toString(),
+      "images": images,
+      "createdAt": createdAt,
+      "measurements": measurements.map((measure) => measure.toMap()).toList(),
     };
   }
 }

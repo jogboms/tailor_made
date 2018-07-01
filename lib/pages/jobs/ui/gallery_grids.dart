@@ -12,19 +12,22 @@ const _kGridWidth = 70.0;
 class GalleryGrid extends StatelessWidget {
   final String tag;
   final String imageUrl;
+  final Size size;
 
   GalleryGrid({
     Key key,
     @required this.tag,
     @required this.imageUrl,
-  }) : super(key: key);
+    double size,
+  })  : size = Size.square(size ?? _kGridWidth),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return new Hero(
       tag: tag,
       child: Container(
-        width: _kGridWidth,
+        width: size.width,
         margin: EdgeInsets.only(right: 8.0),
         decoration: BoxDecoration(
           color: Colors.grey[200],
@@ -61,6 +64,14 @@ class GalleryGrid extends StatelessWidget {
 }
 
 class GalleryGrids extends StatelessWidget {
+  final Size gridSize;
+
+  GalleryGrids({
+    Key key,
+    double gridSize,
+  })  : gridSize = Size.square(gridSize ?? _kGridWidth),
+        super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
@@ -74,6 +85,7 @@ class GalleryGrids extends StatelessWidget {
       return GalleryGrid(
         imageUrl: image,
         tag: "$image-$id-$id2",
+        size: gridSize.width,
       );
     }).toList();
     return new Column(
@@ -92,21 +104,21 @@ class GalleryGrids extends StatelessWidget {
           ],
         ),
         new Container(
-          height: _kGridWidth + 8,
+          height: gridSize.width + 8,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: new ListView(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             scrollDirection: Axis.horizontal,
-            children: [GalleryGrids.newGrid()]..addAll(imagesList),
+            children: [GalleryGrids.newGrid(gridSize)]..addAll(imagesList),
           ),
         ),
       ],
     );
   }
 
-  static Widget newGrid() {
+  static Widget newGrid(Size gridSize) {
     return new Container(
-      width: _kGridWidth,
+      width: gridSize.width,
       margin: EdgeInsets.only(right: 8.0),
       child: new Material(
         borderRadius: BorderRadius.circular(5.0),
