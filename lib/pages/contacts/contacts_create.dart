@@ -6,97 +6,142 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
+import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
+import 'package:tailor_made/utils/tm_validators.dart';
 
 class ContactsCreatePage extends StatefulWidget {
   @override
   _ContactsCreatePageState createState() => new _ContactsCreatePageState();
 }
 
-class _ContactsCreatePageState extends State<ContactsCreatePage> {
-  String imageUrl;
+class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarProvider {
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   bool isLoading = false;
   bool isSuccess = false;
+  ContactModel contact;
+  bool _autovalidate = false;
 
   @override
   void initState() {
     super.initState();
-    // FirebaseAuth.instance.signInAnonymously().then((r) {
-    //   print(r);
-    // });
+    contact = new ContactModel();
+    FirebaseAuth.instance.signInAnonymously().then((r) {
+      print(r);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
     return new Scaffold(
+      key: scaffoldKey,
       backgroundColor: theme.scaffoldColor,
       //   backgroundColor: Colors.grey.shade100,
       appBar: appBar(
         context,
         title: "Create Contacts",
       ),
-      body: Center(
-        child: CircleAvatar(
-          radius: 200.0,
-          // backgroundColor: Colors.transparent,
-          // backgroundColor: Colors.red,
-          backgroundImage: NetworkImage("https://placeimg.com/640/640/animals"),
-          // backgroundImage: NetworkImage(imageUrl),
-          // child: Image.network(imageUrl),
-          // child: Image.network("https://placeimg.com/640/640/animals"),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            SizedBox(height: 16.0),
+            _buildAvatar(),
+            SizedBox(height: 16.0),
+            _buildForm(),
+          ],
         ),
       ),
-      // SingleChildScrollView(
-      //   child: Column(
-      //     crossAxisAlignment: CrossAxisAlignment.stretch,
-      //     children: <Widget>[
-      //       // _buildAvatar(),
-      //       CircleAvatar(
-      //         backgroundColor: Colors.transparent,
-      //         // backgroundColor: Colors.red,
-      //         backgroundImage: NetworkImage("https://placeimg.com/640/640/animals"),
-      //         // backgroundImage: NetworkImage(imageUrl),
-      //         // child: Image.network(imageUrl),
-      //         // child: Image.network("https://placeimg.com/640/640/animals"),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 
-  Container _buildAvatar() {
+  Widget _buildForm() {
+    return Theme(
+      data: ThemeData(hintColor: Colors.grey.shade400),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Form(
+          key: _formKey,
+          autovalidate: _autovalidate,
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.person),
+                  labelText: "Fullname",
+                ),
+                validator: validateAlpha(),
+                onSaved: (fullname) => contact.fullname = fullname,
+              ),
+              SizedBox(height: 8.0),
+              TextFormField(
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.phone),
+                  labelText: "Phone",
+                ),
+                validator: (value) => (value.length > 0) ? null : "Please input a value",
+                onSaved: (phone) => contact.phone = phone,
+              ),
+              SizedBox(height: 8.0),
+              TextFormField(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.location_city),
+                  labelText: "Location",
+                ),
+                validator: (value) => (value.length > 0) ? null : "Please input a value",
+                onSaved: (location) => contact.location = location,
+              ),
+              SizedBox(height: 32.0),
+              FlatButton(
+                onPressed: _handleSubmit,
+                child: Text("SUBMIT"),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAvatar() {
     return Container(
-      width: 120.0,
-      height: 120.0,
-      margin: EdgeInsets.all(16.0),
+      width: 158.0,
+      height: 158.0,
+      // margin: EdgeInsets.all(16.0),
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.grey.withOpacity(.2),
+        border: Border.all(color: Colors.grey.withOpacity(.5), width: 2.0),
       ),
-      child: GestureDetector(
-        onTap: _handlePhotoButtonPressed,
-        child: !isSuccess
-            ? Center(
-                child: SizedBox.expand(
-                  child: CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    // backgroundColor: Colors.red,
-                    backgroundImage: NetworkImage("https://placeimg.com/640/640/animals"),
-                    // backgroundImage: NetworkImage(imageUrl),
-                    // child: Image.network(imageUrl),
-                    // child: Image.network("https://placeimg.com/640/640/animals"),
-                  ),
-                ),
-              )
-            // TODO
-            // FadeInImage.assetNetwork()
-            : Center(
-                child: isLoading
+      child: Container(
+        width: 150.0,
+        height: 150.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.grey.withOpacity(.2),
+        ),
+        padding: EdgeInsets.all(4.0),
+        child: Center(
+          child: GestureDetector(
+            onTap: _handlePhotoButtonPressed,
+            child: isSuccess
+                ? SizedBox.fromSize(
+                    size: Size.square(150.0),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      backgroundImage: NetworkImage(contact.imageUrl),
+                    ),
+                  )
+                // TODO
+                // FadeInImage.assetNetwork()
+                : isLoading
                     ? CircularProgressIndicator()
                     : CupertinoButton(
                         child: Icon(
@@ -105,7 +150,8 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
                         ),
                         onPressed: null,
                       ),
-              ),
+          ),
+        ),
       ),
     );
   }
@@ -137,7 +183,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
       isSuccess = false;
     });
     try {
-      imageUrl = (await uploadTask.future).downloadUrl?.toString();
+      contact.imageUrl = (await uploadTask.future).downloadUrl?.toString();
       setState(() {
         isLoading = false;
         isSuccess = true;
@@ -147,6 +193,50 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
         isLoading = false;
         isSuccess = false;
       });
+    }
+  }
+
+  void _handleSubmit() async {
+    final FormState form = _formKey.currentState;
+    if (form == null) return;
+    if (!form.validate()) {
+      _autovalidate = true; // Start validating on every change.
+      showInSnackBar('Please fix the errors in red before submitting.');
+    } else {
+      form.save();
+      showLoadingSnackBar();
+
+      try {
+        var data = await Cloudstore.contacts.add(contact.toMap());
+        closeLoadingSnackBar();
+        print(data);
+        showInSnackBar("Successfully Added");
+        _handleSuccess();
+      } catch (e) {
+        closeLoadingSnackBar();
+        showInSnackBar(e.toString());
+      }
+    }
+  }
+
+  void _handleSuccess() async {
+    var choice = await showChildDialog(
+      context: context,
+      child: new AlertDialog(
+        content: Text("Do you wish to add another?"),
+        actions: <Widget>[
+          FlatButton(onPressed: () => Navigator.pop(context, 1), child: Text("DISMISS")),
+          FlatButton(onPressed: () => Navigator.pop(context, 2), child: Text("OK")),
+        ],
+      ),
+    );
+    if (choice == null) return;
+    if (choice == 1) {
+      Navigator.pop(context, true);
+    } else {
+      contact = new ContactModel();
+      setState(() => isSuccess = false);
+      _formKey.currentState.reset();
     }
   }
 }
