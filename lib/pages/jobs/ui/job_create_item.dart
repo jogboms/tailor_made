@@ -86,22 +86,16 @@ class JobMeasureBlock extends StatelessWidget {
                   ),
                 ),
                 width: constraints.maxWidth / 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(measure.name, style: TextStyle(fontSize: 12.0)),
-                    new TextFormField(
-                      keyboardType: TextInputType.number,
-                      style: TextStyle(fontSize: 18.0, color: Colors.black),
-                      decoration: new InputDecoration(
-                        contentPadding: EdgeInsets.zero,
-                        hintText: "Enter Value",
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(fontSize: 12.0),
-                      ),
-                      onSaved: (value) => measure.value = value,
-                    ),
-                  ],
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(fontSize: 20.0, color: Colors.black),
+                  decoration: new InputDecoration(
+                    contentPadding: EdgeInsets.zero,
+                    labelText: measure.name,
+                    border: InputBorder.none,
+                    labelStyle: TextStyle(fontSize: 14.0),
+                  ),
+                  onSaved: (value) => measure.value = value,
                 ),
               );
             },

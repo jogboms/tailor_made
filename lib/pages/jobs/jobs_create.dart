@@ -308,7 +308,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         decoration: new InputDecoration(
           isDense: true,
           hintText: "Enter Name",
-          hintStyle: TextStyle(fontSize: 12.0),
+          hintStyle: TextStyle(fontSize: 14.0),
           // border: InputBorder.none,
           border: UnderlineInputBorder(
             borderSide: BorderSide(
@@ -332,7 +332,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         decoration: new InputDecoration(
           isDense: true,
           hintText: "Enter Amount",
-          hintStyle: TextStyle(fontSize: 12.0),
+          hintStyle: TextStyle(fontSize: 14.0),
           border: UnderlineInputBorder(
             borderSide: BorderSide(
               color: borderSideColor,
