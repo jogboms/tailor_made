@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/homepage/ui/bottom_row.dart';
 import 'package:tailor_made/pages/homepage/ui/header.dart';
@@ -26,14 +25,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    super.initState();
-    FirebaseAuth.instance.signInAnonymously().then((r) {
-      print(r);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
