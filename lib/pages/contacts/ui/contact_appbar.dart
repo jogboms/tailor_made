@@ -50,6 +50,29 @@ class ContactAppBarState extends State<ContactAppBar> {
       Navigator.pop(context);
     }
 
+    void _select(Choice choice) {
+      switch (choice) {
+        case Choice.CreateJob:
+          {
+            TMNavigate(
+              context,
+              JobsCreatePage(
+                contact: ContactModel(
+                  title: "Princess",
+                  pending: 4,
+                  totalJobs: 40,
+                  image: "https://placeimg.com/640/640/animals",
+                ),
+              ),
+            );
+            break;
+          }
+        default:
+          break;
+      }
+      print(choice);
+    }
+
     Widget appBarLeading = new FlatButton(
       padding: EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
       child: new Row(
@@ -62,11 +85,11 @@ class ContactAppBarState extends State<ContactAppBar> {
           ),
           new SizedBox(width: isAtTop ? 0.0 : 4.0),
           new Hero(
-            tag: widget.contact.imageUrl,
+            tag: widget.contact.image,
             child: new CircleAvatar(
               radius: isAtTop ? 0.0 : null,
               backgroundColor: Colors.grey.shade400,
-              backgroundImage: NetworkImage(widget.contact.imageUrl),
+              backgroundImage: NetworkImage(widget.contact.image),
             ),
           ),
         ],
@@ -79,7 +102,7 @@ class ContactAppBarState extends State<ContactAppBar> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         new Text(
-          widget.contact.fullname,
+          widget.contact.title,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: new TextStyle(
@@ -88,13 +111,13 @@ class ContactAppBarState extends State<ContactAppBar> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        isAtTop || (widget.contact.hasPending < 1)
+        isAtTop || (widget.contact.pending < 1)
             ? new Container()
             : new Text.rich(
                 new TextSpan(
                   children: [
                     new TextSpan(
-                      text: widget.contact.hasPending.toString(),
+                      text: widget.contact.pending.toString(),
                       style: new TextStyle(fontWeight: FontWeight.w600),
                     ),
                     new TextSpan(
@@ -114,7 +137,7 @@ class ContactAppBarState extends State<ContactAppBar> {
 
     Widget appBarIcon({IconData icon, VoidCallback onTap}) {
       return Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(8.0),
         child: InkResponse(
           child: new Icon(icon, color: Colors.white),
           onTap: onTap,
@@ -154,10 +177,16 @@ class ContactAppBarState extends State<ContactAppBar> {
                 icon: Icons.message,
                 onTap: () {},
               ),
-              appBarIcon(
-                icon: Icons.add,
-                onTap: () {
-                  TMNavigate(context, JobsCreatePage(contact: widget.contact));
+              new PopupMenuButton<Choice>(
+                icon: Icon(Icons.more_vert, color: Colors.white),
+                onSelected: _select,
+                itemBuilder: (BuildContext context) {
+                  return [
+                    new PopupMenuItem<Choice>(
+                      value: Choice.CreateJob,
+                      child: new Text("Create Job"),
+                    ),
+                  ];
                 },
               ),
             ],
