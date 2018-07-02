@@ -25,6 +25,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
   bool isSuccess = false;
   ContactModel contact;
   bool _autovalidate = false;
+  StorageReference _lastImgRef;
 
   @override
   void initState() {
@@ -172,7 +173,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
     if (source == null) return;
     var imageFile = await ImagePicker.pickImage(source: source, maxWidth: 200.0, maxHeight: 200.0);
     var random = new Random().nextInt(10000);
-    var ref = FirebaseStorage.instance.ref().child('image_$random.jpg');
+    var ref = FirebaseStorage.instance.ref().child('contacts/image_$random.jpg');
     var uploadTask = ref.putFile(imageFile);
 
     setState(() {
@@ -182,8 +183,12 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
     try {
       contact.imageUrl = (await uploadTask.future).downloadUrl?.toString();
       setState(() {
+        if (_lastImgRef != null) {
+          _lastImgRef.delete();
+        }
         isLoading = false;
         isSuccess = true;
+        _lastImgRef = ref;
       });
     } catch (e) {
       setState(() {

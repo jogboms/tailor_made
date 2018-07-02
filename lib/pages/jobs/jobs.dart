@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/pages/jobs/jobs_list.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
-import 'package:tailor_made/pages/jobs/models/job_list.model.dart';
 
 class JobsPage extends StatefulWidget {
   @override
@@ -15,10 +15,10 @@ class _JobsPageState extends State<JobsPage> {
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
-    List<JobListModel> list = List
+    List<JobModel> list = List
         .generate(
           40,
-          (int) => JobListModel(),
+          (int) => JobModel(),
         )
         .toList();
 

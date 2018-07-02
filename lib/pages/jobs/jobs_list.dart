@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'job.dart';
-import 'models/job_list.model.dart';
+import 'models/job.model.dart';
 
 class JobList extends StatelessWidget {
-  final List<JobListModel> lists;
+  final List<JobModel> lists;
 
   JobList({this.lists});
 
@@ -22,7 +22,7 @@ class JobList extends StatelessWidget {
 }
 
 class JobListItem extends StatelessWidget {
-  final JobListModel list;
+  final JobModel list;
 
   JobListItem({this.list});
 
