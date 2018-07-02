@@ -329,7 +329,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
           isDense: true,
-          hintText: "Enter Name",
+          hintText: "Enter Style Name",
           hintStyle: TextStyle(fontSize: 14.0),
           // border: InputBorder.none,
           border: UnderlineInputBorder(

@@ -1,11 +1,9 @@
-import 'dart:math';
-
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:tailor_made/utils/tm_theme.dart';
-import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/gallery/gallery.dart';
 import 'package:tailor_made/pages/gallery/gallery_view.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 
 const _kGridWidth = 70.0;
 
@@ -81,10 +79,12 @@ class GalleryGrid extends StatelessWidget {
 
 class GalleryGrids extends StatelessWidget {
   final Size gridSize;
+  final List<String> images;
 
   GalleryGrids({
     Key key,
     double gridSize,
+    @required this.images,
   })  : gridSize = Size.square(gridSize ?? _kGridWidth),
         super(key: key);
 
@@ -92,18 +92,14 @@ class GalleryGrids extends StatelessWidget {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    List<Widget> imagesList = List.generate(10, (int index) {
-      Random rand = new Random();
-      int id = rand.nextInt(10000);
-      int id2 = rand.nextInt(10000);
-      String image = "https://placeimg.com/640/640/nature/$id";
-
+    List<Widget> imagesList = images.map((src) {
       return GalleryGrid(
-        imageUrl: image,
-        tag: "$image-$id-$id2",
+        imageUrl: src,
+        tag: src,
         size: gridSize.width,
       );
     }).toList();
+
     return new Column(
       children: <Widget>[
         new Row(
@@ -115,7 +111,7 @@ class GalleryGrids extends StatelessWidget {
             ),
             CupertinoButton(
               child: Text("SHOW ALL", style: ralewayRegular(11.0, textBaseColor)),
-              onPressed: () => TMNavigate(context, GalleryPage(), fullscreenDialog: true),
+              onPressed: () => TMNavigate(context, GalleryPage(images: images), fullscreenDialog: true),
             ),
           ],
         ),

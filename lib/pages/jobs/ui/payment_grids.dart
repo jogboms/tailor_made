@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:tailor_made/utils/tm_theme.dart';
+import 'package:flutter/material.dart';
 import 'package:tailor_made/ui/blank.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 
 const _kGridWidth = 120.0;
 
@@ -99,7 +99,7 @@ class PaymentGrids extends StatelessWidget {
         child: new InkWell(
           onTap: () {},
           child: Icon(
-            Icons.add_circle,
+            Icons.note_add,
             size: 30.0,
             color: textBaseColor.withOpacity(.35),
           ),
