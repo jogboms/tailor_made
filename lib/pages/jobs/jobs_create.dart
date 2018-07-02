@@ -19,6 +19,7 @@ import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 const _kGridWidth = 85.0;
 
 class FireImage {
+  StorageReference ref;
   String imageUrl;
   bool isLoading = true;
   bool isSucess = false;
@@ -99,13 +100,14 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       children.add(makeHeader("Style Name"));
       children.add(buildEnterName());
 
-      children.add(makeHeader("Measurements", "Inches (In)"));
-      children.add(JobMeasures(job));
-
       children.add(makeHeader("Payment", "Naira (₦)"));
       children.add(buildEnterAmount());
 
+      children.add(makeHeader("References"));
       children.add(buildImageGrid());
+
+      children.add(makeHeader("Measurements", "Inches (In)"));
+      children.add(JobMeasures(job));
 
       children.add(makeHeader("Additional Notes"));
       children.add(buildAdditional());
@@ -191,7 +193,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         closeLoadingSnackBar();
         print(data);
         showInSnackBar("Successfully Added");
-        // _handleSuccess();
+        form.reset();
+        fireImages.clear();
       } catch (e) {
         closeLoadingSnackBar();
         showInSnackBar(e.toString());
@@ -209,7 +212,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         decoration: new InputDecoration(
           isDense: true,
           hintText: "Fabric color, size, special requirements...",
-          hintStyle: TextStyle(fontSize: 12.0),
+          hintStyle: TextStyle(fontSize: 14.0),
           border: UnderlineInputBorder(
             borderSide: BorderSide(
               color: borderSideColor,
@@ -234,7 +237,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           child: new InkWell(
             onTap: _handlePhotoButtonPressed,
             child: Icon(
-              Icons.add_circle,
+              Icons.add_a_photo,
               size: 24.0,
               color: textBaseColor.withOpacity(.35),
             ),
@@ -243,19 +246,29 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       );
     }
 
-    List<Widget> imagesList = List.generate(fireImages.length, (int index) {
-      String image = fireImages[index].imageUrl;
+    List<Widget> imagesList = List.generate(
+      fireImages.length,
+      (int index) {
+        final fireImage = fireImages[index];
+        final image = fireImage.imageUrl;
 
-      if (image == null) {
-        return Center(widthFactor: 2.0, child: CircularProgressIndicator());
-      }
+        if (image == null) {
+          return Center(widthFactor: 2.5, child: CircularProgressIndicator());
+        }
 
-      return GalleryGrid(
-        imageUrl: image,
-        tag: "$image-$index",
-        size: _kGridWidth,
-      );
-    }).toList();
+        return GalleryGrid(
+          imageUrl: image,
+          tag: "$image-$index",
+          size: _kGridWidth,
+          onTapDelete: (image) {
+            setState(() {
+              fireImage.ref.delete();
+              fireImages.removeAt(index);
+            });
+          },
+        );
+      },
+    ).toList();
 
     return new Container(
       height: _kGridWidth + 8,
@@ -287,18 +300,19 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     if (source == null) return;
     var imageFile = await ImagePicker.pickImage(source: source);
     var random = new Random().nextInt(10000);
-    var ref = FirebaseStorage.instance.ref().child('image_$random.jpg');
+    var ref = FirebaseStorage.instance.ref().child('references/image_$random.jpg');
     var uploadTask = ref.putFile(imageFile);
 
     setState(() {
-      fireImages.add(FireImage());
+      fireImages.add(FireImage()..ref = ref);
     });
     try {
       var image = (await uploadTask.future).downloadUrl?.toString();
       setState(() {
-        fireImages.last.isLoading = false;
-        fireImages.last.isSucess = true;
-        fireImages.last.imageUrl = image;
+        fireImages.last
+          ..isLoading = false
+          ..isSucess = true
+          ..imageUrl = image;
       });
     } catch (e) {
       setState(() {
@@ -326,6 +340,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
             ),
           ),
         ),
+        validator: (value) => (value.length > 0) ? null : "Please input a name",
         onSaved: (value) => job.name = value,
       ),
     );
@@ -349,6 +364,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
             ),
           ),
         ),
+        validator: (value) => (value.length > 0) ? null : "Please input a price",
         onSaved: (value) => job.price = double.tryParse(value),
       ),
     );

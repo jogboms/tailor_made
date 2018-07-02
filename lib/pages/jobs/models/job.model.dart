@@ -43,7 +43,7 @@ class JobModel extends Model {
   @override
   toMap() {
     return {
-      "contact": contact,
+      "contact": contact.toMap(),
       "name": name,
       "price": price,
       "notes": notes,

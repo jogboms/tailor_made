@@ -13,11 +13,13 @@ class GalleryGrid extends StatelessWidget {
   final String tag;
   final String imageUrl;
   final Size size;
+  final void Function(String imageUrl) onTapDelete;
 
   GalleryGrid({
     Key key,
     @required this.tag,
     @required this.imageUrl,
+    this.onTapDelete,
     double size,
   })  : size = Size.square(size ?? _kGridWidth),
         super(key: key);
@@ -29,34 +31,48 @@ class GalleryGrid extends StatelessWidget {
       child: Container(
         width: size.width,
         margin: EdgeInsets.only(right: 8.0),
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: new NetworkImage(imageUrl),
-          ),
-          borderRadius: BorderRadius.circular(5.0),
-        ),
-        child: new Material(
-          elevation: 2.0,
-          color: Colors.transparent,
-          child: new InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                    new PageRouteBuilder(
-                      opaque: false,
-                      pageBuilder: (BuildContext context, _, __) => GalleryView(imageUrl, tag),
-                      transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-                        return new FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
-              // TMNavigate(context, GalleryView(image, "-$image-$id-$id2"), fullscreenDialog: true)
-            },
-          ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: new Material(
+                color: Colors.white,
+                elevation: 2.0,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+                child: new Ink.image(
+                  image: new NetworkImage(imageUrl),
+                  fit: BoxFit.cover,
+                  child: new InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                            new PageRouteBuilder(
+                              opaque: false,
+                              pageBuilder: (BuildContext context, _, __) => GalleryView(imageUrl, tag),
+                              transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                                return new FadeTransition(
+                                  opacity: animation,
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
+                    },
+                    child: onTapDelete != null
+                        ? new Align(
+                            alignment: Alignment.topRight,
+                            child: GestureDetector(
+                              onTap: () => onTapDelete(imageUrl),
+                              child: new Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: new Icon(Icons.cancel, color: Colors.red),
+                              ),
+                            ),
+                          )
+                        : SizedBox(),
+                  ),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -126,7 +142,7 @@ class GalleryGrids extends StatelessWidget {
         child: new InkWell(
           onTap: () {},
           child: Icon(
-            Icons.add_circle,
+            Icons.add_a_photo,
             size: 24.0,
             color: textBaseColor.withOpacity(.35),
           ),

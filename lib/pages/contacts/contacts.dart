@@ -77,15 +77,17 @@ class _ContactsPageState extends State<ContactsPage> {
         stream: Cloudstore.contacts.snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const Text('Loading...');
-          List<DocumentSnapshot> _data = snapshot.data.documents;
-          var data = _data.where((doc) => doc.data.containsKey("fullname")).toList();
-
+          List<DocumentSnapshot> _list = snapshot.data.documents;
+          var list = _list.where((doc) => doc.data.containsKey("fullname")).toList();
           return new ListView.builder(
-            itemCount: data.length,
+            itemCount: list.length,
             shrinkWrap: true,
             itemExtent: null,
             itemBuilder: (context, index) {
-              return ContactsItem(contact: ContactModel.fromJson(data[index].data));
+              var item = list[index];
+              return ContactsItem(
+                contact: ContactModel.fromJson(item.data),
+              );
             },
           );
         },
