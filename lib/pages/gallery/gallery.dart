@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/gallery/gallery_grid.dart';
-import 'package:tailor_made/pages/gallery/models/gallery_image.model.dart';
+import 'package:tailor_made/pages/gallery/models/image.model.dart';
 import 'package:tailor_made/ui/back_button.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class GalleryPage extends StatelessWidget {
-  final List<String> images;
+  final List<ImageModel> images;
 
   GalleryPage({
     Key key,
@@ -15,10 +15,6 @@ class GalleryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
-
-    List<GalleryImageModel> imagesList = images.map((src) {
-      return GalleryImageModel(src: src);
-    }).toList();
 
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
@@ -30,7 +26,7 @@ class GalleryPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text("Gallery", style: theme.appBarStyle),
-                Text("${imagesList.length} Photos", style: TextStyle(fontSize: 11.0, color: textBaseColor)),
+                Text("${images.length} Photos", style: TextStyle(fontSize: 11.0, color: textBaseColor)),
               ],
             ),
             backgroundColor: theme.appBarBackgroundColor,
@@ -39,7 +35,7 @@ class GalleryPage extends StatelessWidget {
             centerTitle: false,
             floating: true,
           ),
-          GalleryGrid(images: imagesList),
+          GalleryGrid(images: images),
         ],
       ),
     );

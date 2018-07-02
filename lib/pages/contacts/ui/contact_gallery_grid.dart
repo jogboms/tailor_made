@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/gallery/gallery_grid.dart';
-import 'package:tailor_made/pages/gallery/models/gallery_image.model.dart';
+import 'package:tailor_made/pages/gallery/models/image.model.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/ui/tm_empty_result.dart';
 
@@ -17,14 +17,10 @@ class GalleryGridWidget extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    final List<GalleryImageModel> images = [];
+    final List<ImageModel> images = [];
 
     jobs.forEach(
-      (item) => images.addAll(
-            item.images.map(
-              (src) => GalleryImageModel(src: src),
-            ),
-          ),
+      (item) => images.addAll(item.images),
     );
 
     if (images.isEmpty) {

@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/pages/gallery/models/image.model.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/pages/jobs/models/measure.model.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grids.dart';
@@ -14,7 +16,6 @@ import 'package:tailor_made/ui/avatar_app_bar.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 
 const _kGridWidth = 85.0;
 
@@ -187,7 +188,12 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       form.save();
       showLoadingSnackBar();
 
-      job.images = fireImages.map((img) => img.imageUrl).toList();
+      job.images = fireImages
+          .map((img) => ImageModel(
+                src: img.imageUrl,
+                contact: widget.contact,
+              ))
+          .toList();
       try {
         var data = await Cloudstore.jobs.add(job.toMap());
         closeLoadingSnackBar();

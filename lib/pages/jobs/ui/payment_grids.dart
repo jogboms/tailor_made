@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tailor_made/pages/payments/models/payment.model.dart';
 import 'package:tailor_made/ui/blank.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -7,6 +8,13 @@ import 'package:tailor_made/utils/tm_theme.dart';
 const _kGridWidth = 120.0;
 
 class PaymentGrid extends StatelessWidget {
+  final PaymentModel payment;
+
+  PaymentGrid({
+    Key key,
+    this.payment,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return new Container(
@@ -51,15 +59,22 @@ class PaymentGrid extends StatelessWidget {
 }
 
 class PaymentGrids extends StatelessWidget {
+  final List<PaymentModel> payments;
+
+  PaymentGrids({
+    Key key,
+    @required this.payments,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
-    List<Widget> paymentList = List
-        .generate(
-          10,
-          (int index) => PaymentGrid(),
-        )
-        .toList();
+
+    List<Widget> paymentList = payments.map((payment) {
+      return PaymentGrid(
+        payment: payment,
+      );
+    }).toList();
 
     return new Column(
       children: <Widget>[

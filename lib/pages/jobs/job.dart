@@ -190,7 +190,7 @@ class _JobPageState extends State<JobPage> {
                 // const Divider(height: 1.0),
                 new Padding(
                   padding: const EdgeInsets.only(top: 8.0),
-                  child: PaymentGrids(),
+                  child: PaymentGrids(payments: widget.job.payments),
                 ),
               ],
             ),

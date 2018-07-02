@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/gallery/gallery.dart';
 import 'package:tailor_made/pages/gallery/gallery_view.dart';
+import 'package:tailor_made/pages/gallery/models/image.model.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -79,7 +80,7 @@ class GalleryGrid extends StatelessWidget {
 
 class GalleryGrids extends StatelessWidget {
   final Size gridSize;
-  final List<String> images;
+  final List<ImageModel> images;
 
   GalleryGrids({
     Key key,
@@ -92,10 +93,10 @@ class GalleryGrids extends StatelessWidget {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    List<Widget> imagesList = images.map((src) {
+    List<Widget> imagesList = images.map((img) {
       return GalleryGrid(
-        imageUrl: src,
-        tag: src,
+        imageUrl: img.src,
+        tag: img.src,
         size: gridSize.width,
       );
     }).toList();
