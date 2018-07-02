@@ -2,10 +2,45 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
+class TMPageRoute {
+  static slideIn<T>(
+    Widget widget, {
+    RouteSettings settings,
+    maintainState: true,
+    bool fullscreenDialog: false,
+    hostRoute,
+  }) {
+    return CupertinoPageRoute<T>(
+      builder: (BuildContext context) => TMTheme(child: widget),
+      settings: settings,
+      maintainState: maintainState,
+      fullscreenDialog: fullscreenDialog,
+      hostRoute: hostRoute,
+    );
+  }
+
+  static fadeIn<T>(
+    Widget widget, {
+    RouteSettings settings,
+    maintainState: true,
+  }) {
+    return PageRouteBuilder<T>(
+      opaque: false,
+      pageBuilder: (BuildContext context, _, __) => TMTheme(child: widget),
+      transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+        return new FadeTransition(opacity: animation, child: child);
+      },
+      settings: settings,
+      maintainState: maintainState,
+    );
+  }
+}
+
 class TMNavigate {
   TMNavigate(
     BuildContext context,
     Widget widget, {
+    String name,
     RouteSettings settings,
     maintainState: true,
     bool fullscreenDialog: false,
@@ -13,14 +48,46 @@ class TMNavigate {
   }) {
     Navigator.push(
       context,
-      // TMNavigateRoute(builder: (BuildContext context) => TMTheme(child: widget)),
-      CupertinoPageRoute(
-        builder: (BuildContext context) => TMTheme(child: widget),
+      TMNavigate.slideIn(
+        widget,
+        name: name,
         settings: settings,
         maintainState: maintainState,
         fullscreenDialog: fullscreenDialog,
         hostRoute: hostRoute,
       ),
+    );
+  }
+
+  static slideIn<T>(
+    Widget widget, {
+    String name,
+    RouteSettings settings,
+    maintainState: true,
+    bool fullscreenDialog: false,
+    hostRoute,
+  }) {
+    var _settings = name != null ? new RouteSettings(name: name) : settings;
+    return TMPageRoute.slideIn<T>(
+      widget,
+      settings: _settings,
+      maintainState: maintainState,
+      fullscreenDialog: fullscreenDialog,
+      hostRoute: hostRoute,
+    );
+  }
+
+  static fadeIn<T>(
+    Widget widget, {
+    String name,
+    RouteSettings settings,
+    maintainState: true,
+  }) {
+    var _settings = name != null ? new RouteSettings(name: name) : settings;
+    return TMPageRoute.fadeIn<T>(
+      widget,
+      settings: _settings,
+      maintainState: maintainState,
     );
   }
 }

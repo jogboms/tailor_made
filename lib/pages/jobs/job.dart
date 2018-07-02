@@ -27,7 +27,7 @@ class _JobPageState extends State<JobPage> {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    ContactModel contact = ContactModel(title: "Joy", pending: 0, image: "https://placeimg.com/640/640/arch");
+    ContactModel contact = ContactModel(fullname: "Joy", hasPending: 0, imageUrl: "https://placeimg.com/640/640/arch");
 
     final List<Measure> items = <Measure>[
       new Measure(name: "Arm Hole", measurement: 29, unit: "In"),
@@ -126,12 +126,12 @@ class _JobPageState extends State<JobPage> {
     );
 
     Widget appBar = AvatarAppBar(
-      tag: contact.image,
-      image: NetworkImage(contact.image),
+      tag: contact.imageUrl,
+      image: NetworkImage(contact.imageUrl),
       title: new GestureDetector(
         onTap: () => TMNavigate(context, Contact(contact: contact)),
         child: new Text(
-          contact.title,
+          contact.fullname,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: ralewayRegular(18.0, Colors.white),
