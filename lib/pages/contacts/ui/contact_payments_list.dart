@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 
 class PaymentsListWidget extends StatelessWidget {
+  final ContactModel contact;
+
+  PaymentsListWidget({@required this.contact});
+
   @override
   build(BuildContext context) {
     // return SliverFixedExtentList(

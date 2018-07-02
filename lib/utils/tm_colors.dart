@@ -51,4 +51,5 @@ class TMColors {
   );
   static const Color accent = const Color(0xFF4caf50);
   static const Color primary = const Color(0xFF4caf50);
+  static const Color light_grey = const Color(0xFF9B9B9B);
 }

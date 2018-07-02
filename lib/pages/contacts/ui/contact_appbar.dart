@@ -10,10 +10,8 @@ enum Choice {
 
 class ContactAppBar extends StatefulWidget {
   final ContactModel contact;
-  final ScrollController scrollController;
-  final bool scrolled;
 
-  ContactAppBar({this.contact, this.scrollController, this.scrolled: true});
+  ContactAppBar({this.contact});
 
   @override
   ContactAppBarState createState() {
@@ -23,26 +21,6 @@ class ContactAppBar extends StatefulWidget {
 
 class ContactAppBarState extends State<ContactAppBar> {
   bool isAtTop = false;
-
-  void _updateScrollPosition() {
-    if (widget.scrollController.position.maxScrollExtent == widget.scrollController.offset) {
-      setState(() => isAtTop = true);
-    } else if (8.0 < widget.scrollController.offset) {
-      setState(() => isAtTop = false);
-    }
-  }
-
-  @override
-  void initState() {
-    widget.scrollController.addListener(_updateScrollPosition);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    widget.scrollController.removeListener(_updateScrollPosition);
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
