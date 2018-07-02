@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/pages/jobs/models/job.model.dart';
 
 class PaymentsListWidget extends StatelessWidget {
   final ContactModel contact;
+  final List<JobModel> jobs;
 
-  PaymentsListWidget({@required this.contact});
+  PaymentsListWidget({
+    Key key,
+    @required this.contact,
+    @required this.jobs,
+  }) : super(key: key);
 
   @override
   build(BuildContext context) {

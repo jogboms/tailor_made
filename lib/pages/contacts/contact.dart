@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_appbar.dart';
+import 'package:tailor_made/pages/contacts/ui/contact_gallery_grid.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_jobs_list.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_payments_list.dart';
-import 'package:tailor_made/pages/contacts/ui/contact_gallery_grid.dart';
+import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/services/cloudstore.dart';
+import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 const TABS = const ["Jobs", "Gallery", "Payments"];
@@ -45,12 +49,27 @@ class _ContactState extends State<Contact> {
               ),
             ];
           },
-          body: new TabBarView(
-            children: [
-              tabView(name: TABS[0].toLowerCase(), child: JobsListWidget(contact: widget.contact)),
-              tabView(name: TABS[1].toLowerCase(), child: GalleryGridWidget(contact: widget.contact)),
-              tabView(name: TABS[2].toLowerCase(), child: PaymentsListWidget(contact: widget.contact)),
-            ],
+          body: StreamBuilder(
+            stream: Cloudstore.jobs.where("contact.id", isEqualTo: widget.contact.id).snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: loadingSpinner(),
+                );
+              }
+
+              List<DocumentSnapshot> list = snapshot.data.documents;
+
+              final jobs = list.map((item) => JobModel.fromJson(item.data)).toList();
+
+              return new TabBarView(
+                children: [
+                  tabView(name: TABS[0].toLowerCase(), child: JobsListWidget(contact: widget.contact, jobs: jobs)),
+                  tabView(name: TABS[1].toLowerCase(), child: GalleryGridWidget(contact: widget.contact, jobs: jobs)),
+                  tabView(name: TABS[2].toLowerCase(), child: PaymentsListWidget(contact: widget.contact, jobs: jobs)),
+                ],
+              );
+            },
           ),
         ),
       ),
