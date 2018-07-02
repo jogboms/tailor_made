@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_appbar.dart';
-import 'package:tailor_made/pages/contacts/ui/contact_header.dart';
+import 'package:tailor_made/pages/contacts/ui/contact_gallery_grid.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_jobs_list.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_payments_list.dart';
-import 'package:tailor_made/pages/contacts/ui/contact_gallery_grid.dart';
+import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/services/cloudstore.dart';
+import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 const TABS = const ["Jobs", "Gallery", "Payments"];
@@ -19,8 +22,6 @@ class Contact extends StatefulWidget {
 }
 
 class _ContactState extends State<Contact> {
-  ScrollController _scrollController = new ScrollController();
-
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
@@ -30,7 +31,6 @@ class _ContactState extends State<Contact> {
       body: new DefaultTabController(
         length: 3,
         child: new NestedScrollView(
-          controller: _scrollController,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               new SliverOverlapAbsorber(
@@ -38,30 +38,38 @@ class _ContactState extends State<Contact> {
                 child: new SliverAppBar(
                   backgroundColor: accentColor,
                   automaticallyImplyLeading: false,
-                  title: new ContactAppBar(
-                    contact: widget.contact,
-                    scrollController: _scrollController,
-                    scrolled: innerBoxIsScrolled,
-                  ),
+                  title: new ContactAppBar(contact: widget.contact),
                   pinned: true,
-                  // floating: true,
-                  // snap: true,
                   titleSpacing: 0.0,
                   centerTitle: false,
-                  flexibleSpace: ContactHeaderCarouselWidget(),
-                  expandedHeight: 300.0,
+                  expandedHeight: 0.0,
                   forceElevated: true,
                   bottom: tabTitles(),
                 ),
               ),
             ];
           },
-          body: new TabBarView(
-            children: [
-              tabView(name: TABS[0].toLowerCase(), child: JobsListWidget()),
-              tabView(name: TABS[1].toLowerCase(), child: GalleryGridWidget()),
-              tabView(name: TABS[2].toLowerCase(), child: PaymentsListWidget()),
-            ],
+          body: StreamBuilder(
+            stream: Cloudstore.jobs.where("contact.id", isEqualTo: widget.contact.id).snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: loadingSpinner(),
+                );
+              }
+
+              List<DocumentSnapshot> list = snapshot.data.documents;
+
+              final jobs = list.map((item) => JobModel.fromJson(item.data)).toList();
+
+              return new TabBarView(
+                children: [
+                  tabView(name: TABS[0].toLowerCase(), child: JobsListWidget(contact: widget.contact, jobs: jobs)),
+                  tabView(name: TABS[1].toLowerCase(), child: GalleryGridWidget(contact: widget.contact, jobs: jobs)),
+                  tabView(name: TABS[2].toLowerCase(), child: PaymentsListWidget(contact: widget.contact, jobs: jobs)),
+                ],
+              );
+            },
           ),
         ),
       ),
@@ -72,19 +80,6 @@ class _ContactState extends State<Contact> {
 Widget tabTitles() {
   return PreferredSize(
     child: Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Colors.transparent,
-            Colors.black.withOpacity(.25),
-            Colors.black.withOpacity(.375),
-            Colors.black.withOpacity(.4),
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-      // padding: EdgeInsets.symmetric(horizontal: 32.0),
       child: TabBar(
         // indicatorSize: TabBarIndicatorSize.label,
         labelStyle: ralewayMedium(14.0),
