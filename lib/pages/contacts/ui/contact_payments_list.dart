@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/pages/payments/payments_list.dart';
+import 'package:tailor_made/ui/tm_empty_result.dart';
 
 class PaymentsListWidget extends StatelessWidget {
   final ContactModel contact;
@@ -14,30 +16,22 @@ class PaymentsListWidget extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    // return SliverFixedExtentList(
-    return SliverList(
-      delegate: new SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          onTapImage() {
-            print("onTapList");
-          }
+    final List<dynamic> payments = [];
 
-          return Container(
-            // padding: EdgeInsets.zero,
-            // padding: EdgeInsets.all(20.0),
-            color: Colors.grey[100],
-            margin: EdgeInsets.only(bottom: 2.0),
-            height: 100.0,
-            child: new InkResponse(
-              onTap: onTapImage,
-              radius: 300.0,
-              child: Text(""),
-            ),
-          );
-        },
-        childCount: 30,
-      ),
-      // itemExtent: 30.0,
-    );
+    // jobs.forEach(
+    //   (item) => payments.addAll(
+    //         item.payments.map(
+    //           (src) => GalleryImageModel(src: src),
+    //         ),
+    //       ),
+    // );
+
+    if (payments.isEmpty) {
+      return SliverFillRemaining(
+        child: TMEmptyResult(message: "No payments available"),
+      );
+    }
+
+    return PaymentList(payments: payments.toList());
   }
 }

@@ -22,8 +22,6 @@ class JobsListWidget extends StatelessWidget {
       );
     }
 
-    return JobList(
-      jobs: jobs,
-    );
+    return JobList(jobs: jobs);
   }
 }

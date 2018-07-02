@@ -81,7 +81,7 @@ Widget tabTitles() {
   return PreferredSize(
     child: Container(
       child: TabBar(
-        indicatorSize: TabBarIndicatorSize.label,
+        // indicatorSize: TabBarIndicatorSize.label,
         labelStyle: ralewayMedium(14.0),
         tabs: [
           Tab(child: Text(TABS[0])),

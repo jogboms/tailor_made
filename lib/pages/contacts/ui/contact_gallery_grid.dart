@@ -33,8 +33,6 @@ class GalleryGridWidget extends StatelessWidget {
       );
     }
 
-    return GalleryGrid(
-      images: images.toList(),
-    );
+    return GalleryGrid(images: images.toList());
   }
 }
