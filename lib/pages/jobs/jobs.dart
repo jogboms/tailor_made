@@ -1,38 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/pages/jobs/jobs_create.dart';
+import 'package:tailor_made/pages/jobs/jobs_list.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/ui/app_bar.dart';
-import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
-import 'package:tailor_made/pages/jobs/jobs_list.dart';
-import 'package:tailor_made/pages/jobs/jobs_create.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 
-class JobsPage extends StatefulWidget {
-  @override
-  _JobsPageState createState() => new _JobsPageState();
-}
+class JobsPage extends StatelessWidget {
+  final List<JobModel> jobs;
 
-class _JobsPageState extends State<JobsPage> {
+  JobsPage({
+    Key key,
+    @required this.jobs,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
-    List<JobModel> list = List
-        .generate(
-          40,
-          (int) => JobModel(),
-        )
-        .toList();
 
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
       appBar: appBar(
         context,
         title: "Jobs",
+        elevation: 0.0,
       ),
       body: SafeArea(
         top: false,
         child: CustomScrollView(
           slivers: <Widget>[
-            JobList(jobs: list),
+            JobList(jobs: jobs),
           ],
         ),
       ),

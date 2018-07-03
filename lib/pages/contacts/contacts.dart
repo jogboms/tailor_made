@@ -1,15 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/contacts/ui/contacts_item.dart';
-import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
-import 'package:tailor_made/utils/tm_colors.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class ContactsPage extends StatefulWidget {
+  final List<ContactModel> contacts;
+
+  ContactsPage({
+    Key key,
+    @required this.contacts,
+  }) : super(key: key);
+
   @override
   _ContactsPageState createState() => new _ContactsPageState();
 }
@@ -50,7 +54,8 @@ class _ContactsPageState extends State<ContactsPage> {
           ),
           style: new TextStyle(fontSize: 18.0),
         ),
-        backgroundColor: TMColors.primary,
+        // backgroundColor: TMColors.primary,
+        elevation: 0.0,
       );
     }
 
@@ -58,6 +63,7 @@ class _ContactsPageState extends State<ContactsPage> {
       return appBar(
         context,
         title: "Clients",
+        elevation: 0.0,
         actions: <Widget>[
           new IconButton(
             icon: new Icon(
@@ -73,22 +79,14 @@ class _ContactsPageState extends State<ContactsPage> {
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
       appBar: _isSearching ? buildSearchBar() : buildAppBar(),
-      body: StreamBuilder(
-        stream: Cloudstore.contacts.snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return const Text('Loading...');
-          List<DocumentSnapshot> _list = snapshot.data.documents;
-          var list = _list.where((doc) => doc.data.containsKey("fullname")).toList();
-          return new ListView.builder(
-            itemCount: list.length,
-            shrinkWrap: true,
-            itemExtent: null,
-            itemBuilder: (context, index) {
-              var item = list[index];
-              return ContactsItem(
-                contact: ContactModel.fromDoc(item),
-              );
-            },
+      body: new ListView.builder(
+        itemCount: widget.contacts.length,
+        shrinkWrap: true,
+        itemExtent: null,
+        itemBuilder: (context, index) {
+          var item = widget.contacts[index];
+          return ContactsItem(
+            contact: item,
           );
         },
       ),

@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
@@ -14,6 +14,10 @@ import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/utils/tm_validators.dart';
 
 class ContactsCreatePage extends StatefulWidget {
+  ContactsCreatePage({
+    Key key,
+  }) : super(key: key);
+
   @override
   _ContactsCreatePageState createState() => new _ContactsCreatePageState();
 }
