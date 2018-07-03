@@ -3,6 +3,7 @@ import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/contacts/ui/contacts_item.dart';
 import 'package:tailor_made/ui/app_bar.dart';
+import 'package:tailor_made/ui/tm_empty_result.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -79,17 +80,19 @@ class _ContactsPageState extends State<ContactsPage> {
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
       appBar: _isSearching ? buildSearchBar() : buildAppBar(),
-      body: new ListView.builder(
-        itemCount: widget.contacts.length,
-        shrinkWrap: true,
-        itemExtent: null,
-        itemBuilder: (context, index) {
-          var item = widget.contacts[index];
-          return ContactsItem(
-            contact: item,
-          );
-        },
-      ),
+      body: widget.contacts.isEmpty
+          ? SliverFillRemaining(
+              child: TMEmptyResult(message: "No contacts available"),
+            )
+          : new ListView.builder(
+              itemCount: widget.contacts.length,
+              shrinkWrap: true,
+              itemExtent: null,
+              itemBuilder: (context, index) {
+                var item = widget.contacts[index];
+                return ContactsItem(contact: item);
+              },
+            ),
       floatingActionButton: new FloatingActionButton(
         child: new Icon(Icons.add),
         onPressed: () => TMNavigate(context, ContactsCreatePage()),

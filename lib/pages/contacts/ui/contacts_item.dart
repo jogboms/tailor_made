@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
+import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-class ContactsItem extends StatefulWidget {
+class ContactsItem extends StatelessWidget {
   final ContactModel contact;
+  final VoidCallback onTapContact;
+  final bool showActions;
 
-  ContactsItem({this.contact});
+  ContactsItem({
+    Key key,
+    this.contact,
+    this.onTapContact,
+    this.showActions = true,
+  }) : super(key: key);
 
-  @override
-  _ContactsItemState createState() => new _ContactsItemState();
-}
-
-class _ContactsItemState extends State<ContactsItem> {
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
     void onTapCard() {
-      TMNavigate(context, Contact(contact: widget.contact));
+      if (onTapContact != null) {
+        onTapContact();
+        return;
+      }
+      TMNavigate(context, Contact(contact: contact));
     }
 
     void onTapCall() {
@@ -49,13 +55,13 @@ class _ContactsItemState extends State<ContactsItem> {
 
     Hero avatar() {
       return new Hero(
-        tag: widget.contact.imageUrl,
+        tag: contact.imageUrl,
         child: new CircleAvatar(
           backgroundColor: theme.scaffoldColor.withOpacity(.5),
-          backgroundImage: NetworkImage(widget.contact.imageUrl),
+          backgroundImage: NetworkImage(contact.imageUrl),
           child: new Align(
             alignment: Alignment(1.25, -1.25),
-            child: widget.contact.hasPending > 0
+            child: contact.hasPending > 0
                 ? new Container(
                     width: 15.5,
                     height: 15.5,
@@ -82,13 +88,13 @@ class _ContactsItemState extends State<ContactsItem> {
     );
 
     Text title = new Text(
-      widget.contact.fullname,
+      contact.fullname,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: new TextStyle(color: theme.textColor),
     );
 
-    int pending = widget.contact.hasPending;
+    int pending = contact.hasPending;
 
     ListTile list = ListTile(
       dense: true,
@@ -96,7 +102,7 @@ class _ContactsItemState extends State<ContactsItem> {
       leading: avatar(),
       title: title,
       subtitle: pending > 1 ? Text("$pending wear-ables") : Text("No pending wear-ables"),
-      trailing: icons,
+      trailing: showActions ? icons : null,
     );
 
     return new Card(

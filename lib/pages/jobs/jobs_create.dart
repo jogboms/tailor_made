@@ -2,18 +2,21 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/gallery/models/image.model.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/pages/jobs/models/measure.model.dart';
+import 'package:tailor_made/pages/jobs/ui/contact_lists.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grids.dart';
 import 'package:tailor_made/pages/jobs/ui/job_create_item.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -47,14 +50,16 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider, 
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   List<FireImage> fireImages = [];
   JobModel job;
+  ContactModel contact;
 
   bool _autovalidate = false;
 
   @override
   void initState() {
     super.initState();
+    contact = widget.contact;
     job = new JobModel(
-      contact: widget.contact,
+      contact: contact,
       measurements: [
         MeasureModel(name: "Arm Hole", type: MeasureModelType.blouse),
         MeasureModel(name: "Shoulder", type: MeasureModelType.blouse),
@@ -104,7 +109,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider, 
       );
     }
 
-    if (widget.contact != null) {
+    if (contact != null) {
       children.add(makeHeader("Style Name"));
       children.add(buildEnterName());
 
@@ -141,12 +146,12 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider, 
       key: scaffoldKey,
       backgroundColor: theme.scaffoldColor,
       appBar: buildAppBar(theme),
-      body: buildBody(children),
+      body: buildBody(theme, children),
     );
   }
 
-  Widget buildBody(List<Widget> children) {
-    return widget.contact != null
+  Widget buildBody(TMTheme theme, List<Widget> children) {
+    return contact != null
         ? new SafeArea(
             top: false,
             child: new SingleChildScrollView(
@@ -162,25 +167,54 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider, 
             ),
           )
         : new Center(
-            child: FlatButton(
-              onPressed: () {},
-              child: Text("SELECT A CLIENT"),
+            child: CupertinoButton(
+              onPressed: onSelectContact,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  CircleAvatar(
+                    backgroundColor: Colors.grey.withOpacity(.2),
+                    radius: 50.0,
+                    child: Icon(Icons.person_add, color: theme.textColor),
+                  ),
+                  SizedBox(height: 16.0),
+                  Text("SELECT A CLIENT", style: theme.smallTextStyle),
+                ],
+              ),
             ),
           );
   }
 
+  void onSelectContact() async {
+    final selectedContact = await Navigator.push<ContactModel>(
+      context,
+      TMNavigate.fadeIn<ContactModel>(ContactLists(contacts: widget.contacts)),
+    );
+    if (selectedContact != null) {
+      setState(() {
+        contact = selectedContact;
+      });
+    }
+  }
+
   PreferredSizeWidget buildAppBar(TMTheme theme) {
-    return widget.contact != null
+    return contact != null
         ? AvatarAppBar(
-            tag: widget.contact.imageUrl,
-            image: NetworkImage(widget.contact.imageUrl),
+            tag: contact.imageUrl,
+            image: NetworkImage(contact.imageUrl),
             title: new Text(
-              widget.contact.fullname,
+              contact.fullname,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: ralewayRegular(18.0, theme.appBarColor),
             ),
-            subtitle: Text("${widget.contact.totalJobs} Jobs", style: theme.smallTextStyle),
+            subtitle: Text("${contact.totalJobs} Jobs", style: theme.smallTextStyle),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.people),
+                onPressed: onSelectContact,
+              )
+            ],
           )
         : appBar(context);
   }
@@ -199,7 +233,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider, 
           .map((img) => ImageModel(
                 src: img.imageUrl,
                 path: img.ref.path,
-                contact: widget.contact,
+                contact: contact,
               ))
           .toList();
       try {

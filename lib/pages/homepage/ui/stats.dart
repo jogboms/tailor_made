@@ -59,6 +59,7 @@ class StatsWidget extends StatelessWidget {
             margin: EdgeInsets.only(left: 30.0, right: 30.0),
           ),
           Expanded(
+            // TODO
             child: statsTile(count: 62, title: "Completed", subTitle: "Projects"),
           ),
         ],
