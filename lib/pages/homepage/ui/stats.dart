@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class StatsWidget extends StatelessWidget {
+  final List<JobModel> jobs;
+
+  StatsWidget({
+    Key key,
+    @required this.jobs,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Widget statsTile({int count, String title, String subTitle}) {
@@ -42,7 +50,7 @@ class StatsWidget extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: statsTile(count: 43, title: "Created", subTitle: "Projects"),
+            child: statsTile(count: jobs.length, title: "Created", subTitle: "Projects"),
           ),
           Container(
             color: borderSideColor,

@@ -72,7 +72,7 @@ Widget textTile(TMTheme theme, {String title, String subTitle, bool small: false
     children: <Widget>[
       new Text(
         title,
-        style: new TextStyle(color: theme?.textColor, fontSize: small == true ? 14.0 : 18.0),
+        style: new TextStyle(color: theme?.textColor, fontSize: small == true ? 14.0 : 16.0),
       ),
       subTitle != null
           ? new Text(

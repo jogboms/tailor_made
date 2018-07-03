@@ -30,8 +30,13 @@ class VM {}
 
 class JobsCreatePage extends StatefulWidget {
   final ContactModel contact;
+  final List<ContactModel> contacts;
 
-  JobsCreatePage({this.contact});
+  JobsCreatePage({
+    Key key,
+    this.contact,
+    this.contacts = const [],
+  }) : super(key: key);
 
   @override
   _JobsCreatePageState createState() => new _JobsCreatePageState();
