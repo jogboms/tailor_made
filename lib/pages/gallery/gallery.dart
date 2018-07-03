@@ -33,6 +33,7 @@ class GalleryPage extends StatelessWidget {
             backgroundColor: theme.appBarBackgroundColor,
             automaticallyImplyLeading: false,
             leading: backButton(context),
+            forceElevated: true,
             centerTitle: false,
             floating: true,
           ),
