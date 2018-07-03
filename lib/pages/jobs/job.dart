@@ -185,15 +185,12 @@ class _JobPageState extends State<JobPage> {
                 ),
                 new Padding(
                   padding: const EdgeInsets.only(top: 8.0),
-                  child: GalleryGrids(
-                    contact: widget.job.contact,
-                    images: widget.job.images,
-                  ),
+                  child: GalleryGrids(job: widget.job),
                 ),
                 // const Divider(height: 1.0),
                 new Padding(
                   padding: const EdgeInsets.only(top: 8.0),
-                  child: PaymentGrids(payments: widget.job.payments),
+                  child: PaymentGrids(job: widget.job),
                 ),
               ],
             ),

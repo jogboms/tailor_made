@@ -193,6 +193,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider, 
       job.images = fireImages
           .map((img) => ImageModel(
                 src: img.imageUrl,
+                path: img.ref.path,
                 contact: widget.contact,
               ))
           .toList();

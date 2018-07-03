@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/pages/payments/models/payment.model.dart';
 import 'package:tailor_made/ui/blank.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -59,18 +60,18 @@ class PaymentGrid extends StatelessWidget {
 }
 
 class PaymentGrids extends StatelessWidget {
-  final List<PaymentModel> payments;
+  final JobModel job;
 
   PaymentGrids({
     Key key,
-    @required this.payments,
+    @required this.job,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    List<Widget> paymentList = payments.map((payment) {
+    List<Widget> paymentList = job.payments.map((payment) {
       return PaymentGrid(
         payment: payment,
       );

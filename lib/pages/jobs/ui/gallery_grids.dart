@@ -9,6 +9,7 @@ import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/gallery/gallery.dart';
 import 'package:tailor_made/pages/gallery/gallery_view.dart';
 import 'package:tailor_made/pages/gallery/models/image.model.dart';
+import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -94,14 +95,12 @@ class GalleryGrid extends StatelessWidget {
 
 class GalleryGrids extends StatefulWidget {
   final Size gridSize;
-  final ContactModel contact;
-  final List<ImageModel> images;
+  final JobModel job;
 
   GalleryGrids({
     Key key,
     double gridSize,
-    @required this.contact,
-    @required this.images,
+    @required this.job,
   })  : gridSize = Size.square(gridSize ?? _kGridWidth),
         super(key: key);
 
@@ -117,20 +116,39 @@ class GalleryGridsState extends State<GalleryGrids> {
   @override
   initState() {
     super.initState();
-    fireImages = widget.images.map((img) => FireImage()..imageUrl = img.src);
+    fireImages = widget.job.images.map((img) => FireImage()..imageUrl = img.src).toList();
   }
 
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    List<Widget> imagesList = widget.images.map((img) {
-      return GalleryGrid(
-        imageUrl: img.src,
-        tag: img.src,
-        size: widget.gridSize.width,
-      );
-    }).toList();
+    List<Widget> imagesList = List.generate(
+      fireImages.length,
+      (int index) {
+        final fireImage = fireImages[index];
+        final image = fireImage.imageUrl;
+
+        if (image == null) {
+          return Center(widthFactor: 2.5, child: CircularProgressIndicator());
+        }
+
+        return GalleryGrid(
+          imageUrl: image,
+          tag: "$image-$index",
+          size: _kGridWidth,
+          // Remove images from storage using path
+          onTapDelete: fireImage.ref != null
+              ? (image) {
+                  setState(() {
+                    fireImage.ref.delete();
+                    fireImages.removeAt(index);
+                  });
+                }
+              : null,
+        );
+      },
+    ).toList();
 
     return new Column(
       children: <Widget>[
@@ -143,7 +161,7 @@ class GalleryGridsState extends State<GalleryGrids> {
             ),
             CupertinoButton(
               child: Text("SHOW ALL", style: ralewayRegular(11.0, textBaseColor)),
-              onPressed: () => TMNavigate(context, GalleryPage(images: widget.images), fullscreenDialog: true),
+              onPressed: () => TMNavigate(context, GalleryPage(images: widget.job.images), fullscreenDialog: true),
             ),
           ],
         ),
@@ -153,7 +171,7 @@ class GalleryGridsState extends State<GalleryGrids> {
           child: new ListView(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             scrollDirection: Axis.horizontal,
-            children: [newGrid(widget.contact, widget.gridSize)]..addAll(imagesList),
+            children: [newGrid(widget.job.contact, widget.gridSize)]..addAll(imagesList.reversed.toList()),
           ),
         ),
       ],
@@ -211,6 +229,16 @@ class GalleryGridsState extends State<GalleryGrids> {
           ..isLoading = false
           ..isSucess = true
           ..imageUrl = image;
+
+        widget.job.reference.updateData({
+          "images": fireImages
+              .map((img) => ImageModel(
+                    src: img.imageUrl,
+                    path: ref.path,
+                    contact: widget.job.contact,
+                  ).toMap())
+              .toList()
+        });
       });
     } catch (e) {
       setState(() {
