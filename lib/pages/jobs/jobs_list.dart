@@ -1,33 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:tailor_made/utils/tm_months.dart';
-import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
-
+import 'package:tailor_made/utils/tm_navigate.dart';
 import 'job.dart';
-import 'models/job.model.dart';
-
-var nairaFormat = new NumberFormat.currency(symbol: "");
+import 'models/job_list.model.dart';
 
 class JobList extends StatelessWidget {
-  final List<JobModel> jobs;
+  final List<JobListModel> lists;
 
-  JobList({this.jobs});
+  JobList({this.lists});
 
   @override
   Widget build(BuildContext context) {
     SliverChildListDelegate delegate = new SliverChildListDelegate(
-      jobs.map((job) => JobListItem(job: job)).toList(),
+      lists.map((list) => JobListItem(list: list)).toList(),
     );
 
-    return SliverList(delegate: delegate);
+    return SliverList(
+      delegate: delegate,
+    );
   }
 }
 
 class JobListItem extends StatelessWidget {
-  final JobModel job;
+  final JobListModel list;
 
-  JobListItem({this.job});
+  JobListItem({this.list});
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +34,8 @@ class JobListItem extends StatelessWidget {
 
     onTapList() {
       print("onTapList");
-      TMNavigate(context, JobPage(job: job));
+      TMNavigate(context, JobPage());
     }
-
-    final _date = job.createdAt;
-    final _price = nairaFormat.format(job.price ?? 0);
 
     return new Container(
       decoration: BoxDecoration(
@@ -63,9 +57,9 @@ class JobListItem extends StatelessWidget {
                 child: new Text.rich(
                   new TextSpan(
                     children: [
-                      new TextSpan(text: "${_date.day}\n", style: ralewayLight(30.0, Colors.white)),
+                      new TextSpan(text: "15\n", style: ralewayLight(30.0, Colors.white)),
                       new TextSpan(
-                        text: MONTHS_SHORT[_date.month - 1].toUpperCase(),
+                        text: "MAY",
                         style: ralewayLight(10.0, Colors.white).copyWith(
                           letterSpacing: 2.0,
                         ),
@@ -81,8 +75,8 @@ class JobListItem extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(job.name, style: TextStyle(fontSize: 16.0, color: Colors.black)),
-                    Text("NGN$_price", style: TextStyle(color: textBaseColor)),
+                    Text("2 Italian Gowns", style: TextStyle(fontSize: 16.0, color: Colors.black)),
+                    Text("₦3,000", style: TextStyle(color: textBaseColor)),
                   ],
                 ),
               ),

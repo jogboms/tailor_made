@@ -1,37 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/gallery/gallery.dart';
-import 'package:tailor_made/pages/gallery/models/image.model.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
-import 'package:tailor_made/pages/payments/models/payment.model.dart';
 import 'package:tailor_made/pages/payments/payments.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class BottomRowWidget extends StatelessWidget {
-  final List<JobModel> jobs;
-
-  BottomRowWidget({
-    Key key,
-    @required this.jobs,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    final List<ImageModel> images = [];
-    final List<PaymentModel> payments = [];
-
-    jobs.forEach((item) {
-      images.addAll(item.images);
-      payments.addAll(item.payments);
-    });
-
     void onTapPayments() {
-      TMNavigate(context, PaymentsPage(payments: payments.toList()));
+      TMNavigate(context, PaymentsPage());
     }
 
     void onTapGallery() {
-      TMNavigate(context, GalleryPage(images: images.toList()));
+      TMNavigate(context, GalleryPage());
     }
 
     return new Container(
@@ -63,7 +45,7 @@ class BottomRowWidget extends StatelessWidget {
                 color: Colors.blueAccent,
                 icon: Icons.image,
                 title: "Gallery",
-                subTitle: "${images.length} Photos",
+                subTitle: "206 Photos",
                 onPressed: onTapGallery,
               ),
             ),

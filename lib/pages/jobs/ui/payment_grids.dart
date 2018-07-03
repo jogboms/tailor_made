@@ -1,21 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
-import 'package:tailor_made/pages/payments/models/payment.model.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/ui/blank.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
-import 'package:tailor_made/utils/tm_theme.dart';
 
 const _kGridWidth = 120.0;
 
 class PaymentGrid extends StatelessWidget {
-  final PaymentModel payment;
-
-  PaymentGrid({
-    Key key,
-    this.payment,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return new Container(
@@ -60,22 +51,15 @@ class PaymentGrid extends StatelessWidget {
 }
 
 class PaymentGrids extends StatelessWidget {
-  final JobModel job;
-
-  PaymentGrids({
-    Key key,
-    @required this.job,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
-
-    List<Widget> paymentList = job.payments.map((payment) {
-      return PaymentGrid(
-        payment: payment,
-      );
-    }).toList();
+    List<Widget> paymentList = List
+        .generate(
+          10,
+          (int index) => PaymentGrid(),
+        )
+        .toList();
 
     return new Column(
       children: <Widget>[
@@ -115,7 +99,7 @@ class PaymentGrids extends StatelessWidget {
         child: new InkWell(
           onTap: () {},
           child: Icon(
-            Icons.note_add,
+            Icons.add_circle,
             size: 30.0,
             color: textBaseColor.withOpacity(.35),
           ),

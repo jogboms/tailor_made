@@ -1,16 +1,21 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/gallery/gallery_view.dart';
-import 'package:tailor_made/pages/gallery/models/image.model.dart';
+import 'models/gallery_image.model.dart';
+import 'gallery_view.dart';
 
 class GalleryGridItem extends StatelessWidget {
-  final ImageModel image;
+  final GalleryImageModel image;
 
   GalleryGridItem({this.image});
 
   @override
   Widget build(BuildContext context) {
+    Random rand = new Random();
+    int id = rand.nextInt(10000);
+    int id2 = rand.nextInt(10000);
     return new Hero(
-      tag: image.src,
+      tag: "-${image.src}-$id-$id2",
       child: Container(
         decoration: BoxDecoration(
           color: Colors.grey[200],
@@ -25,7 +30,7 @@ class GalleryGridItem extends StatelessWidget {
             onTap: () {
               PageRouteBuilder pageBuilder = new PageRouteBuilder(
                 opaque: false,
-                pageBuilder: (BuildContext context, _, __) => GalleryView(image.src, image.src),
+                pageBuilder: (BuildContext context, _, __) => GalleryView(image.src, "-${image.src}-$id-$id2"),
                 transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
                   return new FadeTransition(opacity: animation, child: child);
                 },

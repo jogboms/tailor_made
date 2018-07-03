@@ -49,13 +49,13 @@ class _ContactsItemState extends State<ContactsItem> {
 
     Hero avatar() {
       return new Hero(
-        tag: widget.contact.imageUrl,
+        tag: widget.contact.image,
         child: new CircleAvatar(
           backgroundColor: theme.scaffoldColor.withOpacity(.5),
-          backgroundImage: NetworkImage(widget.contact.imageUrl),
+          backgroundImage: NetworkImage(widget.contact.image),
           child: new Align(
             alignment: Alignment(1.25, -1.25),
-            child: widget.contact.hasPending > 0
+            child: widget.contact.pending > 0
                 ? new Container(
                     width: 15.5,
                     height: 15.5,
@@ -72,7 +72,7 @@ class _ContactsItemState extends State<ContactsItem> {
     }
 
     Row icons = new Row(
-      mainAxisSize: MainAxisSize.min,
+      // mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         iconCircle(Icons.call, onTapCall),
@@ -82,13 +82,13 @@ class _ContactsItemState extends State<ContactsItem> {
     );
 
     Text title = new Text(
-      widget.contact.fullname,
+      widget.contact.title,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: new TextStyle(color: theme.textColor),
     );
 
-    int pending = widget.contact.hasPending;
+    int pending = widget.contact.pending;
 
     ListTile list = ListTile(
       dense: true,
