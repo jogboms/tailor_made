@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tailor_made/pages/jobs/job.dart';
+import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/ui/tm_empty_result.dart';
 import 'package:tailor_made/utils/tm_months.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
-
-import 'job.dart';
-import 'models/job.model.dart';
 
 var nairaFormat = new NumberFormat.currency(symbol: "");
 
@@ -16,11 +16,17 @@ class JobList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SliverChildListDelegate delegate = new SliverChildListDelegate(
-      jobs.map((job) => JobListItem(job: job)).toList(),
-    );
+    if (jobs.isEmpty) {
+      return SliverFillRemaining(
+        child: TMEmptyResult(message: "No jobs available"),
+      );
+    }
 
-    return SliverList(delegate: delegate);
+    return SliverList(
+      delegate: new SliverChildListDelegate(
+        jobs.map((job) => JobListItem(job: job)).toList(),
+      ),
+    );
   }
 }
 

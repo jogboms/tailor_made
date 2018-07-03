@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/payments/models/payment.model.dart';
+import 'package:tailor_made/ui/tm_empty_result.dart';
 
 class PaymentList extends StatelessWidget {
   final List<PaymentModel> payments;
@@ -8,11 +9,17 @@ class PaymentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SliverChildListDelegate delegate = new SliverChildListDelegate(
-      payments.map((payment) => PaymentListItem(payment: payment)).toList(),
-    );
+    if (payments.isEmpty) {
+      return SliverFillRemaining(
+        child: TMEmptyResult(message: "No payments available"),
+      );
+    }
 
-    return SliverList(delegate: delegate);
+    return SliverList(
+      delegate: new SliverChildListDelegate(
+        payments.map((payment) => PaymentListItem(payment: payment)).toList(),
+      ),
+    );
   }
 }
 
