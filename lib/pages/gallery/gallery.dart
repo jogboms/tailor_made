@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/gallery/gallery_grid.dart';
 import 'package:tailor_made/pages/gallery/models/image.model.dart';
 import 'package:tailor_made/ui/back_button.dart';
+import 'package:tailor_made/ui/tm_empty_result.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class GalleryPage extends StatelessWidget {
@@ -35,7 +36,11 @@ class GalleryPage extends StatelessWidget {
             centerTitle: false,
             floating: true,
           ),
-          GalleryGrid(images: images),
+          images.isEmpty
+              ? SliverFillRemaining(
+                  child: TMEmptyResult(message: "No images available"),
+                )
+              : GalleryGrid(images: images),
         ],
       ),
     );
