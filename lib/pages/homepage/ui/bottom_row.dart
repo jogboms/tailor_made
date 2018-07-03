@@ -26,14 +26,6 @@ class BottomRowWidget extends StatelessWidget {
       payments.addAll(item.payments);
     });
 
-    void onTapPayments() {
-      TMNavigate(context, PaymentsPage(payments: payments.toList()));
-    }
-
-    void onTapGallery() {
-      TMNavigate(context, GalleryPage(images: images.toList()));
-    }
-
     return new Container(
       height: 120.0,
       decoration: new BoxDecoration(
@@ -52,8 +44,8 @@ class BottomRowWidget extends StatelessWidget {
                 color: Colors.redAccent,
                 icon: Icons.attach_money,
                 title: "Payments",
-                subTitle: "26 Received",
-                onPressed: onTapPayments,
+                subTitle: "${payments.length} Received",
+                onPressed: () => TMNavigate(context, PaymentsPage(payments: payments.toList())),
               ),
             ),
           ),
@@ -64,7 +56,7 @@ class BottomRowWidget extends StatelessWidget {
                 icon: Icons.image,
                 title: "Gallery",
                 subTitle: "${images.length} Photos",
-                onPressed: onTapGallery,
+                onPressed: () => TMNavigate(context, GalleryPage(images: images.toList())),
               ),
             ),
           ),

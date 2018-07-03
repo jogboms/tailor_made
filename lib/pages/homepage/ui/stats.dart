@@ -16,19 +16,17 @@ class StatsWidget extends StatelessWidget {
       final TMTheme theme = TMTheme.of(context);
       return new Row(
         children: <Widget>[
-          new Padding(
-            child: new Text(
-              count.toString(),
-              style: new TextStyle(color: theme.textColor, fontSize: 18.0),
-            ),
-            padding: EdgeInsets.only(right: 10.0),
+          new Text(
+            count.toString(),
+            style: new TextStyle(color: theme.textColor, fontSize: 24.0),
           ),
+          const SizedBox(width: 8.0),
           new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               new Text(
                 title,
-                style: new TextStyle(color: theme.textColor, fontSize: 13.0, fontWeight: FontWeight.w300),
+                style: new TextStyle(color: theme.textColor, fontSize: 14.0),
               ),
               new Text(
                 subTitle,
@@ -60,7 +58,7 @@ class StatsWidget extends StatelessWidget {
           ),
           Expanded(
             // TODO
-            child: statsTile(count: 62, title: "Completed", subTitle: "Projects"),
+            child: statsTile(count: 0, title: "Completed", subTitle: "Projects"),
           ),
         ],
       ),
