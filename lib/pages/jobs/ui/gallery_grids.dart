@@ -1,155 +1,68 @@
-import 'dart:async';
 import 'dart:math';
 
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/pages/gallery/gallery.dart';
 import 'package:tailor_made/pages/gallery/gallery_view.dart';
-import 'package:tailor_made/pages/gallery/models/image.model.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
-import 'package:tailor_made/utils/tm_child_dialog.dart';
-import 'package:tailor_made/utils/tm_navigate.dart';
-import 'package:tailor_made/utils/tm_theme.dart';
 
 const _kGridWidth = 70.0;
 
-class FireImage {
-  StorageReference ref;
-  String imageUrl;
-  bool isLoading = true;
-  bool isSucess = false;
-}
-
 class GalleryGrid extends StatelessWidget {
-  final String tag;
-  final String imageUrl;
-  final Size size;
-  final void Function(String imageUrl) onTapDelete;
-
-  GalleryGrid({
-    Key key,
-    @required this.tag,
-    @required this.imageUrl,
-    this.onTapDelete,
-    double size,
-  })  : size = Size.square(size ?? _kGridWidth),
-        super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    Random rand = new Random();
+    int id = rand.nextInt(10000);
+    int id2 = rand.nextInt(10000);
+    String image = "https://placeimg.com/640/640/nature/$id";
     return new Hero(
-      tag: tag,
+      tag: "-$image-$id-$id2",
       child: Container(
-        width: size.width,
+        width: _kGridWidth,
         margin: EdgeInsets.only(right: 8.0),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: new Material(
-                color: Colors.white,
-                elevation: 2.0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                child: new Ink.image(
-                  image: new NetworkImage(imageUrl),
-                  fit: BoxFit.cover,
-                  child: new InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                            new PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder: (BuildContext context, _, __) => GalleryView(imageUrl, tag),
-                              transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-                                return new FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                    },
-                    child: onTapDelete != null
-                        ? new Align(
-                            alignment: Alignment.topRight,
-                            child: GestureDetector(
-                              onTap: () => onTapDelete(imageUrl),
-                              child: new Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: new Icon(Icons.cancel, color: Colors.red),
-                              ),
-                            ),
-                          )
-                        : SizedBox(),
-                  ),
-                ),
-              ),
-            )
-          ],
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: new NetworkImage(image),
+          ),
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        child: new Material(
+          elevation: 2.0,
+          color: Colors.transparent,
+          child: new InkWell(
+            onTap: () {
+              Navigator.of(context).push(new PageRouteBuilder(
+                  opaque: false,
+                  pageBuilder: (BuildContext context, _, __) => GalleryView(image, "-$image-$id-$id2"),
+                  transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                    return new FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    );
+                  }));
+              // TMNavigate(context, GalleryView(image, "-$image-$id-$id2"), fullscreenDialog: true)
+            },
+          ),
         ),
       ),
     );
   }
 }
 
-class GalleryGrids extends StatefulWidget {
-  final Size gridSize;
-  final JobModel job;
-
-  GalleryGrids({
-    Key key,
-    double gridSize,
-    @required this.job,
-  })  : gridSize = Size.square(gridSize ?? _kGridWidth),
-        super(key: key);
-
-  @override
-  GalleryGridsState createState() {
-    return new GalleryGridsState();
-  }
-}
-
-class GalleryGridsState extends State<GalleryGrids> {
-  List<FireImage> fireImages = [];
-
-  @override
-  initState() {
-    super.initState();
-    fireImages = widget.job.images.map((img) => FireImage()..imageUrl = img.src).toList();
-  }
-
+class GalleryGrids extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    List<Widget> imagesList = List.generate(
-      fireImages.length,
-      (int index) {
-        final fireImage = fireImages[index];
-        final image = fireImage.imageUrl;
-
-        if (image == null) {
-          return Center(widthFactor: 2.5, child: CircularProgressIndicator());
-        }
-
-        return GalleryGrid(
-          imageUrl: image,
-          tag: "$image-$index",
-          size: _kGridWidth,
-          // Remove images from storage using path
-          onTapDelete: fireImage.ref != null
-              ? (image) {
-                  setState(() {
-                    fireImage.ref.delete();
-                    fireImages.removeAt(index);
-                  });
-                }
-              : null,
-        );
-      },
-    ).toList();
-
+    List<Widget> imagesList = List
+        .generate(
+          10,
+          (int index) => GalleryGrid(),
+        )
+        .toList();
     return new Column(
       children: <Widget>[
         new Row(
@@ -161,89 +74,39 @@ class GalleryGridsState extends State<GalleryGrids> {
             ),
             CupertinoButton(
               child: Text("SHOW ALL", style: ralewayRegular(11.0, textBaseColor)),
-              onPressed: () => TMNavigate(context, GalleryPage(images: widget.job.images), fullscreenDialog: true),
+              onPressed: () => TMNavigate(context, GalleryPage(), fullscreenDialog: true),
             ),
           ],
         ),
         new Container(
-          height: widget.gridSize.width + 8,
+          height: _kGridWidth + 8,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: new ListView(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             scrollDirection: Axis.horizontal,
-            children: [newGrid(widget.job.contact, widget.gridSize)]..addAll(imagesList.reversed.toList()),
+            children: [GalleryGrids.newGrid()]..addAll(imagesList),
           ),
         ),
       ],
     );
   }
 
-  Widget newGrid(ContactModel contact, Size gridSize) {
+  static Widget newGrid() {
     return new Container(
-      width: gridSize.width,
+      width: _kGridWidth,
       margin: EdgeInsets.only(right: 8.0),
       child: new Material(
         borderRadius: BorderRadius.circular(5.0),
         color: Colors.grey[100],
         child: new InkWell(
-          onTap: _handlePhotoButtonPressed,
+          onTap: () {},
           child: Icon(
-            Icons.add_a_photo,
+            Icons.add_circle,
             size: 24.0,
             color: textBaseColor.withOpacity(.35),
           ),
         ),
       ),
     );
-  }
-
-  Future<Null> _handlePhotoButtonPressed() async {
-    var source = await showChildDialog(
-      context: context,
-      child: new SimpleDialog(
-        children: <Widget>[
-          new SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, ImageSource.camera),
-            child: Padding(child: Text("Camera"), padding: EdgeInsets.all(8.0)),
-          ),
-          new SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, ImageSource.gallery),
-            child: Padding(child: Text("Gallery"), padding: EdgeInsets.all(8.0)),
-          ),
-        ],
-      ),
-    );
-    if (source == null) return;
-    var imageFile = await ImagePicker.pickImage(source: source);
-    var random = new Random().nextInt(10000);
-    var ref = FirebaseStorage.instance.ref().child('references/image_$random.jpg');
-    var uploadTask = ref.putFile(imageFile);
-
-    setState(() {
-      fireImages.add(FireImage()..ref = ref);
-    });
-    try {
-      var image = (await uploadTask.future).downloadUrl?.toString();
-      setState(() {
-        fireImages.last
-          ..isLoading = false
-          ..isSucess = true
-          ..imageUrl = image;
-
-        widget.job.reference.updateData({
-          "images": fireImages
-              .map((img) => ImageModel(
-                    src: img.imageUrl,
-                    path: ref.path,
-                    contact: widget.job.contact,
-                  ).toMap())
-              .toList()
-        });
-      });
-    } catch (e) {
-      setState(() {
-        fireImages.last.isLoading = false;
-      });
-    }
   }
 }

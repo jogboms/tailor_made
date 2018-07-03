@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -58,7 +58,7 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     if (subtitle != null) {
-      titles.addAll([SizedBox(height: 4.0), subtitle]);
+      titles.add(subtitle);
       // new Text.rich(
       //   new TextSpan(
       //     children: [
