@@ -60,13 +60,22 @@ class _ContactState extends State<Contact> {
 
               List<DocumentSnapshot> list = snapshot.data.documents;
 
-              final jobs = list.map((item) => JobModel.fromJson(item.data)).toList();
+              final jobs = list.map((item) => JobModel.fromDoc(item)).toList();
 
               return new TabBarView(
                 children: [
-                  tabView(name: TABS[0].toLowerCase(), child: JobsListWidget(contact: widget.contact, jobs: jobs)),
-                  tabView(name: TABS[1].toLowerCase(), child: GalleryGridWidget(contact: widget.contact, jobs: jobs)),
-                  tabView(name: TABS[2].toLowerCase(), child: PaymentsListWidget(contact: widget.contact, jobs: jobs)),
+                  tabView(
+                    name: TABS[0].toLowerCase(),
+                    child: JobsListWidget(contact: widget.contact, jobs: jobs),
+                  ),
+                  tabView(
+                    name: TABS[1].toLowerCase(),
+                    child: GalleryGridWidget(contact: widget.contact, jobs: jobs),
+                  ),
+                  tabView(
+                    name: TABS[2].toLowerCase(),
+                    child: PaymentsListWidget(contact: widget.contact, jobs: jobs),
+                  ),
                 ],
               );
             },

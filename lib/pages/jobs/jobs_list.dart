@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tailor_made/utils/tm_months.dart';
-import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
+
 import 'job.dart';
 import 'models/job.model.dart';
 
@@ -36,7 +37,7 @@ class JobListItem extends StatelessWidget {
 
     onTapList() {
       print("onTapList");
-      TMNavigate(context, JobPage());
+      TMNavigate(context, JobPage(job: job));
     }
 
     final _date = job.createdAt;

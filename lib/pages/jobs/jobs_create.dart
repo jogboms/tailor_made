@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/pages/gallery/models/image.model.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/pages/jobs/models/measure.model.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grids.dart';
@@ -14,7 +16,6 @@ import 'package:tailor_made/ui/avatar_app_bar.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 
 const _kGridWidth = 85.0;
 
@@ -25,6 +26,8 @@ class FireImage {
   bool isSucess = false;
 }
 
+class VM {}
+
 class JobsCreatePage extends StatefulWidget {
   final ContactModel contact;
 
@@ -34,7 +37,7 @@ class JobsCreatePage extends StatefulWidget {
   _JobsCreatePageState createState() => new _JobsCreatePageState();
 }
 
-class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
+class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider, VM {
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   List<FireImage> fireImages = [];
@@ -187,7 +190,13 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       form.save();
       showLoadingSnackBar();
 
-      job.images = fireImages.map((img) => img.imageUrl).toList();
+      job.images = fireImages
+          .map((img) => ImageModel(
+                src: img.imageUrl,
+                path: img.ref.path,
+                contact: widget.contact,
+              ))
+          .toList();
       try {
         var data = await Cloudstore.jobs.add(job.toMap());
         closeLoadingSnackBar();
@@ -329,7 +338,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
           isDense: true,
-          hintText: "Enter Name",
+          hintText: "Enter Style Name",
           hintStyle: TextStyle(fontSize: 14.0),
           // border: InputBorder.none,
           border: UnderlineInputBorder(

@@ -18,13 +18,9 @@ class PaymentsListWidget extends StatelessWidget {
   build(BuildContext context) {
     final List<dynamic> payments = [];
 
-    // jobs.forEach(
-    //   (item) => payments.addAll(
-    //         item.payments.map(
-    //           (src) => GalleryImageModel(src: src),
-    //         ),
-    //       ),
-    // );
+    jobs.forEach(
+      (item) => payments.addAll(item.payments),
+    );
 
     if (payments.isEmpty) {
       return SliverFillRemaining(

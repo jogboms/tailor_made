@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/pages/gallery/models/image.model.dart';
 import 'package:tailor_made/pages/jobs/models/measure.model.dart';
+import 'package:tailor_made/pages/payments/models/payment.model.dart';
 import 'package:tailor_made/utils/tm_uuid.dart';
 
 class JobModel extends Model {
@@ -9,9 +12,10 @@ class JobModel extends Model {
   String name;
   double price;
   String notes;
-  List<String> images;
+  List<ImageModel> images;
   DateTime createdAt;
   List<MeasureModel> measurements;
+  List<PaymentModel> payments;
 
   JobModel({
     id,
@@ -21,7 +25,8 @@ class JobModel extends Model {
     this.notes,
     this.images,
     createdAt,
-    this.measurements,
+    this.measurements = const [],
+    this.payments = const [],
   })  : id = id ?? uuid(),
         createdAt = createdAt ?? DateTime.now();
 
@@ -33,16 +38,35 @@ class JobModel extends Model {
         (measure) => measurements.add(MeasureModel.fromJson(measure.cast<String, dynamic>())),
       );
     }
+    List<PaymentModel> payments = [];
+    if (json['payments'] != null) {
+      json['payments'].forEach(
+        (payment) => payments.add(PaymentModel.fromJson(payment.cast<String, dynamic>())),
+      );
+    }
+    List<ImageModel> images = [];
+    if (json['images'] != null) {
+      json['images'].forEach(
+        (image) => images.add(ImageModel.fromJson(image.cast<String, dynamic>())),
+      );
+    }
     return new JobModel(
       id: json['id'],
       contact: ContactModel.fromJson(json['contact'].cast<String, dynamic>()),
       name: json['name'],
       price: double.tryParse(json['price'].toString()),
       notes: json['notes'],
-      images: json['images'].cast<String>(),
+      images: images,
       createdAt: DateTime.tryParse(json['createdAt'].toString()),
       measurements: measurements,
+      payments: payments,
     );
+  }
+
+  factory JobModel.fromDoc(DocumentSnapshot doc) {
+    return JobModel.fromJson(doc.data)
+      ..reference = doc.reference
+      ..documentID = doc.documentID;
   }
 
   @override
@@ -53,9 +77,10 @@ class JobModel extends Model {
       "name": name,
       "price": price,
       "notes": notes,
-      "images": images,
+      "images": images.map((image) => image.toMap()).toList(),
       "createdAt": createdAt.toString(),
       "measurements": measurements.map((measure) => measure.toMap()).toList(),
+      "payments": payments.map((payment) => payment.toMap()).toList(),
     };
   }
 }

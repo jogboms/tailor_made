@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/payments/models/payment.model.dart';
 
 class PaymentList extends StatelessWidget {
-  final List<PaymentModel> jobs;
-  final List<dynamic> payments;
+  final List<PaymentModel> payments;
 
-  PaymentList({this.jobs, this.payments});
+  PaymentList({this.payments});
 
   @override
   Widget build(BuildContext context) {
     SliverChildListDelegate delegate = new SliverChildListDelegate(
-      jobs.map((job) => PaymentListItem(job: job)).toList(),
+      payments.map((payment) => PaymentListItem(payment: payment)).toList(),
     );
 
     return SliverList(delegate: delegate);
@@ -18,9 +17,9 @@ class PaymentList extends StatelessWidget {
 }
 
 class PaymentListItem extends StatelessWidget {
-  final PaymentModel job;
+  final PaymentModel payment;
 
-  PaymentListItem({this.job});
+  PaymentListItem({this.payment});
 
   @override
   Widget build(BuildContext context) {
