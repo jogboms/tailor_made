@@ -33,6 +33,8 @@ class PaymentsPage extends StatelessWidget {
             backgroundColor: theme.appBarBackgroundColor,
             automaticallyImplyLeading: false,
             leading: backButton(context),
+            forceElevated: true,
+            elevation: 1.0,
             centerTitle: false,
             floating: true,
           ),

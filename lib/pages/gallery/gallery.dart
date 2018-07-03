@@ -34,6 +34,7 @@ class GalleryPage extends StatelessWidget {
             automaticallyImplyLeading: false,
             leading: backButton(context),
             forceElevated: true,
+            elevation: 1.0,
             centerTitle: false,
             floating: true,
           ),
@@ -41,7 +42,10 @@ class GalleryPage extends StatelessWidget {
               ? SliverFillRemaining(
                   child: TMEmptyResult(message: "No images available"),
                 )
-              : GalleryGrid(images: images),
+              : SliverPadding(
+                  padding: EdgeInsets.only(top: 3.0),
+                  sliver: GalleryGrid(images: images),
+                ),
         ],
       ),
     );
