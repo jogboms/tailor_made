@@ -20,14 +20,6 @@ class ContactsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    void onTapCard() {
-      if (onTapContact != null) {
-        onTapContact();
-        return;
-      }
-      TMNavigate(context, Contact(contact: contact));
-    }
-
     void onTapCall() {
       print("onTapCall");
     }
@@ -36,13 +28,8 @@ class ContactsItem extends StatelessWidget {
       print("onTapChat");
     }
 
-    void onTapMore() {
-      print("onTapMore");
-    }
-
     Widget iconCircle(IconData icon, VoidCallback onTap) {
       return Padding(
-        // padding: const EdgeInsets.symmetric(vertical: 13.0, horizontal: 8.0),
         padding: const EdgeInsets.all(8.0),
         child: InkResponse(
           child: new Icon(icon, size: 18.0, color: theme.textColor),
@@ -67,7 +54,11 @@ class ContactsItem extends StatelessWidget {
                     height: 15.5,
                     decoration: new BoxDecoration(
                       color: accentColor,
-                      border: Border.all(color: theme.scaffoldColor, style: BorderStyle.solid, width: 2.5),
+                      border: Border.all(
+                        color: theme.scaffoldColor,
+                        style: BorderStyle.solid,
+                        width: 2.5,
+                      ),
                       shape: BoxShape.circle,
                     ),
                   )
@@ -83,7 +74,6 @@ class ContactsItem extends StatelessWidget {
       children: <Widget>[
         iconCircle(Icons.call, onTapCall),
         iconCircle(Icons.message, onTapChat),
-        iconCircle(Icons.more_vert, onTapMore),
       ],
     );
 
@@ -98,7 +88,7 @@ class ContactsItem extends StatelessWidget {
 
     ListTile list = ListTile(
       dense: true,
-      onTap: onTapCard,
+      onTap: onTapContact ?? () => TMNavigate(context, Contact(contact: contact)),
       leading: avatar(),
       title: title,
       subtitle: pending > 1 ? Text("$pending wear-ables") : Text("No pending wear-ables"),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
-import 'package:tailor_made/utils/tm_theme.dart';
-import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 
 enum Choice {
   CreateJob,
@@ -24,9 +24,7 @@ class ContactAppBarState extends State<ContactAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    void onTapGoBack() {
-      Navigator.pop(context);
-    }
+    void onTapGoBack() => Navigator.pop(context);
 
     Widget appBarLeading = new FlatButton(
       padding: EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
@@ -104,42 +102,31 @@ class ContactAppBarState extends State<ContactAppBar> {
 
     return new PreferredSize(
       preferredSize: new Size.fromHeight(kToolbarHeight),
-      child: Container(
-        decoration: BoxDecoration(
-            // color: Colors.transparent,
-            // color: theme.appBarBackgroundColor,
-            // color: Colors.black.withOpacity(.05),
-            // boxShadow: [
-            //   BoxShadow(color: Colors.black.withOpacity(.05)),
-            //   BoxShadow(color: Colors.black.withOpacity(.05), spreadRadius: 2.0, blurRadius: 10.0),
-            // ],
+      child: SafeArea(
+        top: true,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            appBarLeading,
+            Expanded(
+              child: appBarTitle,
             ),
-        child: SafeArea(
-          top: true,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              appBarLeading,
-              Expanded(
-                child: appBarTitle,
-              ),
-              appBarIcon(
-                icon: Icons.call,
-                onTap: () {},
-              ),
-              appBarIcon(
-                icon: Icons.message,
-                onTap: () {},
-              ),
-              appBarIcon(
-                icon: Icons.add,
-                onTap: () {
-                  TMNavigate(context, JobsCreatePage(contact: widget.contact));
-                },
-              ),
-            ],
-          ),
+            appBarIcon(
+              icon: Icons.call,
+              onTap: () {},
+            ),
+            appBarIcon(
+              icon: Icons.message,
+              onTap: () {},
+            ),
+            appBarIcon(
+              icon: Icons.add,
+              onTap: () {
+                TMNavigate(context, JobsCreatePage(contact: widget.contact));
+              },
+            ),
+          ],
         ),
       ),
     );

@@ -55,8 +55,6 @@ class _ContactsPageState extends State<ContactsPage> {
           ),
           style: new TextStyle(fontSize: 18.0),
         ),
-        // backgroundColor: TMColors.primary,
-        elevation: 0.0,
       );
     }
 
@@ -88,10 +86,7 @@ class _ContactsPageState extends State<ContactsPage> {
               itemCount: widget.contacts.length,
               shrinkWrap: true,
               itemExtent: null,
-              itemBuilder: (context, index) {
-                var item = widget.contacts[index];
-                return ContactsItem(contact: item);
-              },
+              itemBuilder: (context, index) => ContactsItem(contact: widget.contacts[index]),
             ),
       floatingActionButton: new FloatingActionButton(
         child: new Icon(Icons.add),

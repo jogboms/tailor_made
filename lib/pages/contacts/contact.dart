@@ -15,7 +15,10 @@ const TABS = const ["Jobs", "Gallery", "Payments"];
 class Contact extends StatefulWidget {
   final ContactModel contact;
 
-  Contact({this.contact});
+  Contact({
+    Key key,
+    this.contact,
+  }) : super(key: key);
 
   @override
   _ContactState createState() => new _ContactState();
@@ -90,7 +93,6 @@ Widget tabTitles() {
   return PreferredSize(
     child: Container(
       child: TabBar(
-        // indicatorSize: TabBarIndicatorSize.label,
         labelStyle: ralewayMedium(14.0),
         tabs: [
           Tab(child: Text(TABS[0])),
