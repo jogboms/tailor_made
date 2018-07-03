@@ -10,7 +10,7 @@ import 'package:tailor_made/pages/gallery/models/image.model.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/pages/jobs/models/measure.model.dart';
 import 'package:tailor_made/pages/jobs/ui/contact_lists.dart';
-import 'package:tailor_made/pages/jobs/ui/gallery_grids.dart';
+import 'package:tailor_made/pages/jobs/ui/gallery_grid_item.dart';
 import 'package:tailor_made/pages/jobs/ui/job_create_item.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
@@ -202,6 +202,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider, 
         ? AvatarAppBar(
             tag: contact.imageUrl,
             image: NetworkImage(contact.imageUrl),
+            elevation: 1.0,
             title: new Text(
               contact.fullname,
               maxLines: 1,
@@ -304,7 +305,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider, 
           return Center(widthFactor: 2.5, child: CircularProgressIndicator());
         }
 
-        return GalleryGrid(
+        return GalleryGridItem(
           imageUrl: image,
           tag: "$image-$index",
           size: _kGridWidth,

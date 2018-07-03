@@ -8,12 +8,14 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget title;
   final Widget subtitle;
   final Color iconColor;
+  final double elevation;
   final List<Widget> actions;
 
   AvatarAppBar({
     @required this.tag,
     @required this.image,
     this.title,
+    this.elevation = 0.0,
     this.actions,
     this.iconColor,
     this.subtitle,
@@ -95,7 +97,8 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
       children.addAll(actions);
     }
 
-    return Container(
+    return Material(
+      elevation: elevation,
       child: SafeArea(
         top: true,
         child: Row(

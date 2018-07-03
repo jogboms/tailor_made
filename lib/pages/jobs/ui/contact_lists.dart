@@ -41,9 +41,7 @@ class ContactLists extends StatelessWidget {
                 return ContactsItem(
                   contact: item,
                   showActions: false,
-                  onTapContact: () {
-                    Navigator.pop(context, item);
-                  },
+                  onTapContact: () => Navigator.pop(context, item),
                 );
               },
             ),

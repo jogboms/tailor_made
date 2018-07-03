@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
-import 'package:tailor_made/pages/jobs/models/measure.model.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grids.dart';
+import 'package:tailor_made/pages/jobs/ui/measure_lists.dart';
 import 'package:tailor_made/pages/jobs/ui/payment_grids.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -30,7 +30,6 @@ class _JobPageState extends State<JobPage> {
 
     ContactModel contact = widget.job.contact;
 
-    final List<MeasureModel> items = widget.job.measurements;
     final _date = widget.job.createdAt;
 
     var suffix = "th";
@@ -122,11 +121,6 @@ class _JobPageState extends State<JobPage> {
       ],
     );
 
-    Widget list = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: items.where((item) => item.value.isNotEmpty).map((item) => new MeasureItem(item)).toList(),
-    );
-
     Widget appBar = AvatarAppBar(
       tag: contact.imageUrl,
       image: NetworkImage(contact.imageUrl),
@@ -175,59 +169,15 @@ class _JobPageState extends State<JobPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Padding(
-                  padding: const EdgeInsets.only(top: 16.0, left: 16.0),
-                  child: Text("Measurements", style: theme.titleStyle, textAlign: TextAlign.start),
-                ),
-                new Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: list,
-                ),
-                new Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: GalleryGrids(job: widget.job),
-                ),
-                // const Divider(height: 1.0),
-                new Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: PaymentGrids(job: widget.job),
-                ),
+                MeasureLists(measurements: widget.job.measurements),
+                const SizedBox(height: 4.0),
+                GalleryGrids(job: widget.job),
+                const SizedBox(height: 4.0),
+                PaymentGrids(job: widget.job),
               ],
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class MeasureItem extends StatelessWidget {
-  final MeasureModel item;
-
-  MeasureItem(this.item);
-
-  @override
-  Widget build(BuildContext context) {
-    return new Container(
-      color: Colors.grey[100].withOpacity(.5),
-      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-      margin: const EdgeInsets.symmetric(vertical: 1.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(item.name, style: ralewayMedium(14.0, titleBaseColor)),
-                SizedBox(height: 2.0),
-                Text(item.type, style: ralewayMedium(12.0, textBaseColor)),
-              ],
-            ),
-          ),
-          Text("${item.value} ", style: ralewayRegular(16.0, titleBaseColor)),
-          Text(item.unit, style: ralewayLight(12.0, titleBaseColor)),
-        ],
       ),
     );
   }

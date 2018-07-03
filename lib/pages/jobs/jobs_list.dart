@@ -12,7 +12,10 @@ var nairaFormat = new NumberFormat.currency(symbol: "");
 class JobList extends StatelessWidget {
   final List<JobModel> jobs;
 
-  JobList({this.jobs});
+  JobList({
+    Key key,
+    this.jobs,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
