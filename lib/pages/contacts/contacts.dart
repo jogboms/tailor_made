@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/contacts/ui/contacts_item.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
-import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -86,7 +86,7 @@ class _ContactsPageState extends State<ContactsPage> {
             itemBuilder: (context, index) {
               var item = list[index];
               return ContactsItem(
-                contact: ContactModel.fromJson(item.data),
+                contact: ContactModel.fromDoc(item),
               );
             },
           );

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/gallery/models/image.model.dart';
@@ -60,6 +61,12 @@ class JobModel extends Model {
       measurements: measurements,
       payments: payments,
     );
+  }
+
+  factory JobModel.fromDoc(DocumentSnapshot doc) {
+    return JobModel.fromJson(doc.data)
+      ..reference = doc.reference
+      ..documentID = doc.documentID;
   }
 
   @override
