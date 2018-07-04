@@ -39,6 +39,12 @@ class PaymentGridsState extends State<PaymentGrids> {
   List<FirePayment> firePayments = [];
 
   @override
+  initState() {
+    super.initState();
+    firePayments = widget.job.payments.map((payment) => FirePayment()..payment = payment).toList();
+  }
+
+  @override
   Widget build(BuildContext context) {
     List<Widget> paymentsList = List.generate(
       firePayments.length,

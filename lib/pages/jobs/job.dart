@@ -11,10 +11,9 @@ import 'package:tailor_made/ui/avatar_app_bar.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-var nairaFormat = new NumberFormat.currency(symbol: "");
-
 class JobPage extends StatelessWidget {
   final JobModel job;
+  final nairaFormat = new NumberFormat.compactSimpleCurrency(name: "NGN", decimalDigits: 1);
 
   JobPage({
     Key key,
@@ -82,7 +81,7 @@ class JobPage extends StatelessWidget {
         ),
         const SizedBox(height: 12.0),
         Text(
-          "NGN$_price",
+          _price,
           style: ralewayLight(24.0, textColor).copyWith(
             letterSpacing: 1.5,
           ),
