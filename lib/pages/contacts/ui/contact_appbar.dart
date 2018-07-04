@@ -44,8 +44,9 @@ class ContactAppBarState extends State<ContactAppBar> {
             tag: widget.contact.documentID,
             child: new CircleAvatar(
               radius: isAtTop ? 0.0 : null,
-              backgroundColor: Colors.grey.shade400,
-              backgroundImage: NetworkImage(widget.contact.imageUrl),
+              backgroundColor: widget.contact.imageUrl != null ? Colors.grey.shade400 : Colors.white,
+              backgroundImage: widget.contact.imageUrl != null ? NetworkImage(widget.contact.imageUrl) : null,
+              child: widget.contact.imageUrl != null ? null : Center(child: Icon(Icons.person_outline)),
             ),
           ),
         ],

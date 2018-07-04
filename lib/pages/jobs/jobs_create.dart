@@ -29,8 +29,6 @@ class FireImage {
   bool isSucess = false;
 }
 
-class VM {}
-
 class JobsCreatePage extends StatefulWidget {
   final ContactModel contact;
   final List<ContactModel> contacts;
@@ -45,7 +43,7 @@ class JobsCreatePage extends StatefulWidget {
   _JobsCreatePageState createState() => new _JobsCreatePageState();
 }
 
-class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider, VM {
+class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   List<FireImage> fireImages = [];

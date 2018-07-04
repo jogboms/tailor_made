@@ -6,10 +6,9 @@ import 'package:tailor_made/utils/tm_months.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-var nairaFormat = new NumberFormat.currency(symbol: "");
-
 class JobListItem extends StatelessWidget {
   final JobModel job;
+  final nairaFormat = new NumberFormat.compactSimpleCurrency(name: "NGN", decimalDigits: 1);
 
   JobListItem({
     Key key,
@@ -60,7 +59,7 @@ class JobListItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(job.name, style: TextStyle(fontSize: 14.0, color: Colors.black)),
-                    Text("NGN$_price", style: TextStyle(fontSize: 12.0, color: textBaseColor)),
+                    Text(_price, style: TextStyle(fontSize: 12.0, color: textBaseColor)),
                   ],
                 ),
               ),
