@@ -38,6 +38,7 @@ class JobPage extends StatelessWidget {
               elevation: 1.0,
               automaticallyImplyLeading: false,
               centerTitle: false,
+              backgroundColor: Colors.grey.shade300,
               title: buildAvatarAppBar(context),
             ),
           ];
@@ -64,30 +65,30 @@ class JobPage extends StatelessWidget {
 
   Widget buildHeader() {
     final _price = nairaFormat.format(job.price ?? 0);
+    final textColor = Colors.grey.shade800;
 
     return new Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         new Padding(
-          padding: const EdgeInsets.only(top: 4.0, left: 24.0, bottom: 4.0, right: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Text(
             job.name,
-            style: ralewayLight(20.0, Colors.white),
+            style: ralewayLight(18.0, textColor),
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.fade,
           ),
         ),
-        new Padding(
-          padding: const EdgeInsets.only(top: 4.0, bottom: 16.0),
-          child: Text(
-            "NGN$_price",
-            style: ralewayLight(35.0, Colors.white).copyWith(
-              letterSpacing: 1.25,
-            ),
-            textAlign: TextAlign.center,
+        const SizedBox(height: 12.0),
+        Text(
+          "NGN$_price",
+          style: ralewayLight(24.0, textColor).copyWith(
+            letterSpacing: 1.5,
           ),
+          textAlign: TextAlign.center,
         ),
+        const SizedBox(height: 24.0),
         new Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -109,13 +110,20 @@ class JobPage extends StatelessWidget {
                         style: ralewayLight(8.0),
                         textAlign: TextAlign.center,
                       ),
-                      Text(
-                        // TODO
-                        "₦16,500",
-                        style: ralewayMedium(18.0, Colors.green.shade600).copyWith(
-                          letterSpacing: 1.25,
-                        ),
-                        textAlign: TextAlign.center,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(Icons.arrow_drop_up, color: Colors.green.shade600, size: 16.0),
+                          const SizedBox(width: 4.0),
+                          Text(
+                            // TODO
+                            "NGN16.5k",
+                            style: ralewayLight(18.0, Colors.black87).copyWith(
+                              letterSpacing: 1.25,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -129,13 +137,20 @@ class JobPage extends StatelessWidget {
                       style: ralewayLight(8.0),
                       textAlign: TextAlign.center,
                     ),
-                    Text(
-                      // TODO
-                      "₦3,500",
-                      style: ralewayMedium(18.0, Colors.red.shade600).copyWith(
-                        letterSpacing: 1.25,
-                      ),
-                      textAlign: TextAlign.center,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.arrow_drop_down, color: Colors.red.shade600, size: 16.0),
+                        const SizedBox(width: 4.0),
+                        Text(
+                          // TODO
+                          "NGN3.5k",
+                          style: ralewayLight(18.0, Colors.black87).copyWith(
+                            letterSpacing: 1.25,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -150,6 +165,8 @@ class JobPage extends StatelessWidget {
   AvatarAppBar buildAvatarAppBar(BuildContext context) {
     final _date = job.createdAt;
     final contact = job.contact;
+    // final textColor = Colors.white;
+    final textColor = Colors.grey.shade800;
 
     var suffix = "th";
     var digit = _date.day % 10;
@@ -167,18 +184,27 @@ class JobPage extends StatelessWidget {
           contact.fullname,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: ralewayRegular(20.0, Colors.white),
+          style: ralewayRegular(16.0, textColor),
         ),
       ),
-      iconColor: Colors.white,
+      iconColor: textColor,
       subtitle: new Text(
         date,
         style: new TextStyle(
-          color: Colors.white,
-          fontSize: 14.0,
+          color: textColor,
+          fontSize: 12.0,
           fontWeight: FontWeight.w300,
         ),
       ),
+      actions: <Widget>[
+        IconButton(
+          icon: new Icon(
+            job.isComplete ? Icons.check_box : Icons.check_box_outline_blank,
+            color: textBaseColor.shade900,
+          ),
+          onPressed: () {},
+        )
+      ],
     );
   }
 }
