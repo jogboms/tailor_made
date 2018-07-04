@@ -127,7 +127,10 @@ class ContactAppBarState extends State<ContactAppBar> {
             appBarIcon(
               icon: Icons.add,
               onTap: () {
-                TMNavigate(context, JobsCreatePage(contact: widget.contact));
+                TMNavigate(
+                  context,
+                  JobsCreatePage(contact: widget.contact, contacts: []),
+                );
               },
             ),
           ],

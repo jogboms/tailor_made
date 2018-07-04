@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:tailor_made/utils/tm_format_date.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class HeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
-    final _date = DateTime.now();
 
-    var suffix = "th";
-    var digit = _date.day % 10;
-    if ((digit > 0 && digit < 4) && (_date.day < 11 || _date.day > 13)) {
-      suffix = ["st", "nd", "rd"][digit - 1];
-    }
-    final date = new DateFormat("EEEE, d'$suffix' MMMM.").format(_date);
+    final date = formatDate(DateTime.now(), day: "EEEE", month: "MMMM");
 
     return new Expanded(
       child: Container(

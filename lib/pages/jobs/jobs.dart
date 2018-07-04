@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
 import 'package:tailor_made/pages/jobs/jobs_list.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
@@ -8,10 +9,12 @@ import 'package:tailor_made/utils/tm_theme.dart';
 
 class JobsPage extends StatelessWidget {
   final List<JobModel> jobs;
+  final List<ContactModel> contacts;
 
   JobsPage({
     Key key,
     @required this.jobs,
+    @required this.contacts,
   }) : super(key: key);
 
   @override
@@ -34,7 +37,7 @@ class JobsPage extends StatelessWidget {
       ),
       floatingActionButton: new FloatingActionButton(
         child: new Icon(Icons.add),
-        onPressed: () => TMNavigate(context, JobsCreatePage()),
+        onPressed: () => TMNavigate(context, JobsCreatePage(contacts: contacts)),
       ),
     );
   }
