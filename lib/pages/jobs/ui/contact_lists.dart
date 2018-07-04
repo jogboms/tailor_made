@@ -21,7 +21,6 @@ class ContactLists extends StatelessWidget {
       return appBar(
         context,
         title: "Select Client",
-        elevation: 0.0,
       );
     }
 

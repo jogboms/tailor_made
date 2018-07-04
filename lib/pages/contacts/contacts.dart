@@ -62,7 +62,6 @@ class _ContactsPageState extends State<ContactsPage> {
       return appBar(
         context,
         title: "Clients",
-        elevation: 0.0,
         actions: <Widget>[
           new IconButton(
             icon: new Icon(

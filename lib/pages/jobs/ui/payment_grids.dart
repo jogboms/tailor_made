@@ -18,15 +18,13 @@ class PaymentGrids extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TMTheme theme = TMTheme.of(context);
-
     return new Column(
       children: <Widget>[
         new Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             const SizedBox(width: 16.0),
-            Text("Payments", style: theme.titleStyle),
+            Expanded(child: Text("PAYMENTS", style: ralewayRegular(12.0))),
             CupertinoButton(
               child: Text("SHOW ALL", style: ralewayRegular(11.0, textBaseColor)),
               onPressed: () => TMNavigate(context, PaymentsPage(payments: job.payments), fullscreenDialog: true),

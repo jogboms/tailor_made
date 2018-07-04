@@ -51,8 +51,6 @@ class GalleryGridsState extends State<GalleryGrids> {
 
   @override
   Widget build(BuildContext context) {
-    final TMTheme theme = TMTheme.of(context);
-
     List<Widget> imagesList = List.generate(
       fireImages.length,
       (int index) {
@@ -86,7 +84,7 @@ class GalleryGridsState extends State<GalleryGrids> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             const SizedBox(width: 16.0),
-            Text("Gallery", style: theme.titleStyle),
+            Expanded(child: Text("GALLERY", style: ralewayRegular(12.0))),
             CupertinoButton(
               child: Text("SHOW ALL", style: ralewayRegular(11.0, textBaseColor)),
               onPressed: () => TMNavigate(context, GalleryPage(images: widget.job.images), fullscreenDialog: true),

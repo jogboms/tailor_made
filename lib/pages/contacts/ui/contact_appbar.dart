@@ -11,7 +11,10 @@ enum Choice {
 class ContactAppBar extends StatefulWidget {
   final ContactModel contact;
 
-  ContactAppBar({this.contact});
+  ContactAppBar({
+    Key key,
+    this.contact,
+  }) : super(key: key);
 
   @override
   ContactAppBarState createState() {
@@ -38,7 +41,7 @@ class ContactAppBarState extends State<ContactAppBar> {
           ),
           new SizedBox(width: isAtTop ? 0.0 : 4.0),
           new Hero(
-            tag: widget.contact.imageUrl,
+            tag: widget.contact.documentID,
             child: new CircleAvatar(
               radius: isAtTop ? 0.0 : null,
               backgroundColor: Colors.grey.shade400,

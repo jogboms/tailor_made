@@ -203,6 +203,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider, 
             tag: contact.imageUrl,
             image: NetworkImage(contact.imageUrl),
             elevation: 1.0,
+            backgroundColor: Colors.white,
             title: new Text(
               contact.fullname,
               maxLines: 1,

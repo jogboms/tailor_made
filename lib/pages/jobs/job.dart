@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grids.dart';
 import 'package:tailor_made/pages/jobs/ui/measure_lists.dart';
@@ -14,39 +13,65 @@ import 'package:tailor_made/utils/tm_theme.dart';
 
 var nairaFormat = new NumberFormat.currency(symbol: "");
 
-class JobPage extends StatefulWidget {
+class JobPage extends StatelessWidget {
   final JobModel job;
 
-  JobPage({this.job});
+  JobPage({
+    Key key,
+    this.job,
+  }) : super(key: key);
 
-  @override
-  _JobPageState createState() => new _JobPageState();
-}
-
-class _JobPageState extends State<JobPage> {
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    ContactModel contact = widget.job.contact;
+    return new Scaffold(
+      backgroundColor: theme.scaffoldColor,
+      body: new NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              expandedHeight: 250.0,
+              flexibleSpace: FlexibleSpaceBar(background: buildHeader()),
+              pinned: true,
+              titleSpacing: 0.0,
+              elevation: 1.0,
+              automaticallyImplyLeading: false,
+              centerTitle: false,
+              title: buildAvatarAppBar(context),
+            ),
+          ];
+        },
+        body: new SafeArea(
+          top: false,
+          child: new SingleChildScrollView(
+            child: new Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                MeasureLists(measurements: job.measurements),
+                const SizedBox(height: 4.0),
+                GalleryGrids(job: job),
+                const SizedBox(height: 4.0),
+                PaymentGrids(job: job),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-    final _date = widget.job.createdAt;
+  Widget buildHeader() {
+    final _price = nairaFormat.format(job.price ?? 0);
 
-    var suffix = "th";
-    var digit = _date.day % 10;
-    if ((digit > 0 && digit < 4) && (_date.day < 11 || _date.day > 13)) {
-      suffix = ["st", "nd", "rd"][digit - 1];
-    }
-    final date = new DateFormat("EEE, d'$suffix' MMMM").format(widget.job.createdAt);
-    final _price = nairaFormat.format(widget.job.price ?? 0);
-
-    Widget header = new Column(
+    return new Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         new Padding(
           padding: const EdgeInsets.only(top: 4.0, left: 24.0, bottom: 4.0, right: 24.0),
           child: Text(
-            widget.job.name,
+            job.name,
             style: ralewayLight(20.0, Colors.white),
             textAlign: TextAlign.center,
             maxLines: 2,
@@ -120,9 +145,21 @@ class _JobPageState extends State<JobPage> {
         ),
       ],
     );
+  }
 
-    Widget appBar = AvatarAppBar(
-      tag: contact.imageUrl,
+  AvatarAppBar buildAvatarAppBar(BuildContext context) {
+    final _date = job.createdAt;
+    final contact = job.contact;
+
+    var suffix = "th";
+    var digit = _date.day % 10;
+    if ((digit > 0 && digit < 4) && (_date.day < 11 || _date.day > 13)) {
+      suffix = ["st", "nd", "rd"][digit - 1];
+    }
+    final date = new DateFormat("EEE, d'$suffix' MMMM").format(job.createdAt);
+
+    return AvatarAppBar(
+      tag: contact.createdAt.toString(),
       image: NetworkImage(contact.imageUrl),
       title: new GestureDetector(
         onTap: () => TMNavigate(context, Contact(contact: contact)),
@@ -140,43 +177,6 @@ class _JobPageState extends State<JobPage> {
           color: Colors.white,
           fontSize: 14.0,
           fontWeight: FontWeight.w300,
-        ),
-      ),
-    );
-
-    return new Scaffold(
-      backgroundColor: theme.scaffoldColor,
-      body: new NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              expandedHeight: 250.0,
-              flexibleSpace: FlexibleSpaceBar(background: header),
-              pinned: true,
-              titleSpacing: 0.0,
-              elevation: 0.0,
-              automaticallyImplyLeading: false,
-              centerTitle: false,
-              backgroundColor: accentColorAlt,
-              title: appBar,
-            ),
-          ];
-        },
-        body: new SafeArea(
-          top: false,
-          child: new SingleChildScrollView(
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                MeasureLists(measurements: widget.job.measurements),
-                const SizedBox(height: 4.0),
-                GalleryGrids(job: widget.job),
-                const SizedBox(height: 4.0),
-                PaymentGrids(job: widget.job),
-              ],
-            ),
-          ),
         ),
       ),
     );

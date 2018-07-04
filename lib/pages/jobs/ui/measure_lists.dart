@@ -13,16 +13,14 @@ class MeasureLists extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TMTheme theme = TMTheme.of(context);
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         new Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Text("Measurements", style: theme.titleStyle, textAlign: TextAlign.start),
+          padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 4.0),
+          child: Text("MEASUREMENTS", style: ralewayRegular(12.0)),
         ),
-        const SizedBox(height: 4.0),
       ]..addAll(
           measurements.where((item) => item.value.isNotEmpty).map((item) => new MeasureListItem(item)).toList(),
         ),

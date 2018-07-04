@@ -42,7 +42,7 @@ class ContactsItem extends StatelessWidget {
 
     Hero avatar() {
       return new Hero(
-        tag: contact.imageUrl,
+        tag: contact.documentID,
         child: new CircleAvatar(
           backgroundColor: theme.scaffoldColor.withOpacity(.5),
           backgroundImage: NetworkImage(contact.imageUrl),
