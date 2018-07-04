@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/utils/tm_format_date.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class HeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
+
+    final date = formatDate(DateTime.now(), day: "EEEE", month: "MMMM");
+
     return new Expanded(
       child: Container(
         padding: EdgeInsets.fromLTRB(20.0, 35.0, 20.0, 40.0),
@@ -39,24 +43,11 @@ class HeaderWidget extends StatelessWidget {
               overflow: TextOverflow.fade,
               softWrap: false,
             ),
-            new Text.rich(
-              new TextSpan(
-                children: [
-                  new TextSpan(
-                    text: "Sunday",
-                    style: new TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                  new TextSpan(text: ", 12"),
-                  new TextSpan(
-                    text: "nd",
-                    style: new TextStyle(fontSize: 12.0),
-                  ),
-                  new TextSpan(text: " March"),
-                ],
-              ),
+            new Text(
+              date,
               style: new TextStyle(
-                color: theme.textColor,
                 fontSize: 14.0,
+                fontWeight: FontWeight.w300,
                 height: 1.5,
               ),
             ),

@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class StatsWidget extends StatelessWidget {
+  final List<JobModel> jobs;
+
+  StatsWidget({
+    Key key,
+    @required this.jobs,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Widget statsTile({int count, String title, String subTitle}) {
       final TMTheme theme = TMTheme.of(context);
       return new Row(
         children: <Widget>[
-          new Padding(
-            child: new Text(
-              count.toString(),
-              style: new TextStyle(color: theme.textColor, fontSize: 18.0),
-            ),
-            padding: EdgeInsets.only(right: 10.0),
+          new Text(
+            count.toString(),
+            style: new TextStyle(color: theme.textColor, fontSize: 24.0),
           ),
+          const SizedBox(width: 8.0),
           new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               new Text(
                 title,
-                style: new TextStyle(color: theme.textColor, fontSize: 13.0, fontWeight: FontWeight.w300),
+                style: new TextStyle(color: theme.textColor, fontSize: 14.0),
               ),
               new Text(
                 subTitle,
@@ -42,7 +48,7 @@ class StatsWidget extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: statsTile(count: 43, title: "Created", subTitle: "Projects"),
+            child: statsTile(count: jobs.length, title: "Created", subTitle: "Projects"),
           ),
           Container(
             color: borderSideColor,
@@ -51,7 +57,12 @@ class StatsWidget extends StatelessWidget {
             margin: EdgeInsets.only(left: 30.0, right: 30.0),
           ),
           Expanded(
-            child: statsTile(count: 62, title: "Completed", subTitle: "Projects"),
+            // TODO
+            child: statsTile(
+              count: jobs.where((job) => job.isComplete).length,
+              title: "Completed",
+              subTitle: "Projects",
+            ),
           ),
         ],
       ),

@@ -1,78 +1,75 @@
-import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:tailor_made/utils/tm_theme.dart';
-import 'package:tailor_made/ui/blank.dart';
+import 'package:flutter/material.dart';
+import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/pages/jobs/ui/payment_grid_item.dart';
+import 'package:tailor_made/pages/payments/models/payment.model.dart';
+import 'package:tailor_made/pages/payments/payments.dart';
+import 'package:tailor_made/pages/payments/payments_create.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 
 const _kGridWidth = 120.0;
 
-class PaymentGrid extends StatelessWidget {
+class FirePayment {
+  StorageReference ref;
+  PaymentModel payment;
+  bool isLoading = true;
+  bool isSucess = false;
+}
+
+class PaymentGrids extends StatefulWidget {
+  final Size gridSize;
+  final JobModel job;
+
+  PaymentGrids({
+    Key key,
+    double gridSize,
+    @required this.job,
+  })  : gridSize = Size.square(gridSize ?? _kGridWidth),
+        super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return new Container(
-      width: _kGridWidth,
-      margin: EdgeInsets.only(right: 8.0),
-      child: new Material(
-        elevation: 4.0,
-        borderRadius: BorderRadius.circular(5.0),
-        color: accentColor.withOpacity(.8),
-        child: new InkWell(
-          onTap: () => TMNavigate(context, BlankPage(), fullscreenDialog: true),
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                new Align(
-                  alignment: Alignment.topRight,
-                  child: Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(text: "15", style: ralewayLight(24.0, Colors.white)),
-                        TextSpan(text: "\n"),
-                        TextSpan(text: "MAY, 2018", style: ralewayMedium(10.0, Colors.white)),
-                      ],
-                    ),
-                    textAlign: TextAlign.right,
-                  ),
-                ),
-                Text(
-                  "₦15,000",
-                  style: ralewayBold(24.0, Colors.white),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+  PaymentGridsState createState() {
+    return new PaymentGridsState();
   }
 }
 
-class PaymentGrids extends StatelessWidget {
+class PaymentGridsState extends State<PaymentGrids> {
+  List<FirePayment> firePayments = [];
+
+  @override
+  initState() {
+    super.initState();
+    firePayments = widget.job.payments.map((payment) => FirePayment()..payment = payment).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final TMTheme theme = TMTheme.of(context);
-    List<Widget> paymentList = List
-        .generate(
-          10,
-          (int index) => PaymentGrid(),
-        )
-        .toList();
+    List<Widget> paymentsList = List.generate(
+      firePayments.length,
+      (int index) {
+        final fireImage = firePayments[index];
+        final payment = fireImage.payment;
+
+        if (payment == null) {
+          return Center(widthFactor: 2.5, child: CircularProgressIndicator());
+        }
+
+        return PaymentGridItem(payment: payment);
+      },
+    ).toList();
 
     return new Column(
       children: <Widget>[
         new Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Text("Payments", style: theme.titleStyle),
-            ),
+            const SizedBox(width: 16.0),
+            Expanded(child: Text("PAYMENTS", style: ralewayRegular(12.0, Colors.black87))),
             CupertinoButton(
               child: Text("SHOW ALL", style: ralewayRegular(11.0, textBaseColor)),
-              onPressed: () => TMNavigate(context, BlankPage(), fullscreenDialog: true),
+              onPressed: () => TMNavigate(context, PaymentsPage(payments: widget.job.payments), fullscreenDialog: true),
             ),
           ],
         ),
@@ -82,14 +79,20 @@ class PaymentGrids extends StatelessWidget {
           child: new ListView(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             scrollDirection: Axis.horizontal,
-            children: [PaymentGrids.newGrid()]..addAll(paymentList),
+            // children: [newGrid(context)]..addAll(
+            //     widget.job.payments.map((payment) {
+            //       return PaymentGridItem(payment: payment);
+            //     }).toList(),
+            //   ),
+            children: [newGrid(widget.gridSize)]..addAll(paymentsList.reversed.toList()),
+            // children: [newGrid(widget.job.contact, widget.gridSize)]..addAll(imagesList.reversed.toList()),
           ),
         ),
       ],
     );
   }
 
-  static Widget newGrid() {
+  Widget newGrid(Size gridSize) {
     return new Container(
       width: _kGridWidth,
       margin: EdgeInsets.only(right: 8.0),
@@ -97,9 +100,43 @@ class PaymentGrids extends StatelessWidget {
         borderRadius: BorderRadius.circular(5.0),
         color: Colors.grey[100],
         child: new InkWell(
-          onTap: () {},
+          onTap: () async {
+            final result = await Navigator.push<Map<String, dynamic>>(
+              context,
+              TMNavigate.fadeIn<Map<String, dynamic>>(PaymentsCreatePage()),
+            );
+            if (result != null) {
+              setState(() {
+                firePayments.add(FirePayment());
+              });
+
+              final payment = new PaymentModel(
+                contact: widget.job.contact,
+                price: result["price"],
+                notes: result["notes"],
+              );
+
+              try {
+                setState(() {
+                  firePayments.last
+                    ..isLoading = false
+                    ..isSucess = true
+                    ..payment = payment;
+
+                  widget.job.reference.updateData({
+                    "payments": firePayments.map((payment) => payment.payment.toMap()).toList(),
+                  });
+                });
+              } catch (e) {
+                setState(() {
+                  firePayments.last.isLoading = false;
+                });
+                print(e);
+              }
+            }
+          },
           child: Icon(
-            Icons.add_circle,
+            Icons.note_add,
             size: 30.0,
             color: textBaseColor.withOpacity(.35),
           ),

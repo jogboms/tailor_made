@@ -8,19 +8,27 @@ class SlideDownItem extends StatefulWidget {
   final String title;
   final Widget body;
 
-  SlideDownItem({this.title, this.body, this.isExpanded: false});
+  SlideDownItem({
+    Key key,
+    this.title,
+    this.body,
+    this.isExpanded: false,
+  }) : super(key: key);
 
   @override
-  SlideDownItemState createState() => new SlideDownItemState(isExpanded: isExpanded);
+  SlideDownItemState createState() => new SlideDownItemState();
 }
 
 class SlideDownItemState extends State<SlideDownItem> {
   int id;
   bool isExpanded;
 
-  SlideDownItemState({this.isExpanded}) {
+  @override
+  initState() {
+    super.initState();
     Random rand = new Random();
     id = rand.nextInt(100);
+    isExpanded = widget.isExpanded;
   }
 
   @override

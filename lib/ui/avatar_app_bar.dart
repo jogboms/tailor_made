@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -8,12 +8,16 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget title;
   final Widget subtitle;
   final Color iconColor;
+  final Color backgroundColor;
+  final double elevation;
   final List<Widget> actions;
 
   AvatarAppBar({
     @required this.tag,
     @required this.image,
     this.title,
+    this.backgroundColor = Colors.transparent,
+    this.elevation = 0.0,
     this.actions,
     this.iconColor,
     this.subtitle,
@@ -58,7 +62,7 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     if (subtitle != null) {
-      titles.add(subtitle);
+      titles.addAll([SizedBox(height: 2.0), subtitle]);
       // new Text.rich(
       //   new TextSpan(
       //     children: [
@@ -95,7 +99,9 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
       children.addAll(actions);
     }
 
-    return Container(
+    return Material(
+      color: backgroundColor,
+      elevation: elevation,
       child: SafeArea(
         top: true,
         child: Row(

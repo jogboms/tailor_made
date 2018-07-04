@@ -1,4 +1,4 @@
-package com.example.tailormade;
+package io.github.jogboms.tailormade;
 
 import android.os.Bundle;
 
