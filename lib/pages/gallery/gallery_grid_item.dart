@@ -5,13 +5,16 @@ import 'package:tailor_made/pages/gallery/models/image.model.dart';
 class GalleryGridItem extends StatelessWidget {
   final ImageModel image;
 
-  GalleryGridItem({this.image});
+  GalleryGridItem({
+    Key key,
+    this.image,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return new Hero(
       tag: image.src,
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           color: Colors.grey[200],
           image: DecorationImage(

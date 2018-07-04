@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/gallery/gallery.dart';
-import 'package:tailor_made/pages/gallery/gallery_view.dart';
 import 'package:tailor_made/pages/gallery/models/image.model.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/pages/jobs/ui/gallery_grid_item.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -21,76 +21,6 @@ class FireImage {
   String imageUrl;
   bool isLoading = true;
   bool isSucess = false;
-}
-
-class GalleryGrid extends StatelessWidget {
-  final String tag;
-  final String imageUrl;
-  final Size size;
-  final void Function(String imageUrl) onTapDelete;
-
-  GalleryGrid({
-    Key key,
-    @required this.tag,
-    @required this.imageUrl,
-    this.onTapDelete,
-    double size,
-  })  : size = Size.square(size ?? _kGridWidth),
-        super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return new Hero(
-      tag: tag,
-      child: Container(
-        width: size.width,
-        margin: EdgeInsets.only(right: 8.0),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: new Material(
-                color: Colors.white,
-                elevation: 2.0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                child: new Ink.image(
-                  image: new NetworkImage(imageUrl),
-                  fit: BoxFit.cover,
-                  child: new InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                            new PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder: (BuildContext context, _, __) => GalleryView(imageUrl, tag),
-                              transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-                                return new FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                    },
-                    child: onTapDelete != null
-                        ? new Align(
-                            alignment: Alignment.topRight,
-                            child: GestureDetector(
-                              onTap: () => onTapDelete(imageUrl),
-                              child: new Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: new Icon(Icons.cancel, color: Colors.red),
-                              ),
-                            ),
-                          )
-                        : SizedBox(),
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class GalleryGrids extends StatefulWidget {
@@ -121,8 +51,6 @@ class GalleryGridsState extends State<GalleryGrids> {
 
   @override
   Widget build(BuildContext context) {
-    final TMTheme theme = TMTheme.of(context);
-
     List<Widget> imagesList = List.generate(
       fireImages.length,
       (int index) {
@@ -133,7 +61,7 @@ class GalleryGridsState extends State<GalleryGrids> {
           return Center(widthFactor: 2.5, child: CircularProgressIndicator());
         }
 
-        return GalleryGrid(
+        return GalleryGridItem(
           imageUrl: image,
           tag: "$image-$index",
           size: _kGridWidth,
@@ -155,10 +83,8 @@ class GalleryGridsState extends State<GalleryGrids> {
         new Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Text("Gallery", style: theme.titleStyle),
-            ),
+            const SizedBox(width: 16.0),
+            Expanded(child: Text("GALLERY", style: ralewayRegular(12.0))),
             CupertinoButton(
               child: Text("SHOW ALL", style: ralewayRegular(11.0, textBaseColor)),
               onPressed: () => TMNavigate(context, GalleryPage(images: widget.job.images), fullscreenDialog: true),

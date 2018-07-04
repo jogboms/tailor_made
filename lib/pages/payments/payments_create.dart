@@ -15,7 +15,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> {
       backgroundColor: theme.scaffoldColor,
       appBar: appBar(
         context,
-        title: "Create Payments",
+        title: "Create Payment",
       ),
       body: Container(),
     );

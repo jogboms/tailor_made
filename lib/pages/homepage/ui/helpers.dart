@@ -7,7 +7,14 @@ class TMListTile extends StatelessWidget {
   final Color color;
   final String title;
   final VoidCallback onPressed;
-  TMListTile({this.icon, this.color, this.title, this.onPressed});
+
+  TMListTile({
+    Key key,
+    this.icon,
+    this.color,
+    this.title,
+    this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +65,6 @@ Widget circleIcon({IconData icon, Color color: TMColors.accent, bool small: fals
           color: Colors.white,
         ),
       ),
-      // padding: EdgeInsets.only(left: 2.5, right: 10.0),
       padding: new EdgeInsets.only(right: (small == true ? 8.0 : 10.0)),
     ),
     alignment: Alignment.center,

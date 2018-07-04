@@ -19,14 +19,6 @@ class TopRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void onTapJobs() {
-      TMNavigate(context, JobsPage(jobs: jobs));
-    }
-
-    void onTapContacts() {
-      TMNavigate(context, ContactsPage(contacts: contacts));
-    }
-
     return new Container(
       height: 120.0,
       decoration: new BoxDecoration(
@@ -45,7 +37,7 @@ class TopRowWidget extends StatelessWidget {
                 color: Colors.orangeAccent,
                 title: "Clients",
                 subTitle: "${contacts.length} Contacts",
-                onPressed: onTapContacts,
+                onPressed: () => TMNavigate(context, ContactsPage(contacts: contacts)),
               ),
             ),
           ),
@@ -56,7 +48,7 @@ class TopRowWidget extends StatelessWidget {
                 color: Colors.greenAccent.shade400,
                 title: "Jobs",
                 subTitle: "${jobs.length} Total",
-                onPressed: onTapJobs,
+                onPressed: () => TMNavigate(context, JobsPage(jobs: jobs)),
               ),
             ),
           ),

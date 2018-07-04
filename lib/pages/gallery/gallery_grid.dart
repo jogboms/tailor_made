@@ -5,7 +5,10 @@ import 'package:tailor_made/pages/gallery/models/image.model.dart';
 class GalleryGrid extends StatelessWidget {
   final List<ImageModel> images;
 
-  GalleryGrid({this.images});
+  GalleryGrid({
+    Key key,
+    this.images,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

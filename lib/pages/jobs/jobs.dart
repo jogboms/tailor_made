@@ -23,7 +23,6 @@ class JobsPage extends StatelessWidget {
       appBar: appBar(
         context,
         title: "Jobs",
-        elevation: 0.0,
       ),
       body: SafeArea(
         top: false,

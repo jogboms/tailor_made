@@ -19,7 +19,6 @@ import 'package:tailor_made/utils/tm_theme.dart';
 enum CreateOptions {
   clients,
   jobs,
-  // payments,
 }
 
 class HomePage extends StatefulWidget {
@@ -68,36 +67,17 @@ class _HomePageState extends State<HomePage> {
                     title: "Job",
                   ),
                 ),
-                // new SimpleDialogOption(
-                //   onPressed: () {
-                //     Navigator.pop(context, CreateOptions.payments);
-                //   },
-                //   child: TMListTile(
-                //     color: Colors.redAccent,
-                //     icon: Icons.usb,
-                //     title: "Payments",
-                //   ),
-                // ),
               ],
             );
           },
         );
         switch (result) {
           case CreateOptions.clients:
-            {
-              TMNavigate(context, ContactsCreatePage());
-              break;
-            }
+            TMNavigate(context, ContactsCreatePage());
+            break;
           case CreateOptions.jobs:
-            {
-              TMNavigate(context, JobsCreatePage(contacts: contacts));
-              break;
-            }
-          // case CreateOptions.payments:
-          //   {
-          //     TMNavigate(context, PaymentsCreatePage());
-          //     break;
-          //   }
+            TMNavigate(context, JobsCreatePage(contacts: contacts));
+            break;
         }
       };
     }
@@ -118,7 +98,6 @@ class _HomePageState extends State<HomePage> {
         // ],
       ),
       body: StreamBuilder(
-        // stream: Cloudstore.jobs.snapshots(),
         stream: new StreamZip([Cloudstore.jobs.snapshots(), Cloudstore.contacts.snapshots()]),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {

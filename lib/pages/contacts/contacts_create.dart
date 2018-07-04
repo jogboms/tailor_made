@@ -41,12 +41,11 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
     return new Scaffold(
-      // key: scaffoldKey,
+      key: scaffoldKey,
       backgroundColor: theme.scaffoldColor,
-      //   backgroundColor: Colors.grey.shade100,
       appBar: appBar(
         context,
-        title: "Create Contacts",
+        title: "Create Contact",
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -114,22 +113,19 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
 
   Widget _buildAvatar() {
     return Container(
-      width: 158.0,
-      height: 158.0,
-      // margin: EdgeInsets.all(16.0),
+      width: 150.0,
+      height: 150.0,
       alignment: Alignment.center,
+      padding: EdgeInsets.all(4.0),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(color: Colors.grey.withOpacity(.5), width: 2.0),
       ),
-      child: Container(
-        width: 150.0,
-        height: 150.0,
+      child: DecoratedBox(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: Colors.grey.withOpacity(.2),
         ),
-        padding: EdgeInsets.all(4.0),
         child: Center(
           child: GestureDetector(
             onTap: _handlePhotoButtonPressed,

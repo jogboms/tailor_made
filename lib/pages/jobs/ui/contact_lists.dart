@@ -21,7 +21,6 @@ class ContactLists extends StatelessWidget {
       return appBar(
         context,
         title: "Select Client",
-        elevation: 0.0,
       );
     }
 
@@ -41,9 +40,7 @@ class ContactLists extends StatelessWidget {
                 return ContactsItem(
                   contact: item,
                   showActions: false,
-                  onTapContact: () {
-                    Navigator.pop(context, item);
-                  },
+                  onTapContact: () => Navigator.pop(context, item),
                 );
               },
             ),
