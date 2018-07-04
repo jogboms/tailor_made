@@ -20,13 +20,14 @@ class MeasureListItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(item.name, style: ralewayMedium(14.0, titleBaseColor)),
+                Text(item.name, style: ralewayLight(14.0, titleBaseColor)),
                 SizedBox(height: 2.0),
-                Text(item.type, style: ralewayMedium(12.0, textBaseColor)),
+                Text(item.type, style: ralewayLight(12.0, textBaseColor)),
               ],
             ),
           ),
           Text("${item.value} ", style: ralewayRegular(16.0, titleBaseColor)),
+          SizedBox(width: 2.0),
           Text(item.unit, style: ralewayLight(12.0, titleBaseColor)),
         ],
       ),

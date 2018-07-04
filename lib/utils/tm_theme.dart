@@ -9,7 +9,7 @@ import 'package:tailor_made/utils/tm_colors.dart';
 const Color accentColor = TMColors.primary;
 const Color accentColorAlt = Colors.blueGrey;
 const MaterialColor primarySwatch = TMColors.green;
-const Color borderSideColor = const Color(0x3A9E9E9E);
+final Color borderSideColor = Colors.grey.shade300;
 const MaterialColor textBaseColor = Colors.grey;
 const MaterialColor titleBaseColor = TMColors.dark;
 const MaterialColor backgroundBaseColor = TMColors.white;

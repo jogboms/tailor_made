@@ -18,15 +18,6 @@ class JobListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    onTapCheck() {
-      print("onTapCheck");
-    }
-
-    onTapList() {
-      print("onTapList");
-      TMNavigate(context, JobPage(job: job));
-    }
-
     final _date = job.createdAt;
     final _price = nairaFormat.format(job.price ?? 0);
 
@@ -35,7 +26,7 @@ class JobListItem extends StatelessWidget {
         border: Border(bottom: TMBorderSide()),
       ),
       child: new InkWell(
-        onTap: onTapList,
+        onTap: () => TMNavigate(context, JobPage(job: job)),
         child: new Padding(
           padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
           child: Row(
@@ -43,14 +34,14 @@ class JobListItem extends StatelessWidget {
             children: <Widget>[
               new Container(
                 decoration: new BoxDecoration(
-                  color: Colors.grey.withOpacity(.25),
+                  color: Colors.grey.shade300,
                   borderRadius: BorderRadius.all(Radius.circular(4.0)),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                 child: new Text.rich(
                   new TextSpan(
                     children: [
-                      new TextSpan(text: "${_date.day}\n", style: ralewayLight(30.0, Colors.black54)),
+                      new TextSpan(text: "${_date.day}\n", style: ralewayLight(20.0, Colors.black54)),
                       new TextSpan(
                         text: MONTHS_SHORT[_date.month - 1].toUpperCase(),
                         style: ralewayLight(10.0, Colors.black).copyWith(
@@ -68,15 +59,14 @@ class JobListItem extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(job.name, style: TextStyle(fontSize: 16.0, color: Colors.black)),
-                    Text("NGN$_price", style: TextStyle(color: textBaseColor)),
+                    Text(job.name, style: TextStyle(fontSize: 14.0, color: Colors.black)),
+                    Text("NGN$_price", style: TextStyle(fontSize: 12.0, color: textBaseColor)),
                   ],
                 ),
               ),
-              new IconButton(
-                padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 4.0),
-                icon: new Icon(Icons.check, color: Colors.green),
-                onPressed: onTapCheck,
+              new Icon(
+                Icons.check,
+                color: job.isComplete ? Colors.green : textBaseColor.shade300,
               ),
             ],
           ),

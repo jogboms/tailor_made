@@ -62,7 +62,7 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     if (subtitle != null) {
-      titles.addAll([SizedBox(height: 4.0), subtitle]);
+      titles.addAll([SizedBox(height: 2.0), subtitle]);
       // new Text.rich(
       //   new TextSpan(
       //     children: [

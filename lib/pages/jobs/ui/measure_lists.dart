@@ -19,7 +19,7 @@ class MeasureLists extends StatelessWidget {
       children: [
         new Padding(
           padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 4.0),
-          child: Text("MEASUREMENTS", style: ralewayRegular(12.0)),
+          child: Text("MEASUREMENTS", style: ralewayRegular(12.0, Colors.black87)),
         ),
       ]..addAll(
           measurements.where((item) => item.value.isNotEmpty).map((item) => new MeasureListItem(item)).toList(),

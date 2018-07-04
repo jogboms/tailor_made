@@ -24,7 +24,7 @@ class PaymentGrids extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             const SizedBox(width: 16.0),
-            Expanded(child: Text("PAYMENTS", style: ralewayRegular(12.0))),
+            Expanded(child: Text("PAYMENTS", style: ralewayRegular(12.0, Colors.black87))),
             CupertinoButton(
               child: Text("SHOW ALL", style: ralewayRegular(11.0, textBaseColor)),
               onPressed: () => TMNavigate(context, PaymentsPage(payments: job.payments), fullscreenDialog: true),

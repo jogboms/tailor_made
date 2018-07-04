@@ -58,7 +58,11 @@ class StatsWidget extends StatelessWidget {
           ),
           Expanded(
             // TODO
-            child: statsTile(count: 0, title: "Completed", subTitle: "Projects"),
+            child: statsTile(
+              count: jobs.where((job) => job.isComplete).length,
+              title: "Completed",
+              subTitle: "Projects",
+            ),
           ),
         ],
       ),

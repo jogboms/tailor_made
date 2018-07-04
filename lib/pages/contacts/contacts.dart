@@ -63,13 +63,13 @@ class _ContactsPageState extends State<ContactsPage> {
         context,
         title: "Clients",
         actions: <Widget>[
-          new IconButton(
-            icon: new Icon(
-              Icons.search,
-              color: theme.appBarColor,
-            ),
-            onPressed: onTapSearch,
-          )
+          // new IconButton(
+          //   icon: new Icon(
+          //     Icons.search,
+          //     color: theme.appBarColor,
+          //   ),
+          //   onPressed: onTapSearch,
+          // )
         ],
       );
     }
@@ -85,6 +85,7 @@ class _ContactsPageState extends State<ContactsPage> {
               itemCount: widget.contacts.length,
               shrinkWrap: true,
               itemExtent: null,
+              padding: EdgeInsets.only(bottom: 96.0),
               itemBuilder: (context, index) => ContactsItem(contact: widget.contacts[index]),
             ),
       floatingActionButton: new FloatingActionButton(

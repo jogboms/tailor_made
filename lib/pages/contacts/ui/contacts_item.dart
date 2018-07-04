@@ -30,7 +30,7 @@ class ContactsItem extends StatelessWidget {
 
     Widget iconCircle(IconData icon, VoidCallback onTap) {
       return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16.0),
         child: InkResponse(
           child: new Icon(icon, size: 18.0, color: theme.textColor),
           onTap: onTap,
@@ -45,25 +45,27 @@ class ContactsItem extends StatelessWidget {
         tag: contact.documentID,
         child: new CircleAvatar(
           backgroundColor: theme.scaffoldColor.withOpacity(.5),
-          backgroundImage: NetworkImage(contact.imageUrl),
-          child: new Align(
-            alignment: Alignment(1.25, -1.25),
-            child: contact.hasPending > 0
-                ? new Container(
-                    width: 15.5,
-                    height: 15.5,
-                    decoration: new BoxDecoration(
-                      color: accentColor,
-                      border: Border.all(
-                        color: theme.scaffoldColor,
-                        style: BorderStyle.solid,
-                        width: 2.5,
-                      ),
-                      shape: BoxShape.circle,
-                    ),
-                  )
-                : null,
-          ),
+          backgroundImage: contact.imageUrl != null ? NetworkImage(contact.imageUrl) : null,
+          child: contact.imageUrl != null
+              ? new Align(
+                  alignment: Alignment(1.25, -1.25),
+                  child: contact.hasPending > 0
+                      ? new Container(
+                          width: 15.5,
+                          height: 15.5,
+                          decoration: new BoxDecoration(
+                            color: accentColor,
+                            border: Border.all(
+                              color: theme.scaffoldColor,
+                              style: BorderStyle.solid,
+                              width: 2.5,
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                        )
+                      : null,
+                )
+              : Center(child: Icon(Icons.person_outline)),
         ),
       );
     }
@@ -88,6 +90,7 @@ class ContactsItem extends StatelessWidget {
 
     ListTile list = ListTile(
       dense: true,
+      contentPadding: EdgeInsets.only(left: 16.0),
       onTap: onTapContact ?? () => TMNavigate(context, Contact(contact: contact)),
       leading: avatar(),
       title: title,

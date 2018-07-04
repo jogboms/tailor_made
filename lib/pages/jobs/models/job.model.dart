@@ -16,6 +16,7 @@ class JobModel extends Model {
   DateTime createdAt;
   List<MeasureModel> measurements;
   List<PaymentModel> payments;
+  bool isComplete;
 
   JobModel({
     id,
@@ -27,6 +28,7 @@ class JobModel extends Model {
     createdAt,
     this.measurements = const [],
     this.payments = const [],
+    this.isComplete = false,
   })  : id = id ?? uuid(),
         createdAt = createdAt ?? DateTime.now();
 
@@ -60,6 +62,7 @@ class JobModel extends Model {
       createdAt: DateTime.tryParse(json['createdAt'].toString()),
       measurements: measurements,
       payments: payments,
+      isComplete: json['isComplete'],
     );
   }
 
@@ -81,6 +84,7 @@ class JobModel extends Model {
       "createdAt": createdAt.toString(),
       "measurements": measurements.map((measure) => measure.toMap()).toList(),
       "payments": payments.map((payment) => payment.toMap()).toList(),
+      "isComplete": isComplete,
     };
   }
 }
