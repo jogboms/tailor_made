@@ -202,7 +202,11 @@ class JobPage extends StatelessWidget {
             job.isComplete ? Icons.check_box : Icons.check_box_outline_blank,
             color: textBaseColor.shade900,
           ),
-          onPressed: () {},
+          onPressed: () {
+            job.reference.updateData({
+              "isComplete": !job.isComplete,
+            });
+          },
         )
       ],
     );
