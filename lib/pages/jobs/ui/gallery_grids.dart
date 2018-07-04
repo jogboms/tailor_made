@@ -5,7 +5,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/gallery/gallery.dart';
 import 'package:tailor_made/pages/gallery/models/image.model.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
@@ -97,14 +96,14 @@ class GalleryGridsState extends State<GalleryGrids> {
           child: new ListView(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             scrollDirection: Axis.horizontal,
-            children: [newGrid(widget.job.contact, widget.gridSize)]..addAll(imagesList.reversed.toList()),
+            children: [newGrid(widget.gridSize)]..addAll(imagesList.reversed.toList()),
           ),
         ),
       ],
     );
   }
 
-  Widget newGrid(ContactModel contact, Size gridSize) {
+  Widget newGrid(Size gridSize) {
     return new Container(
       width: gridSize.width,
       margin: EdgeInsets.only(right: 8.0),

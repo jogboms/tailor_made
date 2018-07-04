@@ -16,6 +16,7 @@ class PaymentGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(payment);
     return new Container(
       width: _kGridWidth,
       margin: EdgeInsets.only(right: 8.0),

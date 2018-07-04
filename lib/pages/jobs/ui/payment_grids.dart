@@ -1,23 +1,59 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/pages/jobs/ui/payment_grid_item.dart';
+import 'package:tailor_made/pages/payments/models/payment.model.dart';
 import 'package:tailor_made/pages/payments/payments.dart';
+import 'package:tailor_made/pages/payments/payments_create.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 const _kGridWidth = 120.0;
 
-class PaymentGrids extends StatelessWidget {
+class FirePayment {
+  StorageReference ref;
+  PaymentModel payment;
+  bool isLoading = true;
+  bool isSucess = false;
+}
+
+class PaymentGrids extends StatefulWidget {
+  final Size gridSize;
   final JobModel job;
 
   PaymentGrids({
     Key key,
+    double gridSize,
     @required this.job,
-  }) : super(key: key);
+  })  : gridSize = Size.square(gridSize ?? _kGridWidth),
+        super(key: key);
+
+  @override
+  PaymentGridsState createState() {
+    return new PaymentGridsState();
+  }
+}
+
+class PaymentGridsState extends State<PaymentGrids> {
+  List<FirePayment> firePayments = [];
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> paymentsList = List.generate(
+      firePayments.length,
+      (int index) {
+        final fireImage = firePayments[index];
+        final payment = fireImage.payment;
+
+        if (payment == null) {
+          return Center(widthFactor: 2.5, child: CircularProgressIndicator());
+        }
+
+        return PaymentGridItem(payment: payment);
+      },
+    ).toList();
+
     return new Column(
       children: <Widget>[
         new Row(
@@ -27,7 +63,7 @@ class PaymentGrids extends StatelessWidget {
             Expanded(child: Text("PAYMENTS", style: ralewayRegular(12.0, Colors.black87))),
             CupertinoButton(
               child: Text("SHOW ALL", style: ralewayRegular(11.0, textBaseColor)),
-              onPressed: () => TMNavigate(context, PaymentsPage(payments: job.payments), fullscreenDialog: true),
+              onPressed: () => TMNavigate(context, PaymentsPage(payments: widget.job.payments), fullscreenDialog: true),
             ),
           ],
         ),
@@ -37,18 +73,20 @@ class PaymentGrids extends StatelessWidget {
           child: new ListView(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             scrollDirection: Axis.horizontal,
-            children: [newGrid()]..addAll(
-                job.payments.map((payment) {
-                  return PaymentGridItem(payment: payment);
-                }).toList(),
-              ),
+            // children: [newGrid(context)]..addAll(
+            //     widget.job.payments.map((payment) {
+            //       return PaymentGridItem(payment: payment);
+            //     }).toList(),
+            //   ),
+            children: [newGrid(widget.gridSize)]..addAll(paymentsList.reversed.toList()),
+            // children: [newGrid(widget.job.contact, widget.gridSize)]..addAll(imagesList.reversed.toList()),
           ),
         ),
       ],
     );
   }
 
-  Widget newGrid() {
+  Widget newGrid(Size gridSize) {
     return new Container(
       width: _kGridWidth,
       margin: EdgeInsets.only(right: 8.0),
@@ -56,7 +94,41 @@ class PaymentGrids extends StatelessWidget {
         borderRadius: BorderRadius.circular(5.0),
         color: Colors.grey[100],
         child: new InkWell(
-          onTap: () {},
+          onTap: () async {
+            final result = await Navigator.push<Map<String, dynamic>>(
+              context,
+              TMNavigate.fadeIn<Map<String, dynamic>>(PaymentsCreatePage()),
+            );
+            if (result != null) {
+              setState(() {
+                firePayments.add(FirePayment());
+              });
+
+              final payment = new PaymentModel(
+                contact: widget.job.contact,
+                price: result["price"],
+                notes: result["notes"],
+              );
+
+              try {
+                setState(() {
+                  firePayments.last
+                    ..isLoading = false
+                    ..isSucess = true
+                    ..payment = payment;
+
+                  widget.job.reference.updateData({
+                    "payments": firePayments.map((payment) => payment.payment.toMap()).toList(),
+                  });
+                });
+              } catch (e) {
+                setState(() {
+                  firePayments.last.isLoading = false;
+                });
+                print(e);
+              }
+            }
+          },
           child: Icon(
             Icons.note_add,
             size: 30.0,
