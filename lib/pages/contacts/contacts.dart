@@ -27,11 +27,11 @@ class _ContactsPageState extends State<ContactsPage> {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    void onTapSearch() {
-      setState(() {
-        _isSearching = true;
-      });
-    }
+    // void onTapSearch() {
+    //   setState(() {
+    //     _isSearching = true;
+    //   });
+    // }
 
     void _handleSearchEnd() {
       setState(() {
@@ -78,7 +78,7 @@ class _ContactsPageState extends State<ContactsPage> {
       backgroundColor: theme.scaffoldColor,
       appBar: _isSearching ? buildSearchBar() : buildAppBar(),
       body: widget.contacts.isEmpty
-          ? SliverFillRemaining(
+          ? Center(
               child: TMEmptyResult(message: "No contacts available"),
             )
           : new ListView.builder(

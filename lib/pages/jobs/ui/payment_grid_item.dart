@@ -11,11 +11,14 @@ const _kGridWidth = 120.0;
 class PaymentGridItem extends StatelessWidget {
   final PaymentModel payment;
   final nairaFormat = new NumberFormat.compactSimpleCurrency(name: "NGN", decimalDigits: 1);
+  final Size size;
 
   PaymentGridItem({
     Key key,
     this.payment,
-  }) : super(key: key);
+    double size,
+  })  : size = Size.square(size ?? _kGridWidth),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class PaymentGridItem extends StatelessWidget {
     final _price = nairaFormat.format(payment.price ?? 0);
 
     return new Container(
-      width: _kGridWidth,
+      width: size.width,
       margin: EdgeInsets.only(right: 8.0),
       child: new Material(
         elevation: 4.0,

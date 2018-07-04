@@ -8,6 +8,7 @@ import 'package:tailor_made/pages/jobs/ui/gallery_grids.dart';
 import 'package:tailor_made/pages/jobs/ui/measure_lists.dart';
 import 'package:tailor_made/pages/jobs/ui/payment_grids.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
+import 'package:tailor_made/utils/tm_format_date.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -162,17 +163,11 @@ class JobPage extends StatelessWidget {
   }
 
   AvatarAppBar buildAvatarAppBar(BuildContext context) {
-    final _date = job.createdAt;
     final contact = job.contact;
     // final textColor = Colors.white;
     final textColor = Colors.grey.shade800;
 
-    var suffix = "th";
-    var digit = _date.day % 10;
-    if ((digit > 0 && digit < 4) && (_date.day < 11 || _date.day > 13)) {
-      suffix = ["st", "nd", "rd"][digit - 1];
-    }
-    final date = new DateFormat("EEE, d'$suffix' MMMM").format(job.createdAt);
+    final date = formatDate(job.createdAt);
 
     return AvatarAppBar(
       tag: contact.createdAt.toString(),

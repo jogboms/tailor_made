@@ -29,6 +29,9 @@ class PaymentsListWidget extends StatelessWidget {
       );
     }
 
-    return PaymentList(payments: payments.toList());
+    return SliverPadding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      sliver: PaymentList(payments: payments.toList()),
+    );
   }
 }

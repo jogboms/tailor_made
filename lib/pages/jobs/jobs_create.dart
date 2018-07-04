@@ -36,7 +36,7 @@ class JobsCreatePage extends StatefulWidget {
   JobsCreatePage({
     Key key,
     this.contact,
-    this.contacts = const [],
+    @required this.contacts,
   }) : super(key: key);
 
   @override
@@ -209,12 +209,14 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
               style: ralewayRegular(18.0, theme.appBarColor),
             ),
             subtitle: Text("${contact.totalJobs} Jobs", style: theme.smallTextStyle),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.people),
-                onPressed: onSelectContact,
-              )
-            ],
+            actions: widget.contacts.isNotEmpty
+                ? <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.people),
+                      onPressed: onSelectContact,
+                    )
+                  ]
+                : null,
           )
         : appBar(context);
   }

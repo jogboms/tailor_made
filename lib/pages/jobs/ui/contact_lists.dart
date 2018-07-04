@@ -28,7 +28,7 @@ class ContactLists extends StatelessWidget {
       backgroundColor: theme.scaffoldColor,
       appBar: buildAppBar(),
       body: contacts.isEmpty
-          ? SliverFillRemaining(
+          ? Center(
               child: TMEmptyResult(message: "No contacts available"),
             )
           : new ListView.builder(

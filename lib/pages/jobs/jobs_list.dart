@@ -19,9 +19,12 @@ class JobList extends StatelessWidget {
       );
     }
 
-    return SliverList(
-      delegate: new SliverChildListDelegate(
-        jobs.map((job) => JobListItem(job: job)).toList(),
+    return SliverPadding(
+      padding: EdgeInsets.only(bottom: 96.0),
+      sliver: SliverList(
+        delegate: new SliverChildListDelegate(
+          jobs.map((job) => JobListItem(job: job)).toList(),
+        ),
       ),
     );
   }
