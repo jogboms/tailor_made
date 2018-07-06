@@ -12,6 +12,7 @@ dependencies:
   firebase_storage: ^0.3.7
   firebase_auth: ^0.5.11
   intl: ^0.15.6
+  url_launcher: ^3.0.2
 
 dev_dependencies:
   flutter_test:

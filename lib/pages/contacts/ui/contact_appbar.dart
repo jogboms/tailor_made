@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_phone.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 enum Choice {
@@ -27,9 +28,41 @@ class ContactAppBarState extends State<ContactAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    void onTapGoBack() => Navigator.pop(context);
+    return new PreferredSize(
+      preferredSize: new Size.fromHeight(kToolbarHeight),
+      child: SafeArea(
+        top: true,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            appBarLeading(),
+            Expanded(child: appBarTitle()),
+            appBarIcon(
+              icon: Icons.call,
+              onTap: () => call(int.parse(widget.contact.phone)),
+            ),
+            appBarIcon(
+              icon: Icons.message,
+              onTap: () => sms(int.parse(widget.contact.phone)),
+            ),
+            appBarIcon(
+              icon: Icons.add,
+              onTap: () {
+                TMNavigate(
+                  context,
+                  JobsCreatePage(contact: widget.contact, contacts: []),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-    Widget appBarLeading = new FlatButton(
+  Widget appBarLeading() {
+    return new FlatButton(
       padding: EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -51,90 +84,58 @@ class ContactAppBarState extends State<ContactAppBar> {
           ),
         ],
       ),
-      onPressed: onTapGoBack,
+      onPressed: () => Navigator.pop(context),
     );
+  }
 
-    Widget appBarTitle = Column(
+  Widget appBarTitle() {
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        new Text(
+        Text(
           widget.contact.fullname,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: new TextStyle(
+          style: TextStyle(
             fontSize: 18.0,
             color: Colors.white,
             fontWeight: FontWeight.w500,
           ),
         ),
         isAtTop || (widget.contact.hasPending < 1)
-            ? new Container()
-            : new Text.rich(
-                new TextSpan(
+            ? Container()
+            : Text.rich(
+                TextSpan(
                   children: [
-                    new TextSpan(
+                    TextSpan(
                       text: widget.contact.hasPending.toString(),
-                      style: new TextStyle(fontWeight: FontWeight.w600),
+                      style: TextStyle(fontWeight: FontWeight.w600),
                     ),
-                    new TextSpan(
+                    TextSpan(
                       text: " pending wear-ables",
                     ),
                   ],
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: new TextStyle(
+                style: TextStyle(
                   fontSize: 13.0,
                   color: Colors.white,
                 ),
               ),
       ],
     );
+  }
 
-    Widget appBarIcon({IconData icon, VoidCallback onTap}) {
-      return Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: InkResponse(
-          child: new Icon(icon, color: Colors.white),
-          onTap: onTap,
-          radius: 20.0,
-          splashColor: accentColor.withOpacity(.25),
-        ),
-      );
-    }
-
-    return new PreferredSize(
-      preferredSize: new Size.fromHeight(kToolbarHeight),
-      child: SafeArea(
-        top: true,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            appBarLeading,
-            Expanded(
-              child: appBarTitle,
-            ),
-            appBarIcon(
-              icon: Icons.call,
-              onTap: () {},
-            ),
-            appBarIcon(
-              icon: Icons.message,
-              onTap: () {},
-            ),
-            appBarIcon(
-              icon: Icons.add,
-              onTap: () {
-                TMNavigate(
-                  context,
-                  JobsCreatePage(contact: widget.contact, contacts: []),
-                );
-              },
-            ),
-          ],
-        ),
+  Widget appBarIcon({IconData icon, VoidCallback onTap}) {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: InkResponse(
+        child: new Icon(icon, color: Colors.white),
+        onTap: onTap,
+        radius: 20.0,
+        splashColor: accentColor.withOpacity(.25),
       ),
     );
   }

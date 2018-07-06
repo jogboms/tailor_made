@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_phone.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class ContactsItem extends StatelessWidget {
@@ -20,23 +21,10 @@ class ContactsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    void onTapCall() {
-      print("onTapCall");
-    }
-
-    void onTapChat() {
-      print("onTapChat");
-    }
-
     Widget iconCircle(IconData icon, VoidCallback onTap) {
-      return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: InkResponse(
-          child: new Icon(icon, size: 18.0, color: theme.textColor),
-          onTap: onTap,
-          radius: 20.0,
-          splashColor: accentColor.withOpacity(.25),
-        ),
+      return IconButton(
+        icon: new Icon(icon, size: 20.0, color: theme.textColor),
+        onPressed: onTap,
       );
     }
 
@@ -44,6 +32,7 @@ class ContactsItem extends StatelessWidget {
       return new Hero(
         tag: contact.documentID,
         child: new CircleAvatar(
+          radius: 28.0,
           backgroundColor: theme.scaffoldColor.withOpacity(.5),
           backgroundImage: contact.imageUrl != null ? NetworkImage(contact.imageUrl) : null,
           child: contact.imageUrl != null
@@ -74,8 +63,8 @@ class ContactsItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        iconCircle(Icons.call, onTapCall),
-        iconCircle(Icons.message, onTapChat),
+        iconCircle(Icons.call, () => call(int.parse(contact.phone))),
+        iconCircle(Icons.message, () => sms(int.parse(contact.phone))),
       ],
     );
 
@@ -100,9 +89,10 @@ class ContactsItem extends StatelessWidget {
 
     return new Card(
       elevation: 0.5,
-      shape: const RoundedRectangleBorder(),
+      shape: RoundedRectangleBorder(),
+      margin: const EdgeInsets.fromLTRB(2.0, 2.0, 2.0, 0.0),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: list,
       ),
     );
