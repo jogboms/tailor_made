@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -16,6 +17,10 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
   bool _autovalidate = false;
   double price = 0.0;
   String notes = "";
+  TextEditingController controller = new MoneyMaskedTextController(
+    decimalSeparator: '.',
+    thousandSeparator: ',',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +92,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        controller: controller,
         keyboardType: TextInputType.number,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(

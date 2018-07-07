@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/gallery/models/image.model.dart';
@@ -49,6 +50,10 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   List<FireImage> fireImages = [];
   JobModel job;
   ContactModel contact;
+  TextEditingController controller = new MoneyMaskedTextController(
+    decimalSeparator: '.',
+    thousandSeparator: ',',
+  );
 
   bool _autovalidate = false;
 
@@ -403,6 +408,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        controller: controller,
         keyboardType: TextInputType.number,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
