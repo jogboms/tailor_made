@@ -12,14 +12,29 @@ import 'package:tailor_made/utils/tm_format_date.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-class JobPage extends StatelessWidget {
+class JobPage extends StatefulWidget {
   final JobModel job;
-  final nairaFormat = new NumberFormat.compactSimpleCurrency(name: "NGN", decimalDigits: 1);
 
   JobPage({
     Key key,
     this.job,
   }) : super(key: key);
+
+  @override
+  JobPageState createState() {
+    return new JobPageState();
+  }
+}
+
+class JobPageState extends State<JobPage> {
+  final nairaFormat = new NumberFormat.compactSimpleCurrency(name: "NGN", decimalDigits: 1);
+  JobModel job;
+
+  @override
+  void initState() {
+    job = widget.job;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +186,7 @@ class JobPage extends StatelessWidget {
 
     return AvatarAppBar(
       tag: contact.createdAt.toString(),
-      image: NetworkImage(contact.imageUrl),
+      imageUrl: contact.imageUrl,
       title: new GestureDetector(
         onTap: () => TMNavigate(context, Contact(contact: contact)),
         child: new Text(
@@ -197,9 +212,13 @@ class JobPage extends StatelessWidget {
             color: textBaseColor.shade900,
           ),
           onPressed: () {
-            job.reference.updateData({
-              "isComplete": !job.isComplete,
-            });
+            try {
+              job.reference.updateData({
+                "isComplete": !job.isComplete,
+              }).then((_) {
+                setState(() => job.isComplete = !job.isComplete);
+              });
+            } catch (e) {}
           },
         )
       ],

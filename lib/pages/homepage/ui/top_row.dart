@@ -48,7 +48,7 @@ class TopRowWidget extends StatelessWidget {
                 color: Colors.greenAccent.shade400,
                 title: "Jobs",
                 subTitle: "${jobs.length} Total",
-                onPressed: () => TMNavigate(context, JobsPage(jobs: jobs, contacts: contacts)),
+                onPressed: () => TMNavigate(context, JobsPage()),
               ),
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/redux/states/jobs.dart';
 import 'package:tailor_made/redux/states/main.dart';
@@ -9,6 +10,10 @@ class JobsViewModel extends ViewModel {
 
   List<JobModel> get jobs {
     return this.store.state.jobs.jobs;
+  }
+
+  List<ContactModel> get contacts {
+    return this.store.state.contacts.contacts;
   }
 
   bool get isLoading => this.store.state.jobs.status == JobsStatus.loading;

@@ -198,8 +198,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   PreferredSizeWidget buildAppBar(TMTheme theme) {
     return contact != null
         ? AvatarAppBar(
-            tag: contact.imageUrl,
-            image: NetworkImage(contact.imageUrl),
+            tag: contact.createdAt.toString(),
+            imageUrl: contact.imageUrl,
             elevation: 1.0,
             backgroundColor: Colors.white,
             title: new Text(
@@ -231,13 +231,16 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       form.save();
       showLoadingSnackBar();
 
-      job.images = fireImages
-          .map((img) => ImageModel(
-                src: img.imageUrl,
-                path: img.ref.path,
-                contact: contact,
-              ))
-          .toList();
+      job
+        ..images = fireImages
+            .map((img) => ImageModel(
+                  src: img.imageUrl,
+                  path: img.ref.path,
+                  contact: contact,
+                ))
+            .toList()
+        ..contact = contact;
+
       try {
         var data = await Cloudstore.jobs.add(job.toMap());
         closeLoadingSnackBar();
