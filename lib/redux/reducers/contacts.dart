@@ -8,6 +8,7 @@ ContactsState reducer(ReduxState state, ActionType action) {
 
   switch (action.type) {
     case ReduxActions.initContacts:
+    case ReduxActions.onDataEventContact:
       return contacts.copyWith(contacts: action.payload);
 
     case ReduxActions.addContact:

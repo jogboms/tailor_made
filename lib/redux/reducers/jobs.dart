@@ -8,6 +8,7 @@ JobsState reducer(ReduxState state, ActionType action) {
 
   switch (action.type) {
     case ReduxActions.initJobs:
+    case ReduxActions.onDataEventJob:
       return jobs.copyWith(jobs: action.payload);
 
     case ReduxActions.addJob:

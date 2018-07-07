@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
 
 enum JobsStatus {
