@@ -28,7 +28,7 @@ class GalleryGridItem extends StatelessWidget {
             onTap: () {
               PageRouteBuilder pageBuilder = new PageRouteBuilder(
                 opaque: false,
-                pageBuilder: (BuildContext context, _, __) => GalleryView(image.src, image.src),
+                pageBuilder: (BuildContext context, _, __) => GalleryView(imageUrl: image.src),
                 transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
                   return new FadeTransition(opacity: animation, child: child);
                 },
