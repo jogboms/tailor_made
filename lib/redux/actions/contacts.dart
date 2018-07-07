@@ -15,6 +15,13 @@ class AddContact extends ActionType {
   AddContact({this.payload});
 }
 
+class RemoveContact extends ActionType {
+  final String type = ReduxActions.removeContact;
+  final ContactModel payload;
+
+  RemoveContact({this.payload});
+}
+
 class OnDataEvent extends ActionType {
   final String type = ReduxActions.onDataEventContact;
   final List<ContactModel> payload;

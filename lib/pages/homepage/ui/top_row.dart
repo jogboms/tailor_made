@@ -37,7 +37,7 @@ class TopRowWidget extends StatelessWidget {
                 color: Colors.orangeAccent,
                 title: "Clients",
                 subTitle: "${contacts.length} Contacts",
-                onPressed: () => TMNavigate(context, ContactsPage(contacts: contacts)),
+                onPressed: () => TMNavigate(context, ContactsPage()),
               ),
             ),
           ),

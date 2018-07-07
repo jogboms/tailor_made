@@ -15,6 +15,13 @@ class AddJob extends ActionType {
   AddJob({this.payload});
 }
 
+class RemoveJob extends ActionType {
+  final String type = ReduxActions.removeJob;
+  final JobModel payload;
+
+  RemoveJob({this.payload});
+}
+
 class OnDataEvent extends ActionType {
   final String type = ReduxActions.onDataEventJob;
   final List<JobModel> payload;
