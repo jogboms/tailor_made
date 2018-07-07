@@ -13,10 +13,11 @@ dependencies:
   firebase_auth: ^0.5.11
   intl: ^0.15.6
   url_launcher: ^3.0.2
-  redux: "^2.1.1"
-  flutter_redux: "^0.3.5"
-  redux_epics: "^0.8.0"
-  rxdart: "^0.16.7"
+  redux: ^3.0.0
+  flutter_redux: ^0.5.2
+  redux_epics: ^0.10.0
+  rxdart: ^0.18.0
+  redux_logging: ^0.3.0
 
 dev_dependencies:
   flutter_test:
