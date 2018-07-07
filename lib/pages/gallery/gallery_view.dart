@@ -18,11 +18,13 @@ class GalleryView extends StatelessWidget {
         child: new SafeArea(
           child: Stack(
             children: [
-              new Hero(
-                tag: imageUrl,
-                child: new PhotoView(
-                  imageProvider: NetworkImage(imageUrl),
-                  loadingChild: loadingSpinner(),
+              Positioned.fill(
+                child: new Hero(
+                  tag: imageUrl,
+                  child: new PhotoView(
+                    imageProvider: NetworkImage(imageUrl),
+                    loadingChild: loadingSpinner(),
+                  ),
                 ),
               ),
               new Align(
