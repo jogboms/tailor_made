@@ -22,6 +22,13 @@ class RemoveJob extends ActionType {
   RemoveJob({this.payload});
 }
 
+class ToggleCompleteJob extends ActionType {
+  final String type = ReduxActions.removeJob;
+  final JobModel payload;
+
+  ToggleCompleteJob({this.payload});
+}
+
 class OnDataEvent extends ActionType {
   final String type = ReduxActions.onDataEventJob;
   final List<JobModel> payload;

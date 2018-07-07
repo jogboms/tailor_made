@@ -213,11 +213,12 @@ class JobPageState extends State<JobPage> {
           ),
           onPressed: () {
             try {
-              job.reference.updateData({
-                "isComplete": !job.isComplete,
-              }).then((_) {
-                setState(() => job.isComplete = !job.isComplete);
-              });
+              // vm.toggleCompleteJob(job);
+              // job.reference.updateData({
+              //   "isComplete": !job.isComplete,
+              // }).then((_) {
+              //   setState(() => job.isComplete = !job.isComplete);
+              // });
             } catch (e) {}
           },
         )

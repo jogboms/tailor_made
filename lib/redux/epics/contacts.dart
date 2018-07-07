@@ -27,14 +27,3 @@ Observable<List<ContactModel>> getContactList() {
         .toList();
   });
 }
-
-// Stream<dynamic> incrementEpic(Stream<dynamic> actions, EpicStore<ReduxState> store) {
-//   return new Observable(actions)
-//       .ofType(new TypeToken<IncrementCounterAction>())
-//       .flatMap((_) {
-//         return new Observable.fromFuture(Firestore.instance.document("users/tudor")
-//             .updateData({'counter': store.state.counter + 1})
-//             .then((_) => new VoidAction())
-//             .catchError((error) => new CounterOnErrorEventAction(error)));
-//       });
-// }
