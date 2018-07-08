@@ -26,6 +26,28 @@ export const aggregator = functions.firestore
     return batch.commit();
   });
 
+export const aggregateJobPayments = functions.firestore
+  .document("jobs/{jobId}")
+  .onWrite(async (change, context) => {
+    const job = change.after.data();
+    const old_job = change.before.data();
+
+    if (!change.after.exists) {
+      return null;
+    }
+
+    if (job.payments.length === old_job.payments.length) return null;
+
+    const completedPayment = job.payments.reduce(
+      (acc, cur) => acc + cur.price,
+      0
+    );
+    return change.after.ref.update({
+      completedPayment: completedPayment,
+      pendingPayment: job.price - completedPayment
+    });
+  });
+
 export const aggregateStats = functions.firestore
   .document("jobs/{jobId}")
   .onWrite(async (change, context) => {
@@ -81,7 +103,8 @@ export const aggregateContactStats = functions.firestore
     const old_job = change.before.data();
 
     const db = admin.firestore();
-    const count = old_job.isComplete === job.isComplete ? 0 : job.isComplete ? -1 : 1;
+    const count =
+      old_job.isComplete === job.isComplete ? 0 : job.isComplete ? -1 : 1;
     const contact = db.doc(`contacts/${job.contact.documentID}`);
 
     const jobsSnap = await db

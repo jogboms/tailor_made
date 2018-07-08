@@ -144,8 +144,6 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
                       backgroundImage: NetworkImage(contact.imageUrl),
                     ),
                   )
-                // TODO
-                // FadeInImage.assetNetwork()
                 : isLoading
                     ? loadingSpinner()
                     : CupertinoButton(

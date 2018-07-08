@@ -91,7 +91,6 @@ class JobPageState extends State<JobPage> {
   }
 
   Widget buildHeader() {
-    final _price = formatNaira(job.price);
     final textColor = Colors.grey.shade800;
 
     return new Column(
@@ -109,7 +108,7 @@ class JobPageState extends State<JobPage> {
         ),
         const SizedBox(height: 12.0),
         Text(
-          _price,
+          formatNaira(job.price),
           style: ralewayLight(24.0, textColor).copyWith(
             letterSpacing: 1.5,
           ),
@@ -143,8 +142,7 @@ class JobPageState extends State<JobPage> {
                           Icon(Icons.arrow_drop_up, color: Colors.green.shade600, size: 16.0),
                           const SizedBox(width: 4.0),
                           Text(
-                            // TODO
-                            "NGN16.5k",
+                            formatNaira(job.completedPayment),
                             style: ralewayLight(18.0, Colors.black87).copyWith(
                               letterSpacing: 1.25,
                             ),
@@ -170,8 +168,7 @@ class JobPageState extends State<JobPage> {
                         Icon(Icons.arrow_drop_down, color: Colors.red.shade600, size: 16.0),
                         const SizedBox(width: 4.0),
                         Text(
-                          // TODO
-                          "NGN3.5k",
+                          formatNaira(job.pendingPayment),
                           style: ralewayLight(18.0, Colors.black87).copyWith(
                             letterSpacing: 1.25,
                           ),

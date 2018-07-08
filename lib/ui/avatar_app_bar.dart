@@ -114,7 +114,6 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  // TODO: implement preferredSize
   @override
   Size get preferredSize => new Size.fromHeight(kToolbarHeight);
 }
