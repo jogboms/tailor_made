@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/utils/tm_colors.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class TMEmptyResult extends StatelessWidget {
@@ -20,13 +19,13 @@ class TMEmptyResult extends StatelessWidget {
         children: <Widget>[
           new Icon(
             Icons.equalizer,
-            color: TMColors.light_grey,
+            color: theme.accentColor,
             size: 36.0,
           ),
           const SizedBox(height: 8.0),
           new Text(
             message,
-            style: theme.smallTextStyle,
+            style: theme.smallTextStyle.copyWith(fontWeight: FontWeight.w600),
           )
         ],
       ),
