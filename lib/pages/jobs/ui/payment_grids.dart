@@ -6,6 +6,7 @@ import 'package:tailor_made/pages/jobs/ui/payment_grid_item.dart';
 import 'package:tailor_made/pages/payments/models/payment.model.dart';
 import 'package:tailor_made/pages/payments/payments.dart';
 import 'package:tailor_made/pages/payments/payments_create.dart';
+import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -53,7 +54,7 @@ class PaymentGridsState extends State<PaymentGrids> {
         final payment = fireImage.payment;
 
         if (payment == null) {
-          return Center(widthFactor: 2.5, child: CircularProgressIndicator());
+          return Center(widthFactor: 2.5, child: loadingSpinner());
         }
 
         return PaymentGridItem(payment: payment);

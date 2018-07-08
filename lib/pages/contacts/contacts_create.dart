@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
+import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -146,7 +147,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
                 // TODO
                 // FadeInImage.assetNetwork()
                 : isLoading
-                    ? CircularProgressIndicator()
+                    ? loadingSpinner()
                     : CupertinoButton(
                         child: Icon(
                           Icons.add_a_photo,

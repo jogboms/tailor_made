@@ -21,6 +21,7 @@ dependencies:
   flutter_masked_text: ^0.5.0
   photo_view: ^0.0.2
   cached_network_image: "^0.4.1"
+  flutter_spinkit: "^1.0.0"
 
 dev_dependencies:
   flutter_test:

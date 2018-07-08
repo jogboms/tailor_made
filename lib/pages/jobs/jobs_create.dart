@@ -16,6 +16,7 @@ import 'package:tailor_made/pages/jobs/ui/job_create_item.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
+import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
@@ -312,7 +313,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         final image = fireImage.imageUrl;
 
         if (image == null) {
-          return Center(widthFactor: 2.5, child: CircularProgressIndicator());
+          return Center(widthFactor: 2.5, child: loadingSpinner());
         }
 
         return GalleryGridItem(

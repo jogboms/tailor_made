@@ -9,6 +9,7 @@ import 'package:tailor_made/pages/gallery/gallery.dart';
 import 'package:tailor_made/pages/gallery/models/image.model.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grid_item.dart';
+import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -57,7 +58,7 @@ class GalleryGridsState extends State<GalleryGrids> {
         final image = fireImage.imageUrl;
 
         if (image == null) {
-          return Center(widthFactor: 2.5, child: CircularProgressIndicator());
+          return Center(widthFactor: 2.5, child: loadingSpinner());
         }
 
         return GalleryGridItem(

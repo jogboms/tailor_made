@@ -11,6 +11,7 @@ import 'package:tailor_made/pages/homepage/ui/top_row.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
+import 'package:tailor_made/utils/tm_colors.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -24,13 +25,30 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => new _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+  AnimationController controller;
+
   @override
   void initState() {
     super.initState();
     FirebaseAuth.instance.signInAnonymously().then((r) {
       print(r);
     });
+    controller = new AnimationController(vsync: this, duration: Duration(milliseconds: 1200))
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          controller.forward();
+        }
+      })
+      ..forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -119,9 +137,15 @@ class _HomePageState extends State<HomePage> {
                 BottomRowWidget(stats: stats),
                 new FlatButton(
                   padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
-                  child: new Text(
-                    "CREATE",
-                    style: ralewayMedium(14.0, theme.textMutedColor),
+                  color: accentColor,
+                  child: ScaleTransition(
+                    scale: new Tween(begin: 0.85, end: 0.95).animate(controller),
+                    alignment: FractionalOffset.center,
+                    child: new Text(
+                      "TAP TO CREATE",
+                      // style: ralewayMedium(14.0, theme.textMutedColor),
+                      style: ralewayMedium(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
+                    ),
                   ),
                   onPressed: onTapCreate(),
                 )
