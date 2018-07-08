@@ -44,7 +44,7 @@ class BottomRowWidget extends StatelessWidget {
                 color: Colors.redAccent,
                 icon: Icons.attach_money,
                 title: "Payments",
-                subTitle: "${payments.length} Received",
+                subTitle: "32k Recorded",
                 onPressed: () => TMNavigate(context, PaymentsPage(payments: payments.toList())),
               ),
             ),
