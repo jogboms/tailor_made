@@ -31,7 +31,7 @@ class PaymentGridItem extends StatelessWidget {
       child: new Material(
         elevation: 4.0,
         borderRadius: BorderRadius.circular(5.0),
-        color: accentColor.withOpacity(.8),
+        color: primarySwatch.shade300,
         child: new InkWell(
           onTap: () => TMNavigate(context, PaymentPage(payment: payment), fullscreenDialog: true),
           child: Padding(

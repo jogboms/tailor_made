@@ -28,7 +28,7 @@ class JobListItem extends StatelessWidget {
       child: new InkWell(
         onTap: () => TMNavigate(context, JobPage(job: job)),
         child: new Padding(
-          padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+          padding: EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -67,7 +67,7 @@ class JobListItem extends StatelessWidget {
               ),
               new Icon(
                 Icons.check,
-                color: job.isComplete ? Colors.green : textBaseColor.shade300,
+                color: job.isComplete ? theme.accentColor : textBaseColor.shade300,
               ),
             ],
           ),

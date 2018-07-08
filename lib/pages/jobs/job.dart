@@ -63,7 +63,8 @@ class JobPageState extends State<JobPage> {
                   elevation: 1.0,
                   automaticallyImplyLeading: false,
                   centerTitle: false,
-                  backgroundColor: Colors.grey.shade300,
+                  backgroundColor: Colors.white,
+                  // backgroundColor: Colors.grey.shade300,
                   title: buildAvatarAppBar(context),
                 ),
               ];
