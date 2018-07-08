@@ -36,6 +36,7 @@ class PaymentModel extends Model {
       "contact": contact.toMap(),
       "price": price,
       "notes": notes,
+      "documentID": documentID,
       "createdAt": createdAt.toString(),
     };
   }

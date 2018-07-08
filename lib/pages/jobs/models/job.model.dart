@@ -80,6 +80,7 @@ class JobModel extends Model {
       "name": name,
       "price": price,
       "notes": notes,
+      "documentID": documentID,
       "images": images.map((image) => image.toMap()).toList(),
       "createdAt": createdAt.toString(),
       "measurements": measurements.map((measure) => measure.toMap()).toList(),

@@ -51,9 +51,10 @@ class ContactModel extends Model {
       "phone": phone,
       "location": location,
       "imageUrl": imageUrl,
+      "documentID": documentID,
       "createdAt": createdAt.toString(),
-      "totalJobs": totalJobs.toString(),
-      "hasPending": hasPending.toString(),
+      "totalJobs": totalJobs,
+      "hasPending": hasPending,
     };
   }
 }
