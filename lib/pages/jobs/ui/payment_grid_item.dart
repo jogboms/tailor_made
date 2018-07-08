@@ -29,7 +29,7 @@ class PaymentGridItem extends StatelessWidget {
       width: size.width,
       margin: EdgeInsets.only(right: 8.0),
       child: new Material(
-        elevation: 4.0,
+        elevation: 1.0,
         borderRadius: BorderRadius.circular(5.0),
         color: primarySwatch.shade300,
         child: new InkWell(
@@ -47,7 +47,7 @@ class PaymentGridItem extends StatelessWidget {
                       children: [
                         TextSpan(
                           text: _date.day.toString(),
-                          style: ralewayLight(24.0, Colors.white),
+                          style: ralewayMedium(16.0, Colors.white),
                         ),
                         TextSpan(text: "\n"),
                         TextSpan(
@@ -61,7 +61,7 @@ class PaymentGridItem extends StatelessWidget {
                 ),
                 Text(
                   _price,
-                  style: ralewayRegular(24.0, Colors.white),
+                  style: ralewayMedium(24.0, Colors.white),
                 )
               ],
             ),

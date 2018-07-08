@@ -30,7 +30,7 @@ class GalleryGridItem extends StatelessWidget {
             Positioned.fill(
               child: new Material(
                 color: Colors.white,
-                elevation: 2.0,
+                elevation: 1.0,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
                 child: new Ink.image(
                   image: new NetworkImage(imageUrl),
