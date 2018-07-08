@@ -11,13 +11,15 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color iconColor;
   final Color backgroundColor;
   final double elevation;
+  final bool useAlt;
   final List<Widget> actions;
 
   AvatarAppBar({
     @required this.tag,
     @required this.imageUrl,
+    this.useAlt = false,
     this.title,
-    this.backgroundColor = Colors.transparent,
+    this.backgroundColor = Colors.white,
     this.elevation = 0.0,
     this.actions,
     this.iconColor,

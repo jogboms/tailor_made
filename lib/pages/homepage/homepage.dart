@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                   color: accentColor,
                   child: ScaleTransition(
-                    scale: new Tween(begin: 0.85, end: 0.95).animate(controller),
+                    scale: new Tween(begin: 1.0, end: 1.025).animate(controller),
                     alignment: FractionalOffset.center,
                     child: new Text(
                       "TAP TO CREATE",

@@ -34,28 +34,37 @@ class ContactsItem extends StatelessWidget {
         tag: contact.documentID,
         child: new CircleAvatar(
           radius: 24.0,
-          backgroundColor: theme.scaffoldColor.withOpacity(.5),
+          backgroundColor: theme.accentColor.withOpacity(.5),
           backgroundImage: contact.imageUrl != null ? CachedNetworkImageProvider(contact.imageUrl) : null,
-          child: contact.imageUrl != null
-              ? new Align(
-                  alignment: Alignment(1.25, -1.25),
-                  child: contact.pendingJobs > 0
-                      ? new Container(
-                          width: 15.5,
-                          height: 15.5,
-                          decoration: new BoxDecoration(
-                            color: accentColor,
-                            border: Border.all(
-                              color: theme.scaffoldColor,
-                              style: BorderStyle.solid,
-                              width: 2.5,
-                            ),
-                            shape: BoxShape.circle,
+          child: Stack(
+            children: [
+              new Align(
+                alignment: Alignment(1.05, -1.05),
+                child: contact.pendingJobs > 0
+                    ? new Container(
+                        width: 15.5,
+                        height: 15.5,
+                        decoration: new BoxDecoration(
+                          color: accentColor,
+                          border: Border.all(
+                            color: Colors.white,
+                            style: BorderStyle.solid,
+                            width: 2.5,
                           ),
-                        )
-                      : null,
-                )
-              : Center(child: Icon(Icons.person_outline)),
+                          shape: BoxShape.circle,
+                        ),
+                      )
+                    : null,
+              ),
+              contact.imageUrl != null
+                  ? SizedBox()
+                  : Center(
+                      child: Icon(
+                      Icons.person_outline,
+                      color: Colors.white,
+                    )),
+            ],
+          ),
         ),
       );
     }
@@ -84,7 +93,7 @@ class ContactsItem extends StatelessWidget {
       onTap: onTapContact ?? () => TMNavigate(context, Contact(contact: contact)),
       leading: avatar(),
       title: title,
-      subtitle: Text(pending >= 1 ? "$pending wear-ables" : "No pending wear-ables", style: TextStyle(fontSize: 14.0, color: textBaseColor)),
+      subtitle: Text(pending >= 1 ? "$pending pending" : "No pending wears", style: TextStyle(fontSize: 14.0, color: textBaseColor)),
       trailing: showActions ? icons : null,
     );
 

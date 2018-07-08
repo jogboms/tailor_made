@@ -111,18 +111,16 @@ class PaymentGridsState extends State<PaymentGrids> {
                 firePayments.add(FirePayment());
               });
 
-              final payment = new PaymentModel(
-                contact: widget.job.contact,
-                price: result["price"],
-                notes: result["notes"],
-              );
-
               try {
                 setState(() {
                   firePayments.last
                     ..isLoading = false
                     ..isSucess = true
-                    ..payment = payment;
+                    ..payment = new PaymentModel(
+                      contact: widget.job.contact,
+                      price: result["price"],
+                      notes: result["notes"],
+                    );
 
                   widget.job.reference.updateData({
                     "payments": firePayments.map((payment) => payment.payment.toMap()).toList(),

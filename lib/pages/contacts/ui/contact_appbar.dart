@@ -79,6 +79,7 @@ class ContactAppBarState extends State<ContactAppBar> {
             child: circleAvatar(
               radius: isAtTop ? 0.0 : null,
               imageUrl: widget.contact.imageUrl,
+              useAlt: true,
             ),
           ),
         ],
@@ -112,7 +113,7 @@ class ContactAppBarState extends State<ContactAppBar> {
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     TextSpan(
-                      text: " pending wear-ables",
+                      text: " pending",
                     ),
                   ],
                 ),

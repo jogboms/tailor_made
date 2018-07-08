@@ -26,7 +26,7 @@ const _kGridWidth = 85.0;
 
 class FireImage {
   StorageReference ref;
-  String imageUrl;
+  ImageModel image;
   bool isLoading = true;
   bool isSucess = false;
 }
@@ -239,13 +239,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       showLoadingSnackBar();
 
       job
-        ..images = fireImages
-            .map((img) => ImageModel(
-                  src: img.imageUrl,
-                  path: img.ref.path,
-                  contact: contact,
-                ))
-            .toList()
+        ..images = fireImages.map((img) => img.image).toList()
         ..contact = contact;
 
       try {
@@ -310,14 +304,14 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       fireImages.length,
       (int index) {
         final fireImage = fireImages[index];
-        final image = fireImage.imageUrl;
+        final image = fireImage.image;
 
         if (image == null) {
           return Center(widthFactor: 2.5, child: loadingSpinner());
         }
 
         return GalleryGridItem(
-          imageUrl: image,
+          imageUrl: image.src,
           tag: "$image-$index",
           size: _kGridWidth,
           onTapDelete: (image) {
@@ -367,12 +361,16 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       fireImages.add(FireImage()..ref = ref);
     });
     try {
-      var image = (await uploadTask.future).downloadUrl?.toString();
+      var imageUrl = (await uploadTask.future).downloadUrl?.toString();
       setState(() {
         fireImages.last
           ..isLoading = false
           ..isSucess = true
-          ..imageUrl = image;
+          ..image = ImageModel(
+            contact: widget.contact,
+            src: imageUrl,
+            path: ref.path,
+          );
       });
     } catch (e) {
       setState(() {

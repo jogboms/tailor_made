@@ -18,7 +18,7 @@ const _kGridWidth = 70.0;
 
 class FireImage {
   StorageReference ref;
-  String imageUrl;
+  ImageModel image;
   bool isLoading = true;
   bool isSucess = false;
 }
@@ -46,7 +46,7 @@ class GalleryGridsState extends State<GalleryGrids> {
   @override
   initState() {
     super.initState();
-    fireImages = widget.job.images.map((img) => FireImage()..imageUrl = img.src).toList();
+    fireImages = widget.job.images.map((img) => FireImage()..image = img).toList();
   }
 
   @override
@@ -55,14 +55,14 @@ class GalleryGridsState extends State<GalleryGrids> {
       fireImages.length,
       (int index) {
         final fireImage = fireImages[index];
-        final image = fireImage.imageUrl;
+        final image = fireImage.image;
 
         if (image == null) {
           return Center(widthFactor: 2.5, child: loadingSpinner());
         }
 
         return GalleryGridItem(
-          imageUrl: image,
+          imageUrl: image.src,
           tag: "$image-$index",
           size: _kGridWidth,
           // Remove images from storage using path
@@ -149,21 +149,19 @@ class GalleryGridsState extends State<GalleryGrids> {
       fireImages.add(FireImage()..ref = ref);
     });
     try {
-      var image = (await uploadTask.future).downloadUrl?.toString();
+      var imageUrl = (await uploadTask.future).downloadUrl?.toString();
       setState(() {
         fireImages.last
           ..isLoading = false
           ..isSucess = true
-          ..imageUrl = image;
+          ..image = ImageModel(
+            contact: widget.job.contact,
+            src: imageUrl,
+            path: ref.path,
+          );
 
         widget.job.reference.updateData({
-          "images": fireImages
-              .map((img) => ImageModel(
-                    src: img.imageUrl,
-                    path: ref.path,
-                    contact: widget.job.contact,
-                  ).toMap())
-              .toList()
+          "images": fireImages.map((img) => img.image.toMap()).toList(),
         });
       });
     } catch (e) {
