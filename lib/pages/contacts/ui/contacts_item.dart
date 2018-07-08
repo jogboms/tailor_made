@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
@@ -34,7 +35,7 @@ class ContactsItem extends StatelessWidget {
         child: new CircleAvatar(
           radius: 24.0,
           backgroundColor: theme.scaffoldColor.withOpacity(.5),
-          backgroundImage: contact.imageUrl != null ? NetworkImage(contact.imageUrl) : null,
+          backgroundImage: contact.imageUrl != null ? CachedNetworkImageProvider(contact.imageUrl) : null,
           child: contact.imageUrl != null
               ? new Align(
                   alignment: Alignment(1.25, -1.25),
