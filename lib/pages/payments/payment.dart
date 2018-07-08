@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:tailor_made/pages/payments/models/payment.model.dart';
 import 'package:tailor_made/utils/tm_format_date.dart';
+import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class PaymentPage extends StatelessWidget {
-  final nairaFormat = new NumberFormat.compactSimpleCurrency(name: "NGN", decimalDigits: 1);
   final PaymentModel payment;
 
   PaymentPage({
@@ -15,7 +14,7 @@ class PaymentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _price = nairaFormat.format(payment.price ?? 0);
+    final _price = formatNaira(payment.price);
 
     final date = formatDate(payment.createdAt, day: "EEEE", month: "MMMM");
 

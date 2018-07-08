@@ -17,7 +17,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
   bool _autovalidate = false;
   double price = 0.0;
   String notes = "";
-  TextEditingController controller = new MoneyMaskedTextController(
+  MoneyMaskedTextController controller = new MoneyMaskedTextController(
     decimalSeparator: '.',
     thousandSeparator: ',',
   );
@@ -37,6 +37,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
       Padding(
         child: RaisedButton(
           color: accentColor,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
           child: Text(
             "FINISH",
             style: TextStyle(color: Colors.white),
@@ -108,7 +109,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
           ),
         ),
         validator: (value) => (value.length > 0) ? null : "Please input a price",
-        onSaved: (value) => price = double.tryParse(value),
+        onSaved: (value) => price = controller.numberValue,
       ),
     );
   }

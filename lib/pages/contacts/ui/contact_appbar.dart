@@ -79,6 +79,7 @@ class ContactAppBarState extends State<ContactAppBar> {
             child: circleAvatar(
               radius: isAtTop ? 0.0 : null,
               imageUrl: widget.contact.imageUrl,
+              useAlt: true,
             ),
           ),
         ],
@@ -102,17 +103,17 @@ class ContactAppBarState extends State<ContactAppBar> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        isAtTop || (widget.contact.hasPending < 1)
+        isAtTop || (widget.contact.pendingJobs < 1)
             ? Container()
             : Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: widget.contact.hasPending.toString(),
+                      text: widget.contact.pendingJobs.toString(),
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     TextSpan(
-                      text: " pending wear-ables",
+                      text: " pending",
                     ),
                   ],
                 ),

@@ -1,31 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/gallery/gallery.dart';
-import 'package:tailor_made/pages/gallery/models/image.model.dart';
+import 'package:tailor_made/pages/homepage/models/stats.model.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
-import 'package:tailor_made/pages/payments/models/payment.model.dart';
 import 'package:tailor_made/pages/payments/payments.dart';
+import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class BottomRowWidget extends StatelessWidget {
-  final List<JobModel> jobs;
+  final StatsModel stats;
 
   BottomRowWidget({
     Key key,
-    @required this.jobs,
+    @required this.stats,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final List<ImageModel> images = [];
-    final List<PaymentModel> payments = [];
-
-    jobs.forEach((item) {
-      images.addAll(item.images);
-      payments.addAll(item.payments);
-    });
-
     return new Container(
       height: 120.0,
       decoration: new BoxDecoration(
@@ -44,8 +35,8 @@ class BottomRowWidget extends StatelessWidget {
                 color: Colors.redAccent,
                 icon: Icons.attach_money,
                 title: "Payments",
-                subTitle: "32k Recorded",
-                onPressed: () => TMNavigate(context, PaymentsPage(payments: payments.toList())),
+                subTitle: "${formatNaira(stats.payments.total)} Total",
+                onPressed: () => TMNavigate(context, PaymentsPage()),
               ),
             ),
           ),
@@ -55,8 +46,8 @@ class BottomRowWidget extends StatelessWidget {
                 color: Colors.blueAccent,
                 icon: Icons.image,
                 title: "Gallery",
-                subTitle: "${images.length} Photos",
-                onPressed: () => TMNavigate(context, GalleryPage(images: images.toList())),
+                subTitle: "${stats.gallery.total} Photos",
+                onPressed: () => TMNavigate(context, GalleryPage()),
               ),
             ),
           ),

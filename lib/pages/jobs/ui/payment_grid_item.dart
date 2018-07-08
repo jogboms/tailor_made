@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:tailor_made/pages/payments/models/payment.model.dart';
 import 'package:tailor_made/pages/payments/payment.dart';
+import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_months.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -10,7 +10,6 @@ const _kGridWidth = 120.0;
 
 class PaymentGridItem extends StatelessWidget {
   final PaymentModel payment;
-  final nairaFormat = new NumberFormat.compactSimpleCurrency(name: "NGN", decimalDigits: 1);
   final Size size;
 
   PaymentGridItem({
@@ -23,7 +22,7 @@ class PaymentGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _date = payment.createdAt;
-    final _price = nairaFormat.format(payment.price ?? 0);
+    final _price = formatNaira(payment.price);
 
     return new Container(
       width: size.width,
