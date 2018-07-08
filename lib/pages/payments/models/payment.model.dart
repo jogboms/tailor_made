@@ -32,7 +32,7 @@ class PaymentModel extends Model {
   toMap() {
     return {
       "id": id,
-      "contact": contactID,
+      "contactID": contactID,
       "price": price,
       "notes": notes,
       "createdAt": createdAt.toString(),
