@@ -63,7 +63,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     super.initState();
     contact = widget.contact;
     job = new JobModel(
-      contact: contact,
+      contactID: contact?.documentID,
       measurements: [
         MeasureModel(name: "Arm Hole", type: MeasureModelType.blouse),
         MeasureModel(name: "Shoulder", type: MeasureModelType.blouse),
@@ -240,8 +240,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       showLoadingSnackBar();
 
       job
+        ..pendingPayment = job.price
         ..images = fireImages.map((img) => img.image).toList()
-        ..contact = contact;
+        ..contactID = contact.documentID;
 
       try {
         await Cloudstore.jobs.add(job.toMap());

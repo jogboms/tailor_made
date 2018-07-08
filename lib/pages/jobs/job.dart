@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grids.dart';
 import 'package:tailor_made/pages/jobs/ui/measure_lists.dart';
 import 'package:tailor_made/pages/jobs/ui/payment_grids.dart';
+import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/redux/view_models/contacts.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_format_date.dart';
@@ -186,47 +189,52 @@ class JobPageState extends State<JobPage> {
     );
   }
 
-  AvatarAppBar buildAvatarAppBar(BuildContext context) {
-    final contact = job.contact;
+  Widget buildAvatarAppBar(BuildContext context) {
     // final textColor = Colors.white;
     final textColor = Colors.grey.shade800;
 
     final date = formatDate(job.createdAt);
 
-    return AvatarAppBar(
-      tag: contact.createdAt.toString(),
-      imageUrl: contact.imageUrl,
-      title: new GestureDetector(
-        onTap: () => TMNavigate(context, Contact(contact: contact)),
-        child: new Text(
-          contact.fullname,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: ralewayRegular(16.0, textColor),
-        ),
-      ),
-      iconColor: textColor,
-      subtitle: new Text(
-        date,
-        style: new TextStyle(
-          color: textColor,
-          fontSize: 12.0,
-          fontWeight: FontWeight.w300,
-        ),
-      ),
-      actions: <Widget>[
-        IconButton(
-          icon: new Icon(
-            job.isComplete ? Icons.check_box : Icons.check_box_outline_blank,
-            color: textBaseColor.shade900,
+    return new StoreConnector<ReduxState, ContactsViewModel>(
+      converter: (store) => ContactsViewModel(store),
+      builder: (BuildContext context, ContactsViewModel vm) {
+        final contact = vm.contacts.firstWhere((contact) => contact.documentID == job.contactID);
+        return AvatarAppBar(
+          tag: contact.createdAt.toString(),
+          imageUrl: contact.imageUrl,
+          title: new GestureDetector(
+            onTap: () => TMNavigate(context, Contact(contact: contact)),
+            child: new Text(
+              contact.fullname,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: ralewayRegular(16.0, textColor),
+            ),
           ),
-          onPressed: () {
-            job.reference.updateData({
-              "isComplete": !job.isComplete,
-            });
-          },
-        )
-      ],
+          iconColor: textColor,
+          subtitle: new Text(
+            date,
+            style: new TextStyle(
+              color: textColor,
+              fontSize: 12.0,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: new Icon(
+                job.isComplete ? Icons.check_box : Icons.check_box_outline_blank,
+                color: textBaseColor.shade900,
+              ),
+              onPressed: () {
+                job.reference.updateData({
+                  "isComplete": !job.isComplete,
+                });
+              },
+            )
+          ],
+        );
+      },
     );
   }
 }
