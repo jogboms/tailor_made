@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:intl/intl.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grids.dart';
@@ -10,6 +9,7 @@ import 'package:tailor_made/pages/jobs/ui/payment_grids.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_format_date.dart';
+import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -28,7 +28,6 @@ class JobPage extends StatefulWidget {
 }
 
 class JobPageState extends State<JobPage> {
-  final nairaFormat = new NumberFormat.compactSimpleCurrency(name: "NGN", decimalDigits: 1);
   JobModel job;
 
   @override
@@ -92,7 +91,7 @@ class JobPageState extends State<JobPage> {
   }
 
   Widget buildHeader() {
-    final _price = nairaFormat.format(job.price ?? 0);
+    final _price = formatNaira(job.price ?? 0);
     final textColor = Colors.grey.shade800;
 
     return new Column(

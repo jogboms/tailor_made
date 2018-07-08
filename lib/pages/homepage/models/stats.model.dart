@@ -19,9 +19,9 @@ class StatsModel {
 
   StatsModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
-    jobs = DetailStatsModel.fromJson(json['jobs']);
-    contacts = DetailStatsModel.fromJson(json['contacts']);
-    gallery = DetailStatsModel.fromJson(json['gallery']);
-    payments = DetailStatsModel.fromJson(json['payments']);
+    jobs = DetailStatsModel.fromJson(json['jobs'].cast<String, dynamic>());
+    contacts = DetailStatsModel.fromJson(json['contacts'].cast<String, dynamic>());
+    gallery = DetailStatsModel.fromJson(json['gallery'].cast<String, dynamic>());
+    payments = DetailStatsModel.fromJson(json['payments'].cast<String, dynamic>());
   }
 }

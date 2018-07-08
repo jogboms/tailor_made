@@ -5,6 +5,7 @@ class Cloudstore {
 
   Cloudstore._();
 
+  static DocumentReference stats = instance.document("stats/current");
   static CollectionReference contacts = instance.collection("contacts");
   static CollectionReference jobs = instance.collection("jobs");
 }

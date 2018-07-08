@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/pages/homepage/models/stats.model.dart';
+import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class StatsWidget extends StatelessWidget {
-  final List<JobModel> jobs;
+  final StatsModel stats;
 
   StatsWidget({
     Key key,
-    @required this.jobs,
+    @required this.stats,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final int completedLength = jobs.where((job) => job.isComplete).length;
     return new Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       decoration: new BoxDecoration(
@@ -25,7 +25,7 @@ class StatsWidget extends StatelessWidget {
           Expanded(
             child: statsTile(
               context,
-              count: (jobs.length - completedLength).toString(),
+              count: stats.jobs.pending.toString(),
               title: "Pending",
             ),
           ),
@@ -39,7 +39,7 @@ class StatsWidget extends StatelessWidget {
             // TODO
             child: statsTile(
               context,
-              count: "23.6k",
+              count: formatNaira(double.parse(stats.payments.completed.toString())),
               title: "Received",
             ),
           ),
@@ -53,7 +53,7 @@ class StatsWidget extends StatelessWidget {
             // TODO
             child: statsTile(
               context,
-              count: completedLength.toString(),
+              count: stats.jobs.completed.toString(),
               title: "Completed",
             ),
           ),

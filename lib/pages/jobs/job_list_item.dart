@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:tailor_made/pages/jobs/job.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_months.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class JobListItem extends StatelessWidget {
   final JobModel job;
-  final nairaFormat = new NumberFormat.compactSimpleCurrency(name: "NGN", decimalDigits: 1);
 
   JobListItem({
     Key key,
@@ -19,7 +18,7 @@ class JobListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
     final _date = job.createdAt;
-    final _price = nairaFormat.format(job.price ?? 0);
+    final _price = formatNaira(job.price ?? 0);
 
     return new Container(
       decoration: BoxDecoration(

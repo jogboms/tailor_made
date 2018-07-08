@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/contacts.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/pages/homepage/models/stats.model.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';
 import 'package:tailor_made/pages/jobs/jobs.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class TopRowWidget extends StatelessWidget {
-  final List<JobModel> jobs;
-  final List<ContactModel> contacts;
+  final StatsModel stats;
 
   TopRowWidget({
     Key key,
-    @required this.jobs,
-    @required this.contacts,
+    @required this.stats,
   }) : super(key: key);
 
   @override
@@ -36,7 +33,7 @@ class TopRowWidget extends StatelessWidget {
                 icon: Icons.supervisor_account,
                 color: Colors.orangeAccent,
                 title: "Clients",
-                subTitle: "${contacts.length} Contacts",
+                subTitle: "${stats.contacts.total} Contacts",
                 onPressed: () => TMNavigate(context, ContactsPage()),
               ),
             ),
@@ -47,7 +44,7 @@ class TopRowWidget extends StatelessWidget {
                 icon: Icons.usb,
                 color: Colors.greenAccent.shade400,
                 title: "Jobs",
-                subTitle: "${jobs.length} Total",
+                subTitle: "${stats.jobs.total} Total",
                 onPressed: () => TMNavigate(context, JobsPage()),
               ),
             ),
