@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
+import 'package:tailor_made/ui/circle_avatar.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_phone.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -75,11 +76,9 @@ class ContactAppBarState extends State<ContactAppBar> {
           new SizedBox(width: isAtTop ? 0.0 : 4.0),
           new Hero(
             tag: widget.contact.documentID,
-            child: new CircleAvatar(
+            child: circleAvatar(
               radius: isAtTop ? 0.0 : null,
-              backgroundColor: widget.contact.imageUrl != null ? Colors.grey.shade400 : Colors.white,
-              backgroundImage: widget.contact.imageUrl != null ? NetworkImage(widget.contact.imageUrl) : null,
-              child: widget.contact.imageUrl != null ? null : Center(child: Icon(Icons.person_outline)),
+              imageUrl: widget.contact.imageUrl,
             ),
           ),
         ],

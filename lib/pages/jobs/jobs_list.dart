@@ -8,7 +8,7 @@ class JobList extends StatelessWidget {
 
   JobList({
     Key key,
-    this.jobs,
+    @required this.jobs,
   }) : super(key: key);
 
   @override

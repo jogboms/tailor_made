@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/gallery/models/image.model.dart';
@@ -49,6 +50,10 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   List<FireImage> fireImages = [];
   JobModel job;
   ContactModel contact;
+  TextEditingController controller = new MoneyMaskedTextController(
+    decimalSeparator: '.',
+    thousandSeparator: ',',
+  );
 
   bool _autovalidate = false;
 
@@ -127,6 +132,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         Padding(
           child: RaisedButton(
             color: accentColor,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
             child: Text(
               "FINISH",
               style: TextStyle(color: Colors.white),
@@ -198,8 +204,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   PreferredSizeWidget buildAppBar(TMTheme theme) {
     return contact != null
         ? AvatarAppBar(
-            tag: contact.imageUrl,
-            image: NetworkImage(contact.imageUrl),
+            tag: contact.createdAt.toString(),
+            imageUrl: contact.imageUrl,
             elevation: 1.0,
             backgroundColor: Colors.white,
             title: new Text(
@@ -231,13 +237,16 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       form.save();
       showLoadingSnackBar();
 
-      job.images = fireImages
-          .map((img) => ImageModel(
-                src: img.imageUrl,
-                path: img.ref.path,
-                contact: contact,
-              ))
-          .toList();
+      job
+        ..images = fireImages
+            .map((img) => ImageModel(
+                  src: img.imageUrl,
+                  path: img.ref.path,
+                  contact: contact,
+                ))
+            .toList()
+        ..contact = contact;
+
       try {
         var data = await Cloudstore.jobs.add(job.toMap());
         closeLoadingSnackBar();
@@ -400,6 +409,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        controller: controller,
         keyboardType: TextInputType.number,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(

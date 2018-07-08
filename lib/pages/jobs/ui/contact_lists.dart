@@ -27,7 +27,7 @@ class ContactLists extends StatelessWidget {
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
       appBar: buildAppBar(),
-      body: contacts.isEmpty
+      body: (contacts ?? []).isEmpty
           ? Center(
               child: TMEmptyResult(message: "No contacts available"),
             )
