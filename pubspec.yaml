@@ -20,6 +20,7 @@ dependencies:
   redux_logging: ^0.3.0
   flutter_masked_text: ^0.5.0
   photo_view: ^0.0.2
+  cached_network_image: "^0.4.1"
 
 dev_dependencies:
   flutter_test:
