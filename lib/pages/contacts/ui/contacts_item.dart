@@ -39,7 +39,7 @@ class ContactsItem extends StatelessWidget {
           child: contact.imageUrl != null
               ? new Align(
                   alignment: Alignment(1.25, -1.25),
-                  child: contact.hasPending > 0
+                  child: contact.pendingJobs > 0
                       ? new Container(
                           width: 15.5,
                           height: 15.5,
@@ -76,7 +76,7 @@ class ContactsItem extends StatelessWidget {
       style: TextStyle(fontSize: 16.0, color: theme.textColor, fontWeight: FontWeight.w600),
     );
 
-    int pending = contact.hasPending;
+    int pending = contact.pendingJobs;
 
     ListTile list = ListTile(
       dense: true,
@@ -84,7 +84,7 @@ class ContactsItem extends StatelessWidget {
       onTap: onTapContact ?? () => TMNavigate(context, Contact(contact: contact)),
       leading: avatar(),
       title: title,
-      subtitle: Text(pending > 1 ? "$pending wear-ables" : "No pending wear-ables", style: TextStyle(fontSize: 14.0, color: textBaseColor)),
+      subtitle: Text(pending >= 1 ? "$pending wear-ables" : "No pending wear-ables", style: TextStyle(fontSize: 14.0, color: textBaseColor)),
       trailing: showActions ? icons : null,
     );
 

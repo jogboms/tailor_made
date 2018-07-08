@@ -10,7 +10,7 @@ class ContactModel extends Model {
   String imageUrl;
   DateTime createdAt;
   int totalJobs;
-  int hasPending;
+  int pendingJobs;
 
   ContactModel({
     id,
@@ -20,7 +20,7 @@ class ContactModel extends Model {
     this.imageUrl,
     createdAt,
     this.totalJobs = 0,
-    this.hasPending = 0,
+    this.pendingJobs = 0,
   })  : id = id ?? uuid(),
         createdAt = createdAt ?? DateTime.now();
 
@@ -33,7 +33,7 @@ class ContactModel extends Model {
       location: json['location'],
       imageUrl: json['imageUrl'],
       totalJobs: int.tryParse(json['totalJobs'].toString()),
-      hasPending: int.tryParse(json['hasPending'].toString()),
+      pendingJobs: int.tryParse(json['pendingJobs'].toString()),
       createdAt: DateTime.tryParse(json['createdAt'].toString()),
     );
   }
@@ -54,7 +54,7 @@ class ContactModel extends Model {
       "documentID": documentID,
       "createdAt": createdAt.toString(),
       "totalJobs": totalJobs,
-      "hasPending": hasPending,
+      "pendingJobs": pendingJobs,
     };
   }
 }

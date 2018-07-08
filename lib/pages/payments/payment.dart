@@ -14,7 +14,7 @@ class PaymentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _price = formatNaira(payment.price ?? 0);
+    final _price = formatNaira(payment.price);
 
     final date = formatDate(payment.createdAt, day: "EEEE", month: "MMMM");
 

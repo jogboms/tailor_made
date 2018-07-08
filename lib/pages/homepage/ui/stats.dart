@@ -39,7 +39,7 @@ class StatsWidget extends StatelessWidget {
             // TODO
             child: statsTile(
               context,
-              count: formatNaira(double.parse(stats.payments.completed.toString())),
+              count: formatNaira(stats.payments.completed),
               title: "Received",
             ),
           ),

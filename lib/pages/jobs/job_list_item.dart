@@ -18,7 +18,7 @@ class JobListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
     final _date = job.createdAt;
-    final _price = formatNaira(job.price ?? 0);
+    final _price = formatNaira(job.price);
 
     return new Container(
       decoration: BoxDecoration(

@@ -35,7 +35,7 @@ class BottomRowWidget extends StatelessWidget {
                 color: Colors.redAccent,
                 icon: Icons.attach_money,
                 title: "Payments",
-                subTitle: "${formatNaira(double.parse(stats.payments.total.toString()))} Total",
+                subTitle: "${formatNaira(stats.payments.total)} Total",
                 onPressed: () => TMNavigate(context, PaymentsPage(payments: [])),
               ),
             ),

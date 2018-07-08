@@ -91,7 +91,7 @@ class JobPageState extends State<JobPage> {
   }
 
   Widget buildHeader() {
-    final _price = formatNaira(job.price ?? 0);
+    final _price = formatNaira(job.price);
     final textColor = Colors.grey.shade800;
 
     return new Column(

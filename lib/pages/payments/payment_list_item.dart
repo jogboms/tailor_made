@@ -17,7 +17,7 @@ class PaymentListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _date = payment.createdAt;
-    final _price = formatNaira(payment.price ?? 0);
+    final _price = formatNaira(payment.price);
     final textColor = Colors.black54;
 
     return Container(

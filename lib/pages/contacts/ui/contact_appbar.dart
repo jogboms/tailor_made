@@ -102,13 +102,13 @@ class ContactAppBarState extends State<ContactAppBar> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        isAtTop || (widget.contact.hasPending < 1)
+        isAtTop || (widget.contact.pendingJobs < 1)
             ? Container()
             : Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: widget.contact.hasPending.toString(),
+                      text: widget.contact.pendingJobs.toString(),
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     TextSpan(
