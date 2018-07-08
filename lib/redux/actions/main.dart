@@ -7,7 +7,9 @@ abstract class ActionType {
   }
 }
 
-class VoidAction {}
+class VoidAction extends ActionType {
+  final String type = "__voidAction__";
+}
 
 class ReduxActions {
   static const String initContacts = "__initContacts__";

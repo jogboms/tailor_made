@@ -11,15 +11,6 @@ import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class JobsPage extends StatelessWidget {
-  // final List<JobModel> jobs;
-  // final List<ContactModel> contacts;
-
-  JobsPage({
-    Key key,
-    // @required this.jobs,
-    // @required this.contacts,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);

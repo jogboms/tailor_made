@@ -8,6 +8,7 @@ import 'package:tailor_made/pages/jobs/ui/gallery_grids.dart';
 import 'package:tailor_made/pages/jobs/ui/measure_lists.dart';
 import 'package:tailor_made/pages/jobs/ui/payment_grids.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
+import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_format_date.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -17,7 +18,7 @@ class JobPage extends StatefulWidget {
 
   JobPage({
     Key key,
-    this.job,
+    @required this.job,
   }) : super(key: key);
 
   @override
@@ -42,38 +43,49 @@ class JobPageState extends State<JobPage> {
 
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
-      body: new NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              expandedHeight: 250.0,
-              flexibleSpace: FlexibleSpaceBar(background: buildHeader()),
-              pinned: true,
-              titleSpacing: 0.0,
-              elevation: 1.0,
-              automaticallyImplyLeading: false,
-              centerTitle: false,
-              backgroundColor: Colors.grey.shade300,
-              title: buildAvatarAppBar(context),
+      body: new StreamBuilder(
+        stream: job.reference.snapshots(),
+        builder: (BuildContext context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: loadingSpinner(),
+            );
+          }
+          job = JobModel.fromDoc(snapshot.data);
+          return new NestedScrollView(
+            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                SliverAppBar(
+                  expandedHeight: 250.0,
+                  flexibleSpace: FlexibleSpaceBar(background: buildHeader()),
+                  pinned: true,
+                  titleSpacing: 0.0,
+                  elevation: 1.0,
+                  automaticallyImplyLeading: false,
+                  centerTitle: false,
+                  backgroundColor: Colors.grey.shade300,
+                  title: buildAvatarAppBar(context),
+                ),
+              ];
+            },
+            body: new SafeArea(
+              top: false,
+              child: new SingleChildScrollView(
+                child: new Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    MeasureLists(measurements: job.measurements),
+                    const SizedBox(height: 4.0),
+                    GalleryGrids(job: job),
+                    const SizedBox(height: 4.0),
+                    PaymentGrids(job: job),
+                  ],
+                ),
+              ),
             ),
-          ];
+          );
         },
-        body: new SafeArea(
-          top: false,
-          child: new SingleChildScrollView(
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                MeasureLists(measurements: job.measurements),
-                const SizedBox(height: 4.0),
-                GalleryGrids(job: job),
-                const SizedBox(height: 4.0),
-                PaymentGrids(job: job),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -212,14 +224,9 @@ class JobPageState extends State<JobPage> {
             color: textBaseColor.shade900,
           ),
           onPressed: () {
-            try {
-              // vm.toggleCompleteJob(job);
-              // job.reference.updateData({
-              //   "isComplete": !job.isComplete,
-              // }).then((_) {
-              //   setState(() => job.isComplete = !job.isComplete);
-              // });
-            } catch (e) {}
+            job.reference.updateData({
+              "isComplete": !job.isComplete,
+            });
           },
         )
       ],

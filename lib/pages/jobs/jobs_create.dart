@@ -132,6 +132,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         Padding(
           child: RaisedButton(
             color: accentColor,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
             child: Text(
               "FINISH",
               style: TextStyle(color: Colors.white),

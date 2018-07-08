@@ -23,7 +23,7 @@ class ContactsItem extends StatelessWidget {
 
     Widget iconCircle(IconData icon, VoidCallback onTap) {
       return IconButton(
-        icon: new Icon(icon, size: 20.0, color: theme.textColor),
+        icon: new Icon(icon, size: 20.0),
         onPressed: onTap,
       );
     }
@@ -32,7 +32,7 @@ class ContactsItem extends StatelessWidget {
       return new Hero(
         tag: contact.documentID,
         child: new CircleAvatar(
-          radius: 28.0,
+          radius: 24.0,
           backgroundColor: theme.scaffoldColor.withOpacity(.5),
           backgroundImage: contact.imageUrl != null ? NetworkImage(contact.imageUrl) : null,
           child: contact.imageUrl != null
@@ -72,7 +72,7 @@ class ContactsItem extends StatelessWidget {
       contact.fullname,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: new TextStyle(color: theme.textColor),
+      style: TextStyle(fontSize: 16.0, color: theme.textColor, fontWeight: FontWeight.w600),
     );
 
     int pending = contact.hasPending;
@@ -83,7 +83,7 @@ class ContactsItem extends StatelessWidget {
       onTap: onTapContact ?? () => TMNavigate(context, Contact(contact: contact)),
       leading: avatar(),
       title: title,
-      subtitle: pending > 1 ? Text("$pending wear-ables") : Text("No pending wear-ables"),
+      subtitle: Text(pending > 1 ? "$pending wear-ables" : "No pending wear-ables", style: TextStyle(fontSize: 14.0, color: textBaseColor)),
       trailing: showActions ? icons : null,
     );
 

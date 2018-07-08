@@ -8,7 +8,6 @@ EpicMiddleware<ReduxState> reduxEpics() => new EpicMiddleware<ReduxState>(
         [
           contacts,
           jobs,
-          toggleCompleteJob,
         ],
       ),
     );
