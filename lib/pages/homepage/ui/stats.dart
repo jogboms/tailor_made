@@ -12,32 +12,7 @@ class StatsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget statsTile({int count, String title, String subTitle}) {
-      final TMTheme theme = TMTheme.of(context);
-      return new Row(
-        children: <Widget>[
-          new Text(
-            count.toString(),
-            style: new TextStyle(color: theme.textColor, fontSize: 24.0),
-          ),
-          const SizedBox(width: 8.0),
-          new Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              new Text(
-                title,
-                style: new TextStyle(color: theme.textColor, fontSize: 14.0),
-              ),
-              new Text(
-                subTitle,
-                style: new TextStyle(color: theme.textColor, fontSize: 13.0, fontWeight: FontWeight.w300),
-              ),
-            ],
-          )
-        ],
-      );
-    }
-
+    final int completedLength = jobs.where((job) => job.isComplete).length;
     return new Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       decoration: new BoxDecoration(
@@ -48,7 +23,11 @@ class StatsWidget extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: statsTile(count: jobs.length, title: "Created", subTitle: "Projects"),
+            child: statsTile(
+              context,
+              count: (jobs.length - completedLength).toString(),
+              title: "Pending",
+            ),
           ),
           Container(
             color: borderSideColor,
@@ -59,13 +38,44 @@ class StatsWidget extends StatelessWidget {
           Expanded(
             // TODO
             child: statsTile(
-              count: jobs.where((job) => job.isComplete).length,
+              context,
+              count: "23.6k",
+              title: "Received",
+            ),
+          ),
+          Container(
+            color: borderSideColor,
+            width: 1.0,
+            height: 40.0,
+            margin: EdgeInsets.only(left: 30.0, right: 30.0),
+          ),
+          Expanded(
+            // TODO
+            child: statsTile(
+              context,
+              count: completedLength.toString(),
               title: "Completed",
-              subTitle: "Projects",
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget statsTile(BuildContext context, {String count, String title}) {
+    final TMTheme theme = TMTheme.of(context);
+    return new Column(
+      children: <Widget>[
+        new Text(
+          count,
+          style: new TextStyle(color: theme.textColor, fontSize: 20.0, fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 2.0),
+        new Text(
+          title,
+          style: new TextStyle(color: theme.textColor, fontSize: 12.0),
+        ),
+      ],
     );
   }
 }
