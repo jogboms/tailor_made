@@ -365,7 +365,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           ..isLoading = false
           ..isSucess = true
           ..image = ImageModel(
-            contact: widget.contact,
+            contactID: widget.contact.documentID,
             src: imageUrl,
             path: ref.path,
           );

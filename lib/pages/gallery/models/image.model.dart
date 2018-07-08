@@ -4,14 +4,14 @@ import 'package:tailor_made/utils/tm_uuid.dart';
 
 class ImageModel extends Model {
   String id;
-  ContactModel contact;
+  String contactID;
   String path;
   String src;
   DateTime createdAt;
 
   ImageModel({
     id,
-    this.contact,
+    this.contactID,
     this.path,
     this.src,
     createdAt,
@@ -22,7 +22,7 @@ class ImageModel extends Model {
     assert(json != null);
     return new ImageModel(
       id: json['id'],
-      contact: ContactModel.fromJson(json['contact'].cast<String, dynamic>()),
+      contactID: json['contactID'],
       path: json['path'],
       src: json['src'],
       createdAt: DateTime.tryParse(json['createdAt'].toString()),
@@ -33,7 +33,7 @@ class ImageModel extends Model {
   toMap() {
     return {
       "id": id,
-      "contact": contact.toMap(),
+      "contactID": contactID,
       "path": path,
       "src": src,
       "createdAt": createdAt.toString(),

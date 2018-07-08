@@ -117,7 +117,7 @@ class PaymentGridsState extends State<PaymentGrids> {
                     ..isLoading = false
                     ..isSucess = true
                     ..payment = new PaymentModel(
-                      contact: widget.job.contact,
+                      contactID: widget.job.contact.documentID,
                       price: result["price"],
                       notes: result["notes"],
                     );
