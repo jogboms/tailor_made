@@ -69,7 +69,7 @@ class _ContactState extends State<Contact> {
                 children: [
                   tabView(
                     name: TABS[0].toLowerCase(),
-                    child: JobsListWidget(contact: widget.contact, jobs: jobs),
+                    child: JobsListWidget(contact: widget.contact),
                   ),
                   tabView(
                     name: TABS[1].toLowerCase(),

@@ -1,25 +1,40 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:intl/intl.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grids.dart';
 import 'package:tailor_made/pages/jobs/ui/measure_lists.dart';
 import 'package:tailor_made/pages/jobs/ui/payment_grids.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
+import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_format_date.dart';
+import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-class JobPage extends StatelessWidget {
+class JobPage extends StatefulWidget {
   final JobModel job;
-  final nairaFormat = new NumberFormat.compactSimpleCurrency(name: "NGN", decimalDigits: 1);
 
   JobPage({
     Key key,
-    this.job,
+    @required this.job,
   }) : super(key: key);
+
+  @override
+  JobPageState createState() {
+    return new JobPageState();
+  }
+}
+
+class JobPageState extends State<JobPage> {
+  JobModel job;
+
+  @override
+  void initState() {
+    job = widget.job;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,44 +42,55 @@ class JobPage extends StatelessWidget {
 
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
-      body: new NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              expandedHeight: 250.0,
-              flexibleSpace: FlexibleSpaceBar(background: buildHeader()),
-              pinned: true,
-              titleSpacing: 0.0,
-              elevation: 1.0,
-              automaticallyImplyLeading: false,
-              centerTitle: false,
-              backgroundColor: Colors.grey.shade300,
-              title: buildAvatarAppBar(context),
+      body: new StreamBuilder(
+        stream: job.reference.snapshots(),
+        builder: (BuildContext context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: loadingSpinner(),
+            );
+          }
+          job = JobModel.fromDoc(snapshot.data);
+          return new NestedScrollView(
+            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                SliverAppBar(
+                  expandedHeight: 250.0,
+                  flexibleSpace: FlexibleSpaceBar(background: buildHeader()),
+                  pinned: true,
+                  titleSpacing: 0.0,
+                  elevation: 1.0,
+                  automaticallyImplyLeading: false,
+                  centerTitle: false,
+                  backgroundColor: Colors.white,
+                  // backgroundColor: Colors.grey.shade300,
+                  title: buildAvatarAppBar(context),
+                ),
+              ];
+            },
+            body: new SafeArea(
+              top: false,
+              child: new SingleChildScrollView(
+                child: new Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    MeasureLists(measurements: job.measurements),
+                    const SizedBox(height: 4.0),
+                    GalleryGrids(job: job),
+                    const SizedBox(height: 4.0),
+                    PaymentGrids(job: job),
+                  ],
+                ),
+              ),
             ),
-          ];
+          );
         },
-        body: new SafeArea(
-          top: false,
-          child: new SingleChildScrollView(
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                MeasureLists(measurements: job.measurements),
-                const SizedBox(height: 4.0),
-                GalleryGrids(job: job),
-                const SizedBox(height: 4.0),
-                PaymentGrids(job: job),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }
 
   Widget buildHeader() {
-    final _price = nairaFormat.format(job.price ?? 0);
     final textColor = Colors.grey.shade800;
 
     return new Column(
@@ -82,7 +108,7 @@ class JobPage extends StatelessWidget {
         ),
         const SizedBox(height: 12.0),
         Text(
-          _price,
+          formatNaira(job.price),
           style: ralewayLight(24.0, textColor).copyWith(
             letterSpacing: 1.5,
           ),
@@ -116,8 +142,7 @@ class JobPage extends StatelessWidget {
                           Icon(Icons.arrow_drop_up, color: Colors.green.shade600, size: 16.0),
                           const SizedBox(width: 4.0),
                           Text(
-                            // TODO
-                            "NGN16.5k",
+                            formatNaira(job.completedPayment),
                             style: ralewayLight(18.0, Colors.black87).copyWith(
                               letterSpacing: 1.25,
                             ),
@@ -143,8 +168,7 @@ class JobPage extends StatelessWidget {
                         Icon(Icons.arrow_drop_down, color: Colors.red.shade600, size: 16.0),
                         const SizedBox(width: 4.0),
                         Text(
-                          // TODO
-                          "NGN3.5k",
+                          formatNaira(job.pendingPayment),
                           style: ralewayLight(18.0, Colors.black87).copyWith(
                             letterSpacing: 1.25,
                           ),
@@ -171,7 +195,7 @@ class JobPage extends StatelessWidget {
 
     return AvatarAppBar(
       tag: contact.createdAt.toString(),
-      image: NetworkImage(contact.imageUrl),
+      imageUrl: contact.imageUrl,
       title: new GestureDetector(
         onTap: () => TMNavigate(context, Contact(contact: contact)),
         child: new Text(

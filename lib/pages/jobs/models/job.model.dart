@@ -11,6 +11,8 @@ class JobModel extends Model {
   ContactModel contact;
   String name;
   double price;
+  double completedPayment;
+  double pendingPayment;
   String notes;
   List<ImageModel> images;
   DateTime createdAt;
@@ -25,6 +27,8 @@ class JobModel extends Model {
     this.price,
     this.notes,
     this.images,
+    this.completedPayment = 0.0,
+    this.pendingPayment = 0.0,
     createdAt,
     this.measurements = const [],
     this.payments = const [],
@@ -57,6 +61,8 @@ class JobModel extends Model {
       contact: ContactModel.fromJson(json['contact'].cast<String, dynamic>()),
       name: json['name'],
       price: double.tryParse(json['price'].toString()),
+      pendingPayment: double.tryParse(json['pendingPayment'].toString()),
+      completedPayment: double.tryParse(json['completedPayment'].toString()),
       notes: json['notes'],
       images: images,
       createdAt: DateTime.tryParse(json['createdAt'].toString()),
@@ -79,7 +85,10 @@ class JobModel extends Model {
       "contact": contact.toMap(),
       "name": name,
       "price": price,
+      "completedPayment": completedPayment,
+      "pendingPayment": pendingPayment,
       "notes": notes,
+      "documentID": documentID,
       "images": images.map((image) => image.toMap()).toList(),
       "createdAt": createdAt.toString(),
       "measurements": measurements.map((measure) => measure.toMap()).toList(),

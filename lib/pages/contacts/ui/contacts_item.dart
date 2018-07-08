@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_phone.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class ContactsItem extends StatelessWidget {
@@ -20,23 +22,10 @@ class ContactsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    void onTapCall() {
-      print("onTapCall");
-    }
-
-    void onTapChat() {
-      print("onTapChat");
-    }
-
     Widget iconCircle(IconData icon, VoidCallback onTap) {
-      return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: InkResponse(
-          child: new Icon(icon, size: 18.0, color: theme.textColor),
-          onTap: onTap,
-          radius: 20.0,
-          splashColor: accentColor.withOpacity(.25),
-        ),
+      return IconButton(
+        icon: new Icon(icon, size: 20.0),
+        onPressed: onTap,
       );
     }
 
@@ -44,28 +33,38 @@ class ContactsItem extends StatelessWidget {
       return new Hero(
         tag: contact.documentID,
         child: new CircleAvatar(
-          backgroundColor: theme.scaffoldColor.withOpacity(.5),
-          backgroundImage: contact.imageUrl != null ? NetworkImage(contact.imageUrl) : null,
-          child: contact.imageUrl != null
-              ? new Align(
-                  alignment: Alignment(1.25, -1.25),
-                  child: contact.hasPending > 0
-                      ? new Container(
-                          width: 15.5,
-                          height: 15.5,
-                          decoration: new BoxDecoration(
-                            color: accentColor,
-                            border: Border.all(
-                              color: theme.scaffoldColor,
-                              style: BorderStyle.solid,
-                              width: 2.5,
-                            ),
-                            shape: BoxShape.circle,
+          radius: 24.0,
+          backgroundColor: theme.accentColor.withOpacity(.5),
+          backgroundImage: contact.imageUrl != null ? CachedNetworkImageProvider(contact.imageUrl) : null,
+          child: Stack(
+            children: [
+              new Align(
+                alignment: Alignment(1.05, -1.05),
+                child: contact.pendingJobs > 0
+                    ? new Container(
+                        width: 15.5,
+                        height: 15.5,
+                        decoration: new BoxDecoration(
+                          color: accentColor,
+                          border: Border.all(
+                            color: Colors.white,
+                            style: BorderStyle.solid,
+                            width: 2.5,
                           ),
-                        )
-                      : null,
-                )
-              : Center(child: Icon(Icons.person_outline)),
+                          shape: BoxShape.circle,
+                        ),
+                      )
+                    : null,
+              ),
+              contact.imageUrl != null
+                  ? SizedBox()
+                  : Center(
+                      child: Icon(
+                      Icons.person_outline,
+                      color: Colors.white,
+                    )),
+            ],
+          ),
         ),
       );
     }
@@ -74,8 +73,8 @@ class ContactsItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        iconCircle(Icons.call, onTapCall),
-        iconCircle(Icons.message, onTapChat),
+        iconCircle(Icons.call, () => call(int.parse(contact.phone))),
+        iconCircle(Icons.message, () => sms(int.parse(contact.phone))),
       ],
     );
 
@@ -83,10 +82,10 @@ class ContactsItem extends StatelessWidget {
       contact.fullname,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: new TextStyle(color: theme.textColor),
+      style: TextStyle(fontSize: 16.0, color: theme.textColor, fontWeight: FontWeight.w600),
     );
 
-    int pending = contact.hasPending;
+    int pending = contact.pendingJobs;
 
     ListTile list = ListTile(
       dense: true,
@@ -94,15 +93,16 @@ class ContactsItem extends StatelessWidget {
       onTap: onTapContact ?? () => TMNavigate(context, Contact(contact: contact)),
       leading: avatar(),
       title: title,
-      subtitle: pending > 1 ? Text("$pending wear-ables") : Text("No pending wear-ables"),
+      subtitle: Text(pending >= 1 ? "$pending pending" : "No pending wears", style: TextStyle(fontSize: 14.0, color: textBaseColor)),
       trailing: showActions ? icons : null,
     );
 
     return new Card(
       elevation: 0.5,
-      shape: const RoundedRectangleBorder(),
+      shape: RoundedRectangleBorder(),
+      margin: const EdgeInsets.fromLTRB(2.0, 2.0, 2.0, 0.0),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: list,
       ),
     );

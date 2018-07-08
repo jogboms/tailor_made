@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/gallery/models/image.model.dart';
@@ -15,6 +16,7 @@ import 'package:tailor_made/pages/jobs/ui/job_create_item.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
+import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
@@ -24,7 +26,7 @@ const _kGridWidth = 85.0;
 
 class FireImage {
   StorageReference ref;
-  String imageUrl;
+  ImageModel image;
   bool isLoading = true;
   bool isSucess = false;
 }
@@ -49,6 +51,10 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   List<FireImage> fireImages = [];
   JobModel job;
   ContactModel contact;
+  MoneyMaskedTextController controller = new MoneyMaskedTextController(
+    decimalSeparator: '.',
+    thousandSeparator: ',',
+  );
 
   bool _autovalidate = false;
 
@@ -127,6 +133,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         Padding(
           child: RaisedButton(
             color: accentColor,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
             child: Text(
               "FINISH",
               style: TextStyle(color: Colors.white),
@@ -198,8 +205,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   PreferredSizeWidget buildAppBar(TMTheme theme) {
     return contact != null
         ? AvatarAppBar(
-            tag: contact.imageUrl,
-            image: NetworkImage(contact.imageUrl),
+            tag: contact.createdAt.toString(),
+            imageUrl: contact.imageUrl,
             elevation: 1.0,
             backgroundColor: Colors.white,
             title: new Text(
@@ -224,6 +231,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   void _handleSubmit() async {
     final FormState form = _formKey.currentState;
     if (form == null) return;
+
     if (!form.validate()) {
       _autovalidate = true; // Start validating on every change.
       showInSnackBar('Please fix the errors in red before submitting.');
@@ -231,20 +239,14 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       form.save();
       showLoadingSnackBar();
 
-      job.images = fireImages
-          .map((img) => ImageModel(
-                src: img.imageUrl,
-                path: img.ref.path,
-                contact: contact,
-              ))
-          .toList();
+      job
+        ..images = fireImages.map((img) => img.image).toList()
+        ..contact = contact;
+
       try {
-        var data = await Cloudstore.jobs.add(job.toMap());
+        await Cloudstore.jobs.add(job.toMap());
         closeLoadingSnackBar();
-        print(data);
-        showInSnackBar("Successfully Added");
-        form.reset();
-        fireImages.clear();
+        Navigator.pop(context);
       } catch (e) {
         closeLoadingSnackBar();
         showInSnackBar(e.toString());
@@ -300,14 +302,14 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       fireImages.length,
       (int index) {
         final fireImage = fireImages[index];
-        final image = fireImage.imageUrl;
+        final image = fireImage.image;
 
         if (image == null) {
-          return Center(widthFactor: 2.5, child: CircularProgressIndicator());
+          return Center(widthFactor: 2.5, child: loadingSpinner());
         }
 
         return GalleryGridItem(
-          imageUrl: image,
+          imageUrl: image.src,
           tag: "$image-$index",
           size: _kGridWidth,
           onTapDelete: (image) {
@@ -357,12 +359,16 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       fireImages.add(FireImage()..ref = ref);
     });
     try {
-      var image = (await uploadTask.future).downloadUrl?.toString();
+      var imageUrl = (await uploadTask.future).downloadUrl?.toString();
       setState(() {
         fireImages.last
           ..isLoading = false
           ..isSucess = true
-          ..imageUrl = image;
+          ..image = ImageModel(
+            contact: widget.contact,
+            src: imageUrl,
+            path: ref.path,
+          );
       });
     } catch (e) {
       setState(() {
@@ -400,6 +406,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        controller: controller,
         keyboardType: TextInputType.number,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
@@ -415,7 +422,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           ),
         ),
         validator: (value) => (value.length > 0) ? null : "Please input a price",
-        onSaved: (value) => job.price = double.tryParse(value),
+        onSaved: (value) => job.price = controller.numberValue,
       ),
     );
   }

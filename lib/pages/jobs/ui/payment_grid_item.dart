@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:tailor_made/pages/payments/models/payment.model.dart';
 import 'package:tailor_made/pages/payments/payment.dart';
+import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_months.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -10,7 +10,6 @@ const _kGridWidth = 120.0;
 
 class PaymentGridItem extends StatelessWidget {
   final PaymentModel payment;
-  final nairaFormat = new NumberFormat.compactSimpleCurrency(name: "NGN", decimalDigits: 1);
   final Size size;
 
   PaymentGridItem({
@@ -23,15 +22,15 @@ class PaymentGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _date = payment.createdAt;
-    final _price = nairaFormat.format(payment.price ?? 0);
+    final _price = formatNaira(payment.price);
 
     return new Container(
       width: size.width,
       margin: EdgeInsets.only(right: 8.0),
       child: new Material(
-        elevation: 4.0,
+        elevation: 1.0,
         borderRadius: BorderRadius.circular(5.0),
-        color: accentColor.withOpacity(.8),
+        color: primarySwatch.shade300,
         child: new InkWell(
           onTap: () => TMNavigate(context, PaymentPage(payment: payment), fullscreenDialog: true),
           child: Padding(
@@ -47,7 +46,7 @@ class PaymentGridItem extends StatelessWidget {
                       children: [
                         TextSpan(
                           text: _date.day.toString(),
-                          style: ralewayLight(24.0, Colors.white),
+                          style: ralewayMedium(16.0, Colors.white),
                         ),
                         TextSpan(text: "\n"),
                         TextSpan(
@@ -61,7 +60,7 @@ class PaymentGridItem extends StatelessWidget {
                 ),
                 Text(
                   _price,
-                  style: ralewayRegular(24.0, Colors.white),
+                  style: ralewayMedium(24.0, Colors.white),
                 )
               ],
             ),
