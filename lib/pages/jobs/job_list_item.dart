@@ -12,11 +12,12 @@ class JobListItem extends StatelessWidget {
 
   JobListItem({
     Key key,
-    this.job,
+    @required this.job,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final TMTheme theme = TMTheme.of(context);
     final _date = job.createdAt;
     final _price = nairaFormat.format(job.price ?? 0);
 
@@ -27,7 +28,7 @@ class JobListItem extends StatelessWidget {
       child: new InkWell(
         onTap: () => TMNavigate(context, JobPage(job: job)),
         child: new Padding(
-          padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+          padding: EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -58,14 +59,15 @@ class JobListItem extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(job.name, style: TextStyle(fontSize: 14.0, color: Colors.black)),
-                    Text(_price, style: TextStyle(fontSize: 12.0, color: textBaseColor)),
+                    Text(job.name, style: TextStyle(fontSize: 16.0, color: theme.textColor, fontWeight: FontWeight.w600)),
+                    new SizedBox(height: 4.0),
+                    Text(_price, style: TextStyle(fontSize: 14.0, color: textBaseColor)),
                   ],
                 ),
               ),
               new Icon(
                 Icons.check,
-                color: job.isComplete ? Colors.green : textBaseColor.shade300,
+                color: job.isComplete ? theme.accentColor : textBaseColor.shade300,
               ),
             ],
           ),
