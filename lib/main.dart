@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -10,7 +11,13 @@ import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_strings.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-void main() => runApp(new TMApp());
+void main() {
+  FirebaseAuth.instance.signInAnonymously().then((r) {
+    print(r);
+  });
+
+  return runApp(new TMApp());
+}
 
 class TMApp extends StatelessWidget {
   final Store<ReduxState> store = reduxStore();
