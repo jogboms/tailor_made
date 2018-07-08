@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/models/main.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/gallery/models/image.model.dart';
 import 'package:tailor_made/pages/jobs/models/measure.model.dart';
 import 'package:tailor_made/pages/payments/models/payment.model.dart';
@@ -8,7 +7,7 @@ import 'package:tailor_made/utils/tm_uuid.dart';
 
 class JobModel extends Model {
   String id;
-  ContactModel contact;
+  String contactID;
   String name;
   double price;
   double completedPayment;
@@ -22,7 +21,7 @@ class JobModel extends Model {
 
   JobModel({
     id,
-    this.contact,
+    this.contactID,
     this.name,
     this.price,
     this.notes,
@@ -58,7 +57,7 @@ class JobModel extends Model {
     }
     return new JobModel(
       id: json['id'],
-      contact: ContactModel.fromJson(json['contact'].cast<String, dynamic>()),
+      contactID: json['contactID'],
       name: json['name'],
       price: double.tryParse(json['price'].toString()),
       pendingPayment: double.tryParse(json['pendingPayment'].toString()),
@@ -82,7 +81,7 @@ class JobModel extends Model {
   toMap() {
     return {
       "id": id,
-      "contact": contact.toMap(),
+      "contactID": contactID,
       "name": name,
       "price": price,
       "completedPayment": completedPayment,

@@ -155,7 +155,7 @@ class GalleryGridsState extends State<GalleryGrids> {
           ..isLoading = false
           ..isSucess = true
           ..image = ImageModel(
-            contact: widget.job.contact,
+            contactID: widget.job.contactID,
             src: imageUrl,
             path: ref.path,
           );

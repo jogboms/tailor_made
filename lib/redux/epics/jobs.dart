@@ -5,6 +5,7 @@ import 'package:redux_epics/redux_epics.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/redux/actions/jobs.dart';
+import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 

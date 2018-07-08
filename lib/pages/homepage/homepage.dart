@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/pages/homepage/models/stats.model.dart';
@@ -31,9 +30,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.signInAnonymously().then((r) {
-      print(r);
-    });
     controller = new AnimationController(vsync: this, duration: Duration(milliseconds: 1200))
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {

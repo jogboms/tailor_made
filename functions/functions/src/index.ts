@@ -105,11 +105,11 @@ export const aggregateContactStats = functions.firestore
     const db = admin.firestore();
     const count =
       old_job.isComplete === job.isComplete ? 0 : job.isComplete ? -1 : 1;
-    const contact = db.doc(`contacts/${job.contact.documentID}`);
+    const contact = db.doc(`contacts/${job.contactID}`);
 
     const jobsSnap = await db
       .collection("jobs")
-      .where("contact.id", "==", job.contact.id)
+      .where("contactID", "==", job.contactID)
       .get();
 
     const contactSnap = (await contact.get()).data();

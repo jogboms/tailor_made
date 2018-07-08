@@ -1,17 +1,16 @@
 import 'package:tailor_made/models/main.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/utils/tm_uuid.dart';
 
 class PaymentModel extends Model {
   String id;
-  ContactModel contact;
+  String contactID;
   double price;
   String notes;
   DateTime createdAt;
 
   PaymentModel({
     id,
-    this.contact,
+    this.contactID,
     this.price,
     this.notes,
     createdAt,
@@ -22,7 +21,7 @@ class PaymentModel extends Model {
     assert(json != null);
     return new PaymentModel(
       id: json['id'],
-      contact: ContactModel.fromJson(json['contact'].cast<String, dynamic>()),
+      contactID: json['contactID'],
       price: double.tryParse(json['price'].toString()),
       notes: json['notes'],
       createdAt: DateTime.tryParse(json['createdAt'].toString()),
@@ -33,10 +32,9 @@ class PaymentModel extends Model {
   toMap() {
     return {
       "id": id,
-      "contact": contact.toMap(),
+      "contactID": contactID,
       "price": price,
       "notes": notes,
-      "documentID": documentID,
       "createdAt": createdAt.toString(),
     };
   }

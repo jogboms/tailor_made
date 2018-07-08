@@ -14,7 +14,7 @@ class JobsViewModel extends ViewModel {
   List<JobModel> get jobs {
     final jobs = this.store.state.jobs.jobs;
     if (contact != null) {
-      return jobs.where((_) => _.contact.id == contact.id).toList();
+      return jobs.where((_) => _.contactID == contact.documentID).toList();
     }
     return jobs;
   }
