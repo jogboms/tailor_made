@@ -11,7 +11,18 @@ class VoidAction extends ActionType {
   final String type = "__voidAction__";
 }
 
+class InitDataEvents extends ActionType {
+  final String type = ReduxActions.initDataEvent;
+}
+
+class DisposeDataEvents extends ActionType {
+  final String type = ReduxActions.disposeDataEvent;
+}
+
 class ReduxActions {
+  static const String initDataEvent = "__initDataEvent__";
+  static const String disposeDataEvent = "__disposeDataEvent__";
+
   static const String initContacts = "__initContacts__";
   static const String addContact = "__addContact__";
   static const String removeContact = "__removeContact__";

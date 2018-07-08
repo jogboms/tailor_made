@@ -196,9 +196,9 @@ class JobPageState extends State<JobPage> {
     final date = formatDate(job.createdAt);
 
     return new StoreConnector<ReduxState, ContactsViewModel>(
-      converter: (store) => ContactsViewModel(store),
+      converter: (store) => ContactsViewModel(store)..contactID = job.contactID,
       builder: (BuildContext context, ContactsViewModel vm) {
-        final contact = vm.contacts.firstWhere((contact) => contact.documentID == job.contactID);
+        final contact = vm.selected;
         return AvatarAppBar(
           tag: contact.createdAt.toString(),
           imageUrl: contact.imageUrl,

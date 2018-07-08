@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
 import 'package:tailor_made/pages/jobs/jobs_list.dart';
-import 'package:tailor_made/redux/actions/jobs.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/jobs.dart';
 import 'package:tailor_made/ui/app_bar.dart';
@@ -17,8 +16,6 @@ class JobsPage extends StatelessWidget {
 
     return new StoreConnector<ReduxState, JobsViewModel>(
       converter: (store) => JobsViewModel(store),
-      onInit: (store) => store.dispatch(new InitDataEvents()),
-      onDispose: (store) => store.dispatch(new DisposeDataEvents()),
       builder: (BuildContext context, JobsViewModel vm) {
         return new Scaffold(
           backgroundColor: theme.scaffoldColor,

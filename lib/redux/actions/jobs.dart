@@ -35,11 +35,3 @@ class OnDataEvent extends ActionType {
 
   OnDataEvent({this.payload});
 }
-
-class InitDataEvents extends ActionType {
-  final String type = ReduxActions.initDataEventJob;
-}
-
-class DisposeDataEvents extends ActionType {
-  final String type = ReduxActions.disposeDataEventJob;
-}

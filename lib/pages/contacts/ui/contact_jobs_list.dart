@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/jobs/jobs_list.dart';
-import 'package:tailor_made/redux/actions/jobs.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/jobs.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
@@ -19,8 +18,6 @@ class JobsListWidget extends StatelessWidget {
   build(BuildContext context) {
     return new StoreConnector<ReduxState, JobsViewModel>(
       converter: (store) => JobsViewModel(store)..contact = contact,
-      onInit: (store) => store.dispatch(new InitDataEvents()),
-      onDispose: (store) => store.dispatch(new DisposeDataEvents()),
       builder: (BuildContext context, JobsViewModel vm) {
         if (vm.isLoading) {
           return SliverFillRemaining(

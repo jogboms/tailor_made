@@ -5,10 +5,21 @@ import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/main.dart';
 
 class ContactsViewModel extends ViewModel {
+  String contactID;
+
   ContactsViewModel(Store<ReduxState> store) : super(store);
 
   List<ContactModel> get contacts {
     return this.store.state.contacts.contacts;
+  }
+
+  ContactModel get selected {
+    if (contactID != null) {
+      return this.store.state.contacts.contacts.firstWhere(
+            (_) => _.documentID == contactID,
+          );
+    }
+    return null;
   }
 
   bool get isLoading => this.store.state.contacts.status == ContactsStatus.loading;

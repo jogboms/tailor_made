@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
+import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/redux/view_models/contacts.dart';
 import 'package:tailor_made/ui/circle_avatar.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_phone.dart';
@@ -29,36 +32,42 @@ class ContactAppBarState extends State<ContactAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    return new PreferredSize(
-      preferredSize: new Size.fromHeight(kToolbarHeight),
-      child: SafeArea(
-        top: true,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            appBarLeading(),
-            Expanded(child: appBarTitle()),
-            appBarIcon(
-              icon: Icons.call,
-              onTap: () => call(int.parse(widget.contact.phone)),
+    return StoreConnector<ReduxState, ContactsViewModel>(
+      converter: (store) => ContactsViewModel(store)..contactID = widget.contact.documentID,
+      builder: (BuildContext context, ContactsViewModel vm) {
+        final contact = vm.selected;
+        return new PreferredSize(
+          preferredSize: new Size.fromHeight(kToolbarHeight),
+          child: SafeArea(
+            top: true,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                appBarLeading(),
+                Expanded(child: appBarTitle()),
+                appBarIcon(
+                  icon: Icons.call,
+                  onTap: () => call(int.parse(contact.phone)),
+                ),
+                appBarIcon(
+                  icon: Icons.message,
+                  onTap: () => sms(int.parse(contact.phone)),
+                ),
+                appBarIcon(
+                  icon: Icons.add,
+                  onTap: () {
+                    TMNavigate(
+                      context,
+                      JobsCreatePage(contact: contact, contacts: []),
+                    );
+                  },
+                ),
+              ],
             ),
-            appBarIcon(
-              icon: Icons.message,
-              onTap: () => sms(int.parse(widget.contact.phone)),
-            ),
-            appBarIcon(
-              icon: Icons.add,
-              onTap: () {
-                TMNavigate(
-                  context,
-                  JobsCreatePage(contact: widget.contact, contacts: []),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
