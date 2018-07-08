@@ -3,6 +3,29 @@ import * as functions from "firebase-functions";
 
 admin.initializeApp(functions.config().firebase);
 
+export const aggregator = functions.firestore
+  .document("jobs/{jobId}")
+  .onWrite((change, context) => {
+    const payments = change.after.data().payments;
+    const images = change.after.data().images;
+    const db = admin.firestore();
+
+    const batch = db.batch();
+
+    payments.forEach(payment => {
+      const ref = db.collection("payments").doc(payment.id);
+      batch.set(ref, payment);
+    });
+
+    images.forEach(image => {
+      const ref = db.collection("gallery").doc(image.id);
+      batch.set(ref, image);
+    });
+
+    // Commit the batch
+    return batch.commit();
+  });
+
 export const aggregateStats = functions.firestore
   .document("jobs/{jobId}")
   .onWrite(async (change, context) => {
@@ -69,7 +92,7 @@ export const aggregateContactStats = functions.firestore
 
     return contact.update({
       totalJobs: jobsSnap.size,
-      hasPending: contactSnap.hasPending + count
+      pendingJobs: contactSnap.pendingJobs + count
     });
   });
 
