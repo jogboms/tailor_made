@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/payments/models/payment.model.dart';
 import 'package:tailor_made/pages/payments/payments_list.dart';
@@ -44,7 +45,15 @@ class PaymentsPageState extends State<PaymentsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text("Payments", style: theme.appBarStyle),
-                Text(payments != null ? "${payments.length} tickets" : "", style: TextStyle(fontSize: 11.0, color: textBaseColor)),
+                payments != null
+                    ? Text(
+                        "${payments.length} Tickets",
+                        style: TextStyle(
+                          fontSize: 11.0,
+                          color: textBaseColor,
+                        ),
+                      )
+                    : SizedBox(),
               ],
             ),
             backgroundColor: theme.appBarBackgroundColor,
@@ -61,20 +70,7 @@ class PaymentsPageState extends State<PaymentsPage> {
     );
   }
 
-  getBody() {
-    if (payments == null) {
-      return new StreamBuilder(
-        stream: Cloudstore.payments.snapshots(),
-        builder: (BuildContext context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: loadingSpinner(),
-            );
-          }
-          // job = JobModel.fromDoc(snapshot.data);
-        },
-      );
-    }
+  getContent() {
     return payments.isEmpty
         ? SliverFillRemaining(
             child: TMEmptyResult(message: "No payments available"),
@@ -83,5 +79,27 @@ class PaymentsPageState extends State<PaymentsPage> {
             padding: EdgeInsets.only(top: 3.0, left: 16.0, right: 16.0, bottom: 16.0),
             sliver: PaymentList(payments: payments),
           );
+  }
+
+  getBody() {
+    if (payments == null) {
+      return new StreamBuilder(
+        stream: Cloudstore.payments.snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return SliverFillRemaining(
+              child: loadingSpinner(),
+            );
+          }
+          payments = snapshot.data.documents
+              .map(
+                (item) => PaymentModel.fromJson(item.data),
+              )
+              .toList();
+          return getContent();
+        },
+      );
+    }
+    return getContent();
   }
 }
