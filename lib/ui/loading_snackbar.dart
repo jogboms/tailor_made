@@ -6,14 +6,18 @@ class LoadingSnackBar extends SnackBar {
       : super(
           key: key,
           content: Row(
+            mainAxisAlignment: content == null ? MainAxisAlignment.center : MainAxisAlignment.start,
             children: [
-              SpinKitFadingFour(
-                color: Colors.white,
-                width: 32.0,
-                height: 32.0,
+              SizedBox.fromSize(
+                size: Size.square(30.0),
+                child: SpinKitFadingFour(
+                  color: Colors.white,
+                  width: 32.0,
+                  height: 32.0,
+                ),
               ),
-              SizedBox(width: 16.0),
-              content ?? new Text("Please wait...", style: TextStyle(color: Colors.white.withOpacity(.75))),
+              SizedBox(width: content == null ? 0.0 : 16.0),
+              content ?? SizedBox(),
             ],
           ),
           duration: Duration(days: 1),

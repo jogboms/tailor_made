@@ -51,7 +51,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   List<FireImage> fireImages = [];
   JobModel job;
   ContactModel contact;
-  TextEditingController controller = new MoneyMaskedTextController(
+  MoneyMaskedTextController controller = new MoneyMaskedTextController(
     decimalSeparator: '.',
     thousandSeparator: ',',
   );
@@ -231,6 +231,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   void _handleSubmit() async {
     final FormState form = _formKey.currentState;
     if (form == null) return;
+
     if (!form.validate()) {
       _autovalidate = true; // Start validating on every change.
       showInSnackBar('Please fix the errors in red before submitting.');
@@ -243,12 +244,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         ..contact = contact;
 
       try {
-        var data = await Cloudstore.jobs.add(job.toMap());
+        await Cloudstore.jobs.add(job.toMap());
         closeLoadingSnackBar();
-        print(data);
-        showInSnackBar("Successfully Added");
-        form.reset();
-        fireImages.clear();
+        Navigator.pop(context);
       } catch (e) {
         closeLoadingSnackBar();
         showInSnackBar(e.toString());
@@ -424,7 +422,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           ),
         ),
         validator: (value) => (value.length > 0) ? null : "Please input a price",
-        onSaved: (value) => job.price = double.tryParse(value),
+        onSaved: (value) => job.price = controller.numberValue,
       ),
     );
   }
