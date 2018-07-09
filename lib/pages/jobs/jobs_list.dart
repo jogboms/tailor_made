@@ -1,3 +1,5 @@
+import 'dart:math' show max;
+
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/jobs/job_list_item.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
@@ -22,8 +24,12 @@ class JobList extends StatelessWidget {
     return SliverPadding(
       padding: EdgeInsets.only(bottom: 96.0),
       sliver: SliverList(
-        delegate: new SliverChildListDelegate(
-          jobs.map((job) => JobListItem(job: job)).toList(),
+        delegate: new SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            final int itemIndex = index ~/ 2;
+            return (index == 0 || index.isEven) ? JobListItem(job: jobs[itemIndex]) : new Divider();
+          },
+          childCount: max(0, jobs.length * 2 - 1),
         ),
       ),
     );

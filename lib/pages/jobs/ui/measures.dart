@@ -30,8 +30,12 @@ class MeasuresPage extends StatelessWidget {
       );
     }
 
-    return ListView(
-      children: measurements.map((item) => MeasureListItem(item)).toList(),
+    return ListView.separated(
+      itemCount: measurements.length,
+      shrinkWrap: true,
+      padding: EdgeInsets.only(bottom: 96.0),
+      itemBuilder: (context, index) => MeasureListItem(measurements[index]),
+      separatorBuilder: (BuildContext context, int index) => new Divider(),
     );
   }
 }

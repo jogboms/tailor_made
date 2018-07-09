@@ -21,9 +21,6 @@ class JobListItem extends StatelessWidget {
     final _price = formatNaira(job.price);
 
     return new Container(
-      decoration: BoxDecoration(
-        border: Border(bottom: TMBorderSide()),
-      ),
       child: new InkWell(
         onTap: () => TMNavigate(context, JobPage(job: job)),
         child: new Padding(

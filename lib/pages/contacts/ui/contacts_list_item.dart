@@ -6,12 +6,12 @@ import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_phone.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-class ContactsItem extends StatelessWidget {
+class ContactsListItem extends StatelessWidget {
   final ContactModel contact;
   final VoidCallback onTapContact;
   final bool showActions;
 
-  ContactsItem({
+  ContactsListItem({
     Key key,
     this.contact,
     this.onTapContact,
@@ -87,7 +87,7 @@ class ContactsItem extends StatelessWidget {
 
     int pending = contact.pendingJobs;
 
-    ListTile list = ListTile(
+    return ListTile(
       dense: true,
       contentPadding: EdgeInsets.only(left: 16.0),
       onTap: onTapContact ?? () => TMNavigate(context, Contact(contact: contact)),
@@ -95,16 +95,6 @@ class ContactsItem extends StatelessWidget {
       title: title,
       subtitle: Text(pending >= 1 ? "$pending pending" : "No pending wears", style: TextStyle(fontSize: 14.0, color: textBaseColor)),
       trailing: showActions ? icons : null,
-    );
-
-    return new Card(
-      elevation: 0.5,
-      shape: RoundedRectangleBorder(),
-      margin: const EdgeInsets.fromLTRB(2.0, 2.0, 2.0, 0.0),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
-        child: list,
-      ),
     );
   }
 }
