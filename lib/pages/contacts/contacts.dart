@@ -38,7 +38,7 @@ class _ContactsPageState extends State<ContactsPage> {
           appBar: _isSearching ? buildSearchBar() : buildAppBar(),
           body: buildBody(vm),
           floatingActionButton: new FloatingActionButton(
-            child: new Icon(Icons.add),
+            child: new Icon(Icons.person_add),
             onPressed: () => TMNavigate(context, ContactsCreatePage()),
           ),
         );
