@@ -33,7 +33,6 @@ class ContactForm extends StatefulWidget {
 class ContactFormState extends State<ContactForm> with SnackBarProvider {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   bool isLoading = false;
-  bool isSuccess = false;
   ContactModel contact;
   bool _autovalidate = false;
   StorageReference _lastImgRef;
@@ -144,6 +143,7 @@ class ContactFormState extends State<ContactForm> with SnackBarProvider {
                   contact.imageUrl != null
                       ? CircleAvatar(
                           backgroundImage: NetworkImage(contact.imageUrl),
+                          backgroundColor: primarySwatch.withOpacity(.2),
                         )
                       : SizedBox(),
                   isLoading
@@ -198,10 +198,7 @@ class ContactFormState extends State<ContactForm> with SnackBarProvider {
     var ref = FirebaseStorage.instance.ref().child('contacts/image_$random.jpg');
     var uploadTask = ref.putFile(imageFile);
 
-    setState(() {
-      isLoading = true;
-      isSuccess = false;
-    });
+    setState(() => isLoading = true);
     try {
       contact.imageUrl = (await uploadTask.future).downloadUrl?.toString();
       setState(() {
@@ -209,19 +206,12 @@ class ContactFormState extends State<ContactForm> with SnackBarProvider {
           _lastImgRef.delete();
         }
         isLoading = false;
-        isSuccess = true;
         _lastImgRef = ref;
       });
     } catch (e) {
-      setState(() {
-        isLoading = false;
-        isSuccess = false;
-      });
+      setState(() => isLoading = false);
     }
   }
 
-  reset() {
-    setState(() => isSuccess = false);
-    _formKey.currentState.reset();
-  }
+  reset() => _formKey.currentState.reset();
 }

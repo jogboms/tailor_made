@@ -4,6 +4,7 @@ import 'package:tailor_made/pages/contacts/contacts_edit.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_measure.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
+import 'package:tailor_made/pages/jobs/ui/measures.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/contacts.dart';
 import 'package:tailor_made/ui/circle_avatar.dart';
@@ -47,7 +48,8 @@ class ContactAppBarState extends State<ContactAppBar> {
       case Choice.OpenMeasure:
         return TMNavigate(
           context,
-          ContactMeasure(contact: contact),
+          MeasuresPage(measurements: contact.measurements),
+          fullscreenDialog: true,
         );
       case Choice.EditMeasure:
         return TMNavigate(
@@ -64,7 +66,6 @@ class ContactAppBarState extends State<ContactAppBar> {
       default:
         break;
     }
-    print(choice);
   }
 
   @override
@@ -100,16 +101,16 @@ class ContactAppBarState extends State<ContactAppBar> {
                           child: new Text("Open Measurements", style: ralewayRegular(14.0, Colors.black87)),
                         ),
                         new PopupMenuItem<Choice>(
+                          value: Choice.SendText,
+                          child: new Text("Text Message", style: ralewayRegular(14.0, Colors.black87)),
+                        ),
+                        new PopupMenuItem<Choice>(
                           value: Choice.EditMeasure,
                           child: new Text("Edit Measurements", style: ralewayRegular(14.0, Colors.black87)),
                         ),
                         new PopupMenuItem<Choice>(
                           value: Choice.EditAccount,
                           child: new Text("Edit Account", style: ralewayRegular(14.0, Colors.black87)),
-                        ),
-                        new PopupMenuItem<Choice>(
-                          value: Choice.SendText,
-                          child: new Text("Text Message", style: ralewayRegular(14.0, Colors.black87)),
                         ),
                       ],
                 ),

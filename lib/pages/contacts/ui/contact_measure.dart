@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/jobs/ui/job_create_item.dart';
+import 'package:tailor_made/pages/jobs/ui/measures.dart';
 import 'package:tailor_made/ui/app_bar.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -52,6 +54,19 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
       appBar: appBar(
         context,
         title: "Measurements",
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.remove_red_eye,
+              color: titleBaseColor,
+            ),
+            onPressed: () => TMNavigate(
+                  context,
+                  MeasuresPage(measurements: widget.contact.measurements),
+                  fullscreenDialog: true,
+                ),
+          )
+        ],
       ),
       body: new SafeArea(
         top: false,
@@ -100,7 +115,6 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
         await widget.contact.reference.updateData(widget.contact.toMap());
         closeLoadingSnackBar();
         showInSnackBar("Successfully Updated");
-        Navigator.pop(context, true);
       } catch (e) {
         closeLoadingSnackBar();
         showInSnackBar(e.toString());
