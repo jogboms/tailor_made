@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/pages/contacts/ui/contact_measure.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/contacts.dart';
@@ -43,7 +44,7 @@ class ContactAppBarState extends State<ContactAppBar> {
       case Choice.EditMeasure:
         return TMNavigate(
           context,
-          JobsCreatePage(contact: contact, contacts: []),
+          ContactMeasure(contact: contact),
         );
       case Choice.SendText:
         return sms(int.parse(contact.phone));

@@ -64,30 +64,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     contact = widget.contact;
     job = new JobModel(
       contactID: contact?.documentID,
-      measurements: [
-        MeasureModel(name: "Arm Hole", type: MeasureModelType.blouse),
-        MeasureModel(name: "Shoulder", type: MeasureModelType.blouse),
-        MeasureModel(name: "Burst", type: MeasureModelType.blouse),
-        MeasureModel(name: "Burst Point", type: MeasureModelType.blouse),
-        MeasureModel(name: "Shoulder - Burst Point", type: MeasureModelType.blouse),
-        MeasureModel(name: "Shoulder - Under Burst", type: MeasureModelType.blouse),
-        MeasureModel(name: "Shoulder - Waist", type: MeasureModelType.blouse),
-        MeasureModel(name: "Length", type: MeasureModelType.trouser),
-        MeasureModel(name: "Waist", type: MeasureModelType.trouser),
-        MeasureModel(name: "Crouch", type: MeasureModelType.trouser),
-        MeasureModel(name: "Thigh", type: MeasureModelType.trouser),
-        MeasureModel(name: "Body Rise", type: MeasureModelType.trouser),
-        MeasureModel(name: "Width", type: MeasureModelType.trouser),
-        MeasureModel(name: "Hip", type: MeasureModelType.trouser),
-        MeasureModel(name: "Full Length", type: MeasureModelType.skirts),
-        MeasureModel(name: "Short Length", type: MeasureModelType.skirts),
-        MeasureModel(name: "Knee Length", type: MeasureModelType.skirts),
-        MeasureModel(name: "Hip", type: MeasureModelType.skirts),
-        MeasureModel(name: "Waist", type: MeasureModelType.gown),
-        MeasureModel(name: "Long Length", type: MeasureModelType.gown),
-        MeasureModel(name: "Short Length", type: MeasureModelType.gown),
-        MeasureModel(name: "Knee Length", type: MeasureModelType.gown),
-      ],
+      measurements: createDefaultMeasures(),
     );
   }
 
@@ -124,7 +101,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       children.add(buildImageGrid());
 
       children.add(makeHeader("Measurements", "Inches (In)"));
-      children.add(JobMeasures(job));
+      children.add(JobMeasures(job.measurements));
 
       children.add(makeHeader("Additional Notes"));
       children.add(buildAdditional());
