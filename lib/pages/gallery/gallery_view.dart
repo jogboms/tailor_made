@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:tailor_made/ui/tm_loading_spinner.dart';
 
 class GalleryView extends StatelessWidget {
-  final String image;
-  final String id;
+  final String imageUrl;
 
-  GalleryView(this.image, this.id);
+  GalleryView({
+    Key key,
+    this.imageUrl,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(id);
     return new Scaffold(
       body: Container(
         color: Colors.grey[900],
         child: new SafeArea(
           child: Stack(
             children: [
-              new Center(
+              Positioned.fill(
                 child: new Hero(
-                  tag: image,
-                  child: new Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.network(image),
+                  tag: imageUrl,
+                  child: new PhotoView(
+                    imageProvider: NetworkImage(imageUrl),
+                    loadingChild: loadingSpinner(),
                   ),
                 ),
               ),

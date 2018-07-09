@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/models/main.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/gallery/models/image.model.dart';
 import 'package:tailor_made/pages/jobs/models/measure.model.dart';
 import 'package:tailor_made/pages/payments/models/payment.model.dart';
@@ -8,9 +7,11 @@ import 'package:tailor_made/utils/tm_uuid.dart';
 
 class JobModel extends Model {
   String id;
-  ContactModel contact;
+  String contactID;
   String name;
   double price;
+  double completedPayment;
+  double pendingPayment;
   String notes;
   List<ImageModel> images;
   DateTime createdAt;
@@ -20,11 +21,13 @@ class JobModel extends Model {
 
   JobModel({
     id,
-    this.contact,
+    this.contactID,
     this.name,
     this.price,
     this.notes,
     this.images,
+    this.completedPayment = 0.0,
+    this.pendingPayment = 0.0,
     createdAt,
     this.measurements = const [],
     this.payments = const [],
@@ -54,9 +57,11 @@ class JobModel extends Model {
     }
     return new JobModel(
       id: json['id'],
-      contact: ContactModel.fromJson(json['contact'].cast<String, dynamic>()),
+      contactID: json['contactID'],
       name: json['name'],
       price: double.tryParse(json['price'].toString()),
+      pendingPayment: double.tryParse(json['pendingPayment'].toString()),
+      completedPayment: double.tryParse(json['completedPayment'].toString()),
       notes: json['notes'],
       images: images,
       createdAt: DateTime.tryParse(json['createdAt'].toString()),
@@ -76,10 +81,13 @@ class JobModel extends Model {
   toMap() {
     return {
       "id": id,
-      "contact": contact.toMap(),
+      "contactID": contactID,
       "name": name,
       "price": price,
+      "completedPayment": completedPayment,
+      "pendingPayment": pendingPayment,
       "notes": notes,
+      "documentID": documentID,
       "images": images.map((image) => image.toMap()).toList(),
       "createdAt": createdAt.toString(),
       "measurements": measurements.map((measure) => measure.toMap()).toList(),

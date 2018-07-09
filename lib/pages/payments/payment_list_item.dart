@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:tailor_made/pages/payments/models/payment.model.dart';
 import 'package:tailor_made/pages/payments/payment.dart';
+import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_months.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class PaymentListItem extends StatelessWidget {
   final PaymentModel payment;
-  final nairaFormat = new NumberFormat.compactSimpleCurrency(name: "NGN", decimalDigits: 1);
 
   PaymentListItem({
     Key key,
@@ -18,17 +17,17 @@ class PaymentListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _date = payment.createdAt;
-    final _price = nairaFormat.format(payment.price ?? 0);
+    final _price = formatNaira(payment.price);
     final textColor = Colors.black54;
 
     return Container(
-      color: Colors.grey.shade300,
+      // color: Colors.grey.shade300,
       margin: EdgeInsets.only(bottom: 2.0),
       child: new InkResponse(
         onTap: () => TMNavigate(context, PaymentPage(payment: payment), fullscreenDialog: true),
         radius: 300.0,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
           child: Stack(
             children: [
               new Align(
@@ -38,7 +37,7 @@ class PaymentListItem extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: _date.day.toString(),
-                        style: ralewayLight(24.0, textColor),
+                        style: ralewayMedium(16.0, accentColor),
                       ),
                       TextSpan(text: "\n"),
                       TextSpan(
@@ -53,9 +52,24 @@ class PaymentListItem extends StatelessWidget {
               Positioned.fill(
                 child: Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: Text(
-                    _price,
-                    style: ralewayLight(24.0, textColor),
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        width: 4.0,
+                        height: 4.0,
+                        decoration: BoxDecoration(
+                          color: accentColor,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      SizedBox(width: 8.0),
+                      Text(
+                        _price,
+                        style: ralewayMedium(18.0, Colors.black87).copyWith(
+                          letterSpacing: 1.5,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               )

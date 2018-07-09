@@ -1,22 +1,25 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tailor_made/ui/circle_avatar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String tag;
-  final ImageProvider image;
+  final String imageUrl;
   final Widget title;
   final Widget subtitle;
   final Color iconColor;
   final Color backgroundColor;
   final double elevation;
+  final bool useAlt;
   final List<Widget> actions;
 
   AvatarAppBar({
     @required this.tag,
-    @required this.image,
+    @required this.imageUrl,
+    this.useAlt = false,
     this.title,
-    this.backgroundColor = Colors.transparent,
+    this.backgroundColor = Colors.white,
     this.elevation = 0.0,
     this.actions,
     this.iconColor,
@@ -44,10 +47,8 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
           new SizedBox(width: 4.0),
           new Hero(
             tag: tag,
-            child: new CircleAvatar(
-              radius: null,
-              backgroundColor: Colors.grey.shade400,
-              backgroundImage: image,
+            child: circleAvatar(
+              imageUrl: imageUrl,
             ),
           ),
         ],
@@ -113,7 +114,6 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  // TODO: implement preferredSize
   @override
   Size get preferredSize => new Size.fromHeight(kToolbarHeight);
 }

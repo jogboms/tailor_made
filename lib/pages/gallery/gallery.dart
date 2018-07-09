@@ -1,17 +1,35 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/gallery/gallery_grid.dart';
 import 'package:tailor_made/pages/gallery/models/image.model.dart';
+import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/back_button.dart';
 import 'package:tailor_made/ui/tm_empty_result.dart';
+import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-class GalleryPage extends StatelessWidget {
+class GalleryPage extends StatefulWidget {
   final List<ImageModel> images;
 
   GalleryPage({
     Key key,
-    @required this.images,
+    this.images,
   }) : super(key: key);
+
+  @override
+  GalleryPageState createState() {
+    return new GalleryPageState();
+  }
+}
+
+class GalleryPageState extends State<GalleryPage> {
+  List<ImageModel> images;
+
+  @override
+  void initState() {
+    images = widget.images;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +45,15 @@ class GalleryPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text("Gallery", style: theme.appBarStyle),
-                Text("${images.length} Photos", style: TextStyle(fontSize: 11.0, color: textBaseColor)),
+                images != null
+                    ? Text(
+                        "${images.length} Photos",
+                        style: TextStyle(
+                          fontSize: 11.0,
+                          color: textBaseColor,
+                        ),
+                      )
+                    : SizedBox(),
               ],
             ),
             backgroundColor: theme.appBarBackgroundColor,
@@ -38,16 +64,42 @@ class GalleryPage extends StatelessWidget {
             centerTitle: false,
             floating: true,
           ),
-          images.isEmpty
-              ? SliverFillRemaining(
-                  child: TMEmptyResult(message: "No images available"),
-                )
-              : SliverPadding(
-                  padding: EdgeInsets.only(top: 3.0),
-                  sliver: GalleryGrid(images: images),
-                ),
+          getBody()
         ],
       ),
     );
+  }
+
+  getContent() {
+    return images.isEmpty
+        ? SliverFillRemaining(
+            child: TMEmptyResult(message: "No images available"),
+          )
+        : SliverPadding(
+            padding: EdgeInsets.only(top: 3.0),
+            sliver: GalleryGrid(images: images),
+          );
+  }
+
+  getBody() {
+    if (images == null) {
+      return new StreamBuilder(
+        stream: Cloudstore.gallery.snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return SliverFillRemaining(
+              child: loadingSpinner(),
+            );
+          }
+          images = snapshot.data.documents
+              .map(
+                (item) => ImageModel.fromJson(item.data),
+              )
+              .toList();
+          return getContent();
+        },
+      );
+    }
+    return getContent();
   }
 }

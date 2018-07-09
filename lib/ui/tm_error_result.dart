@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/utils/tm_colors.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class TMErrorResult extends StatelessWidget {
@@ -20,13 +19,13 @@ class TMErrorResult extends StatelessWidget {
         children: <Widget>[
           new Icon(
             Icons.error_outline,
-            color: TMColors.light_grey,
+            color: theme.accentColor,
             size: 50.0,
           ),
           const SizedBox(height: 16.0),
           new Text(
             message,
-            style: theme.smallTextStyle,
+            style: theme.smallTextStyle.copyWith(fontWeight: FontWeight.w600),
           )
         ],
       ),

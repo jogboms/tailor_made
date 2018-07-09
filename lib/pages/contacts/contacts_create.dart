@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
+import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -51,7 +52,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            SizedBox(height: 16.0),
+            SizedBox(height: 32.0),
             _buildAvatar(),
             SizedBox(height: 16.0),
             _buildForm(),
@@ -70,6 +71,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
           key: _formKey,
           autovalidate: _autovalidate,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               TextFormField(
                 decoration: InputDecoration(
@@ -79,7 +81,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
                 validator: validateAlpha(),
                 onSaved: (fullname) => contact.fullname = fullname,
               ),
-              SizedBox(height: 8.0),
+              SizedBox(height: 4.0),
               TextFormField(
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
@@ -89,7 +91,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
                 validator: (value) => (value.length > 0) ? null : "Please input a value",
                 onSaved: (phone) => contact.phone = phone,
               ),
-              SizedBox(height: 8.0),
+              SizedBox(height: 4.0),
               TextFormField(
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.location_city),
@@ -99,9 +101,14 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
                 onSaved: (location) => contact.location = location,
               ),
               SizedBox(height: 32.0),
-              FlatButton(
+              RaisedButton(
+                color: accentColor,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
                 onPressed: _handleSubmit,
-                child: Text("SUBMIT"),
+                child: Text(
+                  "SUBMIT",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
               SizedBox(height: 32.0),
             ],
@@ -113,13 +120,13 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
 
   Widget _buildAvatar() {
     return Container(
-      width: 150.0,
-      height: 150.0,
+      width: 120.0,
+      height: 120.0,
       alignment: Alignment.center,
       padding: EdgeInsets.all(4.0),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.grey.withOpacity(.5), width: 2.0),
+        border: Border.all(color: primarySwatch.withOpacity(.5), width: 2.0),
       ),
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -137,14 +144,12 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
                       backgroundImage: NetworkImage(contact.imageUrl),
                     ),
                   )
-                // TODO
-                // FadeInImage.assetNetwork()
                 : isLoading
-                    ? CircularProgressIndicator()
+                    ? loadingSpinner()
                     : CupertinoButton(
                         child: Icon(
                           Icons.add_a_photo,
-                          color: Colors.black.withOpacity(.35),
+                          color: primarySwatch,
                         ),
                         onPressed: null,
                       ),

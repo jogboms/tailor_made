@@ -53,7 +53,7 @@ class _ContactState extends State<Contact> {
             ];
           },
           body: StreamBuilder(
-            stream: Cloudstore.jobs.where("contact.id", isEqualTo: widget.contact.id).snapshots(),
+            stream: Cloudstore.jobs.where("contactID", isEqualTo: widget.contact.documentID).snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return Center(
@@ -69,7 +69,7 @@ class _ContactState extends State<Contact> {
                 children: [
                   tabView(
                     name: TABS[0].toLowerCase(),
-                    child: JobsListWidget(contact: widget.contact, jobs: jobs),
+                    child: JobsListWidget(contact: widget.contact),
                   ),
                   tabView(
                     name: TABS[1].toLowerCase(),
