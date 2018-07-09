@@ -64,7 +64,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     contact = widget.contact;
     job = new JobModel(
       contactID: contact?.documentID,
-      measurements: createDefaultMeasures(),
+      measurements: contact?.measurements ?? createDefaultMeasures(),
     );
   }
 
