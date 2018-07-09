@@ -20,11 +20,11 @@ class JobListItem extends StatelessWidget {
     final _date = job.createdAt;
     final _price = formatNaira(job.price);
 
-    return new Container(
+    return new Material(
       child: new InkWell(
         onTap: () => TMNavigate(context, JobPage(job: job)),
         child: new Padding(
-          padding: EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
+          padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[

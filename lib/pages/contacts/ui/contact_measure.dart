@@ -99,7 +99,7 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
       try {
         await widget.contact.reference.updateData(widget.contact.toMap());
         closeLoadingSnackBar();
-        showInSnackBar("Successfully Added");
+        showInSnackBar("Successfully Updated");
         Navigator.pop(context, true);
       } catch (e) {
         closeLoadingSnackBar();
