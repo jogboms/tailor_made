@@ -132,15 +132,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 TopRowWidget(stats: stats),
                 BottomRowWidget(stats: stats),
                 new FlatButton(
+                  shape: RoundedRectangleBorder(),
                   padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                   color: accentColor,
                   child: ScaleTransition(
-                    scale: new Tween(begin: 1.0, end: 1.025).animate(controller),
+                    scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
                     alignment: FractionalOffset.center,
                     child: new Text(
                       "TAP TO CREATE",
-                      // style: ralewayMedium(14.0, theme.textMutedColor),
-                      style: ralewayMedium(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
+                      style: ralewayBold(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
                     ),
                   ),
                   onPressed: onTapCreate(),

@@ -103,7 +103,7 @@ class JobPageState extends State<JobPage> {
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Text(
             job.name,
-            style: ralewayLight(18.0, textColor),
+            style: ralewayRegular(18.0, textColor),
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.fade,
@@ -112,7 +112,7 @@ class JobPageState extends State<JobPage> {
         const SizedBox(height: 12.0),
         Text(
           formatNaira(job.price),
-          style: ralewayLight(24.0, textColor).copyWith(
+          style: ralewayRegular(24.0, textColor).copyWith(
             letterSpacing: 1.5,
           ),
           textAlign: TextAlign.center,
@@ -121,7 +121,7 @@ class JobPageState extends State<JobPage> {
         new Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            border: Border(bottom: TMBorderSide()),
+            border: Border(top: TMBorderSide(), bottom: TMBorderSide()),
           ),
           padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
           child: Row(
@@ -136,7 +136,7 @@ class JobPageState extends State<JobPage> {
                     children: <Widget>[
                       Text(
                         "PAID",
-                        style: ralewayLight(8.0),
+                        style: ralewayRegular(8.0),
                         textAlign: TextAlign.center,
                       ),
                       Row(
@@ -146,7 +146,7 @@ class JobPageState extends State<JobPage> {
                           const SizedBox(width: 4.0),
                           Text(
                             formatNaira(job.completedPayment),
-                            style: ralewayLight(18.0, Colors.black87).copyWith(
+                            style: ralewayRegular(18.0, Colors.black87).copyWith(
                               letterSpacing: 1.25,
                             ),
                             textAlign: TextAlign.center,
@@ -162,7 +162,7 @@ class JobPageState extends State<JobPage> {
                   children: <Widget>[
                     Text(
                       "UNPAID",
-                      style: ralewayLight(8.0),
+                      style: ralewayRegular(8.0),
                       textAlign: TextAlign.center,
                     ),
                     Row(
@@ -172,7 +172,7 @@ class JobPageState extends State<JobPage> {
                         const SizedBox(width: 4.0),
                         Text(
                           formatNaira(job.pendingPayment),
-                          style: ralewayLight(18.0, Colors.black87).copyWith(
+                          style: ralewayRegular(18.0, Colors.black87).copyWith(
                             letterSpacing: 1.25,
                           ),
                           textAlign: TextAlign.center,
@@ -208,7 +208,9 @@ class JobPageState extends State<JobPage> {
               contact.fullname,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: ralewayRegular(16.0, textColor),
+              style: ralewayRegular(16.0, textColor).copyWith(
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           iconColor: textColor,

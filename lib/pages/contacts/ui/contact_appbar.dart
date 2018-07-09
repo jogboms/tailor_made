@@ -11,6 +11,8 @@ import 'package:tailor_made/utils/tm_theme.dart';
 
 enum Choice {
   CreateJob,
+  EditMeasure,
+  SendText,
 }
 
 class ContactAppBar extends StatefulWidget {
@@ -29,13 +31,34 @@ class ContactAppBar extends StatefulWidget {
 
 class ContactAppBarState extends State<ContactAppBar> {
   bool isAtTop = false;
+  ContactModel contact;
+
+  _selectChoice(Choice choice) {
+    switch (choice) {
+      case Choice.CreateJob:
+        return TMNavigate(
+          context,
+          JobsCreatePage(contact: contact, contacts: []),
+        );
+      case Choice.EditMeasure:
+        return TMNavigate(
+          context,
+          JobsCreatePage(contact: contact, contacts: []),
+        );
+      case Choice.SendText:
+        return sms(int.parse(contact.phone));
+      default:
+        break;
+    }
+    print(choice);
+  }
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<ReduxState, ContactsViewModel>(
       converter: (store) => ContactsViewModel(store)..contactID = widget.contact.documentID,
       builder: (BuildContext context, ContactsViewModel vm) {
-        final contact = vm.selected;
+        contact = vm.selected;
         return new PreferredSize(
           preferredSize: new Size.fromHeight(kToolbarHeight),
           child: SafeArea(
@@ -50,18 +73,23 @@ class ContactAppBarState extends State<ContactAppBar> {
                   icon: Icons.call,
                   onTap: () => call(int.parse(contact.phone)),
                 ),
-                appBarIcon(
-                  icon: Icons.message,
-                  onTap: () => sms(int.parse(contact.phone)),
-                ),
-                appBarIcon(
-                  icon: Icons.add,
-                  onTap: () {
-                    TMNavigate(
-                      context,
-                      JobsCreatePage(contact: contact, contacts: []),
-                    );
-                  },
+                new PopupMenuButton<Choice>(
+                  icon: Icon(Icons.more_vert, color: Colors.white),
+                  onSelected: _selectChoice,
+                  itemBuilder: (BuildContext context) => [
+                        new PopupMenuItem<Choice>(
+                          value: Choice.CreateJob,
+                          child: new Text("Create Job"),
+                        ),
+                        new PopupMenuItem<Choice>(
+                          value: Choice.EditMeasure,
+                          child: new Text("Edit Measurements"),
+                        ),
+                        new PopupMenuItem<Choice>(
+                          value: Choice.SendText,
+                          child: new Text("Send Text"),
+                        ),
+                      ],
                 ),
               ],
             ),

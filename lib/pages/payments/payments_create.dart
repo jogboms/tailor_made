@@ -37,7 +37,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
       Padding(
         child: RaisedButton(
           color: accentColor,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+          shape: StadiumBorder(),
           child: Text(
             "FINISH",
             style: TextStyle(color: Colors.white),

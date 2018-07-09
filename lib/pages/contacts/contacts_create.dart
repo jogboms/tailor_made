@@ -103,7 +103,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
               SizedBox(height: 32.0),
               RaisedButton(
                 color: accentColor,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+                shape: StadiumBorder(),
                 onPressed: _handleSubmit,
                 child: Text(
                   "SUBMIT",
