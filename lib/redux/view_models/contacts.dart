@@ -16,7 +16,7 @@ class ContactsViewModel extends ViewModel {
   ContactModel get selected {
     if (contactID != null) {
       return this.store.state.contacts.contacts.firstWhere(
-            (_) => _.documentID == contactID,
+            (_) => _.id == contactID,
           );
     }
     return null;

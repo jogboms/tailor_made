@@ -53,7 +53,7 @@ class _ContactState extends State<Contact> {
             ];
           },
           body: StreamBuilder(
-            stream: Cloudstore.jobs.where("contactID", isEqualTo: widget.contact.documentID).snapshots(),
+            stream: Cloudstore.jobs.where("contactID", isEqualTo: widget.contact.id).snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return Center(

@@ -63,7 +63,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     super.initState();
     contact = widget.contact;
     job = new JobModel(
-      contactID: contact?.documentID,
+      contactID: contact?.id,
       measurements: contact?.measurements ?? createDefaultMeasures(),
     );
   }
@@ -219,7 +219,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       job
         ..pendingPayment = job.price
         ..images = fireImages.map((img) => img.image).toList()
-        ..contactID = contact.documentID;
+        ..contactID = contact.id;
 
       try {
         await Cloudstore.jobs.add(job.toMap());
@@ -329,7 +329,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           ..isLoading = false
           ..isSucess = true
           ..image = ImageModel(
-            contactID: widget.contact.documentID,
+            contactID: widget.contact.id,
             src: imageUrl,
             path: ref.path,
           );

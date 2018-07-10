@@ -50,9 +50,7 @@ class ContactModel extends Model {
   }
 
   factory ContactModel.fromDoc(DocumentSnapshot doc) {
-    return ContactModel.fromJson(doc.data)
-      ..reference = doc.reference
-      ..documentID = doc.documentID;
+    return ContactModel.fromJson(doc.data)..reference = doc.reference;
   }
 
   toMap() {
@@ -62,7 +60,6 @@ class ContactModel extends Model {
       "phone": phone,
       "location": location,
       "imageUrl": imageUrl,
-      "documentID": documentID,
       "createdAt": createdAt.toString(),
       "measurements": measurements.map((measure) => measure.toMap()).toList(),
       "totalJobs": totalJobs,

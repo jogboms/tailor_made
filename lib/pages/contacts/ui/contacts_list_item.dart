@@ -31,7 +31,7 @@ class ContactsListItem extends StatelessWidget {
 
     Hero avatar() {
       return new Hero(
-        tag: contact.documentID,
+        tag: contact.id,
         child: new CircleAvatar(
           radius: 24.0,
           backgroundColor: theme.accentColor.withOpacity(.5),

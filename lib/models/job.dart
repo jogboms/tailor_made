@@ -72,9 +72,7 @@ class JobModel extends Model {
   }
 
   factory JobModel.fromDoc(DocumentSnapshot doc) {
-    return JobModel.fromJson(doc.data)
-      ..reference = doc.reference
-      ..documentID = doc.documentID;
+    return JobModel.fromJson(doc.data)..reference = doc.reference;
   }
 
   @override
@@ -87,7 +85,6 @@ class JobModel extends Model {
       "completedPayment": completedPayment,
       "pendingPayment": pendingPayment,
       "notes": notes,
-      "documentID": documentID,
       "images": images.map((image) => image.toMap()).toList(),
       "createdAt": createdAt.toString(),
       "measurements": measurements.map((measure) => measure.toMap()).toList(),

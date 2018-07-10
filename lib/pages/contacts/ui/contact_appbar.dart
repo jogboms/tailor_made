@@ -71,7 +71,7 @@ class ContactAppBarState extends State<ContactAppBar> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<ReduxState, ContactsViewModel>(
-      converter: (store) => ContactsViewModel(store)..contactID = widget.contact.documentID,
+      converter: (store) => ContactsViewModel(store)..contactID = widget.contact.id,
       builder: (BuildContext context, ContactsViewModel vm) {
         contact = vm.selected;
         return new PreferredSize(
@@ -135,7 +135,7 @@ class ContactAppBarState extends State<ContactAppBar> {
           ),
           new SizedBox(width: isAtTop ? 0.0 : 4.0),
           new Hero(
-            tag: widget.contact.documentID,
+            tag: widget.contact.id,
             child: circleAvatar(
               radius: isAtTop ? 0.0 : null,
               imageUrl: widget.contact.imageUrl,
