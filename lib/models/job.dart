@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/models/measure.dart';
@@ -14,24 +15,24 @@ class JobModel extends Model {
   double pendingPayment;
   String notes;
   List<ImageModel> images;
-  DateTime createdAt;
   List<MeasureModel> measurements;
   List<PaymentModel> payments;
   bool isComplete;
+  DateTime createdAt;
 
   JobModel({
     id,
-    this.contactID,
+    @required this.contactID,
     this.name,
     this.price,
     this.notes,
     this.images,
     this.completedPayment = 0.0,
     this.pendingPayment = 0.0,
-    createdAt,
     this.measurements = const [],
     this.payments = const [],
     this.isComplete = false,
+    createdAt,
   })  : id = id ?? uuid(),
         createdAt = createdAt ?? DateTime.now();
 

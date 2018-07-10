@@ -86,7 +86,7 @@ class JobMeasureBlock extends StatelessWidget {
                 ),
                 width: constraints.maxWidth / 2,
                 child: TextFormField(
-                  initialValue: measure.value,
+                  initialValue: measure.value.toString(),
                   keyboardType: TextInputType.number,
                   style: TextStyle(fontSize: 20.0, color: Colors.black),
                   decoration: new InputDecoration(
@@ -95,7 +95,7 @@ class JobMeasureBlock extends StatelessWidget {
                     border: InputBorder.none,
                     labelStyle: TextStyle(fontSize: 14.0),
                   ),
-                  onSaved: (value) => measure.value = value,
+                  onSaved: (value) => measure.value = double.tryParse(value),
                 ),
               );
             },

@@ -33,7 +33,7 @@ class MeasureLists extends StatelessWidget {
         )
       ]..addAll(
           measurements
-              .where((item) => item.value.isNotEmpty)
+              .where((item) => item.value > 0)
               .take(5)
               .map(
                 (item) => new MeasureListItem(item),

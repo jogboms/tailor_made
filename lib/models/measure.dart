@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:tailor_made/models/main.dart';
 
 List<MeasureModel> createDefaultMeasures() {
@@ -36,22 +37,22 @@ class MeasureModelType {
 
 class MeasureModel extends Model {
   String name;
-  String value;
+  double value;
   String unit;
   String type;
 
   MeasureModel({
-    this.name,
-    this.value,
+    @required this.name,
+    this.value = 0.0,
     this.unit = "In",
-    this.type,
+    @required this.type,
   });
 
   factory MeasureModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
     return new MeasureModel(
       name: json['name'],
-      value: json['value'],
+      value: double.tryParse(json['value'].toString()),
       unit: json['unit'],
       type: json['type'],
     );
