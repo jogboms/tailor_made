@@ -3,6 +3,48 @@ import * as functions from "firebase-functions";
 
 admin.initializeApp(functions.config().firebase);
 
+async function aggregateStats() {
+  const db = admin.firestore();
+  const stats = db.doc("stats/current");
+
+  const jobsSnap = await db.collection("jobs").get();
+
+  let completedJob = 0,
+    pendingJob = 0,
+    completedPrice = 0,
+    totalPrice = 0,
+    totalImages = 0;
+
+  jobsSnap.forEach(doc => {
+    const data = doc.data();
+    totalPrice += data.price;
+    totalImages += data.images.length;
+    completedPrice += data.payments.reduce((acc, cur) => acc + cur.price, 0);
+
+    if (data.isComplete) {
+      completedJob += 1;
+    } else {
+      pendingJob += 1;
+    }
+  });
+
+  return stats.update({
+    gallery: {
+      total: totalImages
+    },
+    jobs: {
+      total: jobsSnap.size,
+      pending: pendingJob,
+      completed: completedJob
+    },
+    payments: {
+      total: totalPrice,
+      pending: totalPrice - completedPrice,
+      completed: completedPrice
+    }
+  });
+}
+
 export const aggregator = functions.firestore
   .document("jobs/{jobId}")
   .onWrite((change, context) => {
@@ -48,50 +90,20 @@ export const aggregateJobPayments = functions.firestore
     });
   });
 
-export const aggregateStats = functions.firestore
+export const aggregateStatsJobs = functions.firestore
   .document("jobs/{jobId}")
+  .onWrite(async (change, context) => aggregateStats());
+
+export const aggregateStatsContacts = functions.firestore
+  .document("contacts/{contactId}")
   .onWrite(async (change, context) => {
     const db = admin.firestore();
     const stats = db.doc("stats/current");
-
-    const jobsSnap = await db.collection("jobs").get();
     const contactsSnap = await db.collection("contacts").get();
-
-    let completedJob = 0,
-      pendingJob = 0,
-      completedPrice = 0,
-      totalPrice = 0,
-      totalImages = 0;
-
-    jobsSnap.forEach(doc => {
-      const data = doc.data();
-      totalPrice += data.price;
-      totalImages += data.images.length;
-      completedPrice += data.payments.reduce((acc, cur) => acc + cur.price, 0);
-
-      if (data.isComplete) {
-        completedJob += 1;
-      } else {
-        pendingJob += 1;
-      }
-    });
 
     return stats.update({
       contacts: {
         total: contactsSnap.size
-      },
-      gallery: {
-        total: totalImages
-      },
-      jobs: {
-        total: jobsSnap.size,
-        pending: pendingJob,
-        completed: completedJob
-      },
-      payments: {
-        total: totalPrice,
-        pending: totalPrice - completedPrice,
-        completed: completedPrice
       }
     });
   });
