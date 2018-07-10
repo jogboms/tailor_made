@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tailor_made/ui/circle_avatar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -100,15 +101,18 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
       children.addAll(actions);
     }
 
-    return Material(
-      color: backgroundColor,
-      elevation: elevation,
-      child: SafeArea(
-        top: true,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: children,
+    return new AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
+      child: Material(
+        color: backgroundColor,
+        elevation: elevation,
+        child: SafeArea(
+          top: true,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: children,
+          ),
         ),
       ),
     );

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
-import 'package:tailor_made/utils/tm_child_dialog.dart';
+import 'package:tailor_made/utils/tm_image_choice_dialog.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/utils/tm_validators.dart';
@@ -177,21 +177,7 @@ class ContactFormState extends State<ContactForm> with SnackBarProvider {
   }
 
   Future<Null> _handlePhotoButtonPressed() async {
-    var source = await showChildDialog(
-      context: context,
-      child: new SimpleDialog(
-        children: <Widget>[
-          new SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, ImageSource.camera),
-            child: Padding(child: Text("Camera"), padding: EdgeInsets.all(8.0)),
-          ),
-          new SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, ImageSource.gallery),
-            child: Padding(child: Text("Gallery"), padding: EdgeInsets.all(8.0)),
-          ),
-        ],
-      ),
-    );
+    var source = await imageChoiceDialog(context: context);
     if (source == null) return;
     var imageFile = await ImagePicker.pickImage(source: source, maxWidth: 200.0, maxHeight: 200.0);
     var random = new Random().nextInt(10000);

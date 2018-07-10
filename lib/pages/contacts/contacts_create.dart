@@ -4,7 +4,7 @@ import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_form.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
-import 'package:tailor_made/utils/tm_child_dialog.dart';
+import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -62,18 +62,12 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
   }
 
   void _handleSuccess() async {
-    var choice = await showChildDialog(
+    var choice = await confirmDialog(
       context: context,
-      child: new AlertDialog(
-        content: Text("Do you wish to add another?"),
-        actions: <Widget>[
-          FlatButton(onPressed: () => Navigator.pop(context, 1), child: Text("DISMISS")),
-          FlatButton(onPressed: () => Navigator.pop(context, 2), child: Text("OK")),
-        ],
-      ),
+      title: Text("Do you wish to add another?"),
     );
     if (choice == null) return;
-    if (choice == 1) {
+    if (choice == false) {
       Navigator.pop(context, true);
     } else {
       contact = new ContactModel();

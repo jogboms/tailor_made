@@ -15,6 +15,7 @@ class MeasuresPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         iconTheme: IconThemeData(color: Colors.black87),
         backgroundColor: Colors.transparent,
         elevation: 0.0,

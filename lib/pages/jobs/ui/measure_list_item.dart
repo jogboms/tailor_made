@@ -29,7 +29,7 @@ class MeasureListItem extends StatelessWidget {
       ),
     ];
 
-    if (item.value.isNotEmpty) {
+    if (item.value?.isNotEmpty ?? false) {
       children.addAll([
         Text("${item.value} ", style: ralewayRegular(16.0, accentColor)),
         SizedBox(width: 2.0),

@@ -11,9 +11,11 @@ import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/contacts.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
+import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_format_date.dart';
 import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class JobPage extends StatefulWidget {
@@ -30,7 +32,8 @@ class JobPage extends StatefulWidget {
   }
 }
 
-class JobPageState extends State<JobPage> {
+class JobPageState extends State<JobPage> with SnackBarProvider {
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
   JobModel job;
 
   @override
@@ -44,6 +47,7 @@ class JobPageState extends State<JobPage> {
     final TMTheme theme = TMTheme.of(context);
 
     return new Scaffold(
+      key: scaffoldKey,
       backgroundColor: theme.scaffoldColor,
       body: new StreamBuilder(
         stream: job.reference.snapshots(),
@@ -62,6 +66,7 @@ class JobPageState extends State<JobPage> {
                   flexibleSpace: FlexibleSpaceBar(background: buildHeader()),
                   pinned: true,
                   titleSpacing: 0.0,
+                  brightness: Brightness.light,
                   elevation: 1.0,
                   automaticallyImplyLeading: false,
                   centerTitle: false,
@@ -228,15 +233,31 @@ class JobPageState extends State<JobPage> {
                 job.isComplete ? Icons.check_box : Icons.check_box_outline_blank,
                 color: textBaseColor.shade900,
               ),
-              onPressed: () {
-                job.reference.updateData({
-                  "isComplete": !job.isComplete,
-                });
-              },
+              onPressed: onTapComplete,
             )
           ],
         );
       },
     );
+  }
+
+  void onTapComplete() async {
+    var choice = await confirmDialog(
+      context: context,
+      title: Text("Marking this job as complete?"),
+    );
+    if (choice == null || choice == false) return;
+
+    showLoadingSnackBar();
+
+    try {
+      await job.reference.updateData({
+        "isComplete": !job.isComplete,
+      });
+      closeLoadingSnackBar();
+    } catch (e) {
+      closeLoadingSnackBar();
+      showInSnackBar(e.toString());
+    }
   }
 }

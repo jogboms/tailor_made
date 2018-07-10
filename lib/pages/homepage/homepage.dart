@@ -99,6 +99,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: theme.scaffoldColor,
+        brightness: Brightness.light,
         // actions: <Widget>[
         //   new IconButton(
         //     icon: new Icon(

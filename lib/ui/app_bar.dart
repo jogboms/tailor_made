@@ -14,6 +14,7 @@ AppBar appBar(
     elevation: elevation,
     backgroundColor: theme.appBarBackgroundColor,
     leading: backButton(context),
+    brightness: Brightness.light,
     centerTitle: centerTitle,
     title: new Text(
       title,
