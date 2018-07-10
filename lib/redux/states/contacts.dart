@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/models/contact.dart';
 
 enum ContactsStatus {
   loading,

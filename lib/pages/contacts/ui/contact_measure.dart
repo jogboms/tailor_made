@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
-import 'package:tailor_made/pages/jobs/ui/job_create_item.dart';
+import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/pages/jobs/ui/measure_create_items.dart';
 import 'package:tailor_made/pages/jobs/ui/measures.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -30,7 +30,7 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
     List<Widget> children = [];
 
     children.add(makeHeader("Measurements", "Inches (In)"));
-    children.add(JobMeasures(widget.contact.measurements));
+    children.add(MeasureCreateItems(widget.contact.measurements));
 
     children.add(
       Padding(

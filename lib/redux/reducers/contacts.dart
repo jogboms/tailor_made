@@ -19,7 +19,7 @@ ContactsState reducer(ReduxState state, ActionType action) {
     // case ReduxActions.removeContact:
     //   List<ContactModel> _contacts = contacts.contacts
     //       .where(
-    //         (contact) => contact.documentID != action.payload.documentID,
+    //         (contact) => contact.id != action.payload.id,
     //       )
     //       .toList();
     //   return contacts.copyWith(contacts: _contacts);

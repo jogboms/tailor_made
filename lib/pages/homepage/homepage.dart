@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tailor_made/models/stats.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
-import 'package:tailor_made/pages/homepage/models/stats.model.dart';
 import 'package:tailor_made/pages/homepage/ui/bottom_row.dart';
 import 'package:tailor_made/pages/homepage/ui/header.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';

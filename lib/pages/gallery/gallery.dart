@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/gallery/gallery_grid.dart';
-import 'package:tailor_made/pages/gallery/models/image.model.dart';
+import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/back_button.dart';
 import 'package:tailor_made/ui/tm_empty_result.dart';

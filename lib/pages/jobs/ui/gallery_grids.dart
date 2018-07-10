@@ -5,9 +5,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tailor_made/models/image.dart';
+import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/pages/gallery/gallery.dart';
-import 'package:tailor_made/pages/gallery/models/image.model.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grid_item.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_image_choice_dialog.dart';
@@ -142,6 +142,7 @@ class GalleryGridsState extends State<GalleryGrids> {
           ..isSucess = true
           ..image = ImageModel(
             contactID: widget.job.contactID,
+            jobID: widget.job.id,
             src: imageUrl,
             path: ref.path,
           );

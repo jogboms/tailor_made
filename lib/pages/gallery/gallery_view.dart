@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
-import 'package:tailor_made/pages/gallery/models/image.model.dart';
+import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/models/image.dart';
+import 'package:tailor_made/models/job.dart';
+import 'package:tailor_made/pages/contacts/contact.dart';
+import 'package:tailor_made/pages/jobs/job.dart';
 import 'package:tailor_made/redux/states/main.dart';
-import 'package:tailor_made/redux/view_models/contacts.dart';
+import 'package:tailor_made/redux/view_models/contact_job.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
 
 class GalleryView extends StatelessWidget {
   final ImageModel image;
@@ -18,13 +22,16 @@ class GalleryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<ReduxState, ContactsViewModel>(
-      converter: (store) => ContactsViewModel(store)..contactID = image.contactID,
-      builder: (BuildContext context, ContactsViewModel vm) {
-        final contact = vm.selected;
+    return new StoreConnector<ReduxState, ContactJobViewModel>(
+      converter: (store) => ContactJobViewModel(store)
+        ..contactID = image.contactID
+        ..jobID = image.jobID,
+      builder: (BuildContext context, ContactJobViewModel vm) {
+        final contact = vm.selectedContact;
+        final job = vm.selectedJob;
         return new Scaffold(
           backgroundColor: Colors.black87,
-          appBar: MyAppBar(contact: contact),
+          appBar: MyAppBar(contact: contact, job: job),
           body: new Hero(
             tag: image.src,
             child: new PhotoView(
@@ -40,8 +47,13 @@ class GalleryView extends StatelessWidget {
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final ContactModel contact;
+  final JobModel job;
 
-  MyAppBar({Key key, this.contact}) : super(key: key);
+  MyAppBar({
+    Key key,
+    this.contact,
+    this.job,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,16 +76,14 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Icons.work,
                   color: Colors.white,
                 ),
-                // TODO
-                onPressed: null,
+                onPressed: () => TMNavigate(context, JobPage(job: job)),
               ),
               IconButton(
                 icon: Icon(
                   Icons.person,
                   color: Colors.white,
                 ),
-                // onPressed: () => TMNavigate(context, Contact(contact: contact)),
-                onPressed: null,
+                onPressed: () => TMNavigate(context, ContactPage(contact: contact)),
               ),
               IconButton(
                 icon: Icon(

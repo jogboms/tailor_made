@@ -6,13 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
-import 'package:tailor_made/pages/gallery/models/image.model.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
-import 'package:tailor_made/pages/jobs/models/measure.model.dart';
+import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/models/image.dart';
+import 'package:tailor_made/models/job.dart';
+import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/pages/jobs/job.dart';
 import 'package:tailor_made/pages/jobs/ui/contact_lists.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grid_item.dart';
-import 'package:tailor_made/pages/jobs/ui/job_create_item.dart';
+import 'package:tailor_made/pages/jobs/ui/measure_create_items.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
@@ -63,7 +64,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     super.initState();
     contact = widget.contact;
     job = new JobModel(
-      contactID: contact?.documentID,
+      contactID: contact?.id,
       measurements: contact?.measurements ?? createDefaultMeasures(),
     );
   }
@@ -101,7 +102,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       children.add(buildImageGrid());
 
       children.add(makeHeader("Measurements", "Inches (In)"));
-      children.add(JobMeasures(job.measurements));
+      children.add(MeasureCreateItems(job.measurements));
 
       children.add(makeHeader("Additional Notes"));
       children.add(buildAdditional());
@@ -219,12 +220,15 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       job
         ..pendingPayment = job.price
         ..images = fireImages.map((img) => img.image).toList()
-        ..contactID = contact.documentID;
+        ..contactID = contact.id;
 
       try {
-        await Cloudstore.jobs.add(job.toMap());
-        closeLoadingSnackBar();
-        Navigator.pop(context);
+        final ref = Cloudstore.jobs.document(job.id);
+        await ref.setData(job.toMap());
+        ref.snapshots().listen((snap) {
+          closeLoadingSnackBar();
+          Navigator.pushReplacement(context, TMNavigate.slideIn(JobPage(job: JobModel.fromDoc(snap))));
+        });
       } catch (e) {
         closeLoadingSnackBar();
         showInSnackBar(e.toString());
@@ -251,7 +255,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
             ),
           ),
         ),
-        onSaved: (value) => job.notes = value,
+        onSaved: (value) => job.notes = value.trim(),
       ),
     );
   }
@@ -329,7 +333,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           ..isLoading = false
           ..isSucess = true
           ..image = ImageModel(
-            contactID: widget.contact.documentID,
+            contactID: widget.contact.id,
+            jobID: job.id,
             src: imageUrl,
             path: ref.path,
           );
@@ -361,7 +366,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           ),
         ),
         validator: (value) => (value.length > 0) ? null : "Please input a name",
-        onSaved: (value) => job.name = value,
+        onSaved: (value) => job.name = value.trim(),
       ),
     );
   }
@@ -385,7 +390,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
             ),
           ),
         ),
-        validator: (value) => (value.length > 0) ? null : "Please input a price",
+        validator: (value) => (controller.numberValue > 0) ? null : "Please input a price",
         onSaved: (value) => job.price = controller.numberValue,
       ),
     );

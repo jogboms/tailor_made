@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/pages/gallery/gallery_grid.dart';
-import 'package:tailor_made/pages/gallery/models/image.model.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/models/image.dart';
+import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/ui/tm_empty_result.dart';
 
 class GalleryGridWidget extends StatelessWidget {

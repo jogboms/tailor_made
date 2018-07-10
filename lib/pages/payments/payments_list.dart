@@ -1,7 +1,7 @@
 import 'dart:math' show max;
 
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/payments/models/payment.model.dart';
+import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/pages/payments/payment_list_item.dart';
 import 'package:tailor_made/ui/tm_empty_result.dart';
 

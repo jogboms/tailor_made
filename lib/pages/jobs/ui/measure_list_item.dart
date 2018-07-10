@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/jobs/models/measure.model.dart';
+import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class MeasureListItem extends StatelessWidget {
@@ -29,7 +29,7 @@ class MeasureListItem extends StatelessWidget {
       ),
     ];
 
-    if (item.value?.isNotEmpty ?? false) {
+    if (item.value != null && item.value > 0) {
       children.addAll([
         Text("${item.value} ", style: ralewayRegular(16.0, accentColor)),
         SizedBox(width: 2.0),

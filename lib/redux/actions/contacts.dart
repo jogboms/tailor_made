@@ -1,4 +1,4 @@
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 
 class InitContact extends ActionType {

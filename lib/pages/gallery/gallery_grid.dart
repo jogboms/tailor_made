@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/gallery/gallery_grid_item.dart';
-import 'package:tailor_made/pages/gallery/models/image.model.dart';
+import 'package:tailor_made/models/image.dart';
 
 class GalleryGrid extends StatelessWidget {
   final List<ImageModel> images;

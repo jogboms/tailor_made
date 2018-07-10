@@ -1,21 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_appbar.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_gallery_grid.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_jobs_list.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_payments_list.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 const TABS = const ["Jobs", "Gallery", "Payments"];
 
-class Contact extends StatefulWidget {
+class ContactPage extends StatefulWidget {
   final ContactModel contact;
 
-  Contact({
+  ContactPage({
     Key key,
     this.contact,
   }) : super(key: key);
@@ -24,7 +24,7 @@ class Contact extends StatefulWidget {
   _ContactState createState() => new _ContactState();
 }
 
-class _ContactState extends State<Contact> {
+class _ContactState extends State<ContactPage> {
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
@@ -53,7 +53,7 @@ class _ContactState extends State<Contact> {
             ];
           },
           body: StreamBuilder(
-            stream: Cloudstore.jobs.where("contactID", isEqualTo: widget.contact.documentID).snapshots(),
+            stream: Cloudstore.jobs.where("contactID", isEqualTo: widget.contact.id).snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return Center(

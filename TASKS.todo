@@ -1,9 +1,17 @@
 PENDING:
-  ☐ add more flesh to payment view
-  ☐ implement share payment + image
-  ☐ add a documentID to job on cloud function
-  ☐ tie payment model + image model to job documentID
+☐ update stats db on creation @high
+☐ delete-able payment
+☐ delete-able images
+☐ implement share payment + image
+
 
 COMPLETED:
+  ✔ add more flesh to payment view @done(18-07-10 15:36)
+  ✔ navigate to job after creation @high @done(18-07-10 15:23)
+  ✔ navigate to client after creation @high @done(18-07-10 15:23)
+  ✔ trim strings on create @high @done(18-07-10 14:50)
+  ✔ add validation for zero payment @high @done(18-07-10 14:47)
+  ✔ tie payment model + image model to job documentID @done(18-07-10 14:47)
+  ✔ add a documentID to job on cloud function @done(18-07-10 14:26)
   ✔ align create image @done(18-07-09 17:20)
   ✔ assign measurements to customer not job @done(18-07-09 17:20)

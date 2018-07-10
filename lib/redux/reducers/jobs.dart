@@ -20,7 +20,7 @@ JobsState reducer(ReduxState state, ActionType action) {
     // case ReduxActions.removeJob:
     //   List<JobModel> _jobs = jobs.jobs
     //       .where(
-    //         (job) => job.documentID != action.payload.documentID,
+    //         (job) => job.id != action.payload.id,
     //       )
     //       .toList();
     //   return jobs.copyWith(jobs: _jobs);

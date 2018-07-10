@@ -80,7 +80,7 @@ export const aggregateStats = functions.firestore
       contacts: {
         total: contactsSnap.size
       },
-      images: {
+      gallery: {
         total: totalImages
       },
       jobs: {
@@ -117,13 +117,5 @@ export const aggregateContactStats = functions.firestore
     return contact.update({
       totalJobs: jobsSnap.size,
       pendingJobs: contactSnap.pendingJobs + count
-    });
-  });
-
-export const updateContact = functions.firestore
-  .document("contacts/{contactId}")
-  .onCreate((change, context) => {
-    return change.data().update({
-      documentID: context.params.contactId
     });
   });
