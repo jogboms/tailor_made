@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
+import 'package:tailor_made/pages/jobs/job.dart';
 import 'package:tailor_made/redux/states/main.dart';
-import 'package:tailor_made/redux/view_models/contacts.dart';
+import 'package:tailor_made/redux/view_models/contact_job.dart';
 import 'package:tailor_made/utils/tm_format_date.dart';
 import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -23,10 +24,13 @@ class PaymentPage extends StatelessWidget {
 
     final date = formatDate(payment.createdAt, day: "EEEE", month: "MMMM");
 
-    return new StoreConnector<ReduxState, ContactsViewModel>(
-      converter: (store) => ContactsViewModel(store)..contactID = payment.contactID,
-      builder: (BuildContext context, ContactsViewModel vm) {
-        final contact = vm.selected;
+    return new StoreConnector<ReduxState, ContactJobViewModel>(
+      converter: (store) => ContactJobViewModel(store)
+        ..contactID = payment.contactID
+        ..jobID = payment.jobID,
+      builder: (BuildContext context, ContactJobViewModel vm) {
+        final contact = vm.selectedContact;
+        final job = vm.selectedJob;
         return Scaffold(
           appBar: AppBar(
             iconTheme: IconThemeData(color: Colors.black87),
@@ -39,8 +43,7 @@ class PaymentPage extends StatelessWidget {
                   Icons.work,
                   color: titleBaseColor,
                 ),
-                // TODO
-                onPressed: null,
+                onPressed: () => TMNavigate(context, JobPage(job: job)),
               ),
               IconButton(
                 icon: Icon(
