@@ -1,5 +1,4 @@
 import 'package:tailor_made/models/main.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
 import 'package:tailor_made/utils/tm_uuid.dart';
 
 class ImageModel extends Model {

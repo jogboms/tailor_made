@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/jobs/job.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_months.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';

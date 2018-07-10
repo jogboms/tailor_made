@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/contacts.dart';
-import 'package:tailor_made/pages/homepage/models/stats.model.dart';
+import 'package:tailor_made/models/stats.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';
 import 'package:tailor_made/pages/jobs/jobs.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';

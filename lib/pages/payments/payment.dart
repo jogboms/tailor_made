@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
-import 'package:tailor_made/pages/payments/models/payment.model.dart';
+import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/contacts.dart';
 import 'package:tailor_made/utils/tm_format_date.dart';

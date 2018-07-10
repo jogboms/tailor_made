@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/jobs/models/measure.model.dart';
+import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class MeasureListItem extends StatelessWidget {

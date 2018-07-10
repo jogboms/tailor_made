@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/pages/jobs/ui/job_create_item.dart';
 import 'package:tailor_made/pages/jobs/ui/measures.dart';
 import 'package:tailor_made/ui/app_bar.dart';

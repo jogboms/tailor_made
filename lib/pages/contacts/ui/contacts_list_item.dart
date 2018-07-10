@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_phone.dart';
 import 'package:tailor_made/utils/tm_theme.dart';

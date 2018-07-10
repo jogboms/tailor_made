@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grids.dart';
 import 'package:tailor_made/pages/jobs/ui/measure_lists.dart';
 import 'package:tailor_made/pages/jobs/ui/payment_grids.dart';

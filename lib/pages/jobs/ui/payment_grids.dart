@@ -1,9 +1,9 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/pages/jobs/ui/payment_grid_item.dart';
-import 'package:tailor_made/pages/payments/models/payment.model.dart';
+import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/pages/payments/payments.dart';
 import 'package:tailor_made/pages/payments/payments_create.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';

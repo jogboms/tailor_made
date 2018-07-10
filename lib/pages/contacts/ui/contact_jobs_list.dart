@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/pages/jobs/jobs_list.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/jobs.dart';

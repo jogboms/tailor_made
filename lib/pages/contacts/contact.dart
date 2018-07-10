@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_appbar.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_gallery_grid.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_jobs_list.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_payments_list.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_theme.dart';

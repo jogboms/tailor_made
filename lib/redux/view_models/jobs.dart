@@ -1,6 +1,6 @@
 import 'package:redux/redux.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/redux/actions/jobs.dart';
 import 'package:tailor_made/redux/states/jobs.dart';
 import 'package:tailor_made/redux/states/main.dart';

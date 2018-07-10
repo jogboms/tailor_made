@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/models/main.dart';
-import 'package:tailor_made/pages/jobs/models/measure.model.dart';
+import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/utils/tm_uuid.dart';
 
 class ContactModel extends Model {

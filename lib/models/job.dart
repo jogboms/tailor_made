@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/main.dart';
-import 'package:tailor_made/pages/gallery/models/image.model.dart';
-import 'package:tailor_made/pages/jobs/models/measure.model.dart';
-import 'package:tailor_made/pages/payments/models/payment.model.dart';
+import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/utils/tm_uuid.dart';
 
 class JobModel extends Model {
