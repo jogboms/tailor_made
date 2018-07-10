@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/pages/contacts/ui/contacts_list_item.dart';
+import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/contacts.dart';
 import 'package:tailor_made/ui/app_bar.dart';
@@ -32,6 +33,8 @@ class _ContactsPageState extends State<ContactsPage> {
 
     return new StoreConnector<ReduxState, ContactsViewModel>(
       converter: (store) => ContactsViewModel(store),
+      onInit: (store) => store.dispatch(new InitDataEvents()),
+      onDispose: (store) => store.dispatch(new DisposeDataEvents()),
       builder: (BuildContext context, ContactsViewModel vm) {
         return new Scaffold(
           backgroundColor: theme.scaffoldColor,
