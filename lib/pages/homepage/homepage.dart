@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/stats.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/pages/homepage/ui/bottom_row.dart';
@@ -8,6 +10,9 @@ import 'package:tailor_made/pages/homepage/ui/helpers.dart';
 import 'package:tailor_made/pages/homepage/ui/stats.dart';
 import 'package:tailor_made/pages/homepage/ui/top_row.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
+import 'package:tailor_made/redux/actions/main.dart';
+import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/redux/view_models/contacts.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
@@ -51,7 +56,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    onTapCreate() {
+    onTapCreate(List<ContactModel> contacts) {
       return () async {
         CreateOptions result = await showDialog<CreateOptions>(
           context: context,
@@ -88,7 +93,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             TMNavigate(context, ContactsCreatePage());
             break;
           case CreateOptions.jobs:
-            TMNavigate(context, JobsCreatePage(contacts: []));
+            TMNavigate(context, JobsCreatePage(contacts: contacts));
             break;
         }
       };
@@ -132,20 +137,27 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 StatsWidget(stats: stats),
                 TopRowWidget(stats: stats),
                 BottomRowWidget(stats: stats),
-                new FlatButton(
-                  shape: RoundedRectangleBorder(),
-                  padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
-                  color: accentColor,
-                  child: ScaleTransition(
-                    scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
-                    alignment: FractionalOffset.center,
-                    child: new Text(
-                      "TAP TO CREATE",
-                      style: ralewayBold(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
-                    ),
-                  ),
-                  onPressed: onTapCreate(),
-                )
+                new StoreConnector<ReduxState, ContactsViewModel>(
+                  converter: (store) => ContactsViewModel(store),
+                  onInit: (store) => store.dispatch(new InitDataEvents()),
+                  onDispose: (store) => store.dispatch(new DisposeDataEvents()),
+                  builder: (BuildContext context, ContactsViewModel vm) {
+                    return new FlatButton(
+                      shape: RoundedRectangleBorder(),
+                      padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
+                      color: accentColor,
+                      child: ScaleTransition(
+                        scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
+                        alignment: FractionalOffset.center,
+                        child: new Text(
+                          "TAP TO CREATE",
+                          style: ralewayBold(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
+                        ),
+                      ),
+                      onPressed: onTapCreate(vm.contacts),
+                    );
+                  },
+                ),
               ],
             ),
           );

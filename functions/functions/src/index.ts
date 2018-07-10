@@ -1,121 +1,21 @@
-import * as admin from "firebase-admin";
-import * as functions from "firebase-functions";
+import { initializeApp } from "firebase-admin";
+import { config } from "firebase-functions";
+import { onContactStats } from "./fn/contact_stats";
+import { onJobPayments } from "./fn/job_payments";
+import { onPaymentGallery } from "./fn/payment_gallery";
+import { onStatsContacts } from "./fn/stats_contacts";
+import { onStatsJob } from "./fn/stats_jobs";
 
-admin.initializeApp(functions.config().firebase);
+initializeApp(config().firebase);
 
-export const aggregator = functions.firestore
-  .document("jobs/{jobId}")
-  .onWrite((change, context) => {
-    const payments = change.after.data().payments;
-    const images = change.after.data().images;
-    const db = admin.firestore();
+export const PaymentGallery = onPaymentGallery;
 
-    const batch = db.batch();
+export const JobPayments = onJobPayments;
 
-    payments.forEach(payment => {
-      const ref = db.collection("payments").doc(payment.id);
-      batch.set(ref, payment);
-    });
+export const StatsJobs = onStatsJob;
 
-    images.forEach(image => {
-      const ref = db.collection("gallery").doc(image.id);
-      batch.set(ref, image);
-    });
+export const StatsContactsCreate = onStatsContacts();
 
-    // Commit the batch
-    return batch.commit();
-  });
+export const StatsContactsDelete = onStatsContacts(false);
 
-export const aggregateJobPayments = functions.firestore
-  .document("jobs/{jobId}")
-  .onWrite(async (change, context) => {
-    const job = change.after.data();
-    const old_job = change.before.data();
-
-    if (!change.after.exists) {
-      return null;
-    }
-
-    if (job.payments.length === old_job.payments.length) return null;
-
-    const completedPayment = job.payments.reduce(
-      (acc, cur) => acc + cur.price,
-      0
-    );
-    return change.after.ref.update({
-      completedPayment: completedPayment,
-      pendingPayment: job.price - completedPayment
-    });
-  });
-
-export const aggregateStats = functions.firestore
-  .document("jobs/{jobId}")
-  .onWrite(async (change, context) => {
-    const db = admin.firestore();
-    const stats = db.doc("stats/current");
-
-    const jobsSnap = await db.collection("jobs").get();
-    const contactsSnap = await db.collection("contacts").get();
-
-    let completedJob = 0,
-      pendingJob = 0,
-      completedPrice = 0,
-      totalPrice = 0,
-      totalImages = 0;
-
-    jobsSnap.forEach(doc => {
-      const data = doc.data();
-      totalPrice += data.price;
-      totalImages += data.images.length;
-      completedPrice += data.payments.reduce((acc, cur) => acc + cur.price, 0);
-
-      if (data.isComplete) {
-        completedJob += 1;
-      } else {
-        pendingJob += 1;
-      }
-    });
-
-    return stats.update({
-      contacts: {
-        total: contactsSnap.size
-      },
-      gallery: {
-        total: totalImages
-      },
-      jobs: {
-        total: jobsSnap.size,
-        pending: pendingJob,
-        completed: completedJob
-      },
-      payments: {
-        total: totalPrice,
-        pending: totalPrice - completedPrice,
-        completed: completedPrice
-      }
-    });
-  });
-
-export const aggregateContactStats = functions.firestore
-  .document("jobs/{jobId}")
-  .onWrite(async (change, context) => {
-    const job = change.after.data();
-    const old_job = change.before.data();
-
-    const db = admin.firestore();
-    const count =
-      old_job.isComplete === job.isComplete ? 0 : job.isComplete ? -1 : 1;
-    const contact = db.doc(`contacts/${job.contactID}`);
-
-    const jobsSnap = await db
-      .collection("jobs")
-      .where("contactID", "==", job.contactID)
-      .get();
-
-    const contactSnap = (await contact.get()).data();
-
-    return contact.update({
-      totalJobs: jobsSnap.size,
-      pendingJobs: contactSnap.pendingJobs + count
-    });
-  });
+export const ContactStats = onContactStats;

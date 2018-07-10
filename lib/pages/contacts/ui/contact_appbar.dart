@@ -14,7 +14,6 @@ import 'package:tailor_made/utils/tm_theme.dart';
 
 enum Choice {
   CreateJob,
-  OpenMeasure,
   EditMeasure,
   EditAccount,
   SendText,
@@ -44,12 +43,6 @@ class ContactAppBarState extends State<ContactAppBar> {
         return TMNavigate(
           context,
           JobsCreatePage(contact: contact, contacts: []),
-        );
-      case Choice.OpenMeasure:
-        return TMNavigate(
-          context,
-          MeasuresPage(measurements: contact.measurements),
-          fullscreenDialog: true,
         );
       case Choice.EditMeasure:
         return TMNavigate(
@@ -85,6 +78,14 @@ class ContactAppBarState extends State<ContactAppBar> {
                 appBarLeading(),
                 Expanded(child: appBarTitle()),
                 appBarIcon(
+                  icon: Icons.content_cut,
+                  onTap: () => TMNavigate(
+                        context,
+                        MeasuresPage(measurements: contact.measurements),
+                        fullscreenDialog: true,
+                      ),
+                ),
+                appBarIcon(
                   icon: Icons.call,
                   onTap: () => call(int.parse(contact.phone)),
                 ),
@@ -95,10 +96,6 @@ class ContactAppBarState extends State<ContactAppBar> {
                         new PopupMenuItem<Choice>(
                           value: Choice.CreateJob,
                           child: new Text("New Job", style: ralewayRegular(14.0, Colors.black87)),
-                        ),
-                        new PopupMenuItem<Choice>(
-                          value: Choice.OpenMeasure,
-                          child: new Text("Open Measurements", style: ralewayRegular(14.0, Colors.black87)),
                         ),
                         new PopupMenuItem<Choice>(
                           value: Choice.SendText,
