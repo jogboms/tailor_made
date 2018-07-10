@@ -78,7 +78,7 @@ class ContactFormState extends State<ContactForm> with SnackBarProvider {
                   labelText: "Fullname",
                 ),
                 validator: validateAlpha(),
-                onSaved: (fullname) => contact.fullname = fullname,
+                onSaved: (fullname) => contact.fullname = fullname.trim(),
               ),
               SizedBox(height: 4.0),
               TextFormField(
@@ -89,7 +89,7 @@ class ContactFormState extends State<ContactForm> with SnackBarProvider {
                   labelText: "Phone",
                 ),
                 validator: (value) => (value.length > 0) ? null : "Please input a value",
-                onSaved: (phone) => contact.phone = phone,
+                onSaved: (phone) => contact.phone = phone.trim(),
               ),
               SizedBox(height: 4.0),
               TextFormField(
@@ -99,7 +99,7 @@ class ContactFormState extends State<ContactForm> with SnackBarProvider {
                   labelText: "Location",
                 ),
                 validator: (value) => (value.length > 0) ? null : "Please input a value",
-                onSaved: (location) => contact.location = location,
+                onSaved: (location) => contact.location = location.trim(),
               ),
               SizedBox(height: 32.0),
               RaisedButton(

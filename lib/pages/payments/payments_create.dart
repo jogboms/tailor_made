@@ -133,7 +133,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
             ),
           ),
         ),
-        onSaved: (value) => notes = value,
+        onSaved: (value) => notes = value.trim(),
       ),
     );
   }

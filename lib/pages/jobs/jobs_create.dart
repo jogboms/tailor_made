@@ -251,7 +251,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
             ),
           ),
         ),
-        onSaved: (value) => job.notes = value,
+        onSaved: (value) => job.notes = value.trim(),
       ),
     );
   }
@@ -362,7 +362,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           ),
         ),
         validator: (value) => (value.length > 0) ? null : "Please input a name",
-        onSaved: (value) => job.name = value,
+        onSaved: (value) => job.name = value.trim(),
       ),
     );
   }
