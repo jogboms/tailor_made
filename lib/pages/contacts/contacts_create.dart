@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_form.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -51,27 +53,28 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
     showLoadingSnackBar();
 
     try {
-      await Cloudstore.contacts.document(contact.id).setData(contact.toMap());
-      closeLoadingSnackBar();
-      showInSnackBar("Successfully Added");
-      _handleSuccess();
+      final ref = Cloudstore.contacts.document(contact.id);
+      await ref.setData(contact.toMap());
+
+      ref.snapshots().listen((snap) async {
+        closeLoadingSnackBar();
+        showInSnackBar("Successfully Added");
+
+        var choice = await confirmDialog(
+          context: context,
+          title: Text("Do you wish to add another?"),
+        );
+        if (choice == null) return;
+        if (choice == false) {
+          Navigator.pushReplacement(context, TMNavigate.slideIn(ContactPage(contact: ContactModel.fromDoc(snap))));
+        } else {
+          contact = new ContactModel();
+          _formKey.currentState.reset();
+        }
+      });
     } catch (e) {
       closeLoadingSnackBar();
       showInSnackBar(e.toString());
-    }
-  }
-
-  void _handleSuccess() async {
-    var choice = await confirmDialog(
-      context: context,
-      title: Text("Do you wish to add another?"),
-    );
-    if (choice == null) return;
-    if (choice == false) {
-      Navigator.pop(context, true);
-    } else {
-      contact = new ContactModel();
-      _formKey.currentState.reset();
     }
   }
 }

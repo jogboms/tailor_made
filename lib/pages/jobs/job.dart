@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/models/job.dart';
+import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grids.dart';
 import 'package:tailor_made/pages/jobs/ui/measure_lists.dart';
 import 'package:tailor_made/pages/jobs/ui/payment_grids.dart';
@@ -208,7 +208,7 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
           tag: contact.createdAt.toString(),
           imageUrl: contact.imageUrl,
           title: new GestureDetector(
-            onTap: () => TMNavigate(context, Contact(contact: contact)),
+            onTap: () => TMNavigate(context, ContactPage(contact: contact)),
             child: new Text(
               contact.fullname,
               maxLines: 1,

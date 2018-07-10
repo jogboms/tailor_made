@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_phone.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -90,7 +90,7 @@ class ContactsListItem extends StatelessWidget {
     return ListTile(
       dense: true,
       contentPadding: EdgeInsets.only(left: 16.0),
-      onTap: onTapContact ?? () => TMNavigate(context, Contact(contact: contact)),
+      onTap: onTapContact ?? () => TMNavigate(context, ContactPage(contact: contact)),
       leading: avatar(),
       title: title,
       subtitle: Text(pending >= 1 ? "$pending pending" : "No pending wears", style: TextStyle(fontSize: 14.0, color: textBaseColor)),

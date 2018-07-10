@@ -10,9 +10,10 @@ import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/pages/jobs/job.dart';
 import 'package:tailor_made/pages/jobs/ui/contact_lists.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grid_item.dart';
-import 'package:tailor_made/pages/jobs/ui/job_create_item.dart';
+import 'package:tailor_made/pages/jobs/ui/measure_create_items.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
@@ -101,7 +102,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       children.add(buildImageGrid());
 
       children.add(makeHeader("Measurements", "Inches (In)"));
-      children.add(JobMeasures(job.measurements));
+      children.add(MeasureCreateItems(job.measurements));
 
       children.add(makeHeader("Additional Notes"));
       children.add(buildAdditional());
@@ -222,9 +223,12 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         ..contactID = contact.id;
 
       try {
-        await Cloudstore.jobs.document(job.id).setData(job.toMap());
-        closeLoadingSnackBar();
-        Navigator.pop(context);
+        final ref = Cloudstore.jobs.document(job.id);
+        await ref.setData(job.toMap());
+        ref.snapshots().listen((snap) {
+          closeLoadingSnackBar();
+          Navigator.pushReplacement(context, TMNavigate.slideIn(JobPage(job: JobModel.fromDoc(snap))));
+        });
       } catch (e) {
         closeLoadingSnackBar();
         showInSnackBar(e.toString());

@@ -3,10 +3,10 @@ import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/pages/jobs/ui/slide_down.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-class JobMeasures extends StatelessWidget {
+class MeasureCreateItems extends StatelessWidget {
   final List<MeasureModel> measurements;
 
-  JobMeasures(this.measurements);
+  MeasureCreateItems(this.measurements);
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +86,7 @@ class JobMeasureBlock extends StatelessWidget {
                 ),
                 width: constraints.maxWidth / 2,
                 child: TextFormField(
-                  initialValue: measure.value.toString(),
+                  initialValue: measure.value?.toString(),
                   keyboardType: TextInputType.number,
                   style: TextStyle(fontSize: 20.0, color: Colors.black),
                   decoration: new InputDecoration(
