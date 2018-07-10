@@ -1,11 +1,11 @@
 PENDING:
-☐ update stats db on creation @high
 ☐ delete-able payment
 ☐ delete-able images
 ☐ implement share payment + image
 
 
 COMPLETED:
+  ✔ update stats db on creation @high @done(18-07-10 16:39)
   ✔ add more flesh to payment view @done(18-07-10 15:36)
   ✔ navigate to job after creation @high @done(18-07-10 15:23)
   ✔ navigate to client after creation @high @done(18-07-10 15:23)
