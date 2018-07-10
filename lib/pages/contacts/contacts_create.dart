@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_form.dart';
+import 'package:tailor_made/pages/contacts/ui/contact_measure.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
@@ -39,6 +40,18 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
       appBar: appBar(
         context,
         title: "Create Contact",
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.content_cut,
+              color: titleBaseColor,
+            ),
+            onPressed: () => TMNavigate(
+                  context,
+                  ContactMeasure(contact: contact),
+                ),
+          ),
+        ],
       ),
       body: ContactForm(
         key: _formKey,

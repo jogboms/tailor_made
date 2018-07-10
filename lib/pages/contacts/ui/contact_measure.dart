@@ -48,6 +48,7 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
     );
 
     children.add(SizedBox(height: 32.0));
+
     return new Scaffold(
       key: scaffoldKey,
       backgroundColor: theme.scaffoldColor,
