@@ -51,7 +51,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
     showLoadingSnackBar();
 
     try {
-      await Cloudstore.contacts.add(contact.toMap());
+      await Cloudstore.contacts.document(contact.id).setData(contact.toMap());
       closeLoadingSnackBar();
       showInSnackBar("Successfully Added");
       _handleSuccess();

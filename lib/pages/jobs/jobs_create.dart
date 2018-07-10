@@ -222,7 +222,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         ..contactID = contact.id;
 
       try {
-        await Cloudstore.jobs.add(job.toMap());
+        await Cloudstore.jobs.document(job.id).setData(job.toMap());
         closeLoadingSnackBar();
         Navigator.pop(context);
       } catch (e) {
