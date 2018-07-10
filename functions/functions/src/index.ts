@@ -1,133 +1,21 @@
-import * as admin from "firebase-admin";
-import * as functions from "firebase-functions";
+import { initializeApp } from "firebase-admin";
+import { config } from "firebase-functions";
+import { onContactStats } from "./lib/contact_stats";
+import { onJobPayments } from "./lib/job_payments";
+import { onPaymentGallery } from "./lib/payment_gallery";
+import { onStatsContacts } from "./lib/stats_contacts";
+import { onStatsJob } from "./lib/stats_jobs";
 
-admin.initializeApp(functions.config().firebase);
+initializeApp(config().firebase);
 
-async function aggregateStats() {
-  const db = admin.firestore();
-  const stats = db.doc("stats/current");
+export const PaymentGallery = onPaymentGallery;
 
-  const jobsSnap = await db.collection("jobs").get();
+export const JobPayments = onJobPayments;
 
-  let completedJob = 0,
-    pendingJob = 0,
-    completedPrice = 0,
-    totalPrice = 0,
-    totalImages = 0;
+export const StatsJobs = onStatsJob;
 
-  jobsSnap.forEach(doc => {
-    const data = doc.data();
-    totalPrice += data.price;
-    totalImages += data.images.length;
-    completedPrice += data.payments.reduce((acc, cur) => acc + cur.price, 0);
+export const StatsContactsCreate = onStatsContacts();
 
-    if (data.isComplete) {
-      completedJob += 1;
-    } else {
-      pendingJob += 1;
-    }
-  });
+export const StatsContactsDelete = onStatsContacts(false);
 
-  return stats.update({
-    gallery: {
-      total: totalImages
-    },
-    jobs: {
-      total: jobsSnap.size,
-      pending: pendingJob,
-      completed: completedJob
-    },
-    payments: {
-      total: totalPrice,
-      pending: totalPrice - completedPrice,
-      completed: completedPrice
-    }
-  });
-}
-
-export const aggregator = functions.firestore
-  .document("jobs/{jobId}")
-  .onWrite((change, context) => {
-    const payments = change.after.data().payments;
-    const images = change.after.data().images;
-    const db = admin.firestore();
-
-    const batch = db.batch();
-
-    payments.forEach(payment => {
-      const ref = db.collection("payments").doc(payment.id);
-      batch.set(ref, payment);
-    });
-
-    images.forEach(image => {
-      const ref = db.collection("gallery").doc(image.id);
-      batch.set(ref, image);
-    });
-
-    // Commit the batch
-    return batch.commit();
-  });
-
-export const aggregateJobPayments = functions.firestore
-  .document("jobs/{jobId}")
-  .onWrite(async (change, context) => {
-    const job = change.after.data();
-    const old_job = change.before.data();
-
-    if (!change.after.exists) {
-      return null;
-    }
-
-    if (job.payments.length === old_job.payments.length) return null;
-
-    const completedPayment = job.payments.reduce(
-      (acc, cur) => acc + cur.price,
-      0
-    );
-    return change.after.ref.update({
-      completedPayment: completedPayment,
-      pendingPayment: job.price - completedPayment
-    });
-  });
-
-export const aggregateStatsJobs = functions.firestore
-  .document("jobs/{jobId}")
-  .onWrite(async (change, context) => aggregateStats());
-
-export const aggregateStatsContacts = functions.firestore
-  .document("contacts/{contactId}")
-  .onWrite(async (change, context) => {
-    const db = admin.firestore();
-    const stats = db.doc("stats/current");
-    const contactsSnap = await db.collection("contacts").get();
-
-    return stats.update({
-      contacts: {
-        total: contactsSnap.size
-      }
-    });
-  });
-
-export const aggregateContactStats = functions.firestore
-  .document("jobs/{jobId}")
-  .onWrite(async (change, context) => {
-    const job = change.after.data();
-    const old_job = change.before.data();
-
-    const db = admin.firestore();
-    const count =
-      old_job.isComplete === job.isComplete ? 0 : job.isComplete ? -1 : 1;
-    const contact = db.doc(`contacts/${job.contactID}`);
-
-    const jobsSnap = await db
-      .collection("jobs")
-      .where("contactID", "==", job.contactID)
-      .get();
-
-    const contactSnap = (await contact.get()).data();
-
-    return contact.update({
-      totalJobs: jobsSnap.size,
-      pendingJobs: contactSnap.pendingJobs + count
-    });
-  });
+export const ContactStats = onContactStats;
