@@ -60,6 +60,7 @@ class PaymentsPageState extends State<PaymentsPage> {
             automaticallyImplyLeading: false,
             leading: backButton(context),
             forceElevated: true,
+            brightness: Brightness.light,
             elevation: 1.0,
             centerTitle: false,
             floating: true,

@@ -1,37 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/pages/jobs/ui/job_create_item.dart';
+import 'package:tailor_made/pages/jobs/ui/measures.dart';
 import 'package:tailor_made/ui/app_bar.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-class PaymentsCreatePage extends StatefulWidget {
-  PaymentsCreatePage({Key key}) : super(key: key);
+class ContactMeasure extends StatefulWidget {
+  final ContactModel contact;
+
+  ContactMeasure({
+    Key key,
+    this.contact,
+  }) : super(key: key);
 
   @override
-  _PaymentsCreatePageState createState() => new _PaymentsCreatePageState();
+  _ContactMeasureState createState() => new _ContactMeasureState();
 }
 
-class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarProvider {
+class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   bool _autovalidate = false;
-  double price = 0.0;
-  String notes = "";
-  MoneyMaskedTextController controller = new MoneyMaskedTextController(
-    decimalSeparator: '.',
-    thousandSeparator: ',',
-  );
 
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
     List<Widget> children = [];
 
-    children.add(makeHeader("Payment", "Naira (₦)"));
-    children.add(buildEnterAmount());
-
-    children.add(makeHeader("Additional Notes"));
-    children.add(buildAdditional());
+    children.add(makeHeader("Measurements", "Inches (In)"));
+    children.add(JobMeasures(widget.contact.measurements));
 
     children.add(
       Padding(
@@ -54,7 +53,20 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
       backgroundColor: theme.scaffoldColor,
       appBar: appBar(
         context,
-        title: "Create Payment",
+        title: "Measurements",
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.remove_red_eye,
+              color: titleBaseColor,
+            ),
+            onPressed: () => TMNavigate(
+                  context,
+                  MeasuresPage(measurements: widget.contact.measurements),
+                  fullscreenDialog: true,
+                ),
+          )
+        ],
       ),
       body: new SafeArea(
         top: false,
@@ -89,55 +101,6 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
     );
   }
 
-  Widget buildEnterAmount() {
-    return new Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-      child: new TextFormField(
-        controller: controller,
-        keyboardType: TextInputType.number,
-        style: TextStyle(fontSize: 18.0, color: Colors.black),
-        decoration: new InputDecoration(
-          isDense: true,
-          hintText: "Enter Amount",
-          hintStyle: TextStyle(fontSize: 14.0),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: borderSideColor,
-              width: 0.0,
-              style: BorderStyle.solid,
-            ),
-          ),
-        ),
-        validator: (value) => (value.length > 0) ? null : "Please input a price",
-        onSaved: (value) => price = controller.numberValue,
-      ),
-    );
-  }
-
-  Widget buildAdditional() {
-    return new Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-      child: new TextFormField(
-        keyboardType: TextInputType.text,
-        style: TextStyle(fontSize: 18.0, color: Colors.black),
-        maxLines: 6,
-        decoration: new InputDecoration(
-          isDense: true,
-          hintText: "Anything else to remember this payment by?",
-          hintStyle: TextStyle(fontSize: 14.0),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: borderSideColor,
-              width: 0.0,
-              style: BorderStyle.solid,
-            ),
-          ),
-        ),
-        onSaved: (value) => notes = value,
-      ),
-    );
-  }
-
   void _handleSubmit() async {
     final FormState form = _formKey.currentState;
     if (form == null) return;
@@ -146,11 +109,18 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
       showInSnackBar('Please fix the errors in red before submitting.');
     } else {
       form.save();
+      showLoadingSnackBar();
 
-      Navigator.pop(
-        context,
-        {"price": price, "notes": notes},
-      );
+      try {
+        await widget.contact.reference.updateData(widget.contact.toMap());
+        closeLoadingSnackBar();
+        showInSnackBar("Successfully Updated");
+      } catch (e) {
+        closeLoadingSnackBar();
+        showInSnackBar(e.toString());
+      }
+      //
+      widget.contact;
     }
   }
 }

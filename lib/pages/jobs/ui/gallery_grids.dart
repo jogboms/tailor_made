@@ -10,7 +10,7 @@ import 'package:tailor_made/pages/gallery/models/image.model.dart';
 import 'package:tailor_made/pages/jobs/models/job.model.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grid_item.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
-import 'package:tailor_made/utils/tm_child_dialog.dart';
+import 'package:tailor_made/utils/tm_image_choice_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -62,7 +62,7 @@ class GalleryGridsState extends State<GalleryGrids> {
         }
 
         return GalleryGridItem(
-          imageUrl: image.src,
+          image: image,
           tag: "$image-$index",
           size: _kGridWidth,
           // Remove images from storage using path
@@ -124,21 +124,7 @@ class GalleryGridsState extends State<GalleryGrids> {
   }
 
   Future<Null> _handlePhotoButtonPressed() async {
-    var source = await showChildDialog(
-      context: context,
-      child: new SimpleDialog(
-        children: <Widget>[
-          new SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, ImageSource.camera),
-            child: Padding(child: Text("Camera"), padding: EdgeInsets.all(8.0)),
-          ),
-          new SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, ImageSource.gallery),
-            child: Padding(child: Text("Gallery"), padding: EdgeInsets.all(8.0)),
-          ),
-        ],
-      ),
-    );
+    var source = await imageChoiceDialog(context: context);
     if (source == null) return;
     var imageFile = await ImagePicker.pickImage(source: source);
     var random = new Random().nextInt(10000);

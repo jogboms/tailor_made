@@ -17,7 +17,7 @@ import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
-import 'package:tailor_made/utils/tm_child_dialog.dart';
+import 'package:tailor_made/utils/tm_image_choice_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -64,30 +64,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     contact = widget.contact;
     job = new JobModel(
       contactID: contact?.documentID,
-      measurements: [
-        MeasureModel(name: "Arm Hole", type: MeasureModelType.blouse),
-        MeasureModel(name: "Shoulder", type: MeasureModelType.blouse),
-        MeasureModel(name: "Burst", type: MeasureModelType.blouse),
-        MeasureModel(name: "Burst Point", type: MeasureModelType.blouse),
-        MeasureModel(name: "Shoulder - Burst Point", type: MeasureModelType.blouse),
-        MeasureModel(name: "Shoulder - Under Burst", type: MeasureModelType.blouse),
-        MeasureModel(name: "Shoulder - Waist", type: MeasureModelType.blouse),
-        MeasureModel(name: "Length", type: MeasureModelType.trouser),
-        MeasureModel(name: "Waist", type: MeasureModelType.trouser),
-        MeasureModel(name: "Crouch", type: MeasureModelType.trouser),
-        MeasureModel(name: "Thigh", type: MeasureModelType.trouser),
-        MeasureModel(name: "Body Rise", type: MeasureModelType.trouser),
-        MeasureModel(name: "Width", type: MeasureModelType.trouser),
-        MeasureModel(name: "Hip", type: MeasureModelType.trouser),
-        MeasureModel(name: "Full Length", type: MeasureModelType.skirts),
-        MeasureModel(name: "Short Length", type: MeasureModelType.skirts),
-        MeasureModel(name: "Knee Length", type: MeasureModelType.skirts),
-        MeasureModel(name: "Hip", type: MeasureModelType.skirts),
-        MeasureModel(name: "Waist", type: MeasureModelType.gown),
-        MeasureModel(name: "Long Length", type: MeasureModelType.gown),
-        MeasureModel(name: "Short Length", type: MeasureModelType.gown),
-        MeasureModel(name: "Knee Length", type: MeasureModelType.gown),
-      ],
+      measurements: contact?.measurements ?? createDefaultMeasures(),
     );
   }
 
@@ -124,7 +101,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       children.add(buildImageGrid());
 
       children.add(makeHeader("Measurements", "Inches (In)"));
-      children.add(JobMeasures(job));
+      children.add(JobMeasures(job.measurements));
 
       children.add(makeHeader("Additional Notes"));
       children.add(buildAdditional());
@@ -133,7 +110,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         Padding(
           child: RaisedButton(
             color: accentColor,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+            shape: StadiumBorder(),
             child: Text(
               "FINISH",
               style: TextStyle(color: Colors.white),
@@ -310,7 +287,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         }
 
         return GalleryGridItem(
-          imageUrl: image.src,
+          image: image,
           tag: "$image-$index",
           size: _kGridWidth,
           onTapDelete: (image) {
@@ -335,21 +312,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   }
 
   Future<Null> _handlePhotoButtonPressed() async {
-    var source = await showChildDialog(
-      context: context,
-      child: new SimpleDialog(
-        children: <Widget>[
-          new SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, ImageSource.camera),
-            child: Padding(child: Text("Camera"), padding: EdgeInsets.all(8.0)),
-          ),
-          new SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, ImageSource.gallery),
-            child: Padding(child: Text("Gallery"), padding: EdgeInsets.all(8.0)),
-          ),
-        ],
-      ),
-    );
+    var source = await imageChoiceDialog(context: context);
     if (source == null) return;
     var imageFile = await ImagePicker.pickImage(source: source);
     var random = new Random().nextInt(10000);

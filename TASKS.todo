@@ -1,2 +1,9 @@
-☐ align create image
-☐ assign measurements to customer not job
+PENDING:
+  ☐ add more flesh to payment view
+  ☐ implement share payment + image
+  ☐ add a documentID to job on cloud function
+  ☐ tie payment model + image model to job documentID
+
+COMPLETED:
+  ✔ align create image @done(18-07-09 17:20)
+  ✔ assign measurements to customer not job @done(18-07-09 17:20)

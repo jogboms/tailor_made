@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
-import 'package:tailor_made/pages/contacts/ui/contacts_item.dart';
+import 'package:tailor_made/pages/contacts/ui/contacts_list_item.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/contacts.dart';
 import 'package:tailor_made/ui/app_bar.dart';
@@ -38,7 +38,7 @@ class _ContactsPageState extends State<ContactsPage> {
           appBar: _isSearching ? buildSearchBar() : buildAppBar(),
           body: buildBody(vm),
           floatingActionButton: new FloatingActionButton(
-            child: new Icon(Icons.add),
+            child: new Icon(Icons.person_add),
             onPressed: () => TMNavigate(context, ContactsCreatePage()),
           ),
         );
@@ -102,12 +102,12 @@ class _ContactsPageState extends State<ContactsPage> {
         ? Center(
             child: TMEmptyResult(message: "No contacts available"),
           )
-        : new ListView.builder(
+        : new ListView.separated(
             itemCount: vm.contacts.length,
             shrinkWrap: true,
-            itemExtent: null,
             padding: EdgeInsets.only(bottom: 96.0),
-            itemBuilder: (context, index) => ContactsItem(contact: vm.contacts[index]),
+            itemBuilder: (context, index) => ContactsListItem(contact: vm.contacts[index]),
+            separatorBuilder: (BuildContext context, int index) => new Divider(),
           );
   }
 }

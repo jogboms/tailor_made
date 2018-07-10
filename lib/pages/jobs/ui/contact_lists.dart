@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
-import 'package:tailor_made/pages/contacts/ui/contacts_item.dart';
+import 'package:tailor_made/pages/contacts/ui/contacts_list_item.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/tm_empty_result.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -31,18 +31,18 @@ class ContactLists extends StatelessWidget {
           ? Center(
               child: TMEmptyResult(message: "No contacts available"),
             )
-          : new ListView.builder(
+          : new ListView.separated(
               itemCount: contacts.length,
               shrinkWrap: true,
-              itemExtent: null,
               itemBuilder: (context, index) {
                 var item = contacts[index];
-                return ContactsItem(
+                return ContactsListItem(
                   contact: item,
                   showActions: false,
                   onTapContact: () => Navigator.pop(context, item),
                 );
               },
+              separatorBuilder: (BuildContext context, int index) => new Divider(),
             ),
     );
   }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:tailor_made/pages/contacts/contacts_edit.dart';
 import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/pages/contacts/ui/contact_measure.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
+import 'package:tailor_made/pages/jobs/ui/measures.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/contacts.dart';
 import 'package:tailor_made/ui/circle_avatar.dart';
@@ -11,6 +14,10 @@ import 'package:tailor_made/utils/tm_theme.dart';
 
 enum Choice {
   CreateJob,
+  OpenMeasure,
+  EditMeasure,
+  EditAccount,
+  SendText,
 }
 
 class ContactAppBar extends StatefulWidget {
@@ -29,13 +36,44 @@ class ContactAppBar extends StatefulWidget {
 
 class ContactAppBarState extends State<ContactAppBar> {
   bool isAtTop = false;
+  ContactModel contact;
+
+  _selectChoice(Choice choice) {
+    switch (choice) {
+      case Choice.CreateJob:
+        return TMNavigate(
+          context,
+          JobsCreatePage(contact: contact, contacts: []),
+        );
+      case Choice.OpenMeasure:
+        return TMNavigate(
+          context,
+          MeasuresPage(measurements: contact.measurements),
+          fullscreenDialog: true,
+        );
+      case Choice.EditMeasure:
+        return TMNavigate(
+          context,
+          ContactMeasure(contact: contact),
+        );
+      case Choice.EditAccount:
+        return TMNavigate(
+          context,
+          ContactsEditPage(contact: contact),
+        );
+      case Choice.SendText:
+        return sms(int.parse(contact.phone));
+      default:
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<ReduxState, ContactsViewModel>(
       converter: (store) => ContactsViewModel(store)..contactID = widget.contact.documentID,
       builder: (BuildContext context, ContactsViewModel vm) {
-        final contact = vm.selected;
+        contact = vm.selected;
         return new PreferredSize(
           preferredSize: new Size.fromHeight(kToolbarHeight),
           child: SafeArea(
@@ -50,18 +88,31 @@ class ContactAppBarState extends State<ContactAppBar> {
                   icon: Icons.call,
                   onTap: () => call(int.parse(contact.phone)),
                 ),
-                appBarIcon(
-                  icon: Icons.message,
-                  onTap: () => sms(int.parse(contact.phone)),
-                ),
-                appBarIcon(
-                  icon: Icons.add,
-                  onTap: () {
-                    TMNavigate(
-                      context,
-                      JobsCreatePage(contact: contact, contacts: []),
-                    );
-                  },
+                new PopupMenuButton<Choice>(
+                  icon: Icon(Icons.more_vert, color: Colors.white),
+                  onSelected: _selectChoice,
+                  itemBuilder: (BuildContext context) => [
+                        new PopupMenuItem<Choice>(
+                          value: Choice.CreateJob,
+                          child: new Text("New Job", style: ralewayRegular(14.0, Colors.black87)),
+                        ),
+                        new PopupMenuItem<Choice>(
+                          value: Choice.OpenMeasure,
+                          child: new Text("Open Measurements", style: ralewayRegular(14.0, Colors.black87)),
+                        ),
+                        new PopupMenuItem<Choice>(
+                          value: Choice.SendText,
+                          child: new Text("Text Message", style: ralewayRegular(14.0, Colors.black87)),
+                        ),
+                        new PopupMenuItem<Choice>(
+                          value: Choice.EditMeasure,
+                          child: new Text("Edit Measurements", style: ralewayRegular(14.0, Colors.black87)),
+                        ),
+                        new PopupMenuItem<Choice>(
+                          value: Choice.EditAccount,
+                          child: new Text("Edit Account", style: ralewayRegular(14.0, Colors.black87)),
+                        ),
+                      ],
                 ),
               ],
             ),

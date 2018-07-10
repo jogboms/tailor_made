@@ -59,6 +59,7 @@ class GalleryPageState extends State<GalleryPage> {
             backgroundColor: theme.appBarBackgroundColor,
             automaticallyImplyLeading: false,
             leading: backButton(context),
+            brightness: Brightness.light,
             forceElevated: true,
             elevation: 1.0,
             centerTitle: false,

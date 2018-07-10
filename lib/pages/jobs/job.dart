@@ -11,9 +11,11 @@ import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/contacts.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
+import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_format_date.dart';
 import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class JobPage extends StatefulWidget {
@@ -30,7 +32,8 @@ class JobPage extends StatefulWidget {
   }
 }
 
-class JobPageState extends State<JobPage> {
+class JobPageState extends State<JobPage> with SnackBarProvider {
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
   JobModel job;
 
   @override
@@ -44,6 +47,7 @@ class JobPageState extends State<JobPage> {
     final TMTheme theme = TMTheme.of(context);
 
     return new Scaffold(
+      key: scaffoldKey,
       backgroundColor: theme.scaffoldColor,
       body: new StreamBuilder(
         stream: job.reference.snapshots(),
@@ -62,6 +66,7 @@ class JobPageState extends State<JobPage> {
                   flexibleSpace: FlexibleSpaceBar(background: buildHeader()),
                   pinned: true,
                   titleSpacing: 0.0,
+                  brightness: Brightness.light,
                   elevation: 1.0,
                   automaticallyImplyLeading: false,
                   centerTitle: false,
@@ -103,7 +108,7 @@ class JobPageState extends State<JobPage> {
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Text(
             job.name,
-            style: ralewayLight(18.0, textColor),
+            style: ralewayRegular(18.0, textColor),
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.fade,
@@ -112,7 +117,7 @@ class JobPageState extends State<JobPage> {
         const SizedBox(height: 12.0),
         Text(
           formatNaira(job.price),
-          style: ralewayLight(24.0, textColor).copyWith(
+          style: ralewayRegular(24.0, textColor).copyWith(
             letterSpacing: 1.5,
           ),
           textAlign: TextAlign.center,
@@ -121,7 +126,7 @@ class JobPageState extends State<JobPage> {
         new Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            border: Border(bottom: TMBorderSide()),
+            border: Border(top: TMBorderSide(), bottom: TMBorderSide()),
           ),
           padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
           child: Row(
@@ -136,7 +141,7 @@ class JobPageState extends State<JobPage> {
                     children: <Widget>[
                       Text(
                         "PAID",
-                        style: ralewayLight(8.0),
+                        style: ralewayRegular(8.0),
                         textAlign: TextAlign.center,
                       ),
                       Row(
@@ -146,7 +151,7 @@ class JobPageState extends State<JobPage> {
                           const SizedBox(width: 4.0),
                           Text(
                             formatNaira(job.completedPayment),
-                            style: ralewayLight(18.0, Colors.black87).copyWith(
+                            style: ralewayRegular(18.0, Colors.black87).copyWith(
                               letterSpacing: 1.25,
                             ),
                             textAlign: TextAlign.center,
@@ -162,7 +167,7 @@ class JobPageState extends State<JobPage> {
                   children: <Widget>[
                     Text(
                       "UNPAID",
-                      style: ralewayLight(8.0),
+                      style: ralewayRegular(8.0),
                       textAlign: TextAlign.center,
                     ),
                     Row(
@@ -172,7 +177,7 @@ class JobPageState extends State<JobPage> {
                         const SizedBox(width: 4.0),
                         Text(
                           formatNaira(job.pendingPayment),
-                          style: ralewayLight(18.0, Colors.black87).copyWith(
+                          style: ralewayRegular(18.0, Colors.black87).copyWith(
                             letterSpacing: 1.25,
                           ),
                           textAlign: TextAlign.center,
@@ -208,7 +213,9 @@ class JobPageState extends State<JobPage> {
               contact.fullname,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: ralewayRegular(16.0, textColor),
+              style: ralewayRegular(16.0, textColor).copyWith(
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           iconColor: textColor,
@@ -226,15 +233,31 @@ class JobPageState extends State<JobPage> {
                 job.isComplete ? Icons.check_box : Icons.check_box_outline_blank,
                 color: textBaseColor.shade900,
               ),
-              onPressed: () {
-                job.reference.updateData({
-                  "isComplete": !job.isComplete,
-                });
-              },
+              onPressed: onTapComplete,
             )
           ],
         );
       },
     );
+  }
+
+  void onTapComplete() async {
+    var choice = await confirmDialog(
+      context: context,
+      title: Text("Marking this job as complete?"),
+    );
+    if (choice == null || choice == false) return;
+
+    showLoadingSnackBar();
+
+    try {
+      await job.reference.updateData({
+        "isComplete": !job.isComplete,
+      });
+      closeLoadingSnackBar();
+    } catch (e) {
+      closeLoadingSnackBar();
+      showInSnackBar(e.toString());
+    }
   }
 }
