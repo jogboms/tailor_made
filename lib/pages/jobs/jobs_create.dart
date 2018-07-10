@@ -386,7 +386,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
             ),
           ),
         ),
-        validator: (value) => (value.length > 0) ? null : "Please input a price",
+        validator: (value) => (controller.numberValue > 0) ? null : "Please input a price",
         onSaved: (value) => job.price = controller.numberValue,
       ),
     );

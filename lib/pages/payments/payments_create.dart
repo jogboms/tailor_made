@@ -108,7 +108,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
             ),
           ),
         ),
-        validator: (value) => (value.length > 0) ? null : "Please input a price",
+        validator: (value) => (controller.numberValue > 0) ? null : "Please input a price",
         onSaved: (value) => price = controller.numberValue,
       ),
     );
