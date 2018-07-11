@@ -88,6 +88,7 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
                     GalleryGrids(job: job),
                     const SizedBox(height: 4.0),
                     PaymentGrids(job: job),
+                    const SizedBox(height: 32.0),
                   ],
                 ),
               ),
@@ -95,8 +96,12 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: FloatingActionButton.extended(
-            icon: SizedBox(),
-            label: Text(job.isComplete ? "Mark Completed" : "Revert Completed"),
+            icon: new Icon(
+              job.isComplete ? Icons.undo : Icons.check,
+            ),
+            backgroundColor: job.isComplete ? Colors.white : accentColor,
+            foregroundColor: job.isComplete ? accentColor : Colors.white,
+            label: Text(job.isComplete ? "Undo Completed" : "Mark Completed"),
             onPressed: onTapComplete,
           ),
         );
@@ -237,7 +242,7 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
             IconButton(
               icon: new Icon(
                 Icons.check,
-                color: job.isComplete ? accentColor : textBaseColor.shade300,
+                color: job.isComplete ? accentColor : textBaseColor.shade400,
               ),
               onPressed: null,
             )
@@ -250,7 +255,7 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
   void onTapComplete() async {
     var choice = await confirmDialog(
       context: context,
-      title: Text("Marking this job as complete?"),
+      title: Text("Are you sure?"),
     );
     if (choice == null || choice == false) return;
 
