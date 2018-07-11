@@ -24,6 +24,26 @@ class PaymentStatsModel {
   }
 }
 
+// KEEP
+// {
+//   "contacts": {
+//     "total": 0
+//   },
+//   "gallery": {
+//     "total": 0
+//   },
+//   "jobs": {
+//     "total": 0,
+//     "pending": 0,
+//     "completed": 0,
+//   },
+//   "payments": {
+//     "total": 0,
+//     "pending": 0,
+//     "completed": 0,
+//   },
+// }
+
 class StatsModel {
   DetailStatsModel jobs;
   DetailStatsModel contacts;
