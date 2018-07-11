@@ -46,19 +46,19 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    return new Scaffold(
-      key: scaffoldKey,
-      backgroundColor: theme.scaffoldColor,
-      body: new StreamBuilder(
-        stream: job.reference.snapshots(),
-        builder: (BuildContext context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: loadingSpinner(),
-            );
-          }
-          job = JobModel.fromDoc(snapshot.data);
-          return new NestedScrollView(
+    return new StreamBuilder(
+      stream: job.reference.snapshots(),
+      builder: (BuildContext context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: loadingSpinner(),
+          );
+        }
+        job = JobModel.fromDoc(snapshot.data);
+        return new Scaffold(
+          key: scaffoldKey,
+          backgroundColor: theme.scaffoldColor,
+          body: new NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 SliverAppBar(
@@ -92,9 +92,15 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
                 ),
               ),
             ),
-          );
-        },
-      ),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: FloatingActionButton.extended(
+            icon: SizedBox(),
+            label: Text(job.isComplete ? "Mark Completed" : "Revert Completed"),
+            onPressed: onTapComplete,
+          ),
+        );
+      },
     );
   }
 
@@ -230,10 +236,10 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
           actions: <Widget>[
             IconButton(
               icon: new Icon(
-                job.isComplete ? Icons.check_box : Icons.check_box_outline_blank,
-                color: textBaseColor.shade900,
+                Icons.check,
+                color: job.isComplete ? accentColor : textBaseColor.shade300,
               ),
-              onPressed: onTapComplete,
+              onPressed: null,
             )
           ],
         );
