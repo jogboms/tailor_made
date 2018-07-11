@@ -145,7 +145,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     return new FlatButton(
                       shape: RoundedRectangleBorder(),
                       padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
-                      color: accentColor,
+                      color: kAccentColor,
                       child: ScaleTransition(
                         scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
                         alignment: FractionalOffset.center,

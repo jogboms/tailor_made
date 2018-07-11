@@ -6,22 +6,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
 
-const Color accentColor = TMColors.accent;
-const Color accentColorAlt = Colors.blueGrey;
-const Color primaryColor = TMColors.primary;
+const Color kAccentColor = TMColors.accent;
+const Color kPrimaryColor = TMColors.primary;
 
-const MaterialColor accentSwatch = TMColors.biro_blue;
-const MaterialColor primarySwatch = TMColors.slate_pink;
+const MaterialColor kAccentSwatch = TMColors.slate_pink;
+const MaterialColor kPrimarySwatch = TMColors.biro_blue;
 
-final Color borderSideColor = Colors.grey.shade300;
-const MaterialColor textBaseColor = Colors.grey;
-const MaterialColor titleBaseColor = TMColors.dark;
-const MaterialColor backgroundBaseColor = TMColors.white;
+final Color kBorderSideColor = Colors.grey.shade300;
+const MaterialColor kTextBaseColor = Colors.grey;
+const MaterialColor kTitleBaseColor = TMColors.dark;
+const MaterialColor kBackgroundBaseColor = TMColors.white;
 
 class TMBorderSide extends BorderSide {
   TMBorderSide({Color color})
       : super(
-          color: color != null ? color : borderSideColor,
+          color: color != null ? color : kBorderSideColor,
           style: BorderStyle.solid,
           width: 1.0,
         );
@@ -32,11 +31,11 @@ class TMStyle extends TextStyle {
       : super(inherit: false, color: color, fontFamily: 'Raleway', fontSize: size, fontWeight: weight, textBaseline: TextBaseline.alphabetic);
 }
 
-TextStyle ralewayThin(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w100, color ?? textBaseColor);
-TextStyle ralewayLight(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w300, color ?? textBaseColor);
-TextStyle ralewayRegular(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w400, color ?? textBaseColor);
-TextStyle ralewayMedium(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w500, color ?? textBaseColor);
-TextStyle ralewayBold(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w700, color ?? textBaseColor);
+TextStyle ralewayThin(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w100, color ?? kTextBaseColor);
+TextStyle ralewayLight(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w300, color ?? kTextBaseColor);
+TextStyle ralewayRegular(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w400, color ?? kTextBaseColor);
+TextStyle ralewayMedium(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w500, color ?? kTextBaseColor);
+TextStyle ralewayBold(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w700, color ?? kTextBaseColor);
 
 /// The TextStyles and Colors used for titles, labels, and descriptions. This
 /// InheritedWidget is shared by all of the routes and widgets created for
@@ -46,19 +45,19 @@ class TMTheme extends InheritedWidget {
       : assert(child != null),
         super(key: key, child: child);
 
-  Color get accentColor => accentColor;
-  Color get primaryColor => primaryColor;
-  Color get borderSideColor => borderSideColor;
+  Color get accentColor => kAccentColor;
+  Color get primaryColor => kPrimaryColor;
+  Color get borderSideColor => kBorderSideColor;
   Color get appBarBackgroundColor => scaffoldColor;
 
-  final Color scaffoldColor = backgroundBaseColor;
-  final Color scaffoldColorAlt = textBaseColor.shade100;
-  final Color appBarColor = titleBaseColor;
-  final Color textColor = textBaseColor.shade800;
-  final Color textMutedColor = textBaseColor.shade500;
+  final Color scaffoldColor = kBackgroundBaseColor;
+  final Color scaffoldColorAlt = kTextBaseColor.shade100;
+  final Color appBarColor = kTitleBaseColor;
+  final Color textColor = kTextBaseColor.shade800;
+  final Color textMutedColor = kTextBaseColor.shade500;
 
   TextStyle get appBarStyle => ralewayBold(20.0, appBarColor);
-  TextStyle get titleStyle => ralewayMedium(18.0, titleBaseColor);
+  TextStyle get titleStyle => ralewayMedium(18.0, kTitleBaseColor);
   TextStyle get smallTextStyle => ralewayRegular(12.0, textColor);
   TextStyle get mediumTextStyle => ralewayRegular(16.0, textColor);
 

@@ -55,7 +55,7 @@ class JobMeasureBlock extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: borderSideColor,
+            color: kBorderSideColor,
             width: 1.0,
             style: BorderStyle.solid,
           ),
@@ -73,12 +73,12 @@ class JobMeasureBlock extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                      color: borderSideColor,
+                      color: kBorderSideColor,
                       width: 1.0,
                       style: removeBorder ? BorderStyle.none : BorderStyle.solid,
                     ),
                     right: BorderSide(
-                      color: borderSideColor,
+                      color: kBorderSideColor,
                       width: 1.0,
                       style: index % 2 == 0 ? BorderStyle.solid : BorderStyle.none,
                     ),

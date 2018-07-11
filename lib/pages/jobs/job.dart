@@ -99,8 +99,8 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
             icon: new Icon(
               job.isComplete ? Icons.undo : Icons.check,
             ),
-            backgroundColor: job.isComplete ? Colors.white : accentColor,
-            foregroundColor: job.isComplete ? accentColor : Colors.white,
+            backgroundColor: job.isComplete ? Colors.white : kAccentColor,
+            foregroundColor: job.isComplete ? kAccentColor : Colors.white,
             label: Text(job.isComplete ? "Undo Completed" : "Mark Completed"),
             onPressed: onTapComplete,
           ),
@@ -242,7 +242,7 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
             IconButton(
               icon: new Icon(
                 Icons.check,
-                color: job.isComplete ? accentColor : textBaseColor.shade400,
+                color: job.isComplete ? kPrimaryColor : kTextBaseColor.shade400,
               ),
               onPressed: null,
             )

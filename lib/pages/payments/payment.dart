@@ -41,21 +41,21 @@ class PaymentPage extends StatelessWidget {
               IconButton(
                 icon: Icon(
                   Icons.work,
-                  color: titleBaseColor,
+                  color: kTitleBaseColor,
                 ),
                 onPressed: () => TMNavigate(context, JobPage(job: job)),
               ),
               IconButton(
                 icon: Icon(
                   Icons.person,
-                  color: titleBaseColor,
+                  color: kTitleBaseColor,
                 ),
                 onPressed: () => TMNavigate(context, ContactPage(contact: contact)),
               ),
               IconButton(
                 icon: Icon(
                   Icons.share,
-                  color: titleBaseColor,
+                  color: kTitleBaseColor,
                 ),
                 // TODO
                 onPressed: null,

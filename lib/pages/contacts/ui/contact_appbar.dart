@@ -180,7 +180,6 @@ class ContactAppBarState extends State<ContactAppBar> {
         child: new Icon(icon, color: Colors.white),
         onTap: onTap,
         radius: 20.0,
-        splashColor: accentColor.withOpacity(.25),
       ),
     );
   }

@@ -86,7 +86,7 @@ class GalleryGridsState extends State<GalleryGrids> {
             const SizedBox(width: 16.0),
             Expanded(child: Text("GALLERY", style: ralewayRegular(12.0, Colors.black87))),
             CupertinoButton(
-              child: Text("SHOW ALL", style: ralewayRegular(11.0, textBaseColor)),
+              child: Text("SHOW ALL", style: ralewayRegular(11.0, kTextBaseColor)),
               onPressed: () => TMNavigate(context, GalleryPage(images: widget.job.images), fullscreenDialog: true),
             ),
           ],
@@ -116,7 +116,7 @@ class GalleryGridsState extends State<GalleryGrids> {
           child: Icon(
             Icons.add_a_photo,
             size: 24.0,
-            color: textBaseColor.withOpacity(.35),
+            color: kTextBaseColor.withOpacity(.35),
           ),
         ),
       ),

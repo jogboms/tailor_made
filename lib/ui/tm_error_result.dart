@@ -19,7 +19,7 @@ class TMErrorResult extends StatelessWidget {
         children: <Widget>[
           new Icon(
             Icons.error_outline,
-            color: theme.accentColor,
+            color: theme.primaryColor,
             size: 50.0,
           ),
           const SizedBox(height: 16.0),

@@ -34,7 +34,7 @@ class ContactsListItem extends StatelessWidget {
         tag: contact.id,
         child: new CircleAvatar(
           radius: 24.0,
-          backgroundColor: theme.accentColor.withOpacity(.5),
+          backgroundColor: theme.primaryColor,
           backgroundImage: contact.imageUrl != null ? CachedNetworkImageProvider(contact.imageUrl) : null,
           child: Stack(
             children: [
@@ -45,7 +45,7 @@ class ContactsListItem extends StatelessWidget {
                         width: 15.5,
                         height: 15.5,
                         decoration: new BoxDecoration(
-                          color: accentColor,
+                          color: theme.accentColor,
                           border: Border.all(
                             color: Colors.white,
                             style: BorderStyle.solid,
@@ -93,7 +93,7 @@ class ContactsListItem extends StatelessWidget {
       onTap: onTapContact ?? () => TMNavigate(context, ContactPage(contact: contact)),
       leading: avatar(),
       title: title,
-      subtitle: Text(pending >= 1 ? "$pending pending" : "No pending wears", style: TextStyle(fontSize: 14.0, color: textBaseColor)),
+      subtitle: Text(pending >= 1 ? "$pending pending" : "No pending wears", style: TextStyle(fontSize: 14.0, color: kTextBaseColor)),
       trailing: showActions ? icons : null,
     );
   }

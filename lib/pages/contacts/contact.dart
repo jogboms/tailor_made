@@ -39,7 +39,7 @@ class _ContactState extends State<ContactPage> {
               new SliverOverlapAbsorber(
                 handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 child: new SliverAppBar(
-                  backgroundColor: accentColor,
+                  backgroundColor: kAccentColor,
                   automaticallyImplyLeading: false,
                   title: new ContactAppBar(contact: widget.contact),
                   pinned: true,

@@ -30,8 +30,8 @@ class TMApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: TMStrings.appName,
         theme: new ThemeData(
-          accentColor: accentColor,
-          primarySwatch: primarySwatch,
+          accentColor: kAccentColor,
+          primarySwatch: kPrimarySwatch,
           fontFamily: TMFonts.raleway,
         ),
         onGenerateRoute: (RouteSettings settings) {

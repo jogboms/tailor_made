@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 CircleAvatar circleAvatar({double radius, bool useAlt = false, String imageUrl}) {
-  final iconColor = useAlt ? primarySwatch.shade300 : Colors.white;
-  final backgroundColor = useAlt ? Colors.white : primarySwatch.shade300;
+  final iconColor = useAlt ? kPrimaryColor : Colors.white;
+  final backgroundColor = useAlt ? Colors.white : kPrimaryColor;
   return new CircleAvatar(
     radius: radius ?? null,
     backgroundColor: imageUrl != null ? Colors.grey.shade400 : backgroundColor,

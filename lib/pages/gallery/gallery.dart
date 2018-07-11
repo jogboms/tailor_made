@@ -50,7 +50,7 @@ class GalleryPageState extends State<GalleryPage> {
                         "${images.length} Photos",
                         style: TextStyle(
                           fontSize: 11.0,
-                          color: textBaseColor,
+                          color: kTextBaseColor,
                         ),
                       )
                     : SizedBox(),
