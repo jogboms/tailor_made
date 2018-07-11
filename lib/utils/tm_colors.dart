@@ -3,7 +3,8 @@ import 'package:flutter/widgets.dart';
 
 class TMColors {
   TMColors._();
-
+  static const _baseBlue = 0xFF7644e9;
+  static const _basePink = 0xFFf54295;
   static const MaterialColor dark = const MaterialColor(
     0xFF444444,
     const <int, Color>{
@@ -35,13 +36,13 @@ class TMColors {
     },
   );
   static const MaterialColor biro_blue = const MaterialColor(
-    0xFF0000d0,
+    _baseBlue,
     const <int, Color>{
       50: const Color(0xFFeee5fc),
       100: const Color(0xFFd1bff6),
       200: const Color(0xFFb295f1),
       300: const Color(0xFF9168ed),
-      400: const Color(0xFF7644e9),
+      400: const Color(_baseBlue),
       500: const Color(0xFF5519e4),
       600: const Color(0xFF4815de),
       700: const Color(0xFF3009d5),
@@ -49,7 +50,22 @@ class TMColors {
       900: const Color(0xFF0000ca),
     },
   );
-  static const Color accent = const Color(0xFF0000d0);
-  static const Color primary = const Color(0xFFf54295);
+  static const MaterialColor slate_pink = const MaterialColor(
+    _basePink,
+    const <int, Color>{
+      50: const Color(0xFFf54295),
+      100: const Color(0xFFf54295),
+      200: const Color(0xFFf54295),
+      300: const Color(0xFFf54295),
+      400: const Color(_basePink),
+      500: const Color(0xFFf54295),
+      600: const Color(0xFFf54295),
+      700: const Color(0xFFf54295),
+      800: const Color(0xFFf54295),
+      900: const Color(0xFFf54295),
+    },
+  );
+  static const Color accent = const Color(_basePink);
+  static const Color primary = const Color(_baseBlue);
   static const Color light_grey = const Color(0xFF9B9B9B);
 }

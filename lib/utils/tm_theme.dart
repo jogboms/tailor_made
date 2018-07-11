@@ -6,9 +6,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
 
-const Color accentColor = TMColors.primary;
+const Color accentColor = TMColors.accent;
 const Color accentColorAlt = Colors.blueGrey;
-const MaterialColor primarySwatch = TMColors.biro_blue;
+const Color primaryColor = TMColors.primary;
+
+const MaterialColor accentSwatch = TMColors.biro_blue;
+const MaterialColor primarySwatch = TMColors.slate_pink;
+
 final Color borderSideColor = Colors.grey.shade300;
 const MaterialColor textBaseColor = Colors.grey;
 const MaterialColor titleBaseColor = TMColors.dark;
@@ -42,8 +46,8 @@ class TMTheme extends InheritedWidget {
       : assert(child != null),
         super(key: key, child: child);
 
-  Color get accentColor => TMColors.accent;
-  Color get primaryColor => TMColors.primary;
+  Color get accentColor => accentColor;
+  Color get primaryColor => primaryColor;
   Color get borderSideColor => borderSideColor;
   Color get appBarBackgroundColor => scaffoldColor;
 
@@ -52,11 +56,6 @@ class TMTheme extends InheritedWidget {
   final Color appBarColor = titleBaseColor;
   final Color textColor = textBaseColor.shade800;
   final Color textMutedColor = textBaseColor.shade500;
-
-  // final Color scaffoldColor = Color(0xFF00251a);
-  // final Color scaffoldColorAlt = Colors.blueGrey.shade700;
-  // final Color appBarColor = Color(0xFF39796b);
-  // final Color textColor = Color(0xFF39796b);
 
   TextStyle get appBarStyle => ralewayBold(20.0, appBarColor);
   TextStyle get titleStyle => ralewayMedium(18.0, titleBaseColor);
