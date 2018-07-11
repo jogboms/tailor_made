@@ -6,18 +6,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
-import 'package:tailor_made/pages/gallery/models/image.model.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
-import 'package:tailor_made/pages/jobs/models/measure.model.dart';
+import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/models/image.dart';
+import 'package:tailor_made/models/job.dart';
+import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/pages/jobs/job.dart';
 import 'package:tailor_made/pages/jobs/ui/contact_lists.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grid_item.dart';
-import 'package:tailor_made/pages/jobs/ui/job_create_item.dart';
+import 'package:tailor_made/pages/jobs/ui/measure_create_items.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
-import 'package:tailor_made/utils/tm_child_dialog.dart';
+import 'package:tailor_made/utils/tm_image_choice_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -63,31 +64,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     super.initState();
     contact = widget.contact;
     job = new JobModel(
-      contactID: contact?.documentID,
-      measurements: [
-        MeasureModel(name: "Arm Hole", type: MeasureModelType.blouse),
-        MeasureModel(name: "Shoulder", type: MeasureModelType.blouse),
-        MeasureModel(name: "Burst", type: MeasureModelType.blouse),
-        MeasureModel(name: "Burst Point", type: MeasureModelType.blouse),
-        MeasureModel(name: "Shoulder - Burst Point", type: MeasureModelType.blouse),
-        MeasureModel(name: "Shoulder - Under Burst", type: MeasureModelType.blouse),
-        MeasureModel(name: "Shoulder - Waist", type: MeasureModelType.blouse),
-        MeasureModel(name: "Length", type: MeasureModelType.trouser),
-        MeasureModel(name: "Waist", type: MeasureModelType.trouser),
-        MeasureModel(name: "Crouch", type: MeasureModelType.trouser),
-        MeasureModel(name: "Thigh", type: MeasureModelType.trouser),
-        MeasureModel(name: "Body Rise", type: MeasureModelType.trouser),
-        MeasureModel(name: "Width", type: MeasureModelType.trouser),
-        MeasureModel(name: "Hip", type: MeasureModelType.trouser),
-        MeasureModel(name: "Full Length", type: MeasureModelType.skirts),
-        MeasureModel(name: "Short Length", type: MeasureModelType.skirts),
-        MeasureModel(name: "Knee Length", type: MeasureModelType.skirts),
-        MeasureModel(name: "Hip", type: MeasureModelType.skirts),
-        MeasureModel(name: "Waist", type: MeasureModelType.gown),
-        MeasureModel(name: "Long Length", type: MeasureModelType.gown),
-        MeasureModel(name: "Short Length", type: MeasureModelType.gown),
-        MeasureModel(name: "Knee Length", type: MeasureModelType.gown),
-      ],
+      contactID: contact?.id,
+      measurements: contact?.measurements ?? createDefaultMeasures(),
     );
   }
 
@@ -124,7 +102,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       children.add(buildImageGrid());
 
       children.add(makeHeader("Measurements", "Inches (In)"));
-      children.add(JobMeasures(job));
+      children.add(MeasureCreateItems(job.measurements));
 
       children.add(makeHeader("Additional Notes"));
       children.add(buildAdditional());
@@ -133,7 +111,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         Padding(
           child: RaisedButton(
             color: accentColor,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+            shape: StadiumBorder(),
             child: Text(
               "FINISH",
               style: TextStyle(color: Colors.white),
@@ -242,12 +220,15 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       job
         ..pendingPayment = job.price
         ..images = fireImages.map((img) => img.image).toList()
-        ..contactID = contact.documentID;
+        ..contactID = contact.id;
 
       try {
-        await Cloudstore.jobs.add(job.toMap());
-        closeLoadingSnackBar();
-        Navigator.pop(context);
+        final ref = Cloudstore.jobs.document(job.id);
+        await ref.setData(job.toMap());
+        ref.snapshots().listen((snap) {
+          closeLoadingSnackBar();
+          Navigator.pushReplacement(context, TMNavigate.slideIn(JobPage(job: JobModel.fromDoc(snap))));
+        });
       } catch (e) {
         closeLoadingSnackBar();
         showInSnackBar(e.toString());
@@ -274,7 +255,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
             ),
           ),
         ),
-        onSaved: (value) => job.notes = value,
+        onSaved: (value) => job.notes = value.trim(),
       ),
     );
   }
@@ -310,7 +291,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         }
 
         return GalleryGridItem(
-          imageUrl: image.src,
+          image: image,
           tag: "$image-$index",
           size: _kGridWidth,
           onTapDelete: (image) {
@@ -335,21 +316,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   }
 
   Future<Null> _handlePhotoButtonPressed() async {
-    var source = await showChildDialog(
-      context: context,
-      child: new SimpleDialog(
-        children: <Widget>[
-          new SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, ImageSource.camera),
-            child: Padding(child: Text("Camera"), padding: EdgeInsets.all(8.0)),
-          ),
-          new SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, ImageSource.gallery),
-            child: Padding(child: Text("Gallery"), padding: EdgeInsets.all(8.0)),
-          ),
-        ],
-      ),
-    );
+    var source = await imageChoiceDialog(context: context);
     if (source == null) return;
     var imageFile = await ImagePicker.pickImage(source: source);
     var random = new Random().nextInt(10000);
@@ -366,7 +333,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           ..isLoading = false
           ..isSucess = true
           ..image = ImageModel(
-            contactID: widget.contact.documentID,
+            contactID: widget.contact.id,
+            jobID: job.id,
             src: imageUrl,
             path: ref.path,
           );
@@ -398,7 +366,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           ),
         ),
         validator: (value) => (value.length > 0) ? null : "Please input a name",
-        onSaved: (value) => job.name = value,
+        onSaved: (value) => job.name = value.trim(),
       ),
     );
   }
@@ -422,7 +390,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
             ),
           ),
         ),
-        validator: (value) => (value.length > 0) ? null : "Please input a price",
+        validator: (value) => (controller.numberValue > 0) ? null : "Please input a price",
         onSaved: (value) => job.price = controller.numberValue,
       ),
     );

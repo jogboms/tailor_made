@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/main.dart';
-import 'package:tailor_made/pages/gallery/models/image.model.dart';
-import 'package:tailor_made/pages/jobs/models/measure.model.dart';
-import 'package:tailor_made/pages/payments/models/payment.model.dart';
+import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/utils/tm_uuid.dart';
 
 class JobModel extends Model {
@@ -14,24 +15,24 @@ class JobModel extends Model {
   double pendingPayment;
   String notes;
   List<ImageModel> images;
-  DateTime createdAt;
   List<MeasureModel> measurements;
   List<PaymentModel> payments;
   bool isComplete;
+  DateTime createdAt;
 
   JobModel({
     id,
-    this.contactID,
+    @required this.contactID,
     this.name,
     this.price,
     this.notes,
     this.images,
     this.completedPayment = 0.0,
     this.pendingPayment = 0.0,
-    createdAt,
     this.measurements = const [],
     this.payments = const [],
     this.isComplete = false,
+    createdAt,
   })  : id = id ?? uuid(),
         createdAt = createdAt ?? DateTime.now();
 
@@ -72,9 +73,7 @@ class JobModel extends Model {
   }
 
   factory JobModel.fromDoc(DocumentSnapshot doc) {
-    return JobModel.fromJson(doc.data)
-      ..reference = doc.reference
-      ..documentID = doc.documentID;
+    return JobModel.fromJson(doc.data)..reference = doc.reference;
   }
 
   @override
@@ -87,7 +86,6 @@ class JobModel extends Model {
       "completedPayment": completedPayment,
       "pendingPayment": pendingPayment,
       "notes": notes,
-      "documentID": documentID,
       "images": images.map((image) => image.toMap()).toList(),
       "createdAt": createdAt.toString(),
       "measurements": measurements.map((measure) => measure.toMap()).toList(),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/payments/models/payment.model.dart';
+import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/pages/payments/payment.dart';
 import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_months.dart';
@@ -20,14 +20,12 @@ class PaymentListItem extends StatelessWidget {
     final _price = formatNaira(payment.price);
     final textColor = Colors.black54;
 
-    return Container(
-      // color: Colors.grey.shade300,
-      margin: EdgeInsets.only(bottom: 2.0),
+    return Material(
       child: new InkResponse(
         onTap: () => TMNavigate(context, PaymentPage(payment: payment), fullscreenDialog: true),
         radius: 300.0,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+          padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
           child: Stack(
             children: [
               new Align(

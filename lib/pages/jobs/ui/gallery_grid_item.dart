@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/gallery/gallery_view.dart';
+import 'package:tailor_made/models/image.dart';
 
 const _kGridWidth = 70.0;
 
 class GalleryGridItem extends StatelessWidget {
   final String tag;
-  final String imageUrl;
+  final ImageModel image;
   final Size size;
-  final void Function(String imageUrl) onTapDelete;
+  final void Function(ImageModel image) onTapDelete;
 
   GalleryGridItem({
     Key key,
     @required this.tag,
-    @required this.imageUrl,
+    @required this.image,
     this.onTapDelete,
     double size,
   })  : size = Size.square(size ?? _kGridWidth),
@@ -33,14 +34,14 @@ class GalleryGridItem extends StatelessWidget {
                 elevation: 1.0,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
                 child: new Ink.image(
-                  image: new NetworkImage(imageUrl),
+                  image: new NetworkImage(image.src),
                   fit: BoxFit.cover,
                   child: new InkWell(
                     onTap: () {
                       Navigator.of(context).push(
                             new PageRouteBuilder(
                               opaque: false,
-                              pageBuilder: (BuildContext context, _, __) => GalleryView(imageUrl: imageUrl),
+                              pageBuilder: (BuildContext context, _, __) => GalleryView(image: image),
                               transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
                                 return new FadeTransition(
                                   opacity: animation,
@@ -54,7 +55,7 @@ class GalleryGridItem extends StatelessWidget {
                         ? new Align(
                             alignment: Alignment.topRight,
                             child: GestureDetector(
-                              onTap: () => onTapDelete(imageUrl),
+                              onTap: () => onTapDelete(image),
                               child: new Padding(
                                 padding: const EdgeInsets.all(2.0),
                                 child: new Icon(Icons.cancel, color: Colors.red),

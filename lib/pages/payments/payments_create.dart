@@ -37,7 +37,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
       Padding(
         child: RaisedButton(
           color: accentColor,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+          shape: StadiumBorder(),
           child: Text(
             "FINISH",
             style: TextStyle(color: Colors.white),
@@ -108,7 +108,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
             ),
           ),
         ),
-        validator: (value) => (value.length > 0) ? null : "Please input a price",
+        validator: (value) => (controller.numberValue > 0) ? null : "Please input a price",
         onSaved: (value) => price = controller.numberValue,
       ),
     );
@@ -133,7 +133,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
             ),
           ),
         ),
-        onSaved: (value) => notes = value,
+        onSaved: (value) => notes = value.trim(),
       ),
     );
   }

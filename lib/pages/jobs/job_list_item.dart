@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/jobs/job.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_months.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -20,14 +20,11 @@ class JobListItem extends StatelessWidget {
     final _date = job.createdAt;
     final _price = formatNaira(job.price);
 
-    return new Container(
-      decoration: BoxDecoration(
-        border: Border(bottom: TMBorderSide()),
-      ),
+    return new Material(
       child: new InkWell(
         onTap: () => TMNavigate(context, JobPage(job: job)),
         child: new Padding(
-          padding: EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
+          padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[

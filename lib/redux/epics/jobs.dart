@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/redux/actions/jobs.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';

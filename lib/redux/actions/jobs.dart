@@ -1,4 +1,4 @@
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
+import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 
 class InitJobs extends ActionType {

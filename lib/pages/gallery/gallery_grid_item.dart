@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/gallery/gallery_view.dart';
-import 'package:tailor_made/pages/gallery/models/image.model.dart';
+import 'package:tailor_made/models/image.dart';
 
 class GalleryGridItem extends StatelessWidget {
   final ImageModel image;
@@ -28,7 +28,7 @@ class GalleryGridItem extends StatelessWidget {
             onTap: () {
               PageRouteBuilder pageBuilder = new PageRouteBuilder(
                 opaque: false,
-                pageBuilder: (BuildContext context, _, __) => GalleryView(imageUrl: image.src),
+                pageBuilder: (BuildContext context, _, __) => GalleryView(image: image),
                 transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
                   return new FadeTransition(opacity: animation, child: child);
                 },

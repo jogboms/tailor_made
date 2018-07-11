@@ -27,6 +27,7 @@ class TMApp extends StatelessWidget {
     return new StoreProvider<ReduxState>(
       store: store,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: TMStrings.appName,
         theme: new ThemeData(
           accentColor: accentColor,

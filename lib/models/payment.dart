@@ -1,18 +1,21 @@
+import 'package:flutter/foundation.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/utils/tm_uuid.dart';
 
 class PaymentModel extends Model {
   String id;
   String contactID;
+  String jobID;
   double price;
   String notes;
   DateTime createdAt;
 
   PaymentModel({
     id,
-    this.contactID,
-    this.price,
-    this.notes,
+    @required this.contactID,
+    @required this.jobID,
+    @required this.price,
+    @required this.notes,
     createdAt,
   })  : id = id ?? uuid(),
         createdAt = createdAt ?? DateTime.now();
@@ -22,6 +25,7 @@ class PaymentModel extends Model {
     return new PaymentModel(
       id: json['id'],
       contactID: json['contactID'],
+      jobID: json['jobID'],
       price: double.tryParse(json['price'].toString()),
       notes: json['notes'],
       createdAt: DateTime.tryParse(json['createdAt'].toString()),
@@ -33,6 +37,7 @@ class PaymentModel extends Model {
     return {
       "id": id,
       "contactID": contactID,
+      "jobID": jobID,
       "price": price,
       "notes": notes,
       "createdAt": createdAt.toString(),

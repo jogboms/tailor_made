@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/gallery/gallery_grid.dart';
-import 'package:tailor_made/pages/gallery/models/image.model.dart';
+import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/back_button.dart';
 import 'package:tailor_made/ui/tm_empty_result.dart';
@@ -59,6 +59,7 @@ class GalleryPageState extends State<GalleryPage> {
             backgroundColor: theme.appBarBackgroundColor,
             automaticallyImplyLeading: false,
             leading: backButton(context),
+            brightness: Brightness.light,
             forceElevated: true,
             elevation: 1.0,
             centerTitle: false,

@@ -1,5 +1,5 @@
 import 'package:redux/redux.dart';
-import 'package:tailor_made/pages/contacts/models/contact.model.dart';
+import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/redux/states/contacts.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/main.dart';
@@ -16,7 +16,7 @@ class ContactsViewModel extends ViewModel {
   ContactModel get selected {
     if (contactID != null) {
       return this.store.state.contacts.contacts.firstWhere(
-            (_) => _.documentID == contactID,
+            (_) => _.id == contactID,
           );
     }
     return null;

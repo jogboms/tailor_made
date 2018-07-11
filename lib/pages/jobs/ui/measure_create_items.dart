@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/jobs/models/job.model.dart';
-import 'package:tailor_made/pages/jobs/models/measure.model.dart';
+import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/pages/jobs/ui/slide_down.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-class JobMeasures extends StatelessWidget {
-  final JobModel job;
+class MeasureCreateItems extends StatelessWidget {
+  final List<MeasureModel> measurements;
 
-  JobMeasures(this.job);
+  MeasureCreateItems(this.measurements);
 
   @override
   Widget build(BuildContext context) {
@@ -16,26 +15,26 @@ class JobMeasures extends StatelessWidget {
         new SlideDownItem(
           title: MeasureModelType.blouse,
           body: new JobMeasureBlock(
-            job.measurements.where((measure) => measure.type == MeasureModelType.blouse).toList(),
+            measurements.where((measure) => measure.type == MeasureModelType.blouse).toList(),
           ),
-          // isExpanded: true,
+          isExpanded: true,
         ),
         new SlideDownItem(
           title: MeasureModelType.trouser,
           body: new JobMeasureBlock(
-            job.measurements.where((measure) => measure.type == MeasureModelType.trouser).toList(),
+            measurements.where((measure) => measure.type == MeasureModelType.trouser).toList(),
           ),
         ),
         new SlideDownItem(
           title: MeasureModelType.skirts,
           body: new JobMeasureBlock(
-            job.measurements.where((measure) => measure.type == MeasureModelType.skirts).toList(),
+            measurements.where((measure) => measure.type == MeasureModelType.skirts).toList(),
           ),
         ),
         new SlideDownItem(
           title: MeasureModelType.gown,
           body: new JobMeasureBlock(
-            job.measurements.where((measure) => measure.type == MeasureModelType.gown).toList(),
+            measurements.where((measure) => measure.type == MeasureModelType.gown).toList(),
           ),
         ),
       ],
@@ -87,6 +86,7 @@ class JobMeasureBlock extends StatelessWidget {
                 ),
                 width: constraints.maxWidth / 2,
                 child: TextFormField(
+                  initialValue: measure.value != null && measure.value > 0 ? measure.value.toString() : "",
                   keyboardType: TextInputType.number,
                   style: TextStyle(fontSize: 20.0, color: Colors.black),
                   decoration: new InputDecoration(
@@ -95,7 +95,8 @@ class JobMeasureBlock extends StatelessWidget {
                     border: InputBorder.none,
                     labelStyle: TextStyle(fontSize: 14.0),
                   ),
-                  onSaved: (value) => measure.value = value,
+                  onFieldSubmitted: (value) => measure.value = double.tryParse(value),
+                  onSaved: (value) => measure.value = double.tryParse(value),
                 ),
               );
             },

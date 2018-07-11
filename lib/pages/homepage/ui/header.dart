@@ -7,8 +7,6 @@ class HeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    final date = formatDate(DateTime.now(), day: "EEEE", month: "MMMM");
-
     return new Expanded(
       child: Container(
         padding: EdgeInsets.fromLTRB(20.0, 35.0, 20.0, 40.0),
@@ -44,7 +42,7 @@ class HeaderWidget extends StatelessWidget {
               softWrap: false,
             ),
             new Text(
-              date,
+              formatDate(DateTime.now(), day: "EEEE", month: "MMMM"),
               style: new TextStyle(
                 fontSize: 14.0,
                 fontWeight: FontWeight.w300,

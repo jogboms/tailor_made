@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/payments/models/payment.model.dart';
+import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/pages/payments/payments_list.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/back_button.dart';
@@ -60,6 +60,7 @@ class PaymentsPageState extends State<PaymentsPage> {
             automaticallyImplyLeading: false,
             leading: backButton(context),
             forceElevated: true,
+            brightness: Brightness.light,
             elevation: 1.0,
             centerTitle: false,
             floating: true,

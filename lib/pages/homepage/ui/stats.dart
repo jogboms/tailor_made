@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/homepage/models/stats.model.dart';
+import 'package:tailor_made/models/stats.dart';
 import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
