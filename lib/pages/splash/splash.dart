@@ -8,6 +8,7 @@ import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_images.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
+import 'package:tailor_made/utils/tm_strings.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class SplashPage extends StatefulWidget {
@@ -67,11 +68,13 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 32.0),
-              child: Text("TailorMade", style: ralewayMedium(24.0)),
+          Positioned.fill(
+            top: null,
+            bottom: 32.0,
+            child: Text(
+              TMStrings.appName,
+              style: ralewayMedium(22.0, kTextBaseColor.withOpacity(.6)),
+              textAlign: TextAlign.center,
             ),
           ),
           isLoading && widget.isColdStart
@@ -84,38 +87,37 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
                     colorBlendMode: BlendMode.saturation,
                   ),
                 ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 96.0),
-              child: isLoading
-                  ? loadingSpinner()
-                  : RaisedButton(
-                      color: Colors.white,
-                      onPressed: () {
-                        setState(() => isLoading = true);
-                        try {
-                          _onLogin();
-                        } catch (e) {
-                          setState(() => isLoading = false);
-                          showInSnackBar(e.toString());
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Image(
-                            image: TMImages.google_logo,
-                            width: 24.0,
-                          ),
-                          const SizedBox(width: 8.0),
-                          Text("Continue with Google"),
-                        ],
-                      ),
-                    ),
-            ),
+          Positioned(
+            height: 96.0,
+            bottom: 64.0,
+            left: 0.0,
+            right: 0.0,
+            child: isLoading ? loadingSpinner() : Center(child: _googleBtn()),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _googleBtn() {
+    return RaisedButton(
+      color: Colors.white,
+      onPressed: () {
+        setState(() => isLoading = true);
+        try {
+          _onLogin();
+        } catch (e) {
+          setState(() => isLoading = false);
+          showInSnackBar(e.toString());
+        }
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Image(image: TMImages.google_logo, width: 24.0),
+          const SizedBox(width: 8.0),
+          Text("Continue with Google", style: TextStyle(fontWeight: FontWeight.w700)),
         ],
       ),
     );
