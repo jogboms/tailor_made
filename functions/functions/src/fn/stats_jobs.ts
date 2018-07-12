@@ -9,11 +9,9 @@ async function _onStatsJobUpdate(
   change: Change<firestore.DocumentSnapshot>,
   context: EventContext
 ) {
-  const jobs = change.before.exists
-    ? change.before.data()
-    : change.after.data();
+  const jobs = change.before.exists ? change.before : change.after;
 
-  return _onStatsJob(jobs[0], context);
+  return _onStatsJob(jobs, context);
 }
 
 async function _onStatsJob(
@@ -21,15 +19,16 @@ async function _onStatsJob(
   context: EventContext
 ) {
   const db = admin.firestore();
+  const _data = snapshot.data();
 
   // Get user ID from Job
-  const userID = snapshot.data().userID;
+  const userID = isArray(_data) ? _data[0].userID : _data.userID;
 
   const stats = db.doc(`stats/${userID}`);
 
   const jobsSnap = await db
     .collection("jobs")
-    .where("jobs.userID", "==", userID)
+    .where("userID", "==", userID)
     .get();
 
   let completedJob = 0,
