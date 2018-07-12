@@ -10,11 +10,7 @@ import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_strings.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-void main() async {
-  // FirebaseAuth.instance.signInAnonymously().then((r) {
-  //   print(r);
-  // });
-
+void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   return runApp(new TMApp());
 }
@@ -40,7 +36,6 @@ class TMApp extends StatelessWidget {
             settings: settings,
           );
         },
-        // home: TMTheme(child: HomePage()),
       ),
     );
   }
