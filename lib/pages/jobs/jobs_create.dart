@@ -191,7 +191,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
               contact.fullname,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: ralewayRegular(18.0, theme.appBarColor),
+              style: ralewayBold(18.0, theme.appBarColor),
             ),
             subtitle: Text("${contact.totalJobs} Jobs", style: theme.smallTextStyle),
             actions: widget.contacts.isNotEmpty

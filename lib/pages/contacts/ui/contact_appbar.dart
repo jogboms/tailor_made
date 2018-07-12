@@ -157,7 +157,7 @@ class ContactAppBarState extends State<ContactAppBar> {
           style: TextStyle(
             fontSize: 18.0,
             color: Colors.white,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
         Text(
