@@ -45,6 +45,7 @@ class _ContactState extends State<ContactPage> {
                   pinned: true,
                   titleSpacing: 0.0,
                   centerTitle: false,
+                  brightness: Brightness.dark,
                   expandedHeight: 0.0,
                   forceElevated: true,
                   bottom: tabTitles(),
