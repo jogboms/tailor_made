@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        HeaderWidget(),
+                        Expanded(child: HeaderWidget()),
                         StatsWidget(stats: stats),
                         TopRowWidget(stats: stats),
                         BottomRowWidget(stats: stats),
