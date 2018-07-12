@@ -16,6 +16,7 @@ import 'package:tailor_made/redux/view_models/contacts.dart';
 import 'package:tailor_made/services/cloudstore.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
+import 'package:tailor_made/utils/tm_images.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -101,67 +102,84 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: theme.scaffoldColor,
-        brightness: Brightness.light,
-        // actions: <Widget>[
-        //   new IconButton(
-        //     icon: new Icon(
-        //       Icons.person,
-        //       color: theme.appBarColor,
-        //     ),
-        //     onPressed: () => TMNavigate(context, AccountsPage()),
-        //   )
-        // ],
-      ),
-      body: StreamBuilder(
-        stream: Cloudstore.stats.snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: loadingSpinner(),
-            );
-          }
-
-          final DocumentSnapshot _data = snapshot.data;
-          final stats = StatsModel.fromJson(_data.data);
-
-          return new SafeArea(
-            top: false,
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                HeaderWidget(),
-                StatsWidget(stats: stats),
-                TopRowWidget(stats: stats),
-                BottomRowWidget(stats: stats),
-                new StoreConnector<ReduxState, ContactsViewModel>(
-                  converter: (store) => ContactsViewModel(store),
-                  onInit: (store) => store.dispatch(new InitDataEvents()),
-                  onDispose: (store) => store.dispatch(new DisposeDataEvents()),
-                  builder: (BuildContext context, ContactsViewModel vm) {
-                    return new FlatButton(
-                      shape: RoundedRectangleBorder(),
-                      padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
-                      color: accentColor,
-                      child: ScaleTransition(
-                        scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
-                        alignment: FractionalOffset.center,
-                        child: new Text(
-                          "TAP TO CREATE",
-                          style: ralewayBold(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
-                        ),
-                      ),
-                      onPressed: onTapCreate(vm.contacts),
-                    );
-                  },
+      // appBar: AppBar(
+      //   elevation: 0.0,
+      //   backgroundColor: Colors.transparent,
+      //   // backgroundColor: theme.scaffoldColor,
+      //   brightness: Brightness.light,
+      //   // actions: <Widget>[
+      //   //   new IconButton(
+      //   //     icon: new Icon(
+      //   //       Icons.person,
+      //   //       color: theme.appBarColor,
+      //   //     ),
+      //   //     onPressed: () => TMNavigate(context, AccountsPage()),
+      //   //   )
+      //   // ],
+      // ),
+      body: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          Opacity(
+            opacity: .5,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: TMImages.pattern,
+                  fit: BoxFit.cover,
                 ),
-              ],
+              ),
             ),
-          );
-        },
+          ),
+          StreamBuilder(
+            stream: Cloudstore.stats.snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: loadingSpinner(),
+                );
+              }
+
+              final DocumentSnapshot _data = snapshot.data;
+              final stats = StatsModel.fromJson(_data.data);
+
+              return new SafeArea(
+                top: false,
+                child: new Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    HeaderWidget(),
+                    StatsWidget(stats: stats),
+                    TopRowWidget(stats: stats),
+                    BottomRowWidget(stats: stats),
+                    new StoreConnector<ReduxState, ContactsViewModel>(
+                      converter: (store) => ContactsViewModel(store),
+                      onInit: (store) => store.dispatch(new InitDataEvents()),
+                      onDispose: (store) => store.dispatch(new DisposeDataEvents()),
+                      builder: (BuildContext context, ContactsViewModel vm) {
+                        return new FlatButton(
+                          shape: RoundedRectangleBorder(),
+                          padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
+                          color: kAccentColor,
+                          child: ScaleTransition(
+                            scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
+                            alignment: FractionalOffset.center,
+                            child: new Text(
+                              "TAP TO CREATE",
+                              style: ralewayBold(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
+                            ),
+                          ),
+                          onPressed: onTapCreate(vm.contacts),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

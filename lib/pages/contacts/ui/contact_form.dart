@@ -103,7 +103,7 @@ class ContactFormState extends State<ContactForm> with SnackBarProvider {
               ),
               SizedBox(height: 32.0),
               RaisedButton(
-                color: accentColor,
+                color: kAccentColor,
                 shape: StadiumBorder(),
                 onPressed: _handleSubmit,
                 child: Text(
@@ -125,12 +125,12 @@ class ContactFormState extends State<ContactForm> with SnackBarProvider {
       padding: EdgeInsets.all(4.0),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: primarySwatch.withOpacity(.5), width: 2.0),
+        border: Border.all(color: kPrimarySwatch.shade200, width: 2.0),
       ),
       child: DecoratedBox(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: primarySwatch.withOpacity(.2),
+          color: kPrimarySwatch.shade100,
         ),
         child: Center(
           child: GestureDetector(
@@ -143,7 +143,7 @@ class ContactFormState extends State<ContactForm> with SnackBarProvider {
                   contact.imageUrl != null
                       ? CircleAvatar(
                           backgroundImage: NetworkImage(contact.imageUrl),
-                          backgroundColor: primarySwatch.withOpacity(.2),
+                          backgroundColor: kPrimarySwatch.shade100,
                         )
                       : SizedBox(),
                   isLoading

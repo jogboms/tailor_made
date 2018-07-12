@@ -30,7 +30,7 @@ class StatsWidget extends StatelessWidget {
             ),
           ),
           Container(
-            color: borderSideColor,
+            color: kBorderSideColor,
             width: 1.0,
             height: 40.0,
             margin: EdgeInsets.only(left: 0.0, right: 0.0),
@@ -43,7 +43,7 @@ class StatsWidget extends StatelessWidget {
             ),
           ),
           Container(
-            color: borderSideColor,
+            color: kBorderSideColor,
             width: 1.0,
             height: 40.0,
             margin: EdgeInsets.only(left: 0.0, right: 0.0),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/jobs/job.dart';
 import 'package:tailor_made/models/job.dart';
+import 'package:tailor_made/pages/jobs/job.dart';
 import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_months.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -57,13 +57,13 @@ class JobListItem extends StatelessWidget {
                   children: <Widget>[
                     Text(job.name, style: TextStyle(fontSize: 16.0, color: theme.textColor, fontWeight: FontWeight.w600)),
                     new SizedBox(height: 4.0),
-                    Text(_price, style: TextStyle(fontSize: 14.0, color: textBaseColor)),
+                    Text(_price, style: TextStyle(fontSize: 14.0, color: kTextBaseColor)),
                   ],
                 ),
               ),
               new Icon(
                 Icons.check,
-                color: job.isComplete ? theme.accentColor : textBaseColor.shade300,
+                color: job.isComplete ? theme.primaryColor : kTextBaseColor.shade300,
               ),
             ],
           ),

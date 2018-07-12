@@ -36,7 +36,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
     children.add(
       Padding(
         child: RaisedButton(
-          color: accentColor,
+          color: kAccentColor,
           shape: StadiumBorder(),
           child: Text(
             "FINISH",
@@ -82,8 +82,8 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(title.toUpperCase(), style: ralewayLight(12.0, textBaseColor.shade800)),
-          Text(trailing, style: ralewayLight(12.0, textBaseColor.shade800)),
+          Text(title.toUpperCase(), style: ralewayLight(12.0, kTextBaseColor.shade800)),
+          Text(trailing, style: ralewayLight(12.0, kTextBaseColor.shade800)),
         ],
       ),
     );
@@ -102,7 +102,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
           hintStyle: TextStyle(fontSize: 14.0),
           border: UnderlineInputBorder(
             borderSide: BorderSide(
-              color: borderSideColor,
+              color: kBorderSideColor,
               width: 0.0,
               style: BorderStyle.solid,
             ),
@@ -127,7 +127,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
           hintStyle: TextStyle(fontSize: 14.0),
           border: UnderlineInputBorder(
             borderSide: BorderSide(
-              color: borderSideColor,
+              color: kBorderSideColor,
               width: 0.0,
               style: BorderStyle.solid,
             ),

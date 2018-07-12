@@ -20,7 +20,7 @@ class MeasureListItem extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
               child: Text(item.type.toLowerCase(), style: ralewayRegular(10.0, Colors.white)),
               decoration: BoxDecoration(
-                color: accentColor,
+                color: kAccentColor,
                 borderRadius: BorderRadius.circular(10.0),
               ),
             ),
@@ -31,12 +31,12 @@ class MeasureListItem extends StatelessWidget {
 
     if (item.value != null && item.value > 0) {
       children.addAll([
-        Text("${item.value} ", style: ralewayRegular(16.0, accentColor)),
+        Text("${item.value} ", style: ralewayRegular(16.0, kAccentColor)),
         SizedBox(width: 2.0),
-        Text(item.unit, style: ralewayLight(12.0, titleBaseColor)),
+        Text(item.unit, style: ralewayLight(12.0, kTitleBaseColor)),
       ]);
     } else {
-      children.add(Text("N/A", style: ralewayLight(12.0, titleBaseColor)));
+      children.add(Text("N/A", style: ralewayLight(12.0, kTitleBaseColor)));
     }
 
     return new Container(

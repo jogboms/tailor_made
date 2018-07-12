@@ -35,7 +35,7 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
     children.add(
       Padding(
         child: RaisedButton(
-          color: accentColor,
+          color: kAccentColor,
           shape: StadiumBorder(),
           child: Text(
             "FINISH",
@@ -59,7 +59,7 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
           IconButton(
             icon: Icon(
               Icons.remove_red_eye,
-              color: titleBaseColor,
+              color: kTitleBaseColor,
             ),
             onPressed: () => TMNavigate(
                   context,
@@ -95,8 +95,8 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(title.toUpperCase(), style: ralewayLight(12.0, textBaseColor.shade800)),
-          Text(trailing, style: ralewayLight(12.0, textBaseColor.shade800)),
+          Text(title.toUpperCase(), style: ralewayLight(12.0, kTextBaseColor.shade800)),
+          Text(trailing, style: ralewayLight(12.0, kTextBaseColor.shade800)),
         ],
       ),
     );
