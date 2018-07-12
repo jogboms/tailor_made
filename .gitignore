@@ -18,3 +18,4 @@ doc/api/
 ios/.generated/
 packages
 .flutter-plugins
+.log
