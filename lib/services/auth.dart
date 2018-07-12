@@ -10,7 +10,8 @@ class Auth {
   static FirebaseUser _user;
   Auth._();
 
-  static getUser() => _user;
+  static FirebaseUser setUser(FirebaseUser user) => _user = user;
+  static FirebaseUser get getUser => _user;
 
   static Future<GoogleSignInAccount> silently() async => await _googleSignIn.signInSilently();
 
@@ -39,7 +40,7 @@ class Auth {
     assert(user != null);
     assert(!user.isAnonymous);
 
-    _user = user;
+    setUser(user);
     return user;
   }
 
