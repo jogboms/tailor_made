@@ -24,7 +24,7 @@ class HeaderWidget extends StatelessWidget {
               "Hello",
               style: new TextStyle(
                 color: theme.textColor,
-                fontSize: 35.0,
+                fontSize: 32.0,
                 fontWeight: FontWeight.w200,
                 letterSpacing: 2.5,
               ),
@@ -33,9 +33,9 @@ class HeaderWidget extends StatelessWidget {
               "Mikun Sews",
               style: new TextStyle(
                 color: theme.textColor,
-                fontSize: 50.0,
+                fontSize: 48.0,
                 fontWeight: FontWeight.w300,
-                height: 1.05,
+                height: 1.15,
               ),
               maxLines: 1,
               overflow: TextOverflow.fade,
@@ -46,7 +46,7 @@ class HeaderWidget extends StatelessWidget {
               style: new TextStyle(
                 fontSize: 14.0,
                 fontWeight: FontWeight.w300,
-                height: 1.5,
+                height: 1.75,
               ),
             ),
           ],

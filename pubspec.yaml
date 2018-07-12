@@ -4,7 +4,6 @@ description: Tailor-Made with love.
 dependencies:
   flutter:
     sdk: flutter
-  carousel: ^0.0.1
   firebase_analytics: ^1.0.1
   cloud_firestore: ^0.7.3
   cloud_functions: ^0.0.1
@@ -22,6 +21,7 @@ dependencies:
   photo_view: ^0.0.2
   cached_network_image: "^0.4.1"
   flutter_spinkit: "^1.0.0"
+  google_sign_in: "^3.0.4"
 
 dev_dependencies:
   flutter_test:

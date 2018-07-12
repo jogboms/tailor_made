@@ -224,9 +224,7 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
               contact.fullname,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: ralewayRegular(16.0, textColor).copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+              style: ralewayBold(18.0, kTitleBaseColor),
             ),
           ),
           iconColor: textColor,
