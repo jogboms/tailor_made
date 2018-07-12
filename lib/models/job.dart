@@ -4,10 +4,12 @@ import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/models/payment.dart';
+import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/utils/tm_uuid.dart';
 
 class JobModel extends Model {
   String id;
+  String userID;
   String contactID;
   String name;
   double price;
@@ -21,7 +23,8 @@ class JobModel extends Model {
   DateTime createdAt;
 
   JobModel({
-    id,
+    String id,
+    String userID,
     @required this.contactID,
     this.name,
     this.price,
@@ -32,8 +35,9 @@ class JobModel extends Model {
     this.measurements = const [],
     this.payments = const [],
     this.isComplete = false,
-    createdAt,
+    DateTime createdAt,
   })  : id = id ?? uuid(),
+        userID = userID ?? Auth.getUser.uid,
         createdAt = createdAt ?? DateTime.now();
 
   factory JobModel.fromJson(Map<String, dynamic> json) {
@@ -58,6 +62,7 @@ class JobModel extends Model {
     }
     return new JobModel(
       id: json['id'],
+      userID: json['userID'],
       contactID: json['contactID'],
       name: json['name'],
       price: double.tryParse(json['price'].toString()),
@@ -80,6 +85,7 @@ class JobModel extends Model {
   toMap() {
     return {
       "id": id,
+      "userID": userID,
       "contactID": contactID,
       "name": name,
       "price": price,

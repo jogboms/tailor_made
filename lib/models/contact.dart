@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/utils/tm_uuid.dart';
 
 class ContactModel extends Model {
   String id;
+  String userID;
   String fullname;
   String phone;
   String location;
@@ -16,6 +18,7 @@ class ContactModel extends Model {
 
   ContactModel({
     String id,
+    String userID,
     this.fullname,
     this.phone,
     this.location,
@@ -26,6 +29,7 @@ class ContactModel extends Model {
     this.pendingJobs = 0,
   })  : id = id ?? uuid(),
         createdAt = createdAt ?? DateTime.now(),
+        userID = userID ?? Auth.getUser.uid,
         measurements = measurements != null && measurements.isNotEmpty ? measurements : createDefaultMeasures();
 
   factory ContactModel.fromJson(Map<String, dynamic> json) {
@@ -38,6 +42,7 @@ class ContactModel extends Model {
     }
     return new ContactModel(
       id: json['id'],
+      userID: json['userID'],
       fullname: json['fullname'],
       phone: json['phone'],
       location: json['location'],
@@ -56,6 +61,7 @@ class ContactModel extends Model {
   toMap() {
     return {
       "id": id,
+      "userID": userID,
       "fullname": fullname,
       "phone": phone,
       "location": location,
