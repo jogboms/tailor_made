@@ -1,3 +1,5 @@
+<img src="./assets/images/logo.png" style="margin: auto" width="90" />
+
 # TailorMade
 
 A Flutter experiment for managing a Fashion designer's daily routine. Logo, Design & Concept by Me.
