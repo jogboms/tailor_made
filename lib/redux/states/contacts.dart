@@ -26,10 +26,9 @@ class ContactsState {
       message: message ?? this.message,
     );
   }
-}
 
-ContactsState initialState = ContactsState(
-  contacts: null,
-  status: ContactsStatus.loading,
-  message: "",
-);
+  ContactsState.initialState()
+      : contacts = null,
+        status = ContactsStatus.loading,
+        message = "";
+}

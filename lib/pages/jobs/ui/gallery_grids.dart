@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +8,7 @@ import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/pages/gallery/gallery.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grid_item.dart';
+import 'package:tailor_made/services/cloud_storage.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_image_choice_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -124,32 +124,36 @@ class GalleryGridsState extends State<GalleryGrids> {
   }
 
   Future<Null> _handlePhotoButtonPressed() async {
-    var source = await imageChoiceDialog(context: context);
+    final source = await imageChoiceDialog(context: context);
     if (source == null) return;
-    var imageFile = await ImagePicker.pickImage(source: source);
-    var random = new Random().nextInt(10000);
-    var ref = FirebaseStorage.instance.ref().child('references/image_$random.jpg');
-    var uploadTask = ref.putFile(imageFile);
+    final imageFile = await ImagePicker.pickImage(source: source);
+    final ref = CloudStorage.create_reference();
+    final uploadTask = ref.putFile(imageFile);
 
     setState(() {
       fireImages.add(FireImage()..ref = ref);
     });
     try {
-      var imageUrl = (await uploadTask.future).downloadUrl?.toString();
+      final imageUrl = (await uploadTask.future).downloadUrl?.toString();
+
+      setState(() {
+        fireImages.last.image = ImageModel(
+          contactID: widget.job.contactID,
+          jobID: widget.job.id,
+          src: imageUrl,
+          path: ref.path,
+        );
+      });
+
+      await widget.job.reference.updateData({
+        "images": fireImages.map((img) => img.image.toMap()).toList(),
+      });
+
+      // Redraw
       setState(() {
         fireImages.last
           ..isLoading = false
-          ..isSucess = true
-          ..image = ImageModel(
-            contactID: widget.job.contactID,
-            jobID: widget.job.id,
-            src: imageUrl,
-            path: ref.path,
-          );
-
-        widget.job.reference.updateData({
-          "images": fireImages.map((img) => img.image.toMap()).toList(),
-        });
+          ..isSucess = true;
       });
     } catch (e) {
       setState(() {

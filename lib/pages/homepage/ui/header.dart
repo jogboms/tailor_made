@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/account.dart';
-import 'package:tailor_made/services/cloudstore.dart';
+import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_format_date.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -11,7 +11,7 @@ class HeaderWidget extends StatelessWidget {
     final TMTheme theme = TMTheme.of(context);
 
     return new StreamBuilder(
-      stream: Cloudstore.account.snapshots(),
+      stream: CloudDb.account.snapshots(),
       builder: (BuildContext context, snapshot) {
         if (!snapshot.hasData) {
           return Center(

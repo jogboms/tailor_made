@@ -7,7 +7,7 @@ import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/redux/actions/jobs.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
-import 'package:tailor_made/services/cloudstore.dart';
+import 'package:tailor_made/services/cloud_db.dart';
 
 Stream<dynamic> jobs(Stream<dynamic> actions, EpicStore<ReduxState> store) {
   return new Observable(actions)
@@ -20,7 +20,7 @@ Stream<dynamic> jobs(Stream<dynamic> actions, EpicStore<ReduxState> store) {
 }
 
 Observable<List<JobModel>> getJobList() {
-  return new Observable(Cloudstore.jobs.snapshots()).map((QuerySnapshot snapshot) {
+  return new Observable(CloudDb.jobs.snapshots()).map((QuerySnapshot snapshot) {
     return snapshot.documents.map((item) => JobModel.fromDoc(item)).toList();
   });
 }

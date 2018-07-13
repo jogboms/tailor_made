@@ -6,7 +6,7 @@ import 'package:tailor_made/pages/contacts/ui/contact_appbar.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_gallery_grid.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_jobs_list.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_payments_list.dart';
-import 'package:tailor_made/services/cloudstore.dart';
+import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -54,7 +54,7 @@ class _ContactState extends State<ContactPage> {
             ];
           },
           body: StreamBuilder(
-            stream: Cloudstore.jobs.where("contactID", isEqualTo: widget.contact.id).snapshots(),
+            stream: CloudDb.jobs.where("contactID", isEqualTo: widget.contact.id).snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return Center(

@@ -15,7 +15,7 @@ import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/contacts.dart';
 import 'package:tailor_made/services/auth.dart';
-import 'package:tailor_made/services/cloudstore.dart';
+import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
 import 'package:tailor_made/utils/tm_images.dart';
@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             onDispose: (store) => store.dispatch(new DisposeDataEvents()),
             builder: (BuildContext context, store) {
               return StreamBuilder(
-                stream: Cloudstore.stats.snapshots(),
+                stream: CloudDb.stats.snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return Center(

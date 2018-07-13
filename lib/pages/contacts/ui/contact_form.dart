@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:math' show Random;
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/services/cloud_storage.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_image_choice_dialog.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
@@ -177,12 +177,11 @@ class ContactFormState extends State<ContactForm> with SnackBarProvider {
   }
 
   Future<Null> _handlePhotoButtonPressed() async {
-    var source = await imageChoiceDialog(context: context);
+    final source = await imageChoiceDialog(context: context);
     if (source == null) return;
-    var imageFile = await ImagePicker.pickImage(source: source, maxWidth: 200.0, maxHeight: 200.0);
-    var random = new Random().nextInt(10000);
-    var ref = FirebaseStorage.instance.ref().child('contacts/image_$random.jpg');
-    var uploadTask = ref.putFile(imageFile);
+    final imageFile = await ImagePicker.pickImage(source: source, maxWidth: 200.0, maxHeight: 200.0);
+    final ref = CloudStorage.create_contact();
+    final uploadTask = ref.putFile(imageFile);
 
     setState(() => isLoading = true);
     try {

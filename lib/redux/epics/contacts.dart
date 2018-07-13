@@ -7,7 +7,7 @@ import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/redux/actions/contacts.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
-import 'package:tailor_made/services/cloudstore.dart';
+import 'package:tailor_made/services/cloud_db.dart';
 
 Stream<dynamic> contacts(Stream<dynamic> actions, EpicStore<ReduxState> store) {
   return new Observable(actions)
@@ -20,7 +20,7 @@ Stream<dynamic> contacts(Stream<dynamic> actions, EpicStore<ReduxState> store) {
 }
 
 Observable<List<ContactModel>> getContactList() {
-  return new Observable(Cloudstore.contacts.snapshots()).map((QuerySnapshot snapshot) {
+  return new Observable(CloudDb.contacts.snapshots()).map((QuerySnapshot snapshot) {
     return snapshot.documents
         .where((doc) => doc.data.containsKey("fullname"))
         //

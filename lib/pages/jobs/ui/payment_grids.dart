@@ -1,4 +1,3 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/job.dart';
@@ -13,7 +12,6 @@ import 'package:tailor_made/utils/tm_theme.dart';
 const _kGridWidth = 120.0;
 
 class FirePayment {
-  StorageReference ref;
   PaymentModel payment;
   bool isLoading = true;
   bool isSucess = false;

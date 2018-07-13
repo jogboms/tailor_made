@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/services/auth.dart';
 
-class Cloudstore {
+class CloudDb {
   static Firestore instance = Firestore.instance;
 
-  Cloudstore._();
+  CloudDb._();
 
   static DocumentReference get account => instance.document("accounts/${Auth.getUser.uid}");
   static DocumentReference get stats => instance.document("stats/${Auth.getUser.uid}");
