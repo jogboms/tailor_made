@@ -59,49 +59,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    onTapCreate(List<ContactModel> contacts) {
-      return () async {
-        CreateOptions result = await showDialog<CreateOptions>(
-          context: context,
-          builder: (BuildContext context) {
-            return new SimpleDialog(
-              title: const Text('Select action', style: const TextStyle(fontSize: 14.0)),
-              children: <Widget>[
-                new SimpleDialogOption(
-                  onPressed: () {
-                    Navigator.pop(context, CreateOptions.clients);
-                  },
-                  child: TMListTile(
-                    color: Colors.orangeAccent,
-                    icon: Icons.supervisor_account,
-                    title: "Clients",
-                  ),
-                ),
-                new SimpleDialogOption(
-                  onPressed: () {
-                    Navigator.pop(context, CreateOptions.jobs);
-                  },
-                  child: TMListTile(
-                    color: Colors.greenAccent.shade400,
-                    icon: Icons.attach_money,
-                    title: "Job",
-                  ),
-                ),
-              ],
-            );
-          },
-        );
-        switch (result) {
-          case CreateOptions.clients:
-            TMNavigate(context, ContactsCreatePage());
-            break;
-          case CreateOptions.jobs:
-            TMNavigate(context, JobsCreatePage(contacts: contacts));
-            break;
-        }
-      };
-    }
-
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
       body: Stack(
@@ -140,31 +97,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        HeaderWidget(),
+                        Expanded(child: HeaderWidget()),
                         StatsWidget(stats: stats),
                         TopRowWidget(stats: stats),
                         BottomRowWidget(stats: stats),
-                        new StoreConnector<ReduxState, ContactsViewModel>(
-                          converter: (store) => ContactsViewModel(store),
-                          onInit: (store) => store.dispatch(new InitDataEvents()),
-                          onDispose: (store) => store.dispatch(new DisposeDataEvents()),
-                          builder: (BuildContext context, ContactsViewModel vm) {
-                            return new FlatButton(
-                              shape: RoundedRectangleBorder(),
-                              padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
-                              color: kAccentColor,
-                              child: ScaleTransition(
-                                scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
-                                alignment: FractionalOffset.center,
-                                child: new Text(
-                                  "TAP TO CREATE",
-                                  style: ralewayBold(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
-                                ),
-                              ),
-                              onPressed: onTapCreate(vm.contacts),
-                            );
-                          },
-                        ),
+                        _buildCreateBtn(),
                       ],
                     ),
                   );
@@ -196,5 +133,72 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         ],
       ),
     );
+  }
+
+  StoreConnector<ReduxState, ContactsViewModel> _buildCreateBtn() {
+    return new StoreConnector<ReduxState, ContactsViewModel>(
+      converter: (store) => ContactsViewModel(store),
+      onInit: (store) => store.dispatch(new InitDataEvents()),
+      onDispose: (store) => store.dispatch(new DisposeDataEvents()),
+      builder: (BuildContext context, ContactsViewModel vm) {
+        return new FlatButton(
+          shape: RoundedRectangleBorder(),
+          padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
+          color: kAccentColor,
+          child: ScaleTransition(
+            scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
+            alignment: FractionalOffset.center,
+            child: new Text(
+              "TAP TO CREATE",
+              style: ralewayBold(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
+            ),
+          ),
+          onPressed: onTapCreate(vm.contacts),
+        );
+      },
+    );
+  }
+
+  onTapCreate(List<ContactModel> contacts) {
+    return () async {
+      CreateOptions result = await showDialog<CreateOptions>(
+        context: context,
+        builder: (BuildContext context) {
+          return new SimpleDialog(
+            title: const Text('Select action', style: const TextStyle(fontSize: 14.0)),
+            children: <Widget>[
+              new SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, CreateOptions.clients);
+                },
+                child: TMListTile(
+                  color: Colors.orangeAccent,
+                  icon: Icons.supervisor_account,
+                  title: "Clients",
+                ),
+              ),
+              new SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, CreateOptions.jobs);
+                },
+                child: TMListTile(
+                  color: Colors.greenAccent.shade400,
+                  icon: Icons.attach_money,
+                  title: "Job",
+                ),
+              ),
+            ],
+          );
+        },
+      );
+      switch (result) {
+        case CreateOptions.clients:
+          TMNavigate(context, ContactsCreatePage());
+          break;
+        case CreateOptions.jobs:
+          TMNavigate(context, JobsCreatePage(contacts: contacts));
+          break;
+      }
+    };
   }
 }

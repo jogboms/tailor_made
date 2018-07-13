@@ -38,6 +38,7 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
 
     Auth.onAuthStateChanged.firstWhere((user) => user != null).then(
       (user) {
+        Auth.setUser(user);
         Navigator.pushReplacement(context, TMNavigate.fadeIn(new HomePage()));
       },
     );

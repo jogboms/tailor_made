@@ -1,8 +1,9 @@
 PENDING:
+☐ remodel w/ authID
 ☐ delete-able payment
 ☐ delete-able images
 ☐ implement share payment + image
-
+☐ filter + search jobs & contacts
 
 COMPLETED:
   ✔ update stats db on creation @high @done(18-07-10 16:39)
