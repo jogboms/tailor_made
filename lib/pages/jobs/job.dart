@@ -46,19 +46,19 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    return new Scaffold(
-      key: scaffoldKey,
-      backgroundColor: theme.scaffoldColor,
-      body: new StreamBuilder(
-        stream: job.reference.snapshots(),
-        builder: (BuildContext context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: loadingSpinner(),
-            );
-          }
-          job = JobModel.fromDoc(snapshot.data);
-          return new NestedScrollView(
+    return new StreamBuilder(
+      stream: job.reference.snapshots(),
+      builder: (BuildContext context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: loadingSpinner(),
+          );
+        }
+        job = JobModel.fromDoc(snapshot.data);
+        return new Scaffold(
+          key: scaffoldKey,
+          backgroundColor: theme.scaffoldColor,
+          body: new NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 SliverAppBar(
@@ -88,13 +88,24 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
                     GalleryGrids(job: job),
                     const SizedBox(height: 4.0),
                     PaymentGrids(job: job),
+                    const SizedBox(height: 32.0),
                   ],
                 ),
               ),
             ),
-          );
-        },
-      ),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: FloatingActionButton.extended(
+            icon: new Icon(
+              job.isComplete ? Icons.undo : Icons.check,
+            ),
+            backgroundColor: job.isComplete ? Colors.white : kAccentColor,
+            foregroundColor: job.isComplete ? kAccentColor : Colors.white,
+            label: Text(job.isComplete ? "Undo Completed" : "Mark Completed"),
+            onPressed: onTapComplete,
+          ),
+        );
+      },
     );
   }
 
@@ -213,9 +224,7 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
               contact.fullname,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: ralewayRegular(16.0, textColor).copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+              style: ralewayBold(18.0, kTitleBaseColor),
             ),
           ),
           iconColor: textColor,
@@ -230,10 +239,10 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
           actions: <Widget>[
             IconButton(
               icon: new Icon(
-                job.isComplete ? Icons.check_box : Icons.check_box_outline_blank,
-                color: textBaseColor.shade900,
+                Icons.check,
+                color: job.isComplete ? kPrimaryColor : kTextBaseColor.shade400,
               ),
-              onPressed: onTapComplete,
+              onPressed: null,
             )
           ],
         );
@@ -244,7 +253,7 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
   void onTapComplete() async {
     var choice = await confirmDialog(
       context: context,
-      title: Text("Marking this job as complete?"),
+      title: Text("Are you sure?"),
     );
     if (choice == null || choice == false) return;
 

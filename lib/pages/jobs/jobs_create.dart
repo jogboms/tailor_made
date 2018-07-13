@@ -84,8 +84,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         child: new Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(title.toUpperCase(), style: ralewayLight(12.0, textBaseColor.shade800)),
-            Text(trailing, style: ralewayLight(12.0, textBaseColor.shade800)),
+            Text(title.toUpperCase(), style: ralewayLight(12.0, kTextBaseColor.shade800)),
+            Text(trailing, style: ralewayLight(12.0, kTextBaseColor.shade800)),
           ],
         ),
       );
@@ -110,7 +110,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       children.add(
         Padding(
           child: RaisedButton(
-            color: accentColor,
+            color: kAccentColor,
             shape: StadiumBorder(),
             child: Text(
               "FINISH",
@@ -191,7 +191,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
               contact.fullname,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: ralewayRegular(18.0, theme.appBarColor),
+              style: ralewayBold(18.0, theme.appBarColor),
             ),
             subtitle: Text("${contact.totalJobs} Jobs", style: theme.smallTextStyle),
             actions: widget.contacts.isNotEmpty
@@ -249,7 +249,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           hintStyle: TextStyle(fontSize: 14.0),
           border: UnderlineInputBorder(
             borderSide: BorderSide(
-              color: borderSideColor,
+              color: kBorderSideColor,
               width: 0.0,
               style: BorderStyle.solid,
             ),
@@ -273,7 +273,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
             child: Icon(
               Icons.add_a_photo,
               size: 24.0,
-              color: textBaseColor.withOpacity(.35),
+              color: kTextBaseColor.withOpacity(.35),
             ),
           ),
         ),
@@ -359,7 +359,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           // border: InputBorder.none,
           border: UnderlineInputBorder(
             borderSide: BorderSide(
-              color: borderSideColor,
+              color: kBorderSideColor,
               width: 1.0,
               style: BorderStyle.solid,
             ),
@@ -384,7 +384,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           hintStyle: TextStyle(fontSize: 14.0),
           border: UnderlineInputBorder(
             borderSide: BorderSide(
-              color: borderSideColor,
+              color: kBorderSideColor,
               width: 0.0,
               style: BorderStyle.solid,
             ),

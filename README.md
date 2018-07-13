@@ -1,8 +1,24 @@
+<img src="./assets/images/logo.png" style="margin: auto" width="90" />
+
 # TailorMade
 
-A Flutter experiment.
+A Flutter experiment for managing a Fashion designer's daily routine. Logo, Design & Concept by Me.
 
-## UI Shots (so far)
+> Android-only support
+
+## Tools
+
+1.  Firebase Auth
+2.  Firebase Cloud Firestore
+3.  Firebase Cloud Functions
+4.  Firebase Storage
+5.  RxDart
+6.  Redux
+7.  Redux Epics
+
+For a full description of OSS used, see pubspec.yaml
+
+## UI Shots
 
 <div style="text-align: center">
   <table>
@@ -63,6 +79,15 @@ A Flutter experiment.
       </td>
       <td style="text-align: center">
         <img src="./screenshots/ss17.png" width="200" />
+      </td>
+      <td style="text-align: center">
+        <img src="./screenshots/ss18.png" width="200" />
+      </td>
+      <td style="text-align: center">
+        <img src="./screenshots/ss19.png" width="200" />
+      </td>
+      <td style="text-align: center">
+        <img src="./screenshots/ss20.png" width="200" />
       </td>
     </tr>
   </table>

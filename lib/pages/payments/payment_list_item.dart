@@ -35,7 +35,7 @@ class PaymentListItem extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: _date.day.toString(),
-                        style: ralewayMedium(16.0, accentColor),
+                        style: ralewayMedium(16.0, kAccentColor),
                       ),
                       TextSpan(text: "\n"),
                       TextSpan(
@@ -56,7 +56,7 @@ class PaymentListItem extends StatelessWidget {
                         width: 4.0,
                         height: 4.0,
                         decoration: BoxDecoration(
-                          color: accentColor,
+                          color: kAccentColor,
                           shape: BoxShape.circle,
                         ),
                       ),

@@ -1,10 +1,10 @@
 name: tailor_made
 description: Tailor-Made with love.
+version: 0.1.0
 
 dependencies:
   flutter:
     sdk: flutter
-  carousel: ^0.0.1
   firebase_analytics: ^1.0.1
   cloud_firestore: ^0.7.3
   cloud_functions: ^0.0.1
@@ -22,6 +22,7 @@ dependencies:
   photo_view: ^0.0.2
   cached_network_image: "^0.4.1"
   flutter_spinkit: "^1.0.0"
+  google_sign_in: "^3.0.4"
 
 dev_dependencies:
   flutter_test:
@@ -30,19 +31,19 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-assets:
-  - assets/images/
+  assets:
+    - assets/images/
 
-fonts:
-  - family: Raleway
-    fonts:
-      - asset: assets/fonts/Raleway-Thin.ttf
-        weight: 100
-      - asset: assets/fonts/Raleway-Light.ttf
-        weight: 300
-      - asset: assets/fonts/Raleway-Regular.ttf
-        weight: 400
-      - asset: assets/fonts/Raleway-Medium.ttf
-        weight: 500
-      - asset: assets/fonts/Raleway-SemiBold.ttf
-        weight: 600
+  fonts:
+    - family: Raleway
+      fonts:
+        - asset: assets/fonts/Raleway-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Raleway-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Raleway-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Raleway-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Raleway-SemiBold.ttf
+          weight: 600

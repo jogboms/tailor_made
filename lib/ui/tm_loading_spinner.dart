@@ -5,7 +5,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 Widget loadingSpinner({Color color}) {
   return Center(
     child: SpinKitFadingFour(
-      color: color ?? accentColor,
+      color: color ?? kAccentColor,
       // color: color ?? primarySwatch,
       width: 30.0,
       height: 30.0,

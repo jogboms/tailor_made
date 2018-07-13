@@ -44,7 +44,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
           IconButton(
             icon: Icon(
               Icons.content_cut,
-              color: titleBaseColor,
+              color: kTitleBaseColor,
             ),
             onPressed: () => TMNavigate(
                   context,

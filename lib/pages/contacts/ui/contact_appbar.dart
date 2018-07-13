@@ -157,30 +157,18 @@ class ContactAppBarState extends State<ContactAppBar> {
           style: TextStyle(
             fontSize: 18.0,
             color: Colors.white,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
-        isAtTop || (widget.contact.pendingJobs < 1)
-            ? Container()
-            : Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: widget.contact.pendingJobs.toString(),
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    TextSpan(
-                      text: " pending",
-                    ),
-                  ],
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 13.0,
-                  color: Colors.white,
-                ),
-              ),
+        Text(
+          widget.contact.location,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 13.0,
+            color: Colors.white,
+          ),
+        ),
       ],
     );
   }
@@ -192,7 +180,6 @@ class ContactAppBarState extends State<ContactAppBar> {
         child: new Icon(icon, color: Colors.white),
         onTap: onTap,
         radius: 20.0,
-        splashColor: accentColor.withOpacity(.25),
       ),
     );
   }

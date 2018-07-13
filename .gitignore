@@ -15,7 +15,7 @@ doc/api/
 .atom/
 .dart_tool/
 .idea
-.vscode/
 ios/.generated/
 packages
 .flutter-plugins
+.log

@@ -50,7 +50,7 @@ class PaymentsPageState extends State<PaymentsPage> {
                         "${payments.length} Tickets",
                         style: TextStyle(
                           fontSize: 11.0,
-                          color: textBaseColor,
+                          color: kTextBaseColor,
                         ),
                       )
                     : SizedBox(),

@@ -1,15 +1,16 @@
 import { firestore as Firestore } from "firebase-admin";
 import { EventContext, firestore } from "firebase-functions";
 import { isArray } from "util";
+import { ChangeState } from "../utils";
 
-export function _onStatsContacts(onCreate: boolean) {
+export function _onStatsContacts(onCreate: ChangeState) {
   return async (
     snapshot: firestore.DocumentSnapshot,
     context: EventContext
   ) => {
     const db = Firestore();
-    const stats = db.doc("stats/current");
     const contact = snapshot.data();
+    const stats = db.doc(`stats/${contact.userID}`);
 
     const statsSnap = await stats.get();
 
@@ -25,10 +26,10 @@ export function _onStatsContacts(onCreate: boolean) {
   };
 }
 
-export function onStatsContacts(onCreate = true) {
+export function onStatsContacts(onCreate: ChangeState) {
   const store = firestore.document("contacts/{contactId}");
 
-  return onCreate
+  return onCreate === ChangeState.Created
     ? store.onCreate(_onStatsContacts(onCreate))
     : store.onDelete(_onStatsContacts(onCreate));
 }

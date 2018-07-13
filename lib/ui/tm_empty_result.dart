@@ -19,7 +19,7 @@ class TMEmptyResult extends StatelessWidget {
         children: <Widget>[
           new Icon(
             Icons.equalizer,
-            color: theme.accentColor,
+            color: theme.primaryColor,
             size: 36.0,
           ),
           const SizedBox(height: 8.0),
