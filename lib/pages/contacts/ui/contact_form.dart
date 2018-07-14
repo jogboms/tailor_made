@@ -180,7 +180,7 @@ class ContactFormState extends State<ContactForm> with SnackBarProvider {
     final source = await imageChoiceDialog(context: context);
     if (source == null) return;
     final imageFile = await ImagePicker.pickImage(source: source, maxWidth: 200.0, maxHeight: 200.0);
-    final ref = CloudStorage.create_contact();
+    final ref = CloudStorage.createContact();
     final uploadTask = ref.putFile(imageFile);
 
     setState(() => isLoading = true);

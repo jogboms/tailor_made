@@ -66,7 +66,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
     showLoadingSnackBar();
 
     try {
-      final ref = CloudDb.contacts.document(contact.id);
+      final ref = CloudDb.contactsRef.document(contact.id);
       await ref.setData(contact.toMap());
 
       ref.snapshots().listen((snap) async {

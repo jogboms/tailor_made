@@ -111,25 +111,27 @@ class PaymentGridsState extends State<PaymentGrids> {
 
               try {
                 setState(() {
+                  firePayments.last.payment = new PaymentModel(
+                    contactID: widget.job.contactID,
+                    jobID: widget.job.id,
+                    price: result["price"],
+                    notes: result["notes"],
+                  );
+                });
+
+                await widget.job.reference.updateData({
+                  "payments": firePayments.map((payment) => payment.payment.toMap()).toList(),
+                });
+
+                setState(() {
                   firePayments.last
                     ..isLoading = false
-                    ..isSucess = true
-                    ..payment = new PaymentModel(
-                      contactID: widget.job.contactID,
-                      jobID: widget.job.id,
-                      price: result["price"],
-                      notes: result["notes"],
-                    );
-
-                  widget.job.reference.updateData({
-                    "payments": firePayments.map((payment) => payment.payment.toMap()).toList(),
-                  });
+                    ..isSucess = true;
                 });
               } catch (e) {
                 setState(() {
                   firePayments.last.isLoading = false;
                 });
-                print(e);
               }
             }
           },

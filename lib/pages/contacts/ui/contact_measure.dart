@@ -120,8 +120,6 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
         closeLoadingSnackBar();
         showInSnackBar(e.toString());
       }
-      //
-      widget.contact;
     }
   }
 }

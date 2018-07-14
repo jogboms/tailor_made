@@ -223,7 +223,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         ..contactID = contact.id;
 
       try {
-        final ref = CloudDb.jobs.document(job.id);
+        final ref = CloudDb.jobsRef.document(job.id);
         await ref.setData(job.toMap());
         ref.snapshots().listen((snap) {
           closeLoadingSnackBar();
@@ -319,7 +319,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     final source = await imageChoiceDialog(context: context);
     if (source == null) return;
     final imageFile = await ImagePicker.pickImage(source: source);
-    final ref = CloudStorage.create_reference();
+    final ref = CloudStorage.createReference();
     final uploadTask = ref.putFile(imageFile);
 
     setState(() {

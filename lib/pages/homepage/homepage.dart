@@ -18,6 +18,7 @@ import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
+import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_images.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -82,6 +83,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               return StreamBuilder(
                 stream: CloudDb.stats.snapshots(),
                 builder: (context, snapshot) {
+                  // TODO
                   if (!snapshot.hasData) {
                     return Center(
                       child: loadingSpinner(),
@@ -112,21 +114,38 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           Align(
             alignment: Alignment.topRight,
             child: SafeArea(
-              child: IconButton(
-                icon: new Icon(
-                  Icons.power_settings_new,
-                  color: theme.appBarColor,
-                ),
-                // onPressed: () => TMNavigate(context, AccountsPage()),
-                onPressed: () async {
-                  await Auth.signOutWithGoogle();
-                  Navigator.pushReplacement(
-                    context,
-                    TMNavigate.fadeIn(
-                      new SplashPage(isColdStart: false),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  // TODO
+                  // IconButton(
+                  //   icon: new Icon(
+                  //     Icons.person,
+                  //     color: theme.appBarColor,
+                  //   ),
+                  //   onPressed: () => TMNavigate(context, AccountsPage()),
+                  // ),
+                  IconButton(
+                    icon: new Icon(
+                      Icons.power_settings_new,
+                      color: theme.appBarColor,
                     ),
-                  );
-                },
+                    // onPressed: () => TMNavigate(context, AccountsPage()),
+                    onPressed: () async {
+                      final response = await confirmDialog(context: context, title: Text("You are about to logout."));
+
+                      if (response == true) {
+                        await Auth.signOutWithGoogle();
+                        Navigator.pushReplacement(
+                          context,
+                          TMNavigate.fadeIn(
+                            new SplashPage(isColdStart: false),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
               ),
             ),
           ),
@@ -135,25 +154,31 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
-  StoreConnector<ReduxState, ContactsViewModel> _buildCreateBtn() {
+  Widget _buildCreateBtn() {
     return new StoreConnector<ReduxState, ContactsViewModel>(
       converter: (store) => ContactsViewModel(store),
       onInit: (store) => store.dispatch(new InitDataEvents()),
       onDispose: (store) => store.dispatch(new DisposeDataEvents()),
       builder: (BuildContext context, ContactsViewModel vm) {
-        return new FlatButton(
-          shape: RoundedRectangleBorder(),
-          padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
+        return Material(
+          elevation: 0.0,
           color: kAccentColor,
-          child: ScaleTransition(
-            scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
-            alignment: FractionalOffset.center,
-            child: new Text(
-              "TAP TO CREATE",
-              style: ralewayBold(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
+          child: InkWell(
+            onTap: onTapCreate(vm.contacts),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+                child: ScaleTransition(
+                  scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
+                  alignment: FractionalOffset.center,
+                  child: new Text(
+                    "TAP TO CREATE",
+                    style: ralewayBold(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
+                  ),
+                ),
+              ),
             ),
           ),
-          onPressed: onTapCreate(vm.contacts),
         );
       },
     );
