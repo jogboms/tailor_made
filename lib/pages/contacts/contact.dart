@@ -29,6 +29,11 @@ class _ContactState extends State<ContactPage> {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
+    // TODO
+    // return StoreConnector<ReduxState, ContactsViewModel>(
+    //   converter: (store) => ContactsViewModel(store)..contactID = widget.contact.id,
+    //   builder: (BuildContext context, ContactsViewModel vm) {
+    //     final contact = vm.selected;
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
       body: new DefaultTabController(
@@ -86,45 +91,47 @@ class _ContactState extends State<ContactPage> {
           ),
         ),
       ),
+      //   );
+      // },
     );
   }
-}
 
-Widget tabTitles() {
-  return PreferredSize(
-    child: Container(
-      child: TabBar(
-        labelStyle: ralewayMedium(14.0),
-        tabs: [
-          Tab(child: Text(TABS[0])),
-          Tab(child: Text(TABS[1])),
-          Tab(child: Text(TABS[2])),
-        ],
-      ),
-    ),
-    preferredSize: Size.fromHeight(kTextTabBarHeight),
-  );
-}
-
-Widget tabView({name: String, child: Widget}) {
-  return new SafeArea(
-    top: false,
-    bottom: true,
-    child: new Builder(
-      builder: (BuildContext context) {
-        return new CustomScrollView(
-          key: new PageStorageKey<String>(name),
-          slivers: <Widget>[
-            new SliverOverlapInjector(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-            ),
-            new SliverPadding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              sliver: child,
-            ),
+  Widget tabTitles() {
+    return PreferredSize(
+      child: Container(
+        child: TabBar(
+          labelStyle: ralewayMedium(14.0),
+          tabs: [
+            Tab(child: Text(TABS[0])),
+            Tab(child: Text(TABS[1])),
+            Tab(child: Text(TABS[2])),
           ],
-        );
-      },
-    ),
-  );
+        ),
+      ),
+      preferredSize: Size.fromHeight(kTextTabBarHeight),
+    );
+  }
+
+  Widget tabView({name: String, child: Widget}) {
+    return new SafeArea(
+      top: false,
+      bottom: true,
+      child: new Builder(
+        builder: (BuildContext context) {
+          return new CustomScrollView(
+            key: new PageStorageKey<String>(name),
+            slivers: <Widget>[
+              new SliverOverlapInjector(
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              ),
+              new SliverPadding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                sliver: child,
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 }
