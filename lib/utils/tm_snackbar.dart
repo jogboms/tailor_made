@@ -4,8 +4,8 @@ import 'package:tailor_made/ui/loading_snackbar.dart';
 abstract class SnackBarProvider {
   GlobalKey<ScaffoldState> get scaffoldKey;
 
-  void showInSnackBar(String value) {
-    scaffoldKey.currentState?.showSnackBar(new SnackBar(content: new Text(value)));
+  void showInSnackBar(String value, [Duration duration]) {
+    scaffoldKey.currentState?.showSnackBar(new SnackBar(content: new Text(value), duration: duration));
   }
 
   void closeLoadingSnackBar() {
