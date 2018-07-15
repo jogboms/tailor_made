@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:tailor_made/ui/app_bar.dart';
+import 'package:tailor_made/ui/full_button.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -35,9 +36,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
 
     children.add(
       Padding(
-        child: RaisedButton(
-          color: kAccentColor,
-          shape: StadiumBorder(),
+        child: FullButton(
           child: Text(
             "FINISH",
             style: TextStyle(color: Colors.white),

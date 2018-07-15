@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,9 +13,11 @@ import 'package:tailor_made/pages/jobs/job.dart';
 import 'package:tailor_made/pages/jobs/ui/contact_lists.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grid_item.dart';
 import 'package:tailor_made/pages/jobs/ui/measure_create_items.dart';
-import 'package:tailor_made/services/cloudstore.dart';
+import 'package:tailor_made/services/cloud_db.dart';
+import 'package:tailor_made/services/cloud_storage.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
+import 'package:tailor_made/ui/full_button.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_image_choice_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -109,9 +110,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
 
       children.add(
         Padding(
-          child: RaisedButton(
-            color: kAccentColor,
-            shape: StadiumBorder(),
+          child: FullButton(
             child: Text(
               "FINISH",
               style: TextStyle(color: Colors.white),
@@ -223,7 +222,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         ..contactID = contact.id;
 
       try {
-        final ref = Cloudstore.jobs.document(job.id);
+        final ref = CloudDb.jobsRef.document(job.id);
         await ref.setData(job.toMap());
         ref.snapshots().listen((snap) {
           closeLoadingSnackBar();
@@ -316,18 +315,17 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   }
 
   Future<Null> _handlePhotoButtonPressed() async {
-    var source = await imageChoiceDialog(context: context);
+    final source = await imageChoiceDialog(context: context);
     if (source == null) return;
-    var imageFile = await ImagePicker.pickImage(source: source);
-    var random = new Random().nextInt(10000);
-    var ref = FirebaseStorage.instance.ref().child('references/image_$random.jpg');
-    var uploadTask = ref.putFile(imageFile);
+    final imageFile = await ImagePicker.pickImage(source: source);
+    final ref = CloudStorage.createReference();
+    final uploadTask = ref.putFile(imageFile);
 
     setState(() {
       fireImages.add(FireImage()..ref = ref);
     });
     try {
-      var imageUrl = (await uploadTask.future).downloadUrl?.toString();
+      final imageUrl = (await uploadTask.future).downloadUrl?.toString();
       setState(() {
         fireImages.last
           ..isLoading = false

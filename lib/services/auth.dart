@@ -18,30 +18,35 @@ class Auth {
   static get onAuthStateChanged => _auth.onAuthStateChanged;
 
   static Future<FirebaseUser> signInWithGoogle() async {
-    // Attempt to get the currently authenticated user
-    GoogleSignInAccount currentUser = _googleSignIn.currentUser;
-    if (currentUser == null) {
-      // Attempt to sign in without user interaction
-      currentUser = await _googleSignIn.signInSilently();
+    try {
+      // Attempt to get the currently authenticated user
+      GoogleSignInAccount currentUser = _googleSignIn.currentUser;
+      if (currentUser == null) {
+        // Attempt to sign in without user interaction
+        currentUser = await _googleSignIn.signInSilently();
+      }
+      if (currentUser == null) {
+        // Force the user to interactively sign in
+        currentUser = await _googleSignIn.signIn();
+      }
+
+      final GoogleSignInAuthentication auth = await currentUser.authentication;
+
+      // Authenticate with firebase
+      final FirebaseUser user = await _auth.signInWithGoogle(
+        idToken: auth.idToken,
+        accessToken: auth.accessToken,
+      );
+      assert(user != null);
+      assert(!user.isAnonymous);
+
+      setUser(user);
+      return user;
+    } catch (e) {
+      // TODO should test this when flutter fixes debug mode
+      print(e);
+      throw e;
     }
-    if (currentUser == null) {
-      // Force the user to interactively sign in
-      currentUser = await _googleSignIn.signIn();
-    }
-
-    final GoogleSignInAuthentication auth = await currentUser.authentication;
-
-    // Authenticate with firebase
-    final FirebaseUser user = await _auth.signInWithGoogle(
-      idToken: auth.idToken,
-      accessToken: auth.accessToken,
-    );
-
-    assert(user != null);
-    assert(!user.isAnonymous);
-
-    setUser(user);
-    return user;
   }
 
   static Future<Null> signOutWithGoogle() async {

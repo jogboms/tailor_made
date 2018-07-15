@@ -26,10 +26,9 @@ class JobsState {
       message: message ?? this.message,
     );
   }
-}
 
-JobsState initialState = JobsState(
-  jobs: null,
-  status: JobsStatus.loading,
-  message: "",
-);
+  JobsState.initialState()
+      : jobs = null,
+        status = JobsStatus.loading,
+        message = "";
+}
