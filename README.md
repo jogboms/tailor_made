@@ -90,6 +90,14 @@ For a full description of OSS used, see pubspec.yaml
         <img src="./screenshots/ss20.png" width="200" />
       </td>
     </tr>
+    <tr>
+      <td style="text-align: center">
+        <img src="./screenshots/ss21.png" width="200" />
+      </td>
+      <td style="text-align: center">
+        <img src="./screenshots/ss22.png" width="200" />
+      </td>
+    </tr>
   </table>
 </div>
 
