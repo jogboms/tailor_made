@@ -8,7 +8,7 @@
     "type": "dart",
     "request": "launch",
     "args": [
-      "--flavor=development"
+      "--flavor=dev"
     ],
     "program": "lib/main.dart"
   }]

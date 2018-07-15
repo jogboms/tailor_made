@@ -4,7 +4,7 @@ import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_form.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_measure.dart';
-import 'package:tailor_made/services/cloudstore.dart';
+import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -57,16 +57,20 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
         key: _formKey,
         contact: contact,
         onHandleSubmit: _handleSubmit,
-        scaffoldKey: scaffoldKey,
+        onHandleValidate: _handleValidate,
       ),
     );
+  }
+
+  void _handleValidate() async {
+    showInSnackBar('Please fix the errors in red before submitting.');
   }
 
   void _handleSubmit(ContactModel contact) async {
     showLoadingSnackBar();
 
     try {
-      final ref = Cloudstore.contacts.document(contact.id);
+      final ref = CloudDb.contactsRef.document(contact.id);
       await ref.setData(contact.toMap());
 
       ref.snapshots().listen((snap) async {

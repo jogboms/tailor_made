@@ -26,6 +26,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> with SnackBarProvider {
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   bool isLoading;
+  bool isRestartable = false;
 
   @override
   void initState() {
@@ -49,7 +50,14 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
     await new Future.delayed(new Duration(seconds: 1)).then((_) => _onLogin());
   }
 
-  _onLogin() async => await Auth.signInWithGoogle();
+  _onLogin() async => await Auth.signInWithGoogle().catchError((e) async {
+        showInSnackBar(e.message, const Duration(milliseconds: 3500));
+        await Auth.signOutWithGoogle();
+        setState(() {
+          isLoading = false;
+          isRestartable = true;
+        });
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +86,7 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
               textAlign: TextAlign.center,
             ),
           ),
-          isLoading && widget.isColdStart
+          isLoading && (widget.isColdStart || isRestartable)
               ? SizedBox()
               : Center(
                   child: Image(
@@ -101,7 +109,7 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
   }
 
   Widget _googleBtn() {
-    return RaisedButton(
+    return RaisedButton.icon(
       color: Colors.white,
       onPressed: () {
         setState(() => isLoading = true);
@@ -112,15 +120,8 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
           showInSnackBar(e.toString());
         }
       },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Image(image: TMImages.google_logo, width: 24.0),
-          const SizedBox(width: 8.0),
-          Text("Continue with Google", style: TextStyle(fontWeight: FontWeight.w700)),
-        ],
-      ),
+      icon: Image(image: TMImages.google_logo, width: 24.0),
+      label: Text("Continue with Google", style: TextStyle(fontWeight: FontWeight.w700)),
     );
   }
 }

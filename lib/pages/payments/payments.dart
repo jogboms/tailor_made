@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/pages/payments/payments_list.dart';
-import 'package:tailor_made/services/cloudstore.dart';
+import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/ui/back_button.dart';
 import 'package:tailor_made/ui/tm_empty_result.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
@@ -85,7 +85,7 @@ class PaymentsPageState extends State<PaymentsPage> {
   getBody() {
     if (payments == null) {
       return new StreamBuilder(
-        stream: Cloudstore.payments.snapshots(),
+        stream: CloudDb.payments.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return SliverFillRemaining(

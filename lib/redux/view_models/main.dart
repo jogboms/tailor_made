@@ -5,4 +5,12 @@ abstract class ViewModel {
   final Store<ReduxState> store;
 
   ViewModel(this.store);
+
+  // TODO
+  // @override
+  // bool operator ==(Object other) => hashCode == other.hashCode;
+
+  // TODO
+  // @override
+  // int get hashCode => DateTime.now().millisecondsSinceEpoch;
 }

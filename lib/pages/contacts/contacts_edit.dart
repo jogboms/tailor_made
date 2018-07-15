@@ -20,13 +20,6 @@ class ContactsEditPage extends StatefulWidget {
 
 class _ContactsEditPageState extends State<ContactsEditPage> with SnackBarProvider {
   final scaffoldKey = new GlobalKey<ScaffoldState>();
-  ContactModel contact;
-
-  @override
-  void initState() {
-    super.initState();
-    contact = widget.contact;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,18 +32,22 @@ class _ContactsEditPageState extends State<ContactsEditPage> with SnackBarProvid
         title: "Edit Contact",
       ),
       body: ContactForm(
-        contact: contact,
+        contact: widget.contact,
         onHandleSubmit: _handleSubmit,
-        scaffoldKey: scaffoldKey,
+        onHandleValidate: _handleValidate,
       ),
     );
+  }
+
+  void _handleValidate() async {
+    showInSnackBar('Please fix the errors in red before submitting.');
   }
 
   void _handleSubmit(ContactModel contact) async {
     showLoadingSnackBar();
 
     try {
-      await contact.toMap();
+      await contact.reference.setData(contact.toMap());
       closeLoadingSnackBar();
       showInSnackBar("Successfully Updated");
     } catch (e) {

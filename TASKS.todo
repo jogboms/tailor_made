@@ -1,11 +1,16 @@
 PENDING:
-☐ remodel w/ authID
-☐ delete-able payment
+  ☐ delete-able payment
 ☐ delete-able images
 ☐ implement share payment + image
 ☐ filter + search jobs & contacts
+☐ create a new contact from phone contact
+☐ Collect account details on account creation
+☐ Generate invoice & share as SMS containing link to pay on paystack
+☐ Firebase function on successful payments w/ push notification
 
 COMPLETED:
+  ✔ remodel w/ authID @done(18-07-15 14:43)
+  ✔ scope storage path to accounts @high @done(18-07-13 16:19)
   ✔ update stats db on creation @high @done(18-07-10 16:39)
   ✔ add more flesh to payment view @done(18-07-10 15:36)
   ✔ navigate to job after creation @high @done(18-07-10 15:23)

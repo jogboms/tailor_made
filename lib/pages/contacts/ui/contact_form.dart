@@ -1,27 +1,27 @@
 import 'dart:async';
-import 'dart:math' show Random;
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/services/cloud_storage.dart';
+import 'package:tailor_made/ui/full_button.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_image_choice_dialog.dart';
-import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 import 'package:tailor_made/utils/tm_validators.dart';
 
 class ContactForm extends StatefulWidget {
   final void Function(ContactModel) onHandleSubmit;
+  final void Function() onHandleValidate;
   final ContactModel contact;
-  final GlobalKey<ScaffoldState> scaffoldKey;
 
   ContactForm({
     Key key,
     @required this.contact,
     @required this.onHandleSubmit,
-    @required this.scaffoldKey,
+    @required this.onHandleValidate,
   }) : super(key: key);
 
   @override
@@ -30,14 +30,12 @@ class ContactForm extends StatefulWidget {
   }
 }
 
-class ContactFormState extends State<ContactForm> with SnackBarProvider {
+class ContactFormState extends State<ContactForm> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   bool isLoading = false;
   ContactModel contact;
   bool _autovalidate = false;
   StorageReference _lastImgRef;
-
-  get scaffoldKey => widget.scaffoldKey;
 
   @override
   void initState() {
@@ -102,9 +100,7 @@ class ContactFormState extends State<ContactForm> with SnackBarProvider {
                 onSaved: (location) => contact.location = location.trim(),
               ),
               SizedBox(height: 32.0),
-              RaisedButton(
-                color: kAccentColor,
-                shape: StadiumBorder(),
+              FullButton(
                 onPressed: _handleSubmit,
                 child: Text(
                   "SUBMIT",
@@ -169,7 +165,7 @@ class ContactFormState extends State<ContactForm> with SnackBarProvider {
     if (form == null) return;
     if (!form.validate()) {
       _autovalidate = true; // Start validating on every change.
-      showInSnackBar('Please fix the errors in red before submitting.');
+      widget.onHandleValidate();
     } else {
       form.save();
       widget.onHandleSubmit(contact);
@@ -177,12 +173,11 @@ class ContactFormState extends State<ContactForm> with SnackBarProvider {
   }
 
   Future<Null> _handlePhotoButtonPressed() async {
-    var source = await imageChoiceDialog(context: context);
+    final source = await imageChoiceDialog(context: context);
     if (source == null) return;
-    var imageFile = await ImagePicker.pickImage(source: source, maxWidth: 200.0, maxHeight: 200.0);
-    var random = new Random().nextInt(10000);
-    var ref = FirebaseStorage.instance.ref().child('contacts/image_$random.jpg');
-    var uploadTask = ref.putFile(imageFile);
+    final imageFile = await ImagePicker.pickImage(source: source, maxWidth: 200.0, maxHeight: 200.0);
+    final ref = CloudStorage.createContact();
+    final uploadTask = ref.putFile(imageFile);
 
     setState(() => isLoading = true);
     try {
