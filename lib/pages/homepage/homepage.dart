@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/models/contact.dart';
-import 'package:tailor_made/models/stats.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
+import 'package:tailor_made/pages/homepage/home_view_model.dart';
 import 'package:tailor_made/pages/homepage/ui/bottom_row.dart';
 import 'package:tailor_made/pages/homepage/ui/header.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';
@@ -13,9 +12,7 @@ import 'package:tailor_made/pages/jobs/jobs_create.dart';
 import 'package:tailor_made/pages/splash/splash.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
-import 'package:tailor_made/redux/view_models/contacts.dart';
 import 'package:tailor_made/services/auth.dart';
-import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
@@ -76,38 +73,30 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               ),
             ),
           ),
-          new StoreBuilder<ReduxState>(
+          new StoreConnector<ReduxState, HomeViewModel>(
+            converter: (store) => HomeViewModel(store),
             onInit: (store) => store.dispatch(new InitDataEvents()),
             onDispose: (store) => store.dispatch(new DisposeDataEvents()),
-            builder: (BuildContext context, store) {
-              return StreamBuilder(
-                stream: CloudDb.stats.snapshots(),
-                builder: (context, snapshot) {
-                  // TODO
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: loadingSpinner(),
-                    );
-                  }
+            builder: (context, vm) {
+              if (vm.isLoading) {
+                return Center(
+                  child: loadingSpinner(),
+                );
+              }
 
-                  final DocumentSnapshot _data = snapshot.data;
-                  final stats = StatsModel.fromJson(_data.data);
-
-                  return new SafeArea(
-                    top: false,
-                    child: new Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Expanded(child: HeaderWidget()),
-                        StatsWidget(stats: stats),
-                        TopRowWidget(stats: stats),
-                        BottomRowWidget(stats: stats),
-                        _buildCreateBtn(),
-                      ],
-                    ),
-                  );
-                },
+              return new SafeArea(
+                top: false,
+                child: new Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Expanded(child: HeaderWidget()),
+                    StatsWidget(stats: vm.stats),
+                    TopRowWidget(stats: vm.stats),
+                    BottomRowWidget(stats: vm.stats),
+                    _buildCreateBtn(vm.contacts),
+                  ],
+                ),
               );
             },
           ),
@@ -130,7 +119,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       Icons.power_settings_new,
                       color: theme.appBarColor,
                     ),
-                    // onPressed: () => TMNavigate(context, AccountsPage()),
                     onPressed: () async {
                       final response = await confirmDialog(context: context, title: Text("You are about to logout."));
 
@@ -154,33 +142,26 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
-  Widget _buildCreateBtn() {
-    return new StoreConnector<ReduxState, ContactsViewModel>(
-      converter: (store) => ContactsViewModel(store),
-      onInit: (store) => store.dispatch(new InitDataEvents()),
-      onDispose: (store) => store.dispatch(new DisposeDataEvents()),
-      builder: (BuildContext context, ContactsViewModel vm) {
-        return Material(
-          elevation: 0.0,
-          color: kAccentColor,
-          child: InkWell(
-            onTap: onTapCreate(vm.contacts),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
-                child: ScaleTransition(
-                  scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
-                  alignment: FractionalOffset.center,
-                  child: new Text(
-                    "TAP TO CREATE",
-                    style: ralewayBold(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
-                  ),
-                ),
+  Widget _buildCreateBtn(List<ContactModel> contacts) {
+    return Material(
+      elevation: 0.0,
+      color: kAccentColor,
+      child: InkWell(
+        onTap: onTapCreate(contacts),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+            child: ScaleTransition(
+              scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
+              alignment: FractionalOffset.center,
+              child: new Text(
+                "TAP TO CREATE",
+                style: ralewayBold(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
               ),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
