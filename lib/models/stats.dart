@@ -1,26 +1,46 @@
-class DetailStatsModel {
+import 'package:tailor_made/models/main.dart';
+
+class IntStatsModel extends Model {
   int total;
   int pending;
   int completed;
 
-  DetailStatsModel.fromJson(Map<String, dynamic> json) {
+  IntStatsModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
-    total = json["total"];
-    pending = json["pending"];
-    completed = json["completed"];
+    total = int.tryParse(json["total"].toString());
+    pending = int.tryParse(json["pending"].toString());
+    completed = int.tryParse(json["completed"].toString());
+  }
+
+  @override
+  toMap() {
+    return {
+      "total": total,
+      "pending": pending,
+      "completed": completed,
+    };
   }
 }
 
-class PaymentStatsModel {
+class DoubleStatsModel extends Model {
   double total;
   double pending;
   double completed;
 
-  PaymentStatsModel.fromJson(Map<String, dynamic> json) {
+  DoubleStatsModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
     total = double.tryParse(json["total"].toString());
     pending = double.tryParse(json["pending"].toString());
     completed = double.tryParse(json["completed"].toString());
+  }
+
+  @override
+  toMap() {
+    return {
+      "total": total,
+      "pending": pending,
+      "completed": completed,
+    };
   }
 }
 
@@ -44,17 +64,27 @@ class PaymentStatsModel {
 //   },
 // }
 
-class StatsModel {
-  DetailStatsModel jobs;
-  DetailStatsModel contacts;
-  DetailStatsModel gallery;
-  PaymentStatsModel payments;
+class StatsModel extends Model {
+  IntStatsModel jobs;
+  IntStatsModel contacts;
+  IntStatsModel gallery;
+  DoubleStatsModel payments;
 
   StatsModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
-    jobs = DetailStatsModel.fromJson(json['jobs'].cast<String, dynamic>());
-    contacts = DetailStatsModel.fromJson(json['contacts'].cast<String, dynamic>());
-    gallery = DetailStatsModel.fromJson(json['gallery'].cast<String, dynamic>());
-    payments = PaymentStatsModel.fromJson(json['payments'].cast<String, dynamic>());
+    jobs = IntStatsModel.fromJson(json['jobs'].cast<String, dynamic>());
+    contacts = IntStatsModel.fromJson(json['contacts'].cast<String, dynamic>());
+    gallery = IntStatsModel.fromJson(json['gallery'].cast<String, dynamic>());
+    payments = DoubleStatsModel.fromJson(json['payments'].cast<String, dynamic>());
+  }
+
+  @override
+  toMap() {
+    return {
+      "jobs": jobs.toMap(),
+      "contacts": contacts.toMap(),
+      "gallery": gallery.toMap(),
+      "payments": payments.toMap(),
+    };
   }
 }
