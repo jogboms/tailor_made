@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/services/cloud_storage.dart';
+import 'package:tailor_made/ui/full_button.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_image_choice_dialog.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -99,9 +100,7 @@ class ContactFormState extends State<ContactForm> {
                 onSaved: (location) => contact.location = location.trim(),
               ),
               SizedBox(height: 32.0),
-              RaisedButton(
-                color: kAccentColor,
-                shape: StadiumBorder(),
+              FullButton(
                 onPressed: _handleSubmit,
                 child: Text(
                   "SUBMIT",

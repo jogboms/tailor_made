@@ -13,6 +13,7 @@ import 'package:tailor_made/pages/splash/splash.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/services/auth.dart';
+import 'package:tailor_made/ui/full_button.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_colors.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
@@ -143,23 +144,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   Widget _buildCreateBtn(List<ContactModel> contacts) {
-    return Material(
-      elevation: 0.0,
-      color: kAccentColor,
-      child: InkWell(
-        onTap: onTapCreate(contacts),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
-            child: ScaleTransition(
-              scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
-              alignment: FractionalOffset.center,
-              child: new Text(
-                "TAP TO CREATE",
-                style: ralewayBold(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
-              ),
-            ),
-          ),
+    return FullButton(
+      onPressed: onTapCreate(contacts),
+      shape: RoundedRectangleBorder(),
+      child: ScaleTransition(
+        scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
+        alignment: FractionalOffset.center,
+        child: new Text(
+          "TAP TO CREATE",
+          style: ralewayBold(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
         ),
       ),
     );

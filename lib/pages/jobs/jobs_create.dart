@@ -17,6 +17,7 @@ import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/services/cloud_storage.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
+import 'package:tailor_made/ui/full_button.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_image_choice_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -109,9 +110,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
 
       children.add(
         Padding(
-          child: RaisedButton(
-            color: kAccentColor,
-            shape: StadiumBorder(),
+          child: FullButton(
             child: Text(
               "FINISH",
               style: TextStyle(color: Colors.white),

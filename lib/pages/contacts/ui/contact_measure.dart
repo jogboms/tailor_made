@@ -3,6 +3,7 @@ import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/pages/jobs/ui/measure_create_items.dart';
 import 'package:tailor_made/pages/jobs/ui/measures.dart';
 import 'package:tailor_made/ui/app_bar.dart';
+import 'package:tailor_made/ui/full_button.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
@@ -34,9 +35,7 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
 
     children.add(
       Padding(
-        child: RaisedButton(
-          color: kAccentColor,
-          shape: StadiumBorder(),
+        child: FullButton(
           child: Text(
             "FINISH",
             style: TextStyle(color: Colors.white),
