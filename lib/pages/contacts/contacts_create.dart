@@ -57,9 +57,13 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
         key: _formKey,
         contact: contact,
         onHandleSubmit: _handleSubmit,
-        scaffoldKey: scaffoldKey,
+        onHandleValidate: _handleValidate,
       ),
     );
+  }
+
+  void _handleValidate() async {
+    showInSnackBar('Please fix the errors in red before submitting.');
   }
 
   void _handleSubmit(ContactModel contact) async {
