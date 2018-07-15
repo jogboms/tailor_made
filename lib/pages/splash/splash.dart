@@ -40,7 +40,6 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
     Auth.onAuthStateChanged.firstWhere((user) => user != null).then(
       (user) {
         Auth.setUser(user);
-        // TODO
         Navigator.pushReplacement(context, TMNavigate.fadeIn(new HomePage()));
       },
     );
@@ -51,7 +50,9 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
     await new Future.delayed(new Duration(seconds: 1)).then((_) => _onLogin());
   }
 
-  _onLogin() async => await Auth.signInWithGoogle().catchError((e) {
+  _onLogin() async => await Auth.signInWithGoogle().catchError((e) async {
+        showInSnackBar(e.message, const Duration(milliseconds: 3500));
+        await Auth.signOutWithGoogle();
         setState(() {
           isLoading = false;
           isRestartable = true;
@@ -120,8 +121,7 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
         }
       },
       icon: Image(image: TMImages.google_logo, width: 24.0),
-      label: Text("Continue with Google",
-          style: TextStyle(fontWeight: FontWeight.w700)),
+      label: Text("Continue with Google", style: TextStyle(fontWeight: FontWeight.w700)),
     );
   }
 }
