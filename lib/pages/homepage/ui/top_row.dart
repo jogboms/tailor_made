@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/contacts/contacts.dart';
 import 'package:tailor_made/models/stats.dart';
+import 'package:tailor_made/pages/contacts/contacts.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';
 import 'package:tailor_made/pages/jobs/jobs.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -41,7 +41,7 @@ class TopRowWidget extends StatelessWidget {
           Expanded(
             child: Container(
               child: TMGridTile(
-                icon: Icons.usb,
+                icon: Icons.work,
                 color: Colors.greenAccent.shade400,
                 title: "Jobs",
                 subTitle: "${stats.jobs.total} Total",

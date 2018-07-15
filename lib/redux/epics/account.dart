@@ -21,6 +21,6 @@ Stream<dynamic> account(Stream<dynamic> actions, EpicStore<ReduxState> store) {
 
 Observable<AccountModel> getAccount() {
   return new Observable(CloudDb.account.snapshots()).map((DocumentSnapshot snapshot) {
-    return AccountModel.fromJson(snapshot.data);
+    return AccountModel.fromDoc(snapshot);
   });
 }
