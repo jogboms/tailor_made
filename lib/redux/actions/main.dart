@@ -23,6 +23,9 @@ class ReduxActions {
   static const String initDataEvent = "__initDataEvent__";
   static const String disposeDataEvent = "__disposeDataEvent__";
 
+  static const String initStats = "__initStats__";
+  static const String onDataEventStat = "__onDataEventStat__";
+
   static const String initContacts = "__initContacts__";
   static const String addContact = "__addContact__";
   static const String removeContact = "__removeContact__";

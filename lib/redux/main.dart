@@ -5,12 +5,14 @@ import 'package:tailor_made/redux/reducers/main.dart';
 import 'package:tailor_made/redux/states/contacts.dart';
 import 'package:tailor_made/redux/states/jobs.dart';
 import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/redux/states/stats.dart';
 
 Store reduxStore() => new Store<ReduxState>(
       reduxReducer,
       initialState: new ReduxState(
         contacts: ContactsState.initialState(),
         jobs: JobsState.initialState(),
+        stats: StatsState.initialState(),
       ),
       middleware: [
         new LoggingMiddleware.printer(),
