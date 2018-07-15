@@ -5,13 +5,9 @@ import 'package:tailor_made/redux/states/stats.dart';
 import 'package:tailor_made/redux/view_models/main.dart';
 
 class StatsViewModel extends ViewModel {
-  StatsModel contact;
-
   StatsViewModel(Store<ReduxState> store) : super(store);
 
-  StatsModel get stats {
-    return this.store.state.stats.stats;
-  }
+  StatsModel get stats => this.store.state.stats.stats;
 
   bool get isLoading => this.store.state.stats.status == StatsStatus.loading;
 
