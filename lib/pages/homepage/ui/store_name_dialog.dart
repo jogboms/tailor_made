@@ -42,6 +42,10 @@ class StoreNameDialog extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 4.0),
                 child: Theme(
+                  data: ThemeData(
+                    hintColor: kBorderSideColor,
+                    primaryColor: kPrimaryColor,
+                  ),
                   child: new TextField(
                     keyboardType: TextInputType.text,
                     controller: controller,
@@ -53,9 +57,6 @@ class StoreNameDialog extends StatelessWidget {
                       hintText: "Enter Store Name",
                       hintStyle: TextStyle(fontSize: 14.0),
                     ),
-                  ),
-                  data: ThemeData(
-                    hintColor: kBorderSideColor,
                   ),
                 ),
               ),

@@ -128,7 +128,13 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       key: scaffoldKey,
       backgroundColor: theme.scaffoldColor,
       appBar: buildAppBar(theme),
-      body: buildBody(theme, children),
+      body: Theme(
+        data: ThemeData(
+          hintColor: kBorderSideColor,
+          primaryColor: kPrimaryColor,
+        ),
+        child: buildBody(theme, children),
+      ),
     );
   }
 

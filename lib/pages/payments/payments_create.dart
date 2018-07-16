@@ -55,16 +55,22 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
         context,
         title: "Create Payment",
       ),
-      body: new SafeArea(
-        top: false,
-        child: new SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            autovalidate: _autovalidate,
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: children,
+      body: Theme(
+        data: ThemeData(
+          hintColor: kBorderSideColor,
+          primaryColor: kPrimaryColor,
+        ),
+        child: new SafeArea(
+          top: false,
+          child: new SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              autovalidate: _autovalidate,
+              child: new Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: children,
+              ),
             ),
           ),
         ),

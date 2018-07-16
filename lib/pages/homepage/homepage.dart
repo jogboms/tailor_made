@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         ),
                       ),
                       _buildCreateBtn(vm.contacts),
-                      _buildBtnBar(theme, vm.account),
+                      _buildTopBtnBar(theme, vm.account),
                     ],
                   );
                 },
@@ -136,31 +136,33 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
-  Widget _buildBtnBar(TMTheme theme, AccountModel account) {
+  Widget _buildTopBtnBar(TMTheme theme, AccountModel account) {
     return Align(
       alignment: Alignment.topRight,
       child: SafeArea(
-        child: SizedBox.fromSize(
-          size: Size.square(56.0),
-          child: Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(1.5),
-            margin: EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: kAccentColor.withOpacity(.5), width: 1.5),
-            ),
-            child: GestureDetector(
-              onTap: onTapAccount(account),
-              child: account?.photoURL != null
-                  ? CircleAvatar(
-                      backgroundColor: Colors.white,
-                      backgroundImage: NetworkImage(account.photoURL),
-                    )
-                  : new Icon(
-                      Icons.person,
-                      color: theme.appBarColor,
-                    ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SizedBox.fromSize(
+            size: Size.square(48.0),
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(1.5),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: kPrimaryColor.withOpacity(.5), width: 1.5),
+              ),
+              child: GestureDetector(
+                onTap: onTapAccount(account),
+                child: account?.photoURL != null
+                    ? CircleAvatar(
+                        backgroundColor: Colors.white,
+                        backgroundImage: NetworkImage(account.photoURL),
+                      )
+                    : new Icon(
+                        Icons.person,
+                        color: theme.appBarColor,
+                      ),
+              ),
             ),
           ),
         ),
@@ -210,7 +212,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               new SimpleDialogOption(
                 onPressed: () => Navigator.pop(context, AccountOptions.logout),
                 child: TMListTile(
-                  color: Colors.redAccent.shade400,
+                  color: Colors.grey.shade400,
                   icon: Icons.power_settings_new,
                   title: "Logout",
                 ),
@@ -230,7 +232,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   elevation: 0.0,
                   automaticallyImplyLeading: false,
                   leading: IconButton(
-                    icon: Icon(Icons.close),
+                    icon: Icon(Icons.close, color: Colors.white),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),
