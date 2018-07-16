@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-class RateLimitPage extends StatelessWidget {
+class AccessDeniedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme.subhead;
@@ -20,7 +20,7 @@ class RateLimitPage extends StatelessWidget {
             ),
             SizedBox(height: 48.0),
             Text(
-              "USAGE POLICY",
+              "ACCESS DENIED",
               style: textTheme.copyWith(color: Colors.black87, fontWeight: FontWeight.w700),
               textAlign: TextAlign.center,
             ),
@@ -28,25 +28,19 @@ class RateLimitPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 64.0),
               child: Text(
-                "We noticed \n you really enjoy using our service. \n\n Would you mind \n paying a little token if you wish to extend beyond our usage policy?",
+                "Do not be alarmed. \n We just need your attention. \n\n It is possible you have violated one or a couple of our usage policy?\n or you are running an outdated version of the app.\n If none of this is the case, please contact an Administrator.",
                 style: textTheme.copyWith(color: Colors.grey.shade700),
                 textAlign: TextAlign.center,
               ),
             ),
             SizedBox(height: 32.0),
-            FlatButton(
-              onPressed: () {},
-              textColor: Colors.grey.shade500,
-              child: Text("No, Skip now"),
-            ),
-            SizedBox(height: 8.0),
             RaisedButton.icon(
               color: kAccentColor,
               shape: StadiumBorder(),
               colorBrightness: Brightness.dark,
               onPressed: () {},
-              icon: Icon(Icons.done),
-              label: Text("Yes, Sign me up!"),
+              icon: Icon(Icons.mail),
+              label: Text("Send a mail"),
             ),
           ],
         ),
