@@ -87,7 +87,7 @@ class JobMeasureBlock extends StatelessWidget {
                 width: constraints.maxWidth / 2,
                 child: TextFormField(
                   initialValue: measure.value != null && measure.value > 0 ? measure.value.toString() : "",
-                  keyboardType: TextInputType.number,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   style: TextStyle(fontSize: 20.0, color: Colors.black),
                   decoration: new InputDecoration(
                     contentPadding: EdgeInsets.zero,
