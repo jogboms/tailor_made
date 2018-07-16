@@ -94,9 +94,9 @@ class _ContactState extends State<ContactPage> {
         child: TabBar(
           labelStyle: ralewayMedium(14.0),
           tabs: [
-            Tab(child: Text(TABS[0])),
-            Tab(child: Text(TABS[1])),
-            Tab(child: Text(TABS[2])),
+            Tab(child: Text(TABS[0], style: TextStyle(color: Colors.white))),
+            Tab(child: Text(TABS[1], style: TextStyle(color: Colors.white))),
+            Tab(child: Text(TABS[2], style: TextStyle(color: Colors.white))),
           ],
         ),
       ),

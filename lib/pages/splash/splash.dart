@@ -53,6 +53,7 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
   _onLogin() async => await Auth.signInWithGoogle().catchError((e) async {
         showInSnackBar(e.message, const Duration(milliseconds: 3500));
         await Auth.signOutWithGoogle();
+        if (!mounted) return;
         setState(() {
           isLoading = false;
           isRestartable = true;
