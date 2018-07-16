@@ -17,7 +17,6 @@ import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/ui/full_button.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
-import 'package:tailor_made/utils/tm_colors.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_images.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -184,7 +183,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               alignment: FractionalOffset.center,
               child: new Text(
                 "TAP TO CREATE",
-                style: ralewayBold(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
+                style: ralewayBold(14.0, Colors.white).copyWith(letterSpacing: 1.25),
               ),
             ),
           ),
