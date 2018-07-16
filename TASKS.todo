@@ -1,14 +1,18 @@
 PENDING:
   ☐ delete-able payment
-☐ delete-able images
-☐ implement share payment + image
-☐ filter + search jobs & contacts
-☐ create a new contact from phone contact
-☐ Collect account details on account creation
-☐ Generate invoice & share as SMS containing link to pay on paystack
-☐ Firebase function on successful payments w/ push notification
+  ☐ delete-able images
+  ☐ implement share payment + image
+  ☐ filter + search jobs & contacts
+  ☐ create a new contact from phone contact @high
+  ☐ Collect account details on account creation
+  ☐ Generate invoice & share as SMS containing link to pay on paystack
+  ☐ Firebase function on successful payments w/ push notification
+  ☐ On account create, send personal email + email to user @high
 
 COMPLETED:
+  ✔ landscape scale on homepage @low @done(18-07-16 11:56)
+  ✔ no decimals in measurements @critical @done(18-07-16 10:28)
+  ✔ fix measurement creation on new contact @critical @done(18-07-16 10:20)
   ✔ remodel w/ authID @done(18-07-15 14:43)
   ✔ scope storage path to accounts @high @done(18-07-13 16:19)
   ✔ update stats db on creation @high @done(18-07-10 16:39)
