@@ -23,6 +23,8 @@ import 'package:tailor_made/utils/tm_images.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
+const double _kBottomBarHeight = 46.0;
+
 enum AccountOptions {
   logout,
   storename,
@@ -93,25 +95,39 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 );
               }
 
-              return Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  new SafeArea(
-                    top: false,
-                    child: new Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Expanded(child: HeaderWidget(account: vm.account)),
-                        StatsWidget(stats: vm.stats),
-                        TopRowWidget(stats: vm.stats),
-                        BottomRowWidget(stats: vm.stats),
-                        _buildCreateBtn(vm.contacts),
-                      ],
-                    ),
-                  ),
-                  _buildBtnBar(theme, vm.account),
-                ],
+              return LayoutBuilder(
+                builder: (context, constraint) {
+                  final bool isLandscape = constraint.maxWidth > constraint.maxHeight;
+                  return Stack(
+                    fit: StackFit.expand,
+                    children: <Widget>[
+                      new SafeArea(
+                        top: false,
+                        child: SingleChildScrollView(
+                          child: new Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              ConstrainedBox(
+                                constraints: BoxConstraints.expand(
+                                  // Somehow, i mathematically came up w/ these numbers & they made sense :)
+                                  height: (isLandscape ? (constraint.maxHeight / 1.0) : (constraint.maxHeight / 1.89)) - _kBottomBarHeight,
+                                ),
+                                child: HeaderWidget(account: vm.account),
+                              ),
+                              StatsWidget(stats: vm.stats),
+                              TopRowWidget(stats: vm.stats),
+                              BottomRowWidget(stats: vm.stats),
+                              SizedBox(height: _kBottomBarHeight),
+                            ],
+                          ),
+                        ),
+                      ),
+                      _buildCreateBtn(vm.contacts),
+                      _buildBtnBar(theme, vm.account),
+                    ],
+                  );
+                },
               );
             },
           ),
@@ -120,7 +136,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
-  _buildBtnBar(TMTheme theme, AccountModel account) {
+  Widget _buildBtnBar(TMTheme theme, AccountModel account) {
     return Align(
       alignment: Alignment.topRight,
       child: SafeArea(
@@ -153,15 +169,23 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   Widget _buildCreateBtn(List<ContactModel> contacts) {
-    return FullButton(
-      onPressed: onTapCreate(contacts),
-      shape: RoundedRectangleBorder(),
-      child: ScaleTransition(
-        scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
-        alignment: FractionalOffset.center,
-        child: new Text(
-          "TAP TO CREATE",
-          style: ralewayBold(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SafeArea(
+        child: SizedBox(
+          height: _kBottomBarHeight,
+          child: FullButton(
+            onPressed: onTapCreate(contacts),
+            shape: RoundedRectangleBorder(),
+            child: ScaleTransition(
+              scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
+              alignment: FractionalOffset.center,
+              child: new Text(
+                "TAP TO CREATE",
+                style: ralewayBold(14.0, TMColors.white).copyWith(letterSpacing: 1.25),
+              ),
+            ),
+          ),
         ),
       ),
     );
