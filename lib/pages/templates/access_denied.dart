@@ -6,44 +6,39 @@ class AccessDeniedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme.subhead;
-    return new Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            SpinKitFadingCube(
-              color: Colors.grey.shade300,
-            ),
-            SizedBox(height: 48.0),
-            Text(
-              "ACCESS DENIED",
-              style: textTheme.copyWith(color: Colors.black87, fontWeight: FontWeight.w700),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SpinKitFadingCube(
+            color: Colors.grey.shade300,
+          ),
+          SizedBox(height: 48.0),
+          Text(
+            "ACCESS DENIED",
+            style: textTheme.copyWith(color: Colors.black87, fontWeight: FontWeight.w700),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 16.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 64.0),
+            child: Text(
+              "Do not be alarmed. \n We just need your attention. \n\n It is possible you have violated one or a couple of our usage policy?\n or you are running an outdated version of the app.\n If none of this is the case, please contact an Administrator.",
+              style: textTheme.copyWith(color: Colors.grey.shade700),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 16.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 64.0),
-              child: Text(
-                "Do not be alarmed. \n We just need your attention. \n\n It is possible you have violated one or a couple of our usage policy?\n or you are running an outdated version of the app.\n If none of this is the case, please contact an Administrator.",
-                style: textTheme.copyWith(color: Colors.grey.shade700),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SizedBox(height: 32.0),
-            RaisedButton.icon(
-              color: kAccentColor,
-              shape: StadiumBorder(),
-              colorBrightness: Brightness.dark,
-              onPressed: () {},
-              icon: Icon(Icons.mail),
-              label: Text("Send a mail"),
-            ),
-          ],
-        ),
+          ),
+          SizedBox(height: 32.0),
+          RaisedButton.icon(
+            color: kAccentColor,
+            shape: StadiumBorder(),
+            colorBrightness: Brightness.dark,
+            onPressed: () {},
+            icon: Icon(Icons.mail),
+            label: Text("Send a mail"),
+          ),
+        ],
       ),
     );
   }
