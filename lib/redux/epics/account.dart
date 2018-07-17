@@ -8,6 +8,7 @@ import 'package:tailor_made/redux/actions/account.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/services/cloud_db.dart';
+import 'package:tailor_made/services/settings.dart';
 
 Stream<dynamic> account(Stream<dynamic> actions, EpicStore<ReduxState> store) {
   return new Observable(actions)
@@ -62,7 +63,7 @@ Future<AccountModel> _readNotice(AccountModel account) async {
 Future<AccountModel> _signUp(AccountModel account) async {
   final _account = account.copyWith(
     status: AccountModelStatus.pending,
-    notice: "Our team would contact you as regards transfering you to a premium account.",
+    notice: Settings.getData().premiumNotice,
     hasReadNotice: false,
     hasPremiumEnabled: true,
   );

@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/pages/homepage/homepage.dart';
 import 'package:tailor_made/services/auth.dart';
+import 'package:tailor_made/services/cloud_db.dart';
+import 'package:tailor_made/services/settings.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_images.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -102,7 +105,20 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
             bottom: 64.0,
             left: 0.0,
             right: 0.0,
-            child: isLoading ? loadingSpinner() : Center(child: _googleBtn()),
+            child: StreamBuilder(
+              stream: CloudDb.settings.snapshots(),
+              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: loadingSpinner(),
+                  );
+                }
+
+                Settings.setData(snapshot.data.data);
+
+                return isLoading ? loadingSpinner() : Center(child: _googleBtn());
+              },
+            ),
           ),
         ],
       ),
