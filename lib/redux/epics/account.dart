@@ -62,6 +62,8 @@ Future<AccountModel> _readNotice(AccountModel account) async {
 Future<AccountModel> _signUp(AccountModel account) async {
   final _account = account.copyWith(
     status: AccountModelStatus.pending,
+    notice: "Our team would contact you as regards transfering you to a premium account.",
+    hasReadNotice: false,
     hasPremiumEnabled: true,
   );
   try {
