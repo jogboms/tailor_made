@@ -1,25 +1,30 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/pages/homepage/home_view_model.dart';
 import 'package:tailor_made/pages/homepage/ui/bottom_row.dart';
 import 'package:tailor_made/pages/homepage/ui/header.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';
+import 'package:tailor_made/pages/homepage/ui/notice_dialog.dart';
 import 'package:tailor_made/pages/homepage/ui/stats.dart';
 import 'package:tailor_made/pages/homepage/ui/store_name_dialog.dart';
 import 'package:tailor_made/pages/homepage/ui/top_row.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
 import 'package:tailor_made/pages/splash/splash.dart';
+import 'package:tailor_made/pages/templates/access_denied.dart';
+import 'package:tailor_made/pages/templates/rate_limit.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/ui/full_button.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
+import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_images.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_phone.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 const double _kBottomBarHeight = 46.0;
@@ -94,6 +99,25 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 );
               }
 
+              if (vm.isDisabled) {
+                return AccessDeniedPage(
+                  onSendMail: () {
+                    email('Unwarranted%20Account%20Suspension%20%23${vm.account.uid}');
+                  },
+                );
+              }
+
+              if (vm.isWarning && vm.hasSkipedPremium == false) {
+                return RateLimitPage(
+                  onSignUp: () {
+                    vm.onPremiumSignUp();
+                  },
+                  onSkipedPremium: () {
+                    vm.onSkipedPremium();
+                  },
+                );
+              }
+
               return LayoutBuilder(
                 builder: (context, constraint) {
                   final bool isLandscape = constraint.maxWidth > constraint.maxHeight;
@@ -123,7 +147,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         ),
                       ),
                       _buildCreateBtn(vm.contacts),
-                      _buildTopBtnBar(theme, vm.account),
+                      _buildTopBtnBar(theme, vm),
                     ],
                   );
                 },
@@ -135,7 +159,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
-  Widget _buildTopBtnBar(TMTheme theme, AccountModel account) {
+  Widget _buildTopBtnBar(TMTheme theme, HomeViewModel vm) {
+    final account = vm.account;
     return Align(
       alignment: Alignment.topRight,
       child: SafeArea(
@@ -151,16 +176,39 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 border: Border.all(color: kPrimaryColor.withOpacity(.5), width: 1.5),
               ),
               child: GestureDetector(
-                onTap: onTapAccount(account),
-                child: account?.photoURL != null
-                    ? CircleAvatar(
-                        backgroundColor: Colors.white,
-                        backgroundImage: NetworkImage(account.photoURL),
-                      )
-                    : new Icon(
-                        Icons.person,
-                        color: theme.appBarColor,
-                      ),
+                onTap: onTapAccount(vm),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    account?.photoURL != null
+                        ? CircleAvatar(
+                            backgroundColor: Colors.white,
+                            backgroundImage: CachedNetworkImageProvider(account.photoURL),
+                          )
+                        : new Icon(
+                            Icons.person,
+                            color: theme.appBarColor,
+                          ),
+                    new Align(
+                      alignment: Alignment(1.25, 1.25),
+                      child: account?.hasReadNotice ?? false
+                          ? null
+                          : new Container(
+                              width: 15.5,
+                              height: 15.5,
+                              decoration: new BoxDecoration(
+                                color: kAccentColor,
+                                border: Border.all(
+                                  color: Colors.white,
+                                  style: BorderStyle.solid,
+                                  width: 2.5,
+                                ),
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -192,8 +240,20 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
-  onTapAccount(AccountModel account) {
+  onTapAccount(HomeViewModel vm) {
+    final account = vm.account;
     return () async {
+      if (!(account?.hasReadNotice ?? false)) {
+        await showChildDialog(
+          context: context,
+          child: NoticeDialog(
+            account: account,
+          ),
+        );
+        vm.onReadNotice();
+        return;
+      }
+
       AccountOptions result = await showDialog<AccountOptions>(
         context: context,
         builder: (BuildContext context) {

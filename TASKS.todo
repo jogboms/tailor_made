@@ -10,6 +10,8 @@ PENDING:
   ☐ On account create, send personal email + email to user @high
 
 COMPLETED:
+  ✔ Notice modal + indicator on home page @done(18-07-17 11:54)
+  ✔ add rate limit danger + access blocked screens @critical @done(18-07-17 10:31)
   ✔ landscape scale on homepage @low @done(18-07-16 11:56)
   ✔ no decimals in measurements @critical @done(18-07-16 10:28)
   ✔ fix measurement creation on new contact @critical @done(18-07-16 10:20)
