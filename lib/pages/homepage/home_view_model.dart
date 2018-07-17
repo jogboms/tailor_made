@@ -25,5 +25,9 @@ class HomeViewModel extends StatsViewModel {
 
   bool get isWarning => account.status == AccountModelStatus.warning;
 
+  bool get isPending => account.status == AccountModelStatus.pending;
+
+  onPremiumSignUp() => this.store.dispatch(OnPremiumSignUp(payload: account));
+
   onSkipedPremium() => this.store.dispatch(OnSkipedPremium());
 }

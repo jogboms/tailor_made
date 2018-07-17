@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tailor_made/models/main.dart';
 
-enum AccountModelStatus { enabled, disabled, warning }
+enum AccountModelStatus { enabled, disabled, warning, pending }
 
 class AccountModel extends Model {
   String uid;
@@ -12,6 +12,7 @@ class AccountModel extends Model {
   int phoneNumber;
   String photoURL;
   AccountModelStatus status;
+  bool hasPremiumEnabled;
 
   AccountModel({
     @required this.uid,
@@ -21,6 +22,7 @@ class AccountModel extends Model {
     @required this.phoneNumber,
     @required this.photoURL,
     @required this.status,
+    @required this.hasPremiumEnabled,
   });
 
   factory AccountModel.fromJson(Map<String, dynamic> json) {
@@ -33,11 +35,32 @@ class AccountModel extends Model {
       phoneNumber: int.tryParse(json['phoneNumber'].toString()),
       photoURL: json['photoURL'],
       status: AccountModelStatus.values[int.tryParse(json['status'].toString())],
+      hasPremiumEnabled: json['hasPremiumEnabled'],
     );
   }
 
   factory AccountModel.fromDoc(DocumentSnapshot doc) {
     return AccountModel.fromJson(doc.data)..reference = doc.reference;
+  }
+
+  AccountModel copyWith({
+    String storeName,
+    String displayName,
+    int phoneNumber,
+    String photoURL,
+    AccountModelStatus status,
+    bool hasPremiumEnabled,
+  }) {
+    return new AccountModel(
+      uid: this.uid,
+      storeName: storeName ?? this.storeName,
+      email: this.email,
+      displayName: displayName ?? this.displayName,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      photoURL: photoURL ?? this.photoURL,
+      status: status ?? this.status,
+      hasPremiumEnabled: hasPremiumEnabled ?? this.hasPremiumEnabled,
+    );
   }
 
   toMap() {
@@ -48,7 +71,8 @@ class AccountModel extends Model {
       "displayName": displayName,
       "phoneNumber": phoneNumber,
       "photoURL": photoURL,
-      "status": status.toString(),
+      "status": status.index,
+      "hasPremiumEnabled": hasPremiumEnabled,
     };
   }
 }

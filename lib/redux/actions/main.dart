@@ -25,6 +25,7 @@ class ReduxActions {
 
   static const String initAccount = "__initAccount__";
   static const String onDataEventAccount = "__onDataEventAccount__";
+  static const String onPremiumSignUp = "__onPremiumSignUp__";
   static const String onHasSkipedPremium = "__onHasSkipedPremium__";
 
   static const String initStats = "__initStats__";

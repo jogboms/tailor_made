@@ -22,6 +22,7 @@ import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_images.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
+import 'package:tailor_made/utils/tm_phone.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 const double _kBottomBarHeight = 46.0;
@@ -97,11 +98,18 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               }
 
               if (vm.isDisabled) {
-                return AccessDeniedPage();
+                return AccessDeniedPage(
+                  onSendMail: () {
+                    email('Unwarranted%20Account%20Suspension%20%23${vm.account.uid}');
+                  },
+                );
               }
 
               if (vm.isWarning && vm.hasSkipedPremium == false) {
                 return RateLimitPage(
+                  onSignUp: () {
+                    vm.onPremiumSignUp();
+                  },
                   onSkipedPremium: () {
                     vm.onSkipedPremium();
                   },

@@ -12,6 +12,7 @@ EpicMiddleware<ReduxState> reduxEpics() => new EpicMiddleware<ReduxState>(
           jobs,
           stats,
           account,
+          onPremiumSignUp,
         ],
       ),
     );

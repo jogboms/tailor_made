@@ -4,10 +4,12 @@ import 'package:tailor_made/utils/tm_theme.dart';
 
 class RateLimitPage extends StatelessWidget {
   final VoidCallback onSkipedPremium;
+  final VoidCallback onSignUp;
 
   RateLimitPage({
     Key key,
     @required this.onSkipedPremium,
+    @required this.onSignUp,
   }) : super(key: key);
 
   @override
@@ -47,7 +49,7 @@ class RateLimitPage extends StatelessWidget {
             color: kAccentColor,
             shape: StadiumBorder(),
             colorBrightness: Brightness.dark,
-            onPressed: () {},
+            onPressed: onSignUp,
             icon: Icon(Icons.done),
             label: Text("Yes, Sign me up!"),
           ),

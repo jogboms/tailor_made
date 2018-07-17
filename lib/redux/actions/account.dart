@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 
@@ -13,6 +14,15 @@ class OnDataEvent extends ActionType {
   final AccountModel payload;
 
   OnDataEvent({this.payload});
+}
+
+class OnPremiumSignUp extends ActionType {
+  final String type = ReduxActions.onPremiumSignUp;
+  final AccountModel payload;
+
+  OnPremiumSignUp({
+    @required this.payload,
+  });
 }
 
 class OnSkipedPremium extends ActionType {

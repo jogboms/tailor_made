@@ -3,6 +3,13 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class AccessDeniedPage extends StatelessWidget {
+  final VoidCallback onSendMail;
+
+  AccessDeniedPage({
+    Key key,
+    @required this.onSendMail,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme.subhead;
@@ -34,7 +41,7 @@ class AccessDeniedPage extends StatelessWidget {
             color: kAccentColor,
             shape: StadiumBorder(),
             colorBrightness: Brightness.dark,
-            onPressed: () {},
+            onPressed: onSendMail,
             icon: Icon(Icons.mail),
             label: Text("Send a mail"),
           ),
