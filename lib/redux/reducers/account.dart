@@ -13,6 +13,11 @@ AccountState reducer(ReduxState state, ActionType action) {
         status: AccountStatus.success,
       );
 
+    case ReduxActions.onHasSkipedPremium:
+      return account.copyWith(
+        hasSkipedPremium: action.payload,
+      );
+
     default:
       return account;
   }

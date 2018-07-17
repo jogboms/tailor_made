@@ -14,3 +14,8 @@ class OnDataEvent extends ActionType {
 
   OnDataEvent({this.payload});
 }
+
+class OnSkipedPremium extends ActionType {
+  final String type = ReduxActions.onHasSkipedPremium;
+  final bool payload = true;
+}
