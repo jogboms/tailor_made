@@ -1,5 +1,6 @@
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/redux/actions/account.dart';
 import 'package:tailor_made/redux/states/account.dart';
 import 'package:tailor_made/redux/states/contacts.dart';
 import 'package:tailor_made/redux/states/stats.dart';
@@ -17,4 +18,12 @@ class HomeViewModel extends StatsViewModel {
         this.store.state.contacts.status == ContactsStatus.loading ||
         this.store.state.account.status == AccountStatus.loading;
   }
+
+  bool get hasSkipedPremium => store.state.account.hasSkipedPremium == true;
+
+  bool get isDisabled => account.status == AccountModelStatus.disabled;
+
+  bool get isWarning => account.status == AccountModelStatus.warning;
+
+  onSkipedPremium() => this.store.dispatch(OnSkipedPremium());
 }

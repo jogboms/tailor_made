@@ -12,6 +12,8 @@ import 'package:tailor_made/pages/homepage/ui/store_name_dialog.dart';
 import 'package:tailor_made/pages/homepage/ui/top_row.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
 import 'package:tailor_made/pages/splash/splash.dart';
+import 'package:tailor_made/pages/templates/access_denied.dart';
+import 'package:tailor_made/pages/templates/rate_limit.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/services/auth.dart';
@@ -91,6 +93,18 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               if (vm.isLoading) {
                 return Center(
                   child: loadingSpinner(),
+                );
+              }
+
+              if (vm.isDisabled) {
+                return AccessDeniedPage();
+              }
+
+              if (vm.isWarning && vm.hasSkipedPremium == false) {
+                return RateLimitPage(
+                  onSkipedPremium: () {
+                    vm.onSkipedPremium();
+                  },
                 );
               }
 
