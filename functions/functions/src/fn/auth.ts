@@ -14,7 +14,11 @@ export function _onAuth(onCreate: ChangeState) {
       email: user.email,
       displayName: user.displayName,
       phoneNumber: user.phoneNumber,
-      photoURL: user.photoURL
+      photoURL: user.photoURL,
+      status: 0,
+      hasPremiumEnabled: false,
+      notice: "Its amazing to have you here, look around, Enjoy the experience!",
+      hasReadNotice: false,
     });
 
     const stats = db.collection("stats").doc(user.uid);
