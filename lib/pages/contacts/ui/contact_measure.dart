@@ -13,7 +13,7 @@ class ContactMeasure extends StatefulWidget {
 
   ContactMeasure({
     Key key,
-    this.contact,
+    @required this.contact,
   }) : super(key: key);
 
   @override
@@ -112,7 +112,10 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
       showLoadingSnackBar();
 
       try {
-        await widget.contact.reference.updateData(widget.contact.toMap());
+        // During contact creation
+        if (widget.contact.reference != null) {
+          await widget.contact.reference.updateData(widget.contact.toMap());
+        }
         closeLoadingSnackBar();
         showInSnackBar("Successfully Updated");
       } catch (e) {

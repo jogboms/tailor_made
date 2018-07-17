@@ -3,7 +3,7 @@ import { EventContext, firestore } from "firebase-functions";
 import { isArray } from "util";
 import { ChangeState } from "../utils";
 
-export function _onStatsContacts(onCreate: ChangeState) {
+export function _onStatsContacts(state: ChangeState) {
   return async (
     snapshot: firestore.DocumentSnapshot,
     context: EventContext
@@ -20,7 +20,7 @@ export function _onStatsContacts(onCreate: ChangeState) {
 
     return stats.update({
       contacts: {
-        total: total + (onCreate ? count : -count)
+        total: total + (state === ChangeState.Created ? count : -count)
       }
     });
   };

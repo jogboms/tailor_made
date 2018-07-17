@@ -60,7 +60,10 @@ class ContactFormState extends State<ContactForm> {
 
   Widget _buildForm() {
     return Theme(
-      data: ThemeData(hintColor: Colors.grey.shade400),
+      data: ThemeData(
+        hintColor: kBorderSideColor,
+        primaryColor: kPrimaryColor,
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Form(

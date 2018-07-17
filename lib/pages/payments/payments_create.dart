@@ -55,16 +55,22 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
         context,
         title: "Create Payment",
       ),
-      body: new SafeArea(
-        top: false,
-        child: new SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            autovalidate: _autovalidate,
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: children,
+      body: Theme(
+        data: ThemeData(
+          hintColor: kBorderSideColor,
+          primaryColor: kPrimaryColor,
+        ),
+        child: new SafeArea(
+          top: false,
+          child: new SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              autovalidate: _autovalidate,
+              child: new Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: children,
+              ),
             ),
           ),
         ),
@@ -93,7 +99,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
         controller: controller,
-        keyboardType: TextInputType.number,
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
           isDense: true,

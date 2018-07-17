@@ -8,6 +8,9 @@ class CloudDb {
 
   static DocumentReference get account => instance.document("accounts/${Auth.getUser.uid}");
   static DocumentReference get stats => instance.document("stats/${Auth.getUser.uid}");
+  static DocumentReference get settings => instance.document("settings/common");
+
+  static CollectionReference get premium => instance.collection("premium");
 
   static Query get gallery => instance.collection("gallery").where("userID", isEqualTo: Auth.getUser.uid);
   static CollectionReference get galleryRef => gallery.reference();

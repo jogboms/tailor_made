@@ -26,6 +26,7 @@ class TMApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: TMStrings.appName,
         theme: new ThemeData(
+          primaryColor: Colors.white,
           accentColor: kAccentColor,
           primarySwatch: kPrimarySwatch,
           fontFamily: TMFonts.raleway,

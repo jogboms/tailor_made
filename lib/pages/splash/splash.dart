@@ -1,9 +1,13 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_version/get_version.dart';
 import 'package:tailor_made/pages/homepage/homepage.dart';
 import 'package:tailor_made/services/auth.dart';
+import 'package:tailor_made/services/cloud_db.dart';
+import 'package:tailor_made/services/settings.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_images.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -27,11 +31,14 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   bool isLoading;
   bool isRestartable = false;
+  String projectVersion;
 
   @override
   void initState() {
     super.initState();
     isLoading = widget.isColdStart;
+
+    _getVersionName();
 
     if (widget.isColdStart == true) {
       _trySilent();
@@ -45,6 +52,13 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
     );
   }
 
+  _getVersionName() async {
+    try {
+      projectVersion = await GetVersion.projectVersion;
+      print(projectVersion);
+    } catch (e) {}
+  }
+
   _trySilent() async {
     // Give the navigation animations, etc, some time to finish
     await new Future.delayed(new Duration(seconds: 1)).then((_) => _onLogin());
@@ -53,6 +67,7 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
   _onLogin() async => await Auth.signInWithGoogle().catchError((e) async {
         showInSnackBar(e.message, const Duration(milliseconds: 3500));
         await Auth.signOutWithGoogle();
+        if (!mounted) return;
         setState(() {
           isLoading = false;
           isRestartable = true;
@@ -80,10 +95,22 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
           Positioned.fill(
             top: null,
             bottom: 32.0,
-            child: Text(
-              TMStrings.appName,
-              style: ralewayMedium(22.0, kTextBaseColor.withOpacity(.6)),
-              textAlign: TextAlign.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  TMStrings.appName,
+                  style: ralewayMedium(22.0, kTextBaseColor.withOpacity(.6)),
+                  textAlign: TextAlign.center,
+                ),
+                projectVersion != null
+                    ? Text(
+                        "v" + projectVersion,
+                        style: ralewayMedium(12.0, kTextBaseColor.withOpacity(.4)).copyWith(height: 1.5),
+                        textAlign: TextAlign.center,
+                      )
+                    : SizedBox(),
+              ],
             ),
           ),
           isLoading && (widget.isColdStart || isRestartable)
@@ -98,10 +125,23 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
                 ),
           Positioned(
             height: 96.0,
-            bottom: 64.0,
+            bottom: 72.0,
             left: 0.0,
             right: 0.0,
-            child: isLoading ? loadingSpinner() : Center(child: _googleBtn()),
+            child: StreamBuilder(
+              stream: CloudDb.settings.snapshots(),
+              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: loadingSpinner(),
+                  );
+                }
+
+                Settings.setData(snapshot.data.data);
+
+                return isLoading ? loadingSpinner() : Center(child: _googleBtn());
+              },
+            ),
           ),
         ],
       ),

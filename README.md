@@ -1,10 +1,12 @@
 <img src="./assets/images/logo.png" style="margin: auto" width="90" />
 
-# TailorMade
+# TailorMade: Managing a Fashion designer's daily routine.
 
-A Flutter experiment for managing a Fashion designer's daily routine. Logo, Design & Concept by Me.
+TailorMade is what actually started out as an experiment with [Flutter](https://flutter.io/), [flutter_redux](https://github.com/brianegan/flutter_redux) and [Firebase Cloud Functions](https://github.com/flutter/plugins/tree/master/packages/cloud_functions) but instead turned out to be a valuable tool for managing a Fashion designer's daily routine. It is clean, easy on the eyes and overall has a very smooth feel. It also handles offline use cases with Firebase Cloud. Logo, Design & Concept by Me.
 
-> Android-only support
+<div>
+<a href='https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade'><img alt='Get it on Google Play' src='./screenshots/google_play.png' height='40px'/></a>
+</div>
 
 ## Tools
 
@@ -12,9 +14,16 @@ A Flutter experiment for managing a Fashion designer's daily routine. Logo, Desi
 2.  Firebase Cloud Firestore
 3.  Firebase Cloud Functions
 4.  Firebase Storage
-5.  RxDart
-6.  Redux
-7.  Redux Epics
+5.  Google SignIn
+6.  RxDart
+7.  Flutter Redux
+8.  Redux Epics
+9.  Image Picker
+10. Photo View
+11. Cached Network Image
+12. Flutter SpinKit
+13. Flutter Get Version
+14. Flutter Masked Text
 
 For a full description of OSS used, see pubspec.yaml
 

@@ -11,3 +11,5 @@ _launch(String url) async {
 call(int phone) => _launch('tel:$phone');
 
 sms(int phone) => _launch('sms:$phone');
+
+email(String subject) => _launch('mailto:jeremiahogbomo@gmail.com?subject=$subject');

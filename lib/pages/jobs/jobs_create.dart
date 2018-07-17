@@ -128,7 +128,13 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       key: scaffoldKey,
       backgroundColor: theme.scaffoldColor,
       appBar: buildAppBar(theme),
-      body: buildBody(theme, children),
+      body: Theme(
+        data: ThemeData(
+          hintColor: kBorderSideColor,
+          primaryColor: kPrimaryColor,
+        ),
+        child: buildBody(theme, children),
+      ),
     );
   }
 
@@ -374,7 +380,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
         controller: controller,
-        keyboardType: TextInputType.number,
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
           isDense: true,
