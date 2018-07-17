@@ -29,5 +29,7 @@ class HomeViewModel extends StatsViewModel {
 
   onPremiumSignUp() => this.store.dispatch(OnPremiumSignUp(payload: account));
 
+  onReadNotice() => this.store.dispatch(OnReadNotice(payload: account));
+
   onSkipedPremium() => this.store.dispatch(OnSkipedPremium());
 }

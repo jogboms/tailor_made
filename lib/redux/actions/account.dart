@@ -25,6 +25,15 @@ class OnPremiumSignUp extends ActionType {
   });
 }
 
+class OnReadNotice extends ActionType {
+  final String type = ReduxActions.onReadNotice;
+  final AccountModel payload;
+
+  OnReadNotice({
+    @required this.payload,
+  });
+}
+
 class OnSkipedPremium extends ActionType {
   final String type = ReduxActions.onHasSkipedPremium;
   final bool payload = true;

@@ -31,10 +31,32 @@ Stream<dynamic> onPremiumSignUp(Stream<dynamic> actions, EpicStore<ReduxState> s
   ).takeUntil(actions.where((action) => action is DisposeDataEvents));
 }
 
+Stream<dynamic> onReadNotice(Stream<dynamic> actions, EpicStore<ReduxState> store) {
+  return new Observable(actions).ofType(new TypeToken<OnReadNotice>()).switchMap(
+    (OnReadNotice action) {
+      return Observable.fromFuture(
+        _readNotice(action.payload).catchError(
+          (e) => print(e),
+        ),
+      ).map((account) => new VoidAction());
+    },
+  ).takeUntil(actions.where((action) => action is DisposeDataEvents));
+}
+
 Observable<AccountModel> _getAccount() {
   return new Observable(CloudDb.account.snapshots()).map((DocumentSnapshot snapshot) {
     return AccountModel.fromDoc(snapshot);
   });
+}
+
+Future<AccountModel> _readNotice(AccountModel account) async {
+  final _account = account.copyWith(hasReadNotice: true);
+  try {
+    await account.reference.updateData(_account.toMap());
+  } catch (e) {
+    throw e;
+  }
+  return _account;
 }
 
 Future<AccountModel> _signUp(AccountModel account) async {

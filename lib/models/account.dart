@@ -13,6 +13,8 @@ class AccountModel extends Model {
   String photoURL;
   AccountModelStatus status;
   bool hasPremiumEnabled;
+  String notice;
+  bool hasReadNotice;
 
   AccountModel({
     @required this.uid,
@@ -23,6 +25,8 @@ class AccountModel extends Model {
     @required this.photoURL,
     @required this.status,
     @required this.hasPremiumEnabled,
+    @required this.notice,
+    @required this.hasReadNotice,
   });
 
   factory AccountModel.fromJson(Map<String, dynamic> json) {
@@ -36,6 +40,8 @@ class AccountModel extends Model {
       photoURL: json['photoURL'],
       status: AccountModelStatus.values[int.tryParse(json['status'].toString())],
       hasPremiumEnabled: json['hasPremiumEnabled'],
+      notice: json['notice'],
+      hasReadNotice: json['hasReadNotice'],
     );
   }
 
@@ -50,6 +56,8 @@ class AccountModel extends Model {
     String photoURL,
     AccountModelStatus status,
     bool hasPremiumEnabled,
+    String notice,
+    bool hasReadNotice,
   }) {
     return new AccountModel(
       uid: this.uid,
@@ -60,6 +68,8 @@ class AccountModel extends Model {
       photoURL: photoURL ?? this.photoURL,
       status: status ?? this.status,
       hasPremiumEnabled: hasPremiumEnabled ?? this.hasPremiumEnabled,
+      notice: notice ?? this.notice,
+      hasReadNotice: hasReadNotice ?? this.hasReadNotice,
     );
   }
 
@@ -73,6 +83,8 @@ class AccountModel extends Model {
       "photoURL": photoURL,
       "status": status.index,
       "hasPremiumEnabled": hasPremiumEnabled,
+      "notice": notice,
+      "hasReadNotice": hasReadNotice,
     };
   }
 }

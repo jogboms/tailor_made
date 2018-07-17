@@ -13,6 +13,7 @@ EpicMiddleware<ReduxState> reduxEpics() => new EpicMiddleware<ReduxState>(
           stats,
           account,
           onPremiumSignUp,
+          onReadNotice,
         ],
       ),
     );
