@@ -50,7 +50,8 @@ class PaymentPage extends StatelessWidget {
                   Icons.person,
                   color: kTitleBaseColor,
                 ),
-                onPressed: () => TMNavigate(context, ContactPage(contact: contact)),
+                onPressed: () =>
+                    TMNavigate(context, ContactPage(contact: contact)),
               ),
               IconButton(
                 icon: Icon(

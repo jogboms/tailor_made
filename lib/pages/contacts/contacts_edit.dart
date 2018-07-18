@@ -18,7 +18,8 @@ class ContactsEditPage extends StatefulWidget {
   _ContactsEditPageState createState() => new _ContactsEditPageState();
 }
 
-class _ContactsEditPageState extends State<ContactsEditPage> with SnackBarProvider {
+class _ContactsEditPageState extends State<ContactsEditPage>
+    with SnackBarProvider {
   @override
   final scaffoldKey = new GlobalKey<ScaffoldState>();
 

@@ -38,7 +38,8 @@ class AccountModel extends Model {
       displayName: json['displayName'],
       phoneNumber: int.tryParse(json['phoneNumber'].toString()),
       photoURL: json['photoURL'],
-      status: AccountModelStatus.values[int.tryParse(json['status'].toString())],
+      status:
+          AccountModelStatus.values[int.tryParse(json['status'].toString())],
       hasPremiumEnabled: json['hasPremiumEnabled'],
       notice: json['notice'],
       hasReadNotice: json['hasReadNotice'],

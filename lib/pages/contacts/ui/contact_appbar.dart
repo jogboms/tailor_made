@@ -85,19 +85,23 @@ class ContactAppBarState extends State<ContactAppBar> {
               itemBuilder: (BuildContext context) => [
                     new PopupMenuItem<Choice>(
                       value: Choice.CreateJob,
-                      child: new Text('New Job', style: ralewayRegular(14.0, Colors.black87)),
+                      child: new Text('New Job',
+                          style: ralewayRegular(14.0, Colors.black87)),
                     ),
                     new PopupMenuItem<Choice>(
                       value: Choice.SendText,
-                      child: new Text('Text Message', style: ralewayRegular(14.0, Colors.black87)),
+                      child: new Text('Text Message',
+                          style: ralewayRegular(14.0, Colors.black87)),
                     ),
                     new PopupMenuItem<Choice>(
                       value: Choice.EditMeasure,
-                      child: new Text('Edit Measurements', style: ralewayRegular(14.0, Colors.black87)),
+                      child: new Text('Edit Measurements',
+                          style: ralewayRegular(14.0, Colors.black87)),
                     ),
                     new PopupMenuItem<Choice>(
                       value: Choice.EditAccount,
-                      child: new Text('Edit Account', style: ralewayRegular(14.0, Colors.black87)),
+                      child: new Text('Edit Account',
+                          style: ralewayRegular(14.0, Colors.black87)),
                     ),
                   ],
             ),

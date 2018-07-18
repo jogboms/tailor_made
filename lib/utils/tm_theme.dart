@@ -28,14 +28,25 @@ class TMBorderSide extends BorderSide {
 
 class TMStyle extends TextStyle {
   const TMStyle.raleway(double size, FontWeight weight, Color color)
-      : super(inherit: false, color: color, fontFamily: 'Raleway', fontSize: size, fontWeight: weight, textBaseline: TextBaseline.alphabetic);
+      : super(
+            inherit: false,
+            color: color,
+            fontFamily: 'Raleway',
+            fontSize: size,
+            fontWeight: weight,
+            textBaseline: TextBaseline.alphabetic);
 }
 
-TextStyle ralewayThin(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w100, color ?? kTextBaseColor);
-TextStyle ralewayLight(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w300, color ?? kTextBaseColor);
-TextStyle ralewayRegular(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w400, color ?? kTextBaseColor);
-TextStyle ralewayMedium(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w500, color ?? kTextBaseColor);
-TextStyle ralewayBold(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w700, color ?? kTextBaseColor);
+TextStyle ralewayThin(double fontSize, [Color color]) =>
+    new TMStyle.raleway(fontSize, FontWeight.w100, color ?? kTextBaseColor);
+TextStyle ralewayLight(double fontSize, [Color color]) =>
+    new TMStyle.raleway(fontSize, FontWeight.w300, color ?? kTextBaseColor);
+TextStyle ralewayRegular(double fontSize, [Color color]) =>
+    new TMStyle.raleway(fontSize, FontWeight.w400, color ?? kTextBaseColor);
+TextStyle ralewayMedium(double fontSize, [Color color]) =>
+    new TMStyle.raleway(fontSize, FontWeight.w500, color ?? kTextBaseColor);
+TextStyle ralewayBold(double fontSize, [Color color]) =>
+    new TMStyle.raleway(fontSize, FontWeight.w700, color ?? kTextBaseColor);
 
 /// The TextStyles and Colors used for titles, labels, and descriptions. This
 /// InheritedWidget is shared by all of the routes and widgets created for
@@ -61,7 +72,8 @@ class TMTheme extends InheritedWidget {
   TextStyle get smallTextStyle => ralewayRegular(12.0, textColor);
   TextStyle get mediumTextStyle => ralewayRegular(16.0, textColor);
 
-  static TMTheme of(BuildContext context) => context.inheritFromWidgetOfExactType(TMTheme);
+  static TMTheme of(BuildContext context) =>
+      context.inheritFromWidgetOfExactType(TMTheme);
 
   @override
   bool updateShouldNotify(TMTheme oldWidget) => false;

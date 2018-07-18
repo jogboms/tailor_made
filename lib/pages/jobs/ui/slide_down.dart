@@ -41,7 +41,8 @@ class SlideDownItemState extends State<SlideDownItem> {
       firstCurve: const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
       secondCurve: const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
       sizeCurve: Curves.fastOutSlowIn,
-      crossFadeState: isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      crossFadeState:
+          isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
       duration: Duration(milliseconds: 350),
     );
 
@@ -62,7 +63,8 @@ class SlideDownItemState extends State<SlideDownItem> {
             ),
             new Padding(
               padding: const EdgeInsets.only(right: 16.0),
-              child: Icon(isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+              child: Icon(
+                  isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down),
             ),
           ],
         ),

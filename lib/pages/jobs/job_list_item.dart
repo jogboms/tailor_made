@@ -37,7 +37,9 @@ class JobListItem extends StatelessWidget {
                 child: new Text.rich(
                   new TextSpan(
                     children: [
-                      new TextSpan(text: "${_date.day}\n", style: ralewayLight(20.0, Colors.black54)),
+                      new TextSpan(
+                          text: "${_date.day}\n",
+                          style: ralewayLight(20.0, Colors.black54)),
                       new TextSpan(
                         text: MONTHS_SHORT[_date.month - 1].toUpperCase(),
                         style: ralewayLight(10.0, Colors.black).copyWith(
@@ -55,15 +57,23 @@ class JobListItem extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(job.name, style: TextStyle(fontSize: 16.0, color: theme.textColor, fontWeight: FontWeight.w600)),
+                    Text(job.name,
+                        style: TextStyle(
+                            fontSize: 16.0,
+                            color: theme.textColor,
+                            fontWeight: FontWeight.w600)),
                     new SizedBox(height: 4.0),
-                    Text(_price, style: TextStyle(fontSize: 14.0, color: kTextBaseColor)),
+                    Text(_price,
+                        style:
+                            TextStyle(fontSize: 14.0, color: kTextBaseColor)),
                   ],
                 ),
               ),
               new Icon(
                 Icons.check,
-                color: job.isComplete ? theme.primaryColor : kTextBaseColor.shade300,
+                color: job.isComplete
+                    ? theme.primaryColor
+                    : kTextBaseColor.shade300,
               ),
             ],
           ),

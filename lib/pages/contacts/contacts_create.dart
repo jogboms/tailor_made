@@ -20,8 +20,10 @@ class ContactsCreatePage extends StatefulWidget {
   _ContactsCreatePageState createState() => new _ContactsCreatePageState();
 }
 
-class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarProvider {
-  final GlobalKey<ContactFormState> _formKey = new GlobalKey<ContactFormState>();
+class _ContactsCreatePageState extends State<ContactsCreatePage>
+    with SnackBarProvider {
+  final GlobalKey<ContactFormState> _formKey =
+      new GlobalKey<ContactFormState>();
   ContactModel contact;
 
   @override
@@ -89,7 +91,8 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
         if (choice == false) {
           Navigator.pushReplacement<dynamic, dynamic>(
             context,
-            TMNavigate.slideIn<dynamic>(ContactPage(contact: ContactModel.fromDoc(snap))),
+            TMNavigate.slideIn<dynamic>(
+                ContactPage(contact: ContactModel.fromDoc(snap))),
           );
         } else {
           contact = new ContactModel();

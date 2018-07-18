@@ -16,11 +16,13 @@ Stream<dynamic> stats(Stream<dynamic> actions, EpicStore<ReduxState> store) {
       .switchMap<dynamic>((InitDataEvents action) => getStats()
           .map((stats) => new OnDataEvent(payload: stats))
           //
-          .takeUntil<dynamic>(actions.where((dynamic action) => action is DisposeDataEvents)));
+          .takeUntil<dynamic>(
+              actions.where((dynamic action) => action is DisposeDataEvents)));
 }
 
 Observable<StatsModel> getStats() {
-  return new Observable(CloudDb.stats.snapshots()).map((DocumentSnapshot snapshot) {
+  return new Observable(CloudDb.stats.snapshots())
+      .map((DocumentSnapshot snapshot) {
     return StatsModel.fromJson(snapshot.data);
   });
 }

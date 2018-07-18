@@ -45,19 +45,22 @@ class JobModel extends Model {
     final List<MeasureModel> measurements = [];
     if (json['measurements'] != null) {
       json['measurements'].forEach(
-        (dynamic measure) => measurements.add(MeasureModel.fromJson(measure.cast<String, dynamic>())),
+        (dynamic measure) => measurements
+            .add(MeasureModel.fromJson(measure.cast<String, dynamic>())),
       );
     }
     final List<PaymentModel> payments = [];
     if (json['payments'] != null) {
       json['payments'].forEach(
-        (dynamic payment) => payments.add(PaymentModel.fromJson(payment.cast<String, dynamic>())),
+        (dynamic payment) => payments
+            .add(PaymentModel.fromJson(payment.cast<String, dynamic>())),
       );
     }
     final List<ImageModel> images = [];
     if (json['images'] != null) {
       json['images'].forEach(
-        (dynamic image) => images.add(ImageModel.fromJson(image.cast<String, dynamic>())),
+        (dynamic image) =>
+            images.add(ImageModel.fromJson(image.cast<String, dynamic>())),
       );
     }
     return new JobModel(

@@ -97,9 +97,11 @@ class StatsModel extends Model {
     assert(json != null);
     return StatsModel(
       jobs: IntStatsModel.fromJson(json['jobs'].cast<String, dynamic>()),
-      contacts: IntStatsModel.fromJson(json['contacts'].cast<String, dynamic>()),
+      contacts:
+          IntStatsModel.fromJson(json['contacts'].cast<String, dynamic>()),
       gallery: IntStatsModel.fromJson(json['gallery'].cast<String, dynamic>()),
-      payments: DoubleStatsModel.fromJson(json['payments'].cast<String, dynamic>()),
+      payments:
+          DoubleStatsModel.fromJson(json['payments'].cast<String, dynamic>()),
     );
   }
 

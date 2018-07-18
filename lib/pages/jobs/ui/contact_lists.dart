@@ -42,7 +42,8 @@ class ContactLists extends StatelessWidget {
                   onTapContact: () => Navigator.pop(context, item),
                 );
               },
-              separatorBuilder: (BuildContext context, int index) => new Divider(),
+              separatorBuilder: (BuildContext context, int index) =>
+                  new Divider(),
             ),
     );
   }

@@ -60,7 +60,8 @@ class TMGridTile extends StatelessWidget {
   }
 }
 
-Widget circleIcon({IconData icon, Color color: TMColors.accent, bool small: false}) {
+Widget circleIcon(
+    {IconData icon, Color color: TMColors.accent, bool small: false}) {
   return new Align(
     child: new Padding(
       child: new CircleAvatar(
@@ -78,19 +79,24 @@ Widget circleIcon({IconData icon, Color color: TMColors.accent, bool small: fals
   );
 }
 
-Widget textTile(TMTheme theme, {String title, String subTitle, bool small: false}) {
+Widget textTile(TMTheme theme,
+    {String title, String subTitle, bool small: false}) {
   return new Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
       new Text(
         title,
-        style: new TextStyle(color: theme?.textColor, fontSize: small == true ? 15.0 : 16.0),
+        style: new TextStyle(
+            color: theme?.textColor, fontSize: small == true ? 15.0 : 16.0),
       ),
       subTitle != null
           ? new Text(
               subTitle,
-              style: new TextStyle(color: theme?.textColor, fontSize: 12.0, fontWeight: FontWeight.w300),
+              style: new TextStyle(
+                  color: theme?.textColor,
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w300),
             )
           : new Container(),
     ],

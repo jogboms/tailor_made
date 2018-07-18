@@ -12,7 +12,8 @@ class PaymentsCreatePage extends StatefulWidget {
   _PaymentsCreatePageState createState() => new _PaymentsCreatePageState();
 }
 
-class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarProvider {
+class _PaymentsCreatePageState extends State<PaymentsCreatePage>
+    with SnackBarProvider {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   bool _autovalidate = false;
   double price = 0.0;
@@ -84,12 +85,14 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
     return new Container(
       color: Colors.grey[100].withOpacity(.4),
       margin: const EdgeInsets.only(top: 8.0),
-      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
+      padding:
+          const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
       alignment: AlignmentDirectional.centerStart,
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(title.toUpperCase(), style: ralewayLight(12.0, kTextBaseColor.shade800)),
+          Text(title.toUpperCase(),
+              style: ralewayLight(12.0, kTextBaseColor.shade800)),
           Text(trailing, style: ralewayLight(12.0, kTextBaseColor.shade800)),
         ],
       ),
@@ -115,7 +118,8 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
             ),
           ),
         ),
-        validator: (value) => (controller.numberValue > 0) ? null : "Please input a price",
+        validator: (value) =>
+            (controller.numberValue > 0) ? null : "Please input a price",
         onSaved: (value) => price = controller.numberValue,
       ),
     );

@@ -83,7 +83,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Icons.person,
                   color: Colors.white,
                 ),
-                onPressed: () => TMNavigate(context, ContactPage(contact: contact)),
+                onPressed: () =>
+                    TMNavigate(context, ContactPage(contact: contact)),
               ),
               IconButton(
                 icon: Icon(

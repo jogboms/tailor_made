@@ -68,7 +68,8 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
 
   Future<void> _trySilent() async {
     // Give the navigation animations, etc, some time to finish
-    await new Future<dynamic>.delayed(new Duration(seconds: 1)).then((dynamic _) => _onLogin());
+    await new Future<dynamic>.delayed(new Duration(seconds: 1))
+        .then((dynamic _) => _onLogin());
   }
 
   Future<void> _onLogin() async {
@@ -117,7 +118,9 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
                 projectVersion != null
                     ? Text(
                         "v" + projectVersion,
-                        style: ralewayMedium(12.0, kTextBaseColor.withOpacity(.4)).copyWith(height: 1.5),
+                        style:
+                            ralewayMedium(12.0, kTextBaseColor.withOpacity(.4))
+                                .copyWith(height: 1.5),
                         textAlign: TextAlign.center,
                       )
                     : SizedBox(),
@@ -142,7 +145,8 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
             child: StreamBuilder(
               stream: CloudDb.settings.snapshots(),
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (!snapshot.hasData || (snapshot.hasData && snapshot.data.data == null)) {
+                if (!snapshot.hasData ||
+                    (snapshot.hasData && snapshot.data.data == null)) {
                   return Center(
                     child: loadingSpinner(),
                   );
@@ -150,7 +154,9 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
 
                 Settings.setData(snapshot.data.data);
 
-                return isLoading ? loadingSpinner() : Center(child: _googleBtn());
+                return isLoading
+                    ? loadingSpinner()
+                    : Center(child: _googleBtn());
               },
             ),
           ),
@@ -172,7 +178,8 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
         }
       },
       icon: Image(image: TMImages.google_logo, width: 24.0),
-      label: Text("Continue with Google", style: TextStyle(fontWeight: FontWeight.w700)),
+      label: Text("Continue with Google",
+          style: TextStyle(fontWeight: FontWeight.w700)),
     );
   }
 }

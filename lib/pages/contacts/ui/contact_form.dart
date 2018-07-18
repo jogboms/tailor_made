@@ -89,7 +89,8 @@ class ContactFormState extends State<ContactForm> {
                   prefixIcon: Icon(Icons.phone),
                   labelText: "Phone",
                 ),
-                validator: (value) => (value.isEmpty) ? null : "Please input a value",
+                validator: (value) =>
+                    (value.isEmpty) ? null : "Please input a value",
                 onSaved: (phone) => contact.phone = phone.trim(),
               ),
               SizedBox(height: 4.0),
@@ -99,7 +100,8 @@ class ContactFormState extends State<ContactForm> {
                   prefixIcon: Icon(Icons.location_city),
                   labelText: "Location",
                 ),
-                validator: (value) => (value.isEmpty) ? null : "Please input a value",
+                validator: (value) =>
+                    (value.isEmpty) ? null : "Please input a value",
                 onSaved: (location) => contact.location = location.trim(),
               ),
               SizedBox(height: 32.0),
@@ -182,7 +184,8 @@ class ContactFormState extends State<ContactForm> {
     if (source == null) {
       return;
     }
-    final imageFile = await ImagePicker.pickImage(source: source, maxWidth: 200.0, maxHeight: 200.0);
+    final imageFile = await ImagePicker.pickImage(
+        source: source, maxWidth: 200.0, maxHeight: 200.0);
     final ref = CloudStorage.createContact();
     final uploadTask = ref.putFile(imageFile);
 

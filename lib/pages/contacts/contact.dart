@@ -34,7 +34,8 @@ class _ContactState extends State<ContactPage> {
 
     // TODO Maybe a clean up here
     return StoreConnector<ReduxState, ContactsViewModel>(
-      converter: (store) => ContactsViewModel(store)..contactID = widget.contact.id,
+      converter: (store) =>
+          ContactsViewModel(store)..contactID = widget.contact.id,
       builder: (BuildContext context, ContactsViewModel vm) {
         final contact = vm.selected;
         return new DefaultTabController(
@@ -52,7 +53,9 @@ class _ContactState extends State<ContactPage> {
             ),
             // TODO could maybe refactor this as well
             body: new StreamBuilder(
-              stream: CloudDb.jobs.where("contactID", isEqualTo: contact.id).snapshots(),
+              stream: CloudDb.jobs
+                  .where("contactID", isEqualTo: contact.id)
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
@@ -62,7 +65,8 @@ class _ContactState extends State<ContactPage> {
 
                 final List<DocumentSnapshot> list = snapshot.data.documents;
 
-                final jobs = list.map((item) => JobModel.fromDoc(item)).toList();
+                final jobs =
+                    list.map((item) => JobModel.fromDoc(item)).toList();
 
                 return new TabBarView(
                   children: [

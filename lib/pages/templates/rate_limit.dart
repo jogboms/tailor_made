@@ -26,7 +26,8 @@ class RateLimitPage extends StatelessWidget {
           SizedBox(height: 48.0),
           Text(
             "USAGE POLICY",
-            style: textTheme.copyWith(color: Colors.black87, fontWeight: FontWeight.w700),
+            style: textTheme.copyWith(
+                color: Colors.black87, fontWeight: FontWeight.w700),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 16.0),

@@ -17,7 +17,9 @@ class HomeViewModel extends StatsViewModel {
 
   @override
   bool get isLoading {
-    return store.state.stats.status == StatsStatus.loading || store.state.contacts.status == ContactsStatus.loading || store.state.account.status == AccountStatus.loading;
+    return store.state.stats.status == StatsStatus.loading ||
+        store.state.contacts.status == ContactsStatus.loading ||
+        store.state.account.status == AccountStatus.loading;
   }
 
   bool get hasSkipedPremium => store.state.account.hasSkipedPremium == true;

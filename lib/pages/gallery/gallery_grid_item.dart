@@ -26,10 +26,13 @@ class GalleryGridItem extends StatelessWidget {
           color: Colors.transparent,
           child: new InkWell(
             onTap: () {
-              final PageRouteBuilder pageBuilder = new PageRouteBuilder<dynamic>(
+              final PageRouteBuilder pageBuilder =
+                  new PageRouteBuilder<dynamic>(
                 opaque: false,
-                pageBuilder: (BuildContext context, _, __) => GalleryView(image: image),
-                transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                pageBuilder: (BuildContext context, _, __) =>
+                    GalleryView(image: image),
+                transitionsBuilder:
+                    (_, Animation<double> animation, __, Widget child) {
                   return new FadeTransition(opacity: animation, child: child);
                 },
               );

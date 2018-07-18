@@ -13,9 +13,11 @@ class Auth {
   static FirebaseUser setUser(FirebaseUser user) => _user = user;
   static FirebaseUser get getUser => _user;
 
-  static Future<GoogleSignInAccount> silently() async => await _googleSignIn.signInSilently();
+  static Future<GoogleSignInAccount> silently() async =>
+      await _googleSignIn.signInSilently();
 
-  static Stream<FirebaseUser> get onAuthStateChanged => _auth.onAuthStateChanged;
+  static Stream<FirebaseUser> get onAuthStateChanged =>
+      _auth.onAuthStateChanged;
 
   static Future<FirebaseUser> signInWithGoogle() async {
     try {

@@ -32,7 +32,8 @@ class PaymentGridItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(5.0),
         color: kPrimaryColor,
         child: new InkWell(
-          onTap: () => TMNavigate(context, PaymentPage(payment: payment), fullscreenDialog: true),
+          onTap: () => TMNavigate(context, PaymentPage(payment: payment),
+              fullscreenDialog: true),
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
             child: Column(
@@ -50,7 +51,8 @@ class PaymentGridItem extends StatelessWidget {
                         ),
                         TextSpan(text: "\n"),
                         TextSpan(
-                          text: "${MONTHS_SHORT[_date.month-1].toUpperCase()}, ${_date.year}",
+                          text: "${MONTHS_SHORT[_date.month - 1]
+                              .toUpperCase()}, ${_date.year}",
                           style: ralewayMedium(10.0, Colors.white),
                         ),
                       ],

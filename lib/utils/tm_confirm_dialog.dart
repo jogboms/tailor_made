@@ -12,8 +12,11 @@ Future<bool> confirmDialog({
       child: new AlertDialog(
         content: title,
         actions: <Widget>[
-          FlatButton(onPressed: () => Navigator.pop(context, false), child: Text("DISMISS")),
-          FlatButton(onPressed: () => Navigator.pop(context, true), child: Text("OK")),
+          FlatButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text("DISMISS")),
+          FlatButton(
+              onPressed: () => Navigator.pop(context, true), child: Text("OK")),
         ],
       ),
     );

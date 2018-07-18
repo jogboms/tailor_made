@@ -32,7 +32,8 @@ class GalleryGridItem extends StatelessWidget {
               child: new Material(
                 color: Colors.white,
                 elevation: 1.0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0)),
                 child: new Ink.image(
                   image: new NetworkImage(image.src),
                   fit: BoxFit.cover,
@@ -41,8 +42,10 @@ class GalleryGridItem extends StatelessWidget {
                       Navigator.of(context).push<dynamic>(
                         new PageRouteBuilder<dynamic>(
                           opaque: false,
-                          pageBuilder: (BuildContext context, _, __) => GalleryView(image: image),
-                          transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                          pageBuilder: (BuildContext context, _, __) =>
+                              GalleryView(image: image),
+                          transitionsBuilder: (_, Animation<double> animation,
+                              __, Widget child) {
                             return new FadeTransition(
                               opacity: animation,
                               child: child,
@@ -58,7 +61,8 @@ class GalleryGridItem extends StatelessWidget {
                               onTap: () => onTapDelete(image),
                               child: new Padding(
                                 padding: const EdgeInsets.all(2.0),
-                                child: new Icon(Icons.cancel, color: Colors.red),
+                                child:
+                                    new Icon(Icons.cancel, color: Colors.red),
                               ),
                             ),
                           )

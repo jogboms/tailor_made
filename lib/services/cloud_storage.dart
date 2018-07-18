@@ -7,9 +7,13 @@ class CloudStorage {
 
   CloudStorage._();
 
-  static StorageReference get contacts => instance.ref().child('${Auth.getUser.uid}/contacts');
-  static StorageReference get references => instance.ref().child('${Auth.getUser.uid}/references');
+  static StorageReference get contacts =>
+      instance.ref().child('${Auth.getUser.uid}/contacts');
+  static StorageReference get references =>
+      instance.ref().child('${Auth.getUser.uid}/references');
 
-  static StorageReference createContact([String id]) => contacts.child('${id ?? uuid()}.jpg');
-  static StorageReference createReference([String id]) => references.child('${id ?? uuid()}.jpg');
+  static StorageReference createContact([String id]) =>
+      contacts.child('${id ?? uuid()}.jpg');
+  static StorageReference createReference([String id]) =>
+      references.child('${id ?? uuid()}.jpg');
 }
