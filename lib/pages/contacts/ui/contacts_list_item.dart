@@ -11,7 +11,7 @@ class ContactsListItem extends StatelessWidget {
   final VoidCallback onTapContact;
   final bool showActions;
 
-  ContactsListItem({
+  const ContactsListItem({
     Key key,
     this.contact,
     this.onTapContact,
@@ -69,7 +69,7 @@ class ContactsListItem extends StatelessWidget {
       );
     }
 
-    Row icons = new Row(
+    final Row icons = new Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
@@ -78,14 +78,14 @@ class ContactsListItem extends StatelessWidget {
       ],
     );
 
-    Text title = new Text(
+    final Text title = new Text(
       contact.fullname,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(fontSize: 16.0, color: theme.textColor, fontWeight: FontWeight.w600),
     );
 
-    int pending = contact.pendingJobs;
+    final int pending = contact.pendingJobs;
 
     return ListTile(
       dense: true,

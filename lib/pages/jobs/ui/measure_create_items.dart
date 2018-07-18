@@ -6,7 +6,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class MeasureCreateItems extends StatelessWidget {
   final List<MeasureModel> measurements;
 
-  MeasureCreateItems(this.measurements);
+  const MeasureCreateItems(this.measurements);
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +45,11 @@ class MeasureCreateItems extends StatelessWidget {
 class JobMeasureBlock extends StatelessWidget {
   final List<MeasureModel> list;
 
-  JobMeasureBlock(this.list);
+  const JobMeasureBlock(this.list);
 
   @override
   Widget build(BuildContext context) {
-    int length = list.length;
+    final length = list.length;
     return Theme(
       data: ThemeData(primaryColor: kPrimaryColor),
       child: Container(
@@ -66,7 +66,7 @@ class JobMeasureBlock extends StatelessWidget {
         child: Wrap(
           alignment: WrapAlignment.spaceBetween,
           children: list.map((MeasureModel measure) {
-            int index = list.indexOf(measure);
+            final index = list.indexOf(measure);
             return new LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 final removeBorder = (length % 2 != 0 && (index == length - 1)) || (length % 2 == 0 && (index == length - 1 || index == length - 2));

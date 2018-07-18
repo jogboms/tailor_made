@@ -2,6 +2,7 @@ import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 
 class InitJobs extends ActionType {
+  @override
   final String type = ReduxActions.initJobs;
   final List<JobModel> payload;
 
@@ -9,6 +10,7 @@ class InitJobs extends ActionType {
 }
 
 class AddJob extends ActionType {
+  @override
   final String type = ReduxActions.addJob;
   final JobModel payload;
 
@@ -16,6 +18,7 @@ class AddJob extends ActionType {
 }
 
 class RemoveJob extends ActionType {
+  @override
   final String type = ReduxActions.removeJob;
   final JobModel payload;
 
@@ -23,6 +26,7 @@ class RemoveJob extends ActionType {
 }
 
 class ToggleCompleteJob extends ActionType {
+  @override
   final String type = ReduxActions.removeJob;
   final JobModel payload;
 
@@ -30,6 +34,7 @@ class ToggleCompleteJob extends ActionType {
 }
 
 class OnDataEvent extends ActionType {
+  @override
   final String type = ReduxActions.onDataEventJob;
   final List<JobModel> payload;
 

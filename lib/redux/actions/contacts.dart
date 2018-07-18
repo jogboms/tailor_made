@@ -2,6 +2,7 @@ import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 
 class InitContact extends ActionType {
+  @override
   final String type = ReduxActions.initContacts;
   final List<ContactModel> payload;
 
@@ -9,6 +10,7 @@ class InitContact extends ActionType {
 }
 
 class AddContact extends ActionType {
+  @override
   final String type = ReduxActions.addContact;
   final ContactModel payload;
 
@@ -16,6 +18,7 @@ class AddContact extends ActionType {
 }
 
 class RemoveContact extends ActionType {
+  @override
   final String type = ReduxActions.removeContact;
   final ContactModel payload;
 
@@ -23,6 +26,7 @@ class RemoveContact extends ActionType {
 }
 
 class OnDataEvent extends ActionType {
+  @override
   final String type = ReduxActions.onDataEventContact;
   final List<ContactModel> payload;
 

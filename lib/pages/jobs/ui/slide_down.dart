@@ -8,7 +8,7 @@ class SlideDownItem extends StatefulWidget {
   final String title;
   final Widget body;
 
-  SlideDownItem({
+  const SlideDownItem({
     Key key,
     this.title,
     this.body,
@@ -24,18 +24,18 @@ class SlideDownItemState extends State<SlideDownItem> {
   bool isExpanded;
 
   @override
-  initState() {
+  void initState() {
     super.initState();
-    Random rand = new Random();
+    final Random rand = new Random();
     id = rand.nextInt(100);
     isExpanded = widget.isExpanded;
   }
 
   @override
-  build(BuildContext context) {
+  Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    Widget body = new AnimatedCrossFade(
+    final Widget body = new AnimatedCrossFade(
       firstChild: new Container(height: 0.0),
       secondChild: widget.body,
       firstCurve: const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
@@ -45,7 +45,7 @@ class SlideDownItemState extends State<SlideDownItem> {
       duration: Duration(milliseconds: 350),
     );
 
-    Widget header = new Material(
+    final Widget header = new Material(
       color: Colors.white,
       elevation: isExpanded ? 1.0 : 0.0,
       child: new InkWell(

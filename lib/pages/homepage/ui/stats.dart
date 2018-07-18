@@ -6,7 +6,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class StatsWidget extends StatelessWidget {
   final StatsModel stats;
 
-  StatsWidget({
+  const StatsWidget({
     Key key,
     @required this.stats,
   }) : super(key: key);

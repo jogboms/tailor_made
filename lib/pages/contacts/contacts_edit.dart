@@ -9,7 +9,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class ContactsEditPage extends StatefulWidget {
   final ContactModel contact;
 
-  ContactsEditPage({
+  const ContactsEditPage({
     Key key,
     this.contact,
   }) : super(key: key);
@@ -19,6 +19,7 @@ class ContactsEditPage extends StatefulWidget {
 }
 
 class _ContactsEditPageState extends State<ContactsEditPage> with SnackBarProvider {
+  @override
   final scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override

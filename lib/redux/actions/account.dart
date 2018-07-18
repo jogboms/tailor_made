@@ -3,6 +3,7 @@ import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 
 class InitAccount extends ActionType {
+  @override
   final String type = ReduxActions.initAccount;
   final AccountModel payload;
 
@@ -10,6 +11,7 @@ class InitAccount extends ActionType {
 }
 
 class OnDataEvent extends ActionType {
+  @override
   final String type = ReduxActions.onDataEventAccount;
   final AccountModel payload;
 
@@ -17,6 +19,7 @@ class OnDataEvent extends ActionType {
 }
 
 class OnPremiumSignUp extends ActionType {
+  @override
   final String type = ReduxActions.onPremiumSignUp;
   final AccountModel payload;
 
@@ -26,6 +29,7 @@ class OnPremiumSignUp extends ActionType {
 }
 
 class OnReadNotice extends ActionType {
+  @override
   final String type = ReduxActions.onReadNotice;
   final AccountModel payload;
 
@@ -35,6 +39,7 @@ class OnReadNotice extends ActionType {
 }
 
 class OnSkipedPremium extends ActionType {
+  @override
   final String type = ReduxActions.onHasSkipedPremium;
   final bool payload = true;
 }

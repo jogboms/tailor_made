@@ -9,7 +9,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class TopRowWidget extends StatelessWidget {
   final StatsModel stats;
 
-  TopRowWidget({
+  const TopRowWidget({
     Key key,
     @required this.stats,
   }) : super(key: key);

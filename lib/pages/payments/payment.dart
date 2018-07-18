@@ -13,7 +13,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class PaymentPage extends StatelessWidget {
   final PaymentModel payment;
 
-  PaymentPage({
+  const PaymentPage({
     Key key,
     @required this.payment,
   }) : super(key: key);

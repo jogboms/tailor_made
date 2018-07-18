@@ -14,7 +14,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class ContactsPage extends StatefulWidget {
   // final List<ContactModel> contacts;
 
-  ContactsPage({
+  const ContactsPage({
     Key key,
     // @required this.contacts,
   }) : super(key: key);

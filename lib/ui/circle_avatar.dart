@@ -6,7 +6,7 @@ CircleAvatar circleAvatar({double radius, bool useAlt = false, String imageUrl})
   final iconColor = useAlt ? kPrimaryColor : Colors.white;
   final backgroundColor = useAlt ? Colors.white : kPrimaryColor;
   return new CircleAvatar(
-    radius: radius ?? null,
+    radius: radius,
     backgroundColor: imageUrl != null ? Colors.grey.shade400 : backgroundColor,
     backgroundImage: imageUrl != null ? CachedNetworkImageProvider(imageUrl) : null,
     child: imageUrl != null

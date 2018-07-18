@@ -6,7 +6,7 @@ class RateLimitPage extends StatelessWidget {
   final VoidCallback onSkipedPremium;
   final VoidCallback onSignUp;
 
-  RateLimitPage({
+  const RateLimitPage({
     Key key,
     @required this.onSkipedPremium,
     @required this.onSignUp,

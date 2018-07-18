@@ -8,7 +8,7 @@ import 'package:tailor_made/ui/tm_empty_result.dart';
 class PaymentList extends StatelessWidget {
   final List<PaymentModel> payments;
 
-  PaymentList({this.payments});
+  const PaymentList({this.payments});
 
   @override
   Widget build(BuildContext context) {

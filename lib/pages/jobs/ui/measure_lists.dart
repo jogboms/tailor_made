@@ -9,7 +9,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class MeasureLists extends StatelessWidget {
   final List<MeasureModel> measurements;
 
-  MeasureLists({
+  const MeasureLists({
     Key key,
     @required this.measurements,
   }) : super(key: key);

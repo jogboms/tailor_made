@@ -9,14 +9,14 @@ class PaymentsListWidget extends StatelessWidget {
   final ContactModel contact;
   final List<JobModel> jobs;
 
-  PaymentsListWidget({
+  const PaymentsListWidget({
     Key key,
     @required this.contact,
     @required this.jobs,
   }) : super(key: key);
 
   @override
-  build(BuildContext context) {
+  Widget build(BuildContext context) {
     final List<PaymentModel> payments = [];
 
     jobs.forEach(

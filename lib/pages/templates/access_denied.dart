@@ -5,7 +5,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class AccessDeniedPage extends StatelessWidget {
   final VoidCallback onSendMail;
 
-  AccessDeniedPage({
+  const AccessDeniedPage({
     Key key,
     @required this.onSendMail,
   }) : super(key: key);

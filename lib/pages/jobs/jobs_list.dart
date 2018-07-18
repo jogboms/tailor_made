@@ -1,14 +1,14 @@
 import 'dart:math' show max;
 
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/jobs/job_list_item.dart';
 import 'package:tailor_made/models/job.dart';
+import 'package:tailor_made/pages/jobs/job_list_item.dart';
 import 'package:tailor_made/ui/tm_empty_result.dart';
 
 class JobList extends StatelessWidget {
   final List<JobModel> jobs;
 
-  JobList({
+  const JobList({
     Key key,
     @required this.jobs,
   }) : super(key: key);

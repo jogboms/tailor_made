@@ -9,7 +9,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class PaymentListItem extends StatelessWidget {
   final PaymentModel payment;
 
-  PaymentListItem({
+  const PaymentListItem({
     Key key,
     this.payment,
   }) : super(key: key);
@@ -18,7 +18,7 @@ class PaymentListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final _date = payment.createdAt;
     final _price = formatNaira(payment.price);
-    final textColor = Colors.black54;
+    const textColor = Colors.black54;
 
     return Material(
       child: new InkResponse(
@@ -39,7 +39,7 @@ class PaymentListItem extends StatelessWidget {
                       ),
                       TextSpan(text: "\n"),
                       TextSpan(
-                        text: "${MONTHS_SHORT[_date.month-1].toUpperCase()}, ${_date.year}",
+                        text: "${MONTHS_SHORT[_date.month - 1].toUpperCase()}, ${_date.year}",
                         style: ralewayMedium(10.0, textColor),
                       ),
                     ],

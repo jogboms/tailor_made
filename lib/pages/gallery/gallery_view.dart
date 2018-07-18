@@ -15,7 +15,7 @@ import 'package:tailor_made/utils/tm_navigate.dart';
 class GalleryView extends StatelessWidget {
   final ImageModel image;
 
-  GalleryView({
+  const GalleryView({
     Key key,
     this.image,
   }) : super(key: key);
@@ -49,7 +49,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final ContactModel contact;
   final JobModel job;
 
-  MyAppBar({
+  const MyAppBar({
     Key key,
     this.contact,
     this.job,

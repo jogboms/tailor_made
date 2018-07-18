@@ -109,7 +109,9 @@ class TMNavigateRoute<T> extends MaterialPageRoute<T> {
     //       end: Offset.zero,
     //     ).animate(animation);
 
-    if (settings.isInitialRoute) return child;
+    if (settings.isInitialRoute) {
+      return child;
+    }
     // return new FadeTransition(opacity: animation, child: child);
     // return new SlideTransition(position: positionIn(animation), child: child);
     return new FadeTransition(

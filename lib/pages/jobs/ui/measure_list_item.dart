@@ -5,11 +5,11 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class MeasureListItem extends StatelessWidget {
   final MeasureModel item;
 
-  MeasureListItem(this.item);
+  const MeasureListItem(this.item);
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> children = [
+    final List<Widget> children = [
       Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

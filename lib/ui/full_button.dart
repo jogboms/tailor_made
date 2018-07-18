@@ -6,7 +6,7 @@ class FullButton extends StatelessWidget {
   final VoidCallback onPressed;
   final ShapeBorder shape;
 
-  FullButton({
+  const FullButton({
     Key key,
     @required this.onPressed,
     @required this.child,

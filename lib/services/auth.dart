@@ -21,14 +21,10 @@ class Auth {
     try {
       // Attempt to get the currently authenticated user
       GoogleSignInAccount currentUser = _googleSignIn.currentUser;
-      if (currentUser == null) {
-        // Attempt to sign in without user interaction
-        currentUser = await _googleSignIn.signInSilently();
-      }
-      if (currentUser == null) {
-        // Force the user to interactively sign in
-        currentUser = await _googleSignIn.signIn();
-      }
+      // Attempt to sign in without user interaction
+      currentUser ??= await _googleSignIn.signInSilently();
+      // Force the user to interactively sign in
+      currentUser ??= await _googleSignIn.signIn();
 
       final GoogleSignInAuthentication auth = await currentUser.authentication;
 

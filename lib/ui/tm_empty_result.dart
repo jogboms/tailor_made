@@ -4,14 +4,14 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class TMEmptyResult extends StatelessWidget {
   final String message;
 
-  TMEmptyResult({
+  const TMEmptyResult({
     Key key,
     this.message = "No results",
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    TMTheme theme = TMTheme.of(context);
+    final TMTheme theme = TMTheme.of(context);
     return Opacity(
       opacity: .5,
       child: new Column(

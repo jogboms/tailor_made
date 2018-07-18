@@ -15,7 +15,7 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool useAlt;
   final List<Widget> actions;
 
-  AvatarAppBar({
+  const AvatarAppBar({
     @required this.tag,
     @required this.imageUrl,
     this.useAlt = false,
@@ -35,7 +35,7 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
       Navigator.pop(context);
     }
 
-    Widget appBarLeading = new FlatButton(
+    final Widget appBarLeading = new FlatButton(
       padding: EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -57,7 +57,7 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
       onPressed: onTapGoBack,
     );
 
-    List<Widget> titles = <Widget>[];
+    final List<Widget> titles = <Widget>[];
 
     if (title != null) {
       titles.add(title);
@@ -86,7 +86,7 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
       // ),
     }
 
-    List<Widget> children = <Widget>[
+    final List<Widget> children = <Widget>[
       appBarLeading,
       Expanded(
         child: Column(

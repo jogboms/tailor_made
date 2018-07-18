@@ -9,7 +9,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class JobListItem extends StatelessWidget {
   final JobModel job;
 
-  JobListItem({
+  const JobListItem({
     Key key,
     @required this.job,
   }) : super(key: key);

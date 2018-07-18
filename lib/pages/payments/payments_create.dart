@@ -6,14 +6,13 @@ import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class PaymentsCreatePage extends StatefulWidget {
-  PaymentsCreatePage({Key key}) : super(key: key);
+  const PaymentsCreatePage({Key key}) : super(key: key);
 
   @override
   _PaymentsCreatePageState createState() => new _PaymentsCreatePageState();
 }
 
 class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarProvider {
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   bool _autovalidate = false;
   double price = 0.0;
@@ -24,9 +23,12 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
   );
 
   @override
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
-    List<Widget> children = [];
+    final List<Widget> children = [];
 
     children.add(makeHeader("Payment", "Naira (₦)"));
     children.add(buildEnterAmount());
@@ -145,7 +147,9 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
 
   void _handleSubmit() async {
     final FormState form = _formKey.currentState;
-    if (form == null) return;
+    if (form == null) {
+      return;
+    }
     if (!form.validate()) {
       _autovalidate = true; // Start validating on every change.
       showInSnackBar('Please fix the errors in red before submitting.');

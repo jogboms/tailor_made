@@ -151,7 +151,7 @@ linter:
     - unnecessary_overrides
     - unnecessary_parenthesis
     # - unnecessary_statements # not yet tested
-    - unnecessary_this
+    # - unnecessary_this
     - unrelated_type_equality_checks
     - use_rethrow_when_possible
     # - use_setters_to_change_properties # not yet tested

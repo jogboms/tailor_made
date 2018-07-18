@@ -9,13 +9,13 @@ import 'package:tailor_made/ui/tm_loading_spinner.dart';
 class JobsListWidget extends StatelessWidget {
   final ContactModel contact;
 
-  JobsListWidget({
+  const JobsListWidget({
     Key key,
     @required this.contact,
   }) : super(key: key);
 
   @override
-  build(BuildContext context) {
+  Widget build(BuildContext context) {
     return new StoreConnector<ReduxState, JobsViewModel>(
       converter: (store) => JobsViewModel(store)..contact = contact,
       builder: (BuildContext context, JobsViewModel vm) {

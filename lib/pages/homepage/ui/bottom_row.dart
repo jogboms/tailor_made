@@ -10,7 +10,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class BottomRowWidget extends StatelessWidget {
   final StatsModel stats;
 
-  BottomRowWidget({
+  const BottomRowWidget({
     Key key,
     @required this.stats,
   }) : super(key: key);
