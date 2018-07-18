@@ -1,42 +1,37 @@
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 
-class InitJobs extends ActionType {
+class InitJobs extends ActionType<List<JobModel>> {
   @override
   final String type = ReduxActions.initJobs;
-  final List<JobModel> payload;
 
-  InitJobs({this.payload});
+  InitJobs({List<JobModel> payload}) : super(payload: payload);
 }
 
-class AddJob extends ActionType {
+class AddJob extends ActionType<JobModel> {
   @override
   final String type = ReduxActions.addJob;
-  final JobModel payload;
 
-  AddJob({this.payload});
+  AddJob({JobModel payload}) : super(payload: payload);
 }
 
-class RemoveJob extends ActionType {
+class RemoveJob extends ActionType<JobModel> {
   @override
   final String type = ReduxActions.removeJob;
-  final JobModel payload;
 
-  RemoveJob({this.payload});
+  RemoveJob({JobModel payload}) : super(payload: payload);
 }
 
-class ToggleCompleteJob extends ActionType {
+class ToggleCompleteJob extends ActionType<JobModel> {
   @override
   final String type = ReduxActions.removeJob;
-  final JobModel payload;
 
-  ToggleCompleteJob({this.payload});
+  ToggleCompleteJob({JobModel payload}) : super(payload: payload);
 }
 
-class OnDataEvent extends ActionType {
+class OnDataEvent extends ActionType<List<JobModel>> {
   @override
   final String type = ReduxActions.onDataEventJob;
-  final List<JobModel> payload;
 
-  OnDataEvent({this.payload});
+  OnDataEvent({List<JobModel> payload}) : super(payload: payload);
 }

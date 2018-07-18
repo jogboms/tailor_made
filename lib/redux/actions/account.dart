@@ -1,45 +1,37 @@
-import 'package:flutter/foundation.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 
-class InitAccount extends ActionType {
+class InitAccount extends ActionType<AccountModel> {
   @override
   final String type = ReduxActions.initAccount;
-  final AccountModel payload;
 
-  InitAccount({this.payload});
+  InitAccount({AccountModel payload}) : super(payload: payload);
 }
 
-class OnDataEvent extends ActionType {
+class OnDataEvent extends ActionType<AccountModel> {
   @override
   final String type = ReduxActions.onDataEventAccount;
-  final AccountModel payload;
 
-  OnDataEvent({this.payload});
+  OnDataEvent({AccountModel payload}) : super(payload: payload);
 }
 
-class OnPremiumSignUp extends ActionType {
+class OnPremiumSignUp extends ActionType<AccountModel> {
   @override
   final String type = ReduxActions.onPremiumSignUp;
-  final AccountModel payload;
 
-  OnPremiumSignUp({
-    @required this.payload,
-  });
+  OnPremiumSignUp({AccountModel payload}) : super(payload: payload);
 }
 
-class OnReadNotice extends ActionType {
+class OnReadNotice extends ActionType<AccountModel> {
   @override
   final String type = ReduxActions.onReadNotice;
-  final AccountModel payload;
 
-  OnReadNotice({
-    @required this.payload,
-  });
+  OnReadNotice({AccountModel payload}) : super(payload: payload);
 }
 
-class OnSkipedPremium extends ActionType {
+class OnSkipedPremium extends ActionType<bool> {
   @override
   final String type = ReduxActions.onHasSkipedPremium;
-  final bool payload = true;
+
+  OnSkipedPremium({bool payload}) : super(payload: payload);
 }

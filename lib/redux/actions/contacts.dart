@@ -1,34 +1,30 @@
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 
-class InitContact extends ActionType {
+class InitContact extends ActionType<List<ContactModel>> {
   @override
   final String type = ReduxActions.initContacts;
-  final List<ContactModel> payload;
 
-  InitContact({this.payload});
+  InitContact({List<ContactModel> payload}) : super(payload: payload);
 }
 
-class AddContact extends ActionType {
+class AddContact extends ActionType<ContactModel> {
   @override
   final String type = ReduxActions.addContact;
-  final ContactModel payload;
 
-  AddContact({this.payload});
+  AddContact({ContactModel payload}) : super(payload: payload);
 }
 
-class RemoveContact extends ActionType {
+class RemoveContact extends ActionType<ContactModel> {
   @override
   final String type = ReduxActions.removeContact;
-  final ContactModel payload;
 
-  RemoveContact({this.payload});
+  RemoveContact({ContactModel payload}) : super(payload: payload);
 }
 
-class OnDataEvent extends ActionType {
+class OnDataEvent extends ActionType<List<ContactModel>> {
   @override
   final String type = ReduxActions.onDataEventContact;
-  final List<ContactModel> payload;
 
-  OnDataEvent({this.payload});
+  OnDataEvent({List<ContactModel> payload}) : super(payload: payload);
 }

@@ -1,24 +1,27 @@
-abstract class ActionType {
+abstract class ActionType<T> {
+  final T payload;
+
+  ActionType({this.payload});
+
   String get type;
-  final dynamic payload = "";
 
   @override
   String toString() {
-    return '$runtimeType(${payload.toString()})';
+    return '$runtimeType(${payload?.toString()})';
   }
 }
 
-class VoidAction extends ActionType {
+class VoidAction extends ActionType<void> {
   @override
   final String type = "__voidAction__";
 }
 
-class InitDataEvents extends ActionType {
+class InitDataEvents extends ActionType<void> {
   @override
   final String type = ReduxActions.initDataEvent;
 }
 
-class DisposeDataEvents extends ActionType {
+class DisposeDataEvents extends ActionType<void> {
   @override
   final String type = ReduxActions.disposeDataEvent;
 }
