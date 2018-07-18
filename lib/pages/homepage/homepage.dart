@@ -240,11 +240,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
-  onTapAccount(HomeViewModel vm) {
+  void Function() onTapAccount(HomeViewModel vm) {
     final account = vm.account;
     return () async {
       if (!(account?.hasReadNotice ?? false)) {
-        await showChildDialog(
+        await showChildDialog<dynamic>(
           context: context,
           child: NoticeDialog(
             account: account,
@@ -254,7 +254,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         return;
       }
 
-      AccountOptions result = await showDialog<AccountOptions>(
+      final AccountOptions result = await showDialog<AccountOptions>(
         context: context,
         builder: (BuildContext context) {
           return new SimpleDialog(
@@ -302,7 +302,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           );
 
           if (_storeName != null && _storeName != account.storeName) {
-            await account.reference.updateData({
+            await account.reference.updateData(<String, String>{
               "storeName": _storeName,
             });
           }
@@ -313,9 +313,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
           if (response == true) {
             await Auth.signOutWithGoogle();
-            Navigator.pushReplacement(
+            Navigator.pushReplacement<dynamic, dynamic>(
               context,
-              TMNavigate.fadeIn(
+              TMNavigate.fadeIn<dynamic>(
                 new SplashPage(isColdStart: false),
               ),
             );
@@ -325,9 +325,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     };
   }
 
-  onTapCreate(List<ContactModel> contacts) {
+  void Function() onTapCreate(List<ContactModel> contacts) {
     return () async {
-      CreateOptions result = await showDialog<CreateOptions>(
+      final CreateOptions result = await showDialog<CreateOptions>(
         context: context,
         builder: (BuildContext context) {
           return new SimpleDialog(

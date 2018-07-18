@@ -12,7 +12,7 @@ class JobsViewModel extends ViewModel {
   JobsViewModel(Store<ReduxState> store) : super(store);
 
   List<JobModel> get jobs {
-    final jobs = this.store.state.jobs.jobs;
+    final jobs = store.state.jobs.jobs;
     if (contact != null) {
       return jobs.where((_) => _.contactID == contact.id).toList();
     }
@@ -20,20 +20,20 @@ class JobsViewModel extends ViewModel {
   }
 
   List<ContactModel> get contacts {
-    return this.store.state.contacts.contacts;
+    return store.state.contacts.contacts;
   }
 
-  filterByContact(ContactModel contact) {
+  void filterByContact(ContactModel contact) {
     contact = contact;
   }
 
-  toggleCompleteJob(JobModel job) {
-    return this.store.dispatch(ToggleCompleteJob(payload: job));
+  void toggleCompleteJob(JobModel job) {
+    return store.dispatch(ToggleCompleteJob(payload: job));
   }
 
-  bool get isLoading => this.store.state.jobs.status == JobsStatus.loading;
+  bool get isLoading => store.state.jobs.status == JobsStatus.loading;
 
-  bool get isSuccess => this.store.state.jobs.status == JobsStatus.success;
+  bool get isSuccess => store.state.jobs.status == JobsStatus.success;
 
-  bool get isFailure => this.store.state.jobs.status == JobsStatus.failure;
+  bool get isFailure => store.state.jobs.status == JobsStatus.failure;
 }

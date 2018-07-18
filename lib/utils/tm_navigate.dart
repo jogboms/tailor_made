@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class TMPageRoute {
-  static slideIn<T>(
+  static CupertinoPageRoute slideIn<T>(
     Widget widget, {
     RouteSettings settings,
-    maintainState: true,
+    bool maintainState: true,
     bool fullscreenDialog: false,
-    hostRoute,
+    PageRoute hostRoute,
   }) {
     return CupertinoPageRoute<T>(
       builder: (BuildContext context) => TMTheme(child: widget),
@@ -19,10 +19,10 @@ class TMPageRoute {
     );
   }
 
-  static fadeIn<T>(
+  static PageRouteBuilder fadeIn<T>(
     Widget widget, {
     RouteSettings settings,
-    maintainState: true,
+    bool maintainState: true,
   }) {
     return PageRouteBuilder<T>(
       opaque: false,
@@ -42,13 +42,13 @@ class TMNavigate {
     Widget widget, {
     String name,
     RouteSettings settings,
-    maintainState: true,
+    bool maintainState: true,
     bool fullscreenDialog: false,
-    hostRoute,
+    PageRoute hostRoute,
   }) {
-    Navigator.push(
+    Navigator.push<dynamic>(
       context,
-      TMNavigate.slideIn(
+      TMNavigate.slideIn<dynamic>(
         widget,
         name: name,
         settings: settings,
@@ -59,15 +59,15 @@ class TMNavigate {
     );
   }
 
-  static slideIn<T>(
+  static CupertinoPageRoute slideIn<T>(
     Widget widget, {
     String name,
     RouteSettings settings,
-    maintainState: true,
+    bool maintainState: true,
     bool fullscreenDialog: false,
-    hostRoute,
+    PageRoute hostRoute,
   }) {
-    var _settings = name != null ? new RouteSettings(name: name) : settings;
+    final _settings = name != null ? new RouteSettings(name: name) : settings;
     return TMPageRoute.slideIn<T>(
       widget,
       settings: _settings,
@@ -77,13 +77,13 @@ class TMNavigate {
     );
   }
 
-  static fadeIn<T>(
+  static Route fadeIn<T>(
     Widget widget, {
     String name,
     RouteSettings settings,
-    maintainState: true,
+    bool maintainState: true,
   }) {
-    var _settings = name != null ? new RouteSettings(name: name) : settings;
+    final _settings = name != null ? new RouteSettings(name: name) : settings;
     return TMPageRoute.fadeIn<T>(
       widget,
       settings: _settings,

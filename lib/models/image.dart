@@ -38,15 +38,15 @@ class ImageModel extends Model {
   }
 
   @override
-  toMap() {
-    return {
-      "id": id,
-      "userID": userID,
-      "contactID": contactID,
-      "jobID": jobID,
-      "path": path,
-      "src": src,
-      "createdAt": createdAt.toString(),
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'userID': userID,
+      'contactID': contactID,
+      'jobID': jobID,
+      'path': path,
+      'src': src,
+      'createdAt': createdAt.toString(),
     };
   }
 }

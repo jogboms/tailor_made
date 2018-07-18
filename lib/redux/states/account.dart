@@ -14,12 +14,18 @@ class AccountState {
   final bool hasSkipedPremium;
   final String message;
 
-  AccountState({
+  const AccountState({
     this.account,
     this.status,
     this.hasSkipedPremium,
     this.message,
   });
+
+  const AccountState.initialState()
+      : account = null,
+        status = AccountStatus.loading,
+        hasSkipedPremium = false,
+        message = '';
 
   AccountState copyWith({
     AccountModel account,
@@ -34,10 +40,4 @@ class AccountState {
       message: message ?? this.message,
     );
   }
-
-  AccountState.initialState()
-      : account = null,
-        status = AccountStatus.loading,
-        hasSkipedPremium = false,
-        message = "";
 }

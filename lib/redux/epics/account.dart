@@ -11,37 +11,37 @@ import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/services/settings.dart';
 
 Stream<dynamic> account(Stream<dynamic> actions, EpicStore<ReduxState> store) {
-  return new Observable(actions)
+  return new Observable<dynamic>(actions)
       //
       .ofType(new TypeToken<InitDataEvents>())
-      .switchMap((InitDataEvents action) => _getAccount()
+      .switchMap<dynamic>((InitDataEvents action) => _getAccount()
           .map((account) => new OnDataEvent(payload: account))
           //
-          .takeUntil(actions.where((action) => action is DisposeDataEvents)));
+          .takeUntil<dynamic>(actions.where((dynamic action) => action is DisposeDataEvents)));
 }
 
 Stream<dynamic> onPremiumSignUp(Stream<dynamic> actions, EpicStore<ReduxState> store) {
-  return new Observable(actions).ofType(new TypeToken<OnPremiumSignUp>()).switchMap(
+  return new Observable<dynamic>(actions).ofType(new TypeToken<OnPremiumSignUp>()).switchMap(
     (OnPremiumSignUp action) {
       return Observable.fromFuture(
         _signUp(action.payload).catchError(
-          (e) => print(e),
+          (dynamic e) => print(e),
         ),
       ).map((account) => new VoidAction());
     },
-  ).takeUntil(actions.where((action) => action is DisposeDataEvents));
+  ).takeUntil<dynamic>(actions.where((dynamic action) => action is DisposeDataEvents));
 }
 
 Stream<dynamic> onReadNotice(Stream<dynamic> actions, EpicStore<ReduxState> store) {
-  return new Observable(actions).ofType(new TypeToken<OnReadNotice>()).switchMap(
+  return new Observable<dynamic>(actions).ofType(new TypeToken<OnReadNotice>()).switchMap(
     (OnReadNotice action) {
       return Observable.fromFuture(
         _readNotice(action.payload).catchError(
-          (e) => print(e),
+          (dynamic e) => print(e),
         ),
       ).map((account) => new VoidAction());
     },
-  ).takeUntil(actions.where((action) => action is DisposeDataEvents));
+  ).takeUntil<dynamic>(actions.where((dynamic action) => action is DisposeDataEvents));
 }
 
 Observable<AccountModel> _getAccount() {
@@ -55,7 +55,7 @@ Future<AccountModel> _readNotice(AccountModel account) async {
   try {
     await account.reference.updateData(_account.toMap());
   } catch (e) {
-    throw e;
+    rethrow;
   }
   return _account;
 }
@@ -71,7 +71,7 @@ Future<AccountModel> _signUp(AccountModel account) async {
     await account.reference.updateData(_account.toMap());
     await CloudDb.premium.document(account.uid).setData(_account.toMap());
   } catch (e) {
-    throw e;
+    rethrow;
   }
   return _account;
 }

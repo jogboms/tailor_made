@@ -6,7 +6,7 @@ import 'package:tailor_made/ui/tm_empty_result.dart';
 class MeasuresPage extends StatelessWidget {
   final List<MeasureModel> measurements;
 
-  MeasuresPage({
+  const MeasuresPage({
     Key key,
     this.measurements,
   }) : super(key: key);
@@ -24,7 +24,7 @@ class MeasuresPage extends StatelessWidget {
     );
   }
 
-  getBody() {
+  Widget getBody() {
     if (measurements.isEmpty) {
       return Center(
         child: TMEmptyResult(message: "No measurements available"),

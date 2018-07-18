@@ -13,7 +13,12 @@ class ContactsState {
   final ContactsStatus status;
   final String message;
 
-  ContactsState({this.contacts, this.status, this.message});
+  const ContactsState({this.contacts, this.status, this.message});
+
+  const ContactsState.initialState()
+      : contacts = null,
+        status = ContactsStatus.loading,
+        message = '';
 
   ContactsState copyWith({
     List<ContactModel> contacts,
@@ -26,9 +31,4 @@ class ContactsState {
       message: message ?? this.message,
     );
   }
-
-  ContactsState.initialState()
-      : contacts = null,
-        status = ContactsStatus.loading,
-        message = "";
 }

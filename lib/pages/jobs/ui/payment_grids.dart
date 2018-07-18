@@ -38,14 +38,14 @@ class PaymentGridsState extends State<PaymentGrids> {
   List<FirePayment> firePayments = [];
 
   @override
-  initState() {
+  void initState() {
     super.initState();
     firePayments = widget.job.payments.map((payment) => FirePayment()..payment = payment).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> paymentsList = List.generate(
+    final List<Widget> paymentsList = List.generate(
       firePayments.length,
       (int index) {
         final fireImage = firePayments[index];
@@ -119,7 +119,7 @@ class PaymentGridsState extends State<PaymentGrids> {
                   );
                 });
 
-                await widget.job.reference.updateData({
+                await widget.job.reference.updateData(<String, List<Map<String, dynamic>>>{
                   "payments": firePayments.map((payment) => payment.payment.toMap()).toList(),
                 });
 

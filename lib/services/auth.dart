@@ -15,7 +15,7 @@ class Auth {
 
   static Future<GoogleSignInAccount> silently() async => await _googleSignIn.signInSilently();
 
-  static get onAuthStateChanged => _auth.onAuthStateChanged;
+  static Stream<FirebaseUser> get onAuthStateChanged => _auth.onAuthStateChanged;
 
   static Future<FirebaseUser> signInWithGoogle() async {
     try {
@@ -45,7 +45,7 @@ class Auth {
     } catch (e) {
       // TODO should test this when flutter fixes debug mode
       print(e);
-      throw e;
+      rethrow;
     }
   }
 

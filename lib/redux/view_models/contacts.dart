@@ -10,21 +10,21 @@ class ContactsViewModel extends ViewModel {
   ContactsViewModel(Store<ReduxState> store) : super(store);
 
   List<ContactModel> get contacts {
-    return this.store.state.contacts.contacts;
+    return store.state.contacts.contacts;
   }
 
   ContactModel get selected {
     if (contactID != null) {
-      return this.store.state.contacts.contacts.firstWhere(
-            (_) => _.id == contactID,
-          );
+      return store.state.contacts.contacts.firstWhere(
+        (_) => _.id == contactID,
+      );
     }
     return null;
   }
 
-  bool get isLoading => this.store.state.contacts.status == ContactsStatus.loading;
+  bool get isLoading => store.state.contacts.status == ContactsStatus.loading;
 
-  bool get isSuccess => this.store.state.contacts.status == ContactsStatus.success;
+  bool get isSuccess => store.state.contacts.status == ContactsStatus.success;
 
-  bool get isFailure => this.store.state.contacts.status == ContactsStatus.failure;
+  bool get isFailure => store.state.contacts.status == ContactsStatus.failure;
 }

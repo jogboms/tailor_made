@@ -17,7 +17,7 @@ class ContactForm extends StatefulWidget {
   final void Function() onHandleValidate;
   final ContactModel contact;
 
-  ContactForm({
+  const ContactForm({
     Key key,
     @required this.contact,
     @required this.onHandleSubmit,
@@ -89,7 +89,7 @@ class ContactFormState extends State<ContactForm> {
                   prefixIcon: Icon(Icons.phone),
                   labelText: "Phone",
                 ),
-                validator: (value) => (value.length > 0) ? null : "Please input a value",
+                validator: (value) => (value.isEmpty) ? null : "Please input a value",
                 onSaved: (phone) => contact.phone = phone.trim(),
               ),
               SizedBox(height: 4.0),
@@ -99,7 +99,7 @@ class ContactFormState extends State<ContactForm> {
                   prefixIcon: Icon(Icons.location_city),
                   labelText: "Location",
                 ),
-                validator: (value) => (value.length > 0) ? null : "Please input a value",
+                validator: (value) => (value.isEmpty) ? null : "Please input a value",
                 onSaved: (location) => contact.location = location.trim(),
               ),
               SizedBox(height: 32.0),
@@ -165,7 +165,9 @@ class ContactFormState extends State<ContactForm> {
 
   void _handleSubmit() async {
     final FormState form = _formKey.currentState;
-    if (form == null) return;
+    if (form == null) {
+      return;
+    }
     if (!form.validate()) {
       _autovalidate = true; // Start validating on every change.
       widget.onHandleValidate();
@@ -177,7 +179,9 @@ class ContactFormState extends State<ContactForm> {
 
   Future<Null> _handlePhotoButtonPressed() async {
     final source = await imageChoiceDialog(context: context);
-    if (source == null) return;
+    if (source == null) {
+      return;
+    }
     final imageFile = await ImagePicker.pickImage(source: source, maxWidth: 200.0, maxHeight: 200.0);
     final ref = CloudStorage.createContact();
     final uploadTask = ref.putFile(imageFile);
@@ -197,5 +201,5 @@ class ContactFormState extends State<ContactForm> {
     }
   }
 
-  reset() => _formKey.currentState.reset();
+  void reset() => _formKey.currentState.reset();
 }

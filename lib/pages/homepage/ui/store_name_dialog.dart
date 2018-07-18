@@ -68,9 +68,9 @@ class StoreNameDialog extends StatelessWidget {
     );
   }
 
-  _handleSubmit(BuildContext context) {
+  void _handleSubmit(BuildContext context) {
     final _value = controller.text.trim();
-    if (_value.length < 0) {
+    if (_value.isEmpty) {
       return;
     }
     Navigator.pop(context, _value);

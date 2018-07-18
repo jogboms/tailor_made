@@ -37,7 +37,7 @@ class JobsCreatePage extends StatefulWidget {
   final ContactModel contact;
   final List<ContactModel> contacts;
 
-  JobsCreatePage({
+  const JobsCreatePage({
     Key key,
     this.contact,
     @required this.contacts,
@@ -48,7 +48,6 @@ class JobsCreatePage extends StatefulWidget {
 }
 
 class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   List<FireImage> fireImages = [];
   JobModel job;
@@ -59,6 +58,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   );
 
   bool _autovalidate = false;
+
+  @override
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -74,7 +76,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    List<Widget> children = [];
+    final List<Widget> children = [];
 
     Widget makeHeader(String title, [String trailing = ""]) {
       return new Container(
@@ -213,7 +215,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
 
   void _handleSubmit() async {
     final FormState form = _formKey.currentState;
-    if (form == null) return;
+    if (form == null) {
+      return;
+    }
 
     if (!form.validate()) {
       _autovalidate = true; // Start validating on every change.
@@ -232,7 +236,10 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         await ref.setData(job.toMap());
         ref.snapshots().listen((snap) {
           closeLoadingSnackBar();
-          Navigator.pushReplacement(context, TMNavigate.slideIn(JobPage(job: JobModel.fromDoc(snap))));
+          Navigator.pushReplacement<dynamic, dynamic>(
+            context,
+            TMNavigate.slideIn<dynamic>(JobPage(job: JobModel.fromDoc(snap))),
+          );
         });
       } catch (e) {
         closeLoadingSnackBar();
@@ -285,7 +292,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       );
     }
 
-    List<Widget> imagesList = List.generate(
+    final List<Widget> imagesList = List.generate(
       fireImages.length,
       (int index) {
         final fireImage = fireImages[index];
@@ -322,7 +329,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
 
   Future<Null> _handlePhotoButtonPressed() async {
     final source = await imageChoiceDialog(context: context);
-    if (source == null) return;
+    if (source == null) {
+      return;
+    }
     final imageFile = await ImagePicker.pickImage(source: source);
     final ref = CloudStorage.createReference();
     final uploadTask = ref.putFile(imageFile);
@@ -369,7 +378,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
             ),
           ),
         ),
-        validator: (value) => (value.length > 0) ? null : "Please input a name",
+        validator: (value) => (value.isEmpty) ? null : "Please input a name",
         onSaved: (value) => job.name = value.trim(),
       ),
     );

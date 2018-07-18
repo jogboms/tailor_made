@@ -13,7 +13,12 @@ class JobsState {
   final JobsStatus status;
   final String message;
 
-  JobsState({this.jobs, this.status, this.message});
+  const JobsState({this.jobs, this.status, this.message});
+
+  const JobsState.initialState()
+      : jobs = null,
+        status = JobsStatus.loading,
+        message = '';
 
   JobsState copyWith({
     List<JobModel> jobs,
@@ -26,9 +31,4 @@ class JobsState {
       message: message ?? this.message,
     );
   }
-
-  JobsState.initialState()
-      : jobs = null,
-        status = JobsStatus.loading,
-        message = "";
 }

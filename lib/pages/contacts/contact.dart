@@ -18,7 +18,7 @@ const TABS = const ["Jobs", "Gallery", "Payments"];
 class ContactPage extends StatefulWidget {
   final ContactModel contact;
 
-  ContactPage({
+  const ContactPage({
     Key key,
     this.contact,
   }) : super(key: key);
@@ -60,7 +60,7 @@ class _ContactState extends State<ContactPage> {
                   );
                 }
 
-                List<DocumentSnapshot> list = snapshot.data.documents;
+                final List<DocumentSnapshot> list = snapshot.data.documents;
 
                 final jobs = list.map((item) => JobModel.fromDoc(item)).toList();
 
@@ -104,7 +104,7 @@ class _ContactState extends State<ContactPage> {
     );
   }
 
-  Widget tabView({name: String, child: Widget}) {
+  Widget tabView({String name, Widget child}) {
     return new SafeArea(
       top: false,
       bottom: true,

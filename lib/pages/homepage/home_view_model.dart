@@ -1,22 +1,23 @@
+import 'package:redux/redux.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/redux/actions/account.dart';
 import 'package:tailor_made/redux/states/account.dart';
 import 'package:tailor_made/redux/states/contacts.dart';
+import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/states/stats.dart';
 import 'package:tailor_made/redux/view_models/stats.dart';
 
 class HomeViewModel extends StatsViewModel {
-  HomeViewModel(store) : super(store);
+  HomeViewModel(Store<ReduxState> store) : super(store);
 
   AccountModel get account => store.state.account.account;
 
   List<ContactModel> get contacts => store.state.contacts.contacts;
 
+  @override
   bool get isLoading {
-    return this.store.state.stats.status == StatsStatus.loading ||
-        this.store.state.contacts.status == ContactsStatus.loading ||
-        this.store.state.account.status == AccountStatus.loading;
+    return store.state.stats.status == StatsStatus.loading || store.state.contacts.status == ContactsStatus.loading || store.state.account.status == AccountStatus.loading;
   }
 
   bool get hasSkipedPremium => store.state.account.hasSkipedPremium == true;
@@ -27,9 +28,9 @@ class HomeViewModel extends StatsViewModel {
 
   bool get isPending => account.status == AccountModelStatus.pending;
 
-  onPremiumSignUp() => this.store.dispatch(OnPremiumSignUp(payload: account));
+  void onPremiumSignUp() => store.dispatch(OnPremiumSignUp(payload: account));
 
-  onReadNotice() => this.store.dispatch(OnReadNotice(payload: account));
+  void onReadNotice() => store.dispatch(OnReadNotice(payload: account));
 
-  onSkipedPremium() => this.store.dispatch(OnSkipedPremium());
+  void onSkipedPremium() => store.dispatch(OnSkipedPremium());
 }

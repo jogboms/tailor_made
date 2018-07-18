@@ -12,7 +12,7 @@ import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class ContactsCreatePage extends StatefulWidget {
-  ContactsCreatePage({
+  const ContactsCreatePage({
     Key key,
   }) : super(key: key);
 
@@ -22,8 +22,10 @@ class ContactsCreatePage extends StatefulWidget {
 
 class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarProvider {
   final GlobalKey<ContactFormState> _formKey = new GlobalKey<ContactFormState>();
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
   ContactModel contact;
+
+  @override
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -77,13 +79,18 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
         closeLoadingSnackBar();
         showInSnackBar("Successfully Added");
 
-        var choice = await confirmDialog(
+        final choice = await confirmDialog(
           context: context,
           title: Text("Do you wish to add another?"),
         );
-        if (choice == null) return;
+        if (choice == null) {
+          return;
+        }
         if (choice == false) {
-          Navigator.pushReplacement(context, TMNavigate.slideIn(ContactPage(contact: ContactModel.fromDoc(snap))));
+          Navigator.pushReplacement<dynamic, dynamic>(
+            context,
+            TMNavigate.slideIn<dynamic>(ContactPage(contact: ContactModel.fromDoc(snap))),
+          );
         } else {
           contact = new ContactModel();
           _formKey.currentState.reset();

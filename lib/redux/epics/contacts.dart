@@ -10,19 +10,19 @@ import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 
 Stream<dynamic> contacts(Stream<dynamic> actions, EpicStore<ReduxState> store) {
-  return new Observable(actions)
+  return new Observable<dynamic>(actions)
       //
       .ofType(new TypeToken<InitDataEvents>())
-      .switchMap((InitDataEvents action) => getContactList()
+      .switchMap<dynamic>((InitDataEvents action) => getContactList()
           .map((contacts) => new OnDataEvent(payload: contacts))
           //
-          .takeUntil(actions.where((action) => action is DisposeDataEvents)));
+          .takeUntil<dynamic>(actions.where((dynamic action) => action is DisposeDataEvents)));
 }
 
 Observable<List<ContactModel>> getContactList() {
   return new Observable(CloudDb.contacts.snapshots()).map((QuerySnapshot snapshot) {
     return snapshot.documents
-        .where((doc) => doc.data.containsKey("fullname"))
+        .where((doc) => doc.data.containsKey('fullname'))
         //
         .map((item) => ContactModel.fromDoc(item))
         .toList();

@@ -73,18 +73,19 @@ class AccountModel extends Model {
     );
   }
 
-  toMap() {
-    return {
-      "uid": uid,
-      "storeName": storeName,
-      "email": email,
-      "displayName": displayName,
-      "phoneNumber": phoneNumber,
-      "photoURL": photoURL,
-      "status": status.index,
-      "hasPremiumEnabled": hasPremiumEnabled,
-      "notice": notice,
-      "hasReadNotice": hasReadNotice,
+  @override
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'uid': uid,
+      'storeName': storeName,
+      'email': email,
+      'displayName': displayName,
+      'phoneNumber': phoneNumber,
+      'photoURL': photoURL,
+      'status': status.index,
+      'hasPremiumEnabled': hasPremiumEnabled,
+      'notice': notice,
+      'hasReadNotice': hasReadNotice,
     };
   }
 }

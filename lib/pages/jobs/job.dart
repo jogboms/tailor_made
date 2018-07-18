@@ -21,7 +21,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class JobPage extends StatefulWidget {
   final JobModel job;
 
-  JobPage({
+  const JobPage({
     Key key,
     @required this.job,
   }) : super(key: key);
@@ -33,8 +33,10 @@ class JobPage extends StatefulWidget {
 }
 
 class JobPageState extends State<JobPage> with SnackBarProvider {
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
   JobModel job;
+
+  @override
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -251,16 +253,18 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
   }
 
   void onTapComplete() async {
-    var choice = await confirmDialog(
+    final choice = await confirmDialog(
       context: context,
       title: Text("Are you sure?"),
     );
-    if (choice == null || choice == false) return;
+    if (choice == null || choice == false) {
+      return;
+    }
 
     showLoadingSnackBar();
 
     try {
-      await job.reference.updateData({
+      await job.reference.updateData(<String, bool>{
         "isComplete": !job.isComplete,
       });
       closeLoadingSnackBar();

@@ -13,7 +13,12 @@ class StatsState {
   final StatsStatus status;
   final String message;
 
-  StatsState({this.stats, this.status, this.message});
+  const StatsState({this.stats, this.status, this.message});
+
+  const StatsState.initialState()
+      : stats = null,
+        status = StatsStatus.loading,
+        message = '';
 
   StatsState copyWith({
     StatsModel stats,
@@ -26,9 +31,4 @@ class StatsState {
       message: message ?? this.message,
     );
   }
-
-  StatsState.initialState()
-      : stats = null,
-        status = StatsStatus.loading,
-        message = "";
 }

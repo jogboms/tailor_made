@@ -44,14 +44,14 @@ class GalleryGridsState extends State<GalleryGrids> {
   List<FireImage> fireImages = [];
 
   @override
-  initState() {
+  void initState() {
     super.initState();
     fireImages = widget.job.images.map((img) => FireImage()..image = img).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> imagesList = List.generate(
+    final List<Widget> imagesList = List.generate(
       fireImages.length,
       (int index) {
         final fireImage = fireImages[index];
@@ -125,7 +125,9 @@ class GalleryGridsState extends State<GalleryGrids> {
 
   Future<Null> _handlePhotoButtonPressed() async {
     final source = await imageChoiceDialog(context: context);
-    if (source == null) return;
+    if (source == null) {
+      return;
+    }
     final imageFile = await ImagePicker.pickImage(source: source);
     final ref = CloudStorage.createReference();
     final uploadTask = ref.putFile(imageFile);
@@ -145,7 +147,7 @@ class GalleryGridsState extends State<GalleryGrids> {
         );
       });
 
-      await widget.job.reference.updateData({
+      await widget.job.reference.updateData(<String, List<Map<String, dynamic>>>{
         "images": fireImages.map((img) => img.image.toMap()).toList(),
       });
 

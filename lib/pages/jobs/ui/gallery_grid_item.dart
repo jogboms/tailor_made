@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/gallery/gallery_view.dart';
 import 'package:tailor_made/models/image.dart';
+import 'package:tailor_made/pages/gallery/gallery_view.dart';
 
 const _kGridWidth = 70.0;
 
@@ -38,18 +38,18 @@ class GalleryGridItem extends StatelessWidget {
                   fit: BoxFit.cover,
                   child: new InkWell(
                     onTap: () {
-                      Navigator.of(context).push(
-                            new PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder: (BuildContext context, _, __) => GalleryView(image: image),
-                              transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-                                return new FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
+                      Navigator.of(context).push<dynamic>(
+                        new PageRouteBuilder<dynamic>(
+                          opaque: false,
+                          pageBuilder: (BuildContext context, _, __) => GalleryView(image: image),
+                          transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                            return new FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
                     },
                     child: onTapDelete != null
                         ? new Align(

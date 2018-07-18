@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/gallery/gallery_view.dart';
 import 'package:tailor_made/models/image.dart';
+import 'package:tailor_made/pages/gallery/gallery_view.dart';
 
 class GalleryGridItem extends StatelessWidget {
   final ImageModel image;
 
-  GalleryGridItem({
+  const GalleryGridItem({
     Key key,
     this.image,
   }) : super(key: key);
@@ -26,14 +26,14 @@ class GalleryGridItem extends StatelessWidget {
           color: Colors.transparent,
           child: new InkWell(
             onTap: () {
-              PageRouteBuilder pageBuilder = new PageRouteBuilder(
+              final PageRouteBuilder pageBuilder = new PageRouteBuilder<dynamic>(
                 opaque: false,
                 pageBuilder: (BuildContext context, _, __) => GalleryView(image: image),
                 transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
                   return new FadeTransition(opacity: animation, child: child);
                 },
               );
-              Navigator.of(context).push(pageBuilder);
+              Navigator.of(context).push<dynamic>(pageBuilder);
             },
           ),
         ),
