@@ -19,3 +19,4 @@ ios/.generated/
 packages
 .flutter-plugins
 .log
+make.sh

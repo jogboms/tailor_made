@@ -8,6 +8,7 @@ PENDING:
   ☐ Generate invoice & share as SMS containing link to pay on paystack
   ☐ Firebase function on successful payments w/ push notification
   ☐ On account create, send personal email + email to user @high
+  ☐ fix homepage height issue @today
 
 COMPLETED:
   ✔ Notice modal + indicator on home page @done(18-07-17 11:54)
