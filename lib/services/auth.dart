@@ -28,6 +28,10 @@ class Auth {
       // Force the user to interactively sign in
       currentUser ??= await _googleSignIn.signIn();
 
+      if (currentUser == null) {
+        throw Exception("");
+      }
+
       final GoogleSignInAuthentication auth = await currentUser.authentication;
 
       // Authenticate with firebase

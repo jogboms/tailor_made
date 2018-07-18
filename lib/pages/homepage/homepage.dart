@@ -328,7 +328,7 @@ class _HomePageState extends State<HomePage>
             await Auth.signOutWithGoogle();
             Navigator.pushReplacement<dynamic, dynamic>(
               context,
-              TMNavigate.fadeIn<dynamic>(
+              TMNavigate.fadeIn<String>(
                 new SplashPage(isColdStart: false),
               ),
             );

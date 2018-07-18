@@ -91,7 +91,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
         if (choice == false) {
           Navigator.pushReplacement<dynamic, dynamic>(
             context,
-            TMNavigate.slideIn<dynamic>(
+            TMNavigate.slideIn<String>(
                 ContactPage(contact: ContactModel.fromDoc(snap))),
           );
         } else {

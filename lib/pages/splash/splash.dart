@@ -51,7 +51,7 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
         Auth.setUser(user);
         Navigator.pushReplacement<String, dynamic>(
           context,
-          TMNavigate.fadeIn<dynamic>(new HomePage()),
+          TMNavigate.fadeIn<String>(new HomePage()),
         );
       },
     );
@@ -59,8 +59,11 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
 
   Future<void> _getVersionName() async {
     try {
-      projectVersion = await GetVersion.projectVersion;
-      print(projectVersion);
+      final _projectVersion = await GetVersion.projectVersion;
+      if (!mounted) {
+        return;
+      }
+      setState(() => projectVersion = _projectVersion);
     } catch (e) {
       //
     }
@@ -74,7 +77,9 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
 
   Future<void> _onLogin() async {
     return await Auth.signInWithGoogle().catchError((dynamic e) async {
-      showInSnackBar(e.message, const Duration(milliseconds: 3500));
+      if (e?.message?.isNotEmpty ?? false) {
+        showInSnackBar(e.message, const Duration(milliseconds: 3500));
+      }
       await Auth.signOutWithGoogle();
       if (!mounted) {
         return;

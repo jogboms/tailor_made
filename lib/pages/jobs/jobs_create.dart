@@ -241,7 +241,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           closeLoadingSnackBar();
           Navigator.pushReplacement<dynamic, dynamic>(
             context,
-            TMNavigate.slideIn<dynamic>(JobPage(job: JobModel.fromDoc(snap))),
+            TMNavigate.slideIn<String>(JobPage(job: JobModel.fromDoc(snap))),
           );
         });
       } catch (e) {
