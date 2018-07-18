@@ -18,7 +18,8 @@ class MeasureListItem extends StatelessWidget {
             SizedBox(height: 2.0),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
-              child: Text(item.type.toLowerCase(), style: ralewayRegular(10.0, Colors.white)),
+              child: Text(item.type.toLowerCase(),
+                  style: ralewayRegular(10.0, Colors.white)),
               decoration: BoxDecoration(
                 color: kAccentColor,
                 borderRadius: BorderRadius.circular(10.0),

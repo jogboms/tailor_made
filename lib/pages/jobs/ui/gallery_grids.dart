@@ -46,7 +46,8 @@ class GalleryGridsState extends State<GalleryGrids> {
   @override
   void initState() {
     super.initState();
-    fireImages = widget.job.images.map((img) => FireImage()..image = img).toList();
+    fireImages =
+        widget.job.images.map((img) => FireImage()..image = img).toList();
   }
 
   @override
@@ -84,10 +85,15 @@ class GalleryGridsState extends State<GalleryGrids> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             const SizedBox(width: 16.0),
-            Expanded(child: Text("GALLERY", style: ralewayRegular(12.0, Colors.black87))),
+            Expanded(
+                child: Text("GALLERY",
+                    style: ralewayRegular(12.0, Colors.black87))),
             CupertinoButton(
-              child: Text("SHOW ALL", style: ralewayRegular(11.0, kTextBaseColor)),
-              onPressed: () => TMNavigate(context, GalleryPage(images: widget.job.images), fullscreenDialog: true),
+              child:
+                  Text("SHOW ALL", style: ralewayRegular(11.0, kTextBaseColor)),
+              onPressed: () => TMNavigate(
+                  context, GalleryPage(images: widget.job.images),
+                  fullscreenDialog: true),
             ),
           ],
         ),
@@ -97,7 +103,8 @@ class GalleryGridsState extends State<GalleryGrids> {
           child: new ListView(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             scrollDirection: Axis.horizontal,
-            children: [newGrid(widget.gridSize)]..addAll(imagesList.reversed.toList()),
+            children: [newGrid(widget.gridSize)]
+              ..addAll(imagesList.reversed.toList()),
           ),
         ),
       ],
@@ -147,7 +154,8 @@ class GalleryGridsState extends State<GalleryGrids> {
         );
       });
 
-      await widget.job.reference.updateData(<String, List<Map<String, dynamic>>>{
+      await widget.job.reference
+          .updateData(<String, List<Map<String, dynamic>>>{
         "images": fireImages.map((img) => img.image.toMap()).toList(),
       });
 

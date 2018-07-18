@@ -66,7 +66,10 @@ class StatsWidget extends StatelessWidget {
       children: <Widget>[
         new Text(
           count,
-          style: new TextStyle(color: theme.textColor, fontSize: 20.0, fontWeight: FontWeight.w600),
+          style: new TextStyle(
+              color: theme.textColor,
+              fontSize: 20.0,
+              fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 2.0),
         new Text(

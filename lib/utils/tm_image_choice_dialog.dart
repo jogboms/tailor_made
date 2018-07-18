@@ -17,7 +17,8 @@ Future<ImageSource> imageChoiceDialog({
           ),
           new SimpleDialogOption(
             onPressed: () => Navigator.pop(context, ImageSource.gallery),
-            child: Padding(child: Text("Gallery"), padding: EdgeInsets.all(8.0)),
+            child:
+                Padding(child: Text("Gallery"), padding: EdgeInsets.all(8.0)),
           ),
         ],
       ),

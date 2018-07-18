@@ -17,11 +17,15 @@ Stream<dynamic> account(Stream<dynamic> actions, EpicStore<ReduxState> store) {
       .switchMap<dynamic>((InitDataEvents action) => _getAccount()
           .map((account) => new OnDataEvent(payload: account))
           //
-          .takeUntil<dynamic>(actions.where((dynamic action) => action is DisposeDataEvents)));
+          .takeUntil<dynamic>(
+              actions.where((dynamic action) => action is DisposeDataEvents)));
 }
 
-Stream<dynamic> onPremiumSignUp(Stream<dynamic> actions, EpicStore<ReduxState> store) {
-  return new Observable<dynamic>(actions).ofType(new TypeToken<OnPremiumSignUp>()).switchMap(
+Stream<dynamic> onPremiumSignUp(
+    Stream<dynamic> actions, EpicStore<ReduxState> store) {
+  return new Observable<dynamic>(actions)
+      .ofType(new TypeToken<OnPremiumSignUp>())
+      .switchMap(
     (OnPremiumSignUp action) {
       return Observable.fromFuture(
         _signUp(action.payload).catchError(
@@ -29,11 +33,15 @@ Stream<dynamic> onPremiumSignUp(Stream<dynamic> actions, EpicStore<ReduxState> s
         ),
       ).map((account) => new VoidAction());
     },
-  ).takeUntil<dynamic>(actions.where((dynamic action) => action is DisposeDataEvents));
+  ).takeUntil<dynamic>(
+          actions.where((dynamic action) => action is DisposeDataEvents));
 }
 
-Stream<dynamic> onReadNotice(Stream<dynamic> actions, EpicStore<ReduxState> store) {
-  return new Observable<dynamic>(actions).ofType(new TypeToken<OnReadNotice>()).switchMap(
+Stream<dynamic> onReadNotice(
+    Stream<dynamic> actions, EpicStore<ReduxState> store) {
+  return new Observable<dynamic>(actions)
+      .ofType(new TypeToken<OnReadNotice>())
+      .switchMap(
     (OnReadNotice action) {
       return Observable.fromFuture(
         _readNotice(action.payload).catchError(
@@ -41,11 +49,13 @@ Stream<dynamic> onReadNotice(Stream<dynamic> actions, EpicStore<ReduxState> stor
         ),
       ).map((account) => new VoidAction());
     },
-  ).takeUntil<dynamic>(actions.where((dynamic action) => action is DisposeDataEvents));
+  ).takeUntil<dynamic>(
+          actions.where((dynamic action) => action is DisposeDataEvents));
 }
 
 Observable<AccountModel> _getAccount() {
-  return new Observable(CloudDb.account.snapshots()).map((DocumentSnapshot snapshot) {
+  return new Observable(CloudDb.account.snapshots())
+      .map((DocumentSnapshot snapshot) {
     return AccountModel.fromDoc(snapshot);
   });
 }

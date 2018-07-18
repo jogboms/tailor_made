@@ -109,8 +109,10 @@ class _ContactsPageState extends State<ContactsPage> {
             itemCount: vm.contacts.length,
             shrinkWrap: true,
             padding: EdgeInsets.only(bottom: 96.0),
-            itemBuilder: (context, index) => ContactsListItem(contact: vm.contacts[index]),
-            separatorBuilder: (BuildContext context, int index) => new Divider(),
+            itemBuilder: (context, index) =>
+                ContactsListItem(contact: vm.contacts[index]),
+            separatorBuilder: (BuildContext context, int index) =>
+                new Divider(),
           );
   }
 }

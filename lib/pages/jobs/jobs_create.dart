@@ -82,12 +82,14 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       return new Container(
         color: Colors.grey[100].withOpacity(.4),
         margin: const EdgeInsets.only(top: 8.0),
-        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
+        padding: const EdgeInsets.only(
+            top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
         alignment: AlignmentDirectional.centerStart,
         child: new Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(title.toUpperCase(), style: ralewayLight(12.0, kTextBaseColor.shade800)),
+            Text(title.toUpperCase(),
+                style: ralewayLight(12.0, kTextBaseColor.shade800)),
             Text(trailing, style: ralewayLight(12.0, kTextBaseColor.shade800)),
           ],
         ),
@@ -200,7 +202,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
               overflow: TextOverflow.ellipsis,
               style: ralewayBold(18.0, theme.appBarColor),
             ),
-            subtitle: Text("${contact.totalJobs} Jobs", style: theme.smallTextStyle),
+            subtitle:
+                Text("${contact.totalJobs} Jobs", style: theme.smallTextStyle),
             actions: widget.contacts.isNotEmpty
                 ? <Widget>[
                     IconButton(
@@ -403,7 +406,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
             ),
           ),
         ),
-        validator: (value) => (controller.numberValue > 0) ? null : "Please input a price",
+        validator: (value) =>
+            (controller.numberValue > 0) ? null : "Please input a price",
         onSaved: (value) => job.price = controller.numberValue,
       ),
     );

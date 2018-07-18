@@ -29,7 +29,8 @@ class JobsPage extends StatelessWidget {
           body: buildBody(vm),
           floatingActionButton: new FloatingActionButton(
             child: new Icon(Icons.library_add),
-            onPressed: () => TMNavigate(context, JobsCreatePage(contacts: vm.contacts)),
+            onPressed: () =>
+                TMNavigate(context, JobsCreatePage(contacts: vm.contacts)),
           ),
         );
       },

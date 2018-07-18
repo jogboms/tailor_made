@@ -93,11 +93,14 @@ class TMNavigate {
 }
 
 class TMNavigateRoute<T> extends MaterialPageRoute<T> {
-  TMNavigateRoute({WidgetBuilder builder, RouteSettings settings}) : super(builder: builder, settings: settings);
+  TMNavigateRoute({WidgetBuilder builder, RouteSettings settings})
+      : super(builder: builder, settings: settings);
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
-    Animation<Offset> positionIn(Animation<double> animation) => new Tween<Offset>(
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    Animation<Offset> positionIn(Animation<double> animation) =>
+        new Tween<Offset>(
           // begin: const Offset(1.0, 0.0),
           // begin: const Offset(0.0, 1.0),
           begin: const Offset(0.0, 0.3),

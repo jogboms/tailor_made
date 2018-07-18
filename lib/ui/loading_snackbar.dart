@@ -6,7 +6,9 @@ class LoadingSnackBar extends SnackBar {
       : super(
           key: key,
           content: Row(
-            mainAxisAlignment: content == null ? MainAxisAlignment.center : MainAxisAlignment.start,
+            mainAxisAlignment: content == null
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.start,
             children: [
               SizedBox.fromSize(
                 size: Size.square(30.0),

@@ -77,7 +77,8 @@ class PaymentsPageState extends State<PaymentsPage> {
             child: TMEmptyResult(message: "No payments available"),
           )
         : SliverPadding(
-            padding: EdgeInsets.only(top: 3.0, left: 16.0, right: 16.0, bottom: 16.0),
+            padding: EdgeInsets.only(
+                top: 3.0, left: 16.0, right: 16.0, bottom: 16.0),
             sliver: PaymentList(payments: payments),
           );
   }

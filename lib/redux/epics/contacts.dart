@@ -16,11 +16,13 @@ Stream<dynamic> contacts(Stream<dynamic> actions, EpicStore<ReduxState> store) {
       .switchMap<dynamic>((InitDataEvents action) => getContactList()
           .map((contacts) => new OnDataEvent(payload: contacts))
           //
-          .takeUntil<dynamic>(actions.where((dynamic action) => action is DisposeDataEvents)));
+          .takeUntil<dynamic>(
+              actions.where((dynamic action) => action is DisposeDataEvents)));
 }
 
 Observable<List<ContactModel>> getContactList() {
-  return new Observable(CloudDb.contacts.snapshots()).map((QuerySnapshot snapshot) {
+  return new Observable(CloudDb.contacts.snapshots())
+      .map((QuerySnapshot snapshot) {
     return snapshot.documents
         .where((doc) => doc.data.containsKey('fullname'))
         //

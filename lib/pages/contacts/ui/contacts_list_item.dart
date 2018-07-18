@@ -35,7 +35,9 @@ class ContactsListItem extends StatelessWidget {
         child: new CircleAvatar(
           radius: 24.0,
           backgroundColor: theme.primaryColor,
-          backgroundImage: contact.imageUrl != null ? CachedNetworkImageProvider(contact.imageUrl) : null,
+          backgroundImage: contact.imageUrl != null
+              ? CachedNetworkImageProvider(contact.imageUrl)
+              : null,
           child: Stack(
             children: [
               new Align(
@@ -82,7 +84,8 @@ class ContactsListItem extends StatelessWidget {
       contact.fullname,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: TextStyle(fontSize: 16.0, color: theme.textColor, fontWeight: FontWeight.w600),
+      style: TextStyle(
+          fontSize: 16.0, color: theme.textColor, fontWeight: FontWeight.w600),
     );
 
     final int pending = contact.pendingJobs;
@@ -90,10 +93,12 @@ class ContactsListItem extends StatelessWidget {
     return ListTile(
       dense: true,
       contentPadding: EdgeInsets.only(left: 16.0),
-      onTap: onTapContact ?? () => TMNavigate(context, ContactPage(contact: contact)),
+      onTap: onTapContact ??
+          () => TMNavigate(context, ContactPage(contact: contact)),
       leading: avatar(),
       title: title,
-      subtitle: Text(pending >= 1 ? "$pending pending" : "No pending wears", style: TextStyle(fontSize: 14.0, color: kTextBaseColor)),
+      subtitle: Text(pending >= 1 ? "$pending pending" : "No pending wears",
+          style: TextStyle(fontSize: 14.0, color: kTextBaseColor)),
       trailing: showActions ? icons : null,
     );
   }

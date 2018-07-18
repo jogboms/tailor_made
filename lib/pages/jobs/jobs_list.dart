@@ -27,7 +27,9 @@ class JobList extends StatelessWidget {
         delegate: new SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             final int itemIndex = index ~/ 2;
-            return (index == 0 || index.isEven) ? JobListItem(job: jobs[itemIndex]) : new Divider();
+            return (index == 0 || index.isEven)
+                ? JobListItem(job: jobs[itemIndex])
+                : new Divider();
           },
           childCount: max(0, jobs.length * 2 - 1),
         ),

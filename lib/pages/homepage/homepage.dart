@@ -44,13 +44,15 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => new _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   AnimationController controller;
 
   @override
   void initState() {
     super.initState();
-    controller = new AnimationController(vsync: this, duration: Duration(milliseconds: 1200))
+    controller = new AnimationController(
+        vsync: this, duration: Duration(milliseconds: 1200))
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           controller.reverse();
@@ -102,7 +104,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               if (vm.isDisabled) {
                 return AccessDeniedPage(
                   onSendMail: () {
-                    email('Unwarranted%20Account%20Suspension%20%23${vm.account.uid}');
+                    email('Unwarranted%20Account%20Suspension%20%23${vm
+                        .account.uid}');
                   },
                 );
               }
@@ -120,7 +123,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
               return LayoutBuilder(
                 builder: (context, constraint) {
-                  final bool isLandscape = constraint.maxWidth > constraint.maxHeight;
+                  final bool isLandscape =
+                      constraint.maxWidth > constraint.maxHeight;
                   return Stack(
                     fit: StackFit.expand,
                     children: <Widget>[
@@ -134,7 +138,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                               ConstrainedBox(
                                 constraints: BoxConstraints.expand(
                                   // Somehow, i mathematically came up w/ these numbers & they made sense :)
-                                  height: (isLandscape ? (constraint.maxHeight / 1.0) : (constraint.maxHeight / 1.89)) - _kBottomBarHeight,
+                                  height: (isLandscape
+                                          ? (constraint.maxHeight / 1.0)
+                                          : (constraint.maxHeight / 1.89)) -
+                                      _kBottomBarHeight,
                                 ),
                                 child: HeaderWidget(account: vm.account),
                               ),
@@ -173,7 +180,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               padding: EdgeInsets.all(1.5),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: kPrimaryColor.withOpacity(.5), width: 1.5),
+                border: Border.all(
+                    color: kPrimaryColor.withOpacity(.5), width: 1.5),
               ),
               child: GestureDetector(
                 onTap: onTapAccount(vm),
@@ -183,7 +191,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     account?.photoURL != null
                         ? CircleAvatar(
                             backgroundColor: Colors.white,
-                            backgroundImage: CachedNetworkImageProvider(account.photoURL),
+                            backgroundImage:
+                                CachedNetworkImageProvider(account.photoURL),
                           )
                         : new Icon(
                             Icons.person,
@@ -231,7 +240,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               alignment: FractionalOffset.center,
               child: new Text(
                 "TAP TO CREATE",
-                style: ralewayBold(14.0, Colors.white).copyWith(letterSpacing: 1.25),
+                style: ralewayBold(14.0, Colors.white)
+                    .copyWith(letterSpacing: 1.25),
               ),
             ),
           ),
@@ -258,10 +268,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         context: context,
         builder: (BuildContext context) {
           return new SimpleDialog(
-            title: const Text('Select action', style: const TextStyle(fontSize: 14.0)),
+            title: const Text('Select action',
+                style: const TextStyle(fontSize: 14.0)),
             children: <Widget>[
               new SimpleDialogOption(
-                onPressed: () => Navigator.pop(context, AccountOptions.storename),
+                onPressed: () =>
+                    Navigator.pop(context, AccountOptions.storename),
                 child: TMListTile(
                   color: kAccentColor,
                   icon: Icons.store,
@@ -309,7 +321,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
           break;
         case AccountOptions.logout:
-          final response = await confirmDialog(context: context, title: Text("You are about to logout."));
+          final response = await confirmDialog(
+              context: context, title: Text("You are about to logout."));
 
           if (response == true) {
             await Auth.signOutWithGoogle();
@@ -331,7 +344,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         context: context,
         builder: (BuildContext context) {
           return new SimpleDialog(
-            title: const Text('Select action', style: const TextStyle(fontSize: 14.0)),
+            title: const Text('Select action',
+                style: const TextStyle(fontSize: 14.0)),
             children: <Widget>[
               new SimpleDialogOption(
                 onPressed: () => Navigator.pop(context, CreateOptions.clients),

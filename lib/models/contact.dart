@@ -30,14 +30,17 @@ class ContactModel extends Model {
   })  : id = id ?? uuid(),
         createdAt = createdAt ?? DateTime.now(),
         userID = userID ?? Auth.getUser.uid,
-        measurements = measurements != null && measurements.isNotEmpty ? measurements : createDefaultMeasures();
+        measurements = measurements != null && measurements.isNotEmpty
+            ? measurements
+            : createDefaultMeasures();
 
   factory ContactModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
     final List<MeasureModel> measurements = [];
     if (json['measurements'] != null) {
       json['measurements'].forEach(
-        (dynamic measure) => measurements.add(MeasureModel.fromJson(measure.cast<String, dynamic>())),
+        (dynamic measure) => measurements
+            .add(MeasureModel.fromJson(measure.cast<String, dynamic>())),
       );
     }
     return new ContactModel(

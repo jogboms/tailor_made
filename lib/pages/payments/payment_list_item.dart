@@ -22,7 +22,8 @@ class PaymentListItem extends StatelessWidget {
 
     return Material(
       child: new InkResponse(
-        onTap: () => TMNavigate(context, PaymentPage(payment: payment), fullscreenDialog: true),
+        onTap: () => TMNavigate(context, PaymentPage(payment: payment),
+            fullscreenDialog: true),
         radius: 300.0,
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
@@ -39,7 +40,8 @@ class PaymentListItem extends StatelessWidget {
                       ),
                       TextSpan(text: "\n"),
                       TextSpan(
-                        text: "${MONTHS_SHORT[_date.month - 1].toUpperCase()}, ${_date.year}",
+                        text: "${MONTHS_SHORT[_date.month - 1]
+                            .toUpperCase()}, ${_date.year}",
                         style: ralewayMedium(10.0, textColor),
                       ),
                     ],
