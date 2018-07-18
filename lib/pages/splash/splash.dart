@@ -131,7 +131,7 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
             child: StreamBuilder(
               stream: CloudDb.settings.snapshots(),
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (!snapshot.hasData) {
+                if (!snapshot.hasData || (snapshot.hasData && snapshot.data.data == null)) {
                   return Center(
                     child: loadingSpinner(),
                   );

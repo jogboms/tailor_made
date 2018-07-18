@@ -20,8 +20,8 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 ext.versionMajor = 1
 ext.versionMinor = 0
-ext.versionPatch = 0
-ext.versionClassifier = null
+ext.versionPatch = 1
+ext.versionClassifier = "beta"
 ext.isSnapshot = false
 ext.minimumSdkVersion = 16
 
@@ -76,7 +76,7 @@ android {
 }
 
 private Integer generateVersionCode() {
-	return ext.versionMajor * 10000 + ext.versionMinor * 100 + ext.versionPatch
+	return ext.minimumSdkVersion * 10000000 + ext.versionMajor * 10000 + ext.versionMinor * 100 + ext.versionPatch
 }
 
 private String generateVersionName() {
