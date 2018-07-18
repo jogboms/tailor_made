@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:contact_picker/contact_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,8 @@ class ContactFormState extends State<ContactForm> {
   ContactModel contact;
   bool _autovalidate = false;
   StorageReference _lastImgRef;
+  final ContactPicker _contactPicker = new ContactPicker();
+  Contact _selectedContact;
 
   @override
   void initState() {
@@ -56,6 +59,13 @@ class ContactFormState extends State<ContactForm> {
         ],
       ),
     );
+  }
+
+  void _handleSelectContact() async {
+    Contact contact = await _contactPicker.selectContact();
+    setState(() {
+      _selectedContact = contact;
+    });
   }
 
   Widget _buildForm() {
@@ -89,7 +99,8 @@ class ContactFormState extends State<ContactForm> {
                   prefixIcon: Icon(Icons.phone),
                   labelText: "Phone",
                 ),
-                validator: (value) => (value.isEmpty) ? null : "Please input a value",
+                validator: (value) =>
+                    (value.isEmpty) ? null : "Please input a value",
                 onSaved: (phone) => contact.phone = phone.trim(),
               ),
               SizedBox(height: 4.0),
@@ -99,10 +110,16 @@ class ContactFormState extends State<ContactForm> {
                   prefixIcon: Icon(Icons.location_city),
                   labelText: "Location",
                 ),
-                validator: (value) => (value.isEmpty) ? null : "Please input a value",
+                validator: (value) =>
+                    (value.isEmpty) ? null : "Please input a value",
                 onSaved: (location) => contact.location = location.trim(),
               ),
-              SizedBox(height: 32.0),
+              SizedBox(height: 16.0),
+              FlatButton(
+                child: Text("PICK FROM CONTACTS"),
+                onPressed: _handleSelectContact,
+              ),
+              SizedBox(height: 16.0),
               FullButton(
                 onPressed: _handleSubmit,
                 child: Text(
@@ -182,7 +199,8 @@ class ContactFormState extends State<ContactForm> {
     if (source == null) {
       return;
     }
-    final imageFile = await ImagePicker.pickImage(source: source, maxWidth: 200.0, maxHeight: 200.0);
+    final imageFile = await ImagePicker.pickImage(
+        source: source, maxWidth: 200.0, maxHeight: 200.0);
     final ref = CloudStorage.createContact();
     final uploadTask = ref.putFile(imageFile);
 
