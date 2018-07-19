@@ -136,7 +136,7 @@ class GalleryGridsState extends State<GalleryGrids> {
       return;
     }
     final imageFile = await ImagePicker.pickImage(source: source);
-    final ref = CloudStorage.createReference();
+    final ref = CloudStorage.createReferenceImage();
     final uploadTask = ref.putFile(imageFile);
 
     setState(() {

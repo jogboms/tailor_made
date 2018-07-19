@@ -6,7 +6,7 @@ IconButton backButton(BuildContext context, {Color color}) {
   return new IconButton(
     icon: new Icon(
       Icons.arrow_back,
-      color: color != null ? color : theme.appBarColor,
+      color: color ?? theme.appBarColor,
     ),
     onPressed: () => Navigator.maybePop(context),
   );

@@ -60,7 +60,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
       ),
       body: Theme(
         data: ThemeData(
-          hintColor: kBorderSideColor,
+          hintColor: kHintColor,
           primaryColor: kPrimaryColor,
         ),
         child: new SafeArea(
@@ -110,13 +110,6 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
           isDense: true,
           hintText: "Enter Amount",
           hintStyle: TextStyle(fontSize: 14.0),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: kBorderSideColor,
-              width: 0.0,
-              style: BorderStyle.solid,
-            ),
-          ),
         ),
         validator: (value) =>
             (controller.numberValue > 0) ? null : "Please input a price",
@@ -136,13 +129,6 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
           isDense: true,
           hintText: "Anything else to remember this payment by?",
           hintStyle: TextStyle(fontSize: 14.0),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: kBorderSideColor,
-              width: 0.0,
-              style: BorderStyle.solid,
-            ),
-          ),
         ),
         onSaved: (value) => notes = value.trim(),
       ),
