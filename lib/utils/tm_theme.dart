@@ -12,16 +12,17 @@ const Color kPrimaryColor = TMColors.primary;
 const MaterialColor kAccentSwatch = TMColors.slate_pink;
 const MaterialColor kPrimarySwatch = TMColors.biro_blue;
 
+final Color kHintColor = Colors.grey.shade500;
 final Color kBorderSideColor = Colors.grey.shade300;
 const MaterialColor kTextBaseColor = Colors.grey;
 const MaterialColor kTitleBaseColor = TMColors.dark;
 const MaterialColor kBackgroundBaseColor = TMColors.white;
 
 class TMBorderSide extends BorderSide {
-  TMBorderSide({Color color})
+  TMBorderSide({Color color, BorderStyle style})
       : super(
-          color: color != null ? color : kBorderSideColor,
-          style: BorderStyle.solid,
+          color: color ?? kBorderSideColor,
+          style: style ?? BorderStyle.solid,
           width: 1.0,
         );
 }

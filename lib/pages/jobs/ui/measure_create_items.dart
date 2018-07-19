@@ -64,11 +64,7 @@ class JobMeasureBlock extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           border: Border(
-            bottom: BorderSide(
-              color: kBorderSideColor,
-              width: 1.0,
-              style: BorderStyle.solid,
-            ),
+            bottom: TMBorderSide(),
           ),
         ),
         child: Wrap(
@@ -85,15 +81,11 @@ class JobMeasureBlock extends StatelessWidget {
                   padding: EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0),
                   decoration: BoxDecoration(
                     border: Border(
-                      bottom: BorderSide(
-                        color: kBorderSideColor,
-                        width: 1.0,
+                      bottom: TMBorderSide(
                         style:
                             removeBorder ? BorderStyle.none : BorderStyle.solid,
                       ),
-                      right: BorderSide(
-                        color: kBorderSideColor,
-                        width: 1.0,
+                      right: TMBorderSide(
                         style: index % 2 == 0
                             ? BorderStyle.solid
                             : BorderStyle.none,

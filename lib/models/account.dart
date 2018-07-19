@@ -71,7 +71,7 @@ class AccountModel extends Model {
       hasPremiumEnabled: hasPremiumEnabled ?? this.hasPremiumEnabled,
       notice: notice ?? this.notice,
       hasReadNotice: hasReadNotice ?? this.hasReadNotice,
-    );
+    )..reference = this.reference;
   }
 
   @override

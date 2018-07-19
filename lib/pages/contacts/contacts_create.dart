@@ -1,3 +1,4 @@
+import 'package:contact_picker/contact_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/contact.dart';
@@ -25,6 +26,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
   final GlobalKey<ContactFormState> _formKey =
       new GlobalKey<ContactFormState>();
   ContactModel contact;
+  final ContactPicker _contactPicker = new ContactPicker();
 
   @override
   final scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -47,13 +49,18 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
         actions: <Widget>[
           IconButton(
             icon: Icon(
+              Icons.contacts,
+              color: kTitleBaseColor,
+            ),
+            onPressed: _handleSelectContact,
+          ),
+          IconButton(
+            icon: Icon(
               Icons.content_cut,
               color: kTitleBaseColor,
             ),
-            onPressed: () => TMNavigate(
-                  context,
-                  ContactMeasure(contact: contact),
-                ),
+            onPressed: () =>
+                TMNavigate(context, ContactMeasure(contact: contact)),
           ),
         ],
       ),
@@ -62,6 +69,16 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
         contact: contact,
         onHandleSubmit: _handleSubmit,
         onHandleValidate: _handleValidate,
+      ),
+    );
+  }
+
+  void _handleSelectContact() async {
+    final _selectedContact = await _contactPicker.selectContact();
+    _formKey.currentState.updateContact(
+      contact.copyWith(
+        fullname: _selectedContact.fullName,
+        phone: _selectedContact.phoneNumber.number,
       ),
     );
   }
@@ -85,18 +102,15 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
           context: context,
           title: Text("Do you wish to add another?"),
         );
-        if (choice == null) {
-          return;
-        }
+
         if (choice == false) {
           Navigator.pushReplacement<dynamic, dynamic>(
             context,
-            TMNavigate.slideIn<dynamic>(
+            TMNavigate.slideIn<String>(
                 ContactPage(contact: ContactModel.fromDoc(snap))),
           );
         } else {
-          contact = new ContactModel();
-          _formKey.currentState.reset();
+          _formKey.currentState.updateContact(new ContactModel());
         }
       });
     } catch (e) {

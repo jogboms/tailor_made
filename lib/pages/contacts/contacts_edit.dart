@@ -1,3 +1,4 @@
+import 'package:contact_picker/contact_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/contact.dart';
@@ -20,6 +21,10 @@ class ContactsEditPage extends StatefulWidget {
 
 class _ContactsEditPageState extends State<ContactsEditPage>
     with SnackBarProvider {
+  final ContactPicker _contactPicker = new ContactPicker();
+  final GlobalKey<ContactFormState> _formKey =
+      new GlobalKey<ContactFormState>();
+
   @override
   final scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -32,11 +37,31 @@ class _ContactsEditPageState extends State<ContactsEditPage>
       appBar: appBar(
         context,
         title: "Edit Contact",
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.contacts,
+              color: kTitleBaseColor,
+            ),
+            onPressed: _handleSelectContact,
+          ),
+        ],
       ),
       body: ContactForm(
+        key: _formKey,
         contact: widget.contact,
         onHandleSubmit: _handleSubmit,
         onHandleValidate: _handleValidate,
+      ),
+    );
+  }
+
+  void _handleSelectContact() async {
+    final _selectedContact = await _contactPicker.selectContact();
+    _formKey.currentState.updateContact(
+      widget.contact.copyWith(
+        fullname: _selectedContact.fullName,
+        phone: _selectedContact.phoneNumber.number,
       ),
     );
   }

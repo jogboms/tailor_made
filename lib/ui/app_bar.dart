@@ -22,6 +22,6 @@ AppBar appBar(
           // letterSpacing: 0.95,
           ),
     ),
-    actions: actions?.length != null ? actions : [],
+    actions: actions,
   );
 }

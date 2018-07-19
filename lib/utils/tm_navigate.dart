@@ -19,7 +19,7 @@ class TMPageRoute {
     );
   }
 
-  static PageRouteBuilder fadeIn<T>(
+  static Route<T> fadeIn<T>(
     Widget widget, {
     RouteSettings settings,
     bool maintainState: true,
@@ -48,7 +48,7 @@ class TMNavigate {
   }) {
     Navigator.push<dynamic>(
       context,
-      TMNavigate.slideIn<dynamic>(
+      TMNavigate.slideIn<String>(
         widget,
         name: name,
         settings: settings,
@@ -77,7 +77,7 @@ class TMNavigate {
     );
   }
 
-  static Route fadeIn<T>(
+  static Route<T> fadeIn<T>(
     Widget widget, {
     String name,
     RouteSettings settings,

@@ -36,11 +36,15 @@ class ContactFormState extends State<ContactForm> {
   ContactModel contact;
   bool _autovalidate = false;
   StorageReference _lastImgRef;
+  TextEditingController _fNController;
+  TextEditingController _pNController;
 
   @override
   void initState() {
     super.initState();
     contact = widget.contact;
+    _fNController = new TextEditingController(text: contact.fullname);
+    _pNController = new TextEditingController(text: contact.phone);
   }
 
   @override
@@ -61,7 +65,7 @@ class ContactFormState extends State<ContactForm> {
   Widget _buildForm() {
     return Theme(
       data: ThemeData(
-        hintColor: kBorderSideColor,
+        hintColor: kHintColor,
         primaryColor: kPrimaryColor,
       ),
       child: Padding(
@@ -73,7 +77,7 @@ class ContactFormState extends State<ContactForm> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               TextFormField(
-                initialValue: contact.fullname,
+                controller: _fNController,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.person),
                   labelText: "Fullname",
@@ -83,14 +87,14 @@ class ContactFormState extends State<ContactForm> {
               ),
               SizedBox(height: 4.0),
               TextFormField(
-                initialValue: contact.phone,
+                controller: _pNController,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.phone),
                   labelText: "Phone",
                 ),
                 validator: (value) =>
-                    (value.isEmpty) ? null : "Please input a value",
+                    (value.isNotEmpty) ? null : "Please input a value",
                 onSaved: (phone) => contact.phone = phone.trim(),
               ),
               SizedBox(height: 4.0),
@@ -101,7 +105,7 @@ class ContactFormState extends State<ContactForm> {
                   labelText: "Location",
                 ),
                 validator: (value) =>
-                    (value.isEmpty) ? null : "Please input a value",
+                    (value.isNotEmpty) ? null : "Please input a value",
                 onSaved: (location) => contact.location = location.trim(),
               ),
               SizedBox(height: 32.0),
@@ -186,7 +190,7 @@ class ContactFormState extends State<ContactForm> {
     }
     final imageFile = await ImagePicker.pickImage(
         source: source, maxWidth: 200.0, maxHeight: 200.0);
-    final ref = CloudStorage.createContact();
+    final ref = CloudStorage.createContactImage();
     final uploadTask = ref.putFile(imageFile);
 
     setState(() => isLoading = true);
@@ -205,4 +209,13 @@ class ContactFormState extends State<ContactForm> {
   }
 
   void reset() => _formKey.currentState.reset();
+
+  void updateContact(ContactModel _contact) {
+    reset();
+    setState(() {
+      contact = _contact;
+      _fNController.text = contact.fullname ?? "";
+      _pNController.text = contact.phone ?? "";
+    });
+  }
 }

@@ -44,7 +44,7 @@ class StoreNameDialog extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 32.0, vertical: 4.0),
                 child: Theme(
                   data: ThemeData(
-                    hintColor: kBorderSideColor,
+                    hintColor: kHintColor,
                     primaryColor: kPrimaryColor,
                   ),
                   child: new TextField(

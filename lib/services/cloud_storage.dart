@@ -12,8 +12,8 @@ class CloudStorage {
   static StorageReference get references =>
       instance.ref().child('${Auth.getUser.uid}/references');
 
-  static StorageReference createContact([String id]) =>
+  static StorageReference createContactImage([String id]) =>
       contacts.child('${id ?? uuid()}.jpg');
-  static StorageReference createReference([String id]) =>
+  static StorageReference createReferenceImage([String id]) =>
       references.child('${id ?? uuid()}.jpg');
 }

@@ -61,6 +61,27 @@ class ContactModel extends Model {
     return ContactModel.fromJson(doc.data)..reference = doc.reference;
   }
 
+  ContactModel copyWith({
+    String fullname,
+    String phone,
+    String location,
+    String imageUrl,
+    List<MeasureModel> measurements,
+  }) {
+    return new ContactModel(
+      id: this.id,
+      userID: this.userID,
+      fullname: fullname ?? this.fullname,
+      phone: phone ?? this.phone,
+      location: location ?? this.location,
+      imageUrl: imageUrl ?? this.imageUrl,
+      measurements: measurements ?? this.measurements,
+      createdAt: this.createdAt,
+      totalJobs: this.totalJobs,
+      pendingJobs: this.pendingJobs,
+    )..reference = this.reference;
+  }
+
   @override
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

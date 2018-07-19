@@ -134,7 +134,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       appBar: buildAppBar(theme),
       body: Theme(
         data: ThemeData(
-          hintColor: kBorderSideColor,
+          hintColor: kHintColor,
           primaryColor: kPrimaryColor,
         ),
         child: buildBody(theme, children),
@@ -241,7 +241,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           closeLoadingSnackBar();
           Navigator.pushReplacement<dynamic, dynamic>(
             context,
-            TMNavigate.slideIn<dynamic>(JobPage(job: JobModel.fromDoc(snap))),
+            TMNavigate.slideIn<String>(JobPage(job: JobModel.fromDoc(snap))),
           );
         });
       } catch (e) {
@@ -262,13 +262,6 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           isDense: true,
           hintText: "Fabric color, size, special requirements...",
           hintStyle: TextStyle(fontSize: 14.0),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: kBorderSideColor,
-              width: 0.0,
-              style: BorderStyle.solid,
-            ),
-          ),
         ),
         onSaved: (value) => job.notes = value.trim(),
       ),
@@ -336,7 +329,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       return;
     }
     final imageFile = await ImagePicker.pickImage(source: source);
-    final ref = CloudStorage.createReference();
+    final ref = CloudStorage.createReferenceImage();
     final uploadTask = ref.putFile(imageFile);
 
     setState(() {
@@ -372,16 +365,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           isDense: true,
           hintText: "Enter Style Name",
           hintStyle: TextStyle(fontSize: 14.0),
-          // border: InputBorder.none,
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: kBorderSideColor,
-              width: 1.0,
-              style: BorderStyle.solid,
-            ),
-          ),
         ),
-        validator: (value) => (value.isEmpty) ? null : "Please input a name",
+        validator: (value) => (value.isNotEmpty) ? null : "Please input a name",
         onSaved: (value) => job.name = value.trim(),
       ),
     );
@@ -398,13 +383,6 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           isDense: true,
           hintText: "Enter Amount",
           hintStyle: TextStyle(fontSize: 14.0),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: kBorderSideColor,
-              width: 0.0,
-              style: BorderStyle.solid,
-            ),
-          ),
         ),
         validator: (value) =>
             (controller.numberValue > 0) ? null : "Please input a price",
