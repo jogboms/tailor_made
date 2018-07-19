@@ -15,10 +15,10 @@ class AccountState {
   final String message;
 
   const AccountState({
-    this.account,
-    this.status,
-    this.hasSkipedPremium,
-    this.message,
+    @required this.account,
+    @required this.status,
+    @required this.hasSkipedPremium,
+    @required this.message,
   });
 
   const AccountState.initialState()
