@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tailor_made/models/account.dart';
+import 'package:tailor_made/pages/accounts/ui/measures_create.dart';
 import 'package:tailor_made/ui/app_bar.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
 
-class AccountSettingsPage extends StatelessWidget {
+class AccountMeasuresPage extends StatelessWidget {
   final AccountModel account;
 
-  const AccountSettingsPage({
+  const AccountMeasuresPage({
     Key key,
     @required this.account,
   }) : super(key: key);
@@ -17,7 +19,17 @@ class AccountSettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: appBar(
         context,
-        title: "Settings",
+        title: "Measurements",
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () => TMNavigate(
+                  context,
+                  MeasuresCreate(),
+                  fullscreenDialog: true,
+                ),
+          )
+        ],
       ),
       body: Center(
         child: Column(

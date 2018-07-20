@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/models/contact.dart';
-import 'package:tailor_made/pages/accounts/settings.dart';
+import 'package:tailor_made/pages/accounts/measures.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/pages/homepage/home_view_model.dart';
 import 'package:tailor_made/pages/homepage/ui/bottom_row.dart';
@@ -34,7 +34,7 @@ const double _kBottomHeight = 280.0;
 enum AccountOptions {
   logout,
   storename,
-  settings,
+  measurement,
 }
 
 enum CreateOptions {
@@ -298,11 +298,11 @@ class _HomePageState extends State<HomePage>
               ),
               new SimpleDialogOption(
                 onPressed: () =>
-                    Navigator.pop(context, AccountOptions.settings),
+                    Navigator.pop(context, AccountOptions.measurement),
                 child: TMListTile(
-                  color: kPrimaryColor,
-                  icon: Icons.settings,
-                  title: "Settings",
+                  color: Colors.blue.shade400,
+                  icon: Icons.content_cut,
+                  title: "Measurements",
                 ),
               ),
               new SimpleDialogOption(
@@ -346,8 +346,8 @@ class _HomePageState extends State<HomePage>
 
           break;
 
-        case AccountOptions.settings:
-          TMNavigate(context, AccountSettingsPage(account: account));
+        case AccountOptions.measurement:
+          TMNavigate(context, AccountMeasuresPage(account: account));
           break;
 
         case AccountOptions.logout:
