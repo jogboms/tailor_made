@@ -106,6 +106,15 @@ class _ContactsPageState extends State<ContactsPage> {
           onChanged: (term) => vm.search(term),
         ),
       ),
+      bottom: vm.isLoading
+          ? PreferredSize(
+              child: SizedBox(
+                height: 1.0,
+                child: LinearProgressIndicator(backgroundColor: Colors.white),
+              ),
+              preferredSize: Size.fromHeight(1.0),
+            )
+          : null,
     );
   }
 
@@ -127,11 +136,11 @@ class _ContactsPageState extends State<ContactsPage> {
   }
 
   Widget buildBody(ContactsViewModel vm) {
-    if (vm.isLoading) {
+    if (vm.isLoading && !vm.isSearching) {
       return loadingSpinner();
     }
 
-    return vm.contacts.isEmpty
+    return vm.contacts == null || vm.contacts.isEmpty
         ? Center(
             child: TMEmptyResult(message: "No contacts available"),
           )

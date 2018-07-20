@@ -25,30 +25,26 @@ Stream<dynamic> search(Stream<dynamic> actions, EpicStore<ReduxState> store) {
       .map((text) => text.trim())
       .distinct()
       .where((text) => text.length > 1)
-      .debounce(const Duration(milliseconds: 500))
+      .debounce(const Duration(milliseconds: 750))
       .switchMap<dynamic>(
-    (text) {
-      final init$ = Observable<dynamic>.just(StartSearchEvent());
+        (text) => Observable<dynamic>.just(StartSearchEvent())
+            .concatWith([doSearch(store.state.contacts.contacts, text)]),
+      )
+      .takeUntil<dynamic>(
+          actions.where((dynamic action) => action is DisposeDataEvents));
+}
 
-      final search$ = Observable.just(text).map<dynamic>(
-        (text) => new SearchSuccessEvent(
-              payload: store.state.contacts.contacts.where(
-                (contact) {
-                  return contact.fullname.contains(
-                      new RegExp(r'' + text + '', caseSensitive: false));
-                },
-              ).toList(),
-            ),
-      );
-
-      return Observable<dynamic>.concat([
-        init$,
-        search$,
-      ]);
-    },
-  ).takeUntil<dynamic>(
-    actions.where((dynamic action) => action is DisposeDataEvents),
-  );
+Observable<dynamic> doSearch(List<ContactModel> contacts, String text) {
+  return Observable<dynamic>.just(
+    new SearchSuccessEvent(
+      payload: contacts
+          .where(
+            (contact) => contact.fullname
+                .contains(new RegExp(r'' + text + '', caseSensitive: false)),
+          )
+          .toList(),
+    ),
+  ).delay(Duration(seconds: 3));
 }
 
 Observable<List<ContactModel>> getContactList() {
