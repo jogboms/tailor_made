@@ -18,7 +18,7 @@ class JobsViewModel extends ViewModel {
     if (contact != null) {
       return jobs.where((_) => _.contactID == contact.id).toList();
     }
-    return jobs;
+    return isSearching ? _state.searchResults : jobs;
   }
 
   List<ContactModel> get contacts {
