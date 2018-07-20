@@ -8,16 +8,18 @@ import 'package:tailor_made/utils/tm_theme.dart';
 
 class TopRowWidget extends StatelessWidget {
   final StatsModel stats;
+  final double height;
 
   const TopRowWidget({
     Key key,
+    @required this.height,
     @required this.stats,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return new Container(
-      height: 120.0,
+      height: height,
       decoration: new BoxDecoration(
         border: new Border(bottom: TMBorderSide()),
       ),

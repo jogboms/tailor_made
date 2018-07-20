@@ -28,6 +28,7 @@ import 'package:tailor_made/utils/tm_phone.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 const double _kBottomBarHeight = 46.0;
+const double _kBottomHeight = 280.0;
 
 enum AccountOptions {
   logout,
@@ -104,8 +105,8 @@ class _HomePageState extends State<HomePage>
               if (vm.isDisabled) {
                 return AccessDeniedPage(
                   onSendMail: () {
-                    email('Unwarranted%20Account%20Suspension%20%23${vm
-                        .account.uid}');
+                    email(
+                        'Unwarranted%20Account%20Suspension%20%23${vm.account.uid}');
                   },
                 );
               }
@@ -125,6 +126,14 @@ class _HomePageState extends State<HomePage>
                 builder: (context, constraint) {
                   final bool isLandscape =
                       constraint.maxWidth > constraint.maxHeight;
+
+                  // Somehow, i mathematically came up w/ these numbers & they made sense :)
+                  final _height = isLandscape
+                      ? (constraint.maxHeight / 1.0) - _kBottomBarHeight
+                      : constraint.maxHeight -
+                          _kBottomHeight -
+                          (_kBottomBarHeight * 1.45);
+
                   return Stack(
                     fit: StackFit.expand,
                     children: <Widget>[
@@ -137,17 +146,22 @@ class _HomePageState extends State<HomePage>
                             children: <Widget>[
                               ConstrainedBox(
                                 constraints: BoxConstraints.expand(
-                                  // Somehow, i mathematically came up w/ these numbers & they made sense :)
-                                  height: (isLandscape
-                                          ? (constraint.maxHeight / 1.0)
-                                          : (constraint.maxHeight / 1.89)) -
-                                      _kBottomBarHeight,
+                                  height: _height,
                                 ),
                                 child: HeaderWidget(account: vm.account),
                               ),
-                              StatsWidget(stats: vm.stats),
-                              TopRowWidget(stats: vm.stats),
-                              BottomRowWidget(stats: vm.stats),
+                              StatsWidget(
+                                stats: vm.stats,
+                                height: 40.0,
+                              ),
+                              TopRowWidget(
+                                stats: vm.stats,
+                                height: 120.0,
+                              ),
+                              BottomRowWidget(
+                                stats: vm.stats,
+                                height: 120.0,
+                              ),
                               SizedBox(height: _kBottomBarHeight),
                             ],
                           ),
