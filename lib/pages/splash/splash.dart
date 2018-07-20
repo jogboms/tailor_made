@@ -81,6 +81,11 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
       String message = "";
       switch (e?.code) {
         case "exception":
+          if (e?.message?.contains("administrator") ?? false) {
+            message =
+                "It seems this account has been disabled. Contact Administrators.";
+            break;
+          }
           message = "You need a stable internet connection to proceed";
           break;
         case "sign_in_failed":
