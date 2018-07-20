@@ -6,7 +6,7 @@ import 'package:tailor_made/redux/states/main.dart';
 
 List<ContactModel> _sort(List<ContactModel> _contacts, SortType sortType) {
   switch (sortType) {
-    case SortType.active:
+    case SortType.jobs:
       _contacts.sort((a, b) => b.totalJobs.compareTo(a.totalJobs));
       break;
     case SortType.name:
