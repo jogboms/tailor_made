@@ -53,4 +53,5 @@ class ReduxActions {
   static const String onDataEventJob = "__onDataEventJob__";
   static const String initDataEventJob = "__initDataEventJob__";
   static const String disposeDataEventJob = "__disposeDataEventJob__";
+  static const String sortJobs = "__sortJobs__";
 }

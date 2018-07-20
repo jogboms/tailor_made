@@ -3,7 +3,7 @@ import 'package:tailor_made/redux/actions/main.dart';
 
 enum SortType {
   recent,
-  active,
+  jobs,
   pending,
   name,
   reset,

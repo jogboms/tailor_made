@@ -11,6 +11,8 @@ class JobsViewModel extends ViewModel {
 
   JobsViewModel(Store<ReduxState> store) : super(store);
 
+  JobsState get _state => store.state.jobs;
+
   List<JobModel> get jobs {
     final jobs = store.state.jobs.jobs;
     if (contact != null) {
@@ -36,4 +38,10 @@ class JobsViewModel extends ViewModel {
   bool get isSuccess => store.state.jobs.status == JobsStatus.success;
 
   bool get isFailure => store.state.jobs.status == JobsStatus.failure;
+
+  SortType get sortFn => _state.sortFn;
+
+  bool get hasSortFn => _state.hasSortFn;
+
+  void setSortFn(SortType type) => store.dispatch(SortJobs(payload: type));
 }

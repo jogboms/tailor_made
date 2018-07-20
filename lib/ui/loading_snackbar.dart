@@ -14,8 +14,7 @@ class LoadingSnackBar extends SnackBar {
                 size: Size.square(30.0),
                 child: SpinKitFadingFour(
                   color: Colors.white,
-                  width: 32.0,
-                  height: 32.0,
+                  size: 32.0,
                 ),
               ),
               SizedBox(width: content == null ? 0.0 : 16.0),

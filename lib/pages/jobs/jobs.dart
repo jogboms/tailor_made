@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
 import 'package:tailor_made/pages/jobs/jobs_list.dart';
+import 'package:tailor_made/pages/jobs/ui/jobs_filter_button.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/jobs.dart';
@@ -25,6 +26,16 @@ class JobsPage extends StatelessWidget {
           appBar: appBar(
             context,
             title: "Jobs",
+            actions: <Widget>[
+              // new IconButton(
+              //   icon: new Icon(
+              //     Icons.search,
+              //     color: theme.appBarColor,
+              //   ),
+              //   onPressed: onTapSearch,
+              // )
+              JobsFilterButton(vm: vm),
+            ],
           ),
           body: buildBody(vm),
           floatingActionButton: new FloatingActionButton(

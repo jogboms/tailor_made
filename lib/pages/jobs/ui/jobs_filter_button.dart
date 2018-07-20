@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/redux/actions/contacts.dart';
-import 'package:tailor_made/redux/view_models/contacts.dart';
+import 'package:tailor_made/redux/actions/jobs.dart';
+import 'package:tailor_made/redux/view_models/jobs.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-class ContactsFilterButton extends StatelessWidget {
-  final ContactsViewModel vm;
+class JobsFilterButton extends StatelessWidget {
+  final JobsViewModel vm;
 
-  const ContactsFilterButton({
+  const JobsFilterButton({
     Key key,
     @required this.vm,
   }) : super(key: key);
@@ -27,16 +27,24 @@ class ContactsFilterButton extends StatelessWidget {
               onSelected: onTapSort(vm),
               itemBuilder: (BuildContext context) => [
                     buildTextOption(
-                      "Sort by Jobs",
-                      SortType.jobs,
+                      "Sort by Active",
+                      SortType.active,
                     ),
                     buildTextOption(
                       "Sort by Name",
                       SortType.name,
                     ),
                     buildTextOption(
-                      "Sort by Pending",
-                      SortType.pending,
+                      "Sort by Owed",
+                      SortType.owed,
+                    ),
+                    buildTextOption(
+                      "Sort by Payments",
+                      SortType.payments,
+                    ),
+                    buildTextOption(
+                      "Sort by Price",
+                      SortType.price,
                     ),
                     buildTextOption(
                       "Sort by Recent",
@@ -86,6 +94,6 @@ class ContactsFilterButton extends StatelessWidget {
     );
   }
 
-  Function(SortType) onTapSort(ContactsViewModel vm) =>
+  Function(SortType) onTapSort(JobsViewModel vm) =>
       (SortType type) => vm.setSortFn(type);
 }
