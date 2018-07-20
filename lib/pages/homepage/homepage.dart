@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/pages/accounts/settings.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/pages/homepage/home_view_model.dart';
 import 'package:tailor_made/pages/homepage/ui/bottom_row.dart';
@@ -32,6 +33,7 @@ const double _kBottomBarHeight = 46.0;
 enum AccountOptions {
   logout,
   storename,
+  settings,
 }
 
 enum CreateOptions {
@@ -281,6 +283,15 @@ class _HomePageState extends State<HomePage>
                 ),
               ),
               new SimpleDialogOption(
+                onPressed: () =>
+                    Navigator.pop(context, AccountOptions.settings),
+                child: TMListTile(
+                  color: kPrimaryColor,
+                  icon: Icons.settings,
+                  title: "Settings",
+                ),
+              ),
+              new SimpleDialogOption(
                 onPressed: () => Navigator.pop(context, AccountOptions.logout),
                 child: TMListTile(
                   color: Colors.grey.shade400,
@@ -320,6 +331,11 @@ class _HomePageState extends State<HomePage>
           }
 
           break;
+
+        case AccountOptions.settings:
+          TMNavigate(context, AccountSettingsPage(account: account));
+          break;
+
         case AccountOptions.logout:
           final response = await confirmDialog(
               context: context, title: Text("You are about to logout."));
