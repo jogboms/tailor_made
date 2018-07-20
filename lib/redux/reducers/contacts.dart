@@ -47,7 +47,7 @@ ContactsState reducer(ReduxState state, ActionType action) {
       return contacts.copyWith(
         status: ContactsStatus.success,
         isSearching: false,
-        searchResults: null,
+        searchResults: [],
       );
 
     case ReduxActions.onSearchSuccessContactEvent:
