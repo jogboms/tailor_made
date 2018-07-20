@@ -37,47 +37,84 @@ class _ContactsPageState extends State<ContactsPage> {
       onInit: (store) => store.dispatch(new InitDataEvents()),
       onDispose: (store) => store.dispatch(new DisposeDataEvents()),
       builder: (BuildContext context, ContactsViewModel vm) {
-        return new Scaffold(
-          backgroundColor: theme.scaffoldColor,
-          appBar: _isSearching ? buildSearchBar() : buildAppBar(theme, vm),
-          body: buildBody(vm),
-          floatingActionButton: new FloatingActionButton(
-            child: new Icon(Icons.person_add),
-            onPressed: () => TMNavigate(context, ContactsCreatePage()),
+        return WillPopScope(
+          child: new Scaffold(
+            backgroundColor: theme.scaffoldColor,
+            appBar: _isSearching
+                ? buildSearchBar(theme, vm)
+                : buildAppBar(theme, vm),
+            body: buildBody(vm),
+            floatingActionButton: new FloatingActionButton(
+              child: new Icon(Icons.person_add),
+              onPressed: () => TMNavigate(context, ContactsCreatePage()),
+            ),
           ),
+          onWillPop: () async {
+            if (_isSearching) {
+              print("======");
+              _handleSearchEnd(vm)();
+              return false;
+            }
+            return true;
+          },
         );
       },
     );
   }
 
-  // void onTapSearch() {
-  //   setState(() {
-  //     _isSearching = true;
-  //   });
-  // }
-
-  void _handleSearchEnd() {
+  void onTapSearch() {
+    print("+++++++");
     setState(() {
-      _isSearching = false;
+      _isSearching = true;
     });
   }
 
-  Widget buildSearchBar() {
+  Function() _handleSearchEnd(ContactsViewModel vm) {
+    // vm.cancelSearch();
+    return () {
+      setState(() {
+        _isSearching = false;
+      });
+    };
+  }
+
+  Widget buildSearchBar(TMTheme theme, ContactsViewModel vm) {
     return new AppBar(
+      centerTitle: false,
+      elevation: 1.0,
       leading: new IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.white),
-        onPressed: _handleSearchEnd,
+        icon: Icon(Icons.arrow_back, color: theme.appBarColor),
+        onPressed: () {
+          vm.cancelSearch();
+          _handleSearchEnd(vm)();
+        },
         tooltip: 'Back',
       ),
-      title: new TextField(
-        controller: _searchQuery,
-        autofocus: true,
-        decoration: new InputDecoration(
-          hintText: 'Search...',
-          hintStyle: new TextStyle(color: Colors.white),
+      title: new Theme(
+        data: ThemeData(
+          hintColor: Colors.white,
+          primaryColor: kPrimaryColor,
         ),
-        style: new TextStyle(fontSize: 18.0),
+        child: TextField(
+          controller: _searchQuery,
+          autofocus: true,
+          decoration: new InputDecoration(
+            hintText: 'Search...',
+            hintStyle: ralewayBold(16.0),
+          ),
+          style: ralewayBold(16.0, theme.appBarColor),
+          onChanged: (term) => vm.search(term),
+        ),
       ),
+      bottom: vm.isLoading
+          ? PreferredSize(
+              child: SizedBox(
+                height: 1.0,
+                child: LinearProgressIndicator(backgroundColor: Colors.white),
+              ),
+              preferredSize: Size.fromHeight(1.0),
+            )
+          : null,
     );
   }
 
@@ -86,24 +123,24 @@ class _ContactsPageState extends State<ContactsPage> {
       context,
       title: "Clients",
       actions: <Widget>[
-        // new IconButton(
-        //   icon: new Icon(
-        //     Icons.search,
-        //     color: theme.appBarColor,
-        //   ),
-        //   onPressed: onTapSearch,
-        // )
+        new IconButton(
+          icon: new Icon(
+            Icons.search,
+            color: theme.appBarColor,
+          ),
+          onPressed: onTapSearch,
+        ),
         ContactsFilterButton(vm: vm),
       ],
     );
   }
 
   Widget buildBody(ContactsViewModel vm) {
-    if (vm.isLoading) {
+    if (vm.isLoading && !vm.isSearching) {
       return loadingSpinner();
     }
 
-    return vm.contacts.isEmpty
+    return vm.contacts == null || vm.contacts.isEmpty
         ? Center(
             child: TMEmptyResult(message: "No contacts available"),
           )

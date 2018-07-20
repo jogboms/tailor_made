@@ -37,6 +37,34 @@ class SortContacts extends ActionType<SortType> {
   SortContacts({SortType payload}) : super(payload: payload);
 }
 
+class SearchContactEvent extends ActionType<String> {
+  @override
+  final String type = ReduxActions.onSearchContactEvent;
+
+  SearchContactEvent({String payload}) : super(payload: payload);
+}
+
+class SearchSuccessEvent extends ActionType<List<ContactModel>> {
+  @override
+  final String type = ReduxActions.onSearchSuccessEvent;
+
+  SearchSuccessEvent({List<ContactModel> payload}) : super(payload: payload);
+}
+
+class CancelSearchEvent extends ActionType<String> {
+  @override
+  final String type = ReduxActions.onCancelSearchEvent;
+
+  CancelSearchEvent({String payload}) : super(payload: payload);
+}
+
+class StartSearchEvent extends ActionType<String> {
+  @override
+  final String type = ReduxActions.onStartSearchEvent;
+
+  StartSearchEvent({String payload}) : super(payload: payload);
+}
+
 class OnDataEvent extends ActionType<List<ContactModel>> {
   @override
   final String type = ReduxActions.onDataEventContact;
