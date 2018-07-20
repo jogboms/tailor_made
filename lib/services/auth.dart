@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 final GoogleSignIn _googleSignIn = new GoogleSignIn();
@@ -29,7 +30,7 @@ class Auth {
       currentUser ??= await _googleSignIn.signIn();
 
       if (currentUser == null) {
-        throw Exception("");
+        throw PlatformException(code: "canceled");
       }
 
       final GoogleSignInAuthentication auth = await currentUser.authentication;
