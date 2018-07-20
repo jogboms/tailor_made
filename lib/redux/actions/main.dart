@@ -1,21 +1,28 @@
-abstract class ActionType {
-  String get type;
-  final dynamic payload = "";
+abstract class ActionType<T> {
+  final T payload;
 
+  ActionType({this.payload});
+
+  String get type;
+
+  @override
   String toString() {
-    return '$runtimeType(${payload.toString()})';
+    return '$runtimeType(${payload?.toString()})';
   }
 }
 
-class VoidAction extends ActionType {
+class VoidAction extends ActionType<void> {
+  @override
   final String type = "__voidAction__";
 }
 
-class InitDataEvents extends ActionType {
+class InitDataEvents extends ActionType<void> {
+  @override
   final String type = ReduxActions.initDataEvent;
 }
 
-class DisposeDataEvents extends ActionType {
+class DisposeDataEvents extends ActionType<void> {
+  @override
   final String type = ReduxActions.disposeDataEvent;
 }
 
@@ -38,6 +45,14 @@ class ReduxActions {
   static const String onDataEventContact = "__onDataEventContact__";
   static const String initDataEventContact = "__initDataEventContact__";
   static const String disposeDataEventContact = "__disposeDataEventContact__";
+  static const String sortContacts = "__sortContacts__";
+  static const String onSearchContactEvent = "__onSearchContactEvent__";
+  static const String onSearchSuccessContactEvent =
+      "__onSearchSuccessContactEvent__";
+  static const String onStartSearchContactEvent =
+      "__onStartSearchContactEvent__";
+  static const String onCancelSearchContactEvent =
+      "__onCancelSearchContactEvent__";
 
   static const String initJobs = "__initJobs__";
   static const String addJob = "__addJob__";
@@ -45,4 +60,9 @@ class ReduxActions {
   static const String onDataEventJob = "__onDataEventJob__";
   static const String initDataEventJob = "__initDataEventJob__";
   static const String disposeDataEventJob = "__disposeDataEventJob__";
+  static const String sortJobs = "__sortJobs__";
+  static const String onSearchJobEvent = "__onSearchJobEvent__";
+  static const String onSearchSuccessJobEvent = "__onSearchSuccessJobEvent__";
+  static const String onStartSearchJobEvent = "__onStartSearchJobEvent__";
+  static const String onCancelSearchJobEvent = "__onCancelSearchJobEvent__";
 }

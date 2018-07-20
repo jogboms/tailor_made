@@ -1,15 +1,20 @@
 PENDING:
-  ☐ delete-able payment
-  ☐ delete-able images
+  ☐ delete-able payment + images + jobs + contacts
   ☐ implement share payment + image
-  ☐ filter + search jobs & contacts
-  ☐ create a new contact from phone contact @high
   ☐ Collect account details on account creation
   ☐ Generate invoice & share as SMS containing link to pay on paystack
   ☐ Firebase function on successful payments w/ push notification
   ☐ On account create, send personal email + email to user @high
+  ☐ personalize measurements w/ account @critical
+  ☐ indicator for premium accounts @today
+  ☐ reference upload issue @critical
 
 COMPLETED:
+  ✔ fix homepage height issue @today @done(18-07-20 20:39)
+  ✔ sort + search jobs & contacts @today @done(18-07-20 20:00)
+  ✔ friendly error on log in @today @done(18-07-20 19:34)
+  ✔ account settings page @critical @done(18-07-20 03:09)
+  ✔ create a new contact from phone contact @high @done(18-07-19 03:19)
   ✔ Notice modal + indicator on home page @done(18-07-17 11:54)
   ✔ add rate limit danger + access blocked screens @critical @done(18-07-17 10:31)
   ✔ landscape scale on homepage @low @done(18-07-16 11:56)

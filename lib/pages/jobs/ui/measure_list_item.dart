@@ -5,11 +5,11 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class MeasureListItem extends StatelessWidget {
   final MeasureModel item;
 
-  MeasureListItem(this.item);
+  const MeasureListItem(this.item);
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> children = [
+    final List<Widget> children = [
       Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -18,7 +18,8 @@ class MeasureListItem extends StatelessWidget {
             SizedBox(height: 2.0),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
-              child: Text(item.type.toLowerCase(), style: ralewayRegular(10.0, Colors.white)),
+              child: Text(item.type.toLowerCase(),
+                  style: ralewayRegular(10.0, Colors.white)),
               decoration: BoxDecoration(
                 color: kAccentColor,
                 borderRadius: BorderRadius.circular(10.0),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/gallery/gallery.dart';
 import 'package:tailor_made/models/stats.dart';
+import 'package:tailor_made/pages/gallery/gallery.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';
 import 'package:tailor_made/pages/payments/payments.dart';
 import 'package:tailor_made/utils/tm_format_naira.dart';
@@ -9,16 +9,18 @@ import 'package:tailor_made/utils/tm_theme.dart';
 
 class BottomRowWidget extends StatelessWidget {
   final StatsModel stats;
+  final double height;
 
-  BottomRowWidget({
+  const BottomRowWidget({
     Key key,
+    @required this.height,
     @required this.stats,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return new Container(
-      height: 120.0,
+      height: height,
       decoration: new BoxDecoration(
         border: new Border(bottom: TMBorderSide()),
       ),

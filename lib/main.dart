@@ -32,7 +32,7 @@ class TMApp extends StatelessWidget {
           fontFamily: TMFonts.raleway,
         ),
         onGenerateRoute: (RouteSettings settings) {
-          return new TMNavigateRoute(
+          return new TMNavigateRoute<dynamic>(
             builder: (_) => TMTheme(child: SplashPage(isColdStart: true)),
             settings: settings,
           );

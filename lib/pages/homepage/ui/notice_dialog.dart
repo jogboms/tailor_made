@@ -5,7 +5,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class NoticeDialog extends StatelessWidget {
   final AccountModel account;
 
-  NoticeDialog({
+  const NoticeDialog({
     Key key,
     @required this.account,
   }) : super(key: key);

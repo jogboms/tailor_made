@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/gallery/gallery_grid.dart';
 import 'package:tailor_made/models/image.dart';
+import 'package:tailor_made/pages/gallery/gallery_grid.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/ui/back_button.dart';
 import 'package:tailor_made/ui/tm_empty_result.dart';
@@ -11,7 +11,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class GalleryPage extends StatefulWidget {
   final List<ImageModel> images;
 
-  GalleryPage({
+  const GalleryPage({
     Key key,
     this.images,
   }) : super(key: key);
@@ -71,7 +71,7 @@ class GalleryPageState extends State<GalleryPage> {
     );
   }
 
-  getContent() {
+  Widget getContent() {
     return images.isEmpty
         ? SliverFillRemaining(
             child: TMEmptyResult(message: "No images available"),
@@ -82,7 +82,7 @@ class GalleryPageState extends State<GalleryPage> {
           );
   }
 
-  getBody() {
+  Widget getBody() {
     if (images == null) {
       return new StreamBuilder(
         stream: CloudDb.gallery.snapshots(),

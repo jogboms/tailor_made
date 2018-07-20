@@ -38,15 +38,15 @@ class PaymentModel extends Model {
   }
 
   @override
-  toMap() {
-    return {
-      "id": id,
-      "userID": userID,
-      "contactID": contactID,
-      "jobID": jobID,
-      "price": price,
-      "notes": notes,
-      "createdAt": createdAt.toString(),
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'userID': userID,
+      'contactID': contactID,
+      'jobID': jobID,
+      'price': price,
+      'notes': notes,
+      'createdAt': createdAt.toString(),
     };
   }
 }

@@ -12,18 +12,18 @@ class ContactJobViewModel extends ViewModel {
 
   ContactModel get selectedContact {
     if (contactID != null) {
-      return this.store.state.contacts.contacts.firstWhere(
-            (_) => _.id == contactID,
-          );
+      return store.state.contacts.contacts.firstWhere(
+        (_) => _.id == contactID,
+      );
     }
     return null;
   }
 
   JobModel get selectedJob {
     if (jobID != null) {
-      return this.store.state.jobs.jobs.firstWhere(
-            (_) => _.id == jobID,
-          );
+      return store.state.jobs.jobs.firstWhere(
+        (_) => _.id == jobID,
+      );
     }
     return null;
   }

@@ -1,3 +1,4 @@
+import 'package:contact_picker/contact_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/contact.dart';
@@ -12,7 +13,7 @@ import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class ContactsCreatePage extends StatefulWidget {
-  ContactsCreatePage({
+  const ContactsCreatePage({
     Key key,
   }) : super(key: key);
 
@@ -20,10 +21,15 @@ class ContactsCreatePage extends StatefulWidget {
   _ContactsCreatePageState createState() => new _ContactsCreatePageState();
 }
 
-class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarProvider {
-  final GlobalKey<ContactFormState> _formKey = new GlobalKey<ContactFormState>();
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
+class _ContactsCreatePageState extends State<ContactsCreatePage>
+    with SnackBarProvider {
+  final GlobalKey<ContactFormState> _formKey =
+      new GlobalKey<ContactFormState>();
   ContactModel contact;
+  final ContactPicker _contactPicker = new ContactPicker();
+
+  @override
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -43,13 +49,18 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
         actions: <Widget>[
           IconButton(
             icon: Icon(
+              Icons.contacts,
+              color: kTitleBaseColor,
+            ),
+            onPressed: _handleSelectContact,
+          ),
+          IconButton(
+            icon: Icon(
               Icons.content_cut,
               color: kTitleBaseColor,
             ),
-            onPressed: () => TMNavigate(
-                  context,
-                  ContactMeasure(contact: contact),
-                ),
+            onPressed: () =>
+                TMNavigate(context, ContactMeasure(contact: contact)),
           ),
         ],
       ),
@@ -58,6 +69,16 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
         contact: contact,
         onHandleSubmit: _handleSubmit,
         onHandleValidate: _handleValidate,
+      ),
+    );
+  }
+
+  void _handleSelectContact() async {
+    final _selectedContact = await _contactPicker.selectContact();
+    _formKey.currentState.updateContact(
+      contact.copyWith(
+        fullname: _selectedContact.fullName,
+        phone: _selectedContact.phoneNumber.number,
       ),
     );
   }
@@ -77,16 +98,19 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
         closeLoadingSnackBar();
         showInSnackBar("Successfully Added");
 
-        var choice = await confirmDialog(
+        final choice = await confirmDialog(
           context: context,
           title: Text("Do you wish to add another?"),
         );
-        if (choice == null) return;
+
         if (choice == false) {
-          Navigator.pushReplacement(context, TMNavigate.slideIn(ContactPage(contact: ContactModel.fromDoc(snap))));
+          Navigator.pushReplacement<dynamic, dynamic>(
+            context,
+            TMNavigate.slideIn<String>(
+                ContactPage(contact: ContactModel.fromDoc(snap))),
+          );
         } else {
-          contact = new ContactModel();
-          _formKey.currentState.reset();
+          _formKey.currentState.updateContact(new ContactModel());
         }
       });
     } catch (e) {

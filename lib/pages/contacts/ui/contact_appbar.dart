@@ -19,7 +19,7 @@ enum Choice {
 class ContactAppBar extends StatefulWidget {
   final ContactModel contact;
 
-  ContactAppBar({
+  const ContactAppBar({
     Key key,
     this.contact,
   }) : super(key: key);
@@ -31,7 +31,7 @@ class ContactAppBar extends StatefulWidget {
 }
 
 class ContactAppBarState extends State<ContactAppBar> {
-  _selectChoice(Choice choice) {
+  dynamic _selectChoice(Choice choice) {
     switch (choice) {
       case Choice.CreateJob:
         return TMNavigate(
@@ -85,19 +85,23 @@ class ContactAppBarState extends State<ContactAppBar> {
               itemBuilder: (BuildContext context) => [
                     new PopupMenuItem<Choice>(
                       value: Choice.CreateJob,
-                      child: new Text("New Job", style: ralewayRegular(14.0, Colors.black87)),
+                      child: new Text('New Job',
+                          style: ralewayRegular(14.0, Colors.black87)),
                     ),
                     new PopupMenuItem<Choice>(
                       value: Choice.SendText,
-                      child: new Text("Text Message", style: ralewayRegular(14.0, Colors.black87)),
+                      child: new Text('Text Message',
+                          style: ralewayRegular(14.0, Colors.black87)),
                     ),
                     new PopupMenuItem<Choice>(
                       value: Choice.EditMeasure,
-                      child: new Text("Edit Measurements", style: ralewayRegular(14.0, Colors.black87)),
+                      child: new Text('Edit Measurements',
+                          style: ralewayRegular(14.0, Colors.black87)),
                     ),
                     new PopupMenuItem<Choice>(
                       value: Choice.EditAccount,
-                      child: new Text("Edit Account", style: ralewayRegular(14.0, Colors.black87)),
+                      child: new Text('Edit Account',
+                          style: ralewayRegular(14.0, Colors.black87)),
                     ),
                   ],
             ),

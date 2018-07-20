@@ -11,7 +11,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class ContactMeasure extends StatefulWidget {
   final ContactModel contact;
 
-  ContactMeasure({
+  const ContactMeasure({
     Key key,
     @required this.contact,
   }) : super(key: key);
@@ -21,14 +21,16 @@ class ContactMeasure extends StatefulWidget {
 }
 
 class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   bool _autovalidate = false;
 
   @override
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
-    List<Widget> children = [];
+    final List<Widget> children = [];
 
     children.add(makeHeader("Measurements", "Inches (In)"));
     children.add(MeasureCreateItems(widget.contact.measurements));
@@ -89,12 +91,14 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
     return new Container(
       color: Colors.grey[100].withOpacity(.4),
       margin: const EdgeInsets.only(top: 8.0),
-      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
+      padding:
+          const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
       alignment: AlignmentDirectional.centerStart,
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(title.toUpperCase(), style: ralewayLight(12.0, kTextBaseColor.shade800)),
+          Text(title.toUpperCase(),
+              style: ralewayLight(12.0, kTextBaseColor.shade800)),
           Text(trailing, style: ralewayLight(12.0, kTextBaseColor.shade800)),
         ],
       ),
@@ -103,7 +107,9 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
 
   void _handleSubmit() async {
     final FormState form = _formKey.currentState;
-    if (form == null) return;
+    if (form == null) {
+      return;
+    }
     if (!form.validate()) {
       _autovalidate = true; // Start validating on every change.
       showInSnackBar('Please fix the errors in red before submitting.');

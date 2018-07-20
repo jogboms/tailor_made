@@ -6,7 +6,7 @@ class FullButton extends StatelessWidget {
   final VoidCallback onPressed;
   final ShapeBorder shape;
 
-  FullButton({
+  const FullButton({
     Key key,
     @required this.onPressed,
     @required this.child,
@@ -16,8 +16,8 @@ class FullButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: 2.0,
-      color: kAccentColor,
+      elevation: onPressed != null ? 2.0 : 0.5,
+      color: kAccentColor.withOpacity(onPressed != null ? 1.0 : .3),
       shape: shape ?? StadiumBorder(),
       child: InkWell(
         onTap: onPressed,

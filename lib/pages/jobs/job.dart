@@ -21,7 +21,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class JobPage extends StatefulWidget {
   final JobModel job;
 
-  JobPage({
+  const JobPage({
     Key key,
     @required this.job,
   }) : super(key: key);
@@ -33,8 +33,10 @@ class JobPage extends StatefulWidget {
 }
 
 class JobPageState extends State<JobPage> with SnackBarProvider {
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
   JobModel job;
+
+  @override
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -59,7 +61,8 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
           key: scaffoldKey,
           backgroundColor: theme.scaffoldColor,
           body: new NestedScrollView(
-            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 SliverAppBar(
                   expandedHeight: 250.0,
@@ -94,7 +97,8 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
               ),
             ),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
           floatingActionButton: FloatingActionButton.extended(
             icon: new Icon(
               job.isComplete ? Icons.undo : Icons.check,
@@ -158,11 +162,13 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(Icons.arrow_drop_up, color: Colors.green.shade600, size: 16.0),
+                          Icon(Icons.arrow_drop_up,
+                              color: Colors.green.shade600, size: 16.0),
                           const SizedBox(width: 4.0),
                           Text(
                             formatNaira(job.completedPayment),
-                            style: ralewayRegular(18.0, Colors.black87).copyWith(
+                            style:
+                                ralewayRegular(18.0, Colors.black87).copyWith(
                               letterSpacing: 1.25,
                             ),
                             textAlign: TextAlign.center,
@@ -184,7 +190,8 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Icon(Icons.arrow_drop_down, color: Colors.red.shade600, size: 16.0),
+                        Icon(Icons.arrow_drop_down,
+                            color: Colors.red.shade600, size: 16.0),
                         const SizedBox(width: 4.0),
                         Text(
                           formatNaira(job.pendingPayment),
@@ -251,16 +258,18 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
   }
 
   void onTapComplete() async {
-    var choice = await confirmDialog(
+    final choice = await confirmDialog(
       context: context,
       title: Text("Are you sure?"),
     );
-    if (choice == null || choice == false) return;
+    if (choice == null || choice == false) {
+      return;
+    }
 
     showLoadingSnackBar();
 
     try {
-      await job.reference.updateData({
+      await job.reference.updateData(<String, bool>{
         "isComplete": !job.isComplete,
       });
       closeLoadingSnackBar();

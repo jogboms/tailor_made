@@ -11,7 +11,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class PaymentsPage extends StatefulWidget {
   final List<PaymentModel> payments;
 
-  PaymentsPage({
+  const PaymentsPage({
     Key key,
     this.payments,
   }) : super(key: key);
@@ -71,18 +71,19 @@ class PaymentsPageState extends State<PaymentsPage> {
     );
   }
 
-  getContent() {
+  Widget getContent() {
     return payments.isEmpty
         ? SliverFillRemaining(
             child: TMEmptyResult(message: "No payments available"),
           )
         : SliverPadding(
-            padding: EdgeInsets.only(top: 3.0, left: 16.0, right: 16.0, bottom: 16.0),
+            padding: EdgeInsets.only(
+                top: 3.0, left: 16.0, right: 16.0, bottom: 16.0),
             sliver: PaymentList(payments: payments),
           );
   }
 
-  getBody() {
+  Widget getBody() {
     if (payments == null) {
       return new StreamBuilder(
         stream: CloudDb.payments.snapshots(),

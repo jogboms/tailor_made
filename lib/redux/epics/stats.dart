@@ -10,17 +10,15 @@ import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 
 Stream<dynamic> stats(Stream<dynamic> actions, EpicStore<ReduxState> store) {
-  return new Observable(actions)
-      //
+  return new Observable<dynamic>(actions)
       .ofType(new TypeToken<InitDataEvents>())
-      .switchMap((InitDataEvents action) => getStats()
-          .map((stats) => new OnDataEvent(payload: stats))
-          //
-          .takeUntil(actions.where((action) => action is DisposeDataEvents)));
+      .switchMap<dynamic>((InitDataEvents action) =>
+          _getStats().map<dynamic>((stats) => new OnDataEvent(payload: stats)))
+      .takeUntil<dynamic>(
+          actions.where((dynamic action) => action is DisposeDataEvents));
 }
 
-Observable<StatsModel> getStats() {
-  return new Observable(CloudDb.stats.snapshots()).map((DocumentSnapshot snapshot) {
-    return StatsModel.fromJson(snapshot.data);
-  });
+Observable<StatsModel> _getStats() {
+  return new Observable(CloudDb.stats.snapshots())
+      .map((DocumentSnapshot snapshot) => StatsModel.fromJson(snapshot.data));
 }

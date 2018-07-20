@@ -1,30 +1,74 @@
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 
-class InitContact extends ActionType {
+enum SortType {
+  recent,
+  jobs,
+  pending,
+  name,
+  reset,
+}
+
+class InitContact extends ActionType<List<ContactModel>> {
+  @override
   final String type = ReduxActions.initContacts;
-  final List<ContactModel> payload;
 
-  InitContact({this.payload});
+  InitContact({List<ContactModel> payload}) : super(payload: payload);
 }
 
-class AddContact extends ActionType {
+class AddContact extends ActionType<ContactModel> {
+  @override
   final String type = ReduxActions.addContact;
-  final ContactModel payload;
 
-  AddContact({this.payload});
+  AddContact({ContactModel payload}) : super(payload: payload);
 }
 
-class RemoveContact extends ActionType {
+class RemoveContact extends ActionType<ContactModel> {
+  @override
   final String type = ReduxActions.removeContact;
-  final ContactModel payload;
 
-  RemoveContact({this.payload});
+  RemoveContact({ContactModel payload}) : super(payload: payload);
 }
 
-class OnDataEvent extends ActionType {
-  final String type = ReduxActions.onDataEventContact;
-  final List<ContactModel> payload;
+class SortContacts extends ActionType<SortType> {
+  @override
+  final String type = ReduxActions.sortContacts;
 
-  OnDataEvent({this.payload});
+  SortContacts({SortType payload}) : super(payload: payload);
+}
+
+class SearchContactEvent extends ActionType<String> {
+  @override
+  final String type = ReduxActions.onSearchContactEvent;
+
+  SearchContactEvent({String payload}) : super(payload: payload);
+}
+
+class SearchSuccessContactEvent extends ActionType<List<ContactModel>> {
+  @override
+  final String type = ReduxActions.onSearchSuccessContactEvent;
+
+  SearchSuccessContactEvent({List<ContactModel> payload})
+      : super(payload: payload);
+}
+
+class CancelSearchContactEvent extends ActionType<String> {
+  @override
+  final String type = ReduxActions.onCancelSearchContactEvent;
+
+  CancelSearchContactEvent({String payload}) : super(payload: payload);
+}
+
+class StartSearchContactEvent extends ActionType<String> {
+  @override
+  final String type = ReduxActions.onStartSearchContactEvent;
+
+  StartSearchContactEvent({String payload}) : super(payload: payload);
+}
+
+class OnDataEvent extends ActionType<List<ContactModel>> {
+  @override
+  final String type = ReduxActions.onDataEventContact;
+
+  OnDataEvent({List<ContactModel> payload}) : super(payload: payload);
 }

@@ -8,7 +8,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class ContactLists extends StatelessWidget {
   final List<ContactModel> contacts;
 
-  ContactLists({
+  const ContactLists({
     Key key,
     @required this.contacts,
   }) : super(key: key);
@@ -35,14 +35,15 @@ class ContactLists extends StatelessWidget {
               itemCount: contacts.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                var item = contacts[index];
+                final item = contacts[index];
                 return ContactsListItem(
                   contact: item,
                   showActions: false,
                   onTapContact: () => Navigator.pop(context, item),
                 );
               },
-              separatorBuilder: (BuildContext context, int index) => new Divider(),
+              separatorBuilder: (BuildContext context, int index) =>
+                  new Divider(),
             ),
     );
   }

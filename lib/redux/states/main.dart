@@ -13,10 +13,10 @@ class ReduxState {
   final AccountState account;
 
   const ReduxState({
-    this.contacts,
-    this.jobs,
-    this.stats,
-    this.account,
+    @required this.contacts,
+    @required this.jobs,
+    @required this.stats,
+    @required this.account,
   });
 
   ReduxState copyWith({

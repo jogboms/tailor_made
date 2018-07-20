@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/gallery/gallery_view.dart';
 import 'package:tailor_made/models/image.dart';
+import 'package:tailor_made/pages/gallery/gallery_view.dart';
 
 const _kGridWidth = 70.0;
 
@@ -32,24 +32,27 @@ class GalleryGridItem extends StatelessWidget {
               child: new Material(
                 color: Colors.white,
                 elevation: 1.0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0)),
                 child: new Ink.image(
                   image: new NetworkImage(image.src),
                   fit: BoxFit.cover,
                   child: new InkWell(
                     onTap: () {
-                      Navigator.of(context).push(
-                            new PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder: (BuildContext context, _, __) => GalleryView(image: image),
-                              transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-                                return new FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
+                      Navigator.of(context).push<dynamic>(
+                        new PageRouteBuilder<dynamic>(
+                          opaque: false,
+                          pageBuilder: (BuildContext context, _, __) =>
+                              GalleryView(image: image),
+                          transitionsBuilder: (_, Animation<double> animation,
+                              __, Widget child) {
+                            return new FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
                     },
                     child: onTapDelete != null
                         ? new Align(
@@ -58,7 +61,8 @@ class GalleryGridItem extends StatelessWidget {
                               onTap: () => onTapDelete(image),
                               child: new Padding(
                                 padding: const EdgeInsets.all(2.0),
-                                child: new Icon(Icons.cancel, color: Colors.red),
+                                child:
+                                    new Icon(Icons.cancel, color: Colors.red),
                               ),
                             ),
                           )

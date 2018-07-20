@@ -30,14 +30,17 @@ class ContactModel extends Model {
   })  : id = id ?? uuid(),
         createdAt = createdAt ?? DateTime.now(),
         userID = userID ?? Auth.getUser.uid,
-        measurements = measurements != null && measurements.isNotEmpty ? measurements : createDefaultMeasures();
+        measurements = measurements != null && measurements.isNotEmpty
+            ? measurements
+            : createDefaultMeasures();
 
   factory ContactModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
-    List<MeasureModel> measurements = [];
+    final List<MeasureModel> measurements = [];
     if (json['measurements'] != null) {
       json['measurements'].forEach(
-        (measure) => measurements.add(MeasureModel.fromJson(measure.cast<String, dynamic>())),
+        (dynamic measure) => measurements
+            .add(MeasureModel.fromJson(measure.cast<String, dynamic>())),
       );
     }
     return new ContactModel(
@@ -58,18 +61,40 @@ class ContactModel extends Model {
     return ContactModel.fromJson(doc.data)..reference = doc.reference;
   }
 
-  toMap() {
-    return {
-      "id": id,
-      "userID": userID,
-      "fullname": fullname,
-      "phone": phone,
-      "location": location,
-      "imageUrl": imageUrl,
-      "createdAt": createdAt.toString(),
-      "measurements": measurements.map((measure) => measure.toMap()).toList(),
-      "totalJobs": totalJobs,
-      "pendingJobs": pendingJobs,
+  ContactModel copyWith({
+    String fullname,
+    String phone,
+    String location,
+    String imageUrl,
+    List<MeasureModel> measurements,
+  }) {
+    return new ContactModel(
+      id: this.id,
+      userID: this.userID,
+      fullname: fullname ?? this.fullname,
+      phone: phone ?? this.phone,
+      location: location ?? this.location,
+      imageUrl: imageUrl ?? this.imageUrl,
+      measurements: measurements ?? this.measurements,
+      createdAt: this.createdAt,
+      totalJobs: this.totalJobs,
+      pendingJobs: this.pendingJobs,
+    )..reference = this.reference;
+  }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'userID': userID,
+      'fullname': fullname,
+      'phone': phone,
+      'location': location,
+      'imageUrl': imageUrl,
+      'createdAt': createdAt.toString(),
+      'measurements': measurements.map((measure) => measure.toMap()).toList(),
+      'totalJobs': totalJobs,
+      'pendingJobs': pendingJobs,
     };
   }
 }

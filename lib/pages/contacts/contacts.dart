@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
+import 'package:tailor_made/pages/contacts/ui/contacts_filter_button.dart';
 import 'package:tailor_made/pages/contacts/ui/contacts_list_item.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
@@ -14,7 +15,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class ContactsPage extends StatefulWidget {
   // final List<ContactModel> contacts;
 
-  ContactsPage({
+  const ContactsPage({
     Key key,
     // @required this.contacts,
   }) : super(key: key);
@@ -24,7 +25,6 @@ class ContactsPage extends StatefulWidget {
 }
 
 class _ContactsPageState extends State<ContactsPage> {
-  final TextEditingController _searchQuery = new TextEditingController();
   bool _isSearching = false;
 
   @override
@@ -36,72 +36,103 @@ class _ContactsPageState extends State<ContactsPage> {
       onInit: (store) => store.dispatch(new InitDataEvents()),
       onDispose: (store) => store.dispatch(new DisposeDataEvents()),
       builder: (BuildContext context, ContactsViewModel vm) {
-        return new Scaffold(
-          backgroundColor: theme.scaffoldColor,
-          appBar: _isSearching ? buildSearchBar() : buildAppBar(),
-          body: buildBody(vm),
-          floatingActionButton: new FloatingActionButton(
-            child: new Icon(Icons.person_add),
-            onPressed: () => TMNavigate(context, ContactsCreatePage()),
+        return WillPopScope(
+          child: new Scaffold(
+            backgroundColor: theme.scaffoldColor,
+            appBar: _isSearching
+                ? buildSearchBar(theme, vm)
+                : buildAppBar(theme, vm),
+            body: buildBody(vm),
+            floatingActionButton: new FloatingActionButton(
+              child: new Icon(Icons.person_add),
+              onPressed: () => TMNavigate(context, ContactsCreatePage()),
+            ),
           ),
+          onWillPop: () async {
+            if (_isSearching) {
+              _handleSearchEnd(vm)();
+              return false;
+            }
+            return true;
+          },
         );
       },
     );
   }
 
-  // void onTapSearch() {
-  //   setState(() {
-  //     _isSearching = true;
-  //   });
-  // }
-
-  void _handleSearchEnd() {
+  void onTapSearch() {
     setState(() {
-      _isSearching = false;
+      _isSearching = true;
     });
   }
 
-  Widget buildSearchBar() {
-    return new AppBar(
-      leading: new IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.white),
-        onPressed: _handleSearchEnd,
-        tooltip: 'Back',
-      ),
-      title: new TextField(
-        controller: _searchQuery,
-        autofocus: true,
-        decoration: new InputDecoration(
-          hintText: 'Search...',
-          hintStyle: new TextStyle(color: Colors.white),
-        ),
-        style: new TextStyle(fontSize: 18.0),
-      ),
-    );
+  Function() _handleSearchEnd(ContactsViewModel vm) {
+    return () {
+      vm.cancelSearch();
+      setState(() {
+        _isSearching = false;
+      });
+    };
   }
 
-  AppBar buildAppBar() {
+  Widget buildSearchBar(TMTheme theme, ContactsViewModel vm) {
+    return new AppBar(
+        centerTitle: false,
+        elevation: 1.0,
+        leading: new IconButton(
+          icon: Icon(Icons.arrow_back, color: theme.appBarColor),
+          onPressed: _handleSearchEnd(vm),
+          tooltip: 'Back',
+        ),
+        title: new Theme(
+          data: ThemeData(
+            hintColor: Colors.white,
+            primaryColor: kPrimaryColor,
+          ),
+          child: TextField(
+            autofocus: true,
+            decoration: new InputDecoration(
+              hintText: 'Search...',
+              hintStyle: ralewayBold(16.0),
+            ),
+            style: ralewayBold(16.0, theme.appBarColor),
+            onChanged: (term) => vm.search(term),
+          ),
+        ),
+        bottom: PreferredSize(
+          child: SizedBox(
+            height: 1.0,
+            child: vm.isLoading
+                ? LinearProgressIndicator(backgroundColor: Colors.white)
+                : null,
+          ),
+          preferredSize: Size.fromHeight(1.0),
+        ));
+  }
+
+  AppBar buildAppBar(TMTheme theme, ContactsViewModel vm) {
     return appBar(
       context,
       title: "Clients",
       actions: <Widget>[
-        // new IconButton(
-        //   icon: new Icon(
-        //     Icons.search,
-        //     color: theme.appBarColor,
-        //   ),
-        //   onPressed: onTapSearch,
-        // )
+        new IconButton(
+          icon: new Icon(
+            Icons.search,
+            color: theme.appBarColor,
+          ),
+          onPressed: onTapSearch,
+        ),
+        ContactsFilterButton(vm: vm),
       ],
     );
   }
 
   Widget buildBody(ContactsViewModel vm) {
-    if (vm.isLoading) {
+    if (vm.isLoading && !vm.isSearching) {
       return loadingSpinner();
     }
 
-    return vm.contacts.isEmpty
+    return vm.contacts == null || vm.contacts.isEmpty
         ? Center(
             child: TMEmptyResult(message: "No contacts available"),
           )
@@ -109,8 +140,10 @@ class _ContactsPageState extends State<ContactsPage> {
             itemCount: vm.contacts.length,
             shrinkWrap: true,
             padding: EdgeInsets.only(bottom: 96.0),
-            itemBuilder: (context, index) => ContactsListItem(contact: vm.contacts[index]),
-            separatorBuilder: (BuildContext context, int index) => new Divider(),
+            itemBuilder: (context, index) =>
+                ContactsListItem(contact: vm.contacts[index]),
+            separatorBuilder: (BuildContext context, int index) =>
+                new Divider(),
           );
   }
 }

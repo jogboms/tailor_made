@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class TMPageRoute {
-  static slideIn<T>(
+  static CupertinoPageRoute slideIn<T>(
     Widget widget, {
     RouteSettings settings,
-    maintainState: true,
+    bool maintainState: true,
     bool fullscreenDialog: false,
-    hostRoute,
+    PageRoute hostRoute,
   }) {
     return CupertinoPageRoute<T>(
       builder: (BuildContext context) => TMTheme(child: widget),
@@ -19,10 +19,10 @@ class TMPageRoute {
     );
   }
 
-  static fadeIn<T>(
+  static Route<T> fadeIn<T>(
     Widget widget, {
     RouteSettings settings,
-    maintainState: true,
+    bool maintainState: true,
   }) {
     return PageRouteBuilder<T>(
       opaque: false,
@@ -42,13 +42,13 @@ class TMNavigate {
     Widget widget, {
     String name,
     RouteSettings settings,
-    maintainState: true,
+    bool maintainState: true,
     bool fullscreenDialog: false,
-    hostRoute,
+    PageRoute hostRoute,
   }) {
-    Navigator.push(
+    Navigator.push<dynamic>(
       context,
-      TMNavigate.slideIn(
+      TMNavigate.slideIn<String>(
         widget,
         name: name,
         settings: settings,
@@ -59,15 +59,15 @@ class TMNavigate {
     );
   }
 
-  static slideIn<T>(
+  static CupertinoPageRoute slideIn<T>(
     Widget widget, {
     String name,
     RouteSettings settings,
-    maintainState: true,
+    bool maintainState: true,
     bool fullscreenDialog: false,
-    hostRoute,
+    PageRoute hostRoute,
   }) {
-    var _settings = name != null ? new RouteSettings(name: name) : settings;
+    final _settings = name != null ? new RouteSettings(name: name) : settings;
     return TMPageRoute.slideIn<T>(
       widget,
       settings: _settings,
@@ -77,13 +77,13 @@ class TMNavigate {
     );
   }
 
-  static fadeIn<T>(
+  static Route<T> fadeIn<T>(
     Widget widget, {
     String name,
     RouteSettings settings,
-    maintainState: true,
+    bool maintainState: true,
   }) {
-    var _settings = name != null ? new RouteSettings(name: name) : settings;
+    final _settings = name != null ? new RouteSettings(name: name) : settings;
     return TMPageRoute.fadeIn<T>(
       widget,
       settings: _settings,
@@ -93,11 +93,14 @@ class TMNavigate {
 }
 
 class TMNavigateRoute<T> extends MaterialPageRoute<T> {
-  TMNavigateRoute({WidgetBuilder builder, RouteSettings settings}) : super(builder: builder, settings: settings);
+  TMNavigateRoute({WidgetBuilder builder, RouteSettings settings})
+      : super(builder: builder, settings: settings);
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
-    Animation<Offset> positionIn(Animation<double> animation) => new Tween<Offset>(
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    Animation<Offset> positionIn(Animation<double> animation) =>
+        new Tween<Offset>(
           // begin: const Offset(1.0, 0.0),
           // begin: const Offset(0.0, 1.0),
           begin: const Offset(0.0, 0.3),
@@ -109,7 +112,9 @@ class TMNavigateRoute<T> extends MaterialPageRoute<T> {
     //       end: Offset.zero,
     //     ).animate(animation);
 
-    if (settings.isInitialRoute) return child;
+    if (settings.isInitialRoute) {
+      return child;
+    }
     // return new FadeTransition(opacity: animation, child: child);
     // return new SlideTransition(position: positionIn(animation), child: child);
     return new FadeTransition(

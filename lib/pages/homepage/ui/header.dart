@@ -6,7 +6,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class HeaderWidget extends StatelessWidget {
   final AccountModel account;
 
-  HeaderWidget({
+  const HeaderWidget({
     Key key,
     @required this.account,
   }) : super(key: key);

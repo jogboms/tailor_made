@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/pages/accounts/measures.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/pages/homepage/home_view_model.dart';
 import 'package:tailor_made/pages/homepage/ui/bottom_row.dart';
@@ -28,10 +29,12 @@ import 'package:tailor_made/utils/tm_phone.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 const double _kBottomBarHeight = 46.0;
+const double _kBottomHeight = 280.0;
 
 enum AccountOptions {
   logout,
   storename,
+  measurement,
 }
 
 enum CreateOptions {
@@ -44,13 +47,15 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => new _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   AnimationController controller;
 
   @override
   void initState() {
     super.initState();
-    controller = new AnimationController(vsync: this, duration: Duration(milliseconds: 1200))
+    controller = new AnimationController(
+        vsync: this, duration: Duration(milliseconds: 1200))
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           controller.reverse();
@@ -102,7 +107,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               if (vm.isDisabled) {
                 return AccessDeniedPage(
                   onSendMail: () {
-                    email('Unwarranted%20Account%20Suspension%20%23${vm.account.uid}');
+                    email(
+                        'Unwarranted%20Account%20Suspension%20%23${vm.account.uid}');
                   },
                 );
               }
@@ -120,7 +126,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
               return LayoutBuilder(
                 builder: (context, constraint) {
-                  final bool isLandscape = constraint.maxWidth > constraint.maxHeight;
+                  final bool isLandscape =
+                      constraint.maxWidth > constraint.maxHeight;
+
+                  // Somehow, i mathematically came up w/ these numbers & they made sense :)
+                  final _height = isLandscape
+                      ? (constraint.maxHeight / 1.0) - _kBottomBarHeight
+                      : constraint.maxHeight -
+                          _kBottomHeight -
+                          (_kBottomBarHeight * 1.45);
+
                   return Stack(
                     fit: StackFit.expand,
                     children: <Widget>[
@@ -133,14 +148,22 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                             children: <Widget>[
                               ConstrainedBox(
                                 constraints: BoxConstraints.expand(
-                                  // Somehow, i mathematically came up w/ these numbers & they made sense :)
-                                  height: (isLandscape ? (constraint.maxHeight / 1.0) : (constraint.maxHeight / 1.89)) - _kBottomBarHeight,
+                                  height: _height,
                                 ),
                                 child: HeaderWidget(account: vm.account),
                               ),
-                              StatsWidget(stats: vm.stats),
-                              TopRowWidget(stats: vm.stats),
-                              BottomRowWidget(stats: vm.stats),
+                              StatsWidget(
+                                stats: vm.stats,
+                                height: 40.0,
+                              ),
+                              TopRowWidget(
+                                stats: vm.stats,
+                                height: 120.0,
+                              ),
+                              BottomRowWidget(
+                                stats: vm.stats,
+                                height: 120.0,
+                              ),
                               SizedBox(height: _kBottomBarHeight),
                             ],
                           ),
@@ -173,7 +196,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               padding: EdgeInsets.all(1.5),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: kPrimaryColor.withOpacity(.5), width: 1.5),
+                border: Border.all(
+                    color: kPrimaryColor.withOpacity(.5), width: 1.5),
               ),
               child: GestureDetector(
                 onTap: onTapAccount(vm),
@@ -183,7 +207,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     account?.photoURL != null
                         ? CircleAvatar(
                             backgroundColor: Colors.white,
-                            backgroundImage: CachedNetworkImageProvider(account.photoURL),
+                            backgroundImage:
+                                CachedNetworkImageProvider(account.photoURL),
                           )
                         : new Icon(
                             Icons.person,
@@ -231,7 +256,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               alignment: FractionalOffset.center,
               child: new Text(
                 "TAP TO CREATE",
-                style: ralewayBold(14.0, Colors.white).copyWith(letterSpacing: 1.25),
+                style: ralewayBold(14.0, Colors.white)
+                    .copyWith(letterSpacing: 1.25),
               ),
             ),
           ),
@@ -240,11 +266,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
-  onTapAccount(HomeViewModel vm) {
+  void Function() onTapAccount(HomeViewModel vm) {
     final account = vm.account;
     return () async {
       if (!(account?.hasReadNotice ?? false)) {
-        await showChildDialog(
+        await showChildDialog<dynamic>(
           context: context,
           child: NoticeDialog(
             account: account,
@@ -254,18 +280,29 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         return;
       }
 
-      AccountOptions result = await showDialog<AccountOptions>(
+      final AccountOptions result = await showDialog<AccountOptions>(
         context: context,
         builder: (BuildContext context) {
           return new SimpleDialog(
-            title: const Text('Select action', style: const TextStyle(fontSize: 14.0)),
+            title: const Text('Select action',
+                style: const TextStyle(fontSize: 14.0)),
             children: <Widget>[
               new SimpleDialogOption(
-                onPressed: () => Navigator.pop(context, AccountOptions.storename),
+                onPressed: () =>
+                    Navigator.pop(context, AccountOptions.storename),
                 child: TMListTile(
                   color: kAccentColor,
                   icon: Icons.store,
                   title: "Store",
+                ),
+              ),
+              new SimpleDialogOption(
+                onPressed: () =>
+                    Navigator.pop(context, AccountOptions.measurement),
+                child: TMListTile(
+                  color: Colors.blue.shade400,
+                  icon: Icons.content_cut,
+                  title: "Measurements",
                 ),
               ),
               new SimpleDialogOption(
@@ -302,20 +339,26 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           );
 
           if (_storeName != null && _storeName != account.storeName) {
-            await account.reference.updateData({
+            await account.reference.updateData(<String, String>{
               "storeName": _storeName,
             });
           }
 
           break;
+
+        case AccountOptions.measurement:
+          TMNavigate(context, AccountMeasuresPage(account: account));
+          break;
+
         case AccountOptions.logout:
-          final response = await confirmDialog(context: context, title: Text("You are about to logout."));
+          final response = await confirmDialog(
+              context: context, title: Text("You are about to logout."));
 
           if (response == true) {
             await Auth.signOutWithGoogle();
-            Navigator.pushReplacement(
+            Navigator.pushReplacement<dynamic, dynamic>(
               context,
-              TMNavigate.fadeIn(
+              TMNavigate.fadeIn<String>(
                 new SplashPage(isColdStart: false),
               ),
             );
@@ -325,13 +368,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     };
   }
 
-  onTapCreate(List<ContactModel> contacts) {
+  void Function() onTapCreate(List<ContactModel> contacts) {
     return () async {
-      CreateOptions result = await showDialog<CreateOptions>(
+      final CreateOptions result = await showDialog<CreateOptions>(
         context: context,
         builder: (BuildContext context) {
           return new SimpleDialog(
-            title: const Text('Select action', style: const TextStyle(fontSize: 14.0)),
+            title: const Text('Select action',
+                style: const TextStyle(fontSize: 14.0)),
             children: <Widget>[
               new SimpleDialogOption(
                 onPressed: () => Navigator.pop(context, CreateOptions.clients),

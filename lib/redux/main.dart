@@ -17,7 +17,7 @@ Store reduxStore() => new Store<ReduxState>(
         account: AccountState.initialState(),
       ),
       middleware: [
-        new LoggingMiddleware.printer(),
+        new LoggingMiddleware<dynamic>.printer(),
         reduxEpics(),
       ],
     );

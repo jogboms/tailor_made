@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/gallery/gallery_grid_item.dart';
 import 'package:tailor_made/models/image.dart';
+import 'package:tailor_made/pages/gallery/gallery_grid_item.dart';
 
 class GalleryGrid extends StatelessWidget {
   final List<ImageModel> images;
 
-  GalleryGrid({
+  const GalleryGrid({
     Key key,
     this.images,
   }) : super(key: key);

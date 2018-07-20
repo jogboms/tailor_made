@@ -37,7 +37,7 @@ class JobsCreatePage extends StatefulWidget {
   final ContactModel contact;
   final List<ContactModel> contacts;
 
-  JobsCreatePage({
+  const JobsCreatePage({
     Key key,
     this.contact,
     @required this.contacts,
@@ -48,7 +48,6 @@ class JobsCreatePage extends StatefulWidget {
 }
 
 class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   List<FireImage> fireImages = [];
   JobModel job;
@@ -59,6 +58,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   );
 
   bool _autovalidate = false;
+
+  @override
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -74,18 +76,20 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    List<Widget> children = [];
+    final List<Widget> children = [];
 
     Widget makeHeader(String title, [String trailing = ""]) {
       return new Container(
         color: Colors.grey[100].withOpacity(.4),
         margin: const EdgeInsets.only(top: 8.0),
-        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
+        padding: const EdgeInsets.only(
+            top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
         alignment: AlignmentDirectional.centerStart,
         child: new Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(title.toUpperCase(), style: ralewayLight(12.0, kTextBaseColor.shade800)),
+            Text(title.toUpperCase(),
+                style: ralewayLight(12.0, kTextBaseColor.shade800)),
             Text(trailing, style: ralewayLight(12.0, kTextBaseColor.shade800)),
           ],
         ),
@@ -130,7 +134,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       appBar: buildAppBar(theme),
       body: Theme(
         data: ThemeData(
-          hintColor: kBorderSideColor,
+          hintColor: kHintColor,
           primaryColor: kPrimaryColor,
         ),
         child: buildBody(theme, children),
@@ -198,7 +202,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
               overflow: TextOverflow.ellipsis,
               style: ralewayBold(18.0, theme.appBarColor),
             ),
-            subtitle: Text("${contact.totalJobs} Jobs", style: theme.smallTextStyle),
+            subtitle:
+                Text("${contact.totalJobs} Jobs", style: theme.smallTextStyle),
             actions: widget.contacts.isNotEmpty
                 ? <Widget>[
                     IconButton(
@@ -213,7 +218,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
 
   void _handleSubmit() async {
     final FormState form = _formKey.currentState;
-    if (form == null) return;
+    if (form == null) {
+      return;
+    }
 
     if (!form.validate()) {
       _autovalidate = true; // Start validating on every change.
@@ -232,7 +239,10 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         await ref.setData(job.toMap());
         ref.snapshots().listen((snap) {
           closeLoadingSnackBar();
-          Navigator.pushReplacement(context, TMNavigate.slideIn(JobPage(job: JobModel.fromDoc(snap))));
+          Navigator.pushReplacement<dynamic, dynamic>(
+            context,
+            TMNavigate.slideIn<String>(JobPage(job: JobModel.fromDoc(snap))),
+          );
         });
       } catch (e) {
         closeLoadingSnackBar();
@@ -252,13 +262,6 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           isDense: true,
           hintText: "Fabric color, size, special requirements...",
           hintStyle: TextStyle(fontSize: 14.0),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: kBorderSideColor,
-              width: 0.0,
-              style: BorderStyle.solid,
-            ),
-          ),
         ),
         onSaved: (value) => job.notes = value.trim(),
       ),
@@ -285,7 +288,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       );
     }
 
-    List<Widget> imagesList = List.generate(
+    final List<Widget> imagesList = List.generate(
       fireImages.length,
       (int index) {
         final fireImage = fireImages[index];
@@ -322,9 +325,11 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
 
   Future<Null> _handlePhotoButtonPressed() async {
     final source = await imageChoiceDialog(context: context);
-    if (source == null) return;
+    if (source == null) {
+      return;
+    }
     final imageFile = await ImagePicker.pickImage(source: source);
-    final ref = CloudStorage.createReference();
+    final ref = CloudStorage.createReferenceImage();
     final uploadTask = ref.putFile(imageFile);
 
     setState(() {
@@ -360,16 +365,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           isDense: true,
           hintText: "Enter Style Name",
           hintStyle: TextStyle(fontSize: 14.0),
-          // border: InputBorder.none,
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: kBorderSideColor,
-              width: 1.0,
-              style: BorderStyle.solid,
-            ),
-          ),
         ),
-        validator: (value) => (value.length > 0) ? null : "Please input a name",
+        validator: (value) => (value.isNotEmpty) ? null : "Please input a name",
         onSaved: (value) => job.name = value.trim(),
       ),
     );
@@ -386,15 +383,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           isDense: true,
           hintText: "Enter Amount",
           hintStyle: TextStyle(fontSize: 14.0),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: kBorderSideColor,
-              width: 0.0,
-              style: BorderStyle.solid,
-            ),
-          ),
         ),
-        validator: (value) => (controller.numberValue > 0) ? null : "Please input a price",
+        validator: (value) =>
+            (controller.numberValue > 0) ? null : "Please input a price",
         onSaved: (value) => job.price = controller.numberValue,
       ),
     );

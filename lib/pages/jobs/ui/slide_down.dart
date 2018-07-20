@@ -8,7 +8,7 @@ class SlideDownItem extends StatefulWidget {
   final String title;
   final Widget body;
 
-  SlideDownItem({
+  const SlideDownItem({
     Key key,
     this.title,
     this.body,
@@ -24,28 +24,29 @@ class SlideDownItemState extends State<SlideDownItem> {
   bool isExpanded;
 
   @override
-  initState() {
+  void initState() {
     super.initState();
-    Random rand = new Random();
+    final Random rand = new Random();
     id = rand.nextInt(100);
     isExpanded = widget.isExpanded;
   }
 
   @override
-  build(BuildContext context) {
+  Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    Widget body = new AnimatedCrossFade(
+    final Widget body = new AnimatedCrossFade(
       firstChild: new Container(height: 0.0),
       secondChild: widget.body,
       firstCurve: const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
       secondCurve: const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
       sizeCurve: Curves.fastOutSlowIn,
-      crossFadeState: isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      crossFadeState:
+          isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
       duration: Duration(milliseconds: 350),
     );
 
-    Widget header = new Material(
+    final Widget header = new Material(
       color: Colors.white,
       elevation: isExpanded ? 1.0 : 0.0,
       child: new InkWell(
@@ -62,7 +63,8 @@ class SlideDownItemState extends State<SlideDownItem> {
             ),
             new Padding(
               padding: const EdgeInsets.only(right: 16.0),
-              child: Icon(isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+              child: Icon(
+                  isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down),
             ),
           ],
         ),

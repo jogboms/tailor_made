@@ -6,14 +6,15 @@ class LoadingSnackBar extends SnackBar {
       : super(
           key: key,
           content: Row(
-            mainAxisAlignment: content == null ? MainAxisAlignment.center : MainAxisAlignment.start,
+            mainAxisAlignment: content == null
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.start,
             children: [
               SizedBox.fromSize(
                 size: Size.square(30.0),
                 child: SpinKitFadingFour(
                   color: Colors.white,
-                  width: 32.0,
-                  height: 32.0,
+                  size: 32.0,
                 ),
               ),
               SizedBox(width: content == null ? 0.0 : 16.0),

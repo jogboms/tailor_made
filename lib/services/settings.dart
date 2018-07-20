@@ -5,7 +5,7 @@ class Settings {
 
   Settings._();
 
-  static setData(Map<String, dynamic> json) {
+  static void setData(Map<String, dynamic> json) {
     _settings = SettingsModel.fromJson(json);
   }
 

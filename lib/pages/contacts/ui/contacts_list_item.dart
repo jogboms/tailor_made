@@ -11,7 +11,7 @@ class ContactsListItem extends StatelessWidget {
   final VoidCallback onTapContact;
   final bool showActions;
 
-  ContactsListItem({
+  const ContactsListItem({
     Key key,
     this.contact,
     this.onTapContact,
@@ -35,7 +35,9 @@ class ContactsListItem extends StatelessWidget {
         child: new CircleAvatar(
           radius: 24.0,
           backgroundColor: theme.primaryColor,
-          backgroundImage: contact.imageUrl != null ? CachedNetworkImageProvider(contact.imageUrl) : null,
+          backgroundImage: contact.imageUrl != null
+              ? CachedNetworkImageProvider(contact.imageUrl)
+              : null,
           child: Stack(
             children: [
               new Align(
@@ -69,7 +71,7 @@ class ContactsListItem extends StatelessWidget {
       );
     }
 
-    Row icons = new Row(
+    final Row icons = new Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
@@ -78,22 +80,25 @@ class ContactsListItem extends StatelessWidget {
       ],
     );
 
-    Text title = new Text(
+    final Text title = new Text(
       contact.fullname,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: TextStyle(fontSize: 16.0, color: theme.textColor, fontWeight: FontWeight.w600),
+      style: TextStyle(
+          fontSize: 16.0, color: theme.textColor, fontWeight: FontWeight.w600),
     );
 
-    int pending = contact.pendingJobs;
+    final int pending = contact.pendingJobs;
 
     return ListTile(
       dense: true,
       contentPadding: EdgeInsets.only(left: 16.0),
-      onTap: onTapContact ?? () => TMNavigate(context, ContactPage(contact: contact)),
+      onTap: onTapContact ??
+          () => TMNavigate(context, ContactPage(contact: contact)),
       leading: avatar(),
       title: title,
-      subtitle: Text(pending >= 1 ? "$pending pending" : "No pending wears", style: TextStyle(fontSize: 14.0, color: kTextBaseColor)),
+      subtitle: Text(pending >= 1 ? "$pending pending" : "No pending wears",
+          style: TextStyle(fontSize: 14.0, color: kTextBaseColor)),
       trailing: showActions ? icons : null,
     );
   }

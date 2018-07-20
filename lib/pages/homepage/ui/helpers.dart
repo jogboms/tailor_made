@@ -8,7 +8,7 @@ class TMListTile extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
 
-  TMListTile({
+  const TMListTile({
     Key key,
     this.icon,
     this.color,
@@ -34,7 +34,14 @@ class TMGridTile extends StatelessWidget {
   final String title;
   final String subTitle;
   final VoidCallback onPressed;
-  TMGridTile({this.icon, this.color, this.title, this.subTitle, this.onPressed});
+
+  const TMGridTile({
+    this.icon,
+    this.color,
+    this.title,
+    this.subTitle,
+    this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +60,8 @@ class TMGridTile extends StatelessWidget {
   }
 }
 
-Widget circleIcon({IconData icon, Color color: TMColors.accent, bool small: false}) {
+Widget circleIcon(
+    {IconData icon, Color color: TMColors.accent, bool small: false}) {
   return new Align(
     child: new Padding(
       child: new CircleAvatar(
@@ -65,25 +73,30 @@ Widget circleIcon({IconData icon, Color color: TMColors.accent, bool small: fals
           color: Colors.white,
         ),
       ),
-      padding: new EdgeInsets.only(right: (small == true ? 8.0 : 10.0)),
+      padding: new EdgeInsets.only(right: small == true ? 8.0 : 10.0),
     ),
     alignment: Alignment.center,
   );
 }
 
-Widget textTile(TMTheme theme, {String title, String subTitle, bool small: false}) {
+Widget textTile(TMTheme theme,
+    {String title, String subTitle, bool small: false}) {
   return new Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
       new Text(
         title,
-        style: new TextStyle(color: theme?.textColor, fontSize: small == true ? 15.0 : 16.0),
+        style: new TextStyle(
+            color: theme?.textColor, fontSize: small == true ? 15.0 : 16.0),
       ),
       subTitle != null
           ? new Text(
               subTitle,
-              style: new TextStyle(color: theme?.textColor, fontSize: 12.0, fontWeight: FontWeight.w300),
+              style: new TextStyle(
+                  color: theme?.textColor,
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w300),
             )
           : new Container(),
     ],

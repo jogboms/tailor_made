@@ -42,22 +42,25 @@ class JobModel extends Model {
 
   factory JobModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
-    List<MeasureModel> measurements = [];
+    final List<MeasureModel> measurements = [];
     if (json['measurements'] != null) {
       json['measurements'].forEach(
-        (measure) => measurements.add(MeasureModel.fromJson(measure.cast<String, dynamic>())),
+        (dynamic measure) => measurements
+            .add(MeasureModel.fromJson(measure.cast<String, dynamic>())),
       );
     }
-    List<PaymentModel> payments = [];
+    final List<PaymentModel> payments = [];
     if (json['payments'] != null) {
       json['payments'].forEach(
-        (payment) => payments.add(PaymentModel.fromJson(payment.cast<String, dynamic>())),
+        (dynamic payment) => payments
+            .add(PaymentModel.fromJson(payment.cast<String, dynamic>())),
       );
     }
-    List<ImageModel> images = [];
+    final List<ImageModel> images = [];
     if (json['images'] != null) {
       json['images'].forEach(
-        (image) => images.add(ImageModel.fromJson(image.cast<String, dynamic>())),
+        (dynamic image) =>
+            images.add(ImageModel.fromJson(image.cast<String, dynamic>())),
       );
     }
     return new JobModel(
@@ -82,21 +85,21 @@ class JobModel extends Model {
   }
 
   @override
-  toMap() {
-    return {
-      "id": id,
-      "userID": userID,
-      "contactID": contactID,
-      "name": name,
-      "price": price,
-      "completedPayment": completedPayment,
-      "pendingPayment": pendingPayment,
-      "notes": notes,
-      "images": images.map((image) => image.toMap()).toList(),
-      "createdAt": createdAt.toString(),
-      "measurements": measurements.map((measure) => measure.toMap()).toList(),
-      "payments": payments.map((payment) => payment.toMap()).toList(),
-      "isComplete": isComplete,
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'userID': userID,
+      'contactID': contactID,
+      'name': name,
+      'price': price,
+      'completedPayment': completedPayment,
+      'pendingPayment': pendingPayment,
+      'notes': notes,
+      'images': images.map((image) => image.toMap()).toList(),
+      'createdAt': createdAt.toString(),
+      'measurements': measurements.map((measure) => measure.toMap()).toList(),
+      'payments': payments.map((payment) => payment.toMap()).toList(),
+      'isComplete': isComplete,
     };
   }
 }

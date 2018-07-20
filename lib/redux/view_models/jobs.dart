@@ -11,29 +11,43 @@ class JobsViewModel extends ViewModel {
 
   JobsViewModel(Store<ReduxState> store) : super(store);
 
+  JobsState get _state => store.state.jobs;
+
   List<JobModel> get jobs {
-    final jobs = this.store.state.jobs.jobs;
+    final jobs = store.state.jobs.jobs;
     if (contact != null) {
       return jobs.where((_) => _.contactID == contact.id).toList();
     }
-    return jobs;
+    return isSearching ? _state.searchResults : jobs;
   }
 
   List<ContactModel> get contacts {
-    return this.store.state.contacts.contacts;
+    return store.state.contacts.contacts;
   }
 
-  filterByContact(ContactModel contact) {
+  void filterByContact(ContactModel contact) {
     contact = contact;
   }
 
-  toggleCompleteJob(JobModel job) {
-    return this.store.dispatch(ToggleCompleteJob(payload: job));
+  void toggleCompleteJob(JobModel job) {
+    return store.dispatch(ToggleCompleteJob(payload: job));
   }
 
-  bool get isLoading => this.store.state.jobs.status == JobsStatus.loading;
+  bool get isLoading => store.state.jobs.status == JobsStatus.loading;
 
-  bool get isSuccess => this.store.state.jobs.status == JobsStatus.success;
+  bool get isSuccess => store.state.jobs.status == JobsStatus.success;
 
-  bool get isFailure => this.store.state.jobs.status == JobsStatus.failure;
+  bool get isFailure => store.state.jobs.status == JobsStatus.failure;
+
+  SortType get sortFn => _state.sortFn;
+
+  bool get hasSortFn => _state.hasSortFn;
+
+  bool get isSearching => _state.isSearching;
+
+  void setSortFn(SortType type) => store.dispatch(SortJobs(payload: type));
+
+  void search(String term) => store.dispatch(SearchJobEvent(payload: term));
+
+  void cancelSearch() => store.dispatch(CancelSearchJobEvent());
 }

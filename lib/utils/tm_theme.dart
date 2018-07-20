@@ -12,30 +12,42 @@ const Color kPrimaryColor = TMColors.primary;
 const MaterialColor kAccentSwatch = TMColors.slate_pink;
 const MaterialColor kPrimarySwatch = TMColors.biro_blue;
 
+final Color kHintColor = Colors.grey.shade500;
 final Color kBorderSideColor = Colors.grey.shade300;
 const MaterialColor kTextBaseColor = Colors.grey;
 const MaterialColor kTitleBaseColor = TMColors.dark;
 const MaterialColor kBackgroundBaseColor = TMColors.white;
 
 class TMBorderSide extends BorderSide {
-  TMBorderSide({Color color})
+  TMBorderSide({Color color, BorderStyle style})
       : super(
-          color: color != null ? color : kBorderSideColor,
-          style: BorderStyle.solid,
+          color: color ?? kBorderSideColor,
+          style: style ?? BorderStyle.solid,
           width: 1.0,
         );
 }
 
 class TMStyle extends TextStyle {
   const TMStyle.raleway(double size, FontWeight weight, Color color)
-      : super(inherit: false, color: color, fontFamily: 'Raleway', fontSize: size, fontWeight: weight, textBaseline: TextBaseline.alphabetic);
+      : super(
+            inherit: false,
+            color: color,
+            fontFamily: 'Raleway',
+            fontSize: size,
+            fontWeight: weight,
+            textBaseline: TextBaseline.alphabetic);
 }
 
-TextStyle ralewayThin(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w100, color ?? kTextBaseColor);
-TextStyle ralewayLight(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w300, color ?? kTextBaseColor);
-TextStyle ralewayRegular(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w400, color ?? kTextBaseColor);
-TextStyle ralewayMedium(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w500, color ?? kTextBaseColor);
-TextStyle ralewayBold(double fontSize, [Color color]) => new TMStyle.raleway(fontSize, FontWeight.w700, color ?? kTextBaseColor);
+TextStyle ralewayThin(double fontSize, [Color color]) =>
+    new TMStyle.raleway(fontSize, FontWeight.w100, color ?? kTextBaseColor);
+TextStyle ralewayLight(double fontSize, [Color color]) =>
+    new TMStyle.raleway(fontSize, FontWeight.w300, color ?? kTextBaseColor);
+TextStyle ralewayRegular(double fontSize, [Color color]) =>
+    new TMStyle.raleway(fontSize, FontWeight.w400, color ?? kTextBaseColor);
+TextStyle ralewayMedium(double fontSize, [Color color]) =>
+    new TMStyle.raleway(fontSize, FontWeight.w500, color ?? kTextBaseColor);
+TextStyle ralewayBold(double fontSize, [Color color]) =>
+    new TMStyle.raleway(fontSize, FontWeight.w700, color ?? kTextBaseColor);
 
 /// The TextStyles and Colors used for titles, labels, and descriptions. This
 /// InheritedWidget is shared by all of the routes and widgets created for
@@ -61,7 +73,8 @@ class TMTheme extends InheritedWidget {
   TextStyle get smallTextStyle => ralewayRegular(12.0, textColor);
   TextStyle get mediumTextStyle => ralewayRegular(16.0, textColor);
 
-  static TMTheme of(BuildContext context) => context.inheritFromWidgetOfExactType(TMTheme);
+  static TMTheme of(BuildContext context) =>
+      context.inheritFromWidgetOfExactType(TMTheme);
 
   @override
   bool updateShouldNotify(TMTheme oldWidget) => false;

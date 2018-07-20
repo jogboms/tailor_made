@@ -38,7 +38,8 @@ class AccountModel extends Model {
       displayName: json['displayName'],
       phoneNumber: int.tryParse(json['phoneNumber'].toString()),
       photoURL: json['photoURL'],
-      status: AccountModelStatus.values[int.tryParse(json['status'].toString())],
+      status:
+          AccountModelStatus.values[int.tryParse(json['status'].toString())],
       hasPremiumEnabled: json['hasPremiumEnabled'],
       notice: json['notice'],
       hasReadNotice: json['hasReadNotice'],
@@ -70,21 +71,22 @@ class AccountModel extends Model {
       hasPremiumEnabled: hasPremiumEnabled ?? this.hasPremiumEnabled,
       notice: notice ?? this.notice,
       hasReadNotice: hasReadNotice ?? this.hasReadNotice,
-    );
+    )..reference = this.reference;
   }
 
-  toMap() {
-    return {
-      "uid": uid,
-      "storeName": storeName,
-      "email": email,
-      "displayName": displayName,
-      "phoneNumber": phoneNumber,
-      "photoURL": photoURL,
-      "status": status.index,
-      "hasPremiumEnabled": hasPremiumEnabled,
-      "notice": notice,
-      "hasReadNotice": hasReadNotice,
+  @override
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'uid': uid,
+      'storeName': storeName,
+      'email': email,
+      'displayName': displayName,
+      'phoneNumber': phoneNumber,
+      'photoURL': photoURL,
+      'status': status.index,
+      'hasPremiumEnabled': hasPremiumEnabled,
+      'notice': notice,
+      'hasReadNotice': hasReadNotice,
     };
   }
 }

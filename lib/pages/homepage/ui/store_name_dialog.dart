@@ -40,10 +40,11 @@ class StoreNameDialog extends StatelessWidget {
               Text("Store Name", style: ralewayMedium(18.0, Colors.black38)),
               const SizedBox(height: 64.0),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 4.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32.0, vertical: 4.0),
                 child: Theme(
                   data: ThemeData(
-                    hintColor: kBorderSideColor,
+                    hintColor: kHintColor,
                     primaryColor: kPrimaryColor,
                   ),
                   child: new TextField(
@@ -68,9 +69,9 @@ class StoreNameDialog extends StatelessWidget {
     );
   }
 
-  _handleSubmit(BuildContext context) {
+  void _handleSubmit(BuildContext context) {
     final _value = controller.text.trim();
-    if (_value.length < 0) {
+    if (_value.isEmpty) {
       return;
     }
     Navigator.pop(context, _value);

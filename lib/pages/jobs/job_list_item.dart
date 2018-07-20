@@ -9,7 +9,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class JobListItem extends StatelessWidget {
   final JobModel job;
 
-  JobListItem({
+  const JobListItem({
     Key key,
     @required this.job,
   }) : super(key: key);
@@ -19,6 +19,8 @@ class JobListItem extends StatelessWidget {
     final TMTheme theme = TMTheme.of(context);
     final _date = job.createdAt;
     final _price = formatNaira(job.price);
+    final _paid = formatNaira(job.completedPayment);
+    final _owed = formatNaira(job.pendingPayment);
 
     return new Material(
       child: new InkWell(
@@ -37,7 +39,9 @@ class JobListItem extends StatelessWidget {
                 child: new Text.rich(
                   new TextSpan(
                     children: [
-                      new TextSpan(text: "${_date.day}\n", style: ralewayLight(20.0, Colors.black54)),
+                      new TextSpan(
+                          text: "${_date.day}\n",
+                          style: ralewayLight(20.0, Colors.black54)),
                       new TextSpan(
                         text: MONTHS_SHORT[_date.month - 1].toUpperCase(),
                         style: ralewayLight(10.0, Colors.black).copyWith(
@@ -55,15 +59,60 @@ class JobListItem extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(job.name, style: TextStyle(fontSize: 16.0, color: theme.textColor, fontWeight: FontWeight.w600)),
-                    new SizedBox(height: 4.0),
-                    Text(_price, style: TextStyle(fontSize: 14.0, color: kTextBaseColor)),
+                    Text(
+                      job.name,
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: theme.textColor,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    new SizedBox(height: 2.0),
+                    Text(
+                      _price,
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        color: kTextBaseColor,
+                      ),
+                    ),
+                    new SizedBox(height: 2.0),
+                    job.pendingPayment > 0
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(Icons.arrow_drop_up,
+                                  color: Colors.green.shade600, size: 12.0),
+                              const SizedBox(width: 2.0),
+                              Text(
+                                _paid,
+                                style: TextStyle(fontSize: 11.0),
+                              ),
+                              const SizedBox(width: 4.0),
+                              Icon(Icons.arrow_drop_down,
+                                  color: Colors.red.shade600, size: 12.0),
+                              const SizedBox(width: 2.0),
+                              Text(
+                                _owed,
+                                style: TextStyle(fontSize: 11.0),
+                              ),
+                            ],
+                          )
+                        : Container(
+                            padding: EdgeInsets.all(2.0),
+                            child: Icon(Icons.attach_money,
+                                size: 12.0, color: Colors.white),
+                            decoration: BoxDecoration(
+                              color: Colors.green.shade600,
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
                   ],
                 ),
               ),
               new Icon(
                 Icons.check,
-                color: job.isComplete ? theme.primaryColor : kTextBaseColor.shade300,
+                color: job.isComplete
+                    ? theme.primaryColor
+                    : kTextBaseColor.shade300,
               ),
             ],
           ),

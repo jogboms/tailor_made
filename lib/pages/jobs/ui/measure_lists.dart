@@ -9,7 +9,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class MeasureLists extends StatelessWidget {
   final List<MeasureModel> measurements;
 
-  MeasureLists({
+  const MeasureLists({
     Key key,
     @required this.measurements,
   }) : super(key: key);
@@ -24,10 +24,15 @@ class MeasureLists extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             const SizedBox(width: 16.0),
-            Expanded(child: Text("MEASUREMENTS", style: ralewayRegular(12.0, Colors.black87))),
+            Expanded(
+                child: Text("MEASUREMENTS",
+                    style: ralewayRegular(12.0, Colors.black87))),
             CupertinoButton(
-              child: Text("SHOW ALL", style: ralewayRegular(11.0, kTextBaseColor)),
-              onPressed: () => TMNavigate(context, MeasuresPage(measurements: measurements), fullscreenDialog: true),
+              child:
+                  Text("SHOW ALL", style: ralewayRegular(11.0, kTextBaseColor)),
+              onPressed: () => TMNavigate(
+                  context, MeasuresPage(measurements: measurements),
+                  fullscreenDialog: true),
             ),
           ],
         )

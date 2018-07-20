@@ -3,36 +3,36 @@ import 'package:tailor_made/models/main.dart';
 
 List<MeasureModel> createDefaultMeasures() {
   return [
-    MeasureModel(name: "Arm Hole", type: MeasureModelType.blouse),
-    MeasureModel(name: "Shoulder", type: MeasureModelType.blouse),
-    MeasureModel(name: "Burst", type: MeasureModelType.blouse),
-    MeasureModel(name: "Burst Point", type: MeasureModelType.blouse),
-    MeasureModel(name: "Shoulder - Burst Point", type: MeasureModelType.blouse),
-    MeasureModel(name: "Shoulder - Under Burst", type: MeasureModelType.blouse),
-    MeasureModel(name: "Shoulder - Waist", type: MeasureModelType.blouse),
-    MeasureModel(name: "Length", type: MeasureModelType.trouser),
-    MeasureModel(name: "Waist", type: MeasureModelType.trouser),
-    MeasureModel(name: "Crouch", type: MeasureModelType.trouser),
-    MeasureModel(name: "Thigh", type: MeasureModelType.trouser),
-    MeasureModel(name: "Body Rise", type: MeasureModelType.trouser),
-    MeasureModel(name: "Width", type: MeasureModelType.trouser),
-    MeasureModel(name: "Hip", type: MeasureModelType.trouser),
-    MeasureModel(name: "Full Length", type: MeasureModelType.skirts),
-    MeasureModel(name: "Short Length", type: MeasureModelType.skirts),
-    MeasureModel(name: "Knee Length", type: MeasureModelType.skirts),
-    MeasureModel(name: "Hip", type: MeasureModelType.skirts),
-    MeasureModel(name: "Waist", type: MeasureModelType.gown),
-    MeasureModel(name: "Long Length", type: MeasureModelType.gown),
-    MeasureModel(name: "Short Length", type: MeasureModelType.gown),
-    MeasureModel(name: "Knee Length", type: MeasureModelType.gown),
+    MeasureModel(name: 'Arm Hole', type: MeasureModelType.blouse),
+    MeasureModel(name: 'Shoulder', type: MeasureModelType.blouse),
+    MeasureModel(name: 'Bust', type: MeasureModelType.blouse),
+    MeasureModel(name: 'Bust Point', type: MeasureModelType.blouse),
+    MeasureModel(name: 'Shoulder - Bust Point', type: MeasureModelType.blouse),
+    MeasureModel(name: 'Shoulder - Under Bust', type: MeasureModelType.blouse),
+    MeasureModel(name: 'Shoulder - Waist', type: MeasureModelType.blouse),
+    MeasureModel(name: 'Length', type: MeasureModelType.trouser),
+    MeasureModel(name: 'Waist', type: MeasureModelType.trouser),
+    MeasureModel(name: 'Crouch', type: MeasureModelType.trouser),
+    MeasureModel(name: 'Thigh', type: MeasureModelType.trouser),
+    MeasureModel(name: 'Body Rise', type: MeasureModelType.trouser),
+    MeasureModel(name: 'Width', type: MeasureModelType.trouser),
+    MeasureModel(name: 'Hip', type: MeasureModelType.trouser),
+    MeasureModel(name: 'Full Length', type: MeasureModelType.skirts),
+    MeasureModel(name: 'Short Length', type: MeasureModelType.skirts),
+    MeasureModel(name: 'Knee Length', type: MeasureModelType.skirts),
+    MeasureModel(name: 'Hip', type: MeasureModelType.skirts),
+    MeasureModel(name: 'Waist', type: MeasureModelType.gown),
+    MeasureModel(name: 'Long Length', type: MeasureModelType.gown),
+    MeasureModel(name: 'Short Length', type: MeasureModelType.gown),
+    MeasureModel(name: 'Knee Length', type: MeasureModelType.gown),
   ];
 }
 
 class MeasureModelType {
-  static String blouse = "Blouse";
-  static String trouser = "Trouser";
-  static String skirts = "Skirts";
-  static String gown = "Gown";
+  static String blouse = 'Blouse';
+  static String trouser = 'Trouser';
+  static String skirts = 'Skirts';
+  static String gown = 'Gown';
 }
 
 class MeasureModel extends Model {
@@ -44,7 +44,7 @@ class MeasureModel extends Model {
   MeasureModel({
     @required this.name,
     this.value = 0.0,
-    this.unit = "In",
+    this.unit = 'In',
     @required this.type,
   });
 
@@ -59,12 +59,12 @@ class MeasureModel extends Model {
   }
 
   @override
-  toMap() {
-    return {
-      "name": name,
-      "value": value,
-      "unit": unit,
-      "type": type,
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'name': name,
+      'value': value,
+      'unit': unit,
+      'type': type,
     };
   }
 }

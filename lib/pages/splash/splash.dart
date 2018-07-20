@@ -18,7 +18,7 @@ import 'package:tailor_made/utils/tm_theme.dart';
 class SplashPage extends StatefulWidget {
   final bool isColdStart;
 
-  SplashPage({
+  const SplashPage({
     Key key,
     @required this.isColdStart,
   }) : super(key: key);
@@ -28,10 +28,12 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> with SnackBarProvider {
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
   bool isLoading;
   bool isRestartable = false;
   String projectVersion;
+
+  @override
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -47,32 +49,64 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
     Auth.onAuthStateChanged.firstWhere((user) => user != null).then(
       (user) {
         Auth.setUser(user);
-        Navigator.pushReplacement(context, TMNavigate.fadeIn(new HomePage()));
+        Navigator.pushReplacement<String, dynamic>(
+          context,
+          TMNavigate.fadeIn<String>(new HomePage()),
+        );
       },
     );
   }
 
-  _getVersionName() async {
+  Future<void> _getVersionName() async {
     try {
-      projectVersion = await GetVersion.projectVersion;
-      print(projectVersion);
-    } catch (e) {}
+      final _projectVersion = await GetVersion.projectVersion;
+      if (!mounted) {
+        return;
+      }
+      setState(() => projectVersion = _projectVersion);
+    } catch (e) {
+      //
+    }
   }
 
-  _trySilent() async {
+  Future<void> _trySilent() async {
     // Give the navigation animations, etc, some time to finish
-    await new Future.delayed(new Duration(seconds: 1)).then((_) => _onLogin());
+    await new Future<dynamic>.delayed(new Duration(seconds: 1))
+        .then((dynamic _) => _onLogin());
   }
 
-  _onLogin() async => await Auth.signInWithGoogle().catchError((e) async {
-        showInSnackBar(e.message, const Duration(milliseconds: 3500));
-        await Auth.signOutWithGoogle();
-        if (!mounted) return;
-        setState(() {
-          isLoading = false;
-          isRestartable = true;
-        });
+  Future<void> _onLogin() async {
+    return await Auth.signInWithGoogle().catchError((dynamic e) async {
+      // TODO disabled
+      String message = "";
+      switch (e?.code) {
+        case "exception":
+          if (e?.message?.contains("administrator") ?? false) {
+            message =
+                "It seems this account has been disabled. Contact Administrators.";
+            break;
+          }
+          message = "You need a stable internet connection to proceed";
+          break;
+        case "sign_in_failed":
+          message = "Sorry, We could not connect to Google using that account.";
+          break;
+        case "canceled":
+        default:
+      }
+      if (message.isNotEmpty) {
+        showInSnackBar(message, const Duration(milliseconds: 3500));
+      }
+      await Auth.signOutWithGoogle();
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        isLoading = false;
+        isRestartable = true;
       });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +140,9 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
                 projectVersion != null
                     ? Text(
                         "v" + projectVersion,
-                        style: ralewayMedium(12.0, kTextBaseColor.withOpacity(.4)).copyWith(height: 1.5),
+                        style:
+                            ralewayMedium(12.0, kTextBaseColor.withOpacity(.4))
+                                .copyWith(height: 1.5),
                         textAlign: TextAlign.center,
                       )
                     : SizedBox(),
@@ -131,7 +167,8 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
             child: StreamBuilder(
               stream: CloudDb.settings.snapshots(),
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (!snapshot.hasData) {
+                if (!snapshot.hasData ||
+                    (snapshot.hasData && snapshot.data.data == null)) {
                   return Center(
                     child: loadingSpinner(),
                   );
@@ -139,7 +176,9 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
 
                 Settings.setData(snapshot.data.data);
 
-                return isLoading ? loadingSpinner() : Center(child: _googleBtn());
+                return isLoading
+                    ? loadingSpinner()
+                    : Center(child: _googleBtn());
               },
             ),
           ),
@@ -161,7 +200,8 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
         }
       },
       icon: Image(image: TMImages.google_logo, width: 24.0),
-      label: Text("Continue with Google", style: TextStyle(fontWeight: FontWeight.w700)),
+      label: Text("Continue with Google",
+          style: TextStyle(fontWeight: FontWeight.w700)),
     );
   }
 }

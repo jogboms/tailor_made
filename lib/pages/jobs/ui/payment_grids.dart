@@ -38,14 +38,16 @@ class PaymentGridsState extends State<PaymentGrids> {
   List<FirePayment> firePayments = [];
 
   @override
-  initState() {
+  void initState() {
     super.initState();
-    firePayments = widget.job.payments.map((payment) => FirePayment()..payment = payment).toList();
+    firePayments = widget.job.payments
+        .map((payment) => FirePayment()..payment = payment)
+        .toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> paymentsList = List.generate(
+    final List<Widget> paymentsList = List.generate(
       firePayments.length,
       (int index) {
         final fireImage = firePayments[index];
@@ -65,10 +67,15 @@ class PaymentGridsState extends State<PaymentGrids> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             const SizedBox(width: 16.0),
-            Expanded(child: Text("PAYMENTS", style: ralewayRegular(12.0, Colors.black87))),
+            Expanded(
+                child: Text("PAYMENTS",
+                    style: ralewayRegular(12.0, Colors.black87))),
             CupertinoButton(
-              child: Text("SHOW ALL", style: ralewayRegular(11.0, kTextBaseColor)),
-              onPressed: () => TMNavigate(context, PaymentsPage(payments: widget.job.payments), fullscreenDialog: true),
+              child:
+                  Text("SHOW ALL", style: ralewayRegular(11.0, kTextBaseColor)),
+              onPressed: () => TMNavigate(
+                  context, PaymentsPage(payments: widget.job.payments),
+                  fullscreenDialog: true),
             ),
           ],
         ),
@@ -83,7 +90,8 @@ class PaymentGridsState extends State<PaymentGrids> {
             //       return PaymentGridItem(payment: payment);
             //     }).toList(),
             //   ),
-            children: [newGrid(widget.gridSize)]..addAll(paymentsList.reversed.toList()),
+            children: [newGrid(widget.gridSize)]
+              ..addAll(paymentsList.reversed.toList()),
             // children: [newGrid(widget.job.contact, widget.gridSize)]..addAll(imagesList.reversed.toList()),
           ),
         ),
@@ -119,8 +127,11 @@ class PaymentGridsState extends State<PaymentGrids> {
                   );
                 });
 
-                await widget.job.reference.updateData({
-                  "payments": firePayments.map((payment) => payment.payment.toMap()).toList(),
+                await widget.job.reference
+                    .updateData(<String, List<Map<String, dynamic>>>{
+                  "payments": firePayments
+                      .map((payment) => payment.payment.toMap())
+                      .toList(),
                 });
 
                 setState(() {

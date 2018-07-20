@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:url_launcher/url_launcher.dart';
 
-_launch(String url) async {
+Future<void> _launch(String url) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
@@ -8,8 +10,9 @@ _launch(String url) async {
   }
 }
 
-call(int phone) => _launch('tel:$phone');
+void call(int phone) => _launch('tel:$phone');
 
-sms(int phone) => _launch('sms:$phone');
+void sms(int phone) => _launch('sms:$phone');
 
-email(String subject) => _launch('mailto:jeremiahogbomo@gmail.com?subject=$subject');
+void email(String subject) =>
+    _launch('mailto:jeremiahogbomo@gmail.com?subject=$subject');
