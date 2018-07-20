@@ -5,9 +5,11 @@ import 'package:tailor_made/utils/tm_theme.dart';
 
 class StatsWidget extends StatelessWidget {
   final StatsModel stats;
+  final double height;
 
   const StatsWidget({
     Key key,
+    @required this.height,
     @required this.stats,
   }) : super(key: key);
 
@@ -32,7 +34,7 @@ class StatsWidget extends StatelessWidget {
           Container(
             color: kBorderSideColor,
             width: 1.0,
-            height: 40.0,
+            height: height,
             margin: EdgeInsets.only(left: 0.0, right: 0.0),
           ),
           Expanded(
@@ -45,7 +47,7 @@ class StatsWidget extends StatelessWidget {
           Container(
             color: kBorderSideColor,
             width: 1.0,
-            height: 40.0,
+            height: height,
             margin: EdgeInsets.only(left: 0.0, right: 0.0),
           ),
           Expanded(
