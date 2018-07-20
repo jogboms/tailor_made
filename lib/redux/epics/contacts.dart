@@ -27,7 +27,7 @@ Stream<dynamic> search(Stream<dynamic> actions, EpicStore<ReduxState> store) {
       .where((text) => text.length > 1)
       .debounce(const Duration(milliseconds: 750))
       .switchMap<dynamic>(
-        (text) => Observable<dynamic>.just(StartSearchEvent())
+        (text) => Observable<dynamic>.just(StartSearchContactEvent())
             .concatWith([doSearch(store.state.contacts.contacts, text)]),
       )
       .takeUntil<dynamic>(
@@ -36,7 +36,7 @@ Stream<dynamic> search(Stream<dynamic> actions, EpicStore<ReduxState> store) {
 
 Observable<dynamic> doSearch(List<ContactModel> contacts, String text) {
   return Observable<dynamic>.just(
-    new SearchSuccessEvent(
+    new SearchSuccessContactEvent(
       payload: contacts
           .where(
             (contact) => contact.fullname

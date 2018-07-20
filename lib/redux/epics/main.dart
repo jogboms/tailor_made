@@ -11,6 +11,7 @@ EpicMiddleware<ReduxState> reduxEpics() => new EpicMiddleware<ReduxState>(
           contacts.contacts,
           contacts.search,
           jobs.jobs,
+          jobs.search,
           stats.stats,
           account.account,
           account.onPremiumSignUp,

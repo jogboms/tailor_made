@@ -15,6 +15,8 @@ class JobsState {
   final String message;
   final bool hasSortFn;
   final SortType sortFn;
+  final List<JobModel> searchResults;
+  final bool isSearching;
 
   const JobsState({
     @required this.jobs,
@@ -22,6 +24,8 @@ class JobsState {
     @required this.message,
     @required this.hasSortFn,
     @required this.sortFn,
+    @required this.searchResults,
+    @required this.isSearching,
   });
 
   const JobsState.initialState()
@@ -29,6 +33,8 @@ class JobsState {
         status = JobsStatus.loading,
         hasSortFn = false,
         sortFn = SortType.reset,
+        searchResults = null,
+        isSearching = false,
         message = '';
 
   JobsState copyWith({
@@ -37,6 +43,8 @@ class JobsState {
     String message,
     bool hasSortFn,
     SortType sortFn,
+    List<JobModel> searchResults,
+    bool isSearching,
   }) {
     return new JobsState(
       jobs: jobs ?? this.jobs,
@@ -44,6 +52,8 @@ class JobsState {
       message: message ?? this.message,
       hasSortFn: hasSortFn ?? this.hasSortFn,
       sortFn: sortFn ?? this.sortFn,
+      searchResults: searchResults ?? this.searchResults,
+      isSearching: isSearching ?? this.isSearching,
     );
   }
 }

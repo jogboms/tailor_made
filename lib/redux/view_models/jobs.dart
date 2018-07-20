@@ -43,5 +43,11 @@ class JobsViewModel extends ViewModel {
 
   bool get hasSortFn => _state.hasSortFn;
 
+  bool get isSearching => _state.isSearching;
+
   void setSortFn(SortType type) => store.dispatch(SortJobs(payload: type));
+
+  void search(String term) => store.dispatch(SearchJobEvent(payload: term));
+
+  void cancelSearch() => store.dispatch(CancelSearchJobEvent());
 }

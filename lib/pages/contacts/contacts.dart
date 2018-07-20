@@ -25,7 +25,6 @@ class ContactsPage extends StatefulWidget {
 }
 
 class _ContactsPageState extends State<ContactsPage> {
-  final TextEditingController _searchQuery = new TextEditingController();
   bool _isSearching = false;
 
   @override
@@ -96,7 +95,6 @@ class _ContactsPageState extends State<ContactsPage> {
           primaryColor: kPrimaryColor,
         ),
         child: TextField(
-          controller: _searchQuery,
           autofocus: true,
           decoration: new InputDecoration(
             hintText: 'Search...',

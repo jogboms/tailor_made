@@ -41,5 +41,5 @@ class ContactsViewModel extends ViewModel {
 
   void search(String term) => store.dispatch(SearchContactEvent(payload: term));
 
-  void cancelSearch() => store.dispatch(CancelSearchEvent());
+  void cancelSearch() => store.dispatch(CancelSearchContactEvent());
 }
