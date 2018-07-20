@@ -1,7 +1,6 @@
 PENDING:
   ☐ delete-able payment + images + jobs + contacts
   ☐ implement share payment + image
-  ☐ sort + search jobs & contacts @today
   ☐ Collect account details on account creation
   ☐ Generate invoice & share as SMS containing link to pay on paystack
   ☐ Firebase function on successful payments w/ push notification
@@ -11,6 +10,7 @@ PENDING:
   ☐ indicator for premium accounts @today
 
 COMPLETED:
+  ✔ sort + search jobs & contacts @today @done(18-07-20 20:00)
   ✔ friendly error on log in @today @done(18-07-20 19:34)
   ✔ account settings page @critical @done(18-07-20 03:09)
   ✔ create a new contact from phone contact @high @done(18-07-19 03:19)
