@@ -77,8 +77,25 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
 
   Future<void> _onLogin() async {
     return await Auth.signInWithGoogle().catchError((dynamic e) async {
-      if (e?.message?.isNotEmpty ?? false) {
-        showInSnackBar(e.message, const Duration(milliseconds: 3500));
+      // TODO disabled
+      String message = "";
+      switch (e?.code) {
+        case "exception":
+          if (e?.message?.contains("administrator") ?? false) {
+            message =
+                "It seems this account has been disabled. Contact Administrators.";
+            break;
+          }
+          message = "You need a stable internet connection to proceed";
+          break;
+        case "sign_in_failed":
+          message = "Sorry, We could not connect to Google using that account.";
+          break;
+        case "canceled":
+        default:
+      }
+      if (message.isNotEmpty) {
+        showInSnackBar(message, const Duration(milliseconds: 3500));
       }
       await Auth.signOutWithGoogle();
       if (!mounted) {
