@@ -37,24 +37,34 @@ class _ContactsPageState extends State<ContactsPage> {
       onInit: (store) => store.dispatch(new InitDataEvents()),
       onDispose: (store) => store.dispatch(new DisposeDataEvents()),
       builder: (BuildContext context, ContactsViewModel vm) {
-        return new Scaffold(
-          backgroundColor: theme.scaffoldColor,
-          appBar: _isSearching ? buildSearchBar() : buildAppBar(theme, vm),
-          body: buildBody(vm),
-          floatingActionButton: new FloatingActionButton(
-            child: new Icon(Icons.person_add),
-            onPressed: () => TMNavigate(context, ContactsCreatePage()),
+        return WillPopScope(
+          child: new Scaffold(
+            backgroundColor: theme.scaffoldColor,
+            appBar:
+                _isSearching ? buildSearchBar(theme) : buildAppBar(theme, vm),
+            body: buildBody(vm),
+            floatingActionButton: new FloatingActionButton(
+              child: new Icon(Icons.person_add),
+              onPressed: () => TMNavigate(context, ContactsCreatePage()),
+            ),
           ),
+          onWillPop: () async {
+            if (_isSearching) {
+              _handleSearchEnd();
+              return false;
+            }
+            return true;
+          },
         );
       },
     );
   }
 
-  // void onTapSearch() {
-  //   setState(() {
-  //     _isSearching = true;
-  //   });
-  // }
+  void onTapSearch() {
+    setState(() {
+      _isSearching = true;
+    });
+  }
 
   void _handleSearchEnd() {
     setState(() {
@@ -62,21 +72,29 @@ class _ContactsPageState extends State<ContactsPage> {
     });
   }
 
-  Widget buildSearchBar() {
+  Widget buildSearchBar(TMTheme theme) {
     return new AppBar(
+      centerTitle: false,
+      elevation: 1.0,
       leading: new IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.white),
+        icon: Icon(Icons.arrow_back, color: theme.appBarColor),
         onPressed: _handleSearchEnd,
         tooltip: 'Back',
       ),
-      title: new TextField(
-        controller: _searchQuery,
-        autofocus: true,
-        decoration: new InputDecoration(
-          hintText: 'Search...',
-          hintStyle: new TextStyle(color: Colors.white),
+      title: new Theme(
+        data: ThemeData(
+          hintColor: Colors.white,
+          primaryColor: kPrimaryColor,
         ),
-        style: new TextStyle(fontSize: 18.0),
+        child: TextField(
+          controller: _searchQuery,
+          autofocus: true,
+          decoration: new InputDecoration(
+            hintText: 'Search...',
+            hintStyle: ralewayBold(16.0),
+          ),
+          style: ralewayBold(16.0, theme.appBarColor),
+        ),
       ),
     );
   }
@@ -86,13 +104,13 @@ class _ContactsPageState extends State<ContactsPage> {
       context,
       title: "Clients",
       actions: <Widget>[
-        // new IconButton(
-        //   icon: new Icon(
-        //     Icons.search,
-        //     color: theme.appBarColor,
-        //   ),
-        //   onPressed: onTapSearch,
-        // )
+        new IconButton(
+          icon: new Icon(
+            Icons.search,
+            color: theme.appBarColor,
+          ),
+          onPressed: onTapSearch,
+        ),
         ContactsFilterButton(vm: vm),
       ],
     );
