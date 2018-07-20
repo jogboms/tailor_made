@@ -43,7 +43,6 @@ class JobsPageState extends State<JobsPage> {
           ),
           onWillPop: () async {
             if (_isSearching) {
-              print("======");
               _handleSearchEnd(vm)();
               return false;
             }
@@ -55,15 +54,14 @@ class JobsPageState extends State<JobsPage> {
   }
 
   void onTapSearch() {
-    print("+++++++");
     setState(() {
       _isSearching = true;
     });
   }
 
   Function() _handleSearchEnd(JobsViewModel vm) {
-    // vm.cancelSearch();
     return () {
+      vm.cancelSearch();
       setState(() {
         _isSearching = false;
       });
@@ -76,10 +74,7 @@ class JobsPageState extends State<JobsPage> {
       elevation: 1.0,
       leading: new IconButton(
         icon: Icon(Icons.arrow_back, color: theme.appBarColor),
-        onPressed: () {
-          vm.cancelSearch();
-          _handleSearchEnd(vm)();
-        },
+        onPressed: _handleSearchEnd(vm),
         tooltip: 'Back',
       ),
       title: new Theme(
@@ -97,15 +92,15 @@ class JobsPageState extends State<JobsPage> {
           onChanged: (term) => vm.search(term),
         ),
       ),
-      bottom: vm.isLoading
-          ? PreferredSize(
-              child: SizedBox(
-                height: 1.0,
-                child: LinearProgressIndicator(backgroundColor: Colors.white),
-              ),
-              preferredSize: Size.fromHeight(1.0),
-            )
-          : null,
+      bottom: PreferredSize(
+        child: SizedBox(
+          height: 1.0,
+          child: vm.isLoading
+              ? LinearProgressIndicator(backgroundColor: Colors.white)
+              : null,
+        ),
+        preferredSize: Size.fromHeight(1.0),
+      ),
     );
   }
 

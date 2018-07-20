@@ -61,6 +61,7 @@ JobsState reducer(ReduxState state, ActionType action) {
       return jobs.copyWith(
         status: JobsStatus.success,
         isSearching: false,
+        searchResults: null,
       );
 
     case ReduxActions.onSearchSuccessJobEvent:
