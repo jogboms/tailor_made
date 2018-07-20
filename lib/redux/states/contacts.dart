@@ -15,6 +15,8 @@ class ContactsState {
   final String message;
   final bool hasSortFn;
   final SortType sortFn;
+  final List<ContactModel> searchResults;
+  final bool isSearching;
 
   const ContactsState({
     @required this.contacts,
@@ -22,6 +24,8 @@ class ContactsState {
     @required this.message,
     @required this.hasSortFn,
     @required this.sortFn,
+    @required this.searchResults,
+    @required this.isSearching,
   });
 
   const ContactsState.initialState()
@@ -29,6 +33,8 @@ class ContactsState {
         status = ContactsStatus.loading,
         hasSortFn = false,
         sortFn = SortType.reset,
+        searchResults = null,
+        isSearching = false,
         message = '';
 
   ContactsState copyWith({
@@ -37,6 +43,8 @@ class ContactsState {
     String message,
     bool hasSortFn,
     SortType sortFn,
+    List<ContactModel> searchResults,
+    bool isSearching,
   }) {
     return new ContactsState(
       contacts: contacts ?? this.contacts,
@@ -44,6 +52,8 @@ class ContactsState {
       message: message ?? this.message,
       hasSortFn: hasSortFn ?? this.hasSortFn,
       sortFn: sortFn ?? this.sortFn,
+      searchResults: searchResults ?? this.searchResults,
+      isSearching: isSearching ?? this.isSearching,
     );
   }
 }

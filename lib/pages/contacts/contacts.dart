@@ -40,8 +40,9 @@ class _ContactsPageState extends State<ContactsPage> {
         return WillPopScope(
           child: new Scaffold(
             backgroundColor: theme.scaffoldColor,
-            appBar:
-                _isSearching ? buildSearchBar(theme) : buildAppBar(theme, vm),
+            appBar: _isSearching
+                ? buildSearchBar(theme, vm)
+                : buildAppBar(theme, vm),
             body: buildBody(vm),
             floatingActionButton: new FloatingActionButton(
               child: new Icon(Icons.person_add),
@@ -50,7 +51,8 @@ class _ContactsPageState extends State<ContactsPage> {
           ),
           onWillPop: () async {
             if (_isSearching) {
-              _handleSearchEnd();
+              print("======");
+              _handleSearchEnd(vm)();
               return false;
             }
             return true;
@@ -61,24 +63,31 @@ class _ContactsPageState extends State<ContactsPage> {
   }
 
   void onTapSearch() {
+    print("+++++++");
     setState(() {
       _isSearching = true;
     });
   }
 
-  void _handleSearchEnd() {
-    setState(() {
-      _isSearching = false;
-    });
+  Function() _handleSearchEnd(ContactsViewModel vm) {
+    // vm.cancelSearch();
+    return () {
+      setState(() {
+        _isSearching = false;
+      });
+    };
   }
 
-  Widget buildSearchBar(TMTheme theme) {
+  Widget buildSearchBar(TMTheme theme, ContactsViewModel vm) {
     return new AppBar(
       centerTitle: false,
       elevation: 1.0,
       leading: new IconButton(
         icon: Icon(Icons.arrow_back, color: theme.appBarColor),
-        onPressed: _handleSearchEnd,
+        onPressed: () {
+          vm.cancelSearch();
+          _handleSearchEnd(vm)();
+        },
         tooltip: 'Back',
       ),
       title: new Theme(
@@ -94,6 +103,7 @@ class _ContactsPageState extends State<ContactsPage> {
             hintStyle: ralewayBold(16.0),
           ),
           style: ralewayBold(16.0, theme.appBarColor),
+          onChanged: (term) => vm.search(term),
         ),
       ),
     );

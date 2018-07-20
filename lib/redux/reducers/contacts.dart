@@ -37,6 +37,24 @@ ContactsState reducer(ReduxState state, ActionType action) {
         status: ContactsStatus.success,
       );
 
+    case ReduxActions.onSearchContactEvent:
+      return contacts.copyWith(
+        status: ContactsStatus.loading,
+        isSearching: true,
+      );
+
+    case ReduxActions.onCancelSearchEvent:
+      return contacts.copyWith(
+        status: ContactsStatus.success,
+        isSearching: false,
+      );
+
+    case ReduxActions.onSearchSuccessEvent:
+      return contacts.copyWith(
+        searchResults: _sort(action.payload, contacts.sortFn),
+        status: ContactsStatus.success,
+      );
+
     case ReduxActions.sortContacts:
       final _contacts = contacts.contacts;
       return contacts.copyWith(

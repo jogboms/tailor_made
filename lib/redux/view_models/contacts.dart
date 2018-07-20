@@ -12,7 +12,9 @@ class ContactsViewModel extends ViewModel {
 
   ContactsState get _state => store.state.contacts;
 
-  List<ContactModel> get contacts => _state.contacts;
+  List<ContactModel> get contacts {
+    return isSearching ? _state.searchResults : _state.contacts;
+  }
 
   ContactModel get selected {
     if (contactID != null) {
@@ -33,5 +35,11 @@ class ContactsViewModel extends ViewModel {
 
   bool get hasSortFn => _state.hasSortFn;
 
+  bool get isSearching => _state.isSearching;
+
   void setSortFn(SortType type) => store.dispatch(SortContacts(payload: type));
+
+  void search(String term) => store.dispatch(SearchContactEvent(payload: term));
+
+  void cancelSearch() => store.dispatch(SearchCancelEvent());
 }
