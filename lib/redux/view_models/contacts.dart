@@ -1,5 +1,6 @@
 import 'package:redux/redux.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/redux/actions/contacts.dart';
 import 'package:tailor_made/redux/states/contacts.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/main.dart';
@@ -9,22 +10,28 @@ class ContactsViewModel extends ViewModel {
 
   ContactsViewModel(Store<ReduxState> store) : super(store);
 
-  List<ContactModel> get contacts {
-    return store.state.contacts.contacts;
-  }
+  ContactsState get _state => store.state.contacts;
+
+  List<ContactModel> get contacts => _state.contacts;
 
   ContactModel get selected {
     if (contactID != null) {
-      return store.state.contacts.contacts.firstWhere(
+      return _state.contacts.firstWhere(
         (_) => _.id == contactID,
       );
     }
     return null;
   }
 
-  bool get isLoading => store.state.contacts.status == ContactsStatus.loading;
+  bool get isLoading => _state.status == ContactsStatus.loading;
 
-  bool get isSuccess => store.state.contacts.status == ContactsStatus.success;
+  bool get isSuccess => _state.status == ContactsStatus.success;
 
-  bool get isFailure => store.state.contacts.status == ContactsStatus.failure;
+  bool get isFailure => _state.status == ContactsStatus.failure;
+
+  SortType get sortFn => _state.sortFn;
+
+  bool get hasSortFn => _state.hasSortFn;
+
+  void setSortFn(SortType type) => store.dispatch(SortContacts(payload: type));
 }

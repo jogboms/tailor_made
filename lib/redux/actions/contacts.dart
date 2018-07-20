@@ -1,6 +1,14 @@
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 
+enum SortType {
+  recent,
+  active,
+  pending,
+  name,
+  reset,
+}
+
 class InitContact extends ActionType<List<ContactModel>> {
   @override
   final String type = ReduxActions.initContacts;
@@ -20,6 +28,13 @@ class RemoveContact extends ActionType<ContactModel> {
   final String type = ReduxActions.removeContact;
 
   RemoveContact({ContactModel payload}) : super(payload: payload);
+}
+
+class SortContacts extends ActionType<SortType> {
+  @override
+  final String type = ReduxActions.sortContacts;
+
+  SortContacts({SortType payload}) : super(payload: payload);
 }
 
 class OnDataEvent extends ActionType<List<ContactModel>> {

@@ -45,6 +45,7 @@ class ReduxActions {
   static const String onDataEventContact = "__onDataEventContact__";
   static const String initDataEventContact = "__initDataEventContact__";
   static const String disposeDataEventContact = "__disposeDataEventContact__";
+  static const String sortContacts = "__sortContacts__";
 
   static const String initJobs = "__initJobs__";
   static const String addJob = "__addJob__";

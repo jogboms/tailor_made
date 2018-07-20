@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
+import 'package:tailor_made/pages/contacts/ui/contacts_filter_button.dart';
 import 'package:tailor_made/pages/contacts/ui/contacts_list_item.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
@@ -38,7 +39,7 @@ class _ContactsPageState extends State<ContactsPage> {
       builder: (BuildContext context, ContactsViewModel vm) {
         return new Scaffold(
           backgroundColor: theme.scaffoldColor,
-          appBar: _isSearching ? buildSearchBar() : buildAppBar(),
+          appBar: _isSearching ? buildSearchBar() : buildAppBar(theme, vm),
           body: buildBody(vm),
           floatingActionButton: new FloatingActionButton(
             child: new Icon(Icons.person_add),
@@ -80,7 +81,7 @@ class _ContactsPageState extends State<ContactsPage> {
     );
   }
 
-  AppBar buildAppBar() {
+  AppBar buildAppBar(TMTheme theme, ContactsViewModel vm) {
     return appBar(
       context,
       title: "Clients",
@@ -92,6 +93,7 @@ class _ContactsPageState extends State<ContactsPage> {
         //   ),
         //   onPressed: onTapSearch,
         // )
+        ContactsFilterButton(vm: vm),
       ],
     );
   }

@@ -13,7 +13,11 @@ class JobsState {
   final JobsStatus status;
   final String message;
 
-  const JobsState({this.jobs, this.status, this.message});
+  const JobsState({
+    @required this.jobs,
+    @required this.status,
+    @required this.message,
+  });
 
   const JobsState.initialState()
       : jobs = null,

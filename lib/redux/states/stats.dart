@@ -13,7 +13,11 @@ class StatsState {
   final StatsStatus status;
   final String message;
 
-  const StatsState({this.stats, this.status, this.message});
+  const StatsState({
+    @required this.stats,
+    @required this.status,
+    @required this.message,
+  });
 
   const StatsState.initialState()
       : stats = null,
