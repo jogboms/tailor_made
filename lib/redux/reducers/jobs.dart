@@ -51,6 +51,25 @@ JobsState reducer(ReduxState state, ActionType action) {
         status: JobsStatus.success,
       );
 
+    case ReduxActions.onStartSearchJobEvent:
+      return jobs.copyWith(
+        status: JobsStatus.loading,
+        isSearching: true,
+      );
+
+    case ReduxActions.onCancelSearchJobEvent:
+      return jobs.copyWith(
+        status: JobsStatus.success,
+        isSearching: false,
+        searchResults: [],
+      );
+
+    case ReduxActions.onSearchSuccessJobEvent:
+      return jobs.copyWith(
+        searchResults: _sort(action.payload, jobs.sortFn),
+        status: JobsStatus.success,
+      );
+
     case ReduxActions.sortJobs:
       final _jobs = jobs.jobs;
       return jobs.copyWith(

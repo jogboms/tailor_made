@@ -46,6 +46,34 @@ class SortJobs extends ActionType<SortType> {
   SortJobs({SortType payload}) : super(payload: payload);
 }
 
+class SearchSuccessJobEvent extends ActionType<List<JobModel>> {
+  @override
+  final String type = ReduxActions.onSearchSuccessJobEvent;
+
+  SearchSuccessJobEvent({List<JobModel> payload}) : super(payload: payload);
+}
+
+class CancelSearchJobEvent extends ActionType<String> {
+  @override
+  final String type = ReduxActions.onCancelSearchJobEvent;
+
+  CancelSearchJobEvent({String payload}) : super(payload: payload);
+}
+
+class StartSearchJobEvent extends ActionType<String> {
+  @override
+  final String type = ReduxActions.onStartSearchJobEvent;
+
+  StartSearchJobEvent({String payload}) : super(payload: payload);
+}
+
+class SearchJobEvent extends ActionType<String> {
+  @override
+  final String type = ReduxActions.onSearchJobEvent;
+
+  SearchJobEvent({String payload}) : super(payload: payload);
+}
+
 class OnDataEvent extends ActionType<List<JobModel>> {
   @override
   final String type = ReduxActions.onDataEventJob;

@@ -25,7 +25,6 @@ class ContactsPage extends StatefulWidget {
 }
 
 class _ContactsPageState extends State<ContactsPage> {
-  final TextEditingController _searchQuery = new TextEditingController();
   bool _isSearching = false;
 
   @override
@@ -51,7 +50,6 @@ class _ContactsPageState extends State<ContactsPage> {
           ),
           onWillPop: () async {
             if (_isSearching) {
-              print("======");
               _handleSearchEnd(vm)();
               return false;
             }
@@ -63,15 +61,14 @@ class _ContactsPageState extends State<ContactsPage> {
   }
 
   void onTapSearch() {
-    print("+++++++");
     setState(() {
       _isSearching = true;
     });
   }
 
   Function() _handleSearchEnd(ContactsViewModel vm) {
-    // vm.cancelSearch();
     return () {
+      vm.cancelSearch();
       setState(() {
         _isSearching = false;
       });
@@ -80,42 +77,37 @@ class _ContactsPageState extends State<ContactsPage> {
 
   Widget buildSearchBar(TMTheme theme, ContactsViewModel vm) {
     return new AppBar(
-      centerTitle: false,
-      elevation: 1.0,
-      leading: new IconButton(
-        icon: Icon(Icons.arrow_back, color: theme.appBarColor),
-        onPressed: () {
-          vm.cancelSearch();
-          _handleSearchEnd(vm)();
-        },
-        tooltip: 'Back',
-      ),
-      title: new Theme(
-        data: ThemeData(
-          hintColor: Colors.white,
-          primaryColor: kPrimaryColor,
+        centerTitle: false,
+        elevation: 1.0,
+        leading: new IconButton(
+          icon: Icon(Icons.arrow_back, color: theme.appBarColor),
+          onPressed: _handleSearchEnd(vm),
+          tooltip: 'Back',
         ),
-        child: TextField(
-          controller: _searchQuery,
-          autofocus: true,
-          decoration: new InputDecoration(
-            hintText: 'Search...',
-            hintStyle: ralewayBold(16.0),
+        title: new Theme(
+          data: ThemeData(
+            hintColor: Colors.white,
+            primaryColor: kPrimaryColor,
           ),
-          style: ralewayBold(16.0, theme.appBarColor),
-          onChanged: (term) => vm.search(term),
+          child: TextField(
+            autofocus: true,
+            decoration: new InputDecoration(
+              hintText: 'Search...',
+              hintStyle: ralewayBold(16.0),
+            ),
+            style: ralewayBold(16.0, theme.appBarColor),
+            onChanged: (term) => vm.search(term),
+          ),
         ),
-      ),
-      bottom: vm.isLoading
-          ? PreferredSize(
-              child: SizedBox(
-                height: 1.0,
-                child: LinearProgressIndicator(backgroundColor: Colors.white),
-              ),
-              preferredSize: Size.fromHeight(1.0),
-            )
-          : null,
-    );
+        bottom: PreferredSize(
+          child: SizedBox(
+            height: 1.0,
+            child: vm.isLoading
+                ? LinearProgressIndicator(backgroundColor: Colors.white)
+                : null,
+          ),
+          preferredSize: Size.fromHeight(1.0),
+        ));
   }
 
   AppBar buildAppBar(TMTheme theme, ContactsViewModel vm) {

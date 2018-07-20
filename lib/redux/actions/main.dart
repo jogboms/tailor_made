@@ -30,9 +30,6 @@ class ReduxActions {
   static const String initDataEvent = "__initDataEvent__";
   static const String disposeDataEvent = "__disposeDataEvent__";
 
-  static const String onStartSearchEvent = "__onStartSearchEvent__";
-  static const String onCancelSearchEvent = "__onCancelSearchEvent__";
-
   static const String initAccount = "__initAccount__";
   static const String onDataEventAccount = "__onDataEventAccount__";
   static const String onPremiumSignUp = "__onPremiumSignUp__";
@@ -50,8 +47,12 @@ class ReduxActions {
   static const String disposeDataEventContact = "__disposeDataEventContact__";
   static const String sortContacts = "__sortContacts__";
   static const String onSearchContactEvent = "__onSearchContactEvent__";
-  static const String onSearchSuccessEvent = "__onSearchSuccessEvent__";
-  static const String onSearchEmptyEvent = "__onSearchEmptyEvent__";
+  static const String onSearchSuccessContactEvent =
+      "__onSearchSuccessContactEvent__";
+  static const String onStartSearchContactEvent =
+      "__onStartSearchContactEvent__";
+  static const String onCancelSearchContactEvent =
+      "__onCancelSearchContactEvent__";
 
   static const String initJobs = "__initJobs__";
   static const String addJob = "__addJob__";
@@ -60,4 +61,8 @@ class ReduxActions {
   static const String initDataEventJob = "__initDataEventJob__";
   static const String disposeDataEventJob = "__disposeDataEventJob__";
   static const String sortJobs = "__sortJobs__";
+  static const String onSearchJobEvent = "__onSearchJobEvent__";
+  static const String onSearchSuccessJobEvent = "__onSearchSuccessJobEvent__";
+  static const String onStartSearchJobEvent = "__onStartSearchJobEvent__";
+  static const String onCancelSearchJobEvent = "__onCancelSearchJobEvent__";
 }

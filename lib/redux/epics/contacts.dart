@@ -12,7 +12,7 @@ import 'package:tailor_made/services/cloud_db.dart';
 Stream<dynamic> contacts(Stream<dynamic> actions, EpicStore<ReduxState> store) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<InitDataEvents>())
-      .switchMap<dynamic>((InitDataEvents action) => getContactList()
+      .switchMap<dynamic>((InitDataEvents action) => _getContactList()
           .map<dynamic>((contacts) => new OnDataEvent(payload: contacts)))
       .takeUntil<dynamic>(
           actions.where((dynamic action) => action is DisposeDataEvents));
@@ -27,16 +27,16 @@ Stream<dynamic> search(Stream<dynamic> actions, EpicStore<ReduxState> store) {
       .where((text) => text.length > 1)
       .debounce(const Duration(milliseconds: 750))
       .switchMap<dynamic>(
-        (text) => Observable<dynamic>.just(StartSearchEvent())
-            .concatWith([doSearch(store.state.contacts.contacts, text)]),
+        (text) => Observable<dynamic>.just(StartSearchContactEvent())
+            .concatWith([_doSearch(store.state.contacts.contacts, text)]),
       )
       .takeUntil<dynamic>(
           actions.where((dynamic action) => action is DisposeDataEvents));
 }
 
-Observable<dynamic> doSearch(List<ContactModel> contacts, String text) {
+Observable<dynamic> _doSearch(List<ContactModel> contacts, String text) {
   return Observable<dynamic>.just(
-    new SearchSuccessEvent(
+    new SearchSuccessContactEvent(
       payload: contacts
           .where(
             (contact) => contact.fullname
@@ -44,10 +44,10 @@ Observable<dynamic> doSearch(List<ContactModel> contacts, String text) {
           )
           .toList(),
     ),
-  ).delay(Duration(seconds: 3));
+  ).delay(Duration(seconds: 1));
 }
 
-Observable<List<ContactModel>> getContactList() {
+Observable<List<ContactModel>> _getContactList() {
   return new Observable(CloudDb.contacts.snapshots())
       .map((QuerySnapshot snapshot) {
     return snapshot.documents
