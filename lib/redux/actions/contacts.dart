@@ -51,11 +51,18 @@ class SearchSuccessEvent extends ActionType<List<ContactModel>> {
   SearchSuccessEvent({List<ContactModel> payload}) : super(payload: payload);
 }
 
-class SearchCancelEvent extends ActionType<String> {
+class CancelSearchEvent extends ActionType<String> {
   @override
   final String type = ReduxActions.onCancelSearchEvent;
 
-  SearchCancelEvent({String payload}) : super(payload: payload);
+  CancelSearchEvent({String payload}) : super(payload: payload);
+}
+
+class StartSearchEvent extends ActionType<String> {
+  @override
+  final String type = ReduxActions.onStartSearchEvent;
+
+  StartSearchEvent({String payload}) : super(payload: payload);
 }
 
 class OnDataEvent extends ActionType<List<ContactModel>> {

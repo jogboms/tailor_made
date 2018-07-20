@@ -29,7 +29,8 @@ class DisposeDataEvents extends ActionType<void> {
 class ReduxActions {
   static const String initDataEvent = "__initDataEvent__";
   static const String disposeDataEvent = "__disposeDataEvent__";
-  
+
+  static const String onStartSearchEvent = "__onStartSearchEvent__";
   static const String onCancelSearchEvent = "__onCancelSearchEvent__";
 
   static const String initAccount = "__initAccount__";
