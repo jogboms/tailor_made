@@ -49,7 +49,7 @@ class ContactAppBarState extends State<ContactAppBar> {
           ContactsEditPage(contact: widget.contact),
         );
       case Choice.SendText:
-        return sms(int.parse(widget.contact.phone));
+        return sms(widget.contact.phone);
       default:
         break;
     }
@@ -77,7 +77,7 @@ class ContactAppBarState extends State<ContactAppBar> {
             ),
             appBarIcon(
               icon: Icons.call,
-              onTap: () => call(int.parse(widget.contact.phone)),
+              onTap: () => call(widget.contact.phone),
             ),
             new PopupMenuButton<Choice>(
               icon: Icon(Icons.more_vert, color: Colors.white),

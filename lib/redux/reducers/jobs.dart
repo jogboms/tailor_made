@@ -30,7 +30,7 @@ List<JobModel> _sort(List<JobModel> _jobs, SortType sortType) {
       _jobs.sort((a, b) => b.price.compareTo(a.price));
       break;
     case SortType.recent:
-      _jobs.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+      _jobs.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       break;
     case SortType.reset:
     default:
@@ -78,6 +78,9 @@ JobsState reducer(ReduxState state, ActionType action) {
         sortFn: action.payload,
         status: JobsStatus.success,
       );
+
+    case ReduxActions.onLogoutEvent:
+      return JobsState.initialState();
 
     // case ReduxActions.addJob:
     //   List<JobModel> _jobs = new List.from(jobs.jobs)..add(action.payload);

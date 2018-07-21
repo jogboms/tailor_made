@@ -43,7 +43,7 @@ class ContactsFilterButton extends StatelessWidget {
                       SortType.recent,
                     ),
                     buildTextOption(
-                      "Reset Sort",
+                      "No Sort",
                       SortType.reset,
                     ),
                   ],

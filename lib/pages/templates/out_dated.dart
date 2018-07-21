@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
-class AccessDeniedPage extends StatelessWidget {
-  final VoidCallback onSendMail;
+class OutDatedPage extends StatelessWidget {
+  final VoidCallback onUpdate;
 
-  const AccessDeniedPage({
+  const OutDatedPage({
     Key key,
-    @required this.onSendMail,
+    @required this.onUpdate,
   }) : super(key: key);
 
   @override
@@ -23,7 +23,7 @@ class AccessDeniedPage extends StatelessWidget {
           ),
           SizedBox(height: 48.0),
           Text(
-            "ACCESS DENIED",
+            "OUTDATED NOTICE",
             style: textTheme.copyWith(
                 color: Colors.black87, fontWeight: FontWeight.w700),
             textAlign: TextAlign.center,
@@ -32,7 +32,7 @@ class AccessDeniedPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 64.0),
             child: Text(
-              "Do not be alarmed. \n We just need your attention. \n\n It is possible you have violated one or a couple of our usage policy?.\n If this is not the case, please contact an Administrator.",
+              "It appears you are running an outdated version of the app.\n If this is the case, please contact an Administrator.",
               style: textTheme.copyWith(color: Colors.grey.shade700),
               textAlign: TextAlign.center,
             ),
@@ -42,9 +42,9 @@ class AccessDeniedPage extends StatelessWidget {
             color: kAccentColor,
             shape: StadiumBorder(),
             colorBrightness: Brightness.dark,
-            onPressed: onSendMail,
-            icon: Icon(Icons.mail),
-            label: Text("Send a mail"),
+            onPressed: onUpdate,
+            icon: Icon(Icons.get_app),
+            label: Text("Get Update"),
           ),
         ],
       ),

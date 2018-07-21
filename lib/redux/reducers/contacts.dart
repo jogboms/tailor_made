@@ -16,7 +16,7 @@ List<ContactModel> _sort(List<ContactModel> _contacts, SortType sortType) {
       _contacts.sort((a, b) => b.pendingJobs.compareTo(a.pendingJobs));
       break;
     case SortType.recent:
-      _contacts.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+      _contacts.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       break;
     case SortType.reset:
     default:
@@ -64,6 +64,9 @@ ContactsState reducer(ReduxState state, ActionType action) {
         sortFn: action.payload,
         status: ContactsStatus.success,
       );
+
+    case ReduxActions.onLogoutEvent:
+      return ContactsState.initialState();
 
     // case ReduxActions.addContact:
     //   List<ContactModel> _contacts = new List.from(contacts.contacts)..add(action.payload);

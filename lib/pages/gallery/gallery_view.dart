@@ -71,21 +71,25 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                 icon: Icon(Icons.arrow_back),
               ),
               Expanded(child: SizedBox()),
-              IconButton(
-                icon: Icon(
-                  Icons.work,
-                  color: Colors.white,
-                ),
-                onPressed: () => TMNavigate(context, JobPage(job: job)),
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-                onPressed: () =>
-                    TMNavigate(context, ContactPage(contact: contact)),
-              ),
+              job != null
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.work,
+                        color: Colors.white,
+                      ),
+                      onPressed: () => TMNavigate(context, JobPage(job: job)),
+                    )
+                  : SizedBox(),
+              contact != null
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                      onPressed: () =>
+                          TMNavigate(context, ContactPage(contact: contact)),
+                    )
+                  : SizedBox(),
               IconButton(
                 icon: Icon(
                   Icons.share,

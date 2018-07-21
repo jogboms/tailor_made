@@ -60,6 +60,7 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
   Future<void> _getVersionName() async {
     try {
       final _projectVersion = await GetVersion.projectVersion;
+      Settings.setVersion(_projectVersion);
       if (!mounted) {
         return;
       }

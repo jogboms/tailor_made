@@ -10,9 +10,11 @@ Future<void> _launch(String url) async {
   }
 }
 
-void call(int phone) => _launch('tel:$phone');
+void open(String link) => _launch(link);
 
-void sms(int phone) => _launch('sms:$phone');
+void call(String phone) => _launch('tel:$phone');
+
+void sms(String phone) => _launch('sms:$phone');
 
 void email(String subject) =>
     _launch('mailto:jeremiahogbomo@gmail.com?subject=$subject');

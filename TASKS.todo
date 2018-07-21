@@ -7,9 +7,14 @@ PENDING:
   ☐ On account create, send personal email + email to user @high
   ☐ personalize measurements w/ account @critical
   ☐ indicator for premium accounts @today
-  ☐ reference upload issue @critical
 
 COMPLETED:
+  ✔ reference upload issue @critical @done(18-07-21 16:40)
+  ✔ stats image count on job update image @today @done(18-07-21 15:49)
+  ✔ check for outdated version + template @today @done(18-07-21 15:40)
+  ✔ reset local store on logout @critical @done(18-07-21 14:18)
+  ✔ on dismiss contact creation, bad state error @critical @done(18-07-21 10:18)
+  ✔ phone number call + sms issue @critical @done(18-07-21 09:59)
   ✔ fix homepage height issue @today @done(18-07-20 20:39)
   ✔ sort + search jobs & contacts @today @done(18-07-20 20:00)
   ✔ friendly error on log in @today @done(18-07-20 19:34)

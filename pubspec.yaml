@@ -1,6 +1,6 @@
 name: tailor_made
 description: Tailor-Made with love.
-version: 1.0.2
+version: 1.0.3
 
 dependencies:
   flutter:
@@ -25,6 +25,7 @@ dependencies:
   google_sign_in: ^3.0.4
   get_version: ^0.0.5
   contact_picker: ^0.0.2
+  version: ^1.0.0
 
 dev_dependencies:
   flutter_test:

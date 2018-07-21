@@ -113,7 +113,7 @@ class _ContactsPageState extends State<ContactsPage> {
   AppBar buildAppBar(TMTheme theme, ContactsViewModel vm) {
     return appBar(
       context,
-      title: "Clients",
+      title: "Contacts",
       actions: <Widget>[
         new IconButton(
           icon: new Icon(

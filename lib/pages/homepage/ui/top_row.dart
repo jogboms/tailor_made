@@ -34,7 +34,7 @@ class TopRowWidget extends StatelessWidget {
               child: TMGridTile(
                 icon: Icons.supervisor_account,
                 color: Colors.orangeAccent,
-                title: "Clients",
+                title: "Contacts",
                 subTitle: "${stats.contacts.total} Contacts",
                 onPressed: () => TMNavigate(context, ContactsPage()),
               ),

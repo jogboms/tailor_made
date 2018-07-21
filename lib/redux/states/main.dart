@@ -19,6 +19,12 @@ class ReduxState {
     @required this.account,
   });
 
+  const ReduxState.initialState()
+      : contacts = const ContactsState.initialState(),
+        jobs = const JobsState.initialState(),
+        account = const AccountState.initialState(),
+        stats = const StatsState.initialState();
+
   ReduxState copyWith({
     ContactsState contacts,
     JobsState jobs,
