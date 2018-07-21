@@ -9,7 +9,7 @@ List<JobModel> _sort(List<JobModel> _jobs, SortType sortType) {
   switch (sortType) {
     case SortType.active:
       _jobs.sort(
-          (a, b) => (a.isComplete == b.isComplete) ? 0 : a.isComplete ? -1 : 1);
+          (a, b) => (a.isComplete == b.isComplete) ? 0 : a.isComplete ? 1 : -1);
       break;
     case SortType.name:
       _jobs.sort((a, b) => a.name.compareTo(b.name));
