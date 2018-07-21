@@ -11,9 +11,9 @@ PENDING:
   ☐ stats image count on job update image @today
   ☐ check for outdated version + template @today
   ☐ reset local store on logout @critical
-  ☐ on dismiss contact creation, bad state error @critical
 
 COMPLETED:
+  ✔ on dismiss contact creation, bad state error @critical @done(18-07-21 10:18)
   ✔ phone number call + sms issue @critical @done(18-07-21 09:59)
   ✔ fix homepage height issue @today @done(18-07-20 20:39)
   ✔ sort + search jobs & contacts @today @done(18-07-20 20:00)

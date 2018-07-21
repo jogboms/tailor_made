@@ -97,7 +97,10 @@ class ContactsListItem extends StatelessWidget {
           () => TMNavigate(context, ContactPage(contact: contact)),
       leading: avatar(),
       title: title,
-      subtitle: Text(pending >= 1 ? "$pending pending" : "No pending wears",
+      subtitle: Text(
+          pending >= 1
+              ? "$pending pending"
+              : "${contact.totalJobs > 0 ? contact.totalJobs : 'none'} completed",
           style: TextStyle(fontSize: 14.0, color: kTextBaseColor)),
       trailing: showActions ? icons : null,
     );
