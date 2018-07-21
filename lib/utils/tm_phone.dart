@@ -10,6 +10,8 @@ Future<void> _launch(String url) async {
   }
 }
 
+void open(String link) => _launch(link);
+
 void call(String phone) => _launch('tel:$phone');
 
 void sms(String phone) => _launch('sms:$phone');

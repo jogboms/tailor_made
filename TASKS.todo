@@ -9,9 +9,9 @@ PENDING:
   ☐ indicator for premium accounts @today
   ☐ reference upload issue @critical
   ☐ stats image count on job update image @today
-  ☐ check for outdated version + template @today
 
 COMPLETED:
+  ✔ check for outdated version + template @today @done(18-07-21 15:40)
   ✔ reset local store on logout @critical @done(18-07-21 14:18)
   ✔ on dismiss contact creation, bad state error @critical @done(18-07-21 10:18)
   ✔ phone number call + sms issue @critical @done(18-07-21 09:59)

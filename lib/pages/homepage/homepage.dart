@@ -9,10 +9,12 @@ import 'package:tailor_made/pages/homepage/ui/top_button_bar.dart';
 import 'package:tailor_made/pages/homepage/ui/top_row.dart';
 import 'package:tailor_made/pages/splash/splash.dart';
 import 'package:tailor_made/pages/templates/access_denied.dart';
+import 'package:tailor_made/pages/templates/out_dated.dart';
 import 'package:tailor_made/pages/templates/rate_limit.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/services/auth.dart';
+import 'package:tailor_made/services/settings.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_images.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -55,6 +57,15 @@ class HomePage extends StatelessWidget {
               if (vm.isLoading) {
                 return Center(
                   child: loadingSpinner(),
+                );
+              }
+
+              if (Settings.isOutdated) {
+                return OutDatedPage(
+                  onUpdate: () {
+                    open(
+                        'https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade');
+                  },
                 );
               }
 
