@@ -1,77 +1,25 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:tailor_made/models/contact.dart';
-import 'package:tailor_made/pages/accounts/measures.dart';
-import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/pages/homepage/home_view_model.dart';
 import 'package:tailor_made/pages/homepage/ui/bottom_row.dart';
+import 'package:tailor_made/pages/homepage/ui/create_button.dart';
 import 'package:tailor_made/pages/homepage/ui/header.dart';
-import 'package:tailor_made/pages/homepage/ui/helpers.dart';
-import 'package:tailor_made/pages/homepage/ui/notice_dialog.dart';
 import 'package:tailor_made/pages/homepage/ui/stats.dart';
-import 'package:tailor_made/pages/homepage/ui/store_name_dialog.dart';
+import 'package:tailor_made/pages/homepage/ui/top_button_bar.dart';
 import 'package:tailor_made/pages/homepage/ui/top_row.dart';
-import 'package:tailor_made/pages/jobs/jobs_create.dart';
-import 'package:tailor_made/pages/splash/splash.dart';
 import 'package:tailor_made/pages/templates/access_denied.dart';
 import 'package:tailor_made/pages/templates/rate_limit.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
-import 'package:tailor_made/services/auth.dart';
-import 'package:tailor_made/ui/full_button.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
-import 'package:tailor_made/utils/tm_child_dialog.dart';
-import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_images.dart';
-import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_phone.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 const double _kBottomBarHeight = 46.0;
-const double _kBottomHeight = 280.0;
+const double _kBottomGridsHeight = 280.0;
 
-enum AccountOptions {
-  logout,
-  storename,
-  measurement,
-}
-
-enum CreateOptions {
-  clients,
-  jobs,
-}
-
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => new _HomePageState();
-}
-
-class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
-  AnimationController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = new AnimationController(
-        vsync: this, duration: Duration(milliseconds: 1200))
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          controller.reverse();
-        } else if (status == AnimationStatus.dismissed) {
-          controller.forward();
-        }
-      })
-      ..forward();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
@@ -124,57 +72,7 @@ class _HomePageState extends State<HomePage>
                 );
               }
 
-              return LayoutBuilder(
-                builder: (context, constraint) {
-                  final bool isLandscape =
-                      constraint.maxWidth > constraint.maxHeight;
-
-                  // Somehow, i mathematically came up w/ these numbers & they made sense :)
-                  final _height = isLandscape
-                      ? (constraint.maxHeight / 1.0) - _kBottomBarHeight
-                      : constraint.maxHeight -
-                          _kBottomHeight -
-                          (_kBottomBarHeight * 1.45);
-
-                  return Stack(
-                    fit: StackFit.expand,
-                    children: <Widget>[
-                      new SafeArea(
-                        top: false,
-                        child: SingleChildScrollView(
-                          child: new Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              ConstrainedBox(
-                                constraints: BoxConstraints.expand(
-                                  height: _height,
-                                ),
-                                child: HeaderWidget(account: vm.account),
-                              ),
-                              StatsWidget(
-                                stats: vm.stats,
-                                height: 40.0,
-                              ),
-                              TopRowWidget(
-                                stats: vm.stats,
-                                height: 120.0,
-                              ),
-                              BottomRowWidget(
-                                stats: vm.stats,
-                                height: 120.0,
-                              ),
-                              SizedBox(height: _kBottomBarHeight),
-                            ],
-                          ),
-                        ),
-                      ),
-                      _buildCreateBtn(vm.contacts),
-                      _buildTopBtnBar(theme, vm),
-                    ],
-                  );
-                },
-              );
+              return _buildBody(vm);
             },
           ),
         ],
@@ -182,229 +80,55 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget _buildTopBtnBar(TMTheme theme, HomeViewModel vm) {
-    final account = vm.account;
-    return Align(
-      alignment: Alignment.topRight,
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SizedBox.fromSize(
-            size: Size.square(48.0),
-            child: Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(1.5),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                    color: kPrimaryColor.withOpacity(.5), width: 1.5),
-              ),
-              child: GestureDetector(
-                onTap: onTapAccount(vm),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    account?.photoURL != null
-                        ? CircleAvatar(
-                            backgroundColor: Colors.white,
-                            backgroundImage:
-                                CachedNetworkImageProvider(account.photoURL),
-                          )
-                        : new Icon(
-                            Icons.person,
-                            color: theme.appBarColor,
-                          ),
-                    new Align(
-                      alignment: Alignment(1.25, 1.25),
-                      child: account?.hasReadNotice ?? false
-                          ? null
-                          : new Container(
-                              width: 15.5,
-                              height: 15.5,
-                              decoration: new BoxDecoration(
-                                color: kAccentColor,
-                                border: Border.all(
-                                  color: Colors.white,
-                                  style: BorderStyle.solid,
-                                  width: 2.5,
-                                ),
-                                shape: BoxShape.circle,
-                              ),
-                            ),
+  LayoutBuilder _buildBody(HomeViewModel vm) {
+    return LayoutBuilder(
+      builder: (context, constraint) {
+        final bool isLandscape = constraint.maxWidth > constraint.maxHeight;
+
+        // Somehow, i mathematically came up w/ these numbers & they made sense :)
+        final _height = constraint.maxHeight -
+            (isLandscape
+                ? _kBottomBarHeight
+                : _kBottomGridsHeight + (_kBottomBarHeight * 1.45));
+
+        return Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            new SafeArea(
+              top: false,
+              child: SingleChildScrollView(
+                child: new Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    ConstrainedBox(
+                      constraints: BoxConstraints.expand(
+                        height: _height,
+                      ),
+                      child: HeaderWidget(account: vm.account),
                     ),
+                    StatsWidget(
+                      stats: vm.stats,
+                      height: 40.0,
+                    ),
+                    TopRowWidget(
+                      stats: vm.stats,
+                      height: 120.0,
+                    ),
+                    BottomRowWidget(
+                      stats: vm.stats,
+                      height: 120.0,
+                    ),
+                    SizedBox(height: _kBottomBarHeight),
                   ],
                 ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCreateBtn(List<ContactModel> contacts) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: SafeArea(
-        child: SizedBox(
-          height: _kBottomBarHeight,
-          child: FullButton(
-            onPressed: onTapCreate(contacts),
-            shape: RoundedRectangleBorder(),
-            child: ScaleTransition(
-              scale: new Tween(begin: 0.95, end: 1.025).animate(controller),
-              alignment: FractionalOffset.center,
-              child: new Text(
-                "TAP TO CREATE",
-                style: ralewayBold(14.0, Colors.white)
-                    .copyWith(letterSpacing: 1.25),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void Function() onTapAccount(HomeViewModel vm) {
-    final account = vm.account;
-    return () async {
-      if (!(account?.hasReadNotice ?? false)) {
-        await showChildDialog<dynamic>(
-          context: context,
-          child: NoticeDialog(
-            account: account,
-          ),
+            CreateButton(contacts: vm.contacts, height: _kBottomBarHeight),
+            TopButtonBar(vm: vm),
+          ],
         );
-        vm.onReadNotice();
-        return;
-      }
-
-      final AccountOptions result = await showDialog<AccountOptions>(
-        context: context,
-        builder: (BuildContext context) {
-          return new SimpleDialog(
-            title: const Text('Select action',
-                style: const TextStyle(fontSize: 14.0)),
-            children: <Widget>[
-              new SimpleDialogOption(
-                onPressed: () =>
-                    Navigator.pop(context, AccountOptions.storename),
-                child: TMListTile(
-                  color: kAccentColor,
-                  icon: Icons.store,
-                  title: "Store",
-                ),
-              ),
-              new SimpleDialogOption(
-                onPressed: () =>
-                    Navigator.pop(context, AccountOptions.measurement),
-                child: TMListTile(
-                  color: Colors.blue.shade400,
-                  icon: Icons.content_cut,
-                  title: "Measurements",
-                ),
-              ),
-              new SimpleDialogOption(
-                onPressed: () => Navigator.pop(context, AccountOptions.logout),
-                child: TMListTile(
-                  color: Colors.grey.shade400,
-                  icon: Icons.power_settings_new,
-                  title: "Logout",
-                ),
-              ),
-            ],
-          );
-        },
-      );
-      switch (result) {
-        case AccountOptions.storename:
-          final _storeName = await Navigator.push<String>(
-            context,
-            TMNavigate.fadeIn<String>(
-              Scaffold(
-                appBar: AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0.0,
-                  automaticallyImplyLeading: false,
-                  leading: IconButton(
-                    icon: Icon(Icons.close, color: Colors.white),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ),
-                backgroundColor: Colors.black38,
-                body: StoreNameDialog(account: account),
-              ),
-            ),
-          );
-
-          if (_storeName != null && _storeName != account.storeName) {
-            await account.reference.updateData(<String, String>{
-              "storeName": _storeName,
-            });
-          }
-
-          break;
-
-        case AccountOptions.measurement:
-          TMNavigate(context, AccountMeasuresPage(account: account));
-          break;
-
-        case AccountOptions.logout:
-          final response = await confirmDialog(
-              context: context, title: Text("You are about to logout."));
-
-          if (response == true) {
-            await Auth.signOutWithGoogle();
-            Navigator.pushReplacement<dynamic, dynamic>(
-              context,
-              TMNavigate.fadeIn<String>(
-                new SplashPage(isColdStart: false),
-              ),
-            );
-          }
-          break;
-      }
-    };
-  }
-
-  void Function() onTapCreate(List<ContactModel> contacts) {
-    return () async {
-      final CreateOptions result = await showDialog<CreateOptions>(
-        context: context,
-        builder: (BuildContext context) {
-          return new SimpleDialog(
-            title: const Text('Select action',
-                style: const TextStyle(fontSize: 14.0)),
-            children: <Widget>[
-              new SimpleDialogOption(
-                onPressed: () => Navigator.pop(context, CreateOptions.clients),
-                child: TMListTile(
-                  color: Colors.orangeAccent,
-                  icon: Icons.supervisor_account,
-                  title: "Clients",
-                ),
-              ),
-              new SimpleDialogOption(
-                onPressed: () => Navigator.pop(context, CreateOptions.jobs),
-                child: TMListTile(
-                  color: Colors.greenAccent.shade400,
-                  icon: Icons.attach_money,
-                  title: "Job",
-                ),
-              ),
-            ],
-          );
-        },
-      );
-      switch (result) {
-        case CreateOptions.clients:
-          TMNavigate(context, ContactsCreatePage());
-          break;
-        case CreateOptions.jobs:
-          TMNavigate(context, JobsCreatePage(contacts: contacts));
-          break;
-      }
-    };
+      },
+    );
   }
 }
