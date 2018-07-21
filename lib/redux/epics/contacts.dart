@@ -13,9 +13,9 @@ Stream<dynamic> contacts(Stream<dynamic> actions, EpicStore<ReduxState> store) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<InitDataEvents>())
       .switchMap<dynamic>((InitDataEvents action) => _getContactList()
-          .map<dynamic>((contacts) => new OnDataEvent(payload: contacts)))
-      .takeUntil<dynamic>(
-          actions.where((dynamic action) => action is DisposeDataEvents));
+          .map<dynamic>((contacts) => new OnDataEvent(payload: contacts))
+          .takeUntil<dynamic>(
+              actions.where((dynamic action) => action is DisposeDataEvents)));
 }
 
 Stream<dynamic> search(Stream<dynamic> actions, EpicStore<ReduxState> store) {

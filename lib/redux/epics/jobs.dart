@@ -12,10 +12,10 @@ import 'package:tailor_made/services/cloud_db.dart';
 Stream<dynamic> jobs(Stream<dynamic> actions, EpicStore<ReduxState> store) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<InitDataEvents>())
-      .switchMap<dynamic>((InitDataEvents action) =>
-          _getJobList().map<dynamic>((jobs) => new OnDataEvent(payload: jobs)))
-      .takeUntil<dynamic>(
-          actions.where((dynamic action) => action is DisposeDataEvents));
+      .switchMap<dynamic>((InitDataEvents action) => _getJobList()
+          .map<dynamic>((jobs) => new OnDataEvent(payload: jobs))
+          .takeUntil<dynamic>(
+              actions.where((dynamic action) => action is DisposeDataEvents)));
 }
 
 Stream<dynamic> search(Stream<dynamic> actions, EpicStore<ReduxState> store) {

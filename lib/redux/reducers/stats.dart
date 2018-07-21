@@ -13,6 +13,9 @@ StatsState reducer(ReduxState state, ActionType action) {
         status: StatsStatus.success,
       );
 
+    case ReduxActions.onLogoutEvent:
+      return StatsState.initialState();
+
     default:
       return stats;
   }
