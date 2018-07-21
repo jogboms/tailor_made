@@ -8,8 +8,13 @@ PENDING:
   ☐ personalize measurements w/ account @critical
   ☐ indicator for premium accounts @today
   ☐ reference upload issue @critical
+  ☐ stats image count on job update image @today
+  ☐ check for outdated version + template @today
+  ☐ reset local store on logout @critical
+  ☐ on dismiss contact creation, bad state error @critical
 
 COMPLETED:
+  ✔ phone number call + sms issue @critical @done(18-07-21 09:59)
   ✔ fix homepage height issue @today @done(18-07-20 20:39)
   ✔ sort + search jobs & contacts @today @done(18-07-20 20:00)
   ✔ friendly error on log in @today @done(18-07-20 19:34)
