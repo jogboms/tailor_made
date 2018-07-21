@@ -68,11 +68,16 @@ class PaymentGridsState extends State<PaymentGrids> {
           children: <Widget>[
             const SizedBox(width: 16.0),
             Expanded(
-                child: Text("PAYMENTS",
-                    style: ralewayRegular(12.0, Colors.black87))),
+              child: Text(
+                "PAYMENTS",
+                style: ralewayRegular(12.0, Colors.black87),
+              ),
+            ),
             CupertinoButton(
-              child:
-                  Text("SHOW ALL", style: ralewayRegular(11.0, kTextBaseColor)),
+              child: Text(
+                "SHOW ALL",
+                style: ralewayRegular(11.0, kTextBaseColor),
+              ),
               onPressed: () => TMNavigate(
                   context, PaymentsPage(payments: widget.job.payments),
                   fullscreenDialog: true),

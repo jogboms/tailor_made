@@ -25,7 +25,7 @@ class Settings {
 
   static bool get isOutdated {
     final currentVersion = Version.parse(getVersion());
-    final latestVersion = Version.parse(getData().versionName);
+    final latestVersion = Version.parse(getData()?.versionName ?? "1.0.0");
 
     return latestVersion > currentVersion;
   }
