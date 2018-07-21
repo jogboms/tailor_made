@@ -102,23 +102,12 @@ class HomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     ConstrainedBox(
-                      constraints: BoxConstraints.expand(
-                        height: _height,
-                      ),
+                      constraints: BoxConstraints.expand(height: _height),
                       child: HeaderWidget(account: vm.account),
                     ),
-                    StatsWidget(
-                      stats: vm.stats,
-                      height: 40.0,
-                    ),
-                    TopRowWidget(
-                      stats: vm.stats,
-                      height: 120.0,
-                    ),
-                    BottomRowWidget(
-                      stats: vm.stats,
-                      height: 120.0,
-                    ),
+                    StatsWidget(stats: vm.stats, height: 40.0),
+                    TopRowWidget(stats: vm.stats, height: 120.0),
+                    BottomRowWidget(stats: vm.stats, height: 120.0),
                     SizedBox(height: _kBottomBarHeight),
                   ],
                 ),
