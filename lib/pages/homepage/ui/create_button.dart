@@ -8,7 +8,7 @@ import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 enum CreateOptions {
-  clients,
+  contacts,
   jobs,
 }
 
@@ -87,11 +87,11 @@ class CreateButtonState extends State<CreateButton>
                 style: const TextStyle(fontSize: 14.0)),
             children: <Widget>[
               new SimpleDialogOption(
-                onPressed: () => Navigator.pop(context, CreateOptions.clients),
+                onPressed: () => Navigator.pop(context, CreateOptions.contacts),
                 child: TMListTile(
                   color: Colors.orangeAccent,
                   icon: Icons.supervisor_account,
-                  title: "Clients",
+                  title: "Contacts",
                 ),
               ),
               new SimpleDialogOption(
@@ -107,7 +107,7 @@ class CreateButtonState extends State<CreateButton>
         },
       );
       switch (result) {
-        case CreateOptions.clients:
+        case CreateOptions.contacts:
           TMNavigate(context, ContactsCreatePage());
           break;
         case CreateOptions.jobs:

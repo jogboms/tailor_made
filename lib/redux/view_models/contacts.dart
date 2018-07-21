@@ -18,9 +18,13 @@ class ContactsViewModel extends ViewModel {
 
   ContactModel get selected {
     if (contactID != null) {
-      return _state.contacts.firstWhere(
-        (_) => _.id == contactID,
-      );
+      try {
+        return _state.contacts.firstWhere(
+          (_) => _.id == contactID,
+        );
+      } catch (e) {
+        //
+      }
     }
     return null;
   }
