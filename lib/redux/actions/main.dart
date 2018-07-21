@@ -16,6 +16,11 @@ class VoidAction extends ActionType<void> {
   final String type = "__voidAction__";
 }
 
+class OnLogoutEvent extends ActionType<void> {
+  @override
+  final String type = ReduxActions.onLogoutEvent;
+}
+
 class InitDataEvents extends ActionType<void> {
   @override
   final String type = ReduxActions.initDataEvent;
@@ -29,6 +34,7 @@ class DisposeDataEvents extends ActionType<void> {
 class ReduxActions {
   static const String initDataEvent = "__initDataEvent__";
   static const String disposeDataEvent = "__disposeDataEvent__";
+  static const String onLogoutEvent = "__onLogoutEvent__";
 
   static const String initAccount = "__initAccount__";
   static const String onDataEventAccount = "__onDataEventAccount__";

@@ -13,9 +13,9 @@ Stream<dynamic> contacts(Stream<dynamic> actions, EpicStore<ReduxState> store) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<InitDataEvents>())
       .switchMap<dynamic>((InitDataEvents action) => _getContactList()
-          .map<dynamic>((contacts) => new OnDataEvent(payload: contacts)))
-      .takeUntil<dynamic>(
-          actions.where((dynamic action) => action is DisposeDataEvents));
+          .map<dynamic>((contacts) => new OnDataEvent(payload: contacts))
+          .takeUntil<dynamic>(
+              actions.where((dynamic action) => action is DisposeDataEvents)));
 }
 
 Stream<dynamic> search(Stream<dynamic> actions, EpicStore<ReduxState> store) {
@@ -27,24 +27,31 @@ Stream<dynamic> search(Stream<dynamic> actions, EpicStore<ReduxState> store) {
       .where((text) => text.length > 1)
       .debounce(const Duration(milliseconds: 750))
       .switchMap<dynamic>(
-        (text) => Observable<dynamic>.just(StartSearchContactEvent())
-            .concatWith([_doSearch(store.state.contacts.contacts, text)]),
-      )
-      .takeUntil<dynamic>(
-          actions.where((dynamic action) => action is DisposeDataEvents));
+        (text) => Observable.concat([
+              Observable.just(StartSearchContactEvent()),
+              new Observable.timer(
+                _doSearch(
+                  store.state.contacts.contacts,
+                  text,
+                ),
+                new Duration(seconds: 1),
+              )
+            ]).takeUntil<dynamic>(
+              actions.where(
+                  (dynamic action) => action is CancelSearchContactEvent),
+            ),
+      );
 }
 
-Observable<dynamic> _doSearch(List<ContactModel> contacts, String text) {
-  return Observable<dynamic>.just(
-    new SearchSuccessContactEvent(
-      payload: contacts
-          .where(
-            (contact) => contact.fullname
-                .contains(new RegExp(r'' + text + '', caseSensitive: false)),
-          )
-          .toList(),
-    ),
-  ).delay(Duration(seconds: 1));
+SearchSuccessContactEvent _doSearch(List<ContactModel> contacts, String text) {
+  return SearchSuccessContactEvent(
+    payload: contacts
+        .where(
+          (contact) => contact.fullname
+              .contains(new RegExp(r'' + text + '', caseSensitive: false)),
+        )
+        .toList(),
+  );
 }
 
 Observable<List<ContactModel>> _getContactList() {

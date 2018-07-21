@@ -14,41 +14,40 @@ Stream<dynamic> account(Stream<dynamic> actions, EpicStore<ReduxState> store) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<InitDataEvents>())
       .switchMap<dynamic>((InitDataEvents action) => _getAccount()
-          .map<dynamic>((account) => new OnDataEvent(payload: account)))
-      .takeUntil<dynamic>(
-          actions.where((dynamic action) => action is DisposeDataEvents));
+          .map<dynamic>((account) => new OnDataEvent(payload: account))
+          .takeUntil<dynamic>(
+              actions.where((dynamic action) => action is DisposeDataEvents)));
 }
 
 Stream<dynamic> onPremiumSignUp(
     Stream<dynamic> actions, EpicStore<ReduxState> store) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<OnPremiumSignUp>())
-      .switchMap(
-        (OnPremiumSignUp action) => Observable.fromFuture(
-              _signUp(action.payload).catchError(
-                (dynamic e) => print(e),
-              ),
-            ).map((account) => new VoidAction()),
-      )
-      .takeUntil<dynamic>(
-        actions.where((dynamic action) => action is DisposeDataEvents),
-      );
+      .switchMap<dynamic>((OnPremiumSignUp action) =>
+          Observable.fromFuture(_signUp(action.payload).catchError(
+            (dynamic e) => print(e),
+          ))
+              .map((account) => new VoidAction())
+              //
+              .takeUntil<dynamic>(
+                actions.where((dynamic action) => action is DisposeDataEvents),
+              ));
 }
 
 Stream<dynamic> onReadNotice(
     Stream<dynamic> actions, EpicStore<ReduxState> store) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<OnReadNotice>())
-      .switchMap(
-        (OnReadNotice action) => Observable.fromFuture(
-              _readNotice(action.payload).catchError(
-                (dynamic e) => print(e),
-              ),
-            ).map((account) => new VoidAction()),
-      )
-      .takeUntil<dynamic>(
-        actions.where((dynamic action) => action is DisposeDataEvents),
-      );
+      .switchMap<dynamic>((OnReadNotice action) => Observable.fromFuture(
+            _readNotice(action.payload).catchError(
+              (dynamic e) => print(e),
+            ),
+          )
+              .map((account) => new VoidAction())
+              //
+              .takeUntil<dynamic>(
+                actions.where((dynamic action) => action is DisposeDataEvents),
+              ));
 }
 
 Observable<AccountModel> _getAccount() {

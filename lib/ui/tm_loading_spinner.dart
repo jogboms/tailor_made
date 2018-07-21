@@ -6,7 +6,6 @@ Widget loadingSpinner({Color color}) {
   return Center(
     child: SpinKitFadingFour(
       color: color ?? kAccentColor,
-      // color: color ?? primarySwatch,
       size: 30.0,
     ),
   );

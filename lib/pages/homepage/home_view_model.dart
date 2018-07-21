@@ -2,6 +2,7 @@ import 'package:redux/redux.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/redux/actions/account.dart';
+import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/account.dart';
 import 'package:tailor_made/redux/states/contacts.dart';
 import 'package:tailor_made/redux/states/main.dart';
@@ -35,4 +36,6 @@ class HomeViewModel extends StatsViewModel {
   void onReadNotice() => store.dispatch(OnReadNotice(payload: account));
 
   void onSkipedPremium() => store.dispatch(OnSkipedPremium());
+
+  void logout() => store.dispatch(OnLogoutEvent());
 }
