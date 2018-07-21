@@ -10,9 +10,9 @@ PENDING:
   ☐ reference upload issue @critical
   ☐ stats image count on job update image @today
   ☐ check for outdated version + template @today
-  ☐ reset local store on logout @critical
 
 COMPLETED:
+  ✔ reset local store on logout @critical @done(18-07-21 14:18)
   ✔ on dismiss contact creation, bad state error @critical @done(18-07-21 10:18)
   ✔ phone number call + sms issue @critical @done(18-07-21 09:59)
   ✔ fix homepage height issue @today @done(18-07-20 20:39)
