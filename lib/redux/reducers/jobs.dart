@@ -30,7 +30,7 @@ List<JobModel> _sort(List<JobModel> _jobs, SortType sortType) {
       _jobs.sort((a, b) => b.price.compareTo(a.price));
       break;
     case SortType.recent:
-      _jobs.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+      _jobs.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       break;
     case SortType.reset:
     default:

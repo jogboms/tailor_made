@@ -31,8 +31,8 @@ class ContactsState {
   const ContactsState.initialState()
       : contacts = null,
         status = ContactsStatus.loading,
-        hasSortFn = false,
-        sortFn = SortType.reset,
+        hasSortFn = true,
+        sortFn = SortType.name,
         searchResults = null,
         isSearching = false,
         message = '';

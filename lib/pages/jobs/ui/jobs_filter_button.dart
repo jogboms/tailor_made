@@ -51,7 +51,7 @@ class JobsFilterButton extends StatelessWidget {
                       SortType.recent,
                     ),
                     buildTextOption(
-                      "Reset Sort",
+                      "No Sort",
                       SortType.reset,
                     ),
                   ],
