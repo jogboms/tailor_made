@@ -27,24 +27,30 @@ Stream<dynamic> search(Stream<dynamic> actions, EpicStore<ReduxState> store) {
       .where((text) => text.length > 1)
       .debounce(const Duration(milliseconds: 750))
       .switchMap<dynamic>(
-        (text) => Observable<dynamic>.just(StartSearchJobEvent())
-            .concatWith([_doSearch(store.state.jobs.jobs, text)]),
-      )
-      .takeUntil<dynamic>(
-          actions.where((dynamic action) => action is DisposeDataEvents));
+        (text) => Observable.concat([
+              Observable.just(StartSearchJobEvent()),
+              new Observable.timer(
+                _doSearch(
+                  store.state.jobs.jobs,
+                  text,
+                ),
+                new Duration(seconds: 1),
+              )
+            ]).takeUntil<dynamic>(
+              actions.where((dynamic action) => action is CancelSearchJobEvent),
+            ),
+      );
 }
 
-Observable<dynamic> _doSearch(List<JobModel> jobs, String text) {
-  return Observable<dynamic>.just(
-    new SearchSuccessJobEvent(
-      payload: jobs
-          .where(
-            (job) => job.name
-                .contains(new RegExp(r'' + text + '', caseSensitive: false)),
-          )
-          .toList(),
-    ),
-  ).delay(Duration(seconds: 1));
+SearchSuccessJobEvent _doSearch(List<JobModel> jobs, String text) {
+  return new SearchSuccessJobEvent(
+    payload: jobs
+        .where(
+          (job) => job.name
+              .contains(new RegExp(r'' + text + '', caseSensitive: false)),
+        )
+        .toList(),
+  );
 }
 
 Observable<List<JobModel>> _getJobList() {
