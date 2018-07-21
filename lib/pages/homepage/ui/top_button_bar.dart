@@ -18,10 +18,12 @@ enum AccountOptions {
 
 class TopButtonBar extends StatelessWidget {
   final HomeViewModel vm;
+  final VoidCallback onLogout;
 
   const TopButtonBar({
     Key key,
-    this.vm,
+    @required this.vm,
+    @required this.onLogout,
   }) : super(key: key);
 
   @override
@@ -137,6 +139,7 @@ class TopButtonBar extends StatelessWidget {
           );
         },
       );
+
       switch (result) {
         case AccountOptions.storename:
           final _storeName = await Navigator.push<String>(
@@ -175,14 +178,7 @@ class TopButtonBar extends StatelessWidget {
               context: context, title: Text("You are about to logout."));
 
           if (response == true) {
-            vm.logout();
-            // await Auth.signOutWithGoogle();
-            // Navigator.pushReplacement<dynamic, dynamic>(
-            //   context,
-            //   TMNavigate.fadeIn<String>(
-            //     new SplashPage(isColdStart: false),
-            //   ),
-            // );
+            onLogout();
           }
           break;
       }

@@ -7,12 +7,15 @@ import 'package:tailor_made/pages/homepage/ui/header.dart';
 import 'package:tailor_made/pages/homepage/ui/stats.dart';
 import 'package:tailor_made/pages/homepage/ui/top_button_bar.dart';
 import 'package:tailor_made/pages/homepage/ui/top_row.dart';
+import 'package:tailor_made/pages/splash/splash.dart';
 import 'package:tailor_made/pages/templates/access_denied.dart';
 import 'package:tailor_made/pages/templates/rate_limit.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_images.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_phone.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -23,6 +26,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
+    // did this to avoid passing a reference of HomePage context to TopButtonBar
+    // without this, i can not replace this route with SplashPage on logout
+    final _context = context;
 
     return new Scaffold(
       backgroundColor: theme.scaffoldColor,
@@ -72,7 +78,7 @@ class HomePage extends StatelessWidget {
                 );
               }
 
-              return _buildBody(vm);
+              return _buildBody(_context, vm);
             },
           ),
         ],
@@ -80,7 +86,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  LayoutBuilder _buildBody(HomeViewModel vm) {
+  Widget _buildBody(BuildContext _context, HomeViewModel vm) {
     return LayoutBuilder(
       builder: (context, constraint) {
         final bool isLandscape = constraint.maxWidth > constraint.maxHeight;
@@ -114,10 +120,28 @@ class HomePage extends StatelessWidget {
               ),
             ),
             CreateButton(contacts: vm.contacts, height: _kBottomBarHeight),
-            TopButtonBar(vm: vm),
+            TopButtonBar(
+              vm: vm,
+              // did this to avoid passing a reference of HomePage context to TopButtonBar
+              // without this, i can not replace this route with SplashPage on logout
+              onLogout: _onLogout(_context, vm),
+            ),
           ],
         );
       },
     );
+  }
+
+  VoidCallback _onLogout(BuildContext context, HomeViewModel vm) {
+    return () async {
+      vm.logout();
+      await Auth.signOutWithGoogle();
+      Navigator.pushReplacement<dynamic, dynamic>(
+        context,
+        TMNavigate.fadeIn<String>(
+          new SplashPage(isColdStart: false),
+        ),
+      );
+    };
   }
 }

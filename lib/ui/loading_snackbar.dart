@@ -12,7 +12,7 @@ class LoadingSnackBar extends SnackBar {
             children: [
               SizedBox.fromSize(
                 size: Size.square(30.0),
-                child: SpinKitFadingFour(
+                child: SpinKitThreeBounce(
                   color: Colors.white,
                   size: 32.0,
                 ),
