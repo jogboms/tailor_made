@@ -75,8 +75,8 @@ class ContactsListItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        iconCircle(Icons.call, () => call(int.parse(contact.phone))),
-        iconCircle(Icons.message, () => sms(int.parse(contact.phone))),
+        iconCircle(Icons.call, () => call(contact.phone)),
+        iconCircle(Icons.message, () => sms(contact.phone)),
       ],
     );
 
