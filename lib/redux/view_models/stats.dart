@@ -7,11 +7,13 @@ import 'package:tailor_made/redux/view_models/main.dart';
 class StatsViewModel extends ViewModel {
   StatsViewModel(Store<ReduxState> store) : super(store);
 
-  StatsModel get stats => store.state.stats.stats;
+  StatsState get _state => store.state.stats;
 
-  bool get isLoading => store.state.stats.status == StatsStatus.loading;
+  StatsModel get stats => _state.stats;
 
-  bool get isSuccess => store.state.stats.status == StatsStatus.success;
+  bool get isLoading => _state.status == StatsStatus.loading;
 
-  bool get isFailure => store.state.stats.status == StatsStatus.failure;
+  bool get isSuccess => _state.status == StatsStatus.success;
+
+  bool get isFailure => _state.status == StatsStatus.failure;
 }
