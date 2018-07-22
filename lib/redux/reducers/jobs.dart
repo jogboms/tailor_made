@@ -5,39 +5,29 @@ import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/jobs.dart';
 import 'package:tailor_made/redux/states/main.dart';
 
-List<JobModel> _sort(List<JobModel> _jobs, SortType sortType) {
+Comparator<JobModel> _sort(SortType sortType) {
   switch (sortType) {
     case SortType.active:
-      _jobs.sort(
-          (a, b) => (a.isComplete == b.isComplete) ? 0 : a.isComplete ? 1 : -1);
-      break;
+      return (a, b) =>
+          (a.isComplete == b.isComplete) ? 0 : a.isComplete ? 1 : -1;
     case SortType.name:
-      _jobs.sort((a, b) => a.name.compareTo(b.name));
-      break;
+      return (a, b) => a.name.compareTo(b.name);
     case SortType.payments:
       final _folder =
           (double value, PaymentModel element) => value + element.price;
-      _jobs.sort(
-        (a, b) => b.payments.fold<double>(0.0, _folder).compareTo(
-              a.payments.fold<double>(0.0, _folder),
-            ),
-      );
-      break;
+      return (a, b) => b.payments.fold<double>(0.0, _folder).compareTo(
+            a.payments.fold<double>(0.0, _folder),
+          );
     case SortType.owed:
-      _jobs.sort((a, b) => b.pendingPayment.compareTo(a.pendingPayment));
-      break;
+      return (a, b) => b.pendingPayment.compareTo(a.pendingPayment);
     case SortType.price:
-      _jobs.sort((a, b) => b.price.compareTo(a.price));
-      break;
+      return (a, b) => b.price.compareTo(a.price);
     case SortType.recent:
-      _jobs.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      break;
+      return (a, b) => b.createdAt.compareTo(a.createdAt);
     case SortType.reset:
     default:
-      _jobs.sort((a, b) => a.id.compareTo(b.id));
-      break;
+      return (a, b) => a.id.compareTo(b.id);
   }
-  return _jobs;
 }
 
 JobsState reducer(ReduxState state, ActionType action) {
@@ -47,7 +37,7 @@ JobsState reducer(ReduxState state, ActionType action) {
     case ReduxActions.initJobs:
     case ReduxActions.onDataEventJob:
       return jobs.copyWith(
-        jobs: _sort(action.payload, jobs.sortFn),
+        jobs: List<JobModel>.of(action.payload)..sort(_sort(jobs.sortFn)),
         status: JobsStatus.success,
       );
 
@@ -66,14 +56,14 @@ JobsState reducer(ReduxState state, ActionType action) {
 
     case ReduxActions.onSearchSuccessJobEvent:
       return jobs.copyWith(
-        searchResults: _sort(action.payload, jobs.sortFn),
+        searchResults: List<JobModel>.of(action.payload)
+          ..sort(_sort(jobs.sortFn)),
         status: JobsStatus.success,
       );
 
     case ReduxActions.sortJobs:
-      final _jobs = jobs.jobs;
       return jobs.copyWith(
-        jobs: _sort(_jobs, action.payload),
+        jobs: List<JobModel>.of(jobs.jobs)..sort(_sort(action.payload)),
         hasSortFn: action.payload != SortType.reset,
         sortFn: action.payload,
         status: JobsStatus.success,

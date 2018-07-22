@@ -4,26 +4,20 @@ import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/contacts.dart';
 import 'package:tailor_made/redux/states/main.dart';
 
-List<ContactModel> _sort(List<ContactModel> _contacts, SortType sortType) {
+Comparator<ContactModel> _sort(SortType sortType) {
   switch (sortType) {
     case SortType.jobs:
-      _contacts.sort((a, b) => b.totalJobs.compareTo(a.totalJobs));
-      break;
+      return (a, b) => b.totalJobs.compareTo(a.totalJobs);
     case SortType.name:
-      _contacts.sort((a, b) => a.fullname.compareTo(b.fullname));
-      break;
+      return (a, b) => a.fullname.compareTo(b.fullname);
     case SortType.pending:
-      _contacts.sort((a, b) => b.pendingJobs.compareTo(a.pendingJobs));
-      break;
+      return (a, b) => b.pendingJobs.compareTo(a.pendingJobs);
     case SortType.recent:
-      _contacts.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      break;
+      return (a, b) => b.createdAt.compareTo(a.createdAt);
     case SortType.reset:
     default:
-      _contacts.sort((a, b) => a.id.compareTo(b.id));
-      break;
+      return (a, b) => a.id.compareTo(b.id);
   }
-  return _contacts;
 }
 
 ContactsState reducer(ReduxState state, ActionType action) {
@@ -33,7 +27,8 @@ ContactsState reducer(ReduxState state, ActionType action) {
     case ReduxActions.initContacts:
     case ReduxActions.onDataEventContact:
       return contacts.copyWith(
-        contacts: _sort(action.payload, contacts.sortFn),
+        contacts: List<ContactModel>.of(action.payload)
+          ..sort(_sort(contacts.sortFn)),
         status: ContactsStatus.success,
       );
 
@@ -52,14 +47,15 @@ ContactsState reducer(ReduxState state, ActionType action) {
 
     case ReduxActions.onSearchSuccessContactEvent:
       return contacts.copyWith(
-        searchResults: _sort(action.payload, contacts.sortFn),
+        searchResults: List<ContactModel>.of(action.payload)
+          ..sort(_sort(contacts.sortFn)),
         status: ContactsStatus.success,
       );
 
     case ReduxActions.sortContacts:
-      final _contacts = contacts.contacts;
       return contacts.copyWith(
-        contacts: _sort(_contacts, action.payload),
+        contacts: List<ContactModel>.of(contacts.contacts)
+          ..sort(_sort(action.payload)),
         hasSortFn: action.payload != SortType.reset,
         sortFn: action.payload,
         status: ContactsStatus.success,
