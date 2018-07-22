@@ -69,21 +69,6 @@ JobsState reducer(ReduxState state, ActionType action) {
         status: JobsStatus.success,
       );
 
-    case ReduxActions.onLogoutEvent:
-      return JobsState.initialState();
-
-    // case ReduxActions.addJob:
-    //   List<JobModel> _jobs = new List.from(jobs.jobs)..add(action.payload);
-    //   return jobs.copyWith(jobs: _jobs);
-
-    // case ReduxActions.removeJob:
-    //   List<JobModel> _jobs = jobs.jobs
-    //       .where(
-    //         (job) => job.id != action.payload.id,
-    //       )
-    //       .toList();
-    //   return jobs.copyWith(jobs: _jobs);
-
     default:
       return jobs;
   }

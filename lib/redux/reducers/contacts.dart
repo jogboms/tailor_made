@@ -61,21 +61,6 @@ ContactsState reducer(ReduxState state, ActionType action) {
         status: ContactsStatus.success,
       );
 
-    case ReduxActions.onLogoutEvent:
-      return ContactsState.initialState();
-
-    // case ReduxActions.addContact:
-    //   List<ContactModel> _contacts = new List.from(contacts.contacts)..add(action.payload);
-    //   return contacts.copyWith(contacts: _contacts);
-
-    // case ReduxActions.removeContact:
-    //   List<ContactModel> _contacts = contacts.contacts
-    //       .where(
-    //         (contact) => contact.id != action.payload.id,
-    //       )
-    //       .toList();
-    //   return contacts.copyWith(contacts: _contacts);
-
     default:
       return contacts;
   }

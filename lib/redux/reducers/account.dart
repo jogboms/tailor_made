@@ -18,9 +18,6 @@ AccountState reducer(ReduxState state, ActionType action) {
         hasSkipedPremium: action.payload,
       );
 
-    case ReduxActions.onLogoutEvent:
-      return AccountState.initialState();
-
     default:
       return account;
   }
