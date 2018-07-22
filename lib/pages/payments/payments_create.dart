@@ -28,6 +28,8 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
     decimalSeparator: '.',
     thousandSeparator: ',',
   );
+  final FocusNode _amountFocusNode = new FocusNode();
+  final FocusNode _additionFocusNode = new FocusNode();
 
   @override
   final scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -109,7 +111,9 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        focusNode: _amountFocusNode,
         controller: controller,
+        textInputAction: TextInputAction.next,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
@@ -124,6 +128,8 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
           return (controller.numberValue > 0) ? null : "Please input a price";
         },
         onSaved: (value) => price = controller.numberValue,
+        onEditingComplete: () =>
+            FocusScope.of(context).requestFocus(_additionFocusNode),
       ),
     );
   }
@@ -132,6 +138,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        focusNode: _additionFocusNode,
         keyboardType: TextInputType.text,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         maxLines: 6,
@@ -141,6 +148,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
           hintStyle: TextStyle(fontSize: 14.0),
         ),
         onSaved: (value) => notes = value.trim(),
+        onFieldSubmitted: (value) => _handleSubmit(),
       ),
     );
   }

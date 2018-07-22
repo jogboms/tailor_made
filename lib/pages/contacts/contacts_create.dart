@@ -107,7 +107,8 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
           Navigator.pushReplacement<dynamic, dynamic>(
             context,
             TMNavigate.slideIn<String>(
-                ContactPage(contact: ContactModel.fromDoc(snap))),
+              ContactPage(contact: ContactModel.fromDoc(snap)),
+            ),
           );
         } else {
           _formKey.currentState.updateContact(new ContactModel());
