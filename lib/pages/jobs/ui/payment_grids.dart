@@ -115,7 +115,11 @@ class PaymentGridsState extends State<PaymentGrids> {
           onTap: () async {
             final result = await Navigator.push<Map<String, dynamic>>(
               context,
-              TMNavigate.fadeIn<Map<String, dynamic>>(PaymentsCreatePage()),
+              TMNavigate.fadeIn<Map<String, dynamic>>(
+                PaymentsCreatePage(
+                  limit: widget.job.pendingPayment,
+                ),
+              ),
             );
             if (result != null) {
               setState(() {

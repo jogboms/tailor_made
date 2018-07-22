@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/full_button.dart';
+import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class PaymentsCreatePage extends StatefulWidget {
-  const PaymentsCreatePage({Key key}) : super(key: key);
+  final double limit;
+
+  const PaymentsCreatePage({
+    Key key,
+    @required this.limit,
+  }) : super(key: key);
 
   @override
   _PaymentsCreatePageState createState() => new _PaymentsCreatePageState();
@@ -111,8 +117,12 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
           hintText: "Enter Amount",
           hintStyle: TextStyle(fontSize: 14.0),
         ),
-        validator: (value) =>
-            (controller.numberValue > 0) ? null : "Please input a price",
+        validator: (value) {
+          if (controller.numberValue > widget.limit) {
+            return formatNaira(widget.limit) + " is the remainder on this job.";
+          }
+          return (controller.numberValue > 0) ? null : "Please input a price";
+        },
         onSaved: (value) => price = controller.numberValue,
       ),
     );
