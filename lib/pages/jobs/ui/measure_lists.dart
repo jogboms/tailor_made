@@ -25,14 +25,21 @@ class MeasureLists extends StatelessWidget {
           children: <Widget>[
             const SizedBox(width: 16.0),
             Expanded(
-                child: Text("MEASUREMENTS",
-                    style: ralewayRegular(12.0, Colors.black87))),
+              child: Text(
+                "MEASUREMENTS",
+                style: ralewayRegular(12.0, Colors.black87),
+              ),
+            ),
             CupertinoButton(
-              child:
-                  Text("SHOW ALL", style: ralewayRegular(11.0, kTextBaseColor)),
+              child: Text(
+                "SHOW ALL",
+                style: ralewayRegular(11.0, kTextBaseColor),
+              ),
               onPressed: () => TMNavigate(
-                  context, MeasuresPage(measurements: measurements),
-                  fullscreenDialog: true),
+                    context,
+                    MeasuresPage(measurements: measurements),
+                    fullscreenDialog: true,
+                  ),
             ),
           ],
         )
@@ -40,9 +47,7 @@ class MeasureLists extends StatelessWidget {
           measurements
               .where((item) => item.value != null && item.value > 0)
               .take(5)
-              .map(
-                (item) => new MeasureListItem(item),
-              )
+              .map((item) => new MeasureListItem(item))
               .toList(),
         ),
     );

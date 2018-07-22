@@ -92,6 +92,15 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
                     const SizedBox(height: 4.0),
                     PaymentGrids(job: job),
                     const SizedBox(height: 32.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        job.notes,
+                        style: ralewayLight(14.0, Colors.black87),
+                        textAlign: TextAlign.justify,
+                      ),
+                    ),
+                    const SizedBox(height: 48.0),
                   ],
                 ),
               ),

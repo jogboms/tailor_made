@@ -79,8 +79,10 @@ class PaymentGridsState extends State<PaymentGrids> {
                 style: ralewayRegular(11.0, kTextBaseColor),
               ),
               onPressed: () => TMNavigate(
-                  context, PaymentsPage(payments: widget.job.payments),
-                  fullscreenDialog: true),
+                    context,
+                    PaymentsPage(payments: widget.job.payments),
+                    fullscreenDialog: true,
+                  ),
             ),
           ],
         ),
