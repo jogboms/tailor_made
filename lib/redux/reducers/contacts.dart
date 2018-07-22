@@ -23,7 +23,7 @@ Comparator<ContactModel> _sort(SortType sortType) {
 ContactsState reducer(ReduxState state, ActionType action) {
   final ContactsState contacts = state.contacts;
 
-  if (action is InitContact || action is OnDataEvent) {
+  if (action is OnDataContactEvent) {
     return contacts.copyWith(
       contacts: List<ContactModel>.of(action.payload)
         ..sort(_sort(contacts.sortFn)),

@@ -6,7 +6,7 @@ import 'package:tailor_made/redux/states/main.dart';
 AccountState reducer(ReduxState state, ActionType action) {
   final AccountState account = state.account;
 
-  if (action is InitAccount || action is OnDataEvent) {
+  if (action is OnDataAccountEvent) {
     return account.copyWith(
       account: action.payload,
       status: AccountStatus.success,

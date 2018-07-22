@@ -33,7 +33,7 @@ Comparator<JobModel> _sort(SortType sortType) {
 JobsState reducer(ReduxState state, ActionType action) {
   final JobsState jobs = state.jobs;
 
-  if (action is InitJobs || action is OnDataEvent) {
+  if (action is OnDataJobEvent) {
     return jobs.copyWith(
       jobs: List<JobModel>.of(action.payload)..sort(_sort(jobs.sortFn)),
       status: JobsStatus.success,

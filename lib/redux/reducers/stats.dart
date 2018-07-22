@@ -6,7 +6,7 @@ import 'package:tailor_made/redux/states/stats.dart';
 StatsState reducer(ReduxState state, ActionType action) {
   final StatsState stats = state.stats;
 
-  if (action is InitStats || action is OnDataEvent) {
+  if (action is OnDataStatEvent) {
     return stats.copyWith(
       stats: action.payload,
       status: StatsStatus.success,

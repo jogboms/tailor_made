@@ -14,7 +14,7 @@ Stream<dynamic> account(Stream<dynamic> actions, EpicStore<ReduxState> store) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<InitDataEvents>())
       .switchMap<dynamic>((InitDataEvents action) => _getAccount()
-          .map<dynamic>((account) => new OnDataEvent(payload: account))
+          .map<dynamic>((account) => new OnDataAccountEvent(payload: account))
           .takeUntil<dynamic>(
               actions.where((dynamic action) => action is DisposeDataEvents)));
 }

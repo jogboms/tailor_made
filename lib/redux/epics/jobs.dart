@@ -13,7 +13,7 @@ Stream<dynamic> jobs(Stream<dynamic> actions, EpicStore<ReduxState> store) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<InitDataEvents>())
       .switchMap<dynamic>((InitDataEvents action) => _getJobList()
-          .map<dynamic>((jobs) => new OnDataEvent(payload: jobs))
+          .map<dynamic>((jobs) => new OnDataJobEvent(payload: jobs))
           .takeUntil<dynamic>(
               actions.where((dynamic action) => action is DisposeDataEvents)));
 }
