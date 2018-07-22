@@ -13,7 +13,7 @@ Stream<dynamic> stats(Stream<dynamic> actions, EpicStore<ReduxState> store) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<InitDataEvents>())
       .switchMap<dynamic>((InitDataEvents action) => _getStats()
-          .map<dynamic>((stats) => new OnDataEvent(payload: stats))
+          .map<dynamic>((stats) => new OnDataStatEvent(payload: stats))
           .takeUntil<dynamic>(
               actions.where((dynamic action) => action is DisposeDataEvents)));
 }

@@ -7,8 +7,16 @@ PENDING:
   ☐ On account create, send personal email + email to user @high
   ☐ personalize measurements w/ account @critical
   ☐ indicator for premium accounts @today
+  ☐ snackbar loader width @today
+  ☐ handle on image picker canceled. @critical
+  ☐ empty states icons @today
+  ☐ track amount left on payment creation @today
+  ☐ make sure fetching settings happens before silent login @critical
+  ☐ adding multiple contact doesn't work @critical
 
 COMPLETED:
+  ✔ DRY redux @today @done(18-07-22 12:34)
+  ✔ fix create "contacts" typo in modal @today @done(18-07-22 09:23)
   ✔ reference upload issue @critical @done(18-07-21 16:40)
   ✔ stats image count on job update image @today @done(18-07-21 15:49)
   ✔ check for outdated version + template @today @done(18-07-21 15:40)

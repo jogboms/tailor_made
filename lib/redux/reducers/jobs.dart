@@ -3,98 +3,71 @@ import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/redux/actions/jobs.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/jobs.dart';
-import 'package:tailor_made/redux/states/main.dart';
 
-List<JobModel> _sort(List<JobModel> _jobs, SortType sortType) {
+final _foldPrice = (double acc, PaymentModel model) => acc + model.price;
+
+Comparator<JobModel> _sort(SortType sortType) {
   switch (sortType) {
     case SortType.active:
-      _jobs.sort(
-          (a, b) => (a.isComplete == b.isComplete) ? 0 : a.isComplete ? 1 : -1);
-      break;
+      return (a, b) =>
+          (a.isComplete == b.isComplete) ? 0 : a.isComplete ? 1 : -1;
     case SortType.name:
-      _jobs.sort((a, b) => a.name.compareTo(b.name));
-      break;
+      return (a, b) => a.name.compareTo(b.name);
     case SortType.payments:
-      final _folder =
-          (double value, PaymentModel element) => value + element.price;
-      _jobs.sort(
-        (a, b) => b.payments.fold<double>(0.0, _folder).compareTo(
-              a.payments.fold<double>(0.0, _folder),
-            ),
-      );
-      break;
+      return (a, b) => b.payments.fold<double>(0.0, _foldPrice).compareTo(
+            a.payments.fold<double>(0.0, _foldPrice),
+          );
     case SortType.owed:
-      _jobs.sort((a, b) => b.pendingPayment.compareTo(a.pendingPayment));
-      break;
+      return (a, b) => b.pendingPayment.compareTo(a.pendingPayment);
     case SortType.price:
-      _jobs.sort((a, b) => b.price.compareTo(a.price));
-      break;
+      return (a, b) => b.price.compareTo(a.price);
     case SortType.recent:
-      _jobs.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      break;
+      return (a, b) => b.createdAt.compareTo(a.createdAt);
     case SortType.reset:
     default:
-      _jobs.sort((a, b) => a.id.compareTo(b.id));
-      break;
+      return (a, b) => a.id.compareTo(b.id);
   }
-  return _jobs;
 }
 
-JobsState reducer(ReduxState state, ActionType action) {
-  final JobsState jobs = state.jobs;
-
-  switch (action.type) {
-    case ReduxActions.initJobs:
-    case ReduxActions.onDataEventJob:
-      return jobs.copyWith(
-        jobs: _sort(action.payload, jobs.sortFn),
-        status: JobsStatus.success,
-      );
-
-    case ReduxActions.onStartSearchJobEvent:
-      return jobs.copyWith(
-        status: JobsStatus.loading,
-        isSearching: true,
-      );
-
-    case ReduxActions.onCancelSearchJobEvent:
-      return jobs.copyWith(
-        status: JobsStatus.success,
-        isSearching: false,
-        searchResults: [],
-      );
-
-    case ReduxActions.onSearchSuccessJobEvent:
-      return jobs.copyWith(
-        searchResults: _sort(action.payload, jobs.sortFn),
-        status: JobsStatus.success,
-      );
-
-    case ReduxActions.sortJobs:
-      final _jobs = jobs.jobs;
-      return jobs.copyWith(
-        jobs: _sort(_jobs, action.payload),
-        hasSortFn: action.payload != SortType.reset,
-        sortFn: action.payload,
-        status: JobsStatus.success,
-      );
-
-    case ReduxActions.onLogoutEvent:
-      return JobsState.initialState();
-
-    // case ReduxActions.addJob:
-    //   List<JobModel> _jobs = new List.from(jobs.jobs)..add(action.payload);
-    //   return jobs.copyWith(jobs: _jobs);
-
-    // case ReduxActions.removeJob:
-    //   List<JobModel> _jobs = jobs.jobs
-    //       .where(
-    //         (job) => job.id != action.payload.id,
-    //       )
-    //       .toList();
-    //   return jobs.copyWith(jobs: _jobs);
-
-    default:
-      return jobs;
+JobsState reducer(JobsState jobs, ActionType action) {
+  if (action is OnDataJobEvent) {
+    return jobs.copyWith(
+      jobs: List<JobModel>.of(action.payload)..sort(_sort(jobs.sortFn)),
+      status: JobsStatus.success,
+    );
   }
+
+  if (action is StartSearchJobEvent) {
+    return jobs.copyWith(
+      status: JobsStatus.loading,
+      isSearching: true,
+    );
+  }
+
+  if (action is CancelSearchJobEvent) {
+    return jobs.copyWith(
+      status: JobsStatus.success,
+      isSearching: false,
+      searchResults: [],
+    );
+  }
+
+  if (action is SearchSuccessJobEvent) {
+    return jobs.copyWith(
+      searchResults: List<JobModel>.of(action.payload)
+        ..sort(_sort(jobs.sortFn)),
+      status: JobsStatus.success,
+    );
+  }
+
+  if (action is SortJobs) {
+    return jobs.copyWith(
+      jobs: List<JobModel>.of(jobs.jobs)..sort(_sort(action.payload)),
+      hasSortFn: action.payload != SortType.reset,
+      sortFn: action.payload,
+      status: JobsStatus.success,
+    );
+  }
+
+  return jobs;
 }
