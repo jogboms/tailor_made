@@ -2,7 +2,6 @@ import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/redux/actions/contacts.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/contacts.dart';
-import 'package:tailor_made/redux/states/main.dart';
 
 Comparator<ContactModel> _sort(SortType sortType) {
   switch (sortType) {
@@ -20,9 +19,7 @@ Comparator<ContactModel> _sort(SortType sortType) {
   }
 }
 
-ContactsState reducer(ReduxState state, ActionType action) {
-  final ContactsState contacts = state.contacts;
-
+ContactsState reducer(ContactsState contacts, ActionType action) {
   if (action is OnDataContactEvent) {
     return contacts.copyWith(
       contacts: List<ContactModel>.of(action.payload)

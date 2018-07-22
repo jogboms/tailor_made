@@ -3,7 +3,8 @@ import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/redux/actions/jobs.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/jobs.dart';
-import 'package:tailor_made/redux/states/main.dart';
+
+final _foldPrice = (double acc, PaymentModel model) => acc + model.price;
 
 Comparator<JobModel> _sort(SortType sortType) {
   switch (sortType) {
@@ -13,10 +14,8 @@ Comparator<JobModel> _sort(SortType sortType) {
     case SortType.name:
       return (a, b) => a.name.compareTo(b.name);
     case SortType.payments:
-      final _folder =
-          (double value, PaymentModel element) => value + element.price;
-      return (a, b) => b.payments.fold<double>(0.0, _folder).compareTo(
-            a.payments.fold<double>(0.0, _folder),
+      return (a, b) => b.payments.fold<double>(0.0, _foldPrice).compareTo(
+            a.payments.fold<double>(0.0, _foldPrice),
           );
     case SortType.owed:
       return (a, b) => b.pendingPayment.compareTo(a.pendingPayment);
@@ -30,9 +29,7 @@ Comparator<JobModel> _sort(SortType sortType) {
   }
 }
 
-JobsState reducer(ReduxState state, ActionType action) {
-  final JobsState jobs = state.jobs;
-
+JobsState reducer(JobsState jobs, ActionType action) {
   if (action is OnDataJobEvent) {
     return jobs.copyWith(
       jobs: List<JobModel>.of(action.payload)..sort(_sort(jobs.sortFn)),

@@ -11,9 +11,9 @@ ReduxState reduxReducer(ReduxState state, dynamic action) {
   }
 
   return new ReduxState(
-    contacts: contacts.reducer(state, action),
-    jobs: jobs.reducer(state, action),
-    stats: stats.reducer(state, action),
-    account: account.reducer(state, action),
+    contacts: contacts.reducer(state.contacts, action),
+    jobs: jobs.reducer(state.jobs, action),
+    stats: stats.reducer(state.stats, action),
+    account: account.reducer(state.account, action),
   );
 }

@@ -19,8 +19,4 @@ class OnReadNotice extends ActionType<AccountModel> {
   }) : super(payload: payload);
 }
 
-class OnSkipedPremium extends ActionType<bool> {
-  OnSkipedPremium({
-    bool payload,
-  }) : super(payload: payload);
-}
+class OnSkipedPremium extends ActionType<void> {}

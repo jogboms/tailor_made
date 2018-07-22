@@ -4,9 +4,7 @@ abstract class ActionType<T> {
   ActionType({this.payload});
 
   @override
-  String toString() {
-    return '$runtimeType(${payload?.toString()})';
-  }
+  String toString() => '$runtimeType(${payload?.runtimeType})';
 }
 
 class VoidAction extends ActionType<void> {}
