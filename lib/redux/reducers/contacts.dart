@@ -23,45 +23,46 @@ Comparator<ContactModel> _sort(SortType sortType) {
 ContactsState reducer(ReduxState state, ActionType action) {
   final ContactsState contacts = state.contacts;
 
-  switch (action.type) {
-    case ReduxActions.initContacts:
-    case ReduxActions.onDataEventContact:
-      return contacts.copyWith(
-        contacts: List<ContactModel>.of(action.payload)
-          ..sort(_sort(contacts.sortFn)),
-        status: ContactsStatus.success,
-      );
-
-    case ReduxActions.onStartSearchContactEvent:
-      return contacts.copyWith(
-        status: ContactsStatus.loading,
-        isSearching: true,
-      );
-
-    case ReduxActions.onCancelSearchContactEvent:
-      return contacts.copyWith(
-        status: ContactsStatus.success,
-        isSearching: false,
-        searchResults: [],
-      );
-
-    case ReduxActions.onSearchSuccessContactEvent:
-      return contacts.copyWith(
-        searchResults: List<ContactModel>.of(action.payload)
-          ..sort(_sort(contacts.sortFn)),
-        status: ContactsStatus.success,
-      );
-
-    case ReduxActions.sortContacts:
-      return contacts.copyWith(
-        contacts: List<ContactModel>.of(contacts.contacts)
-          ..sort(_sort(action.payload)),
-        hasSortFn: action.payload != SortType.reset,
-        sortFn: action.payload,
-        status: ContactsStatus.success,
-      );
-
-    default:
-      return contacts;
+  if (action is InitContact || action is OnDataEvent) {
+    return contacts.copyWith(
+      contacts: List<ContactModel>.of(action.payload)
+        ..sort(_sort(contacts.sortFn)),
+      status: ContactsStatus.success,
+    );
   }
+
+  if (action is StartSearchContactEvent) {
+    return contacts.copyWith(
+      status: ContactsStatus.loading,
+      isSearching: true,
+    );
+  }
+
+  if (action is SearchSuccessContactEvent) {
+    return contacts.copyWith(
+      searchResults: List<ContactModel>.of(action.payload)
+        ..sort(_sort(contacts.sortFn)),
+      status: ContactsStatus.success,
+    );
+  }
+
+  if (action is SortContacts) {
+    return contacts.copyWith(
+      contacts: List<ContactModel>.of(contacts.contacts)
+        ..sort(_sort(action.payload)),
+      hasSortFn: action.payload != SortType.reset,
+      sortFn: action.payload,
+      status: ContactsStatus.success,
+    );
+  }
+
+  if (action is CancelSearchContactEvent) {
+    return contacts.copyWith(
+      status: ContactsStatus.success,
+      isSearching: false,
+      searchResults: [],
+    );
+  }
+
+  return contacts;
 }

@@ -33,43 +33,44 @@ Comparator<JobModel> _sort(SortType sortType) {
 JobsState reducer(ReduxState state, ActionType action) {
   final JobsState jobs = state.jobs;
 
-  switch (action.type) {
-    case ReduxActions.initJobs:
-    case ReduxActions.onDataEventJob:
-      return jobs.copyWith(
-        jobs: List<JobModel>.of(action.payload)..sort(_sort(jobs.sortFn)),
-        status: JobsStatus.success,
-      );
-
-    case ReduxActions.onStartSearchJobEvent:
-      return jobs.copyWith(
-        status: JobsStatus.loading,
-        isSearching: true,
-      );
-
-    case ReduxActions.onCancelSearchJobEvent:
-      return jobs.copyWith(
-        status: JobsStatus.success,
-        isSearching: false,
-        searchResults: [],
-      );
-
-    case ReduxActions.onSearchSuccessJobEvent:
-      return jobs.copyWith(
-        searchResults: List<JobModel>.of(action.payload)
-          ..sort(_sort(jobs.sortFn)),
-        status: JobsStatus.success,
-      );
-
-    case ReduxActions.sortJobs:
-      return jobs.copyWith(
-        jobs: List<JobModel>.of(jobs.jobs)..sort(_sort(action.payload)),
-        hasSortFn: action.payload != SortType.reset,
-        sortFn: action.payload,
-        status: JobsStatus.success,
-      );
-
-    default:
-      return jobs;
+  if (action is InitJobs || action is OnDataEvent) {
+    return jobs.copyWith(
+      jobs: List<JobModel>.of(action.payload)..sort(_sort(jobs.sortFn)),
+      status: JobsStatus.success,
+    );
   }
+
+  if (action is StartSearchJobEvent) {
+    return jobs.copyWith(
+      status: JobsStatus.loading,
+      isSearching: true,
+    );
+  }
+
+  if (action is CancelSearchJobEvent) {
+    return jobs.copyWith(
+      status: JobsStatus.success,
+      isSearching: false,
+      searchResults: [],
+    );
+  }
+
+  if (action is SearchSuccessJobEvent) {
+    return jobs.copyWith(
+      searchResults: List<JobModel>.of(action.payload)
+        ..sort(_sort(jobs.sortFn)),
+      status: JobsStatus.success,
+    );
+  }
+
+  if (action is SortJobs) {
+    return jobs.copyWith(
+      jobs: List<JobModel>.of(jobs.jobs)..sort(_sort(action.payload)),
+      hasSortFn: action.payload != SortType.reset,
+      sortFn: action.payload,
+      status: JobsStatus.success,
+    );
+  }
+
+  return jobs;
 }
