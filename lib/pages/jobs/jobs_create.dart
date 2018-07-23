@@ -333,6 +333,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       return;
     }
     final imageFile = await ImagePicker.pickImage(source: source);
+    if (imageFile == null) {
+      return;
+    }
     final ref = CloudStorage.createReferenceImage();
     final uploadTask = ref.putFile(imageFile);
 

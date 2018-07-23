@@ -202,6 +202,9 @@ class ContactFormState extends State<ContactForm> {
     }
     final imageFile = await ImagePicker.pickImage(
         source: source, maxWidth: 200.0, maxHeight: 200.0);
+    if (imageFile == null) {
+      return;
+    }
     final ref = CloudStorage.createContactImage();
     final uploadTask = ref.putFile(imageFile);
 
