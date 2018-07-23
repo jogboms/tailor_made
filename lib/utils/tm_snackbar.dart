@@ -7,7 +7,7 @@ abstract class SnackBarProvider {
 
   void showInSnackBar(
     String value, [
-    Duration duration = const Duration(milliseconds: 5000),
+    Duration duration = const Duration(milliseconds: 4000),
   ]) {
     scaffoldKey.currentState?.showSnackBar(
       new SnackBar(

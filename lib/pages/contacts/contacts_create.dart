@@ -111,7 +111,8 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
             ),
           );
         } else {
-          _formKey.currentState.updateContact(new ContactModel());
+          setState(() => contact = new ContactModel());
+          _formKey.currentState.updateContact(contact);
         }
       });
     } catch (e) {

@@ -13,10 +13,13 @@ Future<bool> confirmDialog({
         content: title,
         actions: <Widget>[
           FlatButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: Text("DISMISS")),
+            onPressed: () => Navigator.pop(context, false),
+            child: Text("CANCEL"),
+          ),
           FlatButton(
-              onPressed: () => Navigator.pop(context, true), child: Text("OK")),
+            onPressed: () => Navigator.pop(context, true),
+            child: Text("OK"),
+          ),
         ],
       ),
     );
