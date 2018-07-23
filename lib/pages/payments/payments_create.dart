@@ -35,6 +35,13 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
   final scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
+  void dispose() {
+    _amountFocusNode.dispose();
+    _additionFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
     final List<Widget> children = [];

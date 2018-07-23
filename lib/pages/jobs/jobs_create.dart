@@ -75,6 +75,13 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
   }
 
   @override
+  void dispose() {
+    _amountFocusNode.dispose();
+    _additionFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 

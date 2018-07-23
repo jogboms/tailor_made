@@ -50,6 +50,13 @@ class ContactFormState extends State<ContactForm> {
   }
 
   @override
+  void dispose() {
+    _pNFocusNode.dispose();
+    _locFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return new SingleChildScrollView(
       child: Column(
