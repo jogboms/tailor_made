@@ -7,14 +7,17 @@ PENDING:
   ☐ On account create, send personal email + email to user @high
   ☐ personalize measurements w/ account @critical
   ☐ indicator for premium accounts @today
-  ☐ snackbar loader width @today
-  ☐ handle on image picker canceled. @critical
   ☐ empty states icons @today
-  ☐ track amount left on payment creation @today
   ☐ make sure fetching settings happens before silent login @critical
   ☐ adding multiple contact doesn't work @critical
 
 COMPLETED:
+  ✔ snackbar loader width @today @started(18-07-23 01:05) @done(18-07-23 02:01) @lasted(56m27s)
+  ✔ handle on image picker canceled. @critical @done(18-07-23 01:01)
+  ✔ No UI for additional note on job @today @done(18-07-23 00:57)
+  ✔ Add proper keyboard actions @started(18-07-23 00:15) @done(18-07-23 00:48) @lasted(33m35s)
+  ✔ The getter 'id' was called on null on contact create @critical @done(18-07-23 00:48)
+  ✔ track amount left on payment creation @today @started(18-07-23 00:01) @done(18-07-23 00:14) @lasted(13m32s)
   ✔ DRY redux @today @done(18-07-22 12:34)
   ✔ fix create "contacts" typo in modal @today @done(18-07-22 09:23)
   ✔ reference upload issue @critical @done(18-07-21 16:40)
