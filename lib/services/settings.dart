@@ -7,21 +7,13 @@ class Settings {
 
   Settings._();
 
-  static void setData(Map<String, dynamic> json) {
-    _settings = SettingsModel.fromJson(json);
-  }
+  static void setData(SettingsModel data) => _settings = data;
 
-  static SettingsModel getData() {
-    return _settings;
-  }
+  static SettingsModel getData() => _settings;
 
-  static void setVersion(String version) {
-    _versionName = version;
-  }
+  static void setVersion(String version) => _versionName = version;
 
-  static String getVersion() {
-    return _versionName;
-  }
+  static String getVersion() => _versionName;
 
   static bool get isOutdated {
     final currentVersion = Version.parse(getVersion());
