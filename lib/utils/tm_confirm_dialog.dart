@@ -5,12 +5,14 @@ import 'package:tailor_made/utils/tm_child_dialog.dart';
 
 Future<bool> confirmDialog({
   @required BuildContext context,
-  @required Widget title,
+  @required Widget content,
+  Widget title,
 }) =>
     showChildDialog(
       context: context,
       child: new AlertDialog(
-        content: title,
+        title: title,
+        content: content,
         actions: <Widget>[
           FlatButton(
             onPressed: () => Navigator.pop(context, false),

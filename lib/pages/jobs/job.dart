@@ -269,7 +269,7 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
   void onTapComplete() async {
     final choice = await confirmDialog(
       context: context,
-      title: Text("Are you sure?"),
+      content: Text("Are you sure?"),
     );
     if (choice == null || choice == false) {
       return;

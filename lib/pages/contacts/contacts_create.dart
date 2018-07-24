@@ -100,7 +100,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
 
         final choice = await confirmDialog(
           context: context,
-          title: Text("Do you wish to add another?"),
+          content: Text("Do you wish to add another?"),
         );
 
         if (choice == false) {
