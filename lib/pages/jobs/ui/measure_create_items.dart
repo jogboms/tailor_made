@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/measure.dart';
-import 'package:tailor_made/pages/jobs/ui/slide_down.dart';
+import 'package:tailor_made/ui/slide_down.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class MeasureCreateItems extends StatelessWidget {

@@ -11,4 +11,8 @@ abstract class Model {
   String toString() {
     return json.encode(toMap());
   }
+
+  dynamic operator [](String key) {
+    return toMap()[key];
+  }
 }

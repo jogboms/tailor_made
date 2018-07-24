@@ -65,7 +65,7 @@ class MeasureModel extends Model {
       // TODO remove
       value: double.tryParse(json['value'].toString()),
       unit: json['unit'],
-      group: json['type'],
+      group: json['group'],
       createdAt: DateTime.tryParse(json['createdAt'].toString()),
     );
   }
@@ -82,7 +82,7 @@ class MeasureModel extends Model {
       // TODO remove
       'value': value,
       'unit': unit,
-      'type': group,
+      'group': group,
       'createdAt': createdAt.toString(),
     };
   }
