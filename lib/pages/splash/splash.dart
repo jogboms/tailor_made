@@ -1,13 +1,14 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:get_version/get_version.dart';
-import 'package:tailor_made/models/settings.dart';
 import 'package:tailor_made/pages/homepage/homepage.dart';
+import 'package:tailor_made/redux/actions/settings.dart';
+import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/redux/view_models/settings.dart';
 import 'package:tailor_made/services/auth.dart';
-import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/services/settings.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_images.dart';
@@ -173,18 +174,15 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
             bottom: 72.0,
             left: 0.0,
             right: 0.0,
-            child: StreamBuilder(
-              stream: CloudDb.settings.snapshots(),
-              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting ||
-                    !snapshot.hasData ||
-                    (snapshot.hasData && snapshot.data.data == null)) {
+            child: new StoreConnector<ReduxState, SettingsViewModel>(
+              converter: (store) => SettingsViewModel(store),
+              onInit: (store) => store.dispatch(new InitSettingsEvents()),
+              builder: (context, vm) {
+                if (vm.isLoading && widget.isColdStart) {
                   return Center(
                     child: loadingSpinner(),
                   );
                 }
-
-                Settings.setData(SettingsModel.fromJson(snapshot.data.data));
 
                 if (widget.isColdStart && !isRestartable) {
                   _trySilent();

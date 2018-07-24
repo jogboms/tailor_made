@@ -14,7 +14,6 @@ import 'package:tailor_made/pages/templates/rate_limit.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/services/auth.dart';
-import 'package:tailor_made/services/settings.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_images.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -60,7 +59,7 @@ class HomePage extends StatelessWidget {
                 );
               }
 
-              if (Settings.isOutdated) {
+              if (vm.isOutdated) {
                 return OutDatedPage(
                   onUpdate: () {
                     open(
