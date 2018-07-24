@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/account.dart';
@@ -7,11 +9,17 @@ import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/slide_down.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
+import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_group_model_by.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
+
+enum ActionChoice {
+  edit,
+  delete,
+}
 
 class AccountMeasuresPage extends StatefulWidget {
   final AccountModel account;
@@ -33,9 +41,18 @@ class AccountMeasuresPageState extends State<AccountMeasuresPage>
   final scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(
+      Duration(seconds: 2),
+      () => showInSnackBar("Long-Press on each block to see more actions"),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme.subhead;
     return Scaffold(
+      key: scaffoldKey,
       appBar: appBar(
         context,
         title: "Measurements",
@@ -79,6 +96,41 @@ class AccountMeasuresPageState extends State<AccountMeasuresPage>
               body: _buildBlock(
                 data.toList(),
               ),
+              onLongPress: () async {
+                final choice = await showChildDialog<ActionChoice>(
+                  context: context,
+                  child: new SimpleDialog(
+                    children: <Widget>[
+                      new SimpleDialogOption(
+                        onPressed: () =>
+                            Navigator.pop(context, ActionChoice.edit),
+                        child: Padding(
+                          child: Text("Edit"),
+                          padding: EdgeInsets.all(8.0),
+                        ),
+                      ),
+                      new SimpleDialogOption(
+                        onPressed: () =>
+                            Navigator.pop(context, ActionChoice.delete),
+                        child: Padding(
+                          child: Text("Delete"),
+                          padding: EdgeInsets.all(8.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+
+                if (choice == null) {
+                  return;
+                }
+
+                if (choice == ActionChoice.edit) {
+                  onTapEditBlock(data);
+                } else if (choice == ActionChoice.delete) {
+                  onTapDeleteBlock(data);
+                }
+              },
             ),
           );
         });
@@ -117,21 +169,79 @@ class AccountMeasuresPageState extends State<AccountMeasuresPage>
                 color: kHintColor,
               ),
               iconSize: 20.0,
-              onPressed: () {
-                onTapDeleteItem(measure);
-              },
+              onPressed: () => onTapDeleteItem(measure),
             ),
           ],
         ),
       );
     }).toList();
 
-    return Column(
-      children: children,
+    return Container(
+      color: kBorderSideColor.withOpacity(.5),
+      child: Column(
+        children: children,
+      ),
     );
   }
 
-  void onTapEdit(MeasureModel measure) async {
+  void onTapEditBlock(List<MeasureModel> measures) async {
+    // final choice = await confirmDialog(
+    //   context: context,
+    //   content: Text("Are you sure?"),
+    // );
+    // if (choice == null || choice == false) {
+    //   return;
+    // }
+
+    // final WriteBatch batch = CloudDb.instance.batch();
+
+    // measures.forEach((measure) {
+    //   batch.updateData(
+    //     CloudDb.measurements.document(measure.id),
+    //     measure.toMap(),
+    //   );
+    // });
+
+    // showLoadingSnackBar();
+    // try {
+    //   await batch.commit();
+
+    //   closeLoadingSnackBar();
+    // } catch (e) {
+    //   closeLoadingSnackBar();
+    //   showInSnackBar(e.toString());
+    // }
+  }
+
+  void onTapDeleteBlock(List<MeasureModel> measures) async {
+    final choice = await confirmDialog(
+      context: context,
+      content: Text("Are you sure?"),
+    );
+    if (choice == null || choice == false) {
+      return;
+    }
+
+    final WriteBatch batch = CloudDb.instance.batch();
+
+    measures.forEach((measure) {
+      batch.delete(
+        CloudDb.measurements.document(measure.id),
+      );
+    });
+
+    showLoadingSnackBar();
+    try {
+      await batch.commit();
+
+      closeLoadingSnackBar();
+    } catch (e) {
+      closeLoadingSnackBar();
+      showInSnackBar(e.toString());
+    }
+  }
+
+  void onTapEditItem(MeasureModel measure) async {
     final choice = await confirmDialog(
       context: context,
       content: Text("Are you sure?"),
