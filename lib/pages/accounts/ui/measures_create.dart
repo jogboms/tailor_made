@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tailor_made/ui/full_button.dart';
+import 'package:flutter/services.dart';
+import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/pages/accounts/ui/measure_dialog.dart';
+import 'package:tailor_made/services/cloud_db.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -15,11 +20,65 @@ class MeasuresCreate extends StatefulWidget {
 class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   bool _autovalidate = false;
-  String group_name;
-  final List<dynamic> measures = <dynamic>[];
+  String groupName;
+  // final _group = new TextEditingController();
+  List<MeasureModel> measures = <MeasureModel>[];
 
   @override
   final scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    // _group.l
+  }
+
+  // TODO this can still be better written
+  void _handleAddItem() async {
+    final FormState form = _formKey.currentState;
+    if (form == null) {
+      return;
+    }
+    if (!form.validate()) {
+      _autovalidate = true; // Start validating on every change.
+    } else {
+      form.save();
+
+      final _measure = await Navigator.push<MeasureModel>(
+        context,
+        TMNavigate.fadeIn<MeasureModel>(
+          Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0.0,
+              automaticallyImplyLeading: false,
+              leading: IconButton(
+                icon: Icon(Icons.close, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+            backgroundColor: Colors.black38,
+            body: MeasureDialog(
+              measure: new MeasureModel(
+                name: "",
+                group: groupName,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      print(_measure);
+
+      if (_measure == null) {
+        return;
+      }
+
+      setState(() {
+        measures = [_measure]..addAll(measures);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +88,12 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
     children.add(makeHeader("Group Name"));
     children.add(buildEnterName());
 
-    children.add(
-      Padding(
-        child: FullButton(
-          child: Text(
-            "FINISH",
-            style: TextStyle(color: Colors.white),
-          ),
-          // onPressed: _handleSubmit,
-          onPressed: measures.isEmpty ? null : _handleSubmit,
-        ),
-        padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
-      ),
-    );
+    if (measures.isNotEmpty) {
+      children.add(makeHeader("Group Items"));
+      children.add(buildGroupItems());
 
-    children.add(SizedBox(height: 32.0));
+      children.add(SizedBox(height: 84.0));
+    }
 
     return Scaffold(
       key: scaffoldKey,
@@ -55,8 +105,8 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
         elevation: 1.0,
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {},
+            icon: Icon(Icons.check),
+            onPressed: measures.isEmpty ? null : _handleSubmit,
           )
         ],
       ),
@@ -66,6 +116,14 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
           primaryColor: kPrimaryColor,
         ),
         child: buildBody(theme, children),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        icon: new Icon(Icons.add_circle_outline),
+        backgroundColor: Colors.white,
+        foregroundColor: kAccentColor,
+        label: Text("Add Item"),
+        onPressed: _handleAddItem,
       ),
     );
   }
@@ -98,16 +156,16 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
-        textInputAction: TextInputAction.next,
+        textCapitalization: TextCapitalization.words,
         keyboardType: TextInputType.text,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
           isDense: true,
-          hintText: "Enter Group Name",
+          hintText: "eg Blouse",
           hintStyle: TextStyle(fontSize: 14.0),
         ),
         validator: (value) => (value.isNotEmpty) ? null : "Please input a name",
-        onSaved: (value) => group_name = value.trim(),
+        onSaved: (value) => groupName = value.trim(),
       ),
     );
   }
@@ -129,22 +187,49 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
     );
   }
 
-  void _handleSubmit() async {
-    final FormState form = _formKey.currentState;
-    if (form == null) {
-      return;
-    }
+  Widget buildGroupItems() {
+    final items = List.generate(measures.length, (index) {
+      final measure = measures[index];
+      return ListTile(
+        dense: true,
+        title: Text(measure.name),
+        subtitle: Text(measure.unit),
+        trailing: IconButton(
+          icon: Icon(Icons.remove_circle_outline),
+          iconSize: 20.0,
+          onPressed: () {
+            setState(() {
+              measures = measures..removeAt(index);
+            });
+          },
+        ),
+      );
+    });
+    return new Column(
+      children: items.toList(),
+    );
+  }
 
-    if (!form.validate()) {
-      _autovalidate = true; // Start validating on every change.
-      showInSnackBar('Please fix the errors in red before submitting.');
-    } else {
-      form.save();
-      showLoadingSnackBar();
-      try {} catch (e) {
-        closeLoadingSnackBar();
-        showInSnackBar(e.toString());
-      }
+  void _handleSubmit() async {
+    final WriteBatch batch = CloudDb.instance.batch();
+
+    measures.forEach((measure) {
+      batch.setData(
+        CloudDb.measurements.document(measure.id),
+        measure.toMap(),
+        merge: true,
+      );
+    });
+
+    showLoadingSnackBar();
+    try {
+      await batch.commit();
+
+      closeLoadingSnackBar();
+      Navigator.pop(context);
+    } catch (e) {
+      closeLoadingSnackBar();
+      showInSnackBar(e.toString());
     }
   }
 }

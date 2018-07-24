@@ -16,7 +16,7 @@ class MeasureCreateItems extends StatelessWidget {
           title: MeasureModelType.blouse,
           body: new JobMeasureBlock(
             measurements
-                .where((measure) => measure.type == MeasureModelType.blouse)
+                .where((measure) => measure.group == MeasureModelType.blouse)
                 .toList(),
           ),
           isExpanded: true,
@@ -25,7 +25,7 @@ class MeasureCreateItems extends StatelessWidget {
           title: MeasureModelType.trouser,
           body: new JobMeasureBlock(
             measurements
-                .where((measure) => measure.type == MeasureModelType.trouser)
+                .where((measure) => measure.group == MeasureModelType.trouser)
                 .toList(),
           ),
         ),
@@ -33,7 +33,7 @@ class MeasureCreateItems extends StatelessWidget {
           title: MeasureModelType.skirts,
           body: new JobMeasureBlock(
             measurements
-                .where((measure) => measure.type == MeasureModelType.skirts)
+                .where((measure) => measure.group == MeasureModelType.skirts)
                 .toList(),
           ),
         ),
@@ -41,7 +41,7 @@ class MeasureCreateItems extends StatelessWidget {
           title: MeasureModelType.gown,
           body: new JobMeasureBlock(
             measurements
-                .where((measure) => measure.type == MeasureModelType.gown)
+                .where((measure) => measure.group == MeasureModelType.gown)
                 .toList(),
           ),
         ),

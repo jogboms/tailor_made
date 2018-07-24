@@ -1,30 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tailor_made/models/main.dart';
+import 'package:tailor_made/utils/tm_uuid.dart';
 
 List<MeasureModel> createDefaultMeasures() {
   return [
-    MeasureModel(name: 'Arm Hole', type: MeasureModelType.blouse),
-    MeasureModel(name: 'Shoulder', type: MeasureModelType.blouse),
-    MeasureModel(name: 'Bust', type: MeasureModelType.blouse),
-    MeasureModel(name: 'Bust Point', type: MeasureModelType.blouse),
-    MeasureModel(name: 'Shoulder - Bust Point', type: MeasureModelType.blouse),
-    MeasureModel(name: 'Shoulder - Under Bust', type: MeasureModelType.blouse),
-    MeasureModel(name: 'Shoulder - Waist', type: MeasureModelType.blouse),
-    MeasureModel(name: 'Length', type: MeasureModelType.trouser),
-    MeasureModel(name: 'Waist', type: MeasureModelType.trouser),
-    MeasureModel(name: 'Crouch', type: MeasureModelType.trouser),
-    MeasureModel(name: 'Thigh', type: MeasureModelType.trouser),
-    MeasureModel(name: 'Body Rise', type: MeasureModelType.trouser),
-    MeasureModel(name: 'Width', type: MeasureModelType.trouser),
-    MeasureModel(name: 'Hip', type: MeasureModelType.trouser),
-    MeasureModel(name: 'Full Length', type: MeasureModelType.skirts),
-    MeasureModel(name: 'Short Length', type: MeasureModelType.skirts),
-    MeasureModel(name: 'Knee Length', type: MeasureModelType.skirts),
-    MeasureModel(name: 'Hip', type: MeasureModelType.skirts),
-    MeasureModel(name: 'Waist', type: MeasureModelType.gown),
-    MeasureModel(name: 'Long Length', type: MeasureModelType.gown),
-    MeasureModel(name: 'Short Length', type: MeasureModelType.gown),
-    MeasureModel(name: 'Knee Length', type: MeasureModelType.gown),
+    MeasureModel(name: 'Arm Hole', group: MeasureModelType.blouse),
+    MeasureModel(name: 'Shoulder', group: MeasureModelType.blouse),
+    MeasureModel(name: 'Bust', group: MeasureModelType.blouse),
+    MeasureModel(name: 'Bust Point', group: MeasureModelType.blouse),
+    MeasureModel(name: 'Shoulder - Bust Point', group: MeasureModelType.blouse),
+    MeasureModel(name: 'Shoulder - Under Bust', group: MeasureModelType.blouse),
+    MeasureModel(name: 'Shoulder - Waist', group: MeasureModelType.blouse),
+    MeasureModel(name: 'Length', group: MeasureModelType.trouser),
+    MeasureModel(name: 'Waist', group: MeasureModelType.trouser),
+    MeasureModel(name: 'Crouch', group: MeasureModelType.trouser),
+    MeasureModel(name: 'Thigh', group: MeasureModelType.trouser),
+    MeasureModel(name: 'Body Rise', group: MeasureModelType.trouser),
+    MeasureModel(name: 'Width', group: MeasureModelType.trouser),
+    MeasureModel(name: 'Hip', group: MeasureModelType.trouser),
+    MeasureModel(name: 'Full Length', group: MeasureModelType.skirts),
+    MeasureModel(name: 'Short Length', group: MeasureModelType.skirts),
+    MeasureModel(name: 'Knee Length', group: MeasureModelType.skirts),
+    MeasureModel(name: 'Hip', group: MeasureModelType.skirts),
+    MeasureModel(name: 'Waist', group: MeasureModelType.gown),
+    MeasureModel(name: 'Long Length', group: MeasureModelType.gown),
+    MeasureModel(name: 'Short Length', group: MeasureModelType.gown),
+    MeasureModel(name: 'Knee Length', group: MeasureModelType.gown),
   ];
 }
 
@@ -36,35 +38,52 @@ class MeasureModelType {
 }
 
 class MeasureModel extends Model {
+  String id;
   String name;
+  // TODO remove
   double value;
   String unit;
-  String type;
+  String group;
+  DateTime createdAt;
 
   MeasureModel({
+    String id,
     @required this.name,
+    // TODO remove
     this.value = 0.0,
     this.unit = 'In',
-    @required this.type,
-  });
+    DateTime createdAt,
+    @required this.group,
+  })  : id = id ?? uuid(),
+        createdAt = createdAt ?? DateTime.now();
 
   factory MeasureModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
     return new MeasureModel(
+      id: json['id'],
       name: json['name'],
+      // TODO remove
       value: double.tryParse(json['value'].toString()),
       unit: json['unit'],
-      type: json['type'],
+      group: json['type'],
+      createdAt: DateTime.tryParse(json['createdAt'].toString()),
     );
+  }
+
+  factory MeasureModel.fromDoc(DocumentSnapshot doc) {
+    return MeasureModel.fromJson(doc.data)..reference = doc.reference;
   }
 
   @override
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'name': name,
+      // TODO remove
       'value': value,
       'unit': unit,
-      'type': type,
+      'type': group,
+      'createdAt': createdAt.toString(),
     };
   }
 }
