@@ -56,6 +56,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     decimalSeparator: '.',
     thousandSeparator: ',',
   );
+  final FocusNode _amountFocusNode = new FocusNode();
+  final FocusNode _additionFocusNode = new FocusNode();
 
   bool _autovalidate = false;
 
@@ -70,6 +72,13 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       contactID: contact?.id,
       measurements: contact?.measurements ?? createDefaultMeasures(),
     );
+  }
+
+  @override
+  void dispose() {
+    _amountFocusNode.dispose();
+    _additionFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -255,6 +264,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        focusNode: _additionFocusNode,
         keyboardType: TextInputType.text,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         maxLines: 6,
@@ -264,6 +274,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           hintStyle: TextStyle(fontSize: 14.0),
         ),
         onSaved: (value) => job.notes = value.trim(),
+        onFieldSubmitted: (value) => _handleSubmit(),
       ),
     );
   }
@@ -329,6 +340,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       return;
     }
     final imageFile = await ImagePicker.pickImage(source: source);
+    if (imageFile == null) {
+      return;
+    }
     final ref = CloudStorage.createReferenceImage();
     final uploadTask = ref.putFile(imageFile);
 
@@ -360,6 +374,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        textInputAction: TextInputAction.next,
         keyboardType: TextInputType.text,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
@@ -369,6 +384,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         ),
         validator: (value) => (value.isNotEmpty) ? null : "Please input a name",
         onSaved: (value) => job.name = value.trim(),
+        onEditingComplete: () =>
+            FocusScope.of(context).requestFocus(_amountFocusNode),
       ),
     );
   }
@@ -377,7 +394,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        focusNode: _amountFocusNode,
         controller: controller,
+        textInputAction: TextInputAction.next,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
@@ -388,6 +407,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         validator: (value) =>
             (controller.numberValue > 0) ? null : "Please input a price",
         onSaved: (value) => job.price = controller.numberValue,
+        onEditingComplete: () =>
+            FocusScope.of(context).requestFocus(_additionFocusNode),
       ),
     );
   }

@@ -37,7 +37,8 @@ class _ContactState extends State<ContactPage> {
       converter: (store) =>
           ContactsViewModel(store)..contactID = widget.contact.id,
       builder: (BuildContext context, ContactsViewModel vm) {
-        final contact = vm.selected;
+        // in the case of newly created contacts
+        final contact = vm.selected ?? widget.contact;
         return new DefaultTabController(
           length: 3,
           child: new Scaffold(

@@ -8,6 +8,8 @@ import 'package:tailor_made/redux/states/contacts.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/states/stats.dart';
 import 'package:tailor_made/redux/view_models/stats.dart';
+import 'package:tailor_made/services/settings.dart';
+import 'package:version/version.dart';
 
 class HomeViewModel extends StatsViewModel {
   HomeViewModel(Store<ReduxState> store) : super(store);
@@ -30,6 +32,14 @@ class HomeViewModel extends StatsViewModel {
   bool get isWarning => account.status == AccountModelStatus.warning;
 
   bool get isPending => account.status == AccountModelStatus.pending;
+
+  bool get isOutdated {
+    final currentVersion = Version.parse(Settings.getVersion());
+    final latestVersion =
+        Version.parse(store.state.settings.settings?.versionName ?? "1.0.0");
+
+    return latestVersion > currentVersion;
+  }
 
   void onPremiumSignUp() => store.dispatch(OnPremiumSignUp(payload: account));
 

@@ -92,6 +92,15 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
                     const SizedBox(height: 4.0),
                     PaymentGrids(job: job),
                     const SizedBox(height: 32.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        job.notes,
+                        style: ralewayLight(14.0, Colors.black87),
+                        textAlign: TextAlign.justify,
+                      ),
+                    ),
+                    const SizedBox(height: 48.0),
                   ],
                 ),
               ),
@@ -260,7 +269,7 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
   void onTapComplete() async {
     final choice = await confirmDialog(
       context: context,
-      title: Text("Are you sure?"),
+      content: Text("Are you sure?"),
     );
     if (choice == null || choice == false) {
       return;

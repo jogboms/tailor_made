@@ -1,5 +1,4 @@
 import 'package:tailor_made/models/settings.dart';
-import 'package:version/version.dart';
 
 class Settings {
   static SettingsModel _settings;
@@ -7,26 +6,11 @@ class Settings {
 
   Settings._();
 
-  static void setData(Map<String, dynamic> json) {
-    _settings = SettingsModel.fromJson(json);
-  }
+  static void setData(SettingsModel data) => _settings = data;
 
-  static SettingsModel getData() {
-    return _settings;
-  }
+  static SettingsModel getData() => _settings;
 
-  static void setVersion(String version) {
-    _versionName = version;
-  }
+  static void setVersion(String version) => _versionName = version;
 
-  static String getVersion() {
-    return _versionName;
-  }
-
-  static bool get isOutdated {
-    final currentVersion = Version.parse(getVersion());
-    final latestVersion = Version.parse(getData()?.versionName ?? "1.0.0");
-
-    return latestVersion > currentVersion;
-  }
+  static String getVersion() => _versionName;
 }

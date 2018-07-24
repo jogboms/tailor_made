@@ -98,6 +98,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        textInputAction: TextInputAction.next,
         keyboardType: TextInputType.text,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(

@@ -175,7 +175,7 @@ class TopButtonBar extends StatelessWidget {
 
         case AccountOptions.logout:
           final response = await confirmDialog(
-              context: context, title: Text("You are about to logout."));
+              context: context, content: Text("You are about to logout."));
 
           if (response == true) {
             onLogout();

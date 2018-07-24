@@ -1,12 +1,14 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:get_version/get_version.dart';
 import 'package:tailor_made/pages/homepage/homepage.dart';
+import 'package:tailor_made/redux/actions/settings.dart';
+import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/redux/view_models/settings.dart';
 import 'package:tailor_made/services/auth.dart';
-import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/services/settings.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_images.dart';
@@ -41,10 +43,6 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
     isLoading = widget.isColdStart;
 
     _getVersionName();
-
-    if (widget.isColdStart == true) {
-      _trySilent();
-    }
 
     Auth.onAuthStateChanged.firstWhere((user) => user != null).then(
       (user) {
@@ -82,16 +80,27 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
       String message = "";
       switch (e?.code) {
         case "exception":
+        case "sign_in_failed":
           if (e?.message?.contains("administrator") ?? false) {
             message =
                 "It seems this account has been disabled. Contact Administrators.";
             break;
           }
+          if (e?.message?.contains("NETWORK_ERROR") ?? false) {
+            message = "Please check if you have your internet turned on.";
+            break;
+          }
+          continue fallthrough;
+
+        case "exception":
           message = "You need a stable internet connection to proceed";
           break;
+
+        fallthrough:
         case "sign_in_failed":
-          message = "Sorry, We could not connect to Google using that account.";
+          message = "Sorry, We could not connect to Google on that account.";
           break;
+
         case "canceled":
         default:
       }
@@ -165,17 +174,19 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
             bottom: 72.0,
             left: 0.0,
             right: 0.0,
-            child: StreamBuilder(
-              stream: CloudDb.settings.snapshots(),
-              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (!snapshot.hasData ||
-                    (snapshot.hasData && snapshot.data.data == null)) {
+            child: new StoreConnector<ReduxState, SettingsViewModel>(
+              converter: (store) => SettingsViewModel(store),
+              onInit: (store) => store.dispatch(new InitSettingsEvents()),
+              builder: (context, vm) {
+                if (vm.isLoading && widget.isColdStart) {
                   return Center(
                     child: loadingSpinner(),
                   );
                 }
 
-                Settings.setData(snapshot.data.data);
+                if (widget.isColdStart && !isRestartable) {
+                  _trySilent();
+                }
 
                 return isLoading
                     ? loadingSpinner()
@@ -201,8 +212,10 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
         }
       },
       icon: Image(image: TMImages.google_logo, width: 24.0),
-      label: Text("Continue with Google",
-          style: TextStyle(fontWeight: FontWeight.w700)),
+      label: Text(
+        "Continue with Google",
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
     );
   }
 }

@@ -38,6 +38,8 @@ class ContactFormState extends State<ContactForm> {
   StorageReference _lastImgRef;
   TextEditingController _fNController;
   TextEditingController _pNController;
+  final FocusNode _pNFocusNode = new FocusNode();
+  final FocusNode _locFocusNode = new FocusNode();
 
   @override
   void initState() {
@@ -45,6 +47,13 @@ class ContactFormState extends State<ContactForm> {
     contact = widget.contact;
     _fNController = new TextEditingController(text: contact.fullname);
     _pNController = new TextEditingController(text: contact.phone);
+  }
+
+  @override
+  void dispose() {
+    _pNFocusNode.dispose();
+    _locFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -78,16 +87,21 @@ class ContactFormState extends State<ContactForm> {
             children: <Widget>[
               TextFormField(
                 controller: _fNController,
+                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.person),
                   labelText: "Fullname",
                 ),
                 validator: validateAlpha(),
                 onSaved: (fullname) => contact.fullname = fullname.trim(),
+                onEditingComplete: () =>
+                    FocusScope.of(context).requestFocus(_pNFocusNode),
               ),
               SizedBox(height: 4.0),
               TextFormField(
+                focusNode: _pNFocusNode,
                 controller: _pNController,
+                textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.phone),
@@ -96,10 +110,14 @@ class ContactFormState extends State<ContactForm> {
                 validator: (value) =>
                     (value.isNotEmpty) ? null : "Please input a value",
                 onSaved: (phone) => contact.phone = phone.trim(),
+                onEditingComplete: () =>
+                    FocusScope.of(context).requestFocus(_locFocusNode),
               ),
               SizedBox(height: 4.0),
               TextFormField(
+                focusNode: _locFocusNode,
                 initialValue: contact.location,
+                textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.location_city),
                   labelText: "Location",
@@ -107,6 +125,7 @@ class ContactFormState extends State<ContactForm> {
                 validator: (value) =>
                     (value.isNotEmpty) ? null : "Please input a value",
                 onSaved: (location) => contact.location = location.trim(),
+                onFieldSubmitted: (value) => _handleSubmit(),
               ),
               SizedBox(height: 32.0),
               FullButton(
@@ -190,6 +209,9 @@ class ContactFormState extends State<ContactForm> {
     }
     final imageFile = await ImagePicker.pickImage(
         source: source, maxWidth: 200.0, maxHeight: 200.0);
+    if (imageFile == null) {
+      return;
+    }
     final ref = CloudStorage.createContactImage();
     final uploadTask = ref.putFile(imageFile);
 

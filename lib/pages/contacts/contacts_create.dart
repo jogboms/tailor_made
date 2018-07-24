@@ -100,17 +100,19 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
 
         final choice = await confirmDialog(
           context: context,
-          title: Text("Do you wish to add another?"),
+          content: Text("Do you wish to add another?"),
         );
 
         if (choice == false) {
           Navigator.pushReplacement<dynamic, dynamic>(
             context,
             TMNavigate.slideIn<String>(
-                ContactPage(contact: ContactModel.fromDoc(snap))),
+              ContactPage(contact: ContactModel.fromDoc(snap)),
+            ),
           );
         } else {
-          _formKey.currentState.updateContact(new ContactModel());
+          setState(() => contact = new ContactModel());
+          _formKey.currentState.updateContact(contact);
         }
       });
     } catch (e) {
