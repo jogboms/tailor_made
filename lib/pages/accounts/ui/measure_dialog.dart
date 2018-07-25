@@ -80,6 +80,7 @@ class MeasureDialogState extends State<MeasureDialog> {
                   ),
                   SizedBox(height: 4.0),
                   TextFormField(
+                    initialValue: widget.measure.unit,
                     focusNode: _unitNode,
                     textInputAction: TextInputAction.done,
                     decoration: InputDecoration(

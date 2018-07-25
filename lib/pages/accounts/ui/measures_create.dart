@@ -20,7 +20,7 @@ class MeasuresCreate extends StatefulWidget {
 class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   bool _autovalidate = false;
-  String groupName;
+  String groupName, unitValue;
   // final _group = new TextEditingController();
   List<MeasureModel> measures = <MeasureModel>[];
 
@@ -62,6 +62,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
               measure: new MeasureModel(
                 name: "",
                 group: groupName,
+                unit: unitValue,
               ),
             ),
           ),
@@ -87,6 +88,9 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
 
     children.add(makeHeader("Group Name"));
     children.add(buildEnterName());
+
+    children.add(makeHeader("Group Unit"));
+    children.add(buildEnterUnit());
 
     if (measures.isNotEmpty) {
       children.add(makeHeader("Group Items"));
@@ -165,6 +169,24 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
         ),
         validator: (value) => (value.isNotEmpty) ? null : "Please input a name",
         onSaved: (value) => groupName = value.trim(),
+      ),
+    );
+  }
+
+  Widget buildEnterUnit() {
+    return new Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      child: new TextFormField(
+        keyboardType: TextInputType.text,
+        style: TextStyle(fontSize: 18.0, color: Colors.black),
+        decoration: new InputDecoration(
+          isDense: true,
+          hintText: "Unit (eg. In, cm)",
+          hintStyle: TextStyle(fontSize: 14.0),
+        ),
+        validator: (value) =>
+            (value.isNotEmpty) ? null : "Please input a value",
+        onSaved: (value) => unitValue = value.trim(),
       ),
     );
   }
