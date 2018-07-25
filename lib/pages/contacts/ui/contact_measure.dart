@@ -69,7 +69,9 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
       appBar: appBar(
         context,
         title: "Measurements",
-        onPop: () => Navigator.pop(context, contact),
+        onPop: contact?.reference != null
+            ? null
+            : () => Navigator.pop<ContactModel>(context, contact),
         actions: [
           IconButton(
             icon: Icon(
