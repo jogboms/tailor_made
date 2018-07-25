@@ -2,15 +2,15 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/pages/accounts/measures.dart';
-import 'package:tailor_made/pages/accounts/ui/measure_edit_dialog.dart';
+import 'package:tailor_made/pages/accounts/ui/measures_create.dart';
 import 'package:tailor_made/pages/accounts/ui/measures_slide_block_item.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/ui/slide_down.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 enum ActionChoice {
@@ -92,44 +92,16 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
     );
   }
 
-  void onTapEditBlock() async {
-    final _controller = TextEditingController(text: widget.title);
-    final groupName = await showEditDialog(
-      context: context,
-      title: "GROUP NAME",
-      children: <Widget>[
-        TextField(
-          textCapitalization: TextCapitalization.words,
-          controller: _controller,
-          onSubmitted: (value) => Navigator.pop(context, value.trim()),
-        ),
-      ],
+  void onTapEditBlock() {
+    TMNavigate(
+      context,
+      MeasuresCreate(
+        groupName: widget.title,
+        unitValue: widget.measures.first.unit,
+        measures: widget.measures,
+      ),
+      fullscreenDialog: true,
     );
-
-    if (groupName == null) {
-      return;
-    }
-
-    final WriteBatch batch = CloudDb.instance.batch();
-
-    widget.measures.forEach((measure) {
-      batch.updateData(
-        CloudDb.measurements.document(measure.id),
-        <String, String>{
-          "group": groupName,
-        },
-      );
-    });
-
-    widget.parent.showLoadingSnackBar();
-    try {
-      await batch.commit();
-
-      widget.parent.closeLoadingSnackBar();
-    } catch (e) {
-      widget.parent.closeLoadingSnackBar();
-      widget.parent.showInSnackBar(e.toString());
-    }
   }
 
   void onTapDeleteBlock() async {

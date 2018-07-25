@@ -50,6 +50,7 @@ class MeasureDialogState extends State<MeasureDialog> {
             ),
             child: new Form(
               key: _formKey,
+              autovalidate: _autovalidate,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[

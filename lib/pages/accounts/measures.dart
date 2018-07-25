@@ -12,6 +12,7 @@ import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
+import 'package:tailor_made/utils/tm_theme.dart';
 
 class AccountMeasuresPage extends StatefulWidget {
   final AccountModel account;
@@ -46,18 +47,20 @@ class AccountMeasuresPageState extends State<AccountMeasuresPage>
       appBar: appBar(
         context,
         title: "Measurements",
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => TMNavigate(
-                  context,
-                  MeasuresCreate(),
-                  fullscreenDialog: true,
-                ),
-          )
-        ],
       ),
       body: _buildBody(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        icon: new Icon(Icons.add),
+        backgroundColor: kAccentColor,
+        foregroundColor: Colors.white,
+        label: Text("Add Group"),
+        onPressed: () => TMNavigate(
+              context,
+              MeasuresCreate(),
+              fullscreenDialog: true,
+            ),
+      ),
     );
   }
 

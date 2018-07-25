@@ -1,16 +1,25 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/pages/accounts/ui/measure_dialog.dart';
 import 'package:tailor_made/services/cloud_db.dart';
+import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class MeasuresCreate extends StatefulWidget {
+  final List<MeasureModel> measures;
+  final String groupName, unitValue;
+
   const MeasuresCreate({
     Key key,
+    this.measures,
+    this.groupName,
+    this.unitValue,
   }) : super(key: key);
 
   @override
@@ -21,65 +30,18 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   bool _autovalidate = false;
   String groupName, unitValue;
-  // final _group = new TextEditingController();
-  List<MeasureModel> measures = <MeasureModel>[];
-
-  @override
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
+  List<MeasureModel> measures;
 
   @override
   void initState() {
     super.initState();
-    // _group.l
+    measures = widget.measures ?? <MeasureModel>[];
+    groupName = widget.groupName ?? "";
+    unitValue = widget.unitValue ?? "";
   }
 
-  // TODO this can still be better written
-  void _handleAddItem() async {
-    final FormState form = _formKey.currentState;
-    if (form == null) {
-      return;
-    }
-    if (!form.validate()) {
-      _autovalidate = true; // Start validating on every change.
-    } else {
-      form.save();
-
-      final _measure = await Navigator.push<MeasureModel>(
-        context,
-        TMNavigate.fadeIn<MeasureModel>(
-          Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0.0,
-              automaticallyImplyLeading: false,
-              leading: IconButton(
-                icon: Icon(Icons.close, color: Colors.white),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ),
-            backgroundColor: Colors.black38,
-            body: MeasureDialog(
-              measure: new MeasureModel(
-                name: "",
-                group: groupName,
-                unit: unitValue,
-              ),
-            ),
-          ),
-        ),
-      );
-
-      print(_measure);
-
-      if (_measure == null) {
-        return;
-      }
-
-      setState(() {
-        measures = [_measure]..addAll(measures);
-      });
-    }
-  }
+  @override
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +80,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
           hintColor: kHintColor,
           primaryColor: kPrimaryColor,
         ),
-        child: buildBody(theme, children),
+        child: buildBody(children),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
@@ -159,6 +121,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        initialValue: groupName,
         textCapitalization: TextCapitalization.words,
         keyboardType: TextInputType.text,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
@@ -177,6 +140,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        initialValue: unitValue,
         keyboardType: TextInputType.text,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
@@ -191,7 +155,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
     );
   }
 
-  Widget buildBody(TMTheme theme, List<Widget> children) {
+  Widget buildBody(List<Widget> children) {
     return new SafeArea(
       top: false,
       child: new SingleChildScrollView(
@@ -216,9 +180,16 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
         title: Text(measure.name),
         subtitle: Text(measure.unit),
         trailing: IconButton(
-          icon: Icon(Icons.remove_circle_outline),
+          icon: Icon(
+            measure?.reference != null
+                ? Icons.delete
+                : Icons.remove_circle_outline,
+          ),
           iconSize: 20.0,
           onPressed: () {
+            if (measure?.reference != null) {
+              onTapDeleteItem(measure);
+            }
             setState(() {
               measures = measures..removeAt(index);
             });
@@ -231,26 +202,113 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
     );
   }
 
-  void _handleSubmit() async {
-    final WriteBatch batch = CloudDb.instance.batch();
-
-    measures.forEach((measure) {
-      batch.setData(
-        CloudDb.measurements.document(measure.id),
-        measure.toMap(),
-        merge: true,
-      );
-    });
+  void onTapDeleteItem(MeasureModel measure) async {
+    final choice = await confirmDialog(
+      context: context,
+      content: Text("Are you sure?"),
+    );
+    if (choice == null || choice == false) {
+      return;
+    }
 
     showLoadingSnackBar();
-    try {
-      await batch.commit();
 
+    try {
+      await measure.reference.delete();
       closeLoadingSnackBar();
-      Navigator.pop(context);
     } catch (e) {
       closeLoadingSnackBar();
       showInSnackBar(e.toString());
+    }
+  }
+
+  void _handleAddItem() async {
+    if (_isOkForm()) {
+      final _measure = await _itemModal();
+
+      if (_measure == null) {
+        return;
+      }
+
+      setState(() {
+        measures = [_measure]..addAll(measures);
+      });
+    }
+  }
+
+  Future<MeasureModel> _itemModal() {
+    return Navigator.push<MeasureModel>(
+      context,
+      TMNavigate.fadeIn<MeasureModel>(
+        Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0.0,
+            automaticallyImplyLeading: false,
+            leading: IconButton(
+              icon: Icon(Icons.close, color: Colors.white),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
+          backgroundColor: Colors.black38,
+          body: MeasureDialog(
+            measure: new MeasureModel(
+              name: "",
+              group: groupName,
+              unit: unitValue,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _handleSubmit() async {
+    if (_isOkForm()) {
+      final WriteBatch batch = CloudDb.instance.batch();
+
+      measures.forEach((measure) {
+        if (measure?.reference != null) {
+          batch.updateData(
+            measure.reference,
+            <String, String>{
+              "group": groupName,
+              "unit": unitValue,
+            },
+          );
+        } else {
+          batch.setData(
+            CloudDb.measurements.document(measure.id),
+            measure.toMap(),
+            merge: true,
+          );
+        }
+      });
+
+      showLoadingSnackBar();
+      try {
+        await batch.commit();
+
+        closeLoadingSnackBar();
+        Navigator.pop(context);
+      } catch (e) {
+        closeLoadingSnackBar();
+        showInSnackBar(e.toString());
+      }
+    }
+  }
+
+  bool _isOkForm() {
+    final FormState form = _formKey.currentState;
+    if (form == null) {
+      return false;
+    }
+    if (!form.validate()) {
+      _autovalidate = true; // Start validating on every change.
+      return false;
+    } else {
+      form.save();
+      return true;
     }
   }
 }
