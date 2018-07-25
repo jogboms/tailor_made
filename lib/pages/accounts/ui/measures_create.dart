@@ -99,7 +99,6 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
       key: scaffoldKey,
       backgroundColor: theme.scaffoldColor,
       appBar: AppBar(
-        title: Text("Add Group", style: theme.appBarStyle),
         brightness: Brightness.light,
         centerTitle: false,
         elevation: 1.0,

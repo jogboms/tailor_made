@@ -71,7 +71,7 @@ class MeasureDialogState extends State<MeasureDialog> {
                     textInputAction: TextInputAction.next,
                     onEditingComplete: () =>
                         FocusScope.of(context).requestFocus(_unitNode),
-                    onSaved: (value) => widget.measure.name = value,
+                    onSaved: (value) => widget.measure.name = value.trim(),
                     decoration: InputDecoration(
                       labelText: "Name (eg. Length)",
                     ),
@@ -88,7 +88,7 @@ class MeasureDialogState extends State<MeasureDialog> {
                     style: TextStyle(fontSize: 14.0, color: Colors.black),
                     validator: validateAlpha(),
                     onFieldSubmitted: (value) => _onSaved(),
-                    onSaved: (value) => widget.measure.unit = value,
+                    onSaved: (value) => widget.measure.unit = value.trim(),
                   ),
                   const SizedBox(height: 32.0),
                 ],

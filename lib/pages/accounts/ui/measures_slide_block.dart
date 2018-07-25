@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/pages/accounts/measures.dart';
 import 'package:tailor_made/services/cloud_db.dart';
@@ -40,7 +41,7 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
                 color: kHintColor,
               ),
               iconSize: 20.0,
-              onPressed: () {},
+              onPressed: () => onTapEditItem(measure),
             ),
             IconButton(
               icon: Icon(
@@ -58,7 +59,7 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
     return new SlideDownItem(
       title: widget.title,
       body: Container(
-        color: kBorderSideColor.withOpacity(.5),
+        color: kBorderSideColor.withOpacity(.25),
         child: Column(
           children: children,
         ),
@@ -100,32 +101,73 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
   }
 
   void onTapEditBlock() async {
-    // final choice = await confirmDialog(
-    //   context: context,
-    //   content: Text("Are you sure?"),
-    // );
-    // if (choice == null || choice == false) {
-    //   return;
-    // }
+    final _controller = TextEditingController(text: widget.title);
+    final groupName = await showChildDialog<String>(
+      context: context,
+      child: Align(
+        alignment: FractionalOffset(0.0, 0.25),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0),
+          child: Material(
+            borderRadius: BorderRadius.circular(4.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                SizedBox(height: 16.0),
+                Center(
+                  child: Text("GROUP NAME", style: ralewayLight(12.0)),
+                ),
+                SizedBox(height: 8.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16.0,
+                    horizontal: 16.0,
+                  ),
+                  child: Theme(
+                    data: ThemeData(
+                      hintColor: kHintColor,
+                      primaryColor: kPrimaryColor,
+                    ),
+                    child: TextField(
+                      textCapitalization: TextCapitalization.words,
+                      controller: _controller,
+                      onSubmitted: (value) =>
+                          Navigator.pop(context, value.trim()),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
 
-    // final WriteBatch batch = CloudDb.instance.batch();
+    if (groupName == null) {
+      return;
+    }
 
-    // widget.measures.forEach((measure) {
-    //   batch.updateData(
-    //     CloudDb.measurements.document(measure.id),
-    //     measure.toMap(),
-    //   );
-    // });
+    final WriteBatch batch = CloudDb.instance.batch();
 
-    // showLoadingSnackBar();
-    // try {
-    //   await batch.commit();
+    widget.measures.forEach((measure) {
+      batch.updateData(
+        CloudDb.measurements.document(measure.id),
+        <String, String>{
+          "group": groupName,
+        },
+      );
+    });
 
-    //   closeLoadingSnackBar();
-    // } catch (e) {
-    //   closeLoadingSnackBar();
-    //   showInSnackBar(e.toString());
-    // }
+    widget.parent.showLoadingSnackBar();
+    try {
+      await batch.commit();
+
+      widget.parent.closeLoadingSnackBar();
+    } catch (e) {
+      widget.parent.closeLoadingSnackBar();
+      widget.parent.showInSnackBar(e.toString());
+    }
   }
 
   void onTapDeleteBlock() async {
@@ -157,11 +199,50 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
   }
 
   void onTapEditItem(MeasureModel measure) async {
-    final choice = await confirmDialog(
+    final _controller = TextEditingController(text: measure.name);
+    final itemName = await showChildDialog<String>(
       context: context,
-      content: Text("Are you sure?"),
+      child: Align(
+        alignment: FractionalOffset(0.0, 0.25),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0),
+          child: Material(
+            borderRadius: BorderRadius.circular(4.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                SizedBox(height: 16.0),
+                Center(
+                  child: Text("ITEM NAME", style: ralewayLight(12.0)),
+                ),
+                SizedBox(height: 8.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16.0,
+                    horizontal: 16.0,
+                  ),
+                  child: Theme(
+                    data: ThemeData(
+                      hintColor: kHintColor,
+                      primaryColor: kPrimaryColor,
+                    ),
+                    child: TextField(
+                      textCapitalization: TextCapitalization.words,
+                      controller: _controller,
+                      onSubmitted: (value) =>
+                          Navigator.pop(context, value.trim()),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
-    if (choice == null || choice == false) {
+
+    if (itemName == null) {
       return;
     }
 
@@ -169,8 +250,8 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
 
     try {
       await measure.reference.updateData(<String, String>{
-        "name": "",
-        "unit": "",
+        "name": itemName,
+        // "unit": "",
       });
       widget.parent.closeLoadingSnackBar();
     } catch (e) {
