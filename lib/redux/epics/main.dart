@@ -15,6 +15,7 @@ EpicMiddleware<ReduxState> reduxEpics() => new EpicMiddleware<ReduxState>(
           jobs.jobs,
           jobs.search,
           stats.stats,
+          measures.init,
           measures.measures,
           settings.settings,
           account.account,

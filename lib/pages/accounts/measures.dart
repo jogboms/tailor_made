@@ -76,7 +76,7 @@ class AccountMeasuresPageState extends State<AccountMeasuresPage>
           );
         }
 
-        final slides = <MeasureSlideBlock>[];
+        final slides = <Widget>[];
 
         vm.grouped.forEach((key, data) {
           slides.add(
@@ -92,7 +92,13 @@ class AccountMeasuresPageState extends State<AccountMeasuresPage>
           top: false,
           child: new SingleChildScrollView(
             child: Column(
-              children: slides.toList(),
+              children: slides
+                ..add(
+                  SizedBox(
+                    height: 72.0,
+                  ),
+                )
+                ..toList(),
             ),
           ),
         );

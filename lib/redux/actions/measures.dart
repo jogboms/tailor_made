@@ -6,8 +6,14 @@ class OnDataMeasureEvent extends ActionType<List<MeasureModel>> {
   Map<String, List<MeasureModel>> grouped;
 
   OnDataMeasureEvent({
-    List<MeasureModel> payload,
+    @required List<MeasureModel> payload,
     @required this.grouped,
+  }) : super(payload: payload);
+}
+
+class OnInitMeasureEvent extends ActionType<List<MeasureModel>> {
+  OnInitMeasureEvent({
+    @required List<MeasureModel> payload,
   }) : super(payload: payload);
 }
 
