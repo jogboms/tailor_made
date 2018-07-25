@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/pages/contacts/contacts_edit.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_measure.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
@@ -17,10 +18,12 @@ enum Choice {
 }
 
 class ContactAppBar extends StatefulWidget {
+  final Map<String, List<MeasureModel>> grouped;
   final ContactModel contact;
 
   const ContactAppBar({
     Key key,
+    @required this.grouped,
     this.contact,
   }) : super(key: key);
 
@@ -41,7 +44,10 @@ class ContactAppBarState extends State<ContactAppBar> {
       case Choice.EditMeasure:
         return TMNavigate(
           context,
-          ContactMeasure(contact: widget.contact),
+          ContactMeasure(
+            contact: widget.contact,
+            grouped: widget.grouped,
+          ),
         );
       case Choice.EditAccount:
         return TMNavigate(

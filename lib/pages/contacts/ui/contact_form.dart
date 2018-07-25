@@ -25,9 +25,7 @@ class ContactForm extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  ContactFormState createState() {
-    return new ContactFormState();
-  }
+  ContactFormState createState() => new ContactFormState();
 }
 
 class ContactFormState extends State<ContactForm> {
@@ -36,10 +34,9 @@ class ContactFormState extends State<ContactForm> {
   ContactModel contact;
   bool _autovalidate = false;
   StorageReference _lastImgRef;
-  TextEditingController _fNController;
-  TextEditingController _pNController;
-  final FocusNode _pNFocusNode = new FocusNode();
-  final FocusNode _locFocusNode = new FocusNode();
+  TextEditingController _fNController, _pNController, _lNController;
+  final FocusNode _pNFocusNode = new FocusNode(),
+      _locFocusNode = new FocusNode();
 
   @override
   void initState() {
@@ -47,6 +44,7 @@ class ContactFormState extends State<ContactForm> {
     contact = widget.contact;
     _fNController = new TextEditingController(text: contact.fullname);
     _pNController = new TextEditingController(text: contact.phone);
+    _lNController = new TextEditingController(text: contact.location);
   }
 
   @override
@@ -116,7 +114,7 @@ class ContactFormState extends State<ContactForm> {
               SizedBox(height: 4.0),
               TextFormField(
                 focusNode: _locFocusNode,
-                initialValue: contact.location,
+                controller: _lNController,
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.location_city),
@@ -233,11 +231,12 @@ class ContactFormState extends State<ContactForm> {
   void reset() => _formKey.currentState.reset();
 
   void updateContact(ContactModel _contact) {
-    reset();
     setState(() {
+      reset();
       contact = _contact;
       _fNController.text = contact.fullname ?? "";
       _pNController.text = contact.phone ?? "";
+      _lNController.text = contact.location ?? "";
     });
   }
 }

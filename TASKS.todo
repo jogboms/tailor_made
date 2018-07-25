@@ -5,12 +5,17 @@ PENDING:
   ☐ Generate invoice & share as SMS containing link to pay on paystack @goals
   ☐ Firebase function on successful payments w/ push notification @goals
   ☐ On account create, send personal email + email to user @high
-  ☐ personalize measurements w/ account @critical
   ☐ indicator for premium accounts @goals
   ☐ empty states icons @quickie
+  ☐ edit job measurements @high
+  ☐ add in-app review @quickie
+  ☐ Trigger loading action for any side-effect to the store @low
   ☐ gradual migration to BLoC to reduce boilerplate from Redux @goals
+  ☐ copy and paste jobs @goals
 
 COMPLETED:
+  ✔ personalize measurements w/ account @critical @done(18-07-25 18:47)
+  ✔ long press to delete or edit measure block snackbar message @critical @done(18-07-25 01:20)
   ✔ fix issue with reloading state on outdated app @critical @done(18-07-24 11:23)
   ✔ add WillPopScope to Homepage @high @done(18-07-24 11:22)
   ✔ make sure fetching settings happens before silent login @critical @done(18-07-24 08:51)

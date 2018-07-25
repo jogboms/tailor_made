@@ -1,11 +1,28 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tailor_made/ui/full_button.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/pages/accounts/ui/measure_dialog.dart';
+import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/redux/view_models/measures.dart';
+import 'package:tailor_made/services/cloud_db.dart';
+import 'package:tailor_made/utils/tm_confirm_dialog.dart';
+import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class MeasuresCreate extends StatefulWidget {
+  final List<MeasureModel> measures;
+  final String groupName, unitValue;
+
   const MeasuresCreate({
     Key key,
+    this.measures,
+    this.groupName,
+    this.unitValue,
   }) : super(key: key);
 
   @override
@@ -15,8 +32,16 @@ class MeasuresCreate extends StatefulWidget {
 class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   bool _autovalidate = false;
-  String group_name;
-  final List<dynamic> measures = <dynamic>[];
+  String groupName, unitValue;
+  List<MeasureModel> measures;
+
+  @override
+  void initState() {
+    super.initState();
+    measures = widget.measures ?? <MeasureModel>[];
+    groupName = widget.groupName ?? "";
+    unitValue = widget.unitValue ?? "";
+  }
 
   @override
   final scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -24,49 +49,56 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
-    final List<Widget> children = [];
+    return StoreConnector<ReduxState, MeasuresViewModel>(
+      converter: (store) => MeasuresViewModel(store),
+      builder: (BuildContext context, vm) {
+        final List<Widget> children = [];
 
-    children.add(makeHeader("Group Name"));
-    children.add(buildEnterName());
+        children.add(makeHeader("Group Name"));
+        children.add(buildEnterName());
 
-    children.add(
-      Padding(
-        child: FullButton(
-          child: Text(
-            "FINISH",
-            style: TextStyle(color: Colors.white),
+        children.add(makeHeader("Group Unit"));
+        children.add(buildEnterUnit());
+
+        if (measures.isNotEmpty) {
+          children.add(makeHeader("Group Items"));
+          children.add(buildGroupItems(vm));
+
+          children.add(SizedBox(height: 84.0));
+        }
+
+        return Scaffold(
+          key: scaffoldKey,
+          backgroundColor: theme.scaffoldColor,
+          appBar: AppBar(
+            brightness: Brightness.light,
+            centerTitle: false,
+            elevation: 1.0,
+            actions: [
+              IconButton(
+                icon: Icon(Icons.check),
+                onPressed: measures.isEmpty ? null : () => _handleSubmit(vm),
+              )
+            ],
           ),
-          // onPressed: _handleSubmit,
-          onPressed: measures.isEmpty ? null : _handleSubmit,
-        ),
-        padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
-      ),
-    );
-
-    children.add(SizedBox(height: 32.0));
-
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: theme.scaffoldColor,
-      appBar: AppBar(
-        title: Text("Add Group", style: theme.appBarStyle),
-        brightness: Brightness.light,
-        centerTitle: false,
-        elevation: 1.0,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {},
-          )
-        ],
-      ),
-      body: Theme(
-        data: ThemeData(
-          hintColor: kHintColor,
-          primaryColor: kPrimaryColor,
-        ),
-        child: buildBody(theme, children),
-      ),
+          body: Theme(
+            data: ThemeData(
+              hintColor: kHintColor,
+              primaryColor: kPrimaryColor,
+            ),
+            child: buildBody(children),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: FloatingActionButton.extended(
+            icon: new Icon(Icons.add_circle_outline),
+            backgroundColor: Colors.white,
+            foregroundColor: kAccentColor,
+            label: Text("Add Item"),
+            onPressed: _handleAddItem,
+          ),
+        );
+      },
     );
   }
 
@@ -98,21 +130,41 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
-        textInputAction: TextInputAction.next,
+        initialValue: groupName,
+        textCapitalization: TextCapitalization.words,
         keyboardType: TextInputType.text,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
           isDense: true,
-          hintText: "Enter Group Name",
+          hintText: "eg Blouse",
           hintStyle: TextStyle(fontSize: 14.0),
         ),
         validator: (value) => (value.isNotEmpty) ? null : "Please input a name",
-        onSaved: (value) => group_name = value.trim(),
+        onSaved: (value) => groupName = value.trim(),
       ),
     );
   }
 
-  Widget buildBody(TMTheme theme, List<Widget> children) {
+  Widget buildEnterUnit() {
+    return new Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      child: new TextFormField(
+        initialValue: unitValue,
+        keyboardType: TextInputType.text,
+        style: TextStyle(fontSize: 18.0, color: Colors.black),
+        decoration: new InputDecoration(
+          isDense: true,
+          hintText: "Unit (eg. In, cm)",
+          hintStyle: TextStyle(fontSize: 14.0),
+        ),
+        validator: (value) =>
+            (value.isNotEmpty) ? null : "Please input a value",
+        onSaved: (value) => unitValue = value.trim(),
+      ),
+    );
+  }
+
+  Widget buildBody(List<Widget> children) {
     return new SafeArea(
       top: false,
       child: new SingleChildScrollView(
@@ -129,22 +181,145 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
     );
   }
 
-  void _handleSubmit() async {
-    final FormState form = _formKey.currentState;
-    if (form == null) {
+  Widget buildGroupItems(MeasuresViewModel vm) {
+    final items = List.generate(measures.length, (index) {
+      final measure = measures[index];
+      return ListTile(
+        dense: true,
+        title: Text(measure.name),
+        subtitle: Text(measure.unit),
+        trailing: IconButton(
+          icon: Icon(
+            measure?.reference != null
+                ? Icons.delete
+                : Icons.remove_circle_outline,
+          ),
+          iconSize: 20.0,
+          onPressed: () {
+            if (measure?.reference != null) {
+              onTapDeleteItem(vm, measure);
+            }
+            setState(() {
+              measures = measures..removeAt(index);
+            });
+          },
+        ),
+      );
+    });
+    return new Column(
+      children: items.toList(),
+    );
+  }
+
+  void onTapDeleteItem(MeasuresViewModel vm, MeasureModel measure) async {
+    final choice = await confirmDialog(
+      context: context,
+      content: Text("Are you sure?"),
+    );
+    if (choice == null || choice == false) {
       return;
     }
 
-    if (!form.validate()) {
-      _autovalidate = true; // Start validating on every change.
-      showInSnackBar('Please fix the errors in red before submitting.');
-    } else {
-      form.save();
+    showLoadingSnackBar();
+
+    try {
+      vm.toggleLoading();
+      await measure.reference.delete();
+      closeLoadingSnackBar();
+    } catch (e) {
+      closeLoadingSnackBar();
+      showInSnackBar(e.toString());
+    }
+  }
+
+  void _handleAddItem() async {
+    if (_isOkForm()) {
+      final _measure = await _itemModal();
+
+      if (_measure == null) {
+        return;
+      }
+
+      setState(() {
+        measures = [_measure]..addAll(measures);
+      });
+    }
+  }
+
+  Future<MeasureModel> _itemModal() {
+    return Navigator.push<MeasureModel>(
+      context,
+      TMNavigate.fadeIn<MeasureModel>(
+        Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0.0,
+            automaticallyImplyLeading: false,
+            leading: IconButton(
+              icon: Icon(Icons.close, color: Colors.white),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
+          backgroundColor: Colors.black38,
+          body: MeasureDialog(
+            measure: new MeasureModel(
+              name: "",
+              group: groupName,
+              unit: unitValue,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _handleSubmit(MeasuresViewModel vm) async {
+    if (_isOkForm()) {
+      final WriteBatch batch = CloudDb.instance.batch();
+
+      measures.forEach((measure) {
+        if (measure?.reference != null) {
+          batch.updateData(
+            measure.reference,
+            <String, String>{
+              "group": groupName,
+              "unit": unitValue,
+            },
+          );
+        } else {
+          batch.setData(
+            CloudDb.measurements.document(measure.id),
+            measure.toMap(),
+            merge: true,
+          );
+        }
+      });
+
       showLoadingSnackBar();
-      try {} catch (e) {
+      try {
+        vm.toggleLoading();
+        await batch.commit();
+
+        closeLoadingSnackBar();
+        Navigator.pop(context);
+      } catch (e) {
         closeLoadingSnackBar();
         showInSnackBar(e.toString());
       }
+    }
+  }
+
+  bool _isOkForm() {
+    final FormState form = _formKey.currentState;
+    if (form == null) {
+      return false;
+    }
+    if (!form.validate()) {
+      _autovalidate = true; // Start validating on every change.
+      return false;
+    } else {
+      form.save();
+      return true;
     }
   }
 }

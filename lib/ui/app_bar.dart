@@ -6,6 +6,7 @@ AppBar appBar(
   BuildContext context, {
   String title: "",
   List<Widget> actions,
+  VoidCallback onPop,
   double elevation: 1.0,
   bool centerTitle: false,
 }) {
@@ -13,7 +14,7 @@ AppBar appBar(
   return AppBar(
     elevation: elevation,
     backgroundColor: theme.appBarBackgroundColor,
-    leading: backButton(context),
+    leading: backButton(context, onPop: onPop),
     brightness: Brightness.light,
     centerTitle: centerTitle,
     title: new Text(
