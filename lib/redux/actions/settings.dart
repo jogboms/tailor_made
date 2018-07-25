@@ -5,6 +5,8 @@ class InitSettingsEvents extends ActionType<void> {}
 
 class DisposeSettingsEvents extends ActionType<void> {}
 
+class OnErrorSettingsEvents extends ActionType<void> {}
+
 class OnDataSettingEvent extends ActionType<SettingsModel> {
   OnDataSettingEvent({
     SettingsModel payload,

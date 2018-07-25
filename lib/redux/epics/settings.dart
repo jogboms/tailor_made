@@ -13,13 +13,16 @@ Stream<dynamic> settings(Stream<dynamic> actions, EpicStore<ReduxState> store) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<InitSettingsEvents>())
       .switchMap<dynamic>(
-        (InitSettingsEvents action) => _getSettings().map<dynamic>(
+        (InitSettingsEvents action) => _getSettings()
+            .map<dynamic>(
               (settings) {
                 // Keep Static copy
                 Settings.setData(settings);
                 return new OnDataSettingEvent(payload: settings);
               },
-            ).takeUntil<dynamic>(
+            )
+            .onErrorReturn(new OnErrorSettingsEvents())
+            .takeUntil<dynamic>(
               actions
                   .where((dynamic action) => action is DisposeSettingsEvents),
             ),
@@ -28,5 +31,11 @@ Stream<dynamic> settings(Stream<dynamic> actions, EpicStore<ReduxState> store) {
 
 Observable<SettingsModel> _getSettings() {
   return new Observable(CloudDb.settings.snapshots()).map(
-      (DocumentSnapshot snapshot) => SettingsModel.fromJson(snapshot.data));
+    (DocumentSnapshot snapshot) {
+      if (snapshot.data == null) {
+        throw FormatException("Internet Error");
+      }
+      return SettingsModel.fromJson(snapshot.data);
+    },
+  );
 }

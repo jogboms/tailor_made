@@ -46,8 +46,6 @@ class Auth {
       setUser(user);
       return user;
     } catch (e) {
-      // TODO should test this when flutter fixes debug mode
-      print(e);
       rethrow;
     }
   }

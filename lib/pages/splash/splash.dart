@@ -93,7 +93,7 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
           continue fallthrough;
 
         case "exception":
-          message = "You need a stable internet connection to proceed";
+          message = "You need a stable internet connection to proceed.";
           break;
 
         fallthrough:
@@ -170,7 +170,7 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
                   ),
                 ),
           Positioned(
-            height: 96.0,
+            height: 102.0,
             bottom: 72.0,
             left: 0.0,
             right: 0.0,
@@ -184,6 +184,11 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
                   );
                 }
 
+                if (vm.isFailure) {
+                  isLoading = false;
+                  return _buildFailure(vm);
+                }
+
                 if (widget.isColdStart && !isRestartable) {
                   _trySilent();
                 }
@@ -195,6 +200,31 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildFailure(SettingsViewModel vm) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(32.0, 16.0, 32.0, 16.0),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Text(
+              "You need a stable internet connection to proceed.",
+            ),
+            SizedBox(height: 4.0),
+            RaisedButton(
+              color: Colors.white,
+              onPressed: () {
+                // setState(() => isLoading = true);
+                vm.init();
+              },
+              child: Text("RETRY"),
+            ),
+          ],
+        ),
       ),
     );
   }
