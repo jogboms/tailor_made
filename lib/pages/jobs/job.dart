@@ -5,7 +5,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grids.dart';
-import 'package:tailor_made/pages/jobs/ui/measure_lists.dart';
+import 'package:tailor_made/pages/jobs/ui/measures.dart';
 import 'package:tailor_made/pages/jobs/ui/payment_grids.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/contacts.dart';
@@ -86,7 +86,6 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    MeasureLists(measurements: job.measurements),
                     const SizedBox(height: 4.0),
                     GalleryGrids(job: job),
                     const SizedBox(height: 4.0),
@@ -156,68 +155,75 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
-                child: new Container(
-                  decoration: BoxDecoration(
-                    border: Border(right: TMBorderSide()),
-                  ),
-                  child: new Column(
-                    children: <Widget>[
-                      Text(
-                        "PAID",
-                        style: ralewayRegular(8.0),
-                        textAlign: TextAlign.center,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.arrow_drop_up,
-                              color: Colors.green.shade600, size: 16.0),
-                          const SizedBox(width: 4.0),
-                          Text(
-                            formatNaira(job.completedPayment),
-                            style:
-                                ralewayRegular(18.0, Colors.black87).copyWith(
-                              letterSpacing: 1.25,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: new Column(
-                  children: <Widget>[
-                    Text(
-                      "UNPAID",
-                      style: ralewayRegular(8.0),
-                      textAlign: TextAlign.center,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(Icons.arrow_drop_down,
-                            color: Colors.red.shade600, size: 16.0),
-                        const SizedBox(width: 4.0),
-                        Text(
-                          formatNaira(job.pendingPayment),
-                          style: ralewayRegular(18.0, Colors.black87).copyWith(
-                            letterSpacing: 1.25,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              _buildPaidBox(),
+              _buildUnpaidBox(),
             ],
           ),
         ),
       ],
+    );
+  }
+
+  Expanded _buildUnpaidBox() {
+    return Expanded(
+      child: new Column(
+        children: <Widget>[
+          Text(
+            "UNPAID",
+            style: ralewayRegular(8.0),
+            textAlign: TextAlign.center,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(Icons.arrow_drop_down,
+                  color: Colors.red.shade600, size: 16.0),
+              const SizedBox(width: 4.0),
+              Text(
+                formatNaira(job.pendingPayment),
+                style: ralewayRegular(18.0, Colors.black87).copyWith(
+                  letterSpacing: 1.25,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Expanded _buildPaidBox() {
+    return Expanded(
+      child: new Container(
+        decoration: BoxDecoration(
+          border: Border(right: TMBorderSide()),
+        ),
+        child: new Column(
+          children: <Widget>[
+            Text(
+              "PAID",
+              style: ralewayRegular(8.0),
+              textAlign: TextAlign.center,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.arrow_drop_up,
+                    color: Colors.green.shade600, size: 16.0),
+                const SizedBox(width: 4.0),
+                Text(
+                  formatNaira(job.completedPayment),
+                  style: ralewayRegular(18.0, Colors.black87).copyWith(
+                    letterSpacing: 1.25,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -255,11 +261,21 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
           actions: <Widget>[
             IconButton(
               icon: new Icon(
+                Icons.content_cut,
+              ),
+              onPressed: () => TMNavigate(
+                    context,
+                    MeasuresPage(measurements: job.measurements),
+                    fullscreenDialog: true,
+                  ),
+            ),
+            IconButton(
+              icon: new Icon(
                 Icons.check,
                 color: job.isComplete ? kPrimaryColor : kTextBaseColor.shade400,
               ),
               onPressed: null,
-            )
+            ),
           ],
         );
       },

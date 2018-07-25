@@ -80,6 +80,20 @@ class JobModel extends Model {
     return JobModel.fromJson(doc.data)..reference = doc.reference;
   }
 
+  // TODO implement others
+  JobModel copyWith({
+    String contactID,
+    Map<String, double> measurements,
+  }) {
+    return new JobModel(
+      id: this.id,
+      userID: this.userID,
+      contactID: contactID ?? this.contactID,
+      measurements: measurements ?? this.measurements,
+      createdAt: this.createdAt,
+    )..reference = this.reference;
+  }
+
   @override
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

@@ -61,8 +61,12 @@ class JobMeasureBlock extends StatelessWidget {
           children: measures.map((MeasureModel measure) {
             final index = measures.indexOf(measure);
 
-            final _value = measurements[measure.id] ?? 0;
-            final value = _value != null && _value > 0 ? _value.toString() : "";
+            final _value = measurements.containsKey(measure.id)
+                ? measurements[measure.id]
+                : 0;
+            final value =
+                _value != null && _value > 0 ? _value.toString() : "";
+            final _controller = TextEditingController(text: value);
 
             return new LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
@@ -87,7 +91,8 @@ class JobMeasureBlock extends StatelessWidget {
                   ),
                   width: constraints.maxWidth / 2,
                   child: TextFormField(
-                    initialValue: value,
+                    // initialValue: value,
+                    controller: _controller,
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
                     style: TextStyle(fontSize: 20.0, color: Colors.black),
