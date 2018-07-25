@@ -1,5 +1,6 @@
 import 'package:redux/redux.dart';
 import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/redux/actions/measures.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/states/measures.dart';
 import 'package:tailor_made/redux/view_models/main.dart';
@@ -18,4 +19,6 @@ class MeasuresViewModel extends ViewModel {
   bool get isSuccess => _state.status == MeasuresStatus.success;
 
   bool get isFailure => _state.status == MeasuresStatus.failure;
+
+  void toggleLoading() => store.dispatch(ToggleMeasuresLoading());
 }

@@ -10,3 +10,5 @@ class OnDataMeasureEvent extends ActionType<List<MeasureModel>> {
     @required this.grouped,
   }) : super(payload: payload);
 }
+
+class ToggleMeasuresLoading extends ActionType<void> {}

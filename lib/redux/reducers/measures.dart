@@ -11,5 +11,11 @@ MeasuresState reducer(MeasuresState measures, ActionType action) {
     );
   }
 
+  if (action is ToggleMeasuresLoading) {
+    return measures.copyWith(
+      status: MeasuresStatus.success,
+    );
+  }
+
   return measures;
 }

@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/pages/accounts/ui/measure_dialog.dart';
+import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/redux/view_models/measures.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -46,50 +49,56 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
-    final List<Widget> children = [];
+    return StoreConnector<ReduxState, MeasuresViewModel>(
+      converter: (store) => MeasuresViewModel(store),
+      builder: (BuildContext context, vm) {
+        final List<Widget> children = [];
 
-    children.add(makeHeader("Group Name"));
-    children.add(buildEnterName());
+        children.add(makeHeader("Group Name"));
+        children.add(buildEnterName());
 
-    children.add(makeHeader("Group Unit"));
-    children.add(buildEnterUnit());
+        children.add(makeHeader("Group Unit"));
+        children.add(buildEnterUnit());
 
-    if (measures.isNotEmpty) {
-      children.add(makeHeader("Group Items"));
-      children.add(buildGroupItems());
+        if (measures.isNotEmpty) {
+          children.add(makeHeader("Group Items"));
+          children.add(buildGroupItems(vm));
 
-      children.add(SizedBox(height: 84.0));
-    }
+          children.add(SizedBox(height: 84.0));
+        }
 
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: theme.scaffoldColor,
-      appBar: AppBar(
-        brightness: Brightness.light,
-        centerTitle: false,
-        elevation: 1.0,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.check),
-            onPressed: measures.isEmpty ? null : _handleSubmit,
-          )
-        ],
-      ),
-      body: Theme(
-        data: ThemeData(
-          hintColor: kHintColor,
-          primaryColor: kPrimaryColor,
-        ),
-        child: buildBody(children),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        icon: new Icon(Icons.add_circle_outline),
-        backgroundColor: Colors.white,
-        foregroundColor: kAccentColor,
-        label: Text("Add Item"),
-        onPressed: _handleAddItem,
-      ),
+        return Scaffold(
+          key: scaffoldKey,
+          backgroundColor: theme.scaffoldColor,
+          appBar: AppBar(
+            brightness: Brightness.light,
+            centerTitle: false,
+            elevation: 1.0,
+            actions: [
+              IconButton(
+                icon: Icon(Icons.check),
+                onPressed: measures.isEmpty ? null : () => _handleSubmit(vm),
+              )
+            ],
+          ),
+          body: Theme(
+            data: ThemeData(
+              hintColor: kHintColor,
+              primaryColor: kPrimaryColor,
+            ),
+            child: buildBody(children),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: FloatingActionButton.extended(
+            icon: new Icon(Icons.add_circle_outline),
+            backgroundColor: Colors.white,
+            foregroundColor: kAccentColor,
+            label: Text("Add Item"),
+            onPressed: _handleAddItem,
+          ),
+        );
+      },
     );
   }
 
@@ -172,7 +181,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
     );
   }
 
-  Widget buildGroupItems() {
+  Widget buildGroupItems(MeasuresViewModel vm) {
     final items = List.generate(measures.length, (index) {
       final measure = measures[index];
       return ListTile(
@@ -188,7 +197,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
           iconSize: 20.0,
           onPressed: () {
             if (measure?.reference != null) {
-              onTapDeleteItem(measure);
+              onTapDeleteItem(vm, measure);
             }
             setState(() {
               measures = measures..removeAt(index);
@@ -202,7 +211,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
     );
   }
 
-  void onTapDeleteItem(MeasureModel measure) async {
+  void onTapDeleteItem(MeasuresViewModel vm, MeasureModel measure) async {
     final choice = await confirmDialog(
       context: context,
       content: Text("Are you sure?"),
@@ -214,6 +223,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
     showLoadingSnackBar();
 
     try {
+      vm.toggleLoading();
       await measure.reference.delete();
       closeLoadingSnackBar();
     } catch (e) {
@@ -263,7 +273,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
     );
   }
 
-  void _handleSubmit() async {
+  void _handleSubmit(MeasuresViewModel vm) async {
     if (_isOkForm()) {
       final WriteBatch batch = CloudDb.instance.batch();
 
@@ -287,6 +297,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
 
       showLoadingSnackBar();
       try {
+        vm.toggleLoading();
         await batch.commit();
 
         closeLoadingSnackBar();
