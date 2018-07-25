@@ -1,10 +1,13 @@
 import 'package:contact_picker/contact_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_form.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_measure.dart';
+import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/redux/view_models/measures.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
@@ -40,36 +43,46 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
   @override
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
-    return new Scaffold(
-      key: scaffoldKey,
-      backgroundColor: theme.scaffoldColor,
-      appBar: appBar(
-        context,
-        title: "Create Contact",
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.contacts,
-              color: kTitleBaseColor,
-            ),
-            onPressed: _handleSelectContact,
+    return StoreConnector<ReduxState, MeasuresViewModel>(
+      converter: (store) => MeasuresViewModel(store),
+      builder: (BuildContext context, vm) {
+        return new Scaffold(
+          key: scaffoldKey,
+          backgroundColor: theme.scaffoldColor,
+          appBar: appBar(
+            context,
+            title: "Create Contact",
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.contacts,
+                  color: kTitleBaseColor,
+                ),
+                onPressed: _handleSelectContact,
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.content_cut,
+                  color: kTitleBaseColor,
+                ),
+                onPressed: () => TMNavigate(
+                      context,
+                      ContactMeasure(
+                        contact: contact,
+                        grouped: vm.grouped,
+                      ),
+                    ),
+              ),
+            ],
           ),
-          IconButton(
-            icon: Icon(
-              Icons.content_cut,
-              color: kTitleBaseColor,
-            ),
-            onPressed: () =>
-                TMNavigate(context, ContactMeasure(contact: contact)),
+          body: ContactForm(
+            key: _formKey,
+            contact: contact,
+            onHandleSubmit: _handleSubmit,
+            onHandleValidate: _handleValidate,
           ),
-        ],
-      ),
-      body: ContactForm(
-        key: _formKey,
-        contact: contact,
-        onHandleSubmit: _handleSubmit,
-        onHandleValidate: _handleValidate,
-      ),
+        );
+      },
     );
   }
 

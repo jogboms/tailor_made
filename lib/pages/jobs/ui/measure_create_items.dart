@@ -4,48 +4,30 @@ import 'package:tailor_made/ui/slide_down.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class MeasureCreateItems extends StatelessWidget {
-  final List<MeasureModel> measurements;
+  final Map<String, List<MeasureModel>> grouped;
+  final Map<String, double> measurements;
 
-  const MeasureCreateItems(this.measurements);
+  const MeasureCreateItems(
+    this.grouped,
+    this.measurements,
+  );
 
   @override
   Widget build(BuildContext context) {
+    final slides = <SlideDownItem>[];
+
+    grouped.forEach((key, data) {
+      slides.add(new SlideDownItem(
+        title: key,
+        body: new JobMeasureBlock(
+          data.toList(),
+        ),
+        // isExpanded: true,
+      ));
+    });
+
     return Column(
-      children: [
-        new SlideDownItem(
-          title: MeasureModelType.blouse,
-          body: new JobMeasureBlock(
-            measurements
-                .where((measure) => measure.group == MeasureModelType.blouse)
-                .toList(),
-          ),
-          isExpanded: true,
-        ),
-        new SlideDownItem(
-          title: MeasureModelType.trouser,
-          body: new JobMeasureBlock(
-            measurements
-                .where((measure) => measure.group == MeasureModelType.trouser)
-                .toList(),
-          ),
-        ),
-        new SlideDownItem(
-          title: MeasureModelType.skirts,
-          body: new JobMeasureBlock(
-            measurements
-                .where((measure) => measure.group == MeasureModelType.skirts)
-                .toList(),
-          ),
-        ),
-        new SlideDownItem(
-          title: MeasureModelType.gown,
-          body: new JobMeasureBlock(
-            measurements
-                .where((measure) => measure.group == MeasureModelType.gown)
-                .toList(),
-          ),
-        ),
-      ],
+      children: slides.toList(),
     );
   }
 }

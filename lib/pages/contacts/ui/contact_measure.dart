@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/pages/jobs/ui/measure_create_items.dart';
 import 'package:tailor_made/pages/jobs/ui/measures.dart';
 import 'package:tailor_made/ui/app_bar.dart';
@@ -9,10 +10,12 @@ import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class ContactMeasure extends StatefulWidget {
+  final Map<String, List<MeasureModel>> grouped;
   final ContactModel contact;
 
   const ContactMeasure({
     Key key,
+    @required this.grouped,
     @required this.contact,
   }) : super(key: key);
 
@@ -33,7 +36,10 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
     final List<Widget> children = [];
 
     children.add(makeHeader("Measurements", "Inches (In)"));
-    children.add(MeasureCreateItems(widget.contact.measurements));
+    children.add(MeasureCreateItems(
+      widget.grouped,
+      widget.contact.measurements,
+    ));
 
     children.add(
       Padding(

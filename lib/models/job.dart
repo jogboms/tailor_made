@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/main.dart';
-import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/utils/tm_uuid.dart';
@@ -17,7 +16,7 @@ class JobModel extends Model {
   double pendingPayment;
   String notes;
   List<ImageModel> images;
-  List<MeasureModel> measurements;
+  Map<String, double> measurements;
   List<PaymentModel> payments;
   bool isComplete;
   DateTime createdAt;
@@ -32,7 +31,7 @@ class JobModel extends Model {
     this.images,
     this.completedPayment = 0.0,
     this.pendingPayment = 0.0,
-    this.measurements = const [],
+    this.measurements = const {},
     this.payments = const [],
     this.isComplete = false,
     DateTime createdAt,
@@ -42,12 +41,9 @@ class JobModel extends Model {
 
   factory JobModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
-    final List<MeasureModel> measurements = [];
+    Map<String, double> measurements;
     if (json['measurements'] != null) {
-      json['measurements'].forEach(
-        (dynamic measure) => measurements
-            .add(MeasureModel.fromJson(measure.cast<String, dynamic>())),
-      );
+      measurements = json['measurements'].cast<String, dynamic>();
     }
     final List<PaymentModel> payments = [];
     if (json['payments'] != null) {
@@ -97,7 +93,7 @@ class JobModel extends Model {
       'notes': notes,
       'images': images.map((image) => image.toMap()).toList(),
       'createdAt': createdAt.toString(),
-      'measurements': measurements.map((measure) => measure.toMap()).toList(),
+      'measurements': measurements,
       'payments': payments.map((payment) => payment.toMap()).toList(),
       'isComplete': isComplete,
     };

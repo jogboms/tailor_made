@@ -46,7 +46,10 @@ class _ContactState extends State<ContactPage> {
             appBar: new AppBar(
               backgroundColor: kAccentColor,
               automaticallyImplyLeading: false,
-              title: new ContactAppBar(contact: contact),
+              title: new ContactAppBar(
+                contact: contact,
+                grouped: vm.measuresGrouped,
+              ),
               titleSpacing: 0.0,
               centerTitle: false,
               brightness: Brightness.dark,

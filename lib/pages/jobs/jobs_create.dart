@@ -12,7 +12,6 @@ import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/pages/jobs/job.dart';
 import 'package:tailor_made/pages/jobs/ui/contact_lists.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grid_item.dart';
-import 'package:tailor_made/pages/jobs/ui/measure_create_items.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/services/cloud_storage.dart';
 import 'package:tailor_made/ui/app_bar.dart';
@@ -116,7 +115,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       children.add(buildImageGrid());
 
       children.add(makeHeader("Measurements", "Inches (In)"));
-      children.add(MeasureCreateItems(job.measurements));
+      // children.add(MeasureCreateItems(job.measurements));
 
       children.add(makeHeader("Additional Notes"));
       children.add(buildAdditional());

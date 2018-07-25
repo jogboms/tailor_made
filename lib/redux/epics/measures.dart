@@ -16,6 +16,10 @@ Stream<dynamic> measures(Stream<dynamic> actions, EpicStore<ReduxState> store) {
       .switchMap<dynamic>(
         (InitDataEvents action) => _getMeasures().map<dynamic>(
               (measures) {
+                if (measures.isEmpty) {
+                  measures = createDefaultMeasures();
+                }
+
                 final grouped = groupModelBy<MeasureModel>(measures, "group");
 
                 return new OnDataMeasureEvent(

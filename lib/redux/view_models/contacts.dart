@@ -1,5 +1,6 @@
 import 'package:redux/redux.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/redux/actions/contacts.dart';
 import 'package:tailor_made/redux/states/contacts.dart';
 import 'package:tailor_made/redux/states/main.dart';
@@ -15,6 +16,9 @@ class ContactsViewModel extends ViewModel {
   List<ContactModel> get contacts {
     return isSearching ? _state.searchResults : _state.contacts;
   }
+
+  Map<String, List<MeasureModel>> get measuresGrouped =>
+      store.state.measures.grouped;
 
   ContactModel get selected {
     if (contactID != null) {

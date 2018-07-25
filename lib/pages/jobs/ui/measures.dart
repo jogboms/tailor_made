@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/models/measure.dart';
-import 'package:tailor_made/pages/jobs/ui/measure_list_item.dart';
 import 'package:tailor_made/ui/tm_empty_result.dart';
 
 class MeasuresPage extends StatelessWidget {
-  final List<MeasureModel> measurements;
+  final Map<String, double> measurements;
 
   const MeasuresPage({
     Key key,
@@ -35,7 +33,8 @@ class MeasuresPage extends StatelessWidget {
       itemCount: measurements.length,
       shrinkWrap: true,
       padding: EdgeInsets.only(bottom: 96.0),
-      itemBuilder: (context, index) => MeasureListItem(measurements[index]),
+      // itemBuilder: (context, index) => MeasureListItem(measurements[index]),
+      itemBuilder: (context, index) => Container(),
       separatorBuilder: (BuildContext context, int index) => new Divider(),
     );
   }
