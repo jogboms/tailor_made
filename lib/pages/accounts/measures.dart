@@ -1,22 +1,17 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/models/account.dart';
-import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/pages/accounts/ui/measures_create.dart';
 import 'package:tailor_made/pages/accounts/ui/measures_slide_block.dart';
-import 'package:tailor_made/services/cloud_db.dart';
+import 'package:tailor_made/redux/actions/main.dart';
+import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/redux/view_models/measures.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
-import 'package:tailor_made/utils/tm_group_model_by.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
-
-enum ActionChoice {
-  edit,
-  delete,
-}
 
 class AccountMeasuresPage extends StatefulWidget {
   final AccountModel account;
@@ -69,24 +64,20 @@ class AccountMeasuresPageState extends State<AccountMeasuresPage>
   }
 
   Widget _buildBody() {
-    return StreamBuilder(
-      stream: CloudDb.measurements.snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting ||
-            !snapshot.hasData ||
-            (snapshot.hasData && snapshot.data.documents == null)) {
+    return new StoreConnector<ReduxState, MeasuresViewModel>(
+      converter: (store) => MeasuresViewModel(store),
+      onInit: (store) => store.dispatch(new InitDataEvents()),
+      onDispose: (store) => store.dispatch(new DisposeDataEvents()),
+      builder: (BuildContext context, vm) {
+        if (vm.isLoading) {
           return Center(
             child: loadingSpinner(),
           );
         }
 
-        final measures = List<DocumentSnapshot>.from(snapshot.data.documents)
-            .map((DocumentSnapshot doc) => MeasureModel.fromDoc(doc))
-            .toList();
-
         final slides = <MeasureSlideBlock>[];
 
-        groupModelBy<MeasureModel>(measures, "group").forEach((key, data) {
+        vm.grouped.forEach((key, data) {
           slides.add(
             MeasureSlideBlock(
               title: key,

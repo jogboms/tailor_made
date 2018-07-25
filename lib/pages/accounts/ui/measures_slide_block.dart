@@ -9,6 +9,11 @@ import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
+enum ActionChoice {
+  edit,
+  delete,
+}
+
 class MeasureSlideBlock extends StatefulWidget {
   final List<MeasureModel> measures;
   final AccountMeasuresPageState parent;
