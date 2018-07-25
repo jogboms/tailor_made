@@ -40,7 +40,7 @@ class MeasureModelType {
 class MeasureModel extends Model {
   String id;
   String name;
-  // TODO remove
+  // TODO only for UI purposes
   double value;
   String unit;
   String group;
@@ -49,7 +49,6 @@ class MeasureModel extends Model {
   MeasureModel({
     String id,
     @required this.name,
-    // TODO remove
     this.value = 0.0,
     this.unit = 'In',
     DateTime createdAt,
@@ -62,8 +61,6 @@ class MeasureModel extends Model {
     return new MeasureModel(
       id: json['id'],
       name: json['name'],
-      // TODO remove
-      value: double.tryParse(json['value'].toString()),
       unit: json['unit'],
       group: json['group'],
       createdAt: DateTime.tryParse(json['createdAt'].toString()),
@@ -79,8 +76,6 @@ class MeasureModel extends Model {
     return <String, dynamic>{
       'id': id,
       'name': name,
-      // TODO remove
-      'value': value,
       'unit': unit,
       'group': group,
       'createdAt': createdAt.toString(),

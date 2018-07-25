@@ -36,7 +36,7 @@ class ContactModel extends Model {
     assert(json != null);
     Map<String, double> measurements;
     if (json['measurements'] != null) {
-      measurements = json['measurements'].cast<String, dynamic>();
+      measurements = json['measurements'].cast<String, double>();
     }
     return new ContactModel(
       id: json['id'],

@@ -7,10 +7,11 @@ class MeasureCreateItems extends StatelessWidget {
   final Map<String, List<MeasureModel>> grouped;
   final Map<String, double> measurements;
 
-  const MeasureCreateItems(
-    this.grouped,
-    this.measurements,
-  );
+  const MeasureCreateItems({
+    Key key,
+    @required this.grouped,
+    @required this.measurements,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,8 @@ class MeasureCreateItems extends StatelessWidget {
       slides.add(new SlideDownItem(
         title: key,
         body: new JobMeasureBlock(
-          data.toList(),
+          measures: data.toList(),
+          measurements: measurements,
         ),
         // isExpanded: true,
       ));
@@ -33,13 +35,18 @@ class MeasureCreateItems extends StatelessWidget {
 }
 
 class JobMeasureBlock extends StatelessWidget {
-  final List<MeasureModel> list;
+  final List<MeasureModel> measures;
+  final Map<String, double> measurements;
 
-  const JobMeasureBlock(this.list);
+  const JobMeasureBlock({
+    Key key,
+    @required this.measures,
+    @required this.measurements,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final length = list.length;
+    final length = measures.length;
     return Theme(
       data: ThemeData(primaryColor: kPrimaryColor),
       child: Container(
@@ -51,8 +58,12 @@ class JobMeasureBlock extends StatelessWidget {
         ),
         child: Wrap(
           alignment: WrapAlignment.spaceBetween,
-          children: list.map((MeasureModel measure) {
-            final index = list.indexOf(measure);
+          children: measures.map((MeasureModel measure) {
+            final index = measures.indexOf(measure);
+
+            final _value = measurements[measure.id] ?? 0;
+            final value = _value != null && _value > 0 ? _value.toString() : "";
+
             return new LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 final removeBorder =
@@ -76,9 +87,7 @@ class JobMeasureBlock extends StatelessWidget {
                   ),
                   width: constraints.maxWidth / 2,
                   child: TextFormField(
-                    initialValue: measure.value != null && measure.value > 0
-                        ? measure.value.toString()
-                        : "",
+                    initialValue: value,
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
                     style: TextStyle(fontSize: 20.0, color: Colors.black),
@@ -89,8 +98,9 @@ class JobMeasureBlock extends StatelessWidget {
                       labelStyle: TextStyle(fontSize: 14.0),
                     ),
                     onFieldSubmitted: (value) =>
-                        measure.value = double.tryParse(value),
-                    onSaved: (value) => measure.value = double.tryParse(value),
+                        measurements[measure.id] = double.tryParse(value),
+                    onSaved: (value) =>
+                        measurements[measure.id] = double.tryParse(value),
                   ),
                 );
               },

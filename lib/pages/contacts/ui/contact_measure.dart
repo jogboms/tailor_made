@@ -26,9 +26,16 @@ class ContactMeasure extends StatefulWidget {
 class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   bool _autovalidate = false;
+  ContactModel contact;
 
   @override
   final scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    contact = widget.contact.copyWith();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +44,8 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
 
     children.add(makeHeader("Measurements", "Inches (In)"));
     children.add(MeasureCreateItems(
-      widget.grouped,
-      widget.contact.measurements,
+      grouped: widget.grouped,
+      measurements: contact.measurements,
     ));
 
     children.add(
@@ -62,6 +69,7 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
       appBar: appBar(
         context,
         title: "Measurements",
+        onPop: () => Navigator.pop(context, contact),
         actions: [
           IconButton(
             icon: Icon(
@@ -70,7 +78,9 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
             ),
             onPressed: () => TMNavigate(
                   context,
-                  MeasuresPage(measurements: widget.contact.measurements),
+                  MeasuresPage(
+                    measurements: contact.measurements,
+                  ),
                   fullscreenDialog: true,
                 ),
           )
@@ -124,9 +134,10 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
       showLoadingSnackBar();
 
       try {
+        // TODO find a way to remove this from here
         // During contact creation
-        if (widget.contact.reference != null) {
-          await widget.contact.reference.updateData(widget.contact.toMap());
+        if (contact.reference != null) {
+          await contact.reference.updateData(contact.toMap());
         }
         closeLoadingSnackBar();
         showInSnackBar("Successfully Updated");

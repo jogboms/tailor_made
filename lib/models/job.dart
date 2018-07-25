@@ -43,7 +43,7 @@ class JobModel extends Model {
     assert(json != null);
     Map<String, double> measurements;
     if (json['measurements'] != null) {
-      measurements = json['measurements'].cast<String, dynamic>();
+      measurements = json['measurements'].cast<String, double>();
     }
     final List<PaymentModel> payments = [];
     if (json['payments'] != null) {
