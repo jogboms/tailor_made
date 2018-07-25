@@ -30,10 +30,11 @@ Stream<dynamic> measures(Stream<dynamic> actions, EpicStore<ReduxState> store) {
 }
 
 Observable<List<MeasureModel>> _getMeasures() {
-  return new Observable(CloudDb.measurements.snapshots())
-      .map((QuerySnapshot snapshot) {
-    return snapshot.documents
-        .map((item) => MeasureModel.fromDoc(item))
-        .toList();
-  });
+  return new Observable(CloudDb.measurements.snapshots()).map(
+    (QuerySnapshot snapshot) {
+      return snapshot.documents
+          .map((item) => MeasureModel.fromDoc(item))
+          .toList();
+    },
+  );
 }

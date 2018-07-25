@@ -22,9 +22,7 @@ class AccountMeasuresPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  AccountMeasuresPageState createState() {
-    return new AccountMeasuresPageState();
-  }
+  AccountMeasuresPageState createState() => new AccountMeasuresPageState();
 }
 
 class AccountMeasuresPageState extends State<AccountMeasuresPage>
