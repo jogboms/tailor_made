@@ -9,6 +9,7 @@ import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/measures.dart';
 import 'package:tailor_made/ui/app_bar.dart';
+import 'package:tailor_made/ui/tm_empty_result.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
@@ -36,7 +37,7 @@ class AccountMeasuresPageState extends State<AccountMeasuresPage>
     super.initState();
     Future.delayed(
       Duration(seconds: 2),
-      () => showInSnackBar("Long-Press on each block to see more actions"),
+      () => showInSnackBar("Long-Press on any group to see more actions."),
     );
   }
 
@@ -73,6 +74,12 @@ class AccountMeasuresPageState extends State<AccountMeasuresPage>
         if (vm.isLoading) {
           return Center(
             child: loadingSpinner(),
+          );
+        }
+
+        if (vm.measures == null || vm.measures.isEmpty) {
+          return Center(
+            child: TMEmptyResult(message: "No measurements available"),
           );
         }
 

@@ -75,8 +75,8 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
             centerTitle: false,
             elevation: 1.0,
             actions: [
-              IconButton(
-                icon: Icon(Icons.check),
+              FlatButton(
+                child: Text("SAVE", style: TextStyle(fontSize: 20.0)),
                 onPressed: measures.isEmpty ? null : () => _handleSubmit(vm),
               )
             ],

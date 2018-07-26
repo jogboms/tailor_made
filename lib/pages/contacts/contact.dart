@@ -40,7 +40,7 @@ class _ContactState extends State<ContactPage> {
         // in the case of newly created contacts
         final contact = vm.selected ?? widget.contact;
         return new DefaultTabController(
-          length: 3,
+          length: TABS.length,
           child: new Scaffold(
             backgroundColor: theme.scaffoldColor,
             appBar: new AppBar(

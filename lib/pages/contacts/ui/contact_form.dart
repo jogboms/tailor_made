@@ -216,15 +216,19 @@ class ContactFormState extends State<ContactForm> {
     setState(() => isLoading = true);
     try {
       contact.imageUrl = (await uploadTask.future).downloadUrl?.toString();
-      setState(() {
-        if (_lastImgRef != null) {
-          _lastImgRef.delete();
-        }
-        isLoading = false;
-        _lastImgRef = ref;
-      });
+      if (mounted) {
+        setState(() {
+          if (_lastImgRef != null) {
+            _lastImgRef.delete();
+          }
+          isLoading = false;
+          _lastImgRef = ref;
+        });
+      }
     } catch (e) {
-      setState(() => isLoading = false);
+      if (mounted) {
+        setState(() => isLoading = false);
+      }
     }
   }
 
