@@ -34,6 +34,22 @@ Stream<dynamic> onPremiumSignUp(
               ));
 }
 
+Stream<dynamic> onSendRating(
+    Stream<dynamic> actions, EpicStore<ReduxState> store) {
+  return new Observable<dynamic>(actions)
+      .ofType(new TypeToken<OnSendRating>())
+      .switchMap<dynamic>((OnSendRating action) => Observable.fromFuture(
+            _sendRating(action.payload, action.rating).catchError(
+              (dynamic e) => print(e),
+            ),
+          )
+              .map((account) => new VoidAction())
+              //
+              .takeUntil<dynamic>(
+                actions.where((dynamic action) => action is DisposeDataEvents),
+              ));
+}
+
 Stream<dynamic> onReadNotice(
     Stream<dynamic> actions, EpicStore<ReduxState> store) {
   return new Observable<dynamic>(actions)
@@ -53,6 +69,19 @@ Stream<dynamic> onReadNotice(
 Observable<AccountModel> _getAccount() {
   return new Observable(CloudDb.account.snapshots())
       .map((DocumentSnapshot snapshot) => AccountModel.fromDoc(snapshot));
+}
+
+Future<AccountModel> _sendRating(AccountModel account, int rating) async {
+  final _account = account.copyWith(
+    hasSendRating: true,
+    rating: rating,
+  );
+  try {
+    await account.reference.updateData(_account.toMap());
+  } catch (e) {
+    rethrow;
+  }
+  return _account;
 }
 
 Future<AccountModel> _readNotice(AccountModel account) async {

@@ -1,21 +1,31 @@
+import 'package:meta/meta.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 
 class OnDataAccountEvent extends ActionType<AccountModel> {
   OnDataAccountEvent({
-    AccountModel payload,
+    @required AccountModel payload,
   }) : super(payload: payload);
 }
 
 class OnPremiumSignUp extends ActionType<AccountModel> {
   OnPremiumSignUp({
-    AccountModel payload,
+    @required AccountModel payload,
   }) : super(payload: payload);
 }
 
 class OnReadNotice extends ActionType<AccountModel> {
   OnReadNotice({
-    AccountModel payload,
+    @required AccountModel payload,
+  }) : super(payload: payload);
+}
+
+class OnSendRating extends ActionType<AccountModel> {
+  final int rating;
+
+  OnSendRating({
+    @required AccountModel payload,
+    @required this.rating,
   }) : super(payload: payload);
 }
 
