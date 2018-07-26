@@ -62,7 +62,9 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
               IconButton(
                 icon: Icon(
                   Icons.content_cut,
-                  color: kTitleBaseColor,
+                  color: contact.measurements.isEmpty
+                      ? kAccentColor
+                      : kTitleBaseColor,
                 ),
                 onPressed: () => _handleSelectMeasure(vm),
               ),
@@ -97,12 +99,18 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
   }
 
   void _handleSubmit(ContactModel _contact) async {
+    if (contact.measurements.isEmpty) {
+      showInSnackBar("Leaving Measurements empty? Click on Scissors button.");
+      return;
+    }
+
     showLoadingSnackBar();
 
     try {
       contact = contact.copyWith(
         fullname: _contact.fullname,
         phone: _contact.phone,
+        imageUrl: _contact.imageUrl,
         location: _contact.location,
       );
 

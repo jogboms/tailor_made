@@ -259,7 +259,10 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
 
       job
         ..pendingPayment = job.price
-        ..images = fireImages.map((img) => img.image).toList()
+        ..images = fireImages
+            .where((img) => img.image != null)
+            .map((img) => img.image)
+            .toList()
         ..contactID = contact.id;
 
       try {

@@ -162,10 +162,14 @@ class GalleryGridsState extends State<GalleryGrids> {
         );
       });
 
-      await widget.job.reference
-          .updateData(<String, List<Map<String, dynamic>>>{
-        "images": fireImages.map((img) => img.image.toMap()).toList(),
-      });
+      await widget.job.reference.updateData(
+        <String, List<Map<String, dynamic>>>{
+          "images": fireImages
+              .where((img) => img.image != null)
+              .map((img) => img.image.toMap())
+              .toList(),
+        },
+      );
 
       // Redraw
       setState(() {

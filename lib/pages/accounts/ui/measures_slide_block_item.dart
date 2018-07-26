@@ -26,6 +26,7 @@ class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
     return ListTile(
       dense: true,
       title: Text(widget.measure.name),
+      subtitle: Text(widget.measure.unit),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[

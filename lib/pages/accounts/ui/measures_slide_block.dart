@@ -11,7 +11,6 @@ import 'package:tailor_made/ui/slide_down.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
-import 'package:tailor_made/utils/tm_theme.dart';
 
 enum ActionChoice {
   edit,
@@ -47,7 +46,7 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
     return new SlideDownItem(
       title: widget.title,
       body: Container(
-        color: kBorderSideColor.withOpacity(.25),
+        // color: kBorderSideColor.withOpacity(.25),
         child: Column(
           children: children,
         ),
