@@ -4,6 +4,7 @@ import 'package:tailor_made/redux/actions/main.dart';
 enum SortType {
   recent,
   jobs,
+  completed,
   pending,
   name,
   reset,

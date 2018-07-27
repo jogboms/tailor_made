@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/models/measure.dart';
-import 'package:tailor_made/pages/jobs/ui/measure_list_item.dart';
+import 'package:tailor_made/pages/measures/ui/measure_list_item.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/measures.dart';
 import 'package:tailor_made/ui/tm_empty_result.dart';

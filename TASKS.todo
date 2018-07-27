@@ -8,12 +8,12 @@ PENDING:
   ☐ indicator for premium accounts @goals
   ☐ empty states icons @quickie
   ☐ edit job measurements @high
-  ☐ add in-app review @quickie
   ☐ Trigger loading action for any side-effect to the store @low
   ☐ gradual migration to BLoC to reduce boilerplate from Redux @goals
   ☐ copy and paste jobs @goals
 
 COMPLETED:
+  ✔ add in-app review @quickie @done(18-07-27 03:16)
   ✔ personalize measurements w/ account @critical @done(18-07-25 18:47)
   ✔ long press to delete or edit measure block snackbar message @critical @done(18-07-25 01:20)
   ✔ fix issue with reloading state on outdated app @critical @done(18-07-24 11:23)

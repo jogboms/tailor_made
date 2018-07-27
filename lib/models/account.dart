@@ -13,6 +13,8 @@ class AccountModel extends Model {
   String photoURL;
   AccountModelStatus status;
   bool hasPremiumEnabled;
+  bool hasSendRating;
+  int rating;
   String notice;
   bool hasReadNotice;
 
@@ -25,6 +27,8 @@ class AccountModel extends Model {
     @required this.photoURL,
     @required this.status,
     @required this.hasPremiumEnabled,
+    @required this.hasSendRating,
+    @required this.rating,
     @required this.notice,
     @required this.hasReadNotice,
   });
@@ -41,6 +45,8 @@ class AccountModel extends Model {
       status:
           AccountModelStatus.values[int.tryParse(json['status'].toString())],
       hasPremiumEnabled: json['hasPremiumEnabled'],
+      hasSendRating: json['hasSendRating'] ?? false,
+      rating: json['rating'],
       notice: json['notice'],
       hasReadNotice: json['hasReadNotice'],
     );
@@ -57,6 +63,8 @@ class AccountModel extends Model {
     String photoURL,
     AccountModelStatus status,
     bool hasPremiumEnabled,
+    bool hasSendRating,
+    int rating,
     String notice,
     bool hasReadNotice,
   }) {
@@ -69,6 +77,8 @@ class AccountModel extends Model {
       photoURL: photoURL ?? this.photoURL,
       status: status ?? this.status,
       hasPremiumEnabled: hasPremiumEnabled ?? this.hasPremiumEnabled,
+      hasSendRating: hasSendRating ?? this.hasSendRating,
+      rating: rating ?? this.rating,
       notice: notice ?? this.notice,
       hasReadNotice: hasReadNotice ?? this.hasReadNotice,
     )..reference = this.reference;
@@ -85,6 +95,8 @@ class AccountModel extends Model {
       'photoURL': photoURL,
       'status': status.index,
       'hasPremiumEnabled': hasPremiumEnabled,
+      'hasSendRating': hasSendRating,
+      'rating': rating,
       'notice': notice,
       'hasReadNotice': hasReadNotice,
     };

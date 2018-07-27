@@ -14,7 +14,9 @@ import 'package:version/version.dart';
 class HomeViewModel extends StatsViewModel {
   HomeViewModel(Store<ReduxState> store) : super(store);
 
-  AccountModel get account => store.state.account.account;
+  AccountState get _state => store.state.account;
+
+  AccountModel get account => _state.account;
 
   List<ContactModel> get contacts => store.state.contacts.contacts;
 
@@ -22,16 +24,22 @@ class HomeViewModel extends StatsViewModel {
   bool get isLoading {
     return store.state.stats.status == StatsStatus.loading ||
         store.state.contacts.status == ContactsStatus.loading ||
-        store.state.account.status == AccountStatus.loading;
+        _state.status == AccountStatus.loading;
   }
 
-  bool get hasSkipedPremium => store.state.account.hasSkipedPremium == true;
+  bool get hasSkipedPremium => _state.hasSkipedPremium == true;
 
   bool get isDisabled => account.status == AccountModelStatus.disabled;
 
   bool get isWarning => account.status == AccountModelStatus.warning;
 
   bool get isPending => account.status == AccountModelStatus.pending;
+
+  bool get shouldSendRating {
+    return !account.hasSendRating &&
+        (((store.state.contacts.contacts?.length ?? 0) >= 10) ||
+            ((store.state.jobs.jobs?.length ?? 0) >= 10));
+  }
 
   bool get isOutdated {
     final currentVersion = Version.parse(Settings.getVersion());
@@ -42,6 +50,10 @@ class HomeViewModel extends StatsViewModel {
   }
 
   void onPremiumSignUp() => store.dispatch(OnPremiumSignUp(payload: account));
+
+  void onSendRating(int rating) => store.dispatch(
+        OnSendRating(payload: account, rating: rating),
+      );
 
   void onReadNotice() => store.dispatch(OnReadNotice(payload: account));
 

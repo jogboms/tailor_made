@@ -19,6 +19,7 @@ EpicMiddleware<ReduxState> reduxEpics() => new EpicMiddleware<ReduxState>(
           measures.measures,
           settings.settings,
           account.account,
+          account.onSendRating,
           account.onPremiumSignUp,
           account.onReadNotice,
         ],

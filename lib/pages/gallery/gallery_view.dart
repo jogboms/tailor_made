@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
@@ -27,11 +28,13 @@ class GalleryView extends StatelessWidget {
         ..contactID = image.contactID
         ..jobID = image.jobID,
       builder: (BuildContext context, ContactJobViewModel vm) {
-        final contact = vm.selectedContact;
-        final job = vm.selectedJob;
         return new Scaffold(
           backgroundColor: Colors.black87,
-          appBar: MyAppBar(contact: contact, job: job),
+          appBar: MyAppBar(
+            contact: vm.selectedContact,
+            job: vm.selectedJob,
+            account: vm.account,
+          ),
           body: new Hero(
             tag: image.src,
             child: new PhotoView(
@@ -48,11 +51,13 @@ class GalleryView extends StatelessWidget {
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final ContactModel contact;
   final JobModel job;
+  final AccountModel account;
 
   const MyAppBar({
     Key key,
     this.contact,
     this.job,
+    @required this.account,
   }) : super(key: key);
 
   @override
@@ -90,14 +95,16 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                           TMNavigate(context, ContactPage(contact: contact)),
                     )
                   : SizedBox(),
-              IconButton(
-                icon: Icon(
-                  Icons.share,
-                  color: Colors.white,
-                ),
-                // TODO
-                onPressed: null,
-              ),
+              account.hasPremiumEnabled
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.share,
+                        color: Colors.white,
+                      ),
+                      // TODO
+                      onPressed: null,
+                    )
+                  : SizedBox(),
             ],
           ),
         ),

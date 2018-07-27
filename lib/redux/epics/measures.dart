@@ -10,7 +10,10 @@ import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/utils/tm_group_model_by.dart';
 
-Stream<dynamic> measures(Stream<dynamic> actions, EpicStore<ReduxState> store) {
+Stream<dynamic> measures(
+  Stream<dynamic> actions,
+  EpicStore<ReduxState> store,
+) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<InitDataEvents>())
       .switchMap<dynamic>(
@@ -35,7 +38,10 @@ Stream<dynamic> measures(Stream<dynamic> actions, EpicStore<ReduxState> store) {
       );
 }
 
-Stream<dynamic> init(Stream<dynamic> actions, EpicStore<ReduxState> store) {
+Stream<dynamic> init(
+  Stream<dynamic> actions,
+  EpicStore<ReduxState> store,
+) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<OnInitMeasureEvent>())
       .switchMap<dynamic>(
@@ -46,10 +52,7 @@ Stream<dynamic> init(Stream<dynamic> actions, EpicStore<ReduxState> store) {
             )
                 // TODO refactor need to InitDataEvent
                 .map<dynamic>((measures) => new InitDataEvents())
-                .takeUntil<dynamic>(
-                  actions
-                      .where((dynamic action) => action is DisposeDataEvents),
-                ),
+                .take(1),
       );
 }
 

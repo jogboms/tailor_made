@@ -7,26 +7,42 @@ import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/main.dart';
 
 class JobsViewModel extends ViewModel {
-  ContactModel contact;
+  String jobID;
 
   JobsViewModel(Store<ReduxState> store) : super(store);
 
   JobsState get _state => store.state.jobs;
 
   List<JobModel> get jobs {
-    final jobs = store.state.jobs.jobs;
-    if (contact != null) {
-      return jobs.where((_) => _.contactID == contact.id).toList();
-    }
-    return isSearching ? _state.searchResults : jobs;
+    return isSearching ? _state.searchResults : store.state.jobs.jobs;
   }
 
   List<ContactModel> get contacts {
     return store.state.contacts.contacts;
   }
 
-  void filterByContact(ContactModel contact) {
-    contact = contact;
+  JobModel get selected {
+    if (jobID != null) {
+      try {
+        return _state.jobs.firstWhere(
+          (_) => _.id == jobID,
+        );
+      } catch (e) {
+        //
+      }
+    }
+    return null;
+  }
+
+  ContactModel get selectedContact {
+    if (selected != null) {
+      try {
+        return contacts.firstWhere((_) => _.id == selected.contactID);
+      } catch (e) {
+        //
+      }
+    }
+    return null;
   }
 
   void toggleCompleteJob(JobModel job) {

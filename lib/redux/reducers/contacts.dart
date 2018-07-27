@@ -9,6 +9,9 @@ Comparator<ContactModel> _sort(SortType sortType) {
       return (a, b) => b.totalJobs.compareTo(a.totalJobs);
     case SortType.name:
       return (a, b) => a.fullname.compareTo(b.fullname);
+    case SortType.completed:
+      return (a, b) =>
+          (b.totalJobs - b.pendingJobs).compareTo(a.totalJobs - a.pendingJobs);
     case SortType.pending:
       return (a, b) => b.pendingJobs.compareTo(a.pendingJobs);
     case SortType.recent:
