@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/measure.dart';
-import 'package:tailor_made/pages/jobs/ui/measure_create_items.dart';
-import 'package:tailor_made/pages/jobs/ui/measures.dart';
+import 'package:tailor_made/pages/measures/measures.dart';
+import 'package:tailor_made/pages/measures/ui/measure_create_items.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/full_button.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';

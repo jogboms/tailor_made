@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/measure.dart';
-import 'package:tailor_made/pages/accounts/measures.dart';
-import 'package:tailor_made/pages/accounts/ui/measures_create.dart';
-import 'package:tailor_made/pages/accounts/ui/measures_slide_block_item.dart';
+import 'package:tailor_made/pages/measures/measures_create.dart';
+import 'package:tailor_made/pages/measures/measures_manage.dart';
+import 'package:tailor_made/pages/measures/ui/measures_slide_block_item.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/ui/slide_down.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
@@ -19,7 +19,7 @@ enum ActionChoice {
 
 class MeasureSlideBlock extends StatefulWidget {
   final List<MeasureModel> measures;
-  final AccountMeasuresPageState parent;
+  final MeasuresManagePageState parent;
   final String title;
 
   const MeasureSlideBlock({

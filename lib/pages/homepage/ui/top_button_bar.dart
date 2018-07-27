@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:tailor_made/pages/accounts/measures.dart';
 import 'package:tailor_made/pages/homepage/home_view_model.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';
 import 'package:tailor_made/pages/homepage/ui/notice_dialog.dart';
+import 'package:tailor_made/pages/homepage/ui/review_modal.dart';
 import 'package:tailor_made/pages/homepage/ui/store_name_dialog.dart';
+import 'package:tailor_made/pages/measures/measures_manage.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -62,9 +63,8 @@ class TopButtonBar extends StatelessWidget {
                           ),
                     new Align(
                       alignment: Alignment(1.25, 1.25),
-                      child: account?.hasReadNotice ?? false
-                          ? null
-                          : new Container(
+                      child: _shouldShowIndicator(vm)
+                          ? new Container(
                               width: 15.5,
                               height: 15.5,
                               decoration: new BoxDecoration(
@@ -76,7 +76,8 @@ class TopButtonBar extends StatelessWidget {
                                 ),
                                 shape: BoxShape.circle,
                               ),
-                            ),
+                            )
+                          : null,
                     ),
                   ],
                 ),
@@ -88,10 +89,26 @@ class TopButtonBar extends StatelessWidget {
     );
   }
 
+  bool _shouldShowIndicator(HomeViewModel vm) {
+    return !(vm.account?.hasReadNotice ?? false) || vm.shouldSendRating;
+  }
+
   void Function() _onTapAccount(BuildContext context, HomeViewModel vm) {
     final account = vm.account;
     return () async {
-      if (!(account?.hasReadNotice ?? false)) {
+      if (vm.shouldSendRating) {
+        final _res = await showChildDialog<int>(
+          context: context,
+          child: ReviewModal(),
+        );
+
+        if (_res != null) {
+          vm.onSendRating(_res);
+        }
+        return;
+      }
+
+      if (_shouldShowIndicator(vm)) {
         await showChildDialog<dynamic>(
           context: context,
           child: NoticeDialog(
@@ -170,7 +187,7 @@ class TopButtonBar extends StatelessWidget {
           break;
 
         case AccountOptions.measurement:
-          TMNavigate(context, AccountMeasuresPage(account: account));
+          TMNavigate(context, MeasuresManagePage(account: account));
           break;
 
         case AccountOptions.logout:

@@ -4,7 +4,7 @@ import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/pages/contacts/contacts_edit.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_measure.dart';
 import 'package:tailor_made/pages/jobs/jobs_create.dart';
-import 'package:tailor_made/pages/jobs/ui/measures.dart';
+import 'package:tailor_made/pages/measures/measures.dart';
 import 'package:tailor_made/ui/circle_avatar.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_phone.dart';

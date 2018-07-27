@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grids.dart';
-import 'package:tailor_made/pages/jobs/ui/measures.dart';
 import 'package:tailor_made/pages/jobs/ui/payment_grids.dart';
+import 'package:tailor_made/pages/measures/measures.dart';
 import 'package:tailor_made/redux/states/main.dart';
-import 'package:tailor_made/redux/view_models/contacts.dart';
+import 'package:tailor_made/redux/view_models/jobs.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
@@ -48,15 +49,16 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    return new StreamBuilder(
-      stream: job.reference.snapshots(),
-      builder: (BuildContext context, snapshot) {
-        if (!snapshot.hasData) {
+    return StoreConnector<ReduxState, JobsViewModel>(
+      converter: (store) => JobsViewModel(store)..jobID = widget.job.id,
+      builder: (BuildContext context, vm) {
+        // in the case of newly created jobs
+        job = vm.selected ?? widget.job;
+        if (vm.isLoading) {
           return Center(
             child: loadingSpinner(),
           );
         }
-        job = JobModel.fromDoc(snapshot.data);
         return new Scaffold(
           key: scaffoldKey,
           backgroundColor: theme.scaffoldColor,
@@ -75,7 +77,7 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
                   centerTitle: false,
                   backgroundColor: Colors.white,
                   // backgroundColor: Colors.grey.shade300,
-                  title: buildAvatarAppBar(context),
+                  title: buildAvatarAppBar(context, vm.selectedContact),
                 ),
               ];
             },
@@ -227,58 +229,52 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
     );
   }
 
-  Widget buildAvatarAppBar(BuildContext context) {
+  Widget buildAvatarAppBar(BuildContext context, ContactModel contact) {
     // final textColor = Colors.white;
     final textColor = Colors.grey.shade800;
 
     final date = formatDate(job.createdAt);
 
-    return new StoreConnector<ReduxState, ContactsViewModel>(
-      converter: (store) => ContactsViewModel(store)..contactID = job.contactID,
-      builder: (BuildContext context, ContactsViewModel vm) {
-        final contact = vm.selected;
-        return AvatarAppBar(
-          tag: contact.createdAt.toString(),
-          imageUrl: contact.imageUrl,
-          title: new GestureDetector(
-            onTap: () => TMNavigate(context, ContactPage(contact: contact)),
-            child: new Text(
-              contact.fullname,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: ralewayBold(18.0, kTitleBaseColor),
-            ),
+    return AvatarAppBar(
+      tag: contact.createdAt.toString(),
+      imageUrl: contact.imageUrl,
+      title: new GestureDetector(
+        onTap: () => TMNavigate(context, ContactPage(contact: contact)),
+        child: new Text(
+          contact.fullname,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: ralewayBold(18.0, kTitleBaseColor),
+        ),
+      ),
+      iconColor: textColor,
+      subtitle: new Text(
+        date,
+        style: new TextStyle(
+          color: textColor,
+          fontSize: 12.0,
+          fontWeight: FontWeight.w300,
+        ),
+      ),
+      actions: <Widget>[
+        IconButton(
+          icon: new Icon(
+            Icons.content_cut,
           ),
-          iconColor: textColor,
-          subtitle: new Text(
-            date,
-            style: new TextStyle(
-              color: textColor,
-              fontSize: 12.0,
-              fontWeight: FontWeight.w300,
-            ),
+          onPressed: () => TMNavigate(
+                context,
+                MeasuresPage(measurements: job.measurements),
+                fullscreenDialog: true,
+              ),
+        ),
+        IconButton(
+          icon: new Icon(
+            Icons.check,
+            color: job.isComplete ? kPrimaryColor : kTextBaseColor.shade400,
           ),
-          actions: <Widget>[
-            IconButton(
-              icon: new Icon(
-                Icons.content_cut,
-              ),
-              onPressed: () => TMNavigate(
-                    context,
-                    MeasuresPage(measurements: job.measurements),
-                    fullscreenDialog: true,
-                  ),
-            ),
-            IconButton(
-              icon: new Icon(
-                Icons.check,
-                color: job.isComplete ? kPrimaryColor : kTextBaseColor.shade400,
-              ),
-              onPressed: null,
-            ),
-          ],
-        );
-      },
+          onPressed: null,
+        ),
+      ],
     );
   }
 

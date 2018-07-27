@@ -12,7 +12,7 @@ import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/pages/jobs/job.dart';
 import 'package:tailor_made/pages/jobs/ui/contact_lists.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grid_item.dart';
-import 'package:tailor_made/pages/jobs/ui/measure_create_items.dart';
+import 'package:tailor_made/pages/measures/ui/measure_create_items.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/measures.dart';
 import 'package:tailor_made/services/cloud_db.dart';

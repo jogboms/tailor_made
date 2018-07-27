@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/models/measure.dart';
-import 'package:tailor_made/pages/accounts/ui/measure_dialog.dart';
+import 'package:tailor_made/pages/measures/ui/measure_dialog.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/measures.dart';
 import 'package:tailor_made/services/cloud_db.dart';

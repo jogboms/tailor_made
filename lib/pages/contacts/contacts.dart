@@ -3,7 +3,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/pages/contacts/contacts_create.dart';
 import 'package:tailor_made/pages/contacts/ui/contacts_filter_button.dart';
 import 'package:tailor_made/pages/contacts/ui/contacts_list_item.dart';
-import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/redux/view_models/contacts.dart';
 import 'package:tailor_made/ui/app_bar.dart';
@@ -13,12 +12,7 @@ import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class ContactsPage extends StatefulWidget {
-  // final List<ContactModel> contacts;
-
-  const ContactsPage({
-    Key key,
-    // @required this.contacts,
-  }) : super(key: key);
+  const ContactsPage({Key key}) : super(key: key);
 
   @override
   _ContactsPageState createState() => new _ContactsPageState();
@@ -33,8 +27,6 @@ class _ContactsPageState extends State<ContactsPage> {
 
     return new StoreConnector<ReduxState, ContactsViewModel>(
       converter: (store) => ContactsViewModel(store),
-      onInit: (store) => store.dispatch(new InitDataEvents()),
-      onDispose: (store) => store.dispatch(new DisposeDataEvents()),
       builder: (BuildContext context, ContactsViewModel vm) {
         return WillPopScope(
           child: new Scaffold(

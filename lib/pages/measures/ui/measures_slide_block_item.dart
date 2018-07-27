@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tailor_made/models/measure.dart';
-import 'package:tailor_made/pages/accounts/measures.dart';
-import 'package:tailor_made/pages/accounts/ui/measure_edit_dialog.dart';
+import 'package:tailor_made/pages/measures/measures_manage.dart';
+import 'package:tailor_made/pages/measures/ui/measure_edit_dialog.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class MeasuresSlideBlockItem extends StatefulWidget {
   final MeasureModel measure;
-  final AccountMeasuresPageState parent;
+  final MeasuresManagePageState parent;
 
   const MeasuresSlideBlockItem({
     Key key,
