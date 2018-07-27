@@ -1,37 +1,32 @@
+import 'package:meta/meta.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 
-class InitAccount extends ActionType<AccountModel> {
-  @override
-  final String type = ReduxActions.initAccount;
-
-  InitAccount({AccountModel payload}) : super(payload: payload);
-}
-
-class OnDataEvent extends ActionType<AccountModel> {
-  @override
-  final String type = ReduxActions.onDataEventAccount;
-
-  OnDataEvent({AccountModel payload}) : super(payload: payload);
+class OnDataAccountEvent extends ActionType<AccountModel> {
+  OnDataAccountEvent({
+    @required AccountModel payload,
+  }) : super(payload: payload);
 }
 
 class OnPremiumSignUp extends ActionType<AccountModel> {
-  @override
-  final String type = ReduxActions.onPremiumSignUp;
-
-  OnPremiumSignUp({AccountModel payload}) : super(payload: payload);
+  OnPremiumSignUp({
+    @required AccountModel payload,
+  }) : super(payload: payload);
 }
 
 class OnReadNotice extends ActionType<AccountModel> {
-  @override
-  final String type = ReduxActions.onReadNotice;
-
-  OnReadNotice({AccountModel payload}) : super(payload: payload);
+  OnReadNotice({
+    @required AccountModel payload,
+  }) : super(payload: payload);
 }
 
-class OnSkipedPremium extends ActionType<bool> {
-  @override
-  final String type = ReduxActions.onHasSkipedPremium;
+class OnSendRating extends ActionType<AccountModel> {
+  final int rating;
 
-  OnSkipedPremium({bool payload}) : super(payload: payload);
+  OnSendRating({
+    @required AccountModel payload,
+    @required this.rating,
+  }) : super(payload: payload);
 }
+
+class OnSkipedPremium extends ActionType<void> {}

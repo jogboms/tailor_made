@@ -52,6 +52,7 @@ class _ContactsEditPageState extends State<ContactsEditPage>
         contact: widget.contact,
         onHandleSubmit: _handleSubmit,
         onHandleValidate: _handleValidate,
+        onHandleUpload: _handleUpload,
       ),
     );
   }
@@ -66,8 +67,12 @@ class _ContactsEditPageState extends State<ContactsEditPage>
     );
   }
 
-  void _handleValidate() async {
+  void _handleValidate() {
     showInSnackBar('Please fix the errors in red before submitting.');
+  }
+
+  void _handleUpload(String message) {
+    showInSnackBar(message);
   }
 
   void _handleSubmit(ContactModel contact) async {

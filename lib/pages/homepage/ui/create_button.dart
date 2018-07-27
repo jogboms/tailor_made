@@ -91,7 +91,7 @@ class CreateButtonState extends State<CreateButton>
                 child: TMListTile(
                   color: Colors.orangeAccent,
                   icon: Icons.supervisor_account,
-                  title: "Contacts",
+                  title: "Contact",
                 ),
               ),
               new SimpleDialogOption(

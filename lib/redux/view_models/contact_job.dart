@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/redux/states/main.dart';
@@ -10,10 +11,12 @@ class ContactJobViewModel extends ViewModel {
 
   ContactJobViewModel(Store<ReduxState> store) : super(store);
 
+  ReduxState get _state => store.state;
+
   ContactModel get selectedContact {
     if (contactID != null) {
       try {
-        return store.state.contacts.contacts.firstWhere(
+        return _state.contacts.contacts.firstWhere(
           (_) => _.id == contactID,
         );
       } catch (e) {
@@ -26,7 +29,7 @@ class ContactJobViewModel extends ViewModel {
   JobModel get selectedJob {
     if (jobID != null) {
       try {
-        return store.state.jobs.jobs.firstWhere(
+        return _state.jobs.jobs.firstWhere(
           (_) => _.id == jobID,
         );
       } catch (e) {
@@ -35,4 +38,6 @@ class ContactJobViewModel extends ViewModel {
     }
     return null;
   }
+
+  AccountModel get account => _state.account.account;
 }

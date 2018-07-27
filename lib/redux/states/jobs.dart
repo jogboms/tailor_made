@@ -31,8 +31,8 @@ class JobsState {
   const JobsState.initialState()
       : jobs = null,
         status = JobsStatus.loading,
-        hasSortFn = false,
-        sortFn = SortType.reset,
+        hasSortFn = true,
+        sortFn = SortType.active,
         searchResults = null,
         isSearching = false,
         message = '';

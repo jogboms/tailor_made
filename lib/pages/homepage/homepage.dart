@@ -14,8 +14,8 @@ import 'package:tailor_made/pages/templates/rate_limit.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/services/auth.dart';
-import 'package:tailor_made/services/settings.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
+import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_images.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_phone.dart';
@@ -32,67 +32,75 @@ class HomePage extends StatelessWidget {
     // without this, i can not replace this route with SplashPage on logout
     final _context = context;
 
-    return new Scaffold(
-      backgroundColor: theme.scaffoldColor,
-      resizeToAvoidBottomPadding: false,
-      body: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Opacity(
-            opacity: .5,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: TMImages.pattern,
-                  fit: BoxFit.cover,
+    return WillPopScope(
+      onWillPop: () async {
+        return await confirmDialog(
+          context: _context,
+          content: Text("Continue with Exit?"),
+        );
+      },
+      child: new Scaffold(
+        backgroundColor: theme.scaffoldColor,
+        resizeToAvoidBottomPadding: false,
+        body: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            Opacity(
+              opacity: .5,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: TMImages.pattern,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
-          ),
-          new StoreConnector<ReduxState, HomeViewModel>(
-            converter: (store) => HomeViewModel(store),
-            onInit: (store) => store.dispatch(new InitDataEvents()),
-            onDispose: (store) => store.dispatch(new DisposeDataEvents()),
-            builder: (context, vm) {
-              if (vm.isLoading) {
-                return Center(
-                  child: loadingSpinner(),
-                );
-              }
+            new StoreConnector<ReduxState, HomeViewModel>(
+              converter: (store) => HomeViewModel(store),
+              onInit: (store) => store.dispatch(new InitDataEvents()),
+              onDispose: (store) => store.dispatch(new DisposeDataEvents()),
+              builder: (context, vm) {
+                if (vm.isLoading) {
+                  return Center(
+                    child: loadingSpinner(),
+                  );
+                }
 
-              if (Settings.isOutdated) {
-                return OutDatedPage(
-                  onUpdate: () {
-                    open(
-                        'https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade');
-                  },
-                );
-              }
+                if (vm.isOutdated) {
+                  return OutDatedPage(
+                    onUpdate: () {
+                      open(
+                          'https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade');
+                    },
+                  );
+                }
 
-              if (vm.isDisabled) {
-                return AccessDeniedPage(
-                  onSendMail: () {
-                    email(
-                        'Unwarranted%20Account%20Suspension%20%23${vm.account.uid}');
-                  },
-                );
-              }
+                if (vm.isDisabled) {
+                  return AccessDeniedPage(
+                    onSendMail: () {
+                      email(
+                          'Unwarranted%20Account%20Suspension%20%23${vm.account.uid}');
+                    },
+                  );
+                }
 
-              if (vm.isWarning && vm.hasSkipedPremium == false) {
-                return RateLimitPage(
-                  onSignUp: () {
-                    vm.onPremiumSignUp();
-                  },
-                  onSkipedPremium: () {
-                    vm.onSkipedPremium();
-                  },
-                );
-              }
+                if (vm.isWarning && vm.hasSkipedPremium == false) {
+                  return RateLimitPage(
+                    onSignUp: () {
+                      vm.onPremiumSignUp();
+                    },
+                    onSkipedPremium: () {
+                      vm.onSkipedPremium();
+                    },
+                  );
+                }
 
-              return _buildBody(_context, vm);
-            },
-          ),
-        ],
+                return _buildBody(_context, vm);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

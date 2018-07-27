@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/contact.dart';
-import 'package:tailor_made/pages/jobs/ui/measure_create_items.dart';
-import 'package:tailor_made/pages/jobs/ui/measures.dart';
+import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/pages/measures/measures.dart';
+import 'package:tailor_made/pages/measures/ui/measure_create_items.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/full_button.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -9,10 +10,12 @@ import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class ContactMeasure extends StatefulWidget {
+  final Map<String, List<MeasureModel>> grouped;
   final ContactModel contact;
 
   const ContactMeasure({
     Key key,
+    @required this.grouped,
     @required this.contact,
   }) : super(key: key);
 
@@ -23,9 +26,16 @@ class ContactMeasure extends StatefulWidget {
 class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   bool _autovalidate = false;
+  ContactModel contact;
 
   @override
   final scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    contact = widget.contact.copyWith();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +43,10 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
     final List<Widget> children = [];
 
     children.add(makeHeader("Measurements", "Inches (In)"));
-    children.add(MeasureCreateItems(widget.contact.measurements));
+    children.add(MeasureCreateItems(
+      grouped: widget.grouped,
+      measurements: contact.measurements,
+    ));
 
     children.add(
       Padding(
@@ -56,6 +69,9 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
       appBar: appBar(
         context,
         title: "Measurements",
+        onPop: contact?.reference != null
+            ? null
+            : () => Navigator.pop<ContactModel>(context, contact),
         actions: [
           IconButton(
             icon: Icon(
@@ -64,7 +80,9 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
             ),
             onPressed: () => TMNavigate(
                   context,
-                  MeasuresPage(measurements: widget.contact.measurements),
+                  MeasuresPage(
+                    measurements: contact.measurements,
+                  ),
                   fullscreenDialog: true,
                 ),
           )
@@ -118,9 +136,10 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
       showLoadingSnackBar();
 
       try {
+        // TODO find a way to remove this from here
         // During contact creation
-        if (widget.contact.reference != null) {
-          await widget.contact.reference.updateData(widget.contact.toMap());
+        if (contact.reference != null) {
+          await contact.reference.updateData(contact.toMap());
         }
         closeLoadingSnackBar();
         showInSnackBar("Successfully Updated");

@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/pages/contacts/contact.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grids.dart';
-import 'package:tailor_made/pages/jobs/ui/measure_lists.dart';
 import 'package:tailor_made/pages/jobs/ui/payment_grids.dart';
+import 'package:tailor_made/pages/measures/measures.dart';
 import 'package:tailor_made/redux/states/main.dart';
-import 'package:tailor_made/redux/view_models/contacts.dart';
+import 'package:tailor_made/redux/view_models/jobs.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
@@ -48,15 +49,16 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
   Widget build(BuildContext context) {
     final TMTheme theme = TMTheme.of(context);
 
-    return new StreamBuilder(
-      stream: job.reference.snapshots(),
-      builder: (BuildContext context, snapshot) {
-        if (!snapshot.hasData) {
+    return StoreConnector<ReduxState, JobsViewModel>(
+      converter: (store) => JobsViewModel(store)..jobID = widget.job.id,
+      builder: (BuildContext context, vm) {
+        // in the case of newly created jobs
+        job = vm.selected ?? widget.job;
+        if (vm.isLoading) {
           return Center(
             child: loadingSpinner(),
           );
         }
-        job = JobModel.fromDoc(snapshot.data);
         return new Scaffold(
           key: scaffoldKey,
           backgroundColor: theme.scaffoldColor,
@@ -75,7 +77,7 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
                   centerTitle: false,
                   backgroundColor: Colors.white,
                   // backgroundColor: Colors.grey.shade300,
-                  title: buildAvatarAppBar(context),
+                  title: buildAvatarAppBar(context, vm.selectedContact),
                 ),
               ];
             },
@@ -86,12 +88,20 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    MeasureLists(measurements: job.measurements),
                     const SizedBox(height: 4.0),
                     GalleryGrids(job: job),
                     const SizedBox(height: 4.0),
                     PaymentGrids(job: job),
                     const SizedBox(height: 32.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        job.notes,
+                        style: ralewayLight(14.0, Colors.black87),
+                        textAlign: TextAlign.justify,
+                      ),
+                    ),
+                    const SizedBox(height: 48.0),
                   ],
                 ),
               ),
@@ -147,64 +157,8 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
-                child: new Container(
-                  decoration: BoxDecoration(
-                    border: Border(right: TMBorderSide()),
-                  ),
-                  child: new Column(
-                    children: <Widget>[
-                      Text(
-                        "PAID",
-                        style: ralewayRegular(8.0),
-                        textAlign: TextAlign.center,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.arrow_drop_up,
-                              color: Colors.green.shade600, size: 16.0),
-                          const SizedBox(width: 4.0),
-                          Text(
-                            formatNaira(job.completedPayment),
-                            style:
-                                ralewayRegular(18.0, Colors.black87).copyWith(
-                              letterSpacing: 1.25,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: new Column(
-                  children: <Widget>[
-                    Text(
-                      "UNPAID",
-                      style: ralewayRegular(8.0),
-                      textAlign: TextAlign.center,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(Icons.arrow_drop_down,
-                            color: Colors.red.shade600, size: 16.0),
-                        const SizedBox(width: 4.0),
-                        Text(
-                          formatNaira(job.pendingPayment),
-                          style: ralewayRegular(18.0, Colors.black87).copyWith(
-                            letterSpacing: 1.25,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              _buildPaidBox(),
+              _buildUnpaidBox(),
             ],
           ),
         ),
@@ -212,55 +166,122 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
     );
   }
 
-  Widget buildAvatarAppBar(BuildContext context) {
+  Expanded _buildUnpaidBox() {
+    return Expanded(
+      child: new Column(
+        children: <Widget>[
+          Text(
+            "UNPAID",
+            style: ralewayRegular(8.0),
+            textAlign: TextAlign.center,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(Icons.arrow_drop_down,
+                  color: Colors.red.shade600, size: 16.0),
+              const SizedBox(width: 4.0),
+              Text(
+                formatNaira(job.pendingPayment),
+                style: ralewayRegular(18.0, Colors.black87).copyWith(
+                  letterSpacing: 1.25,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Expanded _buildPaidBox() {
+    return Expanded(
+      child: new Container(
+        decoration: BoxDecoration(
+          border: Border(right: TMBorderSide()),
+        ),
+        child: new Column(
+          children: <Widget>[
+            Text(
+              "PAID",
+              style: ralewayRegular(8.0),
+              textAlign: TextAlign.center,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.arrow_drop_up,
+                    color: Colors.green.shade600, size: 16.0),
+                const SizedBox(width: 4.0),
+                Text(
+                  formatNaira(job.completedPayment),
+                  style: ralewayRegular(18.0, Colors.black87).copyWith(
+                    letterSpacing: 1.25,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildAvatarAppBar(BuildContext context, ContactModel contact) {
     // final textColor = Colors.white;
     final textColor = Colors.grey.shade800;
 
     final date = formatDate(job.createdAt);
 
-    return new StoreConnector<ReduxState, ContactsViewModel>(
-      converter: (store) => ContactsViewModel(store)..contactID = job.contactID,
-      builder: (BuildContext context, ContactsViewModel vm) {
-        final contact = vm.selected;
-        return AvatarAppBar(
-          tag: contact.createdAt.toString(),
-          imageUrl: contact.imageUrl,
-          title: new GestureDetector(
-            onTap: () => TMNavigate(context, ContactPage(contact: contact)),
-            child: new Text(
-              contact.fullname,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: ralewayBold(18.0, kTitleBaseColor),
-            ),
+    return AvatarAppBar(
+      tag: contact.createdAt.toString(),
+      imageUrl: contact.imageUrl,
+      title: new GestureDetector(
+        onTap: () => TMNavigate(context, ContactPage(contact: contact)),
+        child: new Text(
+          contact.fullname,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: ralewayBold(18.0, kTitleBaseColor),
+        ),
+      ),
+      iconColor: textColor,
+      subtitle: new Text(
+        date,
+        style: new TextStyle(
+          color: textColor,
+          fontSize: 12.0,
+          fontWeight: FontWeight.w300,
+        ),
+      ),
+      actions: <Widget>[
+        IconButton(
+          icon: new Icon(
+            Icons.content_cut,
           ),
-          iconColor: textColor,
-          subtitle: new Text(
-            date,
-            style: new TextStyle(
-              color: textColor,
-              fontSize: 12.0,
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-          actions: <Widget>[
-            IconButton(
-              icon: new Icon(
-                Icons.check,
-                color: job.isComplete ? kPrimaryColor : kTextBaseColor.shade400,
+          onPressed: () => TMNavigate(
+                context,
+                MeasuresPage(measurements: job.measurements),
+                fullscreenDialog: true,
               ),
-              onPressed: null,
-            )
-          ],
-        );
-      },
+        ),
+        IconButton(
+          icon: new Icon(
+            Icons.check,
+            color: job.isComplete ? kPrimaryColor : kTextBaseColor.shade400,
+          ),
+          onPressed: null,
+        ),
+      ],
     );
   }
 
   void onTapComplete() async {
     final choice = await confirmDialog(
       context: context,
-      title: Text("Are you sure?"),
+      content: Text("Are you sure?"),
     );
     if (choice == null || choice == false) {
       return;

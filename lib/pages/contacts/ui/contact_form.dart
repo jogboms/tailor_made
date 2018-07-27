@@ -15,6 +15,7 @@ import 'package:tailor_made/utils/tm_validators.dart';
 class ContactForm extends StatefulWidget {
   final void Function(ContactModel) onHandleSubmit;
   final void Function() onHandleValidate;
+  final void Function(String) onHandleUpload;
   final ContactModel contact;
 
   const ContactForm({
@@ -22,12 +23,11 @@ class ContactForm extends StatefulWidget {
     @required this.contact,
     @required this.onHandleSubmit,
     @required this.onHandleValidate,
+    @required this.onHandleUpload,
   }) : super(key: key);
 
   @override
-  ContactFormState createState() {
-    return new ContactFormState();
-  }
+  ContactFormState createState() => new ContactFormState();
 }
 
 class ContactFormState extends State<ContactForm> {
@@ -36,8 +36,9 @@ class ContactFormState extends State<ContactForm> {
   ContactModel contact;
   bool _autovalidate = false;
   StorageReference _lastImgRef;
-  TextEditingController _fNController;
-  TextEditingController _pNController;
+  TextEditingController _fNController, _pNController, _lNController;
+  final FocusNode _pNFocusNode = new FocusNode(),
+      _locFocusNode = new FocusNode();
 
   @override
   void initState() {
@@ -45,6 +46,14 @@ class ContactFormState extends State<ContactForm> {
     contact = widget.contact;
     _fNController = new TextEditingController(text: contact.fullname);
     _pNController = new TextEditingController(text: contact.phone);
+    _lNController = new TextEditingController(text: contact.location);
+  }
+
+  @override
+  void dispose() {
+    _pNFocusNode.dispose();
+    _locFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -78,16 +87,21 @@ class ContactFormState extends State<ContactForm> {
             children: <Widget>[
               TextFormField(
                 controller: _fNController,
+                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.person),
                   labelText: "Fullname",
                 ),
                 validator: validateAlpha(),
                 onSaved: (fullname) => contact.fullname = fullname.trim(),
+                onEditingComplete: () =>
+                    FocusScope.of(context).requestFocus(_pNFocusNode),
               ),
               SizedBox(height: 4.0),
               TextFormField(
+                focusNode: _pNFocusNode,
                 controller: _pNController,
+                textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.phone),
@@ -96,10 +110,14 @@ class ContactFormState extends State<ContactForm> {
                 validator: (value) =>
                     (value.isNotEmpty) ? null : "Please input a value",
                 onSaved: (phone) => contact.phone = phone.trim(),
+                onEditingComplete: () =>
+                    FocusScope.of(context).requestFocus(_locFocusNode),
               ),
               SizedBox(height: 4.0),
               TextFormField(
-                initialValue: contact.location,
+                focusNode: _locFocusNode,
+                controller: _lNController,
+                textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.location_city),
                   labelText: "Location",
@@ -107,6 +125,7 @@ class ContactFormState extends State<ContactForm> {
                 validator: (value) =>
                     (value.isNotEmpty) ? null : "Please input a value",
                 onSaved: (location) => contact.location = location.trim(),
+                onFieldSubmitted: (value) => _handleSubmit(),
               ),
               SizedBox(height: 32.0),
               FullButton(
@@ -190,32 +209,42 @@ class ContactFormState extends State<ContactForm> {
     }
     final imageFile = await ImagePicker.pickImage(
         source: source, maxWidth: 200.0, maxHeight: 200.0);
+    if (imageFile == null) {
+      return;
+    }
     final ref = CloudStorage.createContactImage();
     final uploadTask = ref.putFile(imageFile);
 
     setState(() => isLoading = true);
     try {
       contact.imageUrl = (await uploadTask.future).downloadUrl?.toString();
-      setState(() {
-        if (_lastImgRef != null) {
-          _lastImgRef.delete();
-        }
-        isLoading = false;
-        _lastImgRef = ref;
-      });
+      if (mounted) {
+        widget.onHandleUpload("Upload Successful");
+        setState(() {
+          if (_lastImgRef != null) {
+            _lastImgRef.delete();
+          }
+          isLoading = false;
+          _lastImgRef = ref;
+        });
+      }
     } catch (e) {
-      setState(() => isLoading = false);
+      if (mounted) {
+        widget.onHandleUpload("Please try again");
+        setState(() => isLoading = false);
+      }
     }
   }
 
   void reset() => _formKey.currentState.reset();
 
   void updateContact(ContactModel _contact) {
-    reset();
     setState(() {
+      reset();
       contact = _contact;
       _fNController.text = contact.fullname ?? "";
       _pNController.text = contact.phone ?? "";
+      _lNController.text = contact.location ?? "";
     });
   }
 }

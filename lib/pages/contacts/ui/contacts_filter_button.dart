@@ -35,6 +35,10 @@ class ContactsFilterButton extends StatelessWidget {
                       SortType.name,
                     ),
                     buildTextOption(
+                      "Sort by Completed",
+                      SortType.completed,
+                    ),
+                    buildTextOption(
                       "Sort by Pending",
                       SortType.pending,
                     ),

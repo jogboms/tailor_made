@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/full_button.dart';
+import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class PaymentsCreatePage extends StatefulWidget {
-  const PaymentsCreatePage({Key key}) : super(key: key);
+  final double limit;
+
+  const PaymentsCreatePage({
+    Key key,
+    @required this.limit,
+  }) : super(key: key);
 
   @override
   _PaymentsCreatePageState createState() => new _PaymentsCreatePageState();
@@ -22,9 +28,18 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
     decimalSeparator: '.',
     thousandSeparator: ',',
   );
+  final FocusNode _amountFocusNode = new FocusNode();
+  final FocusNode _additionFocusNode = new FocusNode();
 
   @override
   final scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  @override
+  void dispose() {
+    _amountFocusNode.dispose();
+    _additionFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +118,9 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        focusNode: _amountFocusNode,
         controller: controller,
+        textInputAction: TextInputAction.next,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
@@ -111,9 +128,15 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
           hintText: "Enter Amount",
           hintStyle: TextStyle(fontSize: 14.0),
         ),
-        validator: (value) =>
-            (controller.numberValue > 0) ? null : "Please input a price",
+        validator: (value) {
+          if (controller.numberValue > widget.limit) {
+            return formatNaira(widget.limit) + " is the remainder on this job.";
+          }
+          return (controller.numberValue > 0) ? null : "Please input a price";
+        },
         onSaved: (value) => price = controller.numberValue,
+        onEditingComplete: () =>
+            FocusScope.of(context).requestFocus(_additionFocusNode),
       ),
     );
   }
@@ -122,6 +145,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        focusNode: _additionFocusNode,
         keyboardType: TextInputType.text,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         maxLines: 6,
@@ -131,6 +155,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
           hintStyle: TextStyle(fontSize: 14.0),
         ),
         onSaved: (value) => notes = value.trim(),
+        onFieldSubmitted: (value) => _handleSubmit(),
       ),
     );
   }

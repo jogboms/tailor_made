@@ -1,12 +1,14 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:get_version/get_version.dart';
 import 'package:tailor_made/pages/homepage/homepage.dart';
+import 'package:tailor_made/redux/actions/settings.dart';
+import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/redux/view_models/settings.dart';
 import 'package:tailor_made/services/auth.dart';
-import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/services/settings.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_images.dart';
@@ -42,10 +44,6 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
 
     _getVersionName();
 
-    if (widget.isColdStart == true) {
-      _trySilent();
-    }
-
     Auth.onAuthStateChanged.firstWhere((user) => user != null).then(
       (user) {
         Auth.setUser(user);
@@ -70,7 +68,7 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
     }
   }
 
-  Future<void> _trySilent() async {
+  Future<void> _tryLoginSilent() async {
     // Give the navigation animations, etc, some time to finish
     await new Future<dynamic>.delayed(new Duration(seconds: 1))
         .then((dynamic _) => _onLogin());
@@ -82,16 +80,27 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
       String message = "";
       switch (e?.code) {
         case "exception":
+        case "sign_in_failed":
           if (e?.message?.contains("administrator") ?? false) {
             message =
-                "It seems this account has been disabled. Contact Administrators.";
+                "It seems this account has been disabled. Contact an Admin.";
             break;
           }
-          message = "You need a stable internet connection to proceed";
-          break;
+          if (e?.message?.contains("NETWORK_ERROR") ?? false) {
+            message = "Please check if you have your internet switched on.";
+            break;
+          }
+          if (e?.message?.contains("network") ?? false) {
+            message = "A stable internet connection is required.";
+            break;
+          }
+          continue fallthrough;
+
+        fallthrough:
         case "sign_in_failed":
-          message = "Sorry, We could not connect to Google using that account.";
+          message = "Sorry, We could not connect. Try again.";
           break;
+
         case "canceled":
         default:
       }
@@ -113,77 +122,113 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
   Widget build(BuildContext context) {
     return new Scaffold(
       key: scaffoldKey,
-      body: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Opacity(
-            opacity: .5,
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: TMImages.pattern,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          Positioned.fill(
-            top: null,
-            bottom: 32.0,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  TMStrings.appName,
-                  style: ralewayMedium(22.0, kTextBaseColor.withOpacity(.6)),
-                  textAlign: TextAlign.center,
-                ),
-                projectVersion != null
-                    ? Text(
-                        "v" + projectVersion,
-                        style:
-                            ralewayMedium(12.0, kTextBaseColor.withOpacity(.4))
-                                .copyWith(height: 1.5),
-                        textAlign: TextAlign.center,
-                      )
-                    : SizedBox(),
-              ],
-            ),
-          ),
-          isLoading && (widget.isColdStart || isRestartable)
-              ? SizedBox()
-              : Center(
-                  child: Image(
-                    image: TMImages.logo,
-                    width: 148.0,
-                    color: Colors.white.withOpacity(.35),
-                    colorBlendMode: BlendMode.saturation,
+      body: new StoreConnector<ReduxState, SettingsViewModel>(
+        converter: (store) => SettingsViewModel(store),
+        onInit: (store) => store.dispatch(new InitSettingsEvents()),
+        builder: (context, vm) {
+          return Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              Opacity(
+                opacity: .5,
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: TMImages.pattern,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-          Positioned(
-            height: 96.0,
-            bottom: 72.0,
-            left: 0.0,
-            right: 0.0,
-            child: StreamBuilder(
-              stream: CloudDb.settings.snapshots(),
-              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (!snapshot.hasData ||
-                    (snapshot.hasData && snapshot.data.data == null)) {
-                  return Center(
-                    child: loadingSpinner(),
-                  );
-                }
+              ),
+              Positioned.fill(
+                top: null,
+                bottom: 32.0,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      TMStrings.appName,
+                      style:
+                          ralewayMedium(22.0, kTextBaseColor.withOpacity(.6)),
+                      textAlign: TextAlign.center,
+                    ),
+                    projectVersion != null
+                        ? Text(
+                            "v" + projectVersion,
+                            style: ralewayMedium(
+                                    12.0, kTextBaseColor.withOpacity(.4))
+                                .copyWith(height: 1.5),
+                            textAlign: TextAlign.center,
+                          )
+                        : SizedBox(),
+                  ],
+                ),
+              ),
+              _isImageVisible(vm)
+                  ? SizedBox()
+                  : Center(
+                      child: Image(
+                        image: TMImages.logo,
+                        width: 148.0,
+                        color: Colors.white.withOpacity(.35),
+                        colorBlendMode: BlendMode.saturation,
+                      ),
+                    ),
+              Positioned(
+                height: 124.0,
+                bottom: 72.0,
+                left: 0.0,
+                right: 0.0,
+                child: _buildContent(vm),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 
-                Settings.setData(snapshot.data.data);
+  bool _isImageVisible(SettingsViewModel vm) {
+    return isLoading && (widget.isColdStart || isRestartable) && !vm.isFailure;
+  }
 
-                return isLoading
-                    ? loadingSpinner()
-                    : Center(child: _googleBtn());
-              },
+  Widget _buildContent(SettingsViewModel vm) {
+    if (vm.isLoading && widget.isColdStart) {
+      return Center(
+        child: loadingSpinner(),
+      );
+    }
+
+    if (vm.isFailure) {
+      return _buildFailure(vm);
+    }
+
+    if (widget.isColdStart && !isRestartable) {
+      _tryLoginSilent();
+    }
+
+    return isLoading ? loadingSpinner() : Center(child: _googleBtn());
+  }
+
+  Widget _buildFailure(SettingsViewModel vm) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(48.0, 16.0, 48.0, 16.0),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Text(
+              "You need a stable internet connection to proceed.",
+              textAlign: TextAlign.center,
             ),
-          ),
-        ],
+            SizedBox(height: 8.0),
+            RaisedButton(
+              color: Colors.white,
+              onPressed: vm.init,
+              child: Text("RETRY"),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -201,8 +246,10 @@ class _SplashPageState extends State<SplashPage> with SnackBarProvider {
         }
       },
       icon: Image(image: TMImages.google_logo, width: 24.0),
-      label: Text("Continue with Google",
-          style: TextStyle(fontWeight: FontWeight.w700)),
+      label: Text(
+        "Continue with Google",
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
     );
   }
 }

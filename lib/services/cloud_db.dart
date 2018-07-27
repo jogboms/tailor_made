@@ -13,6 +13,9 @@ class CloudDb {
   static DocumentReference get stats => instance.document('stats/$authUserId');
   static DocumentReference get settings => instance.document('settings/common');
 
+  static CollectionReference get measurements =>
+      instance.collection('measurements/$authUserId/common');
+
   static CollectionReference get premium => instance.collection('premium');
 
   static Query get gallery =>

@@ -141,6 +141,9 @@ class GalleryGridsState extends State<GalleryGrids> {
       return;
     }
     final imageFile = await ImagePicker.pickImage(source: source);
+    if (imageFile == null) {
+      return;
+    }
     final ref = CloudStorage.createReferenceImage();
     final uploadTask = ref.putFile(imageFile);
 
@@ -159,10 +162,14 @@ class GalleryGridsState extends State<GalleryGrids> {
         );
       });
 
-      await widget.job.reference
-          .updateData(<String, List<Map<String, dynamic>>>{
-        "images": fireImages.map((img) => img.image.toMap()).toList(),
-      });
+      await widget.job.reference.updateData(
+        <String, List<Map<String, dynamic>>>{
+          "images": fireImages
+              .where((img) => img.image != null)
+              .map((img) => img.image.toMap())
+              .toList(),
+        },
+      );
 
       // Redraw
       setState(() {

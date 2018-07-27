@@ -4,15 +4,17 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
-import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/pages/jobs/job.dart';
 import 'package:tailor_made/pages/jobs/ui/contact_lists.dart';
 import 'package:tailor_made/pages/jobs/ui/gallery_grid_item.dart';
-import 'package:tailor_made/pages/jobs/ui/measure_create_items.dart';
+import 'package:tailor_made/pages/measures/ui/measure_create_items.dart';
+import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/redux/view_models/measures.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/services/cloud_storage.dart';
 import 'package:tailor_made/ui/app_bar.dart';
@@ -56,6 +58,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     decimalSeparator: '.',
     thousandSeparator: ',',
   );
+  final FocusNode _amountFocusNode = new FocusNode();
+  final FocusNode _additionFocusNode = new FocusNode();
 
   bool _autovalidate = false;
 
@@ -68,8 +72,15 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     contact = widget.contact;
     job = new JobModel(
       contactID: contact?.id,
-      measurements: contact?.measurements ?? createDefaultMeasures(),
+      measurements: contact?.measurements ?? {},
     );
+  }
+
+  @override
+  void dispose() {
+    _amountFocusNode.dispose();
+    _additionFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -107,7 +118,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       children.add(buildImageGrid());
 
       children.add(makeHeader("Measurements", "Inches (In)"));
-      children.add(MeasureCreateItems(job.measurements));
+      children.add(buildCreateMeasure());
 
       children.add(makeHeader("Additional Notes"));
       children.add(buildAdditional());
@@ -139,6 +150,18 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         ),
         child: buildBody(theme, children),
       ),
+    );
+  }
+
+  Widget buildCreateMeasure() {
+    return StoreConnector<ReduxState, MeasuresViewModel>(
+      converter: (store) => MeasuresViewModel(store),
+      builder: (BuildContext context, vm) {
+        return MeasureCreateItems(
+          grouped: vm.grouped,
+          measurements: job.measurements,
+        );
+      },
     );
   }
 
@@ -185,6 +208,10 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     if (selectedContact != null) {
       setState(() {
         contact = selectedContact;
+        job = job.copyWith(
+          contactID: contact?.id,
+          measurements: contact?.measurements ?? {},
+        );
       });
     }
   }
@@ -227,11 +254,15 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       showInSnackBar('Please fix the errors in red before submitting.');
     } else {
       form.save();
+
       showLoadingSnackBar();
 
       job
         ..pendingPayment = job.price
-        ..images = fireImages.map((img) => img.image).toList()
+        ..images = fireImages
+            .where((img) => img.image != null)
+            .map((img) => img.image)
+            .toList()
         ..contactID = contact.id;
 
       try {
@@ -255,6 +286,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        focusNode: _additionFocusNode,
         keyboardType: TextInputType.text,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         maxLines: 6,
@@ -264,6 +296,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
           hintStyle: TextStyle(fontSize: 14.0),
         ),
         onSaved: (value) => job.notes = value.trim(),
+        onFieldSubmitted: (value) => _handleSubmit(),
       ),
     );
   }
@@ -329,6 +362,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
       return;
     }
     final imageFile = await ImagePicker.pickImage(source: source);
+    if (imageFile == null) {
+      return;
+    }
     final ref = CloudStorage.createReferenceImage();
     final uploadTask = ref.putFile(imageFile);
 
@@ -360,6 +396,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        textInputAction: TextInputAction.next,
         keyboardType: TextInputType.text,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
@@ -369,6 +406,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         ),
         validator: (value) => (value.isNotEmpty) ? null : "Please input a name",
         onSaved: (value) => job.name = value.trim(),
+        onEditingComplete: () =>
+            FocusScope.of(context).requestFocus(_amountFocusNode),
       ),
     );
   }
@@ -377,7 +416,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        focusNode: _amountFocusNode,
         controller: controller,
+        textInputAction: TextInputAction.next,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
@@ -388,6 +429,8 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
         validator: (value) =>
             (controller.numberValue > 0) ? null : "Please input a price",
         onSaved: (value) => job.price = controller.numberValue,
+        onEditingComplete: () =>
+            FocusScope.of(context).requestFocus(_additionFocusNode),
       ),
     );
   }

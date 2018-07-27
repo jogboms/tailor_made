@@ -23,7 +23,7 @@ class OutDatedPage extends StatelessWidget {
           ),
           SizedBox(height: 48.0),
           Text(
-            "OUTDATED NOTICE",
+            "OUT OF DATE",
             style: textTheme.copyWith(
                 color: Colors.black87, fontWeight: FontWeight.w700),
             textAlign: TextAlign.center,
@@ -32,7 +32,7 @@ class OutDatedPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 64.0),
             child: Text(
-              "It appears you are running an outdated version of the app.\n If this is the case, please contact an Administrator.",
+              "It appears you are running an outdated version of the app.\n If this is not the case, please contact an Administrator.",
               style: textTheme.copyWith(color: Colors.grey.shade700),
               textAlign: TextAlign.center,
             ),

@@ -34,7 +34,7 @@ class RateLimitPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 64.0),
             child: Text(
-              "We noticed \n you really enjoy using our service. \n\n Would you mind \n paying a little token if you wish to extend beyond our usage policy?",
+              "We noticed \n you really enjoy using our service. \n\n Would you mind \n paying a little token if you wish to extend beyond your usage limits?",
               style: textTheme.copyWith(color: Colors.grey.shade700),
               textAlign: TextAlign.center,
             ),

@@ -9,13 +9,18 @@ import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 
-Stream<dynamic> jobs(Stream<dynamic> actions, EpicStore<ReduxState> store) {
+Stream<dynamic> jobs(
+  Stream<dynamic> actions,
+  EpicStore<ReduxState> store,
+) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<InitDataEvents>())
-      .switchMap<dynamic>((InitDataEvents action) => _getJobList()
-          .map<dynamic>((jobs) => new OnDataEvent(payload: jobs))
-          .takeUntil<dynamic>(
-              actions.where((dynamic action) => action is DisposeDataEvents)));
+      .switchMap<dynamic>(
+        (InitDataEvents action) => _getJobList()
+            .map<dynamic>((jobs) => new OnDataJobEvent(payload: jobs))
+            .takeUntil<dynamic>(
+                actions.where((dynamic action) => action is DisposeDataEvents)),
+      );
 }
 
 Stream<dynamic> search(Stream<dynamic> actions, EpicStore<ReduxState> store) {
@@ -45,10 +50,9 @@ Stream<dynamic> search(Stream<dynamic> actions, EpicStore<ReduxState> store) {
 SearchSuccessJobEvent _doSearch(List<JobModel> jobs, String text) {
   return new SearchSuccessJobEvent(
     payload: jobs
-        .where(
-          (job) => job.name
-              .contains(new RegExp(r'' + text + '', caseSensitive: false)),
-        )
+        .where((job) => job.name.contains(
+              new RegExp(r'' + text + '', caseSensitive: false),
+            ))
         .toList(),
   );
 }

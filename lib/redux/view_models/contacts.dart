@@ -1,5 +1,7 @@
 import 'package:redux/redux.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/models/job.dart';
+import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/redux/actions/contacts.dart';
 import 'package:tailor_made/redux/states/contacts.dart';
 import 'package:tailor_made/redux/states/main.dart';
@@ -16,6 +18,9 @@ class ContactsViewModel extends ViewModel {
     return isSearching ? _state.searchResults : _state.contacts;
   }
 
+  Map<String, List<MeasureModel>> get measuresGrouped =>
+      store.state.measures.grouped;
+
   ContactModel get selected {
     if (contactID != null) {
       try {
@@ -27,6 +32,19 @@ class ContactsViewModel extends ViewModel {
       }
     }
     return null;
+  }
+
+  List<JobModel> get selectedJobs {
+    if (selected != null) {
+      try {
+        return store.state.jobs.jobs
+            .where((job) => job.contactID == selected.id)
+            .toList();
+      } catch (e) {
+        //
+      }
+    }
+    return [];
   }
 
   bool get isLoading => _state.status == ContactsStatus.loading;

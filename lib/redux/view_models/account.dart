@@ -7,11 +7,13 @@ import 'package:tailor_made/redux/view_models/main.dart';
 class AccountViewModel extends ViewModel {
   AccountViewModel(Store<ReduxState> store) : super(store);
 
-  AccountModel get account => store.state.account.account;
+  AccountState get _state => store.state.account;
 
-  bool get isLoading => store.state.account.status == AccountStatus.loading;
+  AccountModel get account => _state.account;
 
-  bool get isSuccess => store.state.account.status == AccountStatus.success;
+  bool get isLoading => _state.status == AccountStatus.loading;
 
-  bool get isFailure => store.state.account.status == AccountStatus.failure;
+  bool get isSuccess => _state.status == AccountStatus.success;
+
+  bool get isFailure => _state.status == AccountStatus.failure;
 }
