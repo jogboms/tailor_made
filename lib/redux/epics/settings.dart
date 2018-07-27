@@ -9,7 +9,10 @@ import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/services/settings.dart';
 
-Stream<dynamic> settings(Stream<dynamic> actions, EpicStore<ReduxState> store) {
+Stream<dynamic> settings(
+  Stream<dynamic> actions,
+  EpicStore<ReduxState> store,
+) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<InitSettingsEvents>())
       .switchMap<dynamic>(

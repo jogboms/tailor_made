@@ -9,16 +9,27 @@ import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/states/main.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 
-Stream<dynamic> contacts(Stream<dynamic> actions, EpicStore<ReduxState> store) {
+Stream<dynamic> contacts(
+  Stream<dynamic> actions,
+  EpicStore<ReduxState> store,
+) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<InitDataEvents>())
-      .switchMap<dynamic>((InitDataEvents action) => _getContactList()
-          .map<dynamic>((contacts) => new OnDataContactEvent(payload: contacts))
-          .takeUntil<dynamic>(
-              actions.where((dynamic action) => action is DisposeDataEvents)));
+      .switchMap<dynamic>(
+        (InitDataEvents action) => _getContactList()
+            .map<dynamic>(
+              (contacts) => new OnDataContactEvent(payload: contacts),
+            )
+            .takeUntil<dynamic>(
+              actions.where((dynamic action) => action is DisposeDataEvents),
+            ),
+      );
 }
 
-Stream<dynamic> search(Stream<dynamic> actions, EpicStore<ReduxState> store) {
+Stream<dynamic> search(
+  Stream<dynamic> actions,
+  EpicStore<ReduxState> store,
+) {
   return new Observable<dynamic>(actions)
       .ofType(new TypeToken<SearchContactEvent>())
       .map((action) => action.payload)
@@ -36,30 +47,28 @@ Stream<dynamic> search(Stream<dynamic> actions, EpicStore<ReduxState> store) {
                 ),
                 new Duration(seconds: 1),
               )
-            ]).takeUntil<dynamic>(
-              actions.where(
-                  (dynamic action) => action is CancelSearchContactEvent),
-            ),
+            ]).takeUntil<dynamic>(actions
+                .where((dynamic action) => action is CancelSearchContactEvent)),
       );
 }
 
 SearchSuccessContactEvent _doSearch(List<ContactModel> contacts, String text) {
   return SearchSuccessContactEvent(
     payload: contacts
-        .where(
-          (contact) => contact.fullname
-              .contains(new RegExp(r'' + text + '', caseSensitive: false)),
-        )
+        .where((contact) => contact.fullname.contains(
+              new RegExp(r'' + text + '', caseSensitive: false),
+            ))
         .toList(),
   );
 }
 
 Observable<List<ContactModel>> _getContactList() {
-  return new Observable(CloudDb.contacts.snapshots())
-      .map((QuerySnapshot snapshot) {
-    return snapshot.documents
-        .where((doc) => doc.data.containsKey('fullname'))
-        .map((item) => ContactModel.fromDoc(item))
-        .toList();
-  });
+  return new Observable(CloudDb.contacts.snapshots()).map(
+    (QuerySnapshot snapshot) {
+      return snapshot.documents
+          .where((doc) => doc.data.containsKey('fullname'))
+          .map((item) => ContactModel.fromDoc(item))
+          .toList();
+    },
+  );
 }
