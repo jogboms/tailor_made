@@ -6,4 +6,5 @@
     "editor.insertSpaces": false,
     "editor.formatOnSave": true
   },
+  "java.configuration.updateBuildConfiguration": "interactive",
 }
