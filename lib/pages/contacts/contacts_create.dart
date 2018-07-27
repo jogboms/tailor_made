@@ -75,6 +75,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
             contact: contact,
             onHandleSubmit: _handleSubmit,
             onHandleValidate: _handleValidate,
+            onHandleUpload: _handleUpload,
           ),
         );
       },
@@ -94,8 +95,12 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
     ));
   }
 
-  void _handleValidate() async {
+  void _handleValidate() {
     showInSnackBar('Please fix the errors in red before submitting.');
+  }
+
+  void _handleUpload(String message) {
+    showInSnackBar(message);
   }
 
   void _handleSubmit(ContactModel _contact) async {
