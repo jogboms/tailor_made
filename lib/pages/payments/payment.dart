@@ -29,8 +29,6 @@ class PaymentPage extends StatelessWidget {
         ..contactID = payment.contactID
         ..jobID = payment.jobID,
       builder: (BuildContext context, ContactJobViewModel vm) {
-        final contact = vm.selectedContact;
-        final job = vm.selectedJob;
         return Scaffold(
           appBar: AppBar(
             iconTheme: IconThemeData(color: Colors.black87),
@@ -43,24 +41,27 @@ class PaymentPage extends StatelessWidget {
                   Icons.work,
                   color: kTitleBaseColor,
                 ),
-                onPressed: () => TMNavigate(context, JobPage(job: job)),
+                onPressed: () =>
+                    TMNavigate(context, JobPage(job: vm.selectedJob)),
               ),
               IconButton(
                 icon: Icon(
                   Icons.person,
                   color: kTitleBaseColor,
                 ),
-                onPressed: () =>
-                    TMNavigate(context, ContactPage(contact: contact)),
+                onPressed: () => TMNavigate(
+                    context, ContactPage(contact: vm.selectedContact)),
               ),
-              IconButton(
-                icon: Icon(
-                  Icons.share,
-                  color: kTitleBaseColor,
-                ),
-                // TODO
-                onPressed: null,
-              ),
+              vm.account.hasPremiumEnabled
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.share,
+                        color: kTitleBaseColor,
+                      ),
+                      // TODO
+                      onPressed: null,
+                    )
+                  : SizedBox(),
             ],
           ),
           body: Column(
