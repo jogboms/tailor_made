@@ -5,14 +5,15 @@ PENDING:
   ☐ Generate invoice & share as SMS containing link to pay on paystack @goals
   ☐ Firebase function on successful payments w/ push notification @goals
   ☐ On account create, send personal email + email to user @high
-  ☐ indicator for premium accounts @goals
   ☐ empty states icons @quickie
   ☐ edit job measurements @high
   ☐ Trigger loading action for any side-effect to the store @low
   ☐ gradual migration to BLoC to reduce boilerplate from Redux @goals
   ☐ copy and paste jobs @goals
+  ☐ migrate all firebase actions to within epics @goals
 
 COMPLETED:
+  ✔ indicator for premium accounts @goals @done(18-07-27 04:38)
   ✔ add in-app review @quickie @done(18-07-27 03:16)
   ✔ personalize measurements w/ account @critical @done(18-07-25 18:47)
   ✔ long press to delete or edit measure block snackbar message @critical @done(18-07-25 01:20)

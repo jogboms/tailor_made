@@ -8,6 +8,7 @@ import 'package:tailor_made/pages/homepage/ui/store_name_dialog.dart';
 import 'package:tailor_made/pages/measures/measures_manage.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
+import 'package:tailor_made/utils/tm_images.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -62,7 +63,19 @@ class TopButtonBar extends StatelessWidget {
                             color: theme.appBarColor,
                           ),
                     new Align(
-                      alignment: Alignment(1.25, 1.25),
+                      alignment: Alignment(0.0, 2.25),
+                      child: vm.account.hasPremiumEnabled
+                          ? ImageIcon(
+                              TMImages.verified,
+                              color: kPrimaryColor,
+                            )
+                          : null,
+                    ),
+                    new Align(
+                      alignment: Alignment(
+                        1.25,
+                        vm.account.hasPremiumEnabled ? -1.25 : 1.25,
+                      ),
                       child: _shouldShowIndicator(vm)
                           ? new Container(
                               width: 15.5,

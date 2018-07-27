@@ -15,6 +15,7 @@ import 'package:tailor_made/utils/tm_validators.dart';
 class ContactForm extends StatefulWidget {
   final void Function(ContactModel) onHandleSubmit;
   final void Function() onHandleValidate;
+  final void Function(String) onHandleUpload;
   final ContactModel contact;
 
   const ContactForm({
@@ -22,6 +23,7 @@ class ContactForm extends StatefulWidget {
     @required this.contact,
     @required this.onHandleSubmit,
     @required this.onHandleValidate,
+    @required this.onHandleUpload,
   }) : super(key: key);
 
   @override
@@ -217,6 +219,7 @@ class ContactFormState extends State<ContactForm> {
     try {
       contact.imageUrl = (await uploadTask.future).downloadUrl?.toString();
       if (mounted) {
+        widget.onHandleUpload("Upload Successful");
         setState(() {
           if (_lastImgRef != null) {
             _lastImgRef.delete();
@@ -227,6 +230,7 @@ class ContactFormState extends State<ContactForm> {
       }
     } catch (e) {
       if (mounted) {
+        widget.onHandleUpload("Please try again");
         setState(() => isLoading = false);
       }
     }
