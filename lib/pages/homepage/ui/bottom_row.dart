@@ -3,6 +3,7 @@ import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/stats.dart';
 import 'package:tailor_made/pages/homepage/ui/helpers.dart';
 import 'package:tailor_made/pages/measures/measures_manage.dart';
+import 'package:tailor_made/pages/tasks/tasks.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
@@ -51,7 +52,7 @@ class BottomRowWidget extends StatelessWidget {
                 icon: Icons.timelapse,
                 title: "Tasks",
                 subTitle: "${stats.jobs.pending} Pending",
-                onPressed: () {},
+                onPressed: () => TMNavigate(context, TasksPage()),
               ),
             ),
           ),
