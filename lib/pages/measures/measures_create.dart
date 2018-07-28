@@ -75,6 +75,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
         }
 
         return Scaffold(
+          resizeToAvoidBottomPadding: false,
           key: scaffoldKey,
           backgroundColor: theme.scaffoldColor,
           appBar: AppBar(

@@ -8,12 +8,16 @@ Future<String> showEditDialog({
   @required BuildContext context,
   @required List<Widget> children,
   @required String title,
+  @required VoidCallback onDone,
+  @required VoidCallback onCancel,
 }) {
   return showChildDialog<String>(
     context: context,
     child: new MeasureEditDialog(
       title: title,
       children: children,
+      onDone: onDone,
+      onCancel: onCancel,
     ),
   );
 }
@@ -21,11 +25,15 @@ Future<String> showEditDialog({
 class MeasureEditDialog extends StatelessWidget {
   final String title;
   final List<Widget> children;
+  final VoidCallback onDone;
+  final VoidCallback onCancel;
 
   const MeasureEditDialog({
     Key key,
     @required this.title,
     @required this.children,
+    @required this.onDone,
+    @required this.onCancel,
   }) : super(key: key);
 
   @override
@@ -59,7 +67,21 @@ class MeasureEditDialog extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 16.0),
+              SizedBox(height: 4.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  FlatButton(
+                    onPressed: onCancel,
+                    child: Text("CANCEL", style: TextStyle(color: Colors.grey)),
+                  ),
+                  FlatButton(
+                    onPressed: onDone,
+                    child: Text("DONE"),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8.0),
             ],
           ),
         ),

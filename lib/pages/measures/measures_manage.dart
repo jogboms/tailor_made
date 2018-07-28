@@ -43,6 +43,7 @@ class MeasuresManagePageState extends State<MeasuresManagePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       key: scaffoldKey,
       appBar: appBar(
         context,
