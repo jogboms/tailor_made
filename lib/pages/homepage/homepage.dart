@@ -4,6 +4,7 @@ import 'package:tailor_made/pages/homepage/home_view_model.dart';
 import 'package:tailor_made/pages/homepage/ui/bottom_row.dart';
 import 'package:tailor_made/pages/homepage/ui/create_button.dart';
 import 'package:tailor_made/pages/homepage/ui/header.dart';
+import 'package:tailor_made/pages/homepage/ui/mid_row.dart';
 import 'package:tailor_made/pages/homepage/ui/stats.dart';
 import 'package:tailor_made/pages/homepage/ui/top_button_bar.dart';
 import 'package:tailor_made/pages/homepage/ui/top_row.dart';
@@ -23,6 +24,8 @@ import 'package:tailor_made/utils/tm_theme.dart';
 
 const double _kBottomBarHeight = 46.0;
 const double _kBottomGridsHeight = 280.0;
+const double _kStatGridsHeight = 40.0;
+const double _kRowGridsHeight = (_kBottomGridsHeight - _kStatGridsHeight) / 3;
 
 class HomePage extends StatelessWidget {
   @override
@@ -130,9 +133,14 @@ class HomePage extends StatelessWidget {
                       constraints: BoxConstraints.expand(height: _height),
                       child: HeaderWidget(account: vm.account),
                     ),
-                    StatsWidget(stats: vm.stats, height: 40.0),
-                    TopRowWidget(stats: vm.stats, height: 120.0),
-                    BottomRowWidget(stats: vm.stats, height: 120.0),
+                    StatsWidget(stats: vm.stats, height: _kStatGridsHeight),
+                    TopRowWidget(stats: vm.stats, height: _kRowGridsHeight),
+                    MidRowWidget(stats: vm.stats, height: _kRowGridsHeight),
+                    BottomRowWidget(
+                      stats: vm.stats,
+                      account: vm.account,
+                      height: _kRowGridsHeight,
+                    ),
                     SizedBox(height: _kBottomBarHeight),
                   ],
                 ),
