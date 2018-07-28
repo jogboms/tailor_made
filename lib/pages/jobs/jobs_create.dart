@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
@@ -20,6 +22,7 @@ import 'package:tailor_made/services/cloud_storage.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/avatar_app_bar.dart';
 import 'package:tailor_made/ui/full_button.dart';
+import 'package:tailor_made/ui/input_dropdown.dart';
 import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_image_choice_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
@@ -114,6 +117,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
 
       children.add(makeHeader("Payment", "Naira (₦)"));
       children.add(buildEnterAmount());
+
+      children.add(makeHeader("Due Date"));
+      children.add(buildDueDate());
 
       children.add(makeHeader("References"));
       children.add(buildImageGrid());
@@ -393,12 +399,36 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
     }
   }
 
+  Widget buildDueDate() {
+    return new Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      child: new InputDropdown(
+        valueText: new DateFormat.yMMMd().format(job.dueAt),
+        valueStyle: TextStyle(fontSize: 18.0, color: Colors.black),
+        onPressed: () async {
+          final DateTime picked = await showDatePicker(
+            context: context,
+            initialDate: job.dueAt,
+            firstDate: new DateTime.now(),
+            lastDate: new DateTime(2101),
+          );
+          if (picked != null && picked != job.dueAt) {
+            setState(() {
+              job = job.copyWith(dueAt: picked);
+            });
+          }
+        },
+      ),
+    );
+  }
+
   Widget buildEnterName() {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
         textInputAction: TextInputAction.next,
         keyboardType: TextInputType.text,
+        textCapitalization: TextCapitalization.words,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
           isDense: true,

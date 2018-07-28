@@ -76,7 +76,7 @@ class PaymentGridsState extends State<PaymentGrids> {
             CupertinoButton(
               child: Text(
                 "SHOW ALL",
-                style: ralewayRegular(11.0, kTextBaseColor),
+                style: ralewayRegular(11.0, Colors.black),
               ),
               onPressed: () => TMNavigate(
                     context,
