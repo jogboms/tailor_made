@@ -49,7 +49,7 @@ class BottomRowWidget extends StatelessWidget {
             child: new Container(
               child: TMGridTile(
                 color: Colors.grey,
-                icon: Icons.timelapse,
+                icon: Icons.event,
                 title: "Tasks",
                 subTitle: "${stats.jobs.pending} Pending",
                 onPressed: () => TMNavigate(context, TasksPage()),

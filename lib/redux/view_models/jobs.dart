@@ -17,6 +17,12 @@ class JobsViewModel extends ViewModel {
     return isSearching ? _state.searchResults : store.state.jobs.jobs;
   }
 
+  List<JobModel> get tasks {
+    final tasks =
+        store.state.jobs.jobs.where((job) => !job.isComplete).toList();
+    return tasks..sort((a, b) => a.dueAt.compareTo(b.dueAt));
+  }
+
   List<ContactModel> get contacts {
     return store.state.contacts.contacts;
   }
