@@ -88,6 +88,33 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    new Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                          child: Text(
+                            "DUE DATE",
+                            style: ralewayRegular(12.0, Colors.black87),
+                          ),
+                        ),
+                        CupertinoButton(
+                          child: Text(
+                            "EXTEND DATE",
+                            style: ralewayRegular(11.0, Colors.black),
+                          ),
+                          onPressed: job.isComplete ? null : _onSaveDate,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: Text(
+                        formatDate(job.dueAt,
+                            day: "EEEE", month: "MMMM", year: "yyyy"),
+                        style: ralewayRegular(16.0, Colors.black),
+                      ),
+                    ),
                     const SizedBox(height: 4.0),
                     GalleryGrids(job: job),
                     const SizedBox(height: 4.0),
@@ -178,8 +205,11 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(Icons.arrow_drop_down,
-                  color: Colors.red.shade600, size: 16.0),
+              Icon(
+                Icons.arrow_drop_down,
+                color: Colors.red.shade600,
+                size: 16.0,
+              ),
               const SizedBox(width: 4.0),
               Text(
                 formatNaira(job.pendingPayment),
@@ -211,8 +241,11 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(Icons.arrow_drop_up,
-                    color: Colors.green.shade600, size: 16.0),
+                Icon(
+                  Icons.arrow_drop_up,
+                  color: Colors.green.shade600,
+                  size: 16.0,
+                ),
                 const SizedBox(width: 4.0),
                 Text(
                   formatNaira(job.completedPayment),
@@ -292,6 +325,39 @@ class JobPageState extends State<JobPage> with SnackBarProvider {
     try {
       await job.reference.updateData(<String, bool>{
         "isComplete": !job.isComplete,
+      });
+      closeLoadingSnackBar();
+    } catch (e) {
+      closeLoadingSnackBar();
+      showInSnackBar(e.toString());
+    }
+  }
+
+  void _onSaveDate() async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: job.dueAt,
+      firstDate: job.dueAt.isAfter(new DateTime.now())
+          ? new DateTime.now()
+          : job.dueAt,
+      lastDate: new DateTime(2101),
+    );
+    if (picked == null || picked == job.dueAt) {
+      return;
+    }
+    final choice = await confirmDialog(
+      context: context,
+      content: Text("Are you sure?"),
+    );
+    if (choice == null || choice == false) {
+      return;
+    }
+
+    showLoadingSnackBar();
+
+    try {
+      await job.reference.updateData(<String, String>{
+        "dueAt": picked.toString(),
       });
       closeLoadingSnackBar();
     } catch (e) {

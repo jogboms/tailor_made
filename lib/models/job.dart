@@ -20,6 +20,7 @@ class JobModel extends Model {
   List<PaymentModel> payments;
   bool isComplete;
   DateTime createdAt;
+  DateTime dueAt;
 
   JobModel({
     String id,
@@ -35,9 +36,11 @@ class JobModel extends Model {
     this.payments = const [],
     this.isComplete = false,
     DateTime createdAt,
+    DateTime dueAt,
   })  : id = id ?? uuid(),
         userID = userID ?? Auth.getUser.uid,
-        createdAt = createdAt ?? DateTime.now();
+        createdAt = createdAt ?? DateTime.now(),
+        dueAt = dueAt ?? DateTime.now();
 
   factory JobModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
@@ -70,6 +73,7 @@ class JobModel extends Model {
       notes: json['notes'],
       images: images,
       createdAt: DateTime.tryParse(json['createdAt'].toString()),
+      dueAt: DateTime.tryParse(json['dueAt'].toString()),
       measurements: measurements,
       payments: payments,
       isComplete: json['isComplete'],
@@ -84,6 +88,7 @@ class JobModel extends Model {
   JobModel copyWith({
     String contactID,
     Map<String, double> measurements,
+    DateTime dueAt,
   }) {
     return new JobModel(
       id: this.id,
@@ -91,6 +96,7 @@ class JobModel extends Model {
       contactID: contactID ?? this.contactID,
       measurements: measurements ?? this.measurements,
       createdAt: this.createdAt,
+      dueAt: dueAt ?? this.dueAt,
     )..reference = this.reference;
   }
 
@@ -107,6 +113,7 @@ class JobModel extends Model {
       'notes': notes,
       'images': images.map((image) => image.toMap()).toList(),
       'createdAt': createdAt.toString(),
+      'dueAt': dueAt.toString(),
       'measurements': measurements,
       'payments': payments.map((payment) => payment.toMap()).toList(),
       'isComplete': isComplete,
