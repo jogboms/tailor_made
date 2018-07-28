@@ -34,6 +34,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
   bool _autovalidate = false;
   String groupName, unitValue;
   List<MeasureModel> measures;
+  final FocusNode _unitNode = new FocusNode();
 
   @override
   void initState() {
@@ -41,6 +42,12 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
     measures = widget.measures ?? <MeasureModel>[];
     groupName = widget.groupName ?? "";
     unitValue = widget.unitValue ?? "";
+  }
+
+  @override
+  void dispose() {
+    _unitNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -68,6 +75,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
         }
 
         return Scaffold(
+          resizeToAvoidBottomPadding: false,
           key: scaffoldKey,
           backgroundColor: theme.scaffoldColor,
           appBar: AppBar(
@@ -76,7 +84,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
             elevation: 1.0,
             actions: [
               FlatButton(
-                child: Text("SAVE", style: TextStyle(fontSize: 20.0)),
+                child: Text("SAVE", style: TextStyle(fontSize: 18.0)),
                 onPressed: measures.isEmpty ? null : () => _handleSubmit(vm),
               )
             ],
@@ -132,6 +140,8 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
       child: new TextFormField(
         initialValue: groupName,
         textCapitalization: TextCapitalization.words,
+        textInputAction: TextInputAction.next,
+        onEditingComplete: () => FocusScope.of(context).requestFocus(_unitNode),
         keyboardType: TextInputType.text,
         style: TextStyle(fontSize: 18.0, color: Colors.black),
         decoration: new InputDecoration(
@@ -149,6 +159,7 @@ class MeasuresCreateState extends State<MeasuresCreate> with SnackBarProvider {
     return new Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: new TextFormField(
+        focusNode: _unitNode,
         initialValue: unitValue,
         keyboardType: TextInputType.text,
         style: TextStyle(fontSize: 18.0, color: Colors.black),

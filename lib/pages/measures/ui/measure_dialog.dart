@@ -92,7 +92,22 @@ class MeasureDialogState extends State<MeasureDialog> {
                     onFieldSubmitted: (value) => _onSaved(),
                     onSaved: (value) => widget.measure.unit = value.trim(),
                   ),
-                  const SizedBox(height: 32.0),
+                  const SizedBox(height: 16.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      FlatButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text("CANCEL",
+                            style: TextStyle(color: Colors.grey)),
+                      ),
+                      FlatButton(
+                        onPressed: _onSaved,
+                        child: Text("DONE"),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8.0),
                 ],
               ),
             ),

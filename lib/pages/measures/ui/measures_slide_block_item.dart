@@ -44,6 +44,14 @@ class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
 
   void onTapEditItem(MeasureModel measure) async {
     final _controller = TextEditingController(text: measure.name);
+
+    void _onSave(String value) {
+      final _value = value.trim();
+      if (_value.length > 1) {
+        Navigator.pop(context, _value);
+      }
+    }
+
     final itemName = await showEditDialog(
       context: context,
       title: "ITEM NAME",
@@ -51,9 +59,11 @@ class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
         TextField(
           textCapitalization: TextCapitalization.words,
           controller: _controller,
-          onSubmitted: (value) => Navigator.pop(context, value.trim()),
+          onSubmitted: (value) => _onSave(value),
         ),
       ],
+      onDone: () => _onSave(_controller.text),
+      onCancel: () => Navigator.pop(context),
     );
 
     if (itemName == null) {

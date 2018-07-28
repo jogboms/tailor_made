@@ -5,7 +5,6 @@ import 'package:tailor_made/pages/homepage/ui/helpers.dart';
 import 'package:tailor_made/pages/homepage/ui/notice_dialog.dart';
 import 'package:tailor_made/pages/homepage/ui/review_modal.dart';
 import 'package:tailor_made/pages/homepage/ui/store_name_dialog.dart';
-import 'package:tailor_made/pages/measures/measures_manage.dart';
 import 'package:tailor_made/utils/tm_child_dialog.dart';
 import 'package:tailor_made/utils/tm_confirm_dialog.dart';
 import 'package:tailor_made/utils/tm_images.dart';
@@ -15,7 +14,6 @@ import 'package:tailor_made/utils/tm_theme.dart';
 enum AccountOptions {
   logout,
   storename,
-  measurement,
 }
 
 class TopButtonBar extends StatelessWidget {
@@ -149,15 +147,6 @@ class TopButtonBar extends StatelessWidget {
                 ),
               ),
               new SimpleDialogOption(
-                onPressed: () =>
-                    Navigator.pop(context, AccountOptions.measurement),
-                child: TMListTile(
-                  color: Colors.blue.shade400,
-                  icon: Icons.content_cut,
-                  title: "Measurements",
-                ),
-              ),
-              new SimpleDialogOption(
                 onPressed: () => Navigator.pop(context, AccountOptions.logout),
                 child: TMListTile(
                   color: Colors.grey.shade400,
@@ -197,10 +186,6 @@ class TopButtonBar extends StatelessWidget {
             });
           }
 
-          break;
-
-        case AccountOptions.measurement:
-          TMNavigate(context, MeasuresManagePage(account: account));
           break;
 
         case AccountOptions.logout:
