@@ -40,7 +40,7 @@ class JobModel extends Model {
   })  : id = id ?? uuid(),
         userID = userID ?? Auth.getUser.uid,
         createdAt = createdAt ?? DateTime.now(),
-        dueAt = dueAt ?? DateTime.now();
+        dueAt = dueAt ?? DateTime.now().add(Duration(days: 7));
 
   factory JobModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
