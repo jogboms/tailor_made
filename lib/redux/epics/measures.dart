@@ -25,7 +25,10 @@ Stream<dynamic> measures(
                   );
                 }
 
-                final grouped = groupModelBy<MeasureModel>(measures, "group");
+                final grouped = groupModelBy<MeasureModel>(
+                  measures,
+                  (measure) => measure.group,
+                );
 
                 return new OnDataMeasureEvent(
                   payload: measures,
