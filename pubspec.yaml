@@ -26,6 +26,7 @@ dependencies:
   get_version: ^0.0.5
   contact_picker: ^0.0.2
   version: ^1.0.0
+  timeago: ^1.2.7
 
 dev_dependencies:
   flutter_test:
