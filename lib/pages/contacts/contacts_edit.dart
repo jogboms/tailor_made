@@ -5,6 +5,7 @@ import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/pages/contacts/ui/contact_form.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
+import 'package:tailor_made/utils/tm_strings.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class ContactsEditPage extends StatefulWidget {
@@ -68,7 +69,7 @@ class _ContactsEditPageState extends State<ContactsEditPage>
   }
 
   void _handleValidate() {
-    showInSnackBar('Please fix the errors in red before submitting.');
+    showInSnackBar(TMStrings.fixErrors);
   }
 
   void _handleUpload(String message) {

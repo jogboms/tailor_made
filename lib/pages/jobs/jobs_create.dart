@@ -24,6 +24,7 @@ import 'package:tailor_made/ui/tm_loading_spinner.dart';
 import 'package:tailor_made/utils/tm_image_choice_dialog.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
+import 'package:tailor_made/utils/tm_strings.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 const _kGridWidth = 85.0;
@@ -251,7 +252,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProvider {
 
     if (!form.validate()) {
       _autovalidate = true; // Start validating on every change.
-      showInSnackBar('Please fix the errors in red before submitting.');
+      showInSnackBar(TMStrings.fixErrors);
     } else {
       form.save();
 

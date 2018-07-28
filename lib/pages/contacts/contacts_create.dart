@@ -12,6 +12,7 @@ import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
+import 'package:tailor_made/utils/tm_strings.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class ContactsCreatePage extends StatefulWidget {
@@ -96,7 +97,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
   }
 
   void _handleValidate() {
-    showInSnackBar('Please fix the errors in red before submitting.');
+    showInSnackBar(TMStrings.fixErrors);
   }
 
   void _handleUpload(String message) {
@@ -105,7 +106,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
 
   void _handleSubmit(ContactModel _contact) async {
     if (contact.measurements.isEmpty) {
-      showInSnackBar("Leaving Measurements empty? Click on Scissors button.");
+      showInSnackBar(TMStrings.leavingEmptyMeasures);
       return;
     }
 

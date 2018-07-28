@@ -92,14 +92,8 @@ class PaymentGridsState extends State<PaymentGrids> {
           child: new ListView(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             scrollDirection: Axis.horizontal,
-            // children: [newGrid(context)]..addAll(
-            //     widget.job.payments.map((payment) {
-            //       return PaymentGridItem(payment: payment);
-            //     }).toList(),
-            //   ),
             children: [newGrid(widget.gridSize)]
               ..addAll(paymentsList.reversed.toList()),
-            // children: [newGrid(widget.job.contact, widget.gridSize)]..addAll(imagesList.reversed.toList()),
           ),
         ),
       ],

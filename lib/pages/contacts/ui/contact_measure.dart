@@ -7,6 +7,7 @@ import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/full_button.dart';
 import 'package:tailor_made/utils/tm_navigate.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
+import 'package:tailor_made/utils/tm_strings.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class ContactMeasure extends StatefulWidget {
@@ -130,7 +131,7 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProvider {
     }
     if (!form.validate()) {
       _autovalidate = true; // Start validating on every change.
-      showInSnackBar('Please fix the errors in red before submitting.');
+      showInSnackBar(TMStrings.fixErrors);
     } else {
       form.save();
       showLoadingSnackBar();

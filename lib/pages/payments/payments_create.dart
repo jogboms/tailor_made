@@ -4,6 +4,7 @@ import 'package:tailor_made/ui/app_bar.dart';
 import 'package:tailor_made/ui/full_button.dart';
 import 'package:tailor_made/utils/tm_format_naira.dart';
 import 'package:tailor_made/utils/tm_snackbar.dart';
+import 'package:tailor_made/utils/tm_strings.dart';
 import 'package:tailor_made/utils/tm_theme.dart';
 
 class PaymentsCreatePage extends StatefulWidget {
@@ -167,7 +168,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
     }
     if (!form.validate()) {
       _autovalidate = true; // Start validating on every change.
-      showInSnackBar('Please fix the errors in red before submitting.');
+      showInSnackBar(TMStrings.fixErrors);
     } else {
       form.save();
 
