@@ -40,8 +40,9 @@ class JobListItem extends StatelessWidget {
                   new TextSpan(
                     children: [
                       new TextSpan(
-                          text: "${_date.day}\n",
-                          style: ralewayLight(20.0, Colors.black54)),
+                        text: "${_date.day}\n",
+                        style: ralewayLight(20.0, Colors.black54),
+                      ),
                       new TextSpan(
                         text: MONTHS_SHORT[_date.month - 1].toUpperCase(),
                         style: ralewayLight(10.0, Colors.black).copyWith(
@@ -62,9 +63,10 @@ class JobListItem extends StatelessWidget {
                     Text(
                       job.name,
                       style: TextStyle(
-                          fontSize: 16.0,
-                          color: theme.textColor,
-                          fontWeight: FontWeight.w600),
+                        fontSize: 16.0,
+                        color: theme.textColor,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     new SizedBox(height: 2.0),
                     Text(
@@ -79,16 +81,22 @@ class JobListItem extends StatelessWidget {
                         ? Row(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              Icon(Icons.arrow_drop_up,
-                                  color: Colors.green.shade600, size: 12.0),
+                              Icon(
+                                Icons.arrow_drop_up,
+                                color: Colors.green.shade600,
+                                size: 12.0,
+                              ),
                               const SizedBox(width: 2.0),
                               Text(
                                 _paid,
                                 style: TextStyle(fontSize: 11.0),
                               ),
                               const SizedBox(width: 4.0),
-                              Icon(Icons.arrow_drop_down,
-                                  color: Colors.red.shade600, size: 12.0),
+                              Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.red.shade600,
+                                size: 12.0,
+                              ),
                               const SizedBox(width: 2.0),
                               Text(
                                 _owed,
@@ -98,8 +106,11 @@ class JobListItem extends StatelessWidget {
                           )
                         : Container(
                             padding: EdgeInsets.all(2.0),
-                            child: Icon(Icons.attach_money,
-                                size: 12.0, color: Colors.white),
+                            child: Icon(
+                              Icons.attach_money,
+                              size: 12.0,
+                              color: Colors.white,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.green.shade600,
                               borderRadius: BorderRadius.circular(10.0),
