@@ -1,11 +1,23 @@
+import 'package:meta/meta.dart';
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/models/settings.dart';
 
-class SettingsInitAction extends Action {
-  const SettingsInitAction();
+class InitSettingsEvents extends Action {
+  const InitSettingsEvents();
 }
 
-class SettingsUpdateAction extends Action {
-  const SettingsUpdateAction(this.settings);
+class DisposeSettingsEvents extends Action {
+  const DisposeSettingsEvents();
+}
 
-  final dynamic settings;
+class OnErrorSettingsEvents extends Action {
+  const OnErrorSettingsEvents();
+}
+
+class OnDataSettingEvent extends Action {
+  const OnDataSettingEvent({
+    @required this.payload,
+  });
+
+  final SettingsModel payload;
 }

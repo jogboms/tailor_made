@@ -13,3 +13,19 @@ class OnLoginAction extends Action {
 class OnLogoutAction extends Action {
   const OnLogoutAction();
 }
+
+class VoidAction extends Action {
+  const VoidAction();
+}
+
+class OnLogoutEvent extends Action {
+  const OnLogoutEvent();
+}
+
+class InitDataEvents extends Action {
+  const InitDataEvents();
+}
+
+class DisposeDataEvents extends Action {
+  const DisposeDataEvents();
+}

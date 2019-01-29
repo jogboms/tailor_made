@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/redux/actions/contacts.dart';
+import 'package:tailor_made/rebloc/actions/contacts.dart';
 import 'package:tailor_made/redux/view_models/contacts.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 

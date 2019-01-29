@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:tailor_made/models/contact.dart';
-import 'package:tailor_made/redux/actions/contacts.dart';
+import 'package:tailor_made/rebloc/actions/contacts.dart';
 
 enum ContactsStatus {
   loading,

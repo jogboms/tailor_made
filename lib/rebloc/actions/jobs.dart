@@ -1,25 +1,61 @@
+import 'package:meta/meta.dart';
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/models/job.dart';
 
-class JobsAsyncLoadingAction extends Action {
-  const JobsAsyncLoadingAction();
+enum SortType {
+  recent,
+  active,
+  name,
+  owed,
+  payments,
+  price,
+  reset,
 }
 
-class JobsAsyncSuccessAction extends JobsUpdateAction {
-  const JobsAsyncSuccessAction(List<dynamic> jobs) : super(jobs);
+class ToggleCompleteJob extends Action {
+  const ToggleCompleteJob({
+    @required this.payload,
+  });
+
+  final JobModel payload;
 }
 
-class JobsAsyncFailureAction extends Action {
-  const JobsAsyncFailureAction(this.error);
+class SortJobs extends Action {
+  const SortJobs({
+    @required this.payload,
+  });
 
-  final String error;
+  final SortType payload;
 }
 
-class JobsAsyncInitAction extends Action {
-  const JobsAsyncInitAction();
+class SearchSuccessJobEvent extends Action {
+  const SearchSuccessJobEvent({
+    @required this.payload,
+  });
+
+  final List<JobModel> payload;
 }
 
-class JobsUpdateAction extends Action {
-  const JobsUpdateAction(this.jobs);
+class CancelSearchJobEvent extends Action {
+  const CancelSearchJobEvent();
+}
 
-  final List<dynamic> jobs;
+class StartSearchJobEvent extends Action {
+  const StartSearchJobEvent();
+}
+
+class SearchJobEvent extends Action {
+  const SearchJobEvent({
+    @required this.payload,
+  });
+
+  final String payload;
+}
+
+class OnDataJobEvent extends Action {
+  const OnDataJobEvent({
+    @required this.payload,
+  });
+
+  final List<JobModel> payload;
 }

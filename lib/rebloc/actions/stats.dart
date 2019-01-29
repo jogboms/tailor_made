@@ -1,11 +1,11 @@
+import 'package:meta/meta.dart';
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/models/stats.dart';
 
-class StatsInitAction extends Action {
-  const StatsInitAction();
-}
+class OnDataStatEvent extends Action {
+  const OnDataStatEvent({
+    @required this.payload,
+  });
 
-class StatsUpdateAction extends Action {
-  const StatsUpdateAction(this.stats);
-
-  final dynamic stats;
+  final StatsModel payload;
 }

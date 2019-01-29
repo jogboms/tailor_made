@@ -1,12 +1,12 @@
 import 'package:redux/redux.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/rebloc/actions/account.dart';
+import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/states/account.dart';
 import 'package:tailor_made/rebloc/states/contacts.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/states/stats.dart';
-import 'package:tailor_made/redux/actions/account.dart';
-import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/view_models/stats.dart';
 import 'package:tailor_made/services/settings.dart';
 import 'package:version/version.dart';

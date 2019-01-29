@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/rebloc/actions/account.dart';
-import 'package:tailor_made/rebloc/states/account.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 
 class AccountBloc extends SimpleBloc<AppState> {
@@ -12,40 +10,40 @@ class AccountBloc extends SimpleBloc<AppState> {
     AppState state,
     Action action,
   ) async {
-    if (action is AccountAsyncInitAction) {
-      return const AccountAsyncLoadingAction();
-    }
+    // if (action is AccountAsyncInitAction) {
+    //   return const AccountAsyncLoadingAction();
+    // }
     return action;
   }
 
   @override
   AppState reducer(AppState state, Action action) {
-    final _account = state.account;
+    // final _account = state.account;
 
-    if (action is AccountAsyncLoadingAction) {
-      return state.copyWith(
-        account: _account.copyWith(
-          status: AccountStatus.loading,
-        ),
-      );
-    }
+    // if (action is AccountAsyncLoadingAction) {
+    //   return state.copyWith(
+    //     account: _account.copyWith(
+    //       status: AccountStatus.loading,
+    //     ),
+    //   );
+    // }
 
-    if (action is AccountAsyncFailureAction) {
-      return state.copyWith(
-        account: _account.copyWith(
-          status: AccountStatus.failure,
-          error: action.error,
-        ),
-      );
-    }
+    // if (action is AccountAsyncFailureAction) {
+    //   return state.copyWith(
+    //     account: _account.copyWith(
+    //       status: AccountStatus.failure,
+    //       error: action.error,
+    //     ),
+    //   );
+    // }
 
-    if (action is AccountAsyncSuccessAction) {
-      return state.copyWith(
-        account: _account.copyWith(
-          status: AccountStatus.success,
-        ),
-      );
-    }
+    // if (action is AccountAsyncSuccessAction) {
+    //   return state.copyWith(
+    //     account: _account.copyWith(
+    //       status: AccountStatus.success,
+    //     ),
+    //   );
+    // }
 
     return state;
   }
@@ -56,17 +54,17 @@ class AccountBloc extends SimpleBloc<AppState> {
     AppState state,
     Action action,
   ) async {
-    if (action is AccountAsyncLoadingAction) {
-      try {
-        dispatcher(
-          AccountAsyncSuccessAction(),
-        );
-      } catch (error) {
-        dispatcher(
-          AccountAsyncFailureAction(error.toString()),
-        );
-      }
-    }
+    // if (action is AccountAsyncLoadingAction) {
+    //   try {
+    //     dispatcher(
+    //       AccountAsyncSuccessAction(),
+    //     );
+    //   } catch (error) {
+    //     dispatcher(
+    //       AccountAsyncFailureAction(error.toString()),
+    //     );
+    //   }
+    // }
     return action;
   }
 }

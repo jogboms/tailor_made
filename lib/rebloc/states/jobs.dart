@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:tailor_made/models/job.dart';
-import 'package:tailor_made/redux/actions/jobs.dart';
+import 'package:tailor_made/rebloc/actions/jobs.dart';
 
 enum JobsStatus {
   loading,

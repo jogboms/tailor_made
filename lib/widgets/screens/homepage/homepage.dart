@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tailor_made/constants/mk_images.dart';
+import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
