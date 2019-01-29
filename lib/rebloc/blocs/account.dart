@@ -1,21 +1,67 @@
 import 'dart:async';
 
 import 'package:rebloc/rebloc.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/rebloc/actions/account.dart';
+import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/states/account.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
+import 'package:tailor_made/services/cloud_db.dart';
+import 'package:tailor_made/services/settings.dart';
 
 class AccountBloc extends SimpleBloc<AppState> {
   @override
-  Future<Action> middleware(
-    DispatchFunction dispatcher,
-    AppState state,
-    Action action,
-  ) async {
-    // if (action is AccountAsyncInitAction) {
-    //   return const AccountAsyncLoadingAction();
-    // }
-    return action;
+  Stream<WareContext<AppState>> applyMiddleware(
+    Stream<WareContext<AppState>> input,
+  ) {
+    return Observable(input).map(
+      (context) {
+        final _action = context.action;
+
+        if (_action is OnReadNotice) {
+          Observable.fromFuture(
+            _readNotice(_action.payload).catchError(
+              (dynamic e) => print(e),
+            ),
+          ).take(1).listen(
+                (_) => context.dispatcher(VoidAction()),
+              );
+        }
+
+        if (_action is OnSendRating) {
+          Observable.fromFuture(
+            _sendRating(_action.payload, _action.rating).catchError(
+              (dynamic e) => print(e),
+            ),
+          ).take(1).listen(
+                (_) => context.dispatcher(VoidAction()),
+              );
+        }
+
+        if (_action is OnPremiumSignUp) {
+          Observable.fromFuture(_signUp(_action.payload).catchError(
+            (dynamic e) => print(e),
+          )).take(1).listen(
+                (_) => context.dispatcher(VoidAction()),
+              );
+        }
+
+        if (_action is InitDataEvents) {
+          Observable(CloudDb.account.snapshots())
+              .map((snapshot) => AccountModel.fromDoc(snapshot))
+              .takeUntil<dynamic>(
+                input.where((action) => action is DisposeDataEvents),
+              )
+              .listen(
+                (account) =>
+                    context.dispatcher(OnDataAccountEvent(payload: account)),
+              );
+        }
+
+        return context;
+      },
+    );
   }
 
   @override
@@ -41,24 +87,43 @@ class AccountBloc extends SimpleBloc<AppState> {
 
     return state;
   }
+}
 
-  @override
-  Future<Action> afterware(
-    DispatchFunction dispatcher,
-    AppState state,
-    Action action,
-  ) async {
-    // if (action is AccountAsyncLoadingAction) {
-    //   try {
-    //     dispatcher(
-    //       AccountAsyncSuccessAction(),
-    //     );
-    //   } catch (error) {
-    //     dispatcher(
-    //       AccountAsyncFailureAction(error.toString()),
-    //     );
-    //   }
-    // }
-    return action;
+Future<AccountModel> _sendRating(AccountModel account, int rating) async {
+  final _account = account.copyWith(
+    hasSendRating: true,
+    rating: rating,
+  );
+  try {
+    await account.reference.updateData(_account.toMap());
+  } catch (e) {
+    rethrow;
   }
+  return _account;
+}
+
+Future<AccountModel> _readNotice(AccountModel account) async {
+  final _account = account.copyWith(hasReadNotice: true);
+  try {
+    await account.reference.updateData(_account.toMap());
+  } catch (e) {
+    rethrow;
+  }
+  return _account;
+}
+
+Future<AccountModel> _signUp(AccountModel account) async {
+  final _account = account.copyWith(
+    status: AccountModelStatus.pending,
+    notice: Settings.getData().premiumNotice,
+    hasReadNotice: false,
+    hasPremiumEnabled: true,
+  );
+  try {
+    await account.reference.updateData(_account.toMap());
+    await CloudDb.premium.document(account.uid).setData(_account.toMap());
+  } catch (e) {
+    rethrow;
+  }
+  return _account;
 }

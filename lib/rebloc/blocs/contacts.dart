@@ -1,8 +1,11 @@
 import 'package:rebloc/rebloc.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/actions/contacts.dart';
 import 'package:tailor_made/rebloc/states/contacts.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
+import 'package:tailor_made/services/cloud_db.dart';
 
 Comparator<ContactModel> _sort(SortType sortType) {
   switch (sortType) {
@@ -24,6 +27,62 @@ Comparator<ContactModel> _sort(SortType sortType) {
 }
 
 class ContactsBloc extends SimpleBloc<AppState> {
+  @override
+  Stream<WareContext<AppState>> applyMiddleware(
+    Stream<WareContext<AppState>> input,
+  ) {
+    return Observable(input).map(
+      (context) {
+        final _action = context.action;
+
+        if (_action is SearchContactEvent) {
+          Observable<String>.just(_action.payload)
+              .map<String>((String text) => text.trim())
+              .distinct()
+              .where((text) => text.length > 1)
+              .debounce(const Duration(milliseconds: 750))
+              .switchMap<Action>(
+                (text) => Observable.concat([
+                      Observable.just(StartSearchContactEvent()),
+                      Observable.timer(
+                        _doSearch(
+                          context.state.contacts.contacts,
+                          text,
+                        ),
+                        Duration(seconds: 1),
+                      )
+                    ]).takeUntil<dynamic>(
+                      input.where(
+                          (action) => action is CancelSearchContactEvent),
+                    ),
+              )
+              .listen((action) => context.dispatcher(action));
+        }
+
+        if (_action is InitDataEvents) {
+          Observable(CloudDb.contacts.snapshots())
+              .map(
+                (snapshot) {
+                  return snapshot.documents
+                      .where((doc) => doc.data.containsKey('fullname'))
+                      .map((item) => ContactModel.fromDoc(item))
+                      .toList();
+                },
+              )
+              .takeUntil<dynamic>(
+                input.where((action) => action is DisposeDataEvents),
+              )
+              .listen(
+                (contacts) =>
+                    context.dispatcher(OnDataContactEvent(payload: contacts)),
+              );
+        }
+
+        return context;
+      },
+    );
+  }
+
   @override
   AppState reducer(AppState state, Action action) {
     final _contacts = state.contacts;
@@ -81,4 +140,14 @@ class ContactsBloc extends SimpleBloc<AppState> {
 
     return state;
   }
+}
+
+SearchSuccessContactEvent _doSearch(List<ContactModel> contacts, String text) {
+  return SearchSuccessContactEvent(
+    payload: contacts
+        .where((contact) => contact.fullname.contains(
+              RegExp(r'' + text + '', caseSensitive: false),
+            ))
+        .toList(),
+  );
 }
