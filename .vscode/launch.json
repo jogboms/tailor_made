@@ -3,13 +3,42 @@
   // Hover to view descriptions of existing attributes.
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
-  "configurations": [{
-    "name": "Flutter",
-    "type": "dart",
-    "request": "launch",
-    "args": [
-      "--flavor=dev"
-    ],
-    "program": "lib/main.dart"
-  }]
+  "configurations": [
+    {
+      "name": "Dev (Dev)",
+      "type": "dart",
+      "request": "launch",
+      "args": ["--flavor", "dev"],
+      "program": "${workspaceFolder}/lib/main_dev.dart"
+    },
+    {
+      "name": "Dev (Prod)",
+      "type": "dart",
+      "request": "launch",
+      "args": ["--flavor", "prod"],
+      "program": "${workspaceFolder}/lib/main_dev.dart"
+    },
+    {
+      "name": "Prod (Dev)",
+      "type": "dart",
+      "request": "launch",
+      "args": ["--flavor", "dev"],
+      "program": "${workspaceFolder}/lib/main_prod.dart"
+    },
+    {
+      "name": "Prod (Prod)",
+      "type": "dart",
+      "request": "launch",
+      "args": ["--flavor", "prod"],
+      "program": "${workspaceFolder}/lib/main_prod.dart"
+    },
+    {
+      "name": "Profile",
+      "request": "launch",
+      "type": "dart",
+      "program": "${workspaceFolder}/lib/main_dev.dart",
+      "args": ["--no-track-widget-creation", "--flavor", "prod"],
+      "flutterMode": "profile"
+    }
+  ]
 }
