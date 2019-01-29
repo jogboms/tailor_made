@@ -1,20 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/services/auth.dart';
-import 'package:tailor_made/utils/tm_uuid.dart';
+import 'package:tailor_made/utils/mk_uuid.dart';
 
 class ContactModel extends Model {
-  String id;
-  String userID;
-  String fullname;
-  String phone;
-  String location;
-  String imageUrl;
-  DateTime createdAt;
-  Map<String, double> measurements;
-  int totalJobs;
-  int pendingJobs;
-
   ContactModel({
     String id,
     String userID,
@@ -38,7 +27,7 @@ class ContactModel extends Model {
     if (json['measurements'] != null) {
       measurements = json['measurements'].cast<String, double>();
     }
-    return new ContactModel(
+    return ContactModel(
       id: json['id'],
       userID: json['userID'],
       fullname: json['fullname'],
@@ -56,6 +45,17 @@ class ContactModel extends Model {
     return ContactModel.fromJson(doc.data)..reference = doc.reference;
   }
 
+  String id;
+  String userID;
+  String fullname;
+  String phone;
+  String location;
+  String imageUrl;
+  DateTime createdAt;
+  Map<String, double> measurements;
+  int totalJobs;
+  int pendingJobs;
+
   ContactModel copyWith({
     String fullname,
     String phone,
@@ -63,7 +63,7 @@ class ContactModel extends Model {
     String imageUrl,
     Map<String, double> measurements,
   }) {
-    return new ContactModel(
+    return ContactModel(
       id: this.id,
       userID: this.userID,
       fullname: fullname ?? this.fullname,

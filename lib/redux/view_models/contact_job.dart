@@ -2,16 +2,16 @@ import 'package:redux/redux.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
-import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/redux/view_models/main.dart';
 
 class ContactJobViewModel extends ViewModel {
   String contactID;
   String jobID;
 
-  ContactJobViewModel(Store<ReduxState> store) : super(store);
+  ContactJobViewModel(Store<AppState> store) : super(store);
 
-  ReduxState get _state => store.state;
+  AppState get _state => store.state;
 
   ContactModel get selectedContact {
     if (contactID != null) {

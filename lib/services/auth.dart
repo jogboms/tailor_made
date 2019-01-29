@@ -4,12 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-final GoogleSignIn _googleSignIn = new GoogleSignIn();
+final GoogleSignIn _googleSignIn = GoogleSignIn();
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class Auth {
-  static FirebaseUser _user;
   Auth._();
+
+  static FirebaseUser _user;
 
   static FirebaseUser setUser(FirebaseUser user) => _user = user;
   static FirebaseUser get getUser => _user;

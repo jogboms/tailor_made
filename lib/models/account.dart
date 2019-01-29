@@ -5,19 +5,6 @@ import 'package:tailor_made/models/main.dart';
 enum AccountModelStatus { enabled, disabled, warning, pending }
 
 class AccountModel extends Model {
-  String uid;
-  String storeName;
-  String email;
-  String displayName;
-  int phoneNumber;
-  String photoURL;
-  AccountModelStatus status;
-  bool hasPremiumEnabled;
-  bool hasSendRating;
-  int rating;
-  String notice;
-  bool hasReadNotice;
-
   AccountModel({
     @required this.uid,
     @required this.storeName,
@@ -35,7 +22,7 @@ class AccountModel extends Model {
 
   factory AccountModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
-    return new AccountModel(
+    return AccountModel(
       uid: json['uid'],
       storeName: json['storeName'],
       email: json['email'],
@@ -56,6 +43,19 @@ class AccountModel extends Model {
     return AccountModel.fromJson(doc.data)..reference = doc.reference;
   }
 
+  String uid;
+  String storeName;
+  String email;
+  String displayName;
+  int phoneNumber;
+  String photoURL;
+  AccountModelStatus status;
+  bool hasPremiumEnabled;
+  bool hasSendRating;
+  int rating;
+  String notice;
+  bool hasReadNotice;
+
   AccountModel copyWith({
     String storeName,
     String displayName,
@@ -68,7 +68,7 @@ class AccountModel extends Model {
     String notice,
     bool hasReadNotice,
   }) {
-    return new AccountModel(
+    return AccountModel(
       uid: this.uid,
       storeName: storeName ?? this.storeName,
       email: this.email,

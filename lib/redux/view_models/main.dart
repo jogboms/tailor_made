@@ -1,8 +1,8 @@
 import 'package:redux/redux.dart';
-import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/rebloc/states/main.dart';
 
 abstract class ViewModel {
-  final Store<ReduxState> store;
+  final Store<AppState> store;
 
   ViewModel(this.store);
 

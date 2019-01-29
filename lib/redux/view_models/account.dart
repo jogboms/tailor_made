@@ -1,11 +1,11 @@
 import 'package:redux/redux.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/redux/states/account.dart';
-import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/redux/view_models/main.dart';
 
 class AccountViewModel extends ViewModel {
-  AccountViewModel(Store<ReduxState> store) : super(store);
+  AccountViewModel(Store<AppState> store) : super(store);
 
   AccountState get _state => store.state.account;
 

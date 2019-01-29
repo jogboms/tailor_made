@@ -6,16 +6,16 @@ import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/redux/actions/main.dart';
 import 'package:tailor_made/redux/actions/measures.dart';
-import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/utils/tm_group_model_by.dart';
 
 Stream<dynamic> measures(
   Stream<dynamic> actions,
-  EpicStore<ReduxState> store,
+  EpicStore<AppState> store,
 ) {
-  return new Observable<dynamic>(actions)
-      .ofType(new TypeToken<InitDataEvents>())
+  return Observable<dynamic>(actions)
+      .ofType(TypeToken<InitDataEvents>())
       .switchMap<dynamic>(
         (InitDataEvents action) => _getMeasures().map<dynamic>(
               (measures) {
@@ -30,7 +30,7 @@ Stream<dynamic> measures(
                   (measure) => measure.group,
                 );
 
-                return new OnDataMeasureEvent(
+                return OnDataMeasureEvent(
                   payload: measures,
                   grouped: grouped,
                 );
@@ -43,10 +43,10 @@ Stream<dynamic> measures(
 
 Stream<dynamic> init(
   Stream<dynamic> actions,
-  EpicStore<ReduxState> store,
+  EpicStore<AppState> store,
 ) {
-  return new Observable<dynamic>(actions)
-      .ofType(new TypeToken<OnInitMeasureEvent>())
+  return Observable<dynamic>(actions)
+      .ofType(TypeToken<OnInitMeasureEvent>())
       .switchMap<dynamic>(
         (OnInitMeasureEvent action) => Observable.fromFuture(
               _init(action.payload).catchError(
@@ -54,7 +54,7 @@ Stream<dynamic> init(
               ),
             )
                 // TODO refactor need to InitDataEvent
-                .map<dynamic>((measures) => new InitDataEvents())
+                .map<dynamic>((measures) => InitDataEvents())
                 .take(1),
       );
 }
@@ -78,7 +78,7 @@ Future<void> _init(List<MeasureModel> measures) async {
 }
 
 Observable<List<MeasureModel>> _getMeasures() {
-  return new Observable(CloudDb.measurements.snapshots()).map(
+  return Observable(CloudDb.measurements.snapshots()).map(
     (QuerySnapshot snapshot) {
       return snapshot.documents
           .map((item) => MeasureModel.fromDoc(item))

@@ -5,14 +5,14 @@ import 'package:tailor_made/redux/reducers/jobs.dart' as jobs;
 import 'package:tailor_made/redux/reducers/measures.dart' as measures;
 import 'package:tailor_made/redux/reducers/settings.dart' as settings;
 import 'package:tailor_made/redux/reducers/stats.dart' as stats;
-import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/rebloc/states/main.dart';
 
-ReduxState reduxReducer(ReduxState state, dynamic action) {
+AppState reduxReducer(AppState state, dynamic action) {
   if (action is OnLogoutEvent) {
-    return ReduxState.initialState();
+    return AppState.initialState();
   }
 
-  return new ReduxState(
+  return AppState(
     contacts: contacts.reducer(state.contacts, action),
     jobs: jobs.reducer(state.jobs, action),
     stats: stats.reducer(state.stats, action),

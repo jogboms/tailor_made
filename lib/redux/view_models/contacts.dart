@@ -4,13 +4,13 @@ import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/redux/actions/contacts.dart';
 import 'package:tailor_made/redux/states/contacts.dart';
-import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/redux/view_models/main.dart';
 
 class ContactsViewModel extends ViewModel {
   String contactID;
 
-  ContactsViewModel(Store<ReduxState> store) : super(store);
+  ContactsViewModel(Store<AppState> store) : super(store);
 
   ContactsState get _state => store.state.contacts;
 

@@ -6,19 +6,19 @@ import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/redux/actions/contacts.dart';
 import 'package:tailor_made/redux/actions/main.dart';
-import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 
 Stream<dynamic> contacts(
   Stream<dynamic> actions,
-  EpicStore<ReduxState> store,
+  EpicStore<AppState> store,
 ) {
-  return new Observable<dynamic>(actions)
-      .ofType(new TypeToken<InitDataEvents>())
+  return Observable<dynamic>(actions)
+      .ofType(TypeToken<InitDataEvents>())
       .switchMap<dynamic>(
         (InitDataEvents action) => _getContactList()
             .map<dynamic>(
-              (contacts) => new OnDataContactEvent(payload: contacts),
+              (contacts) => OnDataContactEvent(payload: contacts),
             )
             .takeUntil<dynamic>(
               actions.where((dynamic action) => action is DisposeDataEvents),
@@ -28,10 +28,10 @@ Stream<dynamic> contacts(
 
 Stream<dynamic> search(
   Stream<dynamic> actions,
-  EpicStore<ReduxState> store,
+  EpicStore<AppState> store,
 ) {
-  return new Observable<dynamic>(actions)
-      .ofType(new TypeToken<SearchContactEvent>())
+  return Observable<dynamic>(actions)
+      .ofType(TypeToken<SearchContactEvent>())
       .map((action) => action.payload)
       .map((text) => text.trim())
       .distinct()
@@ -40,12 +40,12 @@ Stream<dynamic> search(
       .switchMap<dynamic>(
         (text) => Observable.concat([
               Observable.just(StartSearchContactEvent()),
-              new Observable.timer(
+              Observable.timer(
                 _doSearch(
                   store.state.contacts.contacts,
                   text,
                 ),
-                new Duration(seconds: 1),
+                Duration(seconds: 1),
               )
             ]).takeUntil<dynamic>(actions
                 .where((dynamic action) => action is CancelSearchContactEvent)),
@@ -56,14 +56,14 @@ SearchSuccessContactEvent _doSearch(List<ContactModel> contacts, String text) {
   return SearchSuccessContactEvent(
     payload: contacts
         .where((contact) => contact.fullname.contains(
-              new RegExp(r'' + text + '', caseSensitive: false),
+              RegExp(r'' + text + '', caseSensitive: false),
             ))
         .toList(),
   );
 }
 
 Observable<List<ContactModel>> _getContactList() {
-  return new Observable(CloudDb.contacts.snapshots()).map(
+  return Observable(CloudDb.contacts.snapshots()).map(
     (QuerySnapshot snapshot) {
       return snapshot.documents
           .where((doc) => doc.data.containsKey('fullname'))

@@ -1,7 +1,4 @@
 class SettingsModel {
-  final String premiumNotice;
-  final String versionName;
-
   SettingsModel({
     this.premiumNotice,
     this.versionName,
@@ -9,9 +6,12 @@ class SettingsModel {
 
   factory SettingsModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
-    return new SettingsModel(
+    return SettingsModel(
       premiumNotice: json['premiumNotice'],
       versionName: json['versionName'],
     );
   }
+
+  final String premiumNotice;
+  final String versionName;
 }

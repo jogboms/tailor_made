@@ -1,12 +1,12 @@
 import 'package:redux/redux.dart';
 import 'package:tailor_made/models/settings.dart';
 import 'package:tailor_made/redux/actions/settings.dart';
-import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/redux/states/settings.dart';
 import 'package:tailor_made/redux/view_models/main.dart';
 
 class SettingsViewModel extends ViewModel {
-  SettingsViewModel(Store<ReduxState> store) : super(store);
+  SettingsViewModel(Store<AppState> store) : super(store);
 
   SettingsState get _state => store.state.settings;
 

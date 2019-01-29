@@ -5,10 +5,10 @@ import 'package:tailor_made/redux/epics/jobs.dart' as jobs;
 import 'package:tailor_made/redux/epics/measures.dart' as measures;
 import 'package:tailor_made/redux/epics/settings.dart' as settings;
 import 'package:tailor_made/redux/epics/stats.dart' as stats;
-import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/rebloc/states/main.dart';
 
-EpicMiddleware<ReduxState> reduxEpics() => new EpicMiddleware<ReduxState>(
-      combineEpics<ReduxState>(
+EpicMiddleware<AppState> reduxEpics() => EpicMiddleware<AppState>(
+      combineEpics<AppState>(
         [
           contacts.contacts,
           contacts.search,

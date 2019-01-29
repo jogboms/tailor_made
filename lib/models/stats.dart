@@ -1,10 +1,6 @@
 import 'package:tailor_made/models/main.dart';
 
 class IntStatsModel extends Model {
-  final int total;
-  final int pending;
-  final int completed;
-
   IntStatsModel({
     this.total,
     this.pending,
@@ -20,6 +16,10 @@ class IntStatsModel extends Model {
     );
   }
 
+  final int total;
+  final int pending;
+  final int completed;
+
   @override
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -31,10 +31,6 @@ class IntStatsModel extends Model {
 }
 
 class DoubleStatsModel extends Model {
-  final double total;
-  final double pending;
-  final double completed;
-
   DoubleStatsModel({
     this.total,
     this.pending,
@@ -49,6 +45,10 @@ class DoubleStatsModel extends Model {
       completed: double.tryParse(json['completed'].toString()),
     );
   }
+
+  final double total;
+  final double pending;
+  final double completed;
 
   @override
   Map<String, dynamic> toMap() {
@@ -81,11 +81,6 @@ class DoubleStatsModel extends Model {
 // }
 
 class StatsModel extends Model {
-  final IntStatsModel jobs;
-  final IntStatsModel contacts;
-  final IntStatsModel gallery;
-  final DoubleStatsModel payments;
-
   StatsModel({
     this.jobs,
     this.contacts,
@@ -104,6 +99,11 @@ class StatsModel extends Model {
           DoubleStatsModel.fromJson(json['payments'].cast<String, dynamic>()),
     );
   }
+
+  final IntStatsModel jobs;
+  final IntStatsModel contacts;
+  final IntStatsModel gallery;
+  final DoubleStatsModel payments;
 
   @override
   Map<String, dynamic> toMap() {

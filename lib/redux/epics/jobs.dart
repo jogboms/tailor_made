@@ -6,26 +6,26 @@ import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/redux/actions/jobs.dart';
 import 'package:tailor_made/redux/actions/main.dart';
-import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 
 Stream<dynamic> jobs(
   Stream<dynamic> actions,
-  EpicStore<ReduxState> store,
+  EpicStore<AppState> store,
 ) {
-  return new Observable<dynamic>(actions)
-      .ofType(new TypeToken<InitDataEvents>())
+  return Observable<dynamic>(actions)
+      .ofType(TypeToken<InitDataEvents>())
       .switchMap<dynamic>(
         (InitDataEvents action) => _getJobList()
-            .map<dynamic>((jobs) => new OnDataJobEvent(payload: jobs))
+            .map<dynamic>((jobs) => OnDataJobEvent(payload: jobs))
             .takeUntil<dynamic>(
                 actions.where((dynamic action) => action is DisposeDataEvents)),
       );
 }
 
-Stream<dynamic> search(Stream<dynamic> actions, EpicStore<ReduxState> store) {
-  return new Observable<dynamic>(actions)
-      .ofType(new TypeToken<SearchJobEvent>())
+Stream<dynamic> search(Stream<dynamic> actions, EpicStore<AppState> store) {
+  return Observable<dynamic>(actions)
+      .ofType(TypeToken<SearchJobEvent>())
       .map((action) => action.payload)
       .map((text) => text.trim())
       .distinct()
@@ -34,12 +34,12 @@ Stream<dynamic> search(Stream<dynamic> actions, EpicStore<ReduxState> store) {
       .switchMap<dynamic>(
         (text) => Observable.concat([
               Observable.just(StartSearchJobEvent()),
-              new Observable.timer(
+              Observable.timer(
                 _doSearch(
                   store.state.jobs.jobs,
                   text,
                 ),
-                new Duration(seconds: 1),
+                Duration(seconds: 1),
               )
             ]).takeUntil<dynamic>(
               actions.where((dynamic action) => action is CancelSearchJobEvent),
@@ -48,17 +48,17 @@ Stream<dynamic> search(Stream<dynamic> actions, EpicStore<ReduxState> store) {
 }
 
 SearchSuccessJobEvent _doSearch(List<JobModel> jobs, String text) {
-  return new SearchSuccessJobEvent(
+  return SearchSuccessJobEvent(
     payload: jobs
         .where((job) => job.name.contains(
-              new RegExp(r'' + text + '', caseSensitive: false),
+              RegExp(r'' + text + '', caseSensitive: false),
             ))
         .toList(),
   );
 }
 
 Observable<List<JobModel>> _getJobList() {
-  return new Observable(CloudDb.jobs.snapshots()).map((QuerySnapshot snapshot) {
+  return Observable(CloudDb.jobs.snapshots()).map((QuerySnapshot snapshot) {
     return snapshot.documents.map((item) => JobModel.fromDoc(item)).toList();
   });
 }

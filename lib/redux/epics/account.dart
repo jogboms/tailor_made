@@ -6,19 +6,19 @@ import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/redux/actions/account.dart';
 import 'package:tailor_made/redux/actions/main.dart';
-import 'package:tailor_made/redux/states/main.dart';
+import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/services/settings.dart';
 
 Stream<dynamic> account(
   Stream<dynamic> actions,
-  EpicStore<ReduxState> store,
+  EpicStore<AppState> store,
 ) {
-  return new Observable<dynamic>(actions)
-      .ofType(new TypeToken<InitDataEvents>())
+  return Observable<dynamic>(actions)
+      .ofType(TypeToken<InitDataEvents>())
       .switchMap<dynamic>(
         (InitDataEvents action) => _getAccount()
-            .map<dynamic>((account) => new OnDataAccountEvent(payload: account))
+            .map<dynamic>((account) => OnDataAccountEvent(payload: account))
             .takeUntil<dynamic>(
                 actions.where((dynamic action) => action is DisposeDataEvents)),
       );
@@ -26,50 +26,50 @@ Stream<dynamic> account(
 
 Stream<dynamic> onPremiumSignUp(
   Stream<dynamic> actions,
-  EpicStore<ReduxState> store,
+  EpicStore<AppState> store,
 ) {
-  return new Observable<dynamic>(actions)
-      .ofType(new TypeToken<OnPremiumSignUp>())
+  return Observable<dynamic>(actions)
+      .ofType(TypeToken<OnPremiumSignUp>())
       .switchMap<dynamic>(
         (OnPremiumSignUp action) =>
             Observable.fromFuture(_signUp(action.payload).catchError(
               (dynamic e) => print(e),
-            )).map<dynamic>((account) => new VoidAction()).take(1),
+            )).map<dynamic>((account) => VoidAction()).take(1),
       );
 }
 
 Stream<dynamic> onSendRating(
   Stream<dynamic> actions,
-  EpicStore<ReduxState> store,
+  EpicStore<AppState> store,
 ) {
-  return new Observable<dynamic>(actions)
-      .ofType(new TypeToken<OnSendRating>())
+  return Observable<dynamic>(actions)
+      .ofType(TypeToken<OnSendRating>())
       .switchMap<dynamic>(
         (OnSendRating action) => Observable.fromFuture(
               _sendRating(action.payload, action.rating).catchError(
                 (dynamic e) => print(e),
               ),
-            ).map<dynamic>((account) => new VoidAction()).take(1),
+            ).map<dynamic>((account) => VoidAction()).take(1),
       );
 }
 
 Stream<dynamic> onReadNotice(
   Stream<dynamic> actions,
-  EpicStore<ReduxState> store,
+  EpicStore<AppState> store,
 ) {
-  return new Observable<dynamic>(actions)
-      .ofType(new TypeToken<OnReadNotice>())
+  return Observable<dynamic>(actions)
+      .ofType(TypeToken<OnReadNotice>())
       .switchMap<dynamic>(
         (OnReadNotice action) => Observable.fromFuture(
               _readNotice(action.payload).catchError(
                 (dynamic e) => print(e),
               ),
-            ).map<dynamic>((account) => new VoidAction()).take(1),
+            ).map<dynamic>((account) => VoidAction()).take(1),
       );
 }
 
 Observable<AccountModel> _getAccount() {
-  return new Observable(CloudDb.account.snapshots()).map(
+  return Observable(CloudDb.account.snapshots()).map(
     (DocumentSnapshot snapshot) => AccountModel.fromDoc(snapshot),
   );
 }
