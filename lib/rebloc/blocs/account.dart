@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/rebloc/actions/account.dart';
+import 'package:tailor_made/rebloc/states/account.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 
 class AccountBloc extends SimpleBloc<AppState> {
@@ -18,32 +20,24 @@ class AccountBloc extends SimpleBloc<AppState> {
 
   @override
   AppState reducer(AppState state, Action action) {
-    // final _account = state.account;
+    final _account = state.account;
 
-    // if (action is AccountAsyncLoadingAction) {
-    //   return state.copyWith(
-    //     account: _account.copyWith(
-    //       status: AccountStatus.loading,
-    //     ),
-    //   );
-    // }
+    if (action is OnDataAccountEvent) {
+      return state.copyWith(
+        account: _account.copyWith(
+          account: action.payload,
+          status: AccountStatus.success,
+        ),
+      );
+    }
 
-    // if (action is AccountAsyncFailureAction) {
-    //   return state.copyWith(
-    //     account: _account.copyWith(
-    //       status: AccountStatus.failure,
-    //       error: action.error,
-    //     ),
-    //   );
-    // }
-
-    // if (action is AccountAsyncSuccessAction) {
-    //   return state.copyWith(
-    //     account: _account.copyWith(
-    //       status: AccountStatus.success,
-    //     ),
-    //   );
-    // }
+    if (action is OnSkipedPremium) {
+      return state.copyWith(
+        account: _account.copyWith(
+          hasSkipedPremium: true,
+        ),
+      );
+    }
 
     return state;
   }
