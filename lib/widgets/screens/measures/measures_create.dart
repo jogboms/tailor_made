@@ -3,13 +3,15 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/rebloc/actions/measures.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/redux/view_models/measures.dart';
+import 'package:tailor_made/rebloc/view_models/measures.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
+import 'package:tailor_made/utils/mk_dispatch_provider.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/widgets/screens/measures/ui/measure_dialog.dart';
@@ -30,7 +32,7 @@ class MeasuresCreate extends StatefulWidget {
 }
 
 class MeasuresCreateState extends State<MeasuresCreate>
-    with MkSnackBarProvider {
+    with MkSnackBarProvider, MkDispatchProvider<AppState> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
   String groupName, unitValue;
@@ -56,9 +58,13 @@ class MeasuresCreateState extends State<MeasuresCreate>
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, MeasuresViewModel>(
+    return ViewModelSubscriber<AppState, MeasuresViewModel>(
       converter: (store) => MeasuresViewModel(store),
-      builder: (BuildContext context, vm) {
+      builder: (
+        BuildContext context,
+        DispatchFunction dispatcher,
+        vm,
+      ) {
         final List<Widget> children = [];
 
         children.add(makeHeader("Group Name"));
@@ -234,7 +240,7 @@ class MeasuresCreateState extends State<MeasuresCreate>
     showLoadingSnackBar();
 
     try {
-      vm.toggleLoading();
+      dispatchAction(const ToggleMeasuresLoading());
       await measure.reference.delete();
       closeLoadingSnackBar();
     } catch (e) {
@@ -308,7 +314,7 @@ class MeasuresCreateState extends State<MeasuresCreate>
 
       showLoadingSnackBar();
       try {
-        vm.toggleLoading();
+        dispatchAction(const ToggleMeasuresLoading());
         await batch.commit();
 
         closeLoadingSnackBar();

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/redux/view_models/measures.dart';
+import 'package:tailor_made/rebloc/view_models/measures.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 import 'package:tailor_made/widgets/screens/measures/ui/measure_list_item.dart';
 
@@ -16,9 +16,13 @@ class MeasuresPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, MeasuresViewModel>(
+    return ViewModelSubscriber<AppState, MeasuresViewModel>(
       converter: (store) => MeasuresViewModel(store),
-      builder: (BuildContext context, vm) {
+      builder: (
+        BuildContext context,
+        DispatchFunction dispatcher,
+        vm,
+      ) {
         return Scaffold(
           appBar: AppBar(
             brightness: Brightness.light,
@@ -26,7 +30,7 @@ class MeasuresPage extends StatelessWidget {
             backgroundColor: Colors.transparent,
             elevation: 0.0,
           ),
-          body: getBody(vm.measures),
+          body: getBody(vm.model),
         );
       },
     );

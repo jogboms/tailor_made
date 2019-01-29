@@ -5,16 +5,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/redux/view_models/measures.dart';
+import 'package:tailor_made/rebloc/view_models/measures.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/services/cloud_storage.dart';
 import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
@@ -167,9 +167,13 @@ class _JobsCreatePageState extends State<JobsCreatePage>
   }
 
   Widget buildCreateMeasure() {
-    return StoreConnector<AppState, MeasuresViewModel>(
+    return ViewModelSubscriber<AppState, MeasuresViewModel>(
       converter: (store) => MeasuresViewModel(store),
-      builder: (BuildContext context, vm) {
+      builder: (
+        BuildContext context,
+        DispatchFunction dispatcher,
+        vm,
+      ) {
         return MeasureCreateItems(
           grouped: vm.grouped,
           measurements: job.measurements,

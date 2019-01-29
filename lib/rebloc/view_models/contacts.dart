@@ -58,10 +58,4 @@ class ContactsViewModel extends Equatable {
   final bool hasError;
   final bool isSearching;
   final dynamic error;
-
-  // void setSortFn(SortType type) => store.dispatch(SortContacts(payload: type));
-
-  // void search(String term) => store.dispatch(SearchContactEvent(payload: term));
-
-  // void cancelSearch() => store.dispatch(CancelSearchContactEvent());
 }

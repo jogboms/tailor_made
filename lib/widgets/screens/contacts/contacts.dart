@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/rebloc/actions/contacts.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/redux/view_models/contacts.dart';
+import 'package:tailor_made/rebloc/view_models/contacts.dart';
+import 'package:tailor_made/utils/mk_dispatch_provider.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
@@ -19,16 +21,21 @@ class ContactsPage extends StatefulWidget {
   _ContactsPageState createState() => _ContactsPageState();
 }
 
-class _ContactsPageState extends State<ContactsPage> {
+class _ContactsPageState extends State<ContactsPage>
+    with MkDispatchProvider<AppState> {
   bool _isSearching = false;
 
   @override
   Widget build(BuildContext context) {
     final MkTheme theme = MkTheme.of(context);
 
-    return StoreConnector<AppState, ContactsViewModel>(
+    return ViewModelSubscriber<AppState, ContactsViewModel>(
       converter: (store) => ContactsViewModel(store),
-      builder: (BuildContext context, ContactsViewModel vm) {
+      builder: (
+        BuildContext context,
+        DispatchFunction dispatcher,
+        ContactsViewModel vm,
+      ) {
         return WillPopScope(
           child: Scaffold(
             appBar: _isSearching
@@ -60,7 +67,7 @@ class _ContactsPageState extends State<ContactsPage> {
 
   Function() _handleSearchEnd(ContactsViewModel vm) {
     return () {
-      vm.cancelSearch();
+      dispatchAction(const CancelSearchContactEvent());
       setState(() {
         _isSearching = false;
       });
@@ -88,7 +95,8 @@ class _ContactsPageState extends State<ContactsPage> {
               hintStyle: mkFontBold(16.0),
             ),
             style: mkFontBold(16.0, theme.appBarTitle.color),
-            onChanged: (term) => vm.search(term),
+            onChanged: (term) =>
+                dispatchAction(SearchContactEvent(payload: term)),
           ),
         ),
         bottom: PreferredSize(
@@ -113,7 +121,12 @@ class _ContactsPageState extends State<ContactsPage> {
           ),
           onPressed: onTapSearch,
         ),
-        ContactsFilterButton(vm: vm),
+        ContactsFilterButton(
+          vm: vm,
+          onTapSort: (SortType type) {
+            dispatchAction(SortContacts(payload: type));
+          },
+        ),
       ],
     );
   }

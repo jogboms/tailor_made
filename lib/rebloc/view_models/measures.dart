@@ -17,6 +17,4 @@ class MeasuresViewModel extends Equatable {
   final bool isLoading;
   final bool hasError;
   final dynamic error;
-
-  // void toggleLoading() => store.dispatch(ToggleMeasuresLoading());
 }

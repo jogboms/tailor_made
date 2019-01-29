@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/rebloc/actions/account.dart';
+import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/utils/mk_child_dialog.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
@@ -115,7 +118,9 @@ class TopButtonBar extends StatelessWidget {
         );
 
         if (_res != null) {
-          vm.onSendRating(_res);
+          StoreProvider.of<AppState>(context).dispatcher(
+            OnSendRating(payload: account, rating: _res),
+          );
         }
         return;
       }
@@ -127,7 +132,9 @@ class TopButtonBar extends StatelessWidget {
             account: account,
           ),
         );
-        vm.onReadNotice();
+        StoreProvider.of<AppState>(context).dispatcher(
+          OnReadNotice(payload: account),
+        );
         return;
       }
 

@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/redux/view_models/measures.dart';
+import 'package:tailor_made/rebloc/view_models/measures.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
@@ -65,16 +65,20 @@ class MeasuresManagePageState extends State<MeasuresManagePage>
   }
 
   Widget _buildBody() {
-    return StoreConnector<AppState, MeasuresViewModel>(
+    return ViewModelSubscriber<AppState, MeasuresViewModel>(
       converter: (store) => MeasuresViewModel(store),
-      builder: (BuildContext context, vm) {
+      builder: (
+        BuildContext context,
+        DispatchFunction dispatcher,
+        vm,
+      ) {
         if (vm.isLoading) {
           return Center(
             child: const MkLoadingSpinner(),
           );
         }
 
-        if (vm.measures == null || vm.measures.isEmpty) {
+        if (vm.model == null || vm.model.isEmpty) {
           return Center(
             child: const EmptyResultView(message: "No measurements available"),
           );

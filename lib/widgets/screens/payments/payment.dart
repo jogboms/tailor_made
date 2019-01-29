@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/redux/view_models/contact_job.dart';
+import 'package:tailor_made/rebloc/view_models/contacts_job.dart';
 import 'package:tailor_made/utils/mk_dates.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
@@ -24,11 +24,15 @@ class PaymentPage extends StatelessWidget {
 
     final date = MkDates(payment.createdAt, day: "EEEE", month: "MMMM").format;
 
-    return StoreConnector<AppState, ContactJobViewModel>(
+    return ViewModelSubscriber<AppState, ContactJobViewModel>(
       converter: (store) => ContactJobViewModel(store)
         ..contactID = payment.contactID
         ..jobID = payment.jobID,
-      builder: (BuildContext context, ContactJobViewModel vm) {
+      builder: (
+        BuildContext context,
+        DispatchFunction dispatcher,
+        ContactJobViewModel vm,
+      ) {
         return Scaffold(
           appBar: AppBar(
             iconTheme: IconThemeData(color: Colors.black87),

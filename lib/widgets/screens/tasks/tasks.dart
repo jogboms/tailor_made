@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/redux/view_models/jobs.dart';
+import 'package:tailor_made/rebloc/view_models/jobs.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
@@ -15,9 +15,13 @@ class TasksPage extends StatefulWidget {
 class _TasksPageState extends State<TasksPage> {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, JobsViewModel>(
+    return ViewModelSubscriber<AppState, JobsViewModel>(
       converter: (store) => JobsViewModel(store),
-      builder: (BuildContext context, JobsViewModel vm) {
+      builder: (
+        BuildContext context,
+        DispatchFunction dispatcher,
+        JobsViewModel vm,
+      ) {
         return Scaffold(
           appBar: MkAppBar(
             title: Text("Tasks"),

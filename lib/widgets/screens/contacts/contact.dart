@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/redux/view_models/contacts.dart';
+import 'package:tailor_made/rebloc/view_models/contacts.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/screens/contacts/ui/contact_appbar.dart';
 import 'package:tailor_made/widgets/screens/contacts/ui/contact_gallery_grid.dart';
@@ -27,12 +27,16 @@ class ContactPage extends StatefulWidget {
 class _ContactState extends State<ContactPage> {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, ContactsViewModel>(
-      converter: (store) =>
-          ContactsViewModel(store)..contactID = widget.contact.id,
-      builder: (BuildContext context, vm) {
+    return ViewModelSubscriber<AppState, ContactsViewModel>(
+      converter: (state) =>
+          ContactsViewModel(state)..contactID = widget.contact.id,
+      builder: (
+        BuildContext context,
+        DispatchFunction dispatcher,
+        ContactsViewModel viewModel,
+      ) {
         // in the case of newly created contacts
-        final contact = vm.selected ?? widget.contact;
+        final contact = viewModel.selected ?? widget.contact;
         return DefaultTabController(
           length: TABS.length,
           child: Scaffold(
@@ -41,14 +45,14 @@ class _ContactState extends State<ContactPage> {
               automaticallyImplyLeading: false,
               title: ContactAppBar(
                 contact: contact,
-                grouped: vm.measuresGrouped,
+                grouped: viewModel.measuresGrouped,
               ),
               titleSpacing: 0.0,
               centerTitle: false,
               brightness: Brightness.dark,
               bottom: tabTitles(),
             ),
-            body: _buildBody(vm, contact),
+            body: _buildBody(viewModel, contact),
           ),
         );
       },

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/rebloc/actions/jobs.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/redux/view_models/jobs.dart';
+import 'package:tailor_made/rebloc/view_models/jobs.dart';
+import 'package:tailor_made/utils/mk_dispatch_provider.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
@@ -16,16 +18,20 @@ class JobsPage extends StatefulWidget {
   JobsPageState createState() => JobsPageState();
 }
 
-class JobsPageState extends State<JobsPage> {
+class JobsPageState extends State<JobsPage> with MkDispatchProvider<AppState> {
   bool _isSearching = false;
 
   @override
   Widget build(BuildContext context) {
     final MkTheme theme = MkTheme.of(context);
 
-    return StoreConnector<AppState, JobsViewModel>(
+    return ViewModelSubscriber<AppState, JobsViewModel>(
       converter: (store) => JobsViewModel(store),
-      builder: (BuildContext context, JobsViewModel vm) {
+      builder: (
+        BuildContext context,
+        DispatchFunction dispatcher,
+        JobsViewModel vm,
+      ) {
         return WillPopScope(
           child: Scaffold(
             appBar: _isSearching
@@ -58,7 +64,7 @@ class JobsPageState extends State<JobsPage> {
 
   Function() _handleSearchEnd(JobsViewModel vm) {
     return () {
-      vm.cancelSearch();
+      dispatchAction(const CancelSearchJobEvent());
       setState(() {
         _isSearching = false;
       });
@@ -86,7 +92,7 @@ class JobsPageState extends State<JobsPage> {
             hintStyle: mkFontBold(16.0),
           ),
           style: mkFontBold(16.0, theme.appBarTitle.color),
-          onChanged: (term) => vm.search(term),
+          onChanged: (term) => dispatchAction(SearchJobEvent(payload: term)),
         ),
       ),
       bottom: PreferredSize(
@@ -127,7 +133,12 @@ class JobsPageState extends State<JobsPage> {
           ),
           onPressed: onTapSearch,
         ),
-        JobsFilterButton(vm: vm),
+        JobsFilterButton(
+          vm: vm,
+          onTapSort: (SortType type) {
+            dispatchAction(SortJobs(payload: type));
+          },
+        ),
       ],
     );
   }

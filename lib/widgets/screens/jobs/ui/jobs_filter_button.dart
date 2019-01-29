@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/rebloc/actions/jobs.dart';
-import 'package:tailor_made/redux/view_models/jobs.dart';
+import 'package:tailor_made/rebloc/view_models/jobs.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 
 class JobsFilterButton extends StatelessWidget {
   const JobsFilterButton({
     Key key,
     @required this.vm,
+    @required this.onTapSort,
   }) : super(key: key);
 
   final JobsViewModel vm;
+  final void Function(SortType) onTapSort;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class JobsFilterButton extends StatelessWidget {
                 Icons.filter_list,
                 color: theme.appBarTitle.color,
               ),
-              onSelected: onTapSort(vm),
+              onSelected: onTapSort,
               itemBuilder: (BuildContext context) => [
                     buildTextOption(
                       "Sort by Active",
@@ -94,7 +96,4 @@ class JobsFilterButton extends StatelessWidget {
       ),
     );
   }
-
-  Function(SortType) onTapSort(JobsViewModel vm) =>
-      (SortType type) => vm.setSortFn(type);
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
+import 'package:tailor_made/rebloc/actions/account.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/services/auth.dart';
@@ -57,11 +58,11 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            StoreConnector<AppState, HomeViewModel>(
+            ViewModelSubscriber<AppState, HomeViewModel>(
               converter: (store) => HomeViewModel(store),
-              onInit: (store) => store.dispatch(InitDataEvents()),
-              onDispose: (store) => store.dispatch(DisposeDataEvents()),
-              builder: (context, vm) {
+              // onInit: (store) => store.dispatch(InitDataEvents()),
+              // onDispose: (store) => store.dispatch(DisposeDataEvents()),
+              builder: (context, DispatchFunction dispatcher, vm) {
                 if (vm.isLoading) {
                   return Center(
                     child: const MkLoadingSpinner(),
@@ -91,10 +92,10 @@ class HomePage extends StatelessWidget {
                 if (vm.isWarning && vm.hasSkipedPremium == false) {
                   return RateLimitPage(
                     onSignUp: () {
-                      vm.onPremiumSignUp();
+                      dispatcher(OnPremiumSignUp(payload: vm.account));
                     },
                     onSkipedPremium: () {
-                      vm.onSkipedPremium();
+                      dispatcher(const OnSkipedPremium());
                     },
                   );
                 }
@@ -161,7 +162,9 @@ class HomePage extends StatelessWidget {
 
   VoidCallback _onLogout(BuildContext context, HomeViewModel vm) {
     return () async {
-      vm.logout();
+      StoreProvider.of<AppState>(context).dispatcher(
+        const OnLogoutEvent(),
+      );
       await Auth.signOutWithGoogle();
       Navigator.pushReplacement<dynamic, dynamic>(
         context,

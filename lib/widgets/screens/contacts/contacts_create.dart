@@ -1,12 +1,12 @@
 import 'package:contact_picker/contact_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/redux/view_models/measures.dart';
+import 'package:tailor_made/rebloc/view_models/measures.dart';
 import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
@@ -41,9 +41,13 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, MeasuresViewModel>(
+    return ViewModelSubscriber<AppState, MeasuresViewModel>(
       converter: (store) => MeasuresViewModel(store),
-      builder: (BuildContext context, vm) {
+      builder: (
+        BuildContext context,
+        DispatchFunction dispatcher,
+        vm,
+      ) {
         return Scaffold(
           key: scaffoldKey,
           appBar: MkAppBar(

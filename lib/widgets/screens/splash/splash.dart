@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:get_version/get_version.dart';
+import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/rebloc/actions/settings.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/redux/actions/settings.dart';
-import 'package:tailor_made/redux/view_models/settings.dart';
+import 'package:tailor_made/rebloc/view_models/settings.dart';
 import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/services/settings.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
@@ -122,10 +122,14 @@ class _SplashPageState extends State<SplashPage> with MkSnackBarProvider {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      body: StoreConnector<AppState, SettingsViewModel>(
+      body: ViewModelSubscriber<AppState, SettingsViewModel>(
         converter: (store) => SettingsViewModel(store),
-        onInit: (store) => store.dispatch(InitSettingsEvents()),
-        builder: (context, vm) {
+        // onInit: (store) => store.dispatch(InitSettingsEvents()),
+        builder: (
+          context,
+          DispatchFunction dispatcher,
+          vm,
+        ) {
           return Stack(
             fit: StackFit.expand,
             children: <Widget>[
@@ -178,7 +182,10 @@ class _SplashPageState extends State<SplashPage> with MkSnackBarProvider {
                 bottom: 72.0,
                 left: 0.0,
                 right: 0.0,
-                child: _buildContent(vm),
+                child: _buildContent(
+                  vm,
+                  () => dispatcher(const InitSettingsEvents()),
+                ),
               ),
             ],
           );
@@ -188,18 +195,18 @@ class _SplashPageState extends State<SplashPage> with MkSnackBarProvider {
   }
 
   bool _isImageVisible(SettingsViewModel vm) {
-    return isLoading && (widget.isColdStart || isRestartable) && !vm.isFailure;
+    return isLoading && (widget.isColdStart || isRestartable) && !vm.hasError;
   }
 
-  Widget _buildContent(SettingsViewModel vm) {
+  Widget _buildContent(SettingsViewModel vm, VoidCallback onRetry) {
     if (vm.isLoading && widget.isColdStart) {
       return Center(
         child: const MkLoadingSpinner(),
       );
     }
 
-    if (vm.isFailure) {
-      return _buildFailure(vm);
+    if (vm.hasError) {
+      return _buildFailure(vm, onRetry);
     }
 
     if (widget.isColdStart && !isRestartable) {
@@ -209,7 +216,7 @@ class _SplashPageState extends State<SplashPage> with MkSnackBarProvider {
     return isLoading ? const MkLoadingSpinner() : Center(child: _googleBtn());
   }
 
-  Widget _buildFailure(SettingsViewModel vm) {
+  Widget _buildFailure(SettingsViewModel vm, VoidCallback onRetry) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(48.0, 16.0, 48.0, 16.0),
       child: Center(
@@ -223,7 +230,7 @@ class _SplashPageState extends State<SplashPage> with MkSnackBarProvider {
             SizedBox(height: 8.0),
             RaisedButton(
               color: Colors.white,
-              onPressed: vm.init,
+              onPressed: onRetry,
               child: Text("RETRY"),
             ),
           ],

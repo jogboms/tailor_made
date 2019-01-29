@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/rebloc/actions/contacts.dart';
-import 'package:tailor_made/redux/view_models/contacts.dart';
+import 'package:tailor_made/rebloc/view_models/contacts.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 
 class ContactsFilterButton extends StatelessWidget {
   const ContactsFilterButton({
     Key key,
     @required this.vm,
+    @required this.onTapSort,
   }) : super(key: key);
 
   final ContactsViewModel vm;
+  final void Function(SortType) onTapSort;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class ContactsFilterButton extends StatelessWidget {
                 Icons.filter_list,
                 color: theme.appBarTitle.color,
               ),
-              onSelected: onTapSort(vm),
+              onSelected: onTapSort,
               itemBuilder: (BuildContext context) => [
                     buildTextOption(
                       "Sort by Jobs",
@@ -90,7 +92,4 @@ class ContactsFilterButton extends StatelessWidget {
       ),
     );
   }
-
-  Function(SortType) onTapSort(ContactsViewModel vm) =>
-      (SortType type) => vm.setSortFn(type);
 }

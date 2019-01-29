@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/redux/view_models/jobs.dart';
+import 'package:tailor_made/rebloc/view_models/jobs.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_dates.dart';
 import 'package:tailor_made/utils/mk_money.dart';
@@ -47,9 +47,13 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, JobsViewModel>(
+    return ViewModelSubscriber<AppState, JobsViewModel>(
       converter: (store) => JobsViewModel(store)..jobID = widget.job.id,
-      builder: (BuildContext context, vm) {
+      builder: (
+        BuildContext context,
+        DispatchFunction dispatcher,
+        vm,
+      ) {
         // in the case of newly created jobs
         job = vm.selected ?? widget.job;
         if (vm.isLoading) {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/redux/view_models/contact_job.dart';
+import 'package:tailor_made/rebloc/view_models/contacts_job.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/screens/contacts/contact.dart';
@@ -23,11 +23,15 @@ class GalleryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, ContactJobViewModel>(
+    return ViewModelSubscriber<AppState, ContactJobViewModel>(
       converter: (store) => ContactJobViewModel(store)
         ..contactID = image.contactID
         ..jobID = image.jobID,
-      builder: (BuildContext context, ContactJobViewModel vm) {
+      builder: (
+        BuildContext context,
+        DispatchFunction dispatcher,
+        ContactJobViewModel vm,
+      ) {
         return Scaffold(
           backgroundColor: Colors.black87,
           appBar: MyAppBar(

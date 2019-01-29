@@ -15,6 +15,4 @@ class SettingsViewModel extends Equatable {
   final bool isLoading;
   final bool hasError;
   final dynamic error;
-
-  // void init() => store.dispatch(InitSettingsEvents());
 }
