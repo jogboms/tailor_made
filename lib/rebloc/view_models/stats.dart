@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:tailor_made/models/stats.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/states/stats.dart';
 
@@ -10,7 +11,7 @@ class StatsViewModel extends Equatable {
         error = state.stats.error,
         super(<AppState>[state]);
 
-  final dynamic model;
+  final StatsModel model;
   final bool isLoading;
   final bool hasError;
   final dynamic error;
