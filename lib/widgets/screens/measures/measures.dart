@@ -21,7 +21,7 @@ class MeasuresPage extends StatelessWidget {
       builder: (
         BuildContext context,
         DispatchFunction dispatcher,
-        vm,
+        MeasuresViewModel vm,
       ) {
         return Scaffold(
           appBar: AppBar(

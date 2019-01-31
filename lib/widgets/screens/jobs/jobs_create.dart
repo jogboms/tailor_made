@@ -172,7 +172,7 @@ class _JobsCreatePageState extends State<JobsCreatePage>
       builder: (
         BuildContext context,
         DispatchFunction dispatcher,
-        vm,
+        MeasuresViewModel vm,
       ) {
         return MeasureCreateItems(
           grouped: vm.grouped,

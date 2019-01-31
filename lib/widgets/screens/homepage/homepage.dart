@@ -60,7 +60,11 @@ class HomePage extends StatelessWidget {
             ),
             ViewModelSubscriber<AppState, HomeViewModel>(
               converter: (store) => HomeViewModel(store),
-              builder: (context, DispatchFunction dispatcher, vm) {
+              builder: (
+                BuildContext context,
+                DispatchFunction dispatcher,
+                HomeViewModel vm,
+              ) {
                 if (vm.isLoading) {
                   return Center(
                     child: const MkLoadingSpinner(),

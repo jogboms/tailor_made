@@ -133,9 +133,9 @@ class _SplashPageState extends State<SplashPage> with MkSnackBarProvider {
         child: ViewModelSubscriber<AppState, SettingsViewModel>(
           converter: (store) => SettingsViewModel(store),
           builder: (
-            context,
+            BuildContext context,
             DispatchFunction dispatcher,
-            vm,
+            SettingsViewModel vm,
           ) {
             return Stack(
               fit: StackFit.expand,

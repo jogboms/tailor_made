@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/models/account.dart';
@@ -9,6 +8,7 @@ import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/contacts_job.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
+import 'package:tailor_made/utils/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/screens/contacts/contact.dart';
 import 'package:tailor_made/widgets/screens/jobs/job.dart';
@@ -39,12 +39,10 @@ class GalleryView extends StatelessWidget {
             job: vm.selectedJob,
             account: vm.account,
           ),
-          body: Hero(
-            tag: image.src,
-            child: PhotoView(
-              imageProvider: NetworkImage(image.src),
-              loadingChild: const MkLoadingSpinner(),
-            ),
+          body: PhotoView(
+            imageProvider: NetworkImage(image.src),
+            loadingChild: const MkLoadingSpinner(),
+            heroTag: image.src,
           ),
         );
       },
@@ -66,8 +64,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
+    return MkStatusBar(
       child: Container(
         color: Colors.black26,
         child: SafeArea(

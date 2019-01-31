@@ -52,7 +52,7 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
       builder: (
         BuildContext context,
         DispatchFunction dispatcher,
-        vm,
+        JobsViewModel vm,
       ) {
         // in the case of newly created jobs
         job = vm.selected ?? widget.job;

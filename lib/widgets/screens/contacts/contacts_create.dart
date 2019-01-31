@@ -46,7 +46,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
       builder: (
         BuildContext context,
         DispatchFunction dispatcher,
-        vm,
+        MeasuresViewModel vm,
       ) {
         return Scaffold(
           key: scaffoldKey,

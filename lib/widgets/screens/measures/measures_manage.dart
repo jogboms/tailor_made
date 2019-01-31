@@ -70,7 +70,7 @@ class MeasuresManagePageState extends State<MeasuresManagePage>
       builder: (
         BuildContext context,
         DispatchFunction dispatcher,
-        vm,
+        MeasuresViewModel vm,
       ) {
         if (vm.isLoading) {
           return Center(

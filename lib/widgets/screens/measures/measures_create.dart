@@ -63,7 +63,7 @@ class MeasuresCreateState extends State<MeasuresCreate>
       builder: (
         BuildContext context,
         DispatchFunction dispatcher,
-        vm,
+        MeasuresViewModel vm,
       ) {
         final List<Widget> children = [];
 
