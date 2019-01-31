@@ -381,14 +381,13 @@ class _JobsCreatePageState extends State<JobsCreatePage>
     if (imageFile == null) {
       return;
     }
-    final ref = CloudStorage.createReferenceImage();
-    final uploadTask = ref.putFile(imageFile);
+    final ref = CloudStorage.createReferenceImage()..putFile(imageFile);
 
     setState(() {
       fireImages.add(FireImage()..ref = ref);
     });
     try {
-      final imageUrl = (await uploadTask.future).downloadUrl?.toString();
+      final imageUrl = (await ref.getDownloadURL()).downloadUrl?.toString();
       setState(() {
         fireImages.last
           ..isLoading = false

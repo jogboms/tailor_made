@@ -211,12 +211,11 @@ class ContactFormState extends State<ContactForm> {
     if (imageFile == null) {
       return;
     }
-    final ref = CloudStorage.createContactImage();
-    final uploadTask = ref.putFile(imageFile);
+    final ref = CloudStorage.createContactImage()..putFile(imageFile);
 
     setState(() => isLoading = true);
     try {
-      contact.imageUrl = (await uploadTask.future).downloadUrl?.toString();
+      contact.imageUrl = (await ref.getDownloadURL()).downloadUrl?.toString();
       if (mounted) {
         widget.onHandleUpload("Upload Successful");
         setState(() {
