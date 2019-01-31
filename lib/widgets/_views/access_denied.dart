@@ -21,14 +21,16 @@ class AccessDeniedPage extends StatelessWidget {
           SpinKitFadingCube(
             color: Colors.grey.shade300,
           ),
-          SizedBox(height: 48.0),
+          const SizedBox(height: 48.0),
           Text(
             "ACCESS DENIED",
             style: textTheme.copyWith(
-                color: Colors.black87, fontWeight: FontWeight.w700),
+              color: Colors.black87,
+              fontWeight: FontWeight.w700,
+            ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 64.0),
             child: Text(
@@ -37,14 +39,14 @@ class AccessDeniedPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(height: 32.0),
+          const SizedBox(height: 32.0),
           RaisedButton.icon(
             color: kAccentColor,
-            shape: StadiumBorder(),
+            shape: const StadiumBorder(),
             colorBrightness: Brightness.dark,
             onPressed: onSendMail,
-            icon: Icon(Icons.mail),
-            label: Text("Send a mail"),
+            icon: const Icon(Icons.mail),
+            label: const Text("Send a mail"),
           ),
         ],
       ),

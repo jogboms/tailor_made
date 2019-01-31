@@ -5,9 +5,10 @@ import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
-import 'package:tailor_made/widgets/_partials/full_button.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
+import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 import 'package:tailor_made/widgets/screens/measures/measures.dart';
 import 'package:tailor_made/widgets/screens/measures/ui/measure_create_items.dart';
 
@@ -44,7 +45,7 @@ class _ContactMeasureState extends State<ContactMeasure>
   Widget build(BuildContext context) {
     final List<Widget> children = [];
 
-    children.add(makeHeader("Measurements", "Inches (In)"));
+    children.add(const _Header(title: "Measurements", trailing: "Inches (In)"));
     children.add(MeasureCreateItems(
       grouped: widget.grouped,
       measurements: contact.measurements,
@@ -52,14 +53,11 @@ class _ContactMeasureState extends State<ContactMeasure>
 
     children.add(
       Padding(
-        child: FullButton(
-          child: Text(
-            "FINISH",
-            style: TextStyle(color: Colors.white),
-          ),
+        child: MkPrimaryButton(
+          child: Text("FINISH"),
           onPressed: _handleSubmit,
         ),
-        padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
+        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
       ),
     );
 
@@ -68,7 +66,7 @@ class _ContactMeasureState extends State<ContactMeasure>
     return Scaffold(
       key: scaffoldKey,
       appBar: MkAppBar(
-        title: Text("Measurements"),
+        title: const Text("Measurements"),
         leading: MkBackButton(
           onPop: contact?.reference != null
               ? null
@@ -76,17 +74,19 @@ class _ContactMeasureState extends State<ContactMeasure>
         ),
         actions: [
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.remove_red_eye,
               color: kTitleBaseColor,
             ),
-            onPressed: () => MkNavigate(
-                  context,
-                  MeasuresPage(
-                    measurements: contact.measurements,
-                  ),
-                  fullscreenDialog: true,
+            onPressed: () {
+              MkNavigate(
+                context,
+                MeasuresPage(
+                  measurements: contact.measurements,
                 ),
+                fullscreenDialog: true,
+              );
+            },
           )
         ],
       ),
@@ -103,29 +103,6 @@ class _ContactMeasureState extends State<ContactMeasure>
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget makeHeader(String title, [String trailing = ""]) {
-    return Container(
-      color: Colors.grey[100].withOpacity(.4),
-      margin: const EdgeInsets.only(top: 8.0),
-      padding:
-          const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
-      alignment: AlignmentDirectional.centerStart,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            title.toUpperCase(),
-            style: mkFontLight(12.0, kTextBaseColor),
-          ),
-          Text(
-            trailing,
-            style: mkFontLight(12.0, kTextBaseColor),
-          ),
-        ],
       ),
     );
   }
@@ -155,5 +132,39 @@ class _ContactMeasureState extends State<ContactMeasure>
         showInSnackBar(e.toString());
       }
     }
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header({
+    Key key,
+    @required this.title,
+    @required this.trailing,
+  }) : super(key: key);
+
+  final String title;
+  final String trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.grey[100].withOpacity(.4),
+      margin: const EdgeInsets.only(top: 8.0),
+      padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+      alignment: AlignmentDirectional.centerStart,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            title.toUpperCase(),
+            style: MkTheme.of(context).smallSemi,
+          ),
+          Text(
+            trailing,
+            style: MkTheme.of(context).smallSemi,
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/widgets/_partials/full_button.dart';
+import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 import 'package:tailor_made/widgets/screens/contacts/contacts_create.dart';
 import 'package:tailor_made/widgets/screens/homepage/ui/helpers.dart';
 import 'package:tailor_made/widgets/screens/jobs/jobs_create.dart';
@@ -58,9 +58,9 @@ class CreateButtonState extends State<CreateButton>
       child: SafeArea(
         child: SizedBox(
           height: widget.height,
-          child: FullButton(
+          child: MkPrimaryButton(
             onPressed: _onTapCreate(context, widget.contacts),
-            shape: RoundedRectangleBorder(),
+            shape: const RoundedRectangleBorder(),
             child: ScaleTransition(
               scale: Tween(begin: 0.95, end: 1.025).animate(controller),
               alignment: FractionalOffset.center,
@@ -108,7 +108,7 @@ class CreateButtonState extends State<CreateButton>
       );
       switch (result) {
         case CreateOptions.contacts:
-          MkNavigate(context, ContactsCreatePage());
+          MkNavigate(context, const ContactsCreatePage());
           break;
         case CreateOptions.jobs:
           MkNavigate(context, JobsCreatePage(contacts: contacts));

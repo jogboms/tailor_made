@@ -4,13 +4,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tailor_made/constants/mk_colors.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/services/cloud_storage.dart';
 import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_validators.dart';
-import 'package:tailor_made/widgets/_partials/full_button.dart';
+import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
+import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 
 class ContactForm extends StatefulWidget {
   const ContactForm({
@@ -21,9 +23,9 @@ class ContactForm extends StatefulWidget {
     @required this.onHandleUpload,
   }) : super(key: key);
 
-  final void Function(ContactModel) onHandleSubmit;
-  final void Function() onHandleValidate;
-  final void Function(String) onHandleUpload;
+  final ValueSetter<ContactModel> onHandleSubmit;
+  final VoidCallback onHandleValidate;
+  final ValueSetter<String> onHandleUpload;
   final ContactModel contact;
 
   @override
@@ -61,128 +63,74 @@ class ContactFormState extends State<ContactForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          SizedBox(height: 32.0),
-          _buildAvatar(),
-          SizedBox(height: 16.0),
-          _buildForm(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildForm() {
-    return Theme(
-      data: ThemeData(
-        hintColor: kHintColor,
-        primaryColor: kPrimaryColor,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Form(
-          key: _formKey,
-          autovalidate: _autovalidate,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              TextFormField(
-                controller: _fNController,
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.person),
-                  labelText: "Fullname",
-                ),
-                validator: MkValidate.tryAlpha(),
-                onSaved: (fullname) => contact.fullname = fullname.trim(),
-                onEditingComplete: () =>
-                    FocusScope.of(context).requestFocus(_pNFocusNode),
-              ),
-              SizedBox(height: 4.0),
-              TextFormField(
-                focusNode: _pNFocusNode,
-                controller: _pNController,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.phone),
-                  labelText: "Phone",
-                ),
-                validator: (value) =>
-                    (value.isNotEmpty) ? null : "Please input a value",
-                onSaved: (phone) => contact.phone = phone.trim(),
-                onEditingComplete: () =>
-                    FocusScope.of(context).requestFocus(_locFocusNode),
-              ),
-              SizedBox(height: 4.0),
-              TextFormField(
-                focusNode: _locFocusNode,
-                controller: _lNController,
-                textInputAction: TextInputAction.done,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.location_city),
-                  labelText: "Location",
-                ),
-                validator: (value) =>
-                    (value.isNotEmpty) ? null : "Please input a value",
-                onSaved: (location) => contact.location = location.trim(),
-                onFieldSubmitted: (value) => _handleSubmit(),
-              ),
-              SizedBox(height: 32.0),
-              FullButton(
-                onPressed: _handleSubmit,
-                child: Text(
-                  "SUBMIT",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              SizedBox(height: 32.0),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAvatar() {
-    return Container(
-      alignment: Alignment.center,
-      padding: EdgeInsets.all(4.0),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: kPrimarySwatch.shade200, width: 2.0),
-      ),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: kPrimarySwatch.shade100,
-        ),
-        child: Center(
-          child: GestureDetector(
+          const SizedBox(height: 32.0),
+          _Avatar(
+            contact: contact,
+            isLoading: isLoading,
             onTap: _handlePhotoButtonPressed,
-            child: SizedBox.fromSize(
-              size: Size.square(120.0),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  contact.imageUrl != null
-                      ? CircleAvatar(
-                          backgroundImage: NetworkImage(contact.imageUrl),
-                          backgroundColor: kPrimarySwatch.shade100,
-                        )
-                      : SizedBox(),
-                  isLoading
-                      ? const MkLoadingSpinner()
-                      : CupertinoButton(
-                          child: Icon(
-                            Icons.add_a_photo,
-                            color: Colors.white,
-                          ),
-                          onPressed: null,
-                        ),
+          ),
+          const SizedBox(height: 16.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Form(
+              key: _formKey,
+              autovalidate: _autovalidate,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  TextFormField(
+                    controller: _fNController,
+                    textInputAction: TextInputAction.next,
+                    decoration: const InputDecoration(
+                      prefixIcon: const Icon(Icons.person),
+                      labelText: "Fullname",
+                    ),
+                    validator: MkValidate.tryAlpha(),
+                    onSaved: (fullname) => contact.fullname = fullname.trim(),
+                    onEditingComplete: () =>
+                        FocusScope.of(context).requestFocus(_pNFocusNode),
+                  ),
+                  const SizedBox(height: 4.0),
+                  TextFormField(
+                    focusNode: _pNFocusNode,
+                    controller: _pNController,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.phone,
+                    decoration: const InputDecoration(
+                      prefixIcon: const Icon(Icons.phone),
+                      labelText: "Phone",
+                    ),
+                    validator: (value) =>
+                        (value.isNotEmpty) ? null : "Please input a value",
+                    onSaved: (phone) => contact.phone = phone.trim(),
+                    onEditingComplete: () =>
+                        FocusScope.of(context).requestFocus(_locFocusNode),
+                  ),
+                  const SizedBox(height: 4.0),
+                  TextFormField(
+                    focusNode: _locFocusNode,
+                    controller: _lNController,
+                    textInputAction: TextInputAction.done,
+                    decoration: const InputDecoration(
+                      prefixIcon: const Icon(Icons.location_city),
+                      labelText: "Location",
+                    ),
+                    validator: (value) =>
+                        (value.isNotEmpty) ? null : "Please input a value",
+                    onSaved: (location) => contact.location = location.trim(),
+                    onFieldSubmitted: (value) => _handleSubmit(),
+                  ),
+                  const SizedBox(height: 32.0),
+                  MkPrimaryButton(
+                    onPressed: _handleSubmit,
+                    child: const Text("SUBMIT"),
+                  ),
+                  const SizedBox(height: 32.0),
                 ],
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -244,5 +192,67 @@ class ContactFormState extends State<ContactForm> {
       _pNController.text = contact.phone ?? "";
       _lNController.text = contact.location ?? "";
     });
+  }
+}
+
+class _Avatar extends StatelessWidget {
+  const _Avatar({
+    Key key,
+    @required this.contact,
+    @required this.isLoading,
+    @required this.onTap,
+  }) : super(key: key);
+
+  final ContactModel contact;
+  final bool isLoading;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(4.0),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: MkColors.primary,
+          width: 2.0,
+        ),
+      ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: kPrimarySwatch.shade100,
+        ),
+        child: Center(
+          child: GestureDetector(
+            onTap: onTap,
+            child: SizedBox.fromSize(
+              size: const Size.square(120.0),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  contact.imageUrl != null
+                      ? CircleAvatar(
+                          backgroundImage: NetworkImage(contact.imageUrl),
+                          backgroundColor: kPrimarySwatch.shade100,
+                        )
+                      : const SizedBox(),
+                  isLoading
+                      ? const MkLoadingSpinner()
+                      : MkClearButton(
+                          child: const Icon(
+                            Icons.add_a_photo,
+                            color: Colors.white,
+                          ),
+                          onPressed: null,
+                        ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

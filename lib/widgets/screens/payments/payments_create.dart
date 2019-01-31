@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
-import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
-import 'package:tailor_made/widgets/_partials/full_button.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
+import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 
 class PaymentsCreatePage extends StatefulWidget {
   const PaymentsCreatePage({
@@ -54,39 +54,30 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
 
     children.add(
       Padding(
-        child: FullButton(
-          child: Text(
-            "FINISH",
-            style: TextStyle(color: Colors.white),
-          ),
+        child: MkPrimaryButton(
+          child: const Text("FINISH"),
           onPressed: _handleSubmit,
         ),
-        padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
+        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
       ),
     );
 
     children.add(SizedBox(height: 32.0));
     return Scaffold(
       key: scaffoldKey,
-      appBar: MkAppBar(
-        title: Text("Create Payment"),
+      appBar: const MkAppBar(
+        title: const Text("Create Payment"),
       ),
-      body: Theme(
-        data: ThemeData(
-          hintColor: kHintColor,
-          primaryColor: kPrimaryColor,
-        ),
-        child: SafeArea(
-          top: false,
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              autovalidate: _autovalidate,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: children,
-              ),
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            autovalidate: _autovalidate,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: children,
             ),
           ),
         ),
@@ -98,19 +89,18 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
     return Container(
       color: Colors.grey[100].withOpacity(.4),
       margin: const EdgeInsets.only(top: 8.0),
-      padding:
-          const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       alignment: AlignmentDirectional.centerStart,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
             title.toUpperCase(),
-            style: mkFontLight(12.0, kTextBaseColor),
+            style: MkTheme.of(context).smallLight,
           ),
           Text(
             trailing,
-            style: mkFontLight(12.0, kTextBaseColor),
+            style: MkTheme.of(context).smallLight,
           ),
         ],
       ),
@@ -125,11 +115,9 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
         controller: controller,
         textInputAction: TextInputAction.next,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        style: TextStyle(fontSize: 18.0, color: Colors.black),
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           isDense: true,
           hintText: "Enter Amount",
-          hintStyle: TextStyle(fontSize: 14.0),
         ),
         validator: (value) {
           if (controller.numberValue > widget.limit) {
@@ -151,12 +139,10 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
       child: TextFormField(
         focusNode: _additionFocusNode,
         keyboardType: TextInputType.text,
-        style: TextStyle(fontSize: 18.0, color: Colors.black),
         maxLines: 6,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           isDense: true,
           hintText: "Anything else to remember this payment by?",
-          hintStyle: TextStyle(fontSize: 14.0),
         ),
         onSaved: (value) => notes = value.trim(),
         onFieldSubmitted: (value) => _handleSubmit(),

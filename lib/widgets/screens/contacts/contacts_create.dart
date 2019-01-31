@@ -41,26 +41,23 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelSubscriber<AppState, MeasuresViewModel>(
-      converter: (store) => MeasuresViewModel(store),
-      builder: (
-        BuildContext context,
-        DispatchFunction dispatcher,
-        MeasuresViewModel vm,
-      ) {
-        return Scaffold(
-          key: scaffoldKey,
-          appBar: MkAppBar(
-            title: Text("Create Contact"),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.contacts,
-                  color: kTitleBaseColor,
-                ),
-                onPressed: _handleSelectContact,
-              ),
-              IconButton(
+    return Scaffold(
+      key: scaffoldKey,
+      appBar: MkAppBar(
+        title: const Text("Create Contact"),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.contacts),
+            onPressed: _handleSelectContact,
+          ),
+          ViewModelSubscriber<AppState, MeasuresViewModel>(
+            converter: (store) => MeasuresViewModel(store),
+            builder: (
+              BuildContext context,
+              DispatchFunction dispatcher,
+              MeasuresViewModel vm,
+            ) {
+              return IconButton(
                 icon: Icon(
                   Icons.content_cut,
                   color: contact.measurements.isEmpty
@@ -68,18 +65,18 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
                       : kTitleBaseColor,
                 ),
                 onPressed: () => _handleSelectMeasure(vm),
-              ),
-            ],
+              );
+            },
           ),
-          body: ContactForm(
-            key: _formKey,
-            contact: contact,
-            onHandleSubmit: _handleSubmit,
-            onHandleValidate: _handleValidate,
-            onHandleUpload: _handleUpload,
-          ),
-        );
-      },
+        ],
+      ),
+      body: ContactForm(
+        key: _formKey,
+        contact: contact,
+        onHandleSubmit: _handleSubmit,
+        onHandleValidate: _handleValidate,
+        onHandleUpload: _handleUpload,
+      ),
     );
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/rebloc/actions/contacts.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/contacts.dart';
@@ -76,43 +75,37 @@ class _ContactsPageState extends State<ContactsPage>
 
   Widget buildSearchBar(MkTheme theme, ContactsViewModel vm) {
     return AppBar(
-        centerTitle: false,
-        elevation: 1.0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: theme.appBarTitle.color),
-          onPressed: _handleSearchEnd(vm),
-          tooltip: 'Back',
+      centerTitle: false,
+      elevation: 1.0,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back, color: theme.appBarTitle.color),
+        onPressed: _handleSearchEnd(vm),
+        tooltip: 'Back',
+      ),
+      title: TextField(
+        autofocus: true,
+        decoration: InputDecoration(
+          hintText: 'Search...',
+          hintStyle: MkTheme.of(context).subhead1Bold,
         ),
-        title: Theme(
-          data: ThemeData(
-            hintColor: Colors.white,
-            primaryColor: kPrimaryColor,
-          ),
-          child: TextField(
-            autofocus: true,
-            decoration: InputDecoration(
-              hintText: 'Search...',
-              hintStyle: mkFontBold(16.0),
-            ),
-            style: mkFontBold(16.0, theme.appBarTitle.color),
-            onChanged: (term) =>
-                dispatchAction(SearchContactEvent(payload: term)),
-          ),
+        style: MkTheme.of(context).subhead1Bold,
+        onChanged: (term) => dispatchAction(SearchContactEvent(payload: term)),
+      ),
+      bottom: PreferredSize(
+        child: SizedBox(
+          height: 1.0,
+          child: vm.isLoading
+              ? const LinearProgressIndicator(backgroundColor: Colors.white)
+              : null,
         ),
-        bottom: PreferredSize(
-          child: SizedBox(
-            height: 1.0,
-            child: vm.isLoading
-                ? LinearProgressIndicator(backgroundColor: Colors.white)
-                : null,
-          ),
-          preferredSize: Size.fromHeight(1.0),
-        ));
+        preferredSize: const Size.fromHeight(1.0),
+      ),
+    );
   }
 
   Widget buildAppBar(MkTheme theme, ContactsViewModel vm) {
     return MkAppBar(
-      title: Text("Contacts"),
+      title: const Text("Contacts"),
       actions: <Widget>[
         IconButton(
           icon: Icon(
@@ -143,7 +136,7 @@ class _ContactsPageState extends State<ContactsPage>
         : ListView.separated(
             itemCount: vm.contacts.length,
             shrinkWrap: true,
-            padding: EdgeInsets.only(bottom: 96.0),
+            padding: const EdgeInsets.only(bottom: 96.0),
             itemBuilder: (context, index) =>
                 ContactsListItem(contact: vm.contacts[index]),
             separatorBuilder: (_, int index) => const Divider(),

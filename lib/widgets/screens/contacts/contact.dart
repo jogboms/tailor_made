@@ -4,6 +4,7 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/contacts.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/screens/contacts/ui/contact_appbar.dart';
 import 'package:tailor_made/widgets/screens/contacts/ui/contact_gallery_grid.dart';
@@ -50,57 +51,60 @@ class _ContactState extends State<ContactPage> {
               titleSpacing: 0.0,
               centerTitle: false,
               brightness: Brightness.dark,
-              bottom: tabTitles(),
+              bottom: TabBar(
+                labelStyle: MkTheme.of(context).body3Medium,
+                tabs: [
+                  Tab(child: Text(TABS[0])),
+                  Tab(child: Text(TABS[1])),
+                  Tab(child: Text(TABS[2])),
+                ],
+              ),
             ),
-            body: _buildBody(viewModel, contact),
+            body: Builder(builder: (context) {
+              if (viewModel.isLoading) {
+                return Center(
+                  child: const MkLoadingSpinner(),
+                );
+              }
+
+              return TabBarView(
+                children: [
+                  _TabView(
+                    name: TABS[0].toLowerCase(),
+                    child: JobList(jobs: viewModel.selectedJobs),
+                  ),
+                  _TabView(
+                    name: TABS[1].toLowerCase(),
+                    child: GalleryGridWidget(
+                        contact: contact, jobs: viewModel.selectedJobs),
+                  ),
+                  _TabView(
+                    name: TABS[2].toLowerCase(),
+                    child: PaymentsListWidget(
+                        contact: contact, jobs: viewModel.selectedJobs),
+                  ),
+                ],
+              );
+            }),
           ),
         );
       },
     );
   }
+}
 
-  Widget _buildBody(ContactsViewModel vm, ContactModel contact) {
-    if (vm.isLoading) {
-      return Center(
-        child: const MkLoadingSpinner(),
-      );
-    }
+class _TabView extends StatelessWidget {
+  const _TabView({
+    Key key,
+    @required this.name,
+    @required this.child,
+  }) : super(key: key);
 
-    return TabBarView(
-      children: [
-        tabView(
-          name: TABS[0].toLowerCase(),
-          child: JobList(jobs: vm.selectedJobs),
-        ),
-        tabView(
-          name: TABS[1].toLowerCase(),
-          child: GalleryGridWidget(contact: contact, jobs: vm.selectedJobs),
-        ),
-        tabView(
-          name: TABS[2].toLowerCase(),
-          child: PaymentsListWidget(contact: contact, jobs: vm.selectedJobs),
-        ),
-      ],
-    );
-  }
+  final String name;
+  final Widget child;
 
-  Widget tabTitles() {
-    return PreferredSize(
-      child: Container(
-        child: TabBar(
-          labelStyle: mkFontMedium(14.0),
-          tabs: [
-            Tab(child: Text(TABS[0], style: TextStyle(color: Colors.white))),
-            Tab(child: Text(TABS[1], style: TextStyle(color: Colors.white))),
-            Tab(child: Text(TABS[2], style: TextStyle(color: Colors.white))),
-          ],
-        ),
-      ),
-      preferredSize: Size.fromHeight(kTextTabBarHeight),
-    );
-  }
-
-  Widget tabView({String name, Widget child}) {
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       top: false,
       bottom: true,

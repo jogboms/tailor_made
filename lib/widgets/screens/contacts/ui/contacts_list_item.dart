@@ -29,37 +29,39 @@ class ContactsListItem extends StatelessWidget {
       dense: true,
       onTap: onTapContact ??
           () => MkNavigate(context, ContactPage(contact: contact)),
-      leading: avatar(theme),
+      leading: _Avatar(contact: contact),
       title: Text(
         contact.fullname,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontSize: 16.0,
-          color: kTextBaseColor,
-          fontWeight: FontWeight.w600,
-        ),
+        style: theme.subhead3,
       ),
       subtitle: Text(
         pending >= 1
             ? "$pending pending"
             : "${contact.totalJobs > 0 ? contact.totalJobs : 'none'} completed",
-        style: TextStyle(fontSize: 14.0, color: kTextBaseColor),
+        style: theme.body3,
       ),
       trailing: showActions
-          ? iconCircle(Icons.call, () => call(contact.phone))
+          ? IconButton(
+              icon: const Icon(Icons.call, size: 22.0),
+              onPressed: () => call(contact.phone),
+            )
           : null,
     );
   }
+}
 
-  Widget iconCircle(IconData icon, VoidCallback onTap) {
-    return IconButton(
-      icon: Icon(icon, size: 22.0),
-      onPressed: onTap,
-    );
-  }
+class _Avatar extends StatelessWidget {
+  const _Avatar({
+    Key key,
+    @required this.contact,
+  }) : super(key: key);
 
-  Hero avatar(MkTheme theme) {
+  final ContactModel contact;
+
+  @override
+  Widget build(BuildContext context) {
     return Hero(
       tag: contact.id,
       child: CircleAvatar(
@@ -71,7 +73,7 @@ class ContactsListItem extends StatelessWidget {
         child: Stack(
           children: [
             Align(
-              alignment: Alignment(1.05, -1.05),
+              alignment: const Alignment(1.05, -1.05),
               child: contact.pendingJobs > 0
                   ? Container(
                       width: 15.5,
@@ -89,12 +91,13 @@ class ContactsListItem extends StatelessWidget {
                   : null,
             ),
             contact.imageUrl != null
-                ? SizedBox()
-                : Center(
-                    child: Icon(
-                    Icons.person_outline,
-                    color: Colors.white,
-                  )),
+                ? const SizedBox()
+                : const Center(
+                    child: const Icon(
+                      Icons.person_outline,
+                      color: Colors.white,
+                    ),
+                  ),
           ],
         ),
       ),

@@ -22,10 +22,10 @@ import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/avatar_app_bar.dart';
-import 'package:tailor_made/widgets/_partials/full_button.dart';
 import 'package:tailor_made/widgets/_partials/input_dropdown.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
+import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 import 'package:tailor_made/widgets/screens/jobs/job.dart';
 import 'package:tailor_made/widgets/screens/jobs/ui/contact_lists.dart';
 import 'package:tailor_made/widgets/screens/jobs/ui/gallery_grid_item.dart';
@@ -139,30 +139,21 @@ class _JobsCreatePageState extends State<JobsCreatePage>
 
       children.add(
         Padding(
-          child: FullButton(
-            child: Text(
-              "FINISH",
-              style: TextStyle(color: Colors.white),
-            ),
+          child: MkPrimaryButton(
+            child: Text("FINISH"),
             onPressed: _handleSubmit,
           ),
-          padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
+          padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
         ),
       );
 
-      children.add(SizedBox(height: 32.0));
+      children.add(const SizedBox(height: 32.0));
     }
 
     return Scaffold(
       key: scaffoldKey,
       appBar: buildAppBar(theme),
-      body: Theme(
-        data: ThemeData(
-          hintColor: kHintColor,
-          primaryColor: kPrimaryColor,
-        ),
-        child: buildBody(theme, children),
-      ),
+      body: buildBody(theme, children),
     );
   }
 

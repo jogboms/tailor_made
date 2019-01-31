@@ -30,7 +30,7 @@ class PaymentsListWidget extends StatelessWidget {
     }
 
     return SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
       sliver: PaymentList(payments: payments.toList()),
     );
   }

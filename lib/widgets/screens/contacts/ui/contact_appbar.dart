@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
@@ -28,12 +27,10 @@ class ContactAppBar extends StatefulWidget {
   final ContactModel contact;
 
   @override
-  ContactAppBarState createState() {
-    return ContactAppBarState();
-  }
+  _ContactAppBarState createState() => _ContactAppBarState();
 }
 
-class ContactAppBarState extends State<ContactAppBar> {
+class _ContactAppBarState extends State<ContactAppBar> {
   dynamic _selectChoice(Choice choice) {
     switch (choice) {
       case Choice.CreateJob:
@@ -64,114 +61,79 @@ class ContactAppBarState extends State<ContactAppBar> {
   @override
   Widget build(BuildContext context) {
     return PreferredSize(
-      preferredSize: Size.fromHeight(kToolbarHeight),
+      preferredSize: const Size.fromHeight(kToolbarHeight),
       child: SafeArea(
         top: true,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            appBarLeading(),
-            Expanded(child: appBarTitle()),
-            appBarIcon(
-              icon: Icons.content_cut,
-              onTap: () => MkNavigate(
-                    context,
-                    MeasuresPage(measurements: widget.contact.measurements),
-                    fullscreenDialog: true,
-                  ),
+            _Leading(contact: widget.contact),
+            Expanded(
+              child: _Title(contact: widget.contact),
             ),
-            appBarIcon(
+            _Icon(
+              icon: Icons.content_cut,
+              onTap: () {
+                MkNavigate(
+                  context,
+                  MeasuresPage(measurements: widget.contact.measurements),
+                  fullscreenDialog: true,
+                );
+              },
+            ),
+            _Icon(
               icon: Icons.call,
-              onTap: () => call(widget.contact.phone),
+              onTap: () {
+                call(widget.contact.phone);
+              },
             ),
             PopupMenuButton<Choice>(
-              icon: Icon(Icons.more_vert, color: Colors.white),
+              icon: const Icon(
+                Icons.more_vert,
+                color: Colors.white,
+              ),
               onSelected: _selectChoice,
-              itemBuilder: (BuildContext context) => [
-                    PopupMenuItem<Choice>(
-                      value: Choice.CreateJob,
-                      child: Text('New Job',
-                          style: mkFontRegular(14.0, Colors.black87)),
-                    ),
-                    PopupMenuItem<Choice>(
-                      value: Choice.SendText,
-                      child: Text('Text Message',
-                          style: mkFontRegular(14.0, Colors.black87)),
-                    ),
-                    PopupMenuItem<Choice>(
-                      value: Choice.EditMeasure,
-                      child: Text('Edit Measurements',
-                          style: mkFontRegular(14.0, Colors.black87)),
-                    ),
-                    PopupMenuItem<Choice>(
-                      value: Choice.EditAccount,
-                      child: Text('Edit Account',
-                          style: mkFontRegular(14.0, Colors.black87)),
-                    ),
-                  ],
+              itemBuilder: (_) {
+                return [
+                  const PopupMenuItem<Choice>(
+                    value: Choice.CreateJob,
+                    child: const Text('New Job'),
+                  ),
+                  const PopupMenuItem<Choice>(
+                    value: Choice.SendText,
+                    child: const Text('Text Message'),
+                  ),
+                  const PopupMenuItem<Choice>(
+                    value: Choice.EditMeasure,
+                    child: const Text('Edit Measurements'),
+                  ),
+                  const PopupMenuItem<Choice>(
+                    value: Choice.EditAccount,
+                    child: const Text('Edit Account'),
+                  ),
+                ];
+              },
             ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget appBarLeading() {
-    return FlatButton(
-      padding: EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          SizedBox(width: 4.0),
-          Hero(
-            tag: widget.contact.id,
-            child: MkCircleAvatar(
-              radius: null,
-              imageUrl: widget.contact.imageUrl,
-              useAlt: true,
-            ),
-          ),
-        ],
-      ),
-      onPressed: () => Navigator.pop(context),
-    );
-  }
+class _Icon extends StatelessWidget {
+  const _Icon({
+    Key key,
+    @required this.icon,
+    @required this.onTap,
+  }) : super(key: key);
 
-  Widget appBarTitle() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          widget.contact.fullname,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 18.0,
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        Text(
-          widget.contact.location,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 13.0,
-            color: Colors.white,
-          ),
-        ),
-      ],
-    );
-  }
+  final IconData icon;
+  final VoidCallback onTap;
 
-  Widget appBarIcon({IconData icon, VoidCallback onTap}) {
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: InkResponse(
@@ -179,6 +141,80 @@ class ContactAppBarState extends State<ContactAppBar> {
         onTap: onTap,
         radius: 20.0,
       ),
+    );
+  }
+}
+
+class _Title extends StatelessWidget {
+  const _Title({
+    Key key,
+    @required this.contact,
+  }) : super(key: key);
+
+  final ContactModel contact;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          contact.fullname,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontSize: 18.0,
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        Text(
+          contact.location,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontSize: 13.0,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _Leading extends StatelessWidget {
+  const _Leading({
+    Key key,
+    @required this.contact,
+  }) : super(key: key);
+
+  final ContactModel contact;
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      padding: EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          const SizedBox(width: 4.0),
+          Hero(
+            tag: contact.id,
+            child: MkCircleAvatar(
+              radius: null,
+              imageUrl: contact.imageUrl,
+              useAlt: true,
+            ),
+          ),
+        ],
+      ),
+      onPressed: () => Navigator.pop(context),
     );
   }
 }
