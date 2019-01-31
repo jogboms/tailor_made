@@ -78,6 +78,7 @@ class _SplashPageState extends State<SplashPage> with MkSnackBarProvider {
     return await Auth.signInWithGoogle().catchError((dynamic e) async {
       // TODO disabled
       String message = "";
+
       switch (e?.code) {
         case "exception":
         case "sign_in_failed":
@@ -122,74 +123,77 @@ class _SplashPageState extends State<SplashPage> with MkSnackBarProvider {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      body: ViewModelSubscriber<AppState, SettingsViewModel>(
-        converter: (store) => SettingsViewModel(store),
-        // onInit: (store) => store.dispatch(InitSettingsEvents()),
-        builder: (
-          context,
-          DispatchFunction dispatcher,
-          vm,
-        ) {
-          return Stack(
-            fit: StackFit.expand,
-            children: <Widget>[
-              Opacity(
-                opacity: .5,
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: MkImages.pattern,
-                      fit: BoxFit.cover,
+      body: FirstBuildDispatcher<AppState>(
+        action: const InitSettingsEvents(),
+        child: ViewModelSubscriber<AppState, SettingsViewModel>(
+          converter: (store) => SettingsViewModel(store),
+          builder: (
+            context,
+            DispatchFunction dispatcher,
+            vm,
+          ) {
+            return Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                Opacity(
+                  opacity: .5,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: MkImages.pattern,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Positioned.fill(
-                top: null,
-                bottom: 32.0,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      MkStrings.appName,
-                      style: mkFontMedium(22.0, kTextBaseColor.withOpacity(.6)),
-                      textAlign: TextAlign.center,
-                    ),
-                    projectVersion != null
-                        ? Text(
-                            "v" + projectVersion,
-                            style: mkFontMedium(
-                                    12.0, kTextBaseColor.withOpacity(.4))
-                                .copyWith(height: 1.5),
-                            textAlign: TextAlign.center,
-                          )
-                        : SizedBox(),
-                  ],
-                ),
-              ),
-              _isImageVisible(vm)
-                  ? SizedBox()
-                  : Center(
-                      child: Image(
-                        image: MkImages.logo,
-                        width: 148.0,
-                        color: Colors.white.withOpacity(.35),
-                        colorBlendMode: BlendMode.saturation,
+                Positioned.fill(
+                  top: null,
+                  bottom: 32.0,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        MkStrings.appName,
+                        style:
+                            mkFontMedium(22.0, kTextBaseColor.withOpacity(.6)),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-              Positioned(
-                height: 124.0,
-                bottom: 72.0,
-                left: 0.0,
-                right: 0.0,
-                child: _buildContent(
-                  vm,
-                  () => dispatcher(const InitSettingsEvents()),
+                      projectVersion != null
+                          ? Text(
+                              "v" + projectVersion,
+                              style: mkFontMedium(
+                                      12.0, kTextBaseColor.withOpacity(.4))
+                                  .copyWith(height: 1.5),
+                              textAlign: TextAlign.center,
+                            )
+                          : SizedBox(),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
+                _isImageVisible(vm)
+                    ? SizedBox()
+                    : Center(
+                        child: Image(
+                          image: MkImages.logo,
+                          width: 148.0,
+                          color: Colors.white.withOpacity(.35),
+                          colorBlendMode: BlendMode.saturation,
+                        ),
+                      ),
+                Positioned(
+                  height: 124.0,
+                  bottom: 72.0,
+                  left: 0.0,
+                  right: 0.0,
+                  child: _buildContent(
+                    vm,
+                    () => dispatcher(const InitSettingsEvents()),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

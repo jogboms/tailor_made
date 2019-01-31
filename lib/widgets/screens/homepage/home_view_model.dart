@@ -19,7 +19,7 @@ class HomeViewModel extends StatsViewModel {
         stats = state.stats.stats,
         settings = state.settings.settings,
         hasSkipedPremium = state.account.hasSkipedPremium == true,
-        isLoading = state.stats.status == StatsStatus.loading ||
+        _isLoading = state.stats.status == StatsStatus.loading ||
             state.contacts.status == ContactsStatus.loading ||
             state.account.status == AccountStatus.loading,
         super(state);
@@ -29,8 +29,9 @@ class HomeViewModel extends StatsViewModel {
   final List<JobModel> jobs;
   final StatsModel stats;
   final SettingsModel settings;
+  final bool _isLoading;
   @override
-  final bool isLoading;
+  bool get isLoading => _isLoading;
   final bool hasSkipedPremium;
   bool get isDisabled => account.status == AccountModelStatus.disabled;
   bool get isWarning => account.status == AccountModelStatus.warning;

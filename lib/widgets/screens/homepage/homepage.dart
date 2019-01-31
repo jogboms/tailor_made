@@ -60,8 +60,6 @@ class HomePage extends StatelessWidget {
             ),
             ViewModelSubscriber<AppState, HomeViewModel>(
               converter: (store) => HomeViewModel(store),
-              // onInit: (store) => store.dispatch(InitDataEvents()),
-              // onDispose: (store) => store.dispatch(DisposeDataEvents()),
               builder: (context, DispatchFunction dispatcher, vm) {
                 if (vm.isLoading) {
                   return Center(
@@ -73,7 +71,8 @@ class HomePage extends StatelessWidget {
                   return OutDatedPage(
                     onUpdate: () {
                       open(
-                          'https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade');
+                        'https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade',
+                      );
                     },
                   );
                 }

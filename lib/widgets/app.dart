@@ -30,6 +30,12 @@ class _AppState extends State<App> {
   final Store<AppState> store = reblocStore();
 
   @override
+  void dispose() {
+    store.dispatcher(const OnDisposeAction());
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MkTheme(
       child: StoreProvider<AppState>(

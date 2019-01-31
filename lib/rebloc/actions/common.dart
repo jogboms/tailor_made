@@ -4,6 +4,10 @@ class OnInitAction extends Action {
   const OnInitAction();
 }
 
+class OnDisposeAction extends Action {
+  const OnDisposeAction();
+}
+
 class OnLoginAction extends Action {
   const OnLoginAction(this.user);
 
