@@ -7,7 +7,7 @@ class MkOutlineButton extends StatelessWidget {
     Key key,
     @required this.child,
     @required this.onPressed,
-    this.color = MkColors.green,
+    this.color = MkColors.primary,
     this.foregroundColor,
     this.padding,
   }) : super(key: key);

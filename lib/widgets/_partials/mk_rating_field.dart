@@ -39,7 +39,7 @@ class MkRatingField extends StatelessWidget {
                   Icons.star,
                   size: iconSize ?? 32.0,
                   color: index < field.value
-                      ? MkColors.orange.shade700
+                      ? MkColors.accent
                       : MkColors.light_grey.withOpacity(.35),
                 ),
                 onTap: () => field.didChange(index + 1),

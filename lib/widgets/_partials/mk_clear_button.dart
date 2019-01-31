@@ -8,7 +8,7 @@ class MkClearButton extends StatelessWidget {
     Key key,
     @required this.child,
     @required this.onPressed,
-    this.color = MkColors.green,
+    this.color = MkColors.primary,
     this.backgroundColor,
     this.borderRadius,
     this.padding,

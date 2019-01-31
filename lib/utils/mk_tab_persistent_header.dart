@@ -21,9 +21,9 @@ class MkTabPersistentHeader extends StatelessWidget {
           return Material(
             elevation: isAtTop ? 2.0 : 1.0,
             child: TabBar(
-              indicatorColor: MkColors.orange,
+              indicatorColor: MkColors.primary,
               labelStyle: MkTheme.of(context).bodySemi,
-              labelColor: MkColors.green,
+              labelColor: MkColors.accent,
               unselectedLabelColor: kHintColor,
               tabs: tabs,
             ),

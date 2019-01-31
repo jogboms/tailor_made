@@ -35,7 +35,7 @@ class _MkChoiceDialog extends StatelessWidget {
     return AlertDialog(
       title: Text(title, textAlign: TextAlign.center),
       content: Text(message, textAlign: TextAlign.center),
-      titleTextStyle: _theme.bodySemi.copyWith(color: MkColors.green),
+      titleTextStyle: _theme.bodySemi.copyWith(color: MkColors.primary),
       contentTextStyle: _theme.bodyMedium.copyWith(height: 1.5),
       contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 8.0),
       elevation: 2,

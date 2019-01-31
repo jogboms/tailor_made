@@ -2,7 +2,7 @@
 
 # TailorMade: Managing a Fashion designer's daily routine.
 
-TailorMade is what actually started out as an experiment with [Flutter](https://flutter.io/), ~[flutter_redux](https://github.com/brianegan/flutter_redux)~ [ReBLoC](https://github.com/redbrogdon/rebloc) and [Firebase Cloud Functions](https://github.com/flutter/plugins/tree/master/packages/cloud_functions) but instead turned out to be a valuable tool for managing a Fashion designer's daily routine. It is clean, easy on the eyes and overall has a very smooth feel. It also handles offline use cases with Firebase Cloud. Logo, Design & Concept by Me.
+TailorMade is what actually started out as an experiment with [Flutter](https://flutter.io/), [~flutter_redux~](https://github.com/brianegan/flutter_redux) [ReBLoC](https://github.com/redbrogdon/rebloc) and [Firebase Cloud Functions](https://github.com/flutter/plugins/tree/master/packages/cloud_functions) but instead turned out to be a valuable tool for managing a Fashion designer's daily routine. It is clean, easy on the eyes and overall has a very smooth feel. It also handles offline use cases with Firebase Cloud. Logo, Design & Concept by Me.
 
 <div>
 <a href='https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade'><img alt='Get it on Google Play' src='./screenshots/google_play.png' height='40px'/></a>

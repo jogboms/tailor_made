@@ -44,6 +44,11 @@ class _SplashPageState extends State<SplashPage> with MkSnackBarProvider {
 
     _getVersionName();
 
+    Auth.onAuthStateChanged.listen((_) {
+      //
+      print(_);
+    });
+
     Auth.onAuthStateChanged.firstWhere((user) => user != null).then(
       (user) {
         Auth.setUser(user);

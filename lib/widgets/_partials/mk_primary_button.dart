@@ -8,7 +8,7 @@ class MkPrimaryButton extends StatelessWidget {
     @required this.child,
     @required this.onPressed,
     this.color = Colors.white,
-    this.backgroundColor = MkColors.green,
+    this.backgroundColor = MkColors.primary,
     this.padding,
   }) : super(key: key);
 

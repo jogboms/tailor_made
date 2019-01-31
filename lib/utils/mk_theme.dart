@@ -61,7 +61,7 @@ class MkTheme extends InheritedWidget {
 
   TextStyle get textfield => _text15MediumStyle.copyWith(
         fontWeight: MkStyle.semibold,
-        color: MkColors.green,
+        color: MkColors.biro_blue,
       );
 
   TextStyle get textfieldLabel => body3.copyWith(
@@ -100,51 +100,45 @@ class MkTheme extends InheritedWidget {
 
   ThemeData themeData(ThemeData theme) {
     return ThemeData(
-      primaryColor: Colors.white,
       accentColor: kAccentColor,
       primarySwatch: kPrimarySwatch,
+      primaryColor: kPrimaryColor,
+      primaryIconTheme: theme.primaryIconTheme.copyWith(
+        color: kPrimarySwatch,
+      ),
+      textTheme: theme.textTheme.copyWith(
+        body1: theme.textTheme.body1.merge(
+          body1,
+        ),
+        button: theme.textTheme.button.merge(
+          button,
+        ),
+      ),
+      canvasColor: Colors.white,
+      buttonTheme: theme.buttonTheme.copyWith(
+        height: 48.0,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        isDense: false,
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: kPrimarySwatch, width: 2.0),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: kBorderSideColor),
+        ),
+        errorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: kBorderSideErrorColor),
+        ),
+        contentPadding: EdgeInsets.only(top: 13.0, bottom: 12.0),
+        hintStyle: textfieldLabel,
+        labelStyle: textfieldLabel,
+        errorStyle: errorStyle,
+      ),
+      cursorColor: kPrimaryColor,
       fontFamily: MkFonts.base,
+      hintColor: kHintColor,
+      dividerColor: kBorderSideColor,
     );
-    // return ThemeData(
-    //   accentColor: kAccentColor,
-    //   primarySwatch: kPrimarySwatch,
-    //   primaryColor: kPrimaryColor,
-    //   primaryIconTheme: theme.primaryIconTheme.copyWith(
-    //     color: kPrimarySwatch,
-    //   ),
-    //   textTheme: theme.textTheme.copyWith(
-    //     body1: theme.textTheme.body1.merge(
-    //       body1,
-    //     ),
-    //     button: theme.textTheme.button.merge(
-    //       button,
-    //     ),
-    //   ),
-    //   canvasColor: Colors.white,
-    //   buttonTheme: theme.buttonTheme.copyWith(
-    //     height: 48.0,
-    //   ),
-    //   inputDecorationTheme: InputDecorationTheme(
-    //     isDense: false,
-    //     focusedBorder: UnderlineInputBorder(
-    //       borderSide: BorderSide(color: kPrimarySwatch, width: 2.0),
-    //     ),
-    //     enabledBorder: UnderlineInputBorder(
-    //       borderSide: BorderSide(color: kBorderSideColor),
-    //     ),
-    //     errorBorder: UnderlineInputBorder(
-    //       borderSide: BorderSide(color: kBorderSideErrorColor),
-    //     ),
-    //     contentPadding: EdgeInsets.only(top: 13.0, bottom: 12.0),
-    //     hintStyle: textfieldLabel,
-    //     labelStyle: textfieldLabel,
-    //     errorStyle: errorStyle,
-    //   ),
-    //   cursorColor: kPrimaryColor,
-    //   fontFamily: MkFonts.base,
-    //   hintColor: kHintColor,
-    //   dividerColor: kBorderSideColor,
-    // );
   }
 
   @override

@@ -4,13 +4,13 @@ import 'dart:io' show File;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/constants/mk_colors.dart';
 import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_image_utils.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_touchable_opacity.dart';
-import 'package:image_picker/image_picker.dart';
 
 class MkProfileAvatar extends StatefulWidget {
   const MkProfileAvatar({
@@ -66,7 +66,7 @@ class MkProfileAvatarState extends State<MkProfileAvatar> {
               size: const Size.square(35.0),
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: MkColors.green,
+                  color: MkColors.primary,
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: Colors.white,

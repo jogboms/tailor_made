@@ -3,12 +3,12 @@ import 'dart:io' show File;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/constants/mk_colors.dart';
 import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_image_utils.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_touchable_opacity.dart';
-import 'package:image_picker/image_picker.dart';
 
 class MkUploadPhoto extends StatelessWidget {
   const MkUploadPhoto({
@@ -22,16 +22,16 @@ class MkUploadPhoto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const _color = MkColors.green;
+    const _color = MkColors.primary;
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
         height: size.height,
         width: size.width,
         decoration: BoxDecoration(
-          color: MkColors.green.withOpacity(.2),
+          color: MkColors.primary.withOpacity(.2),
           borderRadius: BorderRadius.circular(4.0),
-          border: Border.all(color: MkColors.green),
+          border: Border.all(color: MkColors.primary),
         ),
         child: MkTouchableOpacity(
           padding: const EdgeInsets.all(8.0),

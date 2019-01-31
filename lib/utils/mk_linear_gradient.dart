@@ -7,12 +7,12 @@ LinearGradient mkLinearGradient([bool inverse = false]) {
     end: Alignment.bottomCenter,
     colors: inverse
         ? const [
-            MkColors.gradient_end,
-            MkColors.gradient_start,
+            MkColors.primary,
+            MkColors.accent,
           ]
         : const [
-            MkColors.gradient_start,
-            MkColors.gradient_end,
+            MkColors.accent,
+            MkColors.primary,
           ],
   );
 }

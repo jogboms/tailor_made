@@ -5,8 +5,8 @@ import 'package:tailor_made/constants/mk_fonts.dart';
 const Color kAccentColor = MkColors.accent;
 const Color kPrimaryColor = MkColors.primary;
 
-const MaterialColor kAccentSwatch = MkColors.orange;
-const MaterialColor kPrimarySwatch = MkColors.green;
+const MaterialColor kAccentSwatch = MkColors.slate_pink;
+const MaterialColor kPrimarySwatch = MkColors.biro_blue;
 
 const Color kHintColor = const Color(0xFFAAAAAA);
 const Color kDividerColor = const Color(0xFFBDBDBD);
