@@ -9,8 +9,8 @@ import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
-import 'package:tailor_made/widgets/screens/measures/measures.dart';
 import 'package:tailor_made/widgets/screens/measures/_partials/measure_create_items.dart';
+import 'package:tailor_made/widgets/screens/measures/measures.dart';
 
 class ContactMeasure extends StatefulWidget {
   const ContactMeasure({
@@ -54,14 +54,14 @@ class _ContactMeasureState extends State<ContactMeasure>
     children.add(
       Padding(
         child: MkPrimaryButton(
-          child: Text("FINISH"),
+          child: const Text("FINISH"),
           onPressed: _handleSubmit,
         ),
         padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
       ),
     );
 
-    children.add(SizedBox(height: 32.0));
+    children.add(const SizedBox(height: 32.0));
 
     return Scaffold(
       key: scaffoldKey,
@@ -147,6 +147,7 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = MkTheme.of(context).smallSemi;
     return Container(
       color: Colors.grey[100].withOpacity(.4),
       margin: const EdgeInsets.only(top: 8.0),
@@ -155,14 +156,8 @@ class _Header extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            title.toUpperCase(),
-            style: MkTheme.of(context).smallSemi,
-          ),
-          Text(
-            trailing,
-            style: MkTheme.of(context).smallSemi,
-          ),
+          Text(title.toUpperCase(), style: style),
+          Text(trailing, style: style),
         ],
       ),
     );

@@ -28,6 +28,8 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = MkTheme.of(context);
+
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -51,18 +53,18 @@ class SplashPage extends StatelessWidget {
               children: <Widget>[
                 Text(
                   MkStrings.appName,
-                  style:
-                      // TODO
-                      mkFontMedium(22.0, kTextBaseColor.withOpacity(.6)),
+                  style: theme.display2Semi.copyWith(
+                    color: kTextBaseColor.withOpacity(.6),
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 Settings.getVersion() != null
                     ? Text(
                         "v" + Settings.getVersion(),
-                        // TODO
-                        style:
-                            mkFontMedium(12.0, kTextBaseColor.withOpacity(.4))
-                                .copyWith(height: 1.5),
+                        style: theme.small.copyWith(
+                          color: kTextBaseColor.withOpacity(.4),
+                          height: 1.5,
+                        ),
                         textAlign: TextAlign.center,
                       )
                     : const SizedBox(),

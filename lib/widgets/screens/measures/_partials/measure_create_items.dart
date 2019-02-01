@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_views/slide_down.dart';
 
 class MeasureCreateItems extends StatelessWidget {
@@ -94,11 +95,15 @@ class JobMeasureBlock extends StatelessWidget {
                   controller: _controller,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  style: TextStyle(fontSize: 20.0, color: Colors.black),
+                  style: MkTheme.of(context).headline,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.zero,
                     labelText: measure.name,
                     border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    focusedErrorBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
                   ),
                   onFieldSubmitted: (value) =>
                       measurements[measure.id] = double.tryParse(value),

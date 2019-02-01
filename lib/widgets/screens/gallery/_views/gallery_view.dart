@@ -9,6 +9,7 @@ import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/contacts_job.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_status_bar.dart';
+import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/screens/contacts/contact.dart';
 import 'package:tailor_made/widgets/screens/jobs/job.dart';
@@ -34,7 +35,7 @@ class GalleryView extends StatelessWidget {
       ) {
         return Scaffold(
           backgroundColor: Colors.black87,
-          appBar: MyAppBar(
+          appBar: _MyAppBar(
             contact: vm.selectedContact,
             job: vm.selectedJob,
             account: vm.account,
@@ -50,8 +51,8 @@ class GalleryView extends StatelessWidget {
   }
 }
 
-class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MyAppBar({
+class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const _MyAppBar({
     Key key,
     this.contact,
     this.job,
@@ -65,47 +66,53 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return MkStatusBar(
-      child: Container(
-        color: Colors.black26,
+      child: DecoratedBox(
+        decoration: const BoxDecoration(
+          color: Colors.black26,
+        ),
         child: SafeArea(
           bottom: false,
           child: Row(
             children: <Widget>[
-              IconButton(
+              const MkBackButton(
                 color: Colors.white,
-                onPressed: () => Navigator.maybePop(context),
-                icon: Icon(Icons.arrow_back),
               ),
-              Expanded(child: SizedBox()),
+              const Expanded(child: const SizedBox()),
               job != null
                   ? IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.work,
                         color: Colors.white,
                       ),
-                      onPressed: () => MkNavigate(context, JobPage(job: job)),
+                      onPressed: () {
+                        MkNavigate(context, JobPage(job: job));
+                      },
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
               contact != null
                   ? IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.person,
                         color: Colors.white,
                       ),
-                      onPressed: () =>
-                          MkNavigate(context, ContactPage(contact: contact)),
+                      onPressed: () {
+                        MkNavigate(
+                          context,
+                          ContactPage(contact: contact),
+                        );
+                      },
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
               account.hasPremiumEnabled
                   ? IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.share,
                         color: Colors.white,
                       ),
                       // TODO
                       onPressed: null,
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
             ],
           ),
         ),

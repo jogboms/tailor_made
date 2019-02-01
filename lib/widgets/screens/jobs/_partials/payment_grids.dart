@@ -46,6 +46,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = MkTheme.of(context);
     final List<Widget> paymentsList = List<Widget>.generate(
       firePayments.length,
       (int index) {
@@ -72,17 +73,15 @@ class _PaymentGridsState extends State<PaymentGrids> {
             Expanded(
               child: Text(
                 "PAYMENTS",
-                style: MkTheme.of(context).small.copyWith(
-                      color: Colors.black87,
-                    ),
+                style: theme.small.copyWith(
+                  color: Colors.black87,
+                ),
               ),
             ),
             CupertinoButton(
               child: Text(
                 "SHOW ALL",
-                style: MkTheme.of(context).xsmall.copyWith(
-                      color: Colors.black,
-                    ),
+                style: theme.xsmall,
               ),
               onPressed: () {
                 MkNavigate(

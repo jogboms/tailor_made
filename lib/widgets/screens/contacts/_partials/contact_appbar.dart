@@ -3,6 +3,7 @@ import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_circle_avatar.dart';
 import 'package:tailor_made/widgets/screens/contacts/_views/contact_measure.dart';
 import 'package:tailor_made/widgets/screens/contacts/contacts_edit.dart';
@@ -155,6 +156,7 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = MkTheme.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,20 +165,13 @@ class _Title extends StatelessWidget {
           contact.fullname,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            fontSize: 18.0,
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
+          style: theme.title.copyWith(color: Colors.white),
         ),
         Text(
           contact.location,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            fontSize: 13.0,
-            color: Colors.white,
-          ),
+          style: theme.body1.copyWith(color: Colors.white),
         ),
       ],
     );
@@ -194,7 +189,7 @@ class _Leading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlatButton(
-      padding: EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
+      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.min,
@@ -214,7 +209,7 @@ class _Leading extends StatelessWidget {
           ),
         ],
       ),
-      onPressed: () => Navigator.pop(context),
+      onPressed: () => Navigator.maybePop(context),
     );
   }
 }

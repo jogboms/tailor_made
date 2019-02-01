@@ -24,6 +24,7 @@ class PaymentGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final _date = payment.createdAt;
     final _price = MkMoney(payment.price).format;
+    final theme = MkTheme.of(context);
 
     return Container(
       width: size.width,
@@ -53,19 +54,19 @@ class PaymentGridItem extends StatelessWidget {
                       children: [
                         TextSpan(
                           text: _date.day.toString(),
-                          style: MkTheme.of(context).subhead3.copyWith(
-                                fontWeight: MkStyle.medium,
-                                color: Colors.white,
-                              ),
+                          style: theme.subhead3.copyWith(
+                            fontWeight: MkStyle.medium,
+                            color: Colors.white,
+                          ),
                         ),
-                        TextSpan(text: "\n"),
+                        const TextSpan(text: "\n"),
                         TextSpan(
                           text:
                               "${MkStrings.monthsShort[_date.month - 1].toUpperCase()}, ${_date.year}",
-                          style: MkTheme.of(context).xxsmall.copyWith(
-                                fontWeight: MkStyle.medium,
-                                color: Colors.white,
-                              ),
+                          style: theme.xxsmall.copyWith(
+                            fontWeight: MkStyle.medium,
+                            color: Colors.white,
+                          ),
                         ),
                       ],
                     ),
@@ -74,9 +75,9 @@ class PaymentGridItem extends StatelessWidget {
                 ),
                 Text(
                   _price,
-                  style: MkTheme.of(context).title.copyWith(
-                        color: Colors.white,
-                      ),
+                  style: theme.title.copyWith(
+                    color: Colors.white,
+                  ),
                 )
               ],
             ),

@@ -72,8 +72,6 @@ class _MeasureDialogState extends State<MeasureDialog> {
                   decoration: const InputDecoration(
                     labelText: "Name (eg. Length)",
                   ),
-                  // TODO
-                  style: TextStyle(fontSize: 14.0, color: Colors.black),
                   validator: MkValidate.tryAlpha(),
                 ),
                 const SizedBox(height: 4.0),
@@ -84,8 +82,6 @@ class _MeasureDialogState extends State<MeasureDialog> {
                   decoration: const InputDecoration(
                     labelText: "Unit (eg. In, cm)",
                   ),
-                  // TODO
-                  style: TextStyle(fontSize: 14.0, color: Colors.black),
                   validator: MkValidate.tryAlpha(),
                   onFieldSubmitted: (value) => _onSaved(),
                   onSaved: (value) => widget.measure.unit = value.trim(),

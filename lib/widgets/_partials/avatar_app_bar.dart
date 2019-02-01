@@ -29,34 +29,6 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MkTheme theme = MkTheme.of(context);
-
-    void onTapGoBack() {
-      Navigator.pop(context);
-    }
-
-    final Widget appBarLeading = FlatButton(
-      padding: EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Icon(
-            Icons.arrow_back,
-            color: iconColor ?? theme.appBarTitle.color,
-          ),
-          SizedBox(width: 4.0),
-          Hero(
-            tag: tag,
-            child: MkCircleAvatar(
-              imageUrl: imageUrl,
-            ),
-          ),
-        ],
-      ),
-      onPressed: onTapGoBack,
-    );
-
     final List<Widget> titles = <Widget>[];
 
     if (title != null) {
@@ -64,7 +36,12 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     if (subtitle != null) {
-      titles.addAll([SizedBox(height: 2.0), subtitle]);
+      titles.addAll(
+        [
+          const SizedBox(height: 2.0),
+          subtitle,
+        ],
+      );
       // Text.rich(
       //   TextSpan(
       //     children: [
@@ -87,7 +64,11 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     final List<Widget> children = <Widget>[
-      appBarLeading,
+      _Leading(
+        iconColor: iconColor,
+        tag: tag,
+        imageUrl: imageUrl,
+      ),
       Expanded(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -119,4 +100,42 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+class _Leading extends StatelessWidget {
+  const _Leading({
+    Key key,
+    @required this.iconColor,
+    @required this.tag,
+    @required this.imageUrl,
+  }) : super(key: key);
+
+  final Color iconColor;
+  final String tag;
+  final String imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Icon(
+            Icons.arrow_back,
+            color: iconColor ?? MkTheme.of(context).appBarTitle.color,
+          ),
+          const SizedBox(width: 4.0),
+          Hero(
+            tag: tag,
+            child: MkCircleAvatar(
+              imageUrl: imageUrl,
+            ),
+          ),
+        ],
+      ),
+      onPressed: () => Navigator.maybePop(context),
+    );
+  }
 }

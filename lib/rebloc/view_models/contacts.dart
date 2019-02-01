@@ -22,7 +22,6 @@ class ContactsViewModel extends Equatable {
 
   List<ContactModel> get contacts => isSearching ? searchResults : model;
 
-  // TODO
   Map<String, List<MeasureModel>> get measuresGrouped => measures;
 
   ContactModel get selected {

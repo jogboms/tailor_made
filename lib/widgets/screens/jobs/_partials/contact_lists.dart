@@ -19,7 +19,7 @@ class ContactLists extends StatelessWidget {
         title: const Text("Select Client"),
       ),
       body: (contacts ?? []).isEmpty
-          ? Center(
+          ? const Center(
               child: const EmptyResultView(message: "No contacts available"),
             )
           : ListView.separated(

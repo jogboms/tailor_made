@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
 
 class MeasureListItem extends StatelessWidget {
   const MeasureListItem(this.item);
@@ -9,21 +10,26 @@ class MeasureListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = MkTheme.of(context);
+
     final List<Widget> children = [
       Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // TODO
-            Text(item.name, style: mkFontRegular(13.0, Colors.black87)),
-            const SizedBox(height: 2.0),
+            Text(
+              item.name,
+              style: theme.body3,
+            ),
+            const SizedBox(height: 4.0),
             Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+                vertical: 1.0,
+              ),
               child: Text(
                 item.group.toLowerCase(),
-                // TODO
-                style: mkFontRegular(10.0, Colors.white),
+                style: theme.xsmall.copyWith(color: Colors.white),
               ),
               decoration: BoxDecoration(
                 color: kAccentColor,
@@ -37,15 +43,23 @@ class MeasureListItem extends StatelessWidget {
 
     if (item.value != null && item.value > 0) {
       children.addAll([
-        // TODO
-        Text("${item.value} ", style: mkFontRegular(16.0, kAccentColor)),
+        Text(
+          "${item.value} ",
+          style: theme.subhead3.copyWith(color: kAccentColor),
+        ),
         const SizedBox(width: 2.0),
-        // TODO
-        Text(item.unit, style: mkFontLight(12.0, kTitleBaseColor)),
+        Text(
+          item.unit,
+          style: theme.small.copyWith(color: kTitleBaseColor),
+        ),
       ]);
     } else {
-      // TODO
-      children.add(Text("N/A", style: mkFontLight(12.0, kTitleBaseColor)));
+      children.add(
+        Text(
+          "N/A",
+          style: theme.smallLight.copyWith(color: kTitleBaseColor),
+        ),
+      );
     }
 
     return Container(

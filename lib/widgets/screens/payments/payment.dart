@@ -7,6 +7,7 @@ import 'package:tailor_made/rebloc/view_models/contacts_job.dart';
 import 'package:tailor_made/utils/mk_dates.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/screens/contacts/contact.dart';
 import 'package:tailor_made/widgets/screens/jobs/job.dart';
 
@@ -82,7 +83,6 @@ class PaymentPage extends StatelessWidget {
                 child: Center(
                   child: Text(
                     _price,
-                    // TODO
                     style: mkFontLight(50.0, Colors.black87),
                   ),
                 ),
@@ -91,8 +91,7 @@ class PaymentPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   date,
-                  // TODO
-                  style: mkFontLight(14.0, Colors.black54),
+                  style: MkTheme.of(context).body3Light,
                   textAlign: TextAlign.justify,
                 ),
               ),
@@ -100,8 +99,7 @@ class PaymentPage extends StatelessWidget {
                 padding: const EdgeInsets.all(24.0),
                 child: Text(
                   payment.notes,
-                  // TODO
-                  style: mkFontLight(14.0, Colors.black54),
+                  style: MkTheme.of(context).body3Light,
                   textAlign: TextAlign.justify,
                 ),
               ),

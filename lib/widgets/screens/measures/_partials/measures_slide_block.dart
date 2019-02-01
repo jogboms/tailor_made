@@ -7,10 +7,10 @@ import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/utils/mk_child_dialog.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
+import 'package:tailor_made/utils/mk_snackbar.dart';
 import 'package:tailor_made/widgets/_views/slide_down.dart';
-import 'package:tailor_made/widgets/screens/measures/measures_create.dart';
-import 'package:tailor_made/widgets/screens/measures/measures_manage.dart';
 import 'package:tailor_made/widgets/screens/measures/_partials/measures_slide_block_item.dart';
+import 'package:tailor_made/widgets/screens/measures/measures_create.dart';
 
 enum ActionChoice {
   edit,
@@ -21,12 +21,10 @@ class MeasureSlideBlock extends StatefulWidget {
   const MeasureSlideBlock({
     Key key,
     @required this.measures,
-    @required this.parent,
     @required this.title,
   }) : super(key: key);
 
   final List<MeasureModel> measures;
-  final MeasuresManagePageState parent;
   final String title;
 
   @override
@@ -37,10 +35,9 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
   @override
   Widget build(BuildContext context) {
     final children = widget.measures
-        .map<Widget>((measure) => MeasuresSlideBlockItem(
-              measure: measure,
-              parent: widget.parent,
-            ))
+        .map<Widget>(
+          (measure) => MeasuresSlideBlockItem(measure: measure),
+        )
         .toList();
 
     return SlideDownItem(
@@ -122,14 +119,13 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
       );
     });
 
-    widget.parent.showLoadingSnackBar();
+    MkSnackBar.of(context).loading();
     try {
       await batch.commit();
 
-      widget.parent.closeLoadingSnackBar();
+      MkSnackBar.of(context).hide();
     } catch (e) {
-      widget.parent.closeLoadingSnackBar();
-      widget.parent.showInSnackBar(e.toString());
+      MkSnackBar.of(context).show(e.toString());
     }
   }
 }

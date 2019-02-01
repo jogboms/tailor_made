@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +13,9 @@ import 'package:tailor_made/utils/mk_dispatch_provider.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
+import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
 import 'package:tailor_made/widgets/screens/measures/_views/measure_dialog.dart';
 
 class MeasuresCreate extends StatefulWidget {
@@ -30,10 +30,10 @@ class MeasuresCreate extends StatefulWidget {
   final String groupName, unitValue;
 
   @override
-  MeasuresCreateState createState() => MeasuresCreateState();
+  _MeasuresCreateState createState() => _MeasuresCreateState();
 }
 
-class MeasuresCreateState extends State<MeasuresCreate>
+class _MeasuresCreateState extends State<MeasuresCreate>
     with MkSnackBarProvider, MkDispatchProvider<AppState> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
@@ -69,15 +69,59 @@ class MeasuresCreateState extends State<MeasuresCreate>
       ) {
         final List<Widget> children = [];
 
-        children.add(makeHeader("Group Name"));
-        children.add(buildEnterName());
+        children.add(const _Header(title: "Group Name"));
+        children.add(Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+          child: TextFormField(
+            initialValue: groupName,
+            textCapitalization: TextCapitalization.words,
+            textInputAction: TextInputAction.next,
+            onEditingComplete: () =>
+                FocusScope.of(context).requestFocus(_unitNode),
+            keyboardType: TextInputType.text,
+            decoration: const InputDecoration(
+              isDense: true,
+              hintText: "eg Blouse",
+            ),
+            validator: (value) =>
+                (value.isNotEmpty) ? null : "Please input a name",
+            onSaved: (value) => groupName = value.trim(),
+          ),
+        ));
 
-        children.add(makeHeader("Group Unit"));
-        children.add(buildEnterUnit());
+        children.add(const _Header(title: "Group Unit"));
+        children.add(Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+          child: TextFormField(
+            focusNode: _unitNode,
+            initialValue: unitValue,
+            keyboardType: TextInputType.text,
+            decoration: const InputDecoration(
+              isDense: true,
+              hintText: "Unit (eg. In, cm)",
+            ),
+            validator: (value) =>
+                (value.isNotEmpty) ? null : "Please input a value",
+            onSaved: (value) => unitValue = value.trim(),
+          ),
+        ));
 
         if (measures.isNotEmpty) {
-          children.add(makeHeader("Group Items"));
-          children.add(buildGroupItems(vm));
+          children.add(const _Header(title: "Group Items"));
+          children.add(
+            _GroupItems(
+              measures: measures,
+              onPressed: (MeasureModel measure) {
+                if (measure?.reference != null) {
+                  _onTapDeleteItem(vm, measure);
+                }
+                setState(() {
+                  // TODO: test this
+                  measures = measures..removeWhere((_) => _ == measure);
+                });
+              },
+            ),
+          );
 
           children.add(const SizedBox(height: 84.0));
         }
@@ -85,23 +129,30 @@ class MeasuresCreateState extends State<MeasuresCreate>
         return Scaffold(
           resizeToAvoidBottomPadding: false,
           key: scaffoldKey,
-          appBar: AppBar(
-            brightness: Brightness.light,
-            centerTitle: false,
-            elevation: 1.0,
+          appBar: MkAppBar(
+            title: const Text(""),
+            leading: const MkCloseButton(),
             actions: [
               MkClearButton(
+                color: Colors.black,
                 child: const Text("SAVE"),
                 onPressed: measures.isEmpty ? null : () => _handleSubmit(vm),
               )
             ],
           ),
-          body: Theme(
-            data: ThemeData(
-              hintColor: kHintColor,
-              primaryColor: kPrimaryColor,
+          body: SafeArea(
+            top: false,
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                autovalidate: _autovalidate,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: children,
+                ),
+              ),
             ),
-            child: buildBody(children),
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
@@ -117,119 +168,7 @@ class MeasuresCreateState extends State<MeasuresCreate>
     );
   }
 
-  Widget makeHeader(String title, [String trailing = ""]) {
-    return Container(
-      color: Colors.grey[100].withOpacity(.4),
-      margin: const EdgeInsets.only(top: 8.0),
-      padding: const EdgeInsets.only(
-        top: 8.0,
-        bottom: 8.0,
-        left: 16.0,
-        right: 16.0,
-      ),
-      alignment: AlignmentDirectional.centerStart,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            title.toUpperCase(),
-            style: MkTheme.of(context).small,
-          ),
-          Text(trailing, style: MkTheme.of(context).small),
-        ],
-      ),
-    );
-  }
-
-  Widget buildEnterName() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-      child: TextFormField(
-        initialValue: groupName,
-        textCapitalization: TextCapitalization.words,
-        textInputAction: TextInputAction.next,
-        onEditingComplete: () => FocusScope.of(context).requestFocus(_unitNode),
-        keyboardType: TextInputType.text,
-        // TODO
-        style: TextStyle(fontSize: 18.0, color: Colors.black),
-        decoration: const InputDecoration(
-          isDense: true,
-          hintText: "eg Blouse",
-        ),
-        validator: (value) => (value.isNotEmpty) ? null : "Please input a name",
-        onSaved: (value) => groupName = value.trim(),
-      ),
-    );
-  }
-
-  Widget buildEnterUnit() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-      child: TextFormField(
-        focusNode: _unitNode,
-        initialValue: unitValue,
-        keyboardType: TextInputType.text,
-        // TODO
-        style: TextStyle(fontSize: 18.0, color: Colors.black),
-        decoration: const InputDecoration(
-          isDense: true,
-          hintText: "Unit (eg. In, cm)",
-        ),
-        validator: (value) =>
-            (value.isNotEmpty) ? null : "Please input a value",
-        onSaved: (value) => unitValue = value.trim(),
-      ),
-    );
-  }
-
-  Widget buildBody(List<Widget> children) {
-    return SafeArea(
-      top: false,
-      child: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          autovalidate: _autovalidate,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: children,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildGroupItems(MeasuresViewModel vm) {
-    final items = List.generate(measures.length, (index) {
-      final measure = measures[index];
-      return ListTile(
-        dense: true,
-        title: Text(measure.name),
-        subtitle: Text(measure.unit),
-        trailing: IconButton(
-          icon: Icon(
-            measure?.reference != null
-                ? Icons.delete
-                : Icons.remove_circle_outline,
-          ),
-          iconSize: 20.0,
-          onPressed: () {
-            if (measure?.reference != null) {
-              onTapDeleteItem(vm, measure);
-            }
-            setState(() {
-              measures = measures..removeAt(index);
-            });
-          },
-        ),
-      );
-    });
-    return Column(
-      children: items.toList(),
-    );
-  }
-
-  void onTapDeleteItem(MeasuresViewModel vm, MeasureModel measure) async {
+  void _onTapDeleteItem(MeasuresViewModel vm, MeasureModel measure) async {
     final choice = await mkChoiceDialog(
       context: context,
       title: "",
@@ -253,7 +192,30 @@ class MeasuresCreateState extends State<MeasuresCreate>
 
   void _handleAddItem() async {
     if (_isOkForm()) {
-      final _measure = await _itemModal();
+      final _measure = await Navigator.push<MeasureModel>(
+        context,
+        MkNavigate.fadeIn<MeasureModel>(
+          Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0.0,
+              automaticallyImplyLeading: false,
+              leading: IconButton(
+                icon: const Icon(Icons.close, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+            backgroundColor: Colors.black38,
+            body: MeasureDialog(
+              measure: MeasureModel(
+                name: "",
+                group: groupName,
+                unit: unitValue,
+              ),
+            ),
+          ),
+        ),
+      );
 
       if (_measure == null) {
         return;
@@ -263,33 +225,6 @@ class MeasuresCreateState extends State<MeasuresCreate>
         measures = [_measure]..addAll(measures);
       });
     }
-  }
-
-  Future<MeasureModel> _itemModal() {
-    return Navigator.push<MeasureModel>(
-      context,
-      MkNavigate.fadeIn<MeasureModel>(
-        Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0.0,
-            automaticallyImplyLeading: false,
-            leading: IconButton(
-              icon: const Icon(Icons.close, color: Colors.white),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ),
-          backgroundColor: Colors.black38,
-          body: MeasureDialog(
-            measure: MeasureModel(
-              name: "",
-              group: groupName,
-              unit: unitValue,
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   void _handleSubmit(MeasuresViewModel vm) async {
@@ -340,5 +275,79 @@ class MeasuresCreateState extends State<MeasuresCreate>
       form.save();
       return true;
     }
+  }
+}
+
+class _GroupItems extends StatelessWidget {
+  const _GroupItems({
+    Key key,
+    @required this.measures,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  final List<MeasureModel> measures;
+  final ValueSetter<MeasureModel> onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final items = List.generate(measures.length, (index) {
+      final measure = measures[index];
+      return ListTile(
+        dense: true,
+        title: Text(measure.name),
+        subtitle: Text(measure.unit),
+        trailing: IconButton(
+          icon: Icon(
+            measure?.reference != null
+                ? Icons.delete
+                : Icons.remove_circle_outline,
+          ),
+          iconSize: 20.0,
+          onPressed: () => onPressed(measure),
+        ),
+      );
+    });
+    return Column(
+      children: items.toList(),
+    );
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header({
+    Key key,
+    @required this.title,
+    this.trailing,
+  }) : super(key: key);
+
+  final String title;
+  final String trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.grey[100].withOpacity(.4),
+      margin: const EdgeInsets.only(top: 8.0),
+      padding: const EdgeInsets.only(
+        top: 8.0,
+        bottom: 8.0,
+        left: 16.0,
+        right: 16.0,
+      ),
+      alignment: AlignmentDirectional.centerStart,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            title.toUpperCase(),
+            style: MkTheme.of(context).small,
+          ),
+          Text(
+            trailing,
+            style: MkTheme.of(context).small,
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/measures.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
@@ -31,29 +30,29 @@ class MeasuresPage extends StatelessWidget {
             backgroundColor: Colors.transparent,
             elevation: 0.0,
           ),
-          body: getBody(vm.model),
+          body: Builder(builder: (context) {
+            if (vm.model.isEmpty) {
+              return const Center(
+                child: const EmptyResultView(
+                  message: "No measurements available",
+                ),
+              );
+            }
+
+            return ListView.separated(
+              itemCount: vm.model.length,
+              shrinkWrap: true,
+              padding: const EdgeInsets.only(bottom: 96.0),
+              itemBuilder: (context, index) {
+                final measure = vm.model[index];
+                final _value = measurements[measure.id] ?? 0.0;
+                return MeasureListItem(measure..value = _value);
+              },
+              separatorBuilder: (_, __) => const Divider(),
+            );
+          }),
         );
       },
-    );
-  }
-
-  Widget getBody(List<MeasureModel> measures) {
-    if (measures.isEmpty) {
-      return const Center(
-        child: const EmptyResultView(message: "No measurements available"),
-      );
-    }
-
-    return ListView.separated(
-      itemCount: measures.length,
-      shrinkWrap: true,
-      padding: const EdgeInsets.only(bottom: 96.0),
-      itemBuilder: (context, index) {
-        final measure = measures[index];
-        final _value = measurements[measure.id] ?? 0.0;
-        return MeasureListItem(measure..value = _value);
-      },
-      separatorBuilder: (_, __) => const Divider(),
     );
   }
 }

@@ -42,7 +42,7 @@ class BottomRowWidget extends StatelessWidget {
                 subTitle: "Custom",
                 onPressed: () => MkNavigate(
                       context,
-                      MeasuresManagePage(account: account),
+                      const MeasuresManagePage(),
                     ),
               ),
             ),

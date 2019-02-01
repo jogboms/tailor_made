@@ -53,6 +53,8 @@ class _GalleryGridsState extends State<GalleryGrids> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = MkTheme.of(context);
+
     final List<Widget> imagesList = List<Widget>.generate(
       fireImages.length,
       (int index) {
@@ -92,17 +94,13 @@ class _GalleryGridsState extends State<GalleryGrids> {
             Expanded(
               child: Text(
                 "GALLERY",
-                style: MkTheme.of(context).small.copyWith(
-                      color: Colors.black87,
-                    ),
+                style: theme.small.copyWith(color: Colors.black87),
               ),
             ),
             MkClearButton(
               child: Text(
                 "SHOW ALL",
-                style: MkTheme.of(context).xsmall.copyWith(
-                      color: Colors.black,
-                    ),
+                style: theme.xsmall,
               ),
               onPressed: () {
                 MkNavigate(

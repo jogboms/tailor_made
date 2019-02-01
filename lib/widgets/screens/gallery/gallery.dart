@@ -9,28 +9,13 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 import 'package:tailor_made/widgets/screens/gallery/_partials/gallery_grid.dart';
 
-class GalleryPage extends StatefulWidget {
+class GalleryPage extends StatelessWidget {
   const GalleryPage({
     Key key,
     this.images,
   }) : super(key: key);
 
   final List<ImageModel> images;
-
-  @override
-  GalleryPageState createState() {
-    return GalleryPageState();
-  }
-}
-
-class GalleryPageState extends State<GalleryPage> {
-  List<ImageModel> images;
-
-  @override
-  void initState() {
-    images = widget.images;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,63 +29,75 @@ class GalleryPageState extends State<GalleryPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text("Gallery", style: theme.appBarTitle),
+                Text(
+                  "Gallery",
+                  style: theme.appBarTitle,
+                ),
                 images != null
                     ? Text(
                         "${images.length} Photos",
-                        style: TextStyle(
-                          fontSize: 11.0,
-                          color: kTextBaseColor,
-                        ),
+                        style: theme.xsmall,
                       )
-                    : SizedBox(),
+                    : const SizedBox(),
               ],
             ),
             backgroundColor: kAppBarBackgroundColor,
             automaticallyImplyLeading: false,
-            leading: MkBackButton(),
+            leading: const MkBackButton(),
             brightness: Brightness.light,
             forceElevated: true,
             elevation: 1.0,
             centerTitle: false,
             floating: true,
           ),
-          getBody()
+          Builder(builder: (context) {
+            if (images == null) {
+              return StreamBuilder(
+                stream: CloudDb.gallery.snapshots(),
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot,
+                ) {
+                  if (!snapshot.hasData) {
+                    return const SliverFillRemaining(
+                      child: const MkLoadingSpinner(),
+                    );
+                  }
+                  return _Content(
+                    images: snapshot.data.documents
+                        .map((item) => ImageModel.fromJson(item.data))
+                        .toList(),
+                  );
+                },
+              );
+            }
+            return _Content(images: images);
+          }),
         ],
       ),
     );
   }
+}
 
-  Widget getContent() {
-    return images.isEmpty
-        ? SliverFillRemaining(
-            child: const EmptyResultView(message: "No images available"),
-          )
-        : SliverPadding(
-            padding: EdgeInsets.only(top: 3.0),
-            sliver: GalleryGrid(images: images),
-          );
-  }
+class _Content extends StatelessWidget {
+  const _Content({
+    Key key,
+    @required this.images,
+  }) : super(key: key);
 
-  Widget getBody() {
-    if (images == null) {
-      return StreamBuilder(
-        stream: CloudDb.gallery.snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return SliverFillRemaining(
-              child: const MkLoadingSpinner(),
-            );
-          }
-          images = snapshot.data.documents
-              .map(
-                (item) => ImageModel.fromJson(item.data),
-              )
-              .toList();
-          return getContent();
-        },
+  final List<ImageModel> images;
+
+  @override
+  Widget build(BuildContext context) {
+    if (images.isEmpty) {
+      return const SliverFillRemaining(
+        child: const EmptyResultView(message: "No images available"),
       );
     }
-    return getContent();
+
+    return SliverPadding(
+      padding: const EdgeInsets.only(top: 3.0),
+      sliver: GalleryGrid(images: images),
+    );
   }
 }

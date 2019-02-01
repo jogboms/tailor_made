@@ -48,6 +48,8 @@ class MkTheme extends InheritedWidget {
   TextStyle get subhead3 => _text16Style;
   TextStyle get subhead3Semi =>
       _text16Style.copyWith(fontWeight: MkStyle.semibold);
+  TextStyle get subhead3Light =>
+      _text16Style.copyWith(fontWeight: MkStyle.light);
   TextStyle get headline => _header20Style;
 
   TextStyle get appBarTitle => subhead1Bold.copyWith(letterSpacing: .35);

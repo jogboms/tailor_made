@@ -60,48 +60,58 @@ class _PaymentsPageState extends State<PaymentsPage> {
             centerTitle: false,
             floating: true,
           ),
-          getBody()
+          Builder(builder: (context) {
+            if (payments == null) {
+              return StreamBuilder(
+                stream: CloudDb.payments.snapshots(),
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot,
+                ) {
+                  if (!snapshot.hasData) {
+                    return const SliverFillRemaining(
+                      child: const MkLoadingSpinner(),
+                    );
+                  }
+                  payments = snapshot.data.documents
+                      .map((item) => PaymentModel.fromJson(item.data))
+                      .toList();
+                  return _Content(payments: payments);
+                },
+              );
+            }
+            return _Content(payments: payments);
+          })
         ],
       ),
     );
   }
+}
 
-  Widget getContent() {
-    return payments.isEmpty
-        ? const SliverFillRemaining(
-            child: const EmptyResultView(message: "No payments available"),
-          )
-        : SliverPadding(
-            padding: const EdgeInsets.only(
-              top: 3.0,
-              left: 16.0,
-              right: 16.0,
-              bottom: 16.0,
-            ),
-            sliver: PaymentList(payments: payments),
-          );
-  }
+class _Content extends StatelessWidget {
+  const _Content({
+    Key key,
+    @required this.payments,
+  }) : super(key: key);
 
-  Widget getBody() {
-    if (payments == null) {
-      return StreamBuilder(
-        stream: CloudDb.payments.snapshots(),
-        builder: (
-          BuildContext context,
-          AsyncSnapshot<QuerySnapshot> snapshot,
-        ) {
-          if (!snapshot.hasData) {
-            return const SliverFillRemaining(
-              child: const MkLoadingSpinner(),
-            );
-          }
-          payments = snapshot.data.documents
-              .map((item) => PaymentModel.fromJson(item.data))
-              .toList();
-          return getContent();
-        },
+  final List<PaymentModel> payments;
+
+  @override
+  Widget build(BuildContext context) {
+    if (payments.isEmpty) {
+      return const SliverFillRemaining(
+        child: const EmptyResultView(message: "No payments available"),
       );
     }
-    return getContent();
+
+    return SliverPadding(
+      padding: const EdgeInsets.only(
+        top: 3.0,
+        left: 16.0,
+        right: 16.0,
+        bottom: 16.0,
+      ),
+      sliver: PaymentList(payments: payments),
+    );
   }
 }

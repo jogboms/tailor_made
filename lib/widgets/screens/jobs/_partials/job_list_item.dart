@@ -4,6 +4,7 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/screens/jobs/job.dart';
 
 class JobListItem extends StatelessWidget {
@@ -20,6 +21,7 @@ class JobListItem extends StatelessWidget {
     final _price = MkMoney(job.price).format;
     final _paid = MkMoney(job.completedPayment).format;
     final _owed = MkMoney(job.pendingPayment).format;
+    final MkTheme theme = MkTheme.of(context);
 
     return Material(
       child: InkWell(
@@ -33,26 +35,26 @@ class JobListItem extends StatelessWidget {
             children: <Widget>[
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
+                  color: Colors.grey.shade100,
                   borderRadius: const BorderRadius.all(
                     const Radius.circular(4.0),
                   ),
                 ),
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0, vertical: 12.0),
+                  horizontal: 16.0,
+                  vertical: 12.0,
+                ),
                 child: Text.rich(
                   TextSpan(
                     children: [
                       TextSpan(
                         text: "${_date.day}\n",
-                        // TODO
-                        style: mkFontLight(20.0, Colors.black54),
+                        style: theme.display1,
                       ),
                       TextSpan(
                         text: MkStrings.monthsShort[_date.month - 1]
                             .toUpperCase(),
-                        // TODO
-                        style: mkFontLight(10.0, Colors.black).copyWith(
+                        style: theme.small.copyWith(
                           letterSpacing: 2.0,
                         ),
                       ),
@@ -69,19 +71,12 @@ class JobListItem extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       job.name,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: kTextBaseColor,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: theme.subhead3Semi,
                     ),
                     const SizedBox(height: 2.0),
                     Text(
                       _price,
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color: kTextBaseColor,
-                      ),
+                      style: theme.body1,
                     ),
                     const SizedBox(height: 2.0),
                     job.pendingPayment > 0

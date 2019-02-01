@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/utils/mk_snackbar.dart';
 import 'package:tailor_made/widgets/screens/measures/_views/measure_edit_dialog.dart';
-import 'package:tailor_made/widgets/screens/measures/measures_manage.dart';
 
 class MeasuresSlideBlockItem extends StatefulWidget {
   const MeasuresSlideBlockItem({
     Key key,
     @required this.measure,
-    @required this.parent,
   }) : super(key: key);
 
   final MeasureModel measure;
-  final MeasuresManagePageState parent;
 
   @override
   _MeasuresSlideBlockItemState createState() => _MeasuresSlideBlockItemState();
@@ -69,17 +67,16 @@ class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
       return;
     }
 
-    widget.parent.showLoadingSnackBar();
+    MkSnackBar.of(context).loading();
 
     try {
       await measure.reference.updateData(<String, String>{
         "name": itemName,
         // "unit": "",
       });
-      widget.parent.closeLoadingSnackBar();
+      MkSnackBar.of(context).hide();
     } catch (e) {
-      widget.parent.closeLoadingSnackBar();
-      widget.parent.showInSnackBar(e.toString());
+      MkSnackBar.of(context).show(e.toString());
     }
   }
 }

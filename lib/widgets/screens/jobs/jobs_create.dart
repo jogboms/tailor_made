@@ -25,9 +25,9 @@ import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
-import 'package:tailor_made/widgets/screens/jobs/job.dart';
 import 'package:tailor_made/widgets/screens/jobs/_partials/contact_lists.dart';
 import 'package:tailor_made/widgets/screens/jobs/_partials/gallery_grid_item.dart';
+import 'package:tailor_made/widgets/screens/jobs/job.dart';
 import 'package:tailor_made/widgets/screens/measures/_partials/measure_create_items.dart';
 
 const _kGridWidth = 85.0;
@@ -94,52 +94,33 @@ class _JobsCreatePageState extends State<JobsCreatePage>
 
     final List<Widget> children = [];
 
-    Widget makeHeader(String title, [String trailing = ""]) {
-      return Container(
-        color: Colors.grey[100].withOpacity(.4),
-        margin: const EdgeInsets.only(top: 8.0),
-        padding: const EdgeInsets.only(
-            top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
-        alignment: AlignmentDirectional.centerStart,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(
-              title.toUpperCase(),
-              style: mkFontLight(12.0, kTextBaseColor),
-            ),
-            Text(
-              trailing,
-              style: mkFontLight(12.0, kTextBaseColor),
-            ),
-          ],
-        ),
-      );
-    }
-
     if (contact != null) {
-      children.add(makeHeader("Style Name"));
+      children.add(const _Header(title: "Style Name"));
       children.add(buildEnterName());
 
-      children.add(makeHeader("Payment", "Naira (₦)"));
+      children.add(
+        const _Header(title: "Payment", trailing: "Naira (₦)"),
+      );
       children.add(buildEnterAmount());
 
-      children.add(makeHeader("Due Date"));
+      children.add(const _Header(title: "Due Date"));
       children.add(buildDueDate());
 
-      children.add(makeHeader("References"));
+      children.add(const _Header(title: "References"));
       children.add(buildImageGrid());
 
-      children.add(makeHeader("Measurements", "Inches (In)"));
+      children.add(
+        const _Header(title: "Measurements", trailing: "Inches (In)"),
+      );
       children.add(buildCreateMeasure());
 
-      children.add(makeHeader("Additional Notes"));
+      children.add(const _Header(title: "Additional Notes"));
       children.add(buildAdditional());
 
       children.add(
         Padding(
           child: MkPrimaryButton(
-            child: Text("FINISH"),
+            child: const Text("FINISH"),
             onPressed: _handleSubmit,
           ),
           padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
@@ -151,7 +132,31 @@ class _JobsCreatePageState extends State<JobsCreatePage>
 
     return Scaffold(
       key: scaffoldKey,
-      appBar: buildAppBar(theme),
+      appBar: contact != null
+          ? AvatarAppBar(
+              tag: contact.createdAt.toString(),
+              imageUrl: contact.imageUrl,
+              elevation: 1.0,
+              backgroundColor: Colors.white,
+              title: Text(
+                contact.fullname,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.title,
+              ),
+              subtitle: Text("${contact.totalJobs} Jobs", style: theme.small),
+              actions: widget.contacts.isNotEmpty
+                  ? <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.people),
+                        onPressed: onSelectContact,
+                      )
+                    ]
+                  : null,
+            )
+          : const MkAppBar(
+              title: const Text(""),
+            ),
       body: buildBody(theme, children),
     );
   }
@@ -221,32 +226,6 @@ class _JobsCreatePageState extends State<JobsCreatePage>
         );
       });
     }
-  }
-
-  PreferredSizeWidget buildAppBar(MkTheme theme) {
-    return contact != null
-        ? AvatarAppBar(
-            tag: contact.createdAt.toString(),
-            imageUrl: contact.imageUrl,
-            elevation: 1.0,
-            backgroundColor: Colors.white,
-            title: Text(
-              contact.fullname,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.title.copyWith(color: theme.appBarTitle.color),
-            ),
-            subtitle: Text("${contact.totalJobs} Jobs", style: theme.small),
-            actions: widget.contacts.isNotEmpty
-                ? <Widget>[
-                    IconButton(
-                      icon: const Icon(Icons.people),
-                      onPressed: onSelectContact,
-                    )
-                  ]
-                : null,
-          )
-        : const MkAppBar(title: const Text(""));
   }
 
   void _handleSubmit() async {
@@ -474,6 +453,45 @@ class _NewGrid extends StatelessWidget {
             color: kTextBaseColor.withOpacity(.35),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header({
+    Key key,
+    @required this.title,
+    this.trailing,
+  }) : super(key: key);
+
+  final String title;
+  final String trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.grey[100].withOpacity(.4),
+      margin: const EdgeInsets.only(top: 8.0),
+      padding: const EdgeInsets.only(
+        top: 8.0,
+        bottom: 8.0,
+        left: 16.0,
+        right: 16.0,
+      ),
+      alignment: AlignmentDirectional.centerStart,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            title.toUpperCase(),
+            style: MkTheme.of(context).smallLight,
+          ),
+          Text(
+            trailing,
+            style: MkTheme.of(context).smallLight,
+          ),
+        ],
       ),
     );
   }

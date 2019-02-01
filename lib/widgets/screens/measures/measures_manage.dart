@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/measures.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
@@ -11,22 +10,19 @@ import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
-import 'package:tailor_made/widgets/screens/measures/measures_create.dart';
 import 'package:tailor_made/widgets/screens/measures/_partials/measures_slide_block.dart';
+import 'package:tailor_made/widgets/screens/measures/measures_create.dart';
 
 class MeasuresManagePage extends StatefulWidget {
   const MeasuresManagePage({
     Key key,
-    @required this.account,
   }) : super(key: key);
 
-  final AccountModel account;
-
   @override
-  MeasuresManagePageState createState() => MeasuresManagePageState();
+  _MeasuresManagePageState createState() => _MeasuresManagePageState();
 }
 
-class MeasuresManagePageState extends State<MeasuresManagePage>
+class _MeasuresManagePageState extends State<MeasuresManagePage>
     with MkSnackBarProvider {
   @override
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -93,7 +89,6 @@ class MeasuresManagePageState extends State<MeasuresManagePage>
             MeasureSlideBlock(
               title: key,
               measures: data.toList(),
-              parent: this,
             ),
           );
         });

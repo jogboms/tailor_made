@@ -137,7 +137,7 @@ class _AppBarState extends State<_AppBar> with MkDispatchProvider<AppState> {
                       )
                     : null,
               ),
-              preferredSize: Size.fromHeight(1.0),
+              preferredSize: const Size.fromHeight(1.0),
             ),
           );
   }

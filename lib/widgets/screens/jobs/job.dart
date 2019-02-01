@@ -29,12 +29,10 @@ class JobPage extends StatefulWidget {
   final JobModel job;
 
   @override
-  JobPageState createState() {
-    return JobPageState();
-  }
+  _JobPageState createState() => _JobPageState();
 }
 
-class JobPageState extends State<JobPage> with MkSnackBarProvider {
+class _JobPageState extends State<JobPage> with MkSnackBarProvider {
   JobModel job;
 
   @override
@@ -48,6 +46,8 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
 
   @override
   Widget build(BuildContext context) {
+    final MkTheme theme = MkTheme.of(context);
+
     return ViewModelSubscriber<AppState, JobsViewModel>(
       converter: (store) => JobsViewModel(store)..jobID = widget.job.id,
       builder: (
@@ -72,7 +72,9 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
               return <Widget>[
                 SliverAppBar(
                   expandedHeight: 250.0,
-                  flexibleSpace: FlexibleSpaceBar(background: buildHeader()),
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: _Header(job: job),
+                  ),
                   pinned: true,
                   titleSpacing: 0.0,
                   brightness: Brightness.light,
@@ -81,7 +83,7 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
                   centerTitle: false,
                   backgroundColor: Colors.white,
                   // backgroundColor: Colors.grey.shade300,
-                  title: buildAvatarAppBar(context, vm.selectedContact),
+                  title: _AvatarAppBar(job: job, contact: vm.selectedContact),
                 ),
               ];
             },
@@ -99,17 +101,15 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
                         Expanded(
                           child: Text(
                             "DUE DATE",
-                            style: MkTheme.of(context).small.copyWith(
-                                  color: Colors.black87,
-                                ),
+                            style: theme.small.copyWith(
+                              color: Colors.black87,
+                            ),
                           ),
                         ),
                         CupertinoButton(
                           child: Text(
                             "EXTEND DATE",
-                            style: MkTheme.of(context).xsmall.copyWith(
-                                  color: Colors.black,
-                                ),
+                            style: theme.xsmall,
                           ),
                           onPressed: job.isComplete ? null : _onSaveDate,
                         ),
@@ -124,9 +124,7 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
                           month: "MMMM",
                           year: "yyyy",
                         ).format,
-                        style: MkTheme.of(context).subhead3.copyWith(
-                              color: Colors.black,
-                            ),
+                        style: theme.subhead3,
                       ),
                     ),
                     const SizedBox(height: 4.0),
@@ -138,8 +136,7 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
                         job.notes,
-                        // TODO
-                        style: mkFontLight(14.0, Colors.black87),
+                        style: theme.body3Light,
                         textAlign: TextAlign.justify,
                       ),
                     ),
@@ -162,182 +159,6 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
           ),
         );
       },
-    );
-  }
-
-  Widget buildHeader() {
-    final textColor = Colors.grey.shade800;
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Text(
-            job.name,
-            // TODO
-            style: mkFontRegular(18.0, textColor),
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.fade,
-          ),
-        ),
-        const SizedBox(height: 12.0),
-        Text(
-          MkMoney(job.price).format,
-          // TODO
-          style: mkFontRegular(24.0, textColor).copyWith(
-            letterSpacing: 1.5,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 24.0),
-        Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            border: const Border(
-              top: const MkBorderSide(),
-              bottom: const MkBorderSide(),
-            ),
-          ),
-          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildPaidBox(),
-              _buildUnpaidBox(),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Expanded _buildUnpaidBox() {
-    return Expanded(
-      child: Column(
-        children: <Widget>[
-          Text(
-            "UNPAID",
-            // TODO
-            style: mkFontRegular(8.0),
-            textAlign: TextAlign.center,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Icon(
-                Icons.arrow_drop_down,
-                color: Colors.red.shade600,
-                size: 16.0,
-              ),
-              const SizedBox(width: 4.0),
-              Text(
-                MkMoney(job.pendingPayment).format,
-                // TODO
-                style: mkFontRegular(18.0, Colors.black87).copyWith(
-                  letterSpacing: 1.25,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Expanded _buildPaidBox() {
-    return Expanded(
-      child: Container(
-        decoration: const BoxDecoration(
-          border: const Border(right: const MkBorderSide()),
-        ),
-        child: Column(
-          children: <Widget>[
-            Text(
-              "PAID",
-              // TODO
-              style: mkFontRegular(8.0),
-              textAlign: TextAlign.center,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(
-                  Icons.arrow_drop_up,
-                  color: Colors.green.shade600,
-                  size: 16.0,
-                ),
-                const SizedBox(width: 4.0),
-                Text(
-                  MkMoney(job.completedPayment).format,
-                  // TODO
-                  style: mkFontRegular(18.0, Colors.black87).copyWith(
-                    letterSpacing: 1.25,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildAvatarAppBar(BuildContext context, ContactModel contact) {
-    // final textColor = Colors.white;
-    final textColor = Colors.grey.shade800;
-
-    final date = MkDates(job.createdAt).format;
-
-    return AvatarAppBar(
-      tag: contact.createdAt.toString(),
-      imageUrl: contact.imageUrl,
-      title: GestureDetector(
-        onTap: () {
-          MkNavigate(context, ContactPage(contact: contact));
-        },
-        child: Text(
-          contact.fullname,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          // TODO
-          style: mkFontBold(18.0, kTitleBaseColor),
-        ),
-      ),
-      iconColor: textColor,
-      subtitle: Text(
-        date,
-        // TODO
-        style: TextStyle(
-          color: textColor,
-          fontSize: 12.0,
-          fontWeight: FontWeight.w300,
-        ),
-      ),
-      actions: <Widget>[
-        IconButton(
-          icon: const Icon(
-            Icons.content_cut,
-          ),
-          onPressed: () {
-            MkNavigate(
-              context,
-              MeasuresPage(measurements: job.measurements),
-              fullscreenDialog: true,
-            );
-          },
-        ),
-        IconButton(
-          icon: Icon(
-            Icons.check,
-            color: job.isComplete ? kPrimaryColor : kTextBaseColor,
-          ),
-          onPressed: null,
-        ),
-      ],
     );
   }
 
@@ -394,5 +215,220 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
       closeLoadingSnackBar();
       showInSnackBar(e.toString());
     }
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header({
+    Key key,
+    @required this.job,
+  }) : super(key: key);
+
+  final JobModel job;
+
+  @override
+  Widget build(BuildContext context) {
+    final textColor = Colors.grey.shade800;
+    final theme = MkTheme.of(context);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Text(
+            job.name,
+            style: theme.title.copyWith(color: textColor),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.fade,
+          ),
+        ),
+        const SizedBox(height: 12.0),
+        Text(
+          MkMoney(job.price).format,
+          style: theme.display2Semi.copyWith(
+            color: textColor,
+            letterSpacing: 1.5,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 24.0),
+        Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            border: const Border(
+              top: const MkBorderSide(),
+              bottom: const MkBorderSide(),
+            ),
+          ),
+          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _PaidBox(job: job),
+              _UnpaidBox(job: job),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AvatarAppBar extends StatelessWidget {
+  const _AvatarAppBar({
+    Key key,
+    @required this.job,
+    @required this.contact,
+  }) : super(key: key);
+
+  final JobModel job;
+  final ContactModel contact;
+
+  @override
+  Widget build(BuildContext context) {
+    // final textColor = Colors.white;
+    final textColor = Colors.grey.shade800;
+
+    final date = MkDates(job.createdAt).format;
+    final theme = MkTheme.of(context);
+
+    return AvatarAppBar(
+      tag: contact.createdAt.toString(),
+      imageUrl: contact.imageUrl,
+      title: GestureDetector(
+        onTap: () {
+          MkNavigate(context, ContactPage(contact: contact));
+        },
+        child: Text(
+          contact.fullname,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: theme.title,
+        ),
+      ),
+      iconColor: textColor,
+      subtitle: Text(
+        date,
+        style: theme.small.copyWith(
+          color: textColor,
+          fontWeight: FontWeight.w300,
+        ),
+      ),
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(
+            Icons.content_cut,
+          ),
+          onPressed: () {
+            MkNavigate(
+              context,
+              MeasuresPage(measurements: job.measurements),
+              fullscreenDialog: true,
+            );
+          },
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.check,
+            color: job.isComplete ? kPrimaryColor : kTextBaseColor,
+          ),
+          onPressed: null,
+        ),
+      ],
+    );
+  }
+}
+
+class _PaidBox extends StatelessWidget {
+  const _PaidBox({
+    Key key,
+    @required this.job,
+  }) : super(key: key);
+
+  final JobModel job;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = MkTheme.of(context);
+
+    return Expanded(
+      child: Container(
+        decoration: const BoxDecoration(
+          border: const Border(right: const MkBorderSide()),
+        ),
+        child: Column(
+          children: <Widget>[
+            Text(
+              "PAID",
+              style: theme.xxsmall,
+              textAlign: TextAlign.center,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.arrow_drop_up,
+                  color: Colors.green.shade600,
+                  size: 16.0,
+                ),
+                const SizedBox(width: 4.0),
+                Text(
+                  MkMoney(job.completedPayment).format,
+                  style: theme.title.copyWith(
+                    letterSpacing: 1.25,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _UnpaidBox extends StatelessWidget {
+  const _UnpaidBox({
+    Key key,
+    @required this.job,
+  }) : super(key: key);
+
+  final JobModel job;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = MkTheme.of(context);
+    return Expanded(
+      child: Column(
+        children: <Widget>[
+          Text(
+            "UNPAID",
+            style: theme.xxsmall,
+            textAlign: TextAlign.center,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                Icons.arrow_drop_down,
+                color: Colors.red.shade600,
+                size: 16.0,
+              ),
+              const SizedBox(width: 4.0),
+              Text(
+                MkMoney(job.pendingPayment).format,
+                style: theme.title.copyWith(
+                  letterSpacing: 1.25,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

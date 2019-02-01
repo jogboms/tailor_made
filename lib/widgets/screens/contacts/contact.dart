@@ -62,7 +62,7 @@ class _ContactState extends State<ContactPage> {
             ),
             body: Builder(builder: (context) {
               if (viewModel.isLoading) {
-                return Center(
+                return const Center(
                   child: const MkLoadingSpinner(),
                 );
               }
@@ -71,17 +71,23 @@ class _ContactState extends State<ContactPage> {
                 children: [
                   _TabView(
                     name: TABS[0].toLowerCase(),
-                    child: JobList(jobs: viewModel.selectedJobs),
+                    child: JobList(
+                      jobs: viewModel.selectedJobs,
+                    ),
                   ),
                   _TabView(
                     name: TABS[1].toLowerCase(),
                     child: GalleryGridWidget(
-                        contact: contact, jobs: viewModel.selectedJobs),
+                      contact: contact,
+                      jobs: viewModel.selectedJobs,
+                    ),
                   ),
                   _TabView(
                     name: TABS[2].toLowerCase(),
                     child: PaymentsListWidget(
-                        contact: contact, jobs: viewModel.selectedJobs),
+                      contact: contact,
+                      jobs: viewModel.selectedJobs,
+                    ),
                   ),
                 ],
               );

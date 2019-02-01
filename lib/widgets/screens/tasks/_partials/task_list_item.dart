@@ -3,6 +3,7 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/utils/mk_dates.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/screens/jobs/job.dart';
 import 'package:timeago/timeago.dart';
 
@@ -37,8 +38,7 @@ class TaskListItem extends StatelessWidget {
         children: <Widget>[
           Text(
             task.name,
-            // TODO
-            style: mkFontBold(16.0, kTextBaseColor),
+            style: MkTheme.of(context).subhead1Bold,
           ),
           const SizedBox(height: 2.0),
           Row(
