@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
 
 class RateLimitPage extends StatelessWidget {
   const RateLimitPage({
@@ -14,7 +15,7 @@ class RateLimitPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme.subhead;
+    final textTheme = MkTheme.of(context).subhead1;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -27,10 +28,12 @@ class RateLimitPage extends StatelessWidget {
           Text(
             "USAGE POLICY",
             style: textTheme.copyWith(
-                color: Colors.black87, fontWeight: FontWeight.w700),
+              color: Colors.black87,
+              fontWeight: MkStyle.bold,
+            ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 64.0),
             child: Text(
@@ -39,20 +42,20 @@ class RateLimitPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(height: 32.0),
+          const SizedBox(height: 32.0),
           FlatButton(
             onPressed: onSkipedPremium,
             textColor: Colors.grey.shade500,
             child: Text("No, Skip now"),
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           RaisedButton.icon(
             color: kAccentColor,
-            shape: StadiumBorder(),
+            shape: const StadiumBorder(),
             colorBrightness: Brightness.dark,
             onPressed: onSignUp,
-            icon: Icon(Icons.done),
-            label: Text("Yes, Sign me up!"),
+            icon: const Icon(Icons.done),
+            label: const Text("Yes, Sign me up!"),
           ),
         ],
       ),

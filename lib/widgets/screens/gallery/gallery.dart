@@ -7,7 +7,7 @@ import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
-import 'package:tailor_made/widgets/screens/gallery/gallery_grid.dart';
+import 'package:tailor_made/widgets/screens/gallery/_partials/gallery_grid.dart';
 
 class GalleryPage extends StatefulWidget {
   const GalleryPage({

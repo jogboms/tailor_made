@@ -4,7 +4,7 @@ import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/measures.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
-import 'package:tailor_made/widgets/screens/measures/ui/measure_list_item.dart';
+import 'package:tailor_made/widgets/screens/measures/_partials/measure_list_item.dart';
 
 class MeasuresPage extends StatelessWidget {
   const MeasuresPage({
@@ -21,12 +21,13 @@ class MeasuresPage extends StatelessWidget {
       builder: (
         BuildContext context,
         DispatchFunction dispatcher,
-        vm,
+        MeasuresViewModel vm,
       ) {
         return Scaffold(
           appBar: AppBar(
             brightness: Brightness.light,
-            iconTheme: IconThemeData(color: Colors.black87),
+            // TODO
+            iconTheme: const IconThemeData(color: Colors.black87),
             backgroundColor: Colors.transparent,
             elevation: 0.0,
           ),
@@ -38,7 +39,7 @@ class MeasuresPage extends StatelessWidget {
 
   Widget getBody(List<MeasureModel> measures) {
     if (measures.isEmpty) {
-      return Center(
+      return const Center(
         child: const EmptyResultView(message: "No measurements available"),
       );
     }
@@ -46,13 +47,13 @@ class MeasuresPage extends StatelessWidget {
     return ListView.separated(
       itemCount: measures.length,
       shrinkWrap: true,
-      padding: EdgeInsets.only(bottom: 96.0),
+      padding: const EdgeInsets.only(bottom: 96.0),
       itemBuilder: (context, index) {
         final measure = measures[index];
         final _value = measurements[measure.id] ?? 0.0;
         return MeasureListItem(measure..value = _value);
       },
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      separatorBuilder: (_, __) => const Divider(),
     );
   }
 }

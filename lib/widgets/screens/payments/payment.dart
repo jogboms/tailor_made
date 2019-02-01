@@ -41,31 +41,36 @@ class PaymentPage extends StatelessWidget {
             brightness: Brightness.light,
             actions: <Widget>[
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.work,
                   color: kTitleBaseColor,
                 ),
-                onPressed: () =>
-                    MkNavigate(context, JobPage(job: vm.selectedJob)),
+                onPressed: () {
+                  MkNavigate(context, JobPage(job: vm.selectedJob));
+                },
               ),
               IconButton(
                 icon: Icon(
                   Icons.person,
                   color: kTitleBaseColor,
                 ),
-                onPressed: () => MkNavigate(
-                    context, ContactPage(contact: vm.selectedContact)),
+                onPressed: () {
+                  MkNavigate(
+                    context,
+                    ContactPage(contact: vm.selectedContact),
+                  );
+                },
               ),
               vm.account.hasPremiumEnabled
                   ? IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.share,
                         color: kTitleBaseColor,
                       ),
                       // TODO
                       onPressed: null,
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
             ],
           ),
           body: Column(
@@ -77,6 +82,7 @@ class PaymentPage extends StatelessWidget {
                 child: Center(
                   child: Text(
                     _price,
+                    // TODO
                     style: mkFontLight(50.0, Colors.black87),
                   ),
                 ),
@@ -85,6 +91,7 @@ class PaymentPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   date,
+                  // TODO
                   style: mkFontLight(14.0, Colors.black54),
                   textAlign: TextAlign.justify,
                 ),
@@ -93,6 +100,7 @@ class PaymentPage extends StatelessWidget {
                 padding: const EdgeInsets.all(24.0),
                 child: Text(
                   payment.notes,
+                  // TODO
                   style: mkFontLight(14.0, Colors.black54),
                   textAlign: TextAlign.justify,
                 ),

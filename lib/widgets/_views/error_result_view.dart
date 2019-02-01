@@ -18,7 +18,7 @@ class ErrorResultView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Icon(
+          const Icon(
             Icons.error_outline,
             color: kPrimaryColor,
             size: 50.0,

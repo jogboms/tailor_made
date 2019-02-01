@@ -12,11 +12,12 @@ import 'package:tailor_made/utils/mk_dates.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/avatar_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/screens/contacts/contact.dart';
-import 'package:tailor_made/widgets/screens/jobs/ui/gallery_grids.dart';
-import 'package:tailor_made/widgets/screens/jobs/ui/payment_grids.dart';
+import 'package:tailor_made/widgets/screens/jobs/_partials/gallery_grids.dart';
+import 'package:tailor_made/widgets/screens/jobs/_partials/payment_grids.dart';
 import 'package:tailor_made/widgets/screens/measures/measures.dart';
 
 class JobPage extends StatefulWidget {
@@ -52,7 +53,7 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
       builder: (
         BuildContext context,
         DispatchFunction dispatcher,
-        vm,
+        JobsViewModel vm,
       ) {
         // in the case of newly created jobs
         job = vm.selected ?? widget.job;
@@ -64,8 +65,10 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
         return Scaffold(
           key: scaffoldKey,
           body: NestedScrollView(
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
+            headerSliverBuilder: (
+              BuildContext context,
+              bool innerBoxIsScrolled,
+            ) {
               return <Widget>[
                 SliverAppBar(
                   expandedHeight: 250.0,
@@ -96,13 +99,17 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
                         Expanded(
                           child: Text(
                             "DUE DATE",
-                            style: mkFontRegular(12.0, Colors.black87),
+                            style: MkTheme.of(context).small.copyWith(
+                                  color: Colors.black87,
+                                ),
                           ),
                         ),
                         CupertinoButton(
                           child: Text(
                             "EXTEND DATE",
-                            style: mkFontRegular(11.0, Colors.black),
+                            style: MkTheme.of(context).xsmall.copyWith(
+                                  color: Colors.black,
+                                ),
                           ),
                           onPressed: job.isComplete ? null : _onSaveDate,
                         ),
@@ -111,10 +118,15 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
                     Padding(
                       padding: const EdgeInsets.only(left: 16.0),
                       child: Text(
-                        MkDates(job.dueAt,
-                                day: "EEEE", month: "MMMM", year: "yyyy")
-                            .format,
-                        style: mkFontRegular(16.0, Colors.black),
+                        MkDates(
+                          job.dueAt,
+                          day: "EEEE",
+                          month: "MMMM",
+                          year: "yyyy",
+                        ).format,
+                        style: MkTheme.of(context).subhead3.copyWith(
+                              color: Colors.black,
+                            ),
                       ),
                     ),
                     const SizedBox(height: 4.0),
@@ -126,6 +138,7 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
                         job.notes,
+                        // TODO
                         style: mkFontLight(14.0, Colors.black87),
                         textAlign: TextAlign.justify,
                       ),
@@ -162,6 +175,7 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Text(
             job.name,
+            // TODO
             style: mkFontRegular(18.0, textColor),
             textAlign: TextAlign.center,
             maxLines: 2,
@@ -171,6 +185,7 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
         const SizedBox(height: 12.0),
         Text(
           MkMoney(job.price).format,
+          // TODO
           style: mkFontRegular(24.0, textColor).copyWith(
             letterSpacing: 1.5,
           ),
@@ -178,9 +193,12 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
         ),
         const SizedBox(height: 24.0),
         Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
-            border: Border(top: MkBorderSide(), bottom: MkBorderSide()),
+            border: const Border(
+              top: const MkBorderSide(),
+              bottom: const MkBorderSide(),
+            ),
           ),
           padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
           child: Row(
@@ -201,6 +219,7 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
         children: <Widget>[
           Text(
             "UNPAID",
+            // TODO
             style: mkFontRegular(8.0),
             textAlign: TextAlign.center,
           ),
@@ -215,6 +234,7 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
               const SizedBox(width: 4.0),
               Text(
                 MkMoney(job.pendingPayment).format,
+                // TODO
                 style: mkFontRegular(18.0, Colors.black87).copyWith(
                   letterSpacing: 1.25,
                 ),
@@ -230,13 +250,14 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
   Expanded _buildPaidBox() {
     return Expanded(
       child: Container(
-        decoration: BoxDecoration(
-          border: Border(right: MkBorderSide()),
+        decoration: const BoxDecoration(
+          border: const Border(right: const MkBorderSide()),
         ),
         child: Column(
           children: <Widget>[
             Text(
               "PAID",
+              // TODO
               style: mkFontRegular(8.0),
               textAlign: TextAlign.center,
             ),
@@ -251,6 +272,7 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
                 const SizedBox(width: 4.0),
                 Text(
                   MkMoney(job.completedPayment).format,
+                  // TODO
                   style: mkFontRegular(18.0, Colors.black87).copyWith(
                     letterSpacing: 1.25,
                   ),
@@ -274,17 +296,21 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
       tag: contact.createdAt.toString(),
       imageUrl: contact.imageUrl,
       title: GestureDetector(
-        onTap: () => MkNavigate(context, ContactPage(contact: contact)),
+        onTap: () {
+          MkNavigate(context, ContactPage(contact: contact));
+        },
         child: Text(
           contact.fullname,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
+          // TODO
           style: mkFontBold(18.0, kTitleBaseColor),
         ),
       ),
       iconColor: textColor,
       subtitle: Text(
         date,
+        // TODO
         style: TextStyle(
           color: textColor,
           fontSize: 12.0,
@@ -293,14 +319,16 @@ class JobPageState extends State<JobPage> with MkSnackBarProvider {
       ),
       actions: <Widget>[
         IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.content_cut,
           ),
-          onPressed: () => MkNavigate(
-                context,
-                MeasuresPage(measurements: job.measurements),
-                fullscreenDialog: true,
-              ),
+          onPressed: () {
+            MkNavigate(
+              context,
+              MeasuresPage(measurements: job.measurements),
+              fullscreenDialog: true,
+            );
+          },
         ),
         IconButton(
           icon: Icon(

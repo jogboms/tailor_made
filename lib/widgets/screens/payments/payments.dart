@@ -7,7 +7,7 @@ import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
-import 'package:tailor_made/widgets/screens/payments/payments_list.dart';
+import 'package:tailor_made/widgets/screens/payments/_partials/payments_list.dart';
 
 class PaymentsPage extends StatefulWidget {
   const PaymentsPage({
@@ -18,12 +18,10 @@ class PaymentsPage extends StatefulWidget {
   final List<PaymentModel> payments;
 
   @override
-  PaymentsPageState createState() {
-    return PaymentsPageState();
-  }
+  _PaymentsPageState createState() => _PaymentsPageState();
 }
 
-class PaymentsPageState extends State<PaymentsPage> {
+class _PaymentsPageState extends State<PaymentsPage> {
   List<PaymentModel> payments;
 
   @override
@@ -48,17 +46,14 @@ class PaymentsPageState extends State<PaymentsPage> {
                 payments != null
                     ? Text(
                         "${payments.length} Tickets",
-                        style: TextStyle(
-                          fontSize: 11.0,
-                          color: kTextBaseColor,
-                        ),
+                        style: MkTheme.of(context).xsmall,
                       )
-                    : SizedBox(),
+                    : const SizedBox(),
               ],
             ),
             backgroundColor: kAppBarBackgroundColor,
             automaticallyImplyLeading: false,
-            leading: MkBackButton(),
+            leading: const MkBackButton(),
             forceElevated: true,
             brightness: Brightness.light,
             elevation: 1.0,
@@ -73,12 +68,16 @@ class PaymentsPageState extends State<PaymentsPage> {
 
   Widget getContent() {
     return payments.isEmpty
-        ? SliverFillRemaining(
+        ? const SliverFillRemaining(
             child: const EmptyResultView(message: "No payments available"),
           )
         : SliverPadding(
-            padding: EdgeInsets.only(
-                top: 3.0, left: 16.0, right: 16.0, bottom: 16.0),
+            padding: const EdgeInsets.only(
+              top: 3.0,
+              left: 16.0,
+              right: 16.0,
+              bottom: 16.0,
+            ),
             sliver: PaymentList(payments: payments),
           );
   }
@@ -87,16 +86,17 @@ class PaymentsPageState extends State<PaymentsPage> {
     if (payments == null) {
       return StreamBuilder(
         stream: CloudDb.payments.snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<QuerySnapshot> snapshot,
+        ) {
           if (!snapshot.hasData) {
-            return SliverFillRemaining(
+            return const SliverFillRemaining(
               child: const MkLoadingSpinner(),
             );
           }
           payments = snapshot.data.documents
-              .map(
-                (item) => PaymentModel.fromJson(item.data),
-              )
+              .map((item) => PaymentModel.fromJson(item.data))
               .toList();
           return getContent();
         },

@@ -19,7 +19,7 @@ class MkFakeTextField<T> extends StatefulWidget {
 
   final FormFieldSetter<T> onSaved;
   final FormFieldValidator<T> validator;
-  final void Function(FormFieldState<T>) onTap;
+  final ValueSetter<FormFieldState<T>> onTap;
   final T initialValue;
   final String hint;
   final Widget child;

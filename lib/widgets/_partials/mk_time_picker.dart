@@ -18,8 +18,8 @@ class MkTimePicker extends StatefulWidget {
   final bool isEnabled;
   final String hint;
   final TimeOfDay initialValue;
-  final void Function(TimeOfDay) onChanged;
-  final void Function(TimeOfDay) onSaved;
+  final ValueSetter<TimeOfDay> onChanged;
+  final ValueSetter<TimeOfDay> onSaved;
   final FormFieldValidator<TimeOfDay> validator;
   final bool autovalidate;
 

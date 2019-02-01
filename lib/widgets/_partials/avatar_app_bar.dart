@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:tailor_made/utils/mk_status_bar.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_circle_avatar.dart';
 
@@ -101,8 +101,7 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
       children.addAll(actions);
     }
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.dark,
+    return MkStatusBar(
       child: Material(
         color: backgroundColor,
         elevation: elevation,

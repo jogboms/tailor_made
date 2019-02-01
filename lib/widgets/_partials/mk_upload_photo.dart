@@ -17,7 +17,7 @@ class MkUploadPhoto extends StatelessWidget {
     @required this.onPickImage,
   }) : super(key: key);
 
-  final void Function(File file) onPickImage;
+  final ValueSetter<File> onPickImage;
   final Size size;
 
   @override
