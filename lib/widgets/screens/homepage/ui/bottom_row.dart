@@ -23,16 +23,16 @@ class BottomRowWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      decoration: BoxDecoration(
-        border: Border(bottom: MkBorderSide()),
+      decoration: const BoxDecoration(
+        border: const Border(bottom: const MkBorderSide()),
       ),
       child: Row(
         children: <Widget>[
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  right: MkBorderSide(),
+            child: DecoratedBox(
+              decoration: const BoxDecoration(
+                border: const Border(
+                  right: const MkBorderSide(),
                 ),
               ),
               child: TMGridTile(
@@ -40,19 +40,21 @@ class BottomRowWidget extends StatelessWidget {
                 icon: Icons.content_cut,
                 title: "Measures",
                 subTitle: "Custom",
-                onPressed: () =>
-                    MkNavigate(context, MeasuresManagePage(account: account)),
+                onPressed: () => MkNavigate(
+                      context,
+                      MeasuresManagePage(account: account),
+                    ),
               ),
             ),
           ),
           Expanded(
-            child: Container(
+            child: SizedBox(
               child: TMGridTile(
                 color: Colors.grey,
                 icon: Icons.event,
                 title: "Tasks",
                 subTitle: "${stats.jobs.pending} Pending",
-                onPressed: () => MkNavigate(context, TasksPage()),
+                onPressed: () => MkNavigate(context, const TasksPage()),
               ),
             ),
           ),

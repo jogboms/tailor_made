@@ -14,6 +14,8 @@ import 'package:tailor_made/utils/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_dispatch_provider.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/screens/measures/ui/measure_dialog.dart';
 
 class MeasuresCreate extends StatefulWidget {
@@ -77,7 +79,7 @@ class MeasuresCreateState extends State<MeasuresCreate>
           children.add(makeHeader("Group Items"));
           children.add(buildGroupItems(vm));
 
-          children.add(SizedBox(height: 84.0));
+          children.add(const SizedBox(height: 84.0));
         }
 
         return Scaffold(
@@ -88,8 +90,8 @@ class MeasuresCreateState extends State<MeasuresCreate>
             centerTitle: false,
             elevation: 1.0,
             actions: [
-              FlatButton(
-                child: Text("SAVE", style: TextStyle(fontSize: 18.0)),
+              MkClearButton(
+                child: const Text("SAVE"),
                 onPressed: measures.isEmpty ? null : () => _handleSubmit(vm),
               )
             ],
@@ -104,10 +106,10 @@ class MeasuresCreateState extends State<MeasuresCreate>
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
           floatingActionButton: FloatingActionButton.extended(
-            icon: Icon(Icons.add_circle_outline),
+            icon: const Icon(Icons.add_circle_outline),
             backgroundColor: Colors.white,
             foregroundColor: kAccentColor,
-            label: Text("Add Item"),
+            label: const Text("Add Item"),
             onPressed: _handleAddItem,
           ),
         );
@@ -131,9 +133,9 @@ class MeasuresCreateState extends State<MeasuresCreate>
         children: <Widget>[
           Text(
             title.toUpperCase(),
-            style: mkFontLight(12.0, kTextBaseColor),
+            style: MkTheme.of(context).small,
           ),
-          Text(trailing, style: mkFontLight(12.0, kTextBaseColor)),
+          Text(trailing, style: MkTheme.of(context).small),
         ],
       ),
     );
@@ -148,11 +150,11 @@ class MeasuresCreateState extends State<MeasuresCreate>
         textInputAction: TextInputAction.next,
         onEditingComplete: () => FocusScope.of(context).requestFocus(_unitNode),
         keyboardType: TextInputType.text,
+        // TODO
         style: TextStyle(fontSize: 18.0, color: Colors.black),
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           isDense: true,
           hintText: "eg Blouse",
-          hintStyle: TextStyle(fontSize: 14.0),
         ),
         validator: (value) => (value.isNotEmpty) ? null : "Please input a name",
         onSaved: (value) => groupName = value.trim(),
@@ -167,11 +169,11 @@ class MeasuresCreateState extends State<MeasuresCreate>
         focusNode: _unitNode,
         initialValue: unitValue,
         keyboardType: TextInputType.text,
+        // TODO
         style: TextStyle(fontSize: 18.0, color: Colors.black),
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           isDense: true,
           hintText: "Unit (eg. In, cm)",
-          hintStyle: TextStyle(fontSize: 14.0),
         ),
         validator: (value) =>
             (value.isNotEmpty) ? null : "Please input a value",
@@ -273,7 +275,7 @@ class MeasuresCreateState extends State<MeasuresCreate>
             elevation: 0.0,
             automaticallyImplyLeading: false,
             leading: IconButton(
-              icon: Icon(Icons.close, color: Colors.white),
+              icon: const Icon(Icons.close, color: Colors.white),
               onPressed: () => Navigator.pop(context),
             ),
           ),

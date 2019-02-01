@@ -20,34 +20,34 @@ class TopRowWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      decoration: BoxDecoration(
-        border: Border(bottom: MkBorderSide()),
+      decoration: const BoxDecoration(
+        border: const Border(bottom: const MkBorderSide()),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(right: MkBorderSide()),
+            child: DecoratedBox(
+              decoration: const BoxDecoration(
+                border: const Border(right: const MkBorderSide()),
               ),
               child: TMGridTile(
                 icon: Icons.supervisor_account,
                 color: Colors.orangeAccent,
                 title: "Contacts",
                 subTitle: "${stats.contacts.total} Contacts",
-                onPressed: () => MkNavigate(context, ContactsPage()),
+                onPressed: () => MkNavigate(context, const ContactsPage()),
               ),
             ),
           ),
           Expanded(
-            child: Container(
+            child: SizedBox(
               child: TMGridTile(
                 icon: Icons.work,
                 color: Colors.greenAccent.shade400,
                 title: "Jobs",
                 subTitle: "${stats.jobs.total} Total",
-                onPressed: () => MkNavigate(context, JobsPage()),
+                onPressed: () => MkNavigate(context, const JobsPage()),
               ),
             ),
           ),

@@ -18,10 +18,10 @@ class SlideDownItem extends StatefulWidget {
   final VoidCallback onLongPress;
 
   @override
-  SlideDownItemState createState() => SlideDownItemState();
+  _SlideDownItemState createState() => _SlideDownItemState();
 }
 
-class SlideDownItemState extends State<SlideDownItem> {
+class _SlideDownItemState extends State<SlideDownItem> {
   int id;
   bool isExpanded;
 
@@ -35,31 +35,57 @@ class SlideDownItemState extends State<SlideDownItem> {
 
   @override
   Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _SliderHeader(
+          title: widget.title,
+          isExpanded: isExpanded,
+          onLongPress: widget.onLongPress,
+          onExpand: () => setState(() => isExpanded = !isExpanded),
+        ),
+        _SlideBody(
+          isExpanded: isExpanded,
+          child: widget.body,
+        ),
+      ],
+    );
+  }
+}
+
+class _SliderHeader extends StatelessWidget {
+  const _SliderHeader({
+    Key key,
+    @required this.isExpanded,
+    @required this.title,
+    @required this.onExpand,
+    @required this.onLongPress,
+  }) : super(key: key);
+
+  final String title;
+  final bool isExpanded;
+  final VoidCallback onExpand;
+  final VoidCallback onLongPress;
+
+  @override
+  Widget build(BuildContext context) {
     final MkTheme theme = MkTheme.of(context);
 
-    final Widget body = AnimatedCrossFade(
-      firstChild: Container(height: 0.0),
-      secondChild: widget.body,
-      firstCurve: const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
-      secondCurve: const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
-      sizeCurve: Curves.fastOutSlowIn,
-      crossFadeState:
-          isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-      duration: Duration(milliseconds: 350),
-    );
-
-    final Widget header = Material(
-      color: Colors.white,
+    return Material(
       elevation: isExpanded ? 1.0 : 0.0,
       child: GestureDetector(
         child: InkWell(
           child: Row(
             children: <Widget>[
               Expanded(
-                child: Container(
-                  padding: EdgeInsets.only(left: 16.0, top: 16.0, bottom: 16.0),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 16.0,
+                    top: 16.0,
+                    bottom: 16.0,
+                  ),
                   child: Text(
-                    widget.title,
+                    title,
                     style: theme.title.copyWith(fontSize: 14.0),
                   ),
                 ),
@@ -67,22 +93,38 @@ class SlideDownItemState extends State<SlideDownItem> {
               Padding(
                 padding: const EdgeInsets.only(right: 16.0),
                 child: Icon(
-                    isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+                  isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                ),
               ),
             ],
           ),
-          onTap: () => setState(() => isExpanded = !isExpanded),
+          onTap: onExpand,
         ),
-        onLongPress: widget.onLongPress ?? () {},
+        onLongPress: onLongPress ?? () {},
       ),
     );
+  }
+}
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        header,
-        body,
-      ],
+class _SlideBody extends StatelessWidget {
+  const _SlideBody({
+    Key key,
+    @required this.child,
+    @required this.isExpanded,
+  }) : super(key: key);
+
+  final SlideDownItem child;
+  final bool isExpanded;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedCrossFade(
+      firstChild: const SizedBox(width: double.infinity),
+      secondChild: child,
+      sizeCurve: Curves.decelerate,
+      crossFadeState:
+          isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      duration: const Duration(milliseconds: 250),
     );
   }
 }

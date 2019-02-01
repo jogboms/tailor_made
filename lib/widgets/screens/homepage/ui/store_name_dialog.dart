@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/account.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
 
 class StoreNameDialog extends StatelessWidget {
   StoreNameDialog({
@@ -25,11 +26,11 @@ class StoreNameDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const SizedBox(height: 48.0),
-              Center(
-                child: CircleAvatar(
+              const Center(
+                child: const CircleAvatar(
                   backgroundColor: kAccentColor,
                   foregroundColor: Colors.white,
-                  child: Icon(
+                  child: const Icon(
                     Icons.store,
                     size: 50.0,
                   ),
@@ -37,27 +38,29 @@ class StoreNameDialog extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16.0),
-              Text("Store Name", style: mkFontMedium(18.0, Colors.black38)),
+              Text(
+                "Store Name",
+                style: MkTheme.of(context).title.copyWith(
+                      color: Colors.black38,
+                    ),
+              ),
               const SizedBox(height: 64.0),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32.0, vertical: 4.0),
-                child: Theme(
-                  data: ThemeData(
-                    hintColor: kHintColor,
-                    primaryColor: kPrimaryColor,
-                  ),
-                  child: TextField(
-                    keyboardType: TextInputType.text,
-                    controller: controller,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18.0, color: Colors.black),
-                    onSubmitted: (value) => _handleSubmit(context),
-                    decoration: InputDecoration(
-                      isDense: true,
-                      hintText: "Enter Store Name",
-                      hintStyle: TextStyle(fontSize: 14.0),
-                    ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32.0,
+                  vertical: 4.0,
+                ),
+                child: TextField(
+                  keyboardType: TextInputType.text,
+                  controller: controller,
+                  textAlign: TextAlign.center,
+                  style: MkTheme.of(context).title.copyWith(
+                        color: Colors.black,
+                      ),
+                  onSubmitted: (value) => _handleSubmit(context),
+                  decoration: const InputDecoration(
+                    isDense: true,
+                    hintText: "Enter Store Name",
                   ),
                 ),
               ),

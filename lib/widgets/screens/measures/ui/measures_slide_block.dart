@@ -45,11 +45,8 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
 
     return SlideDownItem(
       title: widget.title,
-      body: Container(
-        // color: kBorderSideColor.withOpacity(.25),
-        child: Column(
-          children: children,
-        ),
+      body: Column(
+        children: children,
       ),
       onLongPress: () async {
         final choice = await _showOptionsDialog();
@@ -73,17 +70,21 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
       child: SimpleDialog(
         children: <Widget>[
           SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, ActionChoice.edit),
+            onPressed: () {
+              Navigator.pop(context, ActionChoice.edit);
+            },
             child: Padding(
-              child: Text("Edit"),
-              padding: EdgeInsets.all(8.0),
+              child: const Text("Edit"),
+              padding: const EdgeInsets.all(8.0),
             ),
           ),
           SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, ActionChoice.delete),
+            onPressed: () {
+              Navigator.pop(context, ActionChoice.delete);
+            },
             child: Padding(
-              child: Text("Delete"),
-              padding: EdgeInsets.all(8.0),
+              child: const Text("Delete"),
+              padding: const EdgeInsets.all(8.0),
             ),
           ),
         ],

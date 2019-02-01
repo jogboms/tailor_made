@@ -4,6 +4,7 @@ import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/rebloc/actions/account.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
+import 'package:tailor_made/rebloc/view_models/home_view_model.dart';
 import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
@@ -12,7 +13,6 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/access_denied.dart';
 import 'package:tailor_made/widgets/_views/out_dated.dart';
 import 'package:tailor_made/widgets/_views/rate_limit.dart';
-import 'package:tailor_made/widgets/screens/homepage/home_view_model.dart';
 import 'package:tailor_made/widgets/screens/homepage/ui/bottom_row.dart';
 import 'package:tailor_made/widgets/screens/homepage/ui/create_button.dart';
 import 'package:tailor_made/widgets/screens/homepage/ui/header.dart';
@@ -28,6 +28,10 @@ const double _kStatGridsHeight = 40.0;
 const double _kRowGridsHeight = (_kBottomGridsHeight - _kStatGridsHeight) / 3;
 
 class HomePage extends StatelessWidget {
+  const HomePage({
+    Key key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     // did this to avoid passing a reference of HomePage context to TopButtonBar

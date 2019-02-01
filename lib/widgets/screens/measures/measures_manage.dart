@@ -35,7 +35,7 @@ class MeasuresManagePageState extends State<MeasuresManagePage>
   void initState() {
     super.initState();
     Future.delayed(
-      Duration(seconds: 2),
+      const Duration(seconds: 2),
       () => showInSnackBar("Long-Press on any group to see more actions."),
     );
   }
@@ -45,21 +45,23 @@ class MeasuresManagePageState extends State<MeasuresManagePage>
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       key: scaffoldKey,
-      appBar: MkAppBar(
-        title: Text("Measurements"),
+      appBar: const MkAppBar(
+        title: const Text("Measurements"),
       ),
       body: _buildBody(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(Icons.add),
+        icon: const Icon(Icons.add),
         backgroundColor: kAccentColor,
         foregroundColor: Colors.white,
-        label: Text("Add Group"),
-        onPressed: () => MkNavigate(
-              context,
-              MeasuresCreate(),
-              fullscreenDialog: true,
-            ),
+        label: const Text("Add Group"),
+        onPressed: () {
+          MkNavigate(
+            context,
+            const MeasuresCreate(),
+            fullscreenDialog: true,
+          );
+        },
       ),
     );
   }
@@ -101,11 +103,7 @@ class MeasuresManagePageState extends State<MeasuresManagePage>
           child: SingleChildScrollView(
             child: Column(
               children: slides
-                ..add(
-                  SizedBox(
-                    height: 72.0,
-                  ),
-                )
+                ..add(const SizedBox(height: 72.0))
                 ..toList(),
             ),
           ),

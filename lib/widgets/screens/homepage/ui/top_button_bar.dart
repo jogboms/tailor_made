@@ -5,11 +5,11 @@ import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/rebloc/actions/account.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
+import 'package:tailor_made/rebloc/view_models/home_view_model.dart';
 import 'package:tailor_made/utils/mk_child_dialog.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
-import 'package:tailor_made/widgets/screens/homepage/home_view_model.dart';
 import 'package:tailor_made/widgets/screens/homepage/ui/helpers.dart';
 import 'package:tailor_made/widgets/screens/homepage/ui/notice_dialog.dart';
 import 'package:tailor_made/widgets/screens/homepage/ui/review_modal.dart';
@@ -40,14 +40,16 @@ class TopButtonBar extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SizedBox.fromSize(
-            size: Size.square(48.0),
+            size: const Size.square(48.0),
             child: Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.all(1.5),
+              padding: const EdgeInsets.all(1.5),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                    color: kPrimaryColor.withOpacity(.5), width: 1.5),
+                  color: kPrimaryColor.withOpacity(.5),
+                  width: 1.5,
+                ),
               ),
               child: GestureDetector(
                 onTap: _onTapAccount(context, vm),
@@ -65,9 +67,9 @@ class TopButtonBar extends StatelessWidget {
                             color: theme.appBarTitle.color,
                           ),
                     Align(
-                      alignment: Alignment(0.0, 2.25),
+                      alignment: const Alignment(0.0, 2.25),
                       child: vm.account.hasPremiumEnabled
-                          ? ImageIcon(
+                          ? const ImageIcon(
                               MkImages.verified,
                               color: kPrimaryColor,
                             )
@@ -108,13 +110,13 @@ class TopButtonBar extends StatelessWidget {
     return !(vm.account?.hasReadNotice ?? false) || vm.shouldSendRating;
   }
 
-  void Function() _onTapAccount(BuildContext context, HomeViewModel vm) {
+  VoidCallback _onTapAccount(BuildContext context, HomeViewModel vm) {
     final account = vm.account;
     return () async {
       if (vm.shouldSendRating) {
         final _res = await mkShowChildDialog<int>(
           context: context,
-          child: ReviewModal(),
+          child: const ReviewModal(),
         );
 
         if (_res != null) {
@@ -142,20 +144,25 @@ class TopButtonBar extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: const Text('Select action',
-                style: const TextStyle(fontSize: 14.0)),
+            title: Text(
+              'Select action',
+              style: MkTheme.of(context).body3,
+            ),
             children: <Widget>[
               SimpleDialogOption(
-                onPressed: () =>
-                    Navigator.pop(context, AccountOptions.storename),
-                child: TMListTile(
+                onPressed: () {
+                  Navigator.pop(context, AccountOptions.storename);
+                },
+                child: const TMListTile(
                   color: kAccentColor,
                   icon: Icons.store,
                   title: "Store",
                 ),
               ),
               SimpleDialogOption(
-                onPressed: () => Navigator.pop(context, AccountOptions.logout),
+                onPressed: () {
+                  Navigator.pop(context, AccountOptions.logout);
+                },
                 child: TMListTile(
                   color: Colors.grey.shade400,
                   icon: Icons.power_settings_new,

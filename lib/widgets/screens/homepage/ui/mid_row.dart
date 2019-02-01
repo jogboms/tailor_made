@@ -21,16 +21,16 @@ class MidRowWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      decoration: BoxDecoration(
-        border: Border(bottom: MkBorderSide()),
+      decoration: const BoxDecoration(
+        border: const Border(bottom: const MkBorderSide()),
       ),
       child: Row(
         children: <Widget>[
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  right: MkBorderSide(),
+            child: DecoratedBox(
+              decoration: const BoxDecoration(
+                border: const Border(
+                  right: const MkBorderSide(),
                 ),
               ),
               child: TMGridTile(
@@ -38,18 +38,18 @@ class MidRowWidget extends StatelessWidget {
                 icon: Icons.attach_money,
                 title: "Payments",
                 subTitle: "${MkMoney(stats.payments.total).format} Total",
-                onPressed: () => MkNavigate(context, PaymentsPage()),
+                onPressed: () => MkNavigate(context, const PaymentsPage()),
               ),
             ),
           ),
           Expanded(
-            child: Container(
+            child: SizedBox(
               child: TMGridTile(
                 color: Colors.blueAccent,
                 icon: Icons.image,
                 title: "Gallery",
                 subTitle: "${stats.gallery.total} Photos",
-                onPressed: () => MkNavigate(context, GalleryPage()),
+                onPressed: () => MkNavigate(context, const GalleryPage()),
               ),
             ),
           ),

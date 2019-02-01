@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +22,7 @@ import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/avatar_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/input_dropdown.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
+import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 import 'package:tailor_made/widgets/screens/jobs/job.dart';
@@ -190,7 +189,7 @@ class _JobsCreatePageState extends State<JobsCreatePage>
             ),
           )
         : Center(
-            child: CupertinoButton(
+            child: MkClearButton(
               onPressed: onSelectContact,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -198,9 +197,9 @@ class _JobsCreatePageState extends State<JobsCreatePage>
                   CircleAvatar(
                     backgroundColor: Colors.grey.withOpacity(.2),
                     radius: 50.0,
-                    child: Icon(Icons.person_add, color: kTextBaseColor),
+                    child: const Icon(Icons.person_add, color: kTextBaseColor),
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   Text("SELECT A CLIENT", style: theme.small),
                 ],
               ),
@@ -235,19 +234,19 @@ class _JobsCreatePageState extends State<JobsCreatePage>
               contact.fullname,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: mkFontBold(18.0, theme.appBarTitle.color),
+              style: theme.title.copyWith(color: theme.appBarTitle.color),
             ),
             subtitle: Text("${contact.totalJobs} Jobs", style: theme.small),
             actions: widget.contacts.isNotEmpty
                 ? <Widget>[
                     IconButton(
-                      icon: Icon(Icons.people),
+                      icon: const Icon(Icons.people),
                       onPressed: onSelectContact,
                     )
                   ]
                 : null,
           )
-        : MkAppBar(title: Text(""));
+        : const MkAppBar(title: const Text(""));
   }
 
   void _handleSubmit() async {
@@ -295,12 +294,11 @@ class _JobsCreatePageState extends State<JobsCreatePage>
       child: TextFormField(
         focusNode: _additionFocusNode,
         keyboardType: TextInputType.text,
-        style: TextStyle(fontSize: 18.0, color: Colors.black),
+        style: MkTheme.of(context).title.copyWith(color: Colors.black),
         maxLines: 6,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           isDense: true,
           hintText: "Fabric color, size, special requirements...",
-          hintStyle: TextStyle(fontSize: 14.0),
         ),
         onSaved: (value) => job.notes = value.trim(),
         onFieldSubmitted: (value) => _handleSubmit(),
@@ -309,25 +307,6 @@ class _JobsCreatePageState extends State<JobsCreatePage>
   }
 
   Container buildImageGrid() {
-    Widget newGrid() {
-      return Container(
-        width: _kGridWidth,
-        margin: EdgeInsets.only(right: 8.0),
-        child: Material(
-          borderRadius: BorderRadius.circular(5.0),
-          color: Colors.grey[100],
-          child: InkWell(
-            onTap: _handlePhotoButtonPressed,
-            child: Icon(
-              Icons.add_a_photo,
-              size: 24.0,
-              color: kTextBaseColor.withOpacity(.35),
-            ),
-          ),
-        ),
-      );
-    }
-
     final List<Widget> imagesList = List<Widget>.generate(
       fireImages.length,
       (int index) {
@@ -335,7 +314,10 @@ class _JobsCreatePageState extends State<JobsCreatePage>
         final image = fireImage.image;
 
         if (image == null) {
-          return Center(widthFactor: 2.5, child: const MkLoadingSpinner());
+          return const Center(
+            widthFactor: 2.5,
+            child: const MkLoadingSpinner(),
+          );
         }
 
         return GalleryGridItem(
@@ -358,12 +340,16 @@ class _JobsCreatePageState extends State<JobsCreatePage>
       child: ListView(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         scrollDirection: Axis.horizontal,
-        children: [newGrid()]..addAll(imagesList.reversed.toList()),
+        children: [
+          _NewGrid(
+            onPressed: _handlePhotoButtonPressed,
+          )
+        ]..addAll(imagesList.reversed.toList()),
       ),
     );
   }
 
-  Future<Null> _handlePhotoButtonPressed() async {
+  void _handlePhotoButtonPressed() async {
     final source = await mkImageChoiceDialog(context: context);
     if (source == null) {
       return;
@@ -403,7 +389,7 @@ class _JobsCreatePageState extends State<JobsCreatePage>
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: InputDropdown(
         valueText: DateFormat.yMMMd().format(job.dueAt),
-        valueStyle: TextStyle(fontSize: 18.0, color: Colors.black),
+        valueStyle: MkTheme.of(context).title.copyWith(color: Colors.black),
         onPressed: () async {
           final DateTime picked = await showDatePicker(
             context: context,
@@ -428,11 +414,10 @@ class _JobsCreatePageState extends State<JobsCreatePage>
         textInputAction: TextInputAction.next,
         keyboardType: TextInputType.text,
         textCapitalization: TextCapitalization.words,
-        style: TextStyle(fontSize: 18.0, color: Colors.black),
-        decoration: InputDecoration(
+        style: MkTheme.of(context).title.copyWith(color: Colors.black),
+        decoration: const InputDecoration(
           isDense: true,
           hintText: "Enter Style Name",
-          hintStyle: TextStyle(fontSize: 14.0),
         ),
         validator: (value) => (value.isNotEmpty) ? null : "Please input a name",
         onSaved: (value) => job.name = value.trim(),
@@ -450,17 +435,45 @@ class _JobsCreatePageState extends State<JobsCreatePage>
         controller: controller,
         textInputAction: TextInputAction.next,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        style: TextStyle(fontSize: 18.0, color: Colors.black),
-        decoration: InputDecoration(
+        style: MkTheme.of(context).title.copyWith(color: Colors.black),
+        decoration: const InputDecoration(
           isDense: true,
           hintText: "Enter Amount",
-          hintStyle: TextStyle(fontSize: 14.0),
         ),
         validator: (value) =>
             (controller.numberValue > 0) ? null : "Please input a price",
         onSaved: (value) => job.price = controller.numberValue,
         onEditingComplete: () =>
             FocusScope.of(context).requestFocus(_additionFocusNode),
+      ),
+    );
+  }
+}
+
+class _NewGrid extends StatelessWidget {
+  const _NewGrid({
+    Key key,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: _kGridWidth,
+      margin: const EdgeInsets.only(right: 8.0),
+      child: Material(
+        borderRadius: BorderRadius.circular(5.0),
+        color: Colors.grey[100],
+        child: InkWell(
+          onTap: onPressed,
+          child: Icon(
+            Icons.add_a_photo,
+            size: 24.0,
+            color: kTextBaseColor.withOpacity(.35),
+          ),
+        ),
       ),
     );
   }

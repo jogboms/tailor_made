@@ -3,6 +3,7 @@ import 'dart:async' show Future;
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/utils/mk_child_dialog.dart';
+import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 
 Future<String> showEditDialog({
   @required BuildContext context,
@@ -39,7 +40,7 @@ class MeasureEditDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: FractionalOffset(0.0, 0.25),
+      alignment: const FractionalOffset(0.0, 0.25),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32.0),
         child: Material(
@@ -47,37 +48,33 @@ class MeasureEditDialog extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               Center(
+                // TODO
                 child: Text(title, style: mkFontLight(12.0)),
               ),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 16.0,
                   horizontal: 16.0,
                 ),
-                child: Theme(
-                  data: ThemeData(
-                    hintColor: kHintColor,
-                    primaryColor: kPrimaryColor,
-                  ),
-                  child: Column(
-                    children: children,
-                  ),
+                child: Column(
+                  children: children,
                 ),
               ),
-              SizedBox(height: 4.0),
+              const SizedBox(height: 4.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  FlatButton(
+                  MkClearButton(
                     onPressed: onCancel,
-                    child: Text("CANCEL", style: TextStyle(color: Colors.grey)),
+                    color: Colors.grey,
+                    child: const Text("CANCEL"),
                   ),
-                  FlatButton(
+                  MkClearButton(
                     onPressed: onDone,
-                    child: Text("DONE"),
+                    child: const Text("DONE"),
                   ),
                 ],
               ),

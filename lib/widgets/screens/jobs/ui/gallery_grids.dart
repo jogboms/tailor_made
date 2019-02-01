@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +8,8 @@ import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/services/cloud_storage.dart';
 import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/screens/gallery/gallery.dart';
 import 'package:tailor_made/widgets/screens/jobs/ui/gallery_grid_item.dart';
@@ -35,19 +35,20 @@ class GalleryGrids extends StatefulWidget {
   final JobModel job;
 
   @override
-  GalleryGridsState createState() {
-    return GalleryGridsState();
-  }
+  _GalleryGridsState createState() => _GalleryGridsState();
 }
 
-class GalleryGridsState extends State<GalleryGrids> {
+class _GalleryGridsState extends State<GalleryGrids> {
   List<FireImage> fireImages = [];
 
   @override
   void initState() {
     super.initState();
-    fireImages =
-        widget.job.images.map((img) => FireImage()..image = img).toList();
+    fireImages = widget.job.images
+        .map(
+          (img) => FireImage()..image = img,
+        )
+        .toList();
   }
 
   @override
@@ -59,7 +60,10 @@ class GalleryGridsState extends State<GalleryGrids> {
         final image = fireImage.image;
 
         if (image == null) {
-          return Center(widthFactor: 2.5, child: const MkLoadingSpinner());
+          return const Center(
+            widthFactor: 2.5,
+            child: const MkLoadingSpinner(),
+          );
         }
 
         return GalleryGridItem(
@@ -88,17 +92,25 @@ class GalleryGridsState extends State<GalleryGrids> {
             Expanded(
               child: Text(
                 "GALLERY",
-                style: mkFontRegular(12.0, Colors.black87),
+                style: MkTheme.of(context).small.copyWith(
+                      color: Colors.black87,
+                    ),
               ),
             ),
-            CupertinoButton(
+            MkClearButton(
               child: Text(
                 "SHOW ALL",
-                style: mkFontRegular(11.0, Colors.black),
+                style: MkTheme.of(context).xsmall.copyWith(
+                      color: Colors.black,
+                    ),
               ),
-              onPressed: () => MkNavigate(
-                  context, GalleryPage(images: widget.job.images),
-                  fullscreenDialog: true),
+              onPressed: () {
+                MkNavigate(
+                  context,
+                  GalleryPage(images: widget.job.images),
+                  fullscreenDialog: true,
+                );
+              },
             ),
           ],
         ),
@@ -108,34 +120,19 @@ class GalleryGridsState extends State<GalleryGrids> {
           child: ListView(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             scrollDirection: Axis.horizontal,
-            children: [newGrid(widget.gridSize)]
-              ..addAll(imagesList.reversed.toList()),
+            children: [
+              _NewGrid(
+                gridSize: widget.gridSize,
+                onPressed: _handlePhotoButtonPressed,
+              )
+            ]..addAll(imagesList.reversed.toList()),
           ),
         ),
       ],
     );
   }
 
-  Widget newGrid(Size gridSize) {
-    return Container(
-      width: gridSize.width,
-      margin: EdgeInsets.only(right: 8.0),
-      child: Material(
-        borderRadius: BorderRadius.circular(5.0),
-        color: Colors.grey[100],
-        child: InkWell(
-          onTap: _handlePhotoButtonPressed,
-          child: Icon(
-            Icons.add_a_photo,
-            size: 24.0,
-            color: kTextBaseColor.withOpacity(.35),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Future<Null> _handlePhotoButtonPressed() async {
+  void _handlePhotoButtonPressed() async {
     final source = await mkImageChoiceDialog(context: context);
     if (source == null) {
       return;
@@ -181,5 +178,36 @@ class GalleryGridsState extends State<GalleryGrids> {
         fireImages.last.isLoading = false;
       });
     }
+  }
+}
+
+class _NewGrid extends StatelessWidget {
+  const _NewGrid({
+    Key key,
+    @required this.gridSize,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  final Size gridSize;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: gridSize.width,
+      margin: const EdgeInsets.only(right: 8.0),
+      child: Material(
+        borderRadius: BorderRadius.circular(5.0),
+        color: Colors.grey[100],
+        child: InkWell(
+          onTap: onPressed,
+          child: Icon(
+            Icons.add_a_photo,
+            size: 24.0,
+            color: kTextBaseColor.withOpacity(.35),
+          ),
+        ),
+      ),
+    );
   }
 }

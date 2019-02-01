@@ -23,28 +23,35 @@ class JobListItem extends StatelessWidget {
 
     return Material(
       child: InkWell(
-        onTap: () => MkNavigate(context, JobPage(job: job)),
+        onTap: () {
+          MkNavigate(context, JobPage(job: job));
+        },
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
                 decoration: BoxDecoration(
                   color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                  borderRadius: const BorderRadius.all(
+                    const Radius.circular(4.0),
+                  ),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 12.0),
                 child: Text.rich(
                   TextSpan(
                     children: [
                       TextSpan(
                         text: "${_date.day}\n",
+                        // TODO
                         style: mkFontLight(20.0, Colors.black54),
                       ),
                       TextSpan(
                         text: MkStrings.monthsShort[_date.month - 1]
                             .toUpperCase(),
+                        // TODO
                         style: mkFontLight(10.0, Colors.black).copyWith(
                           letterSpacing: 2.0,
                         ),
@@ -54,7 +61,7 @@ class JobListItem extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(width: 16.0),
+              const SizedBox(width: 16.0),
               Expanded(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -68,7 +75,7 @@ class JobListItem extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    SizedBox(height: 2.0),
+                    const SizedBox(height: 2.0),
                     Text(
                       _price,
                       style: TextStyle(
@@ -76,7 +83,7 @@ class JobListItem extends StatelessWidget {
                         color: kTextBaseColor,
                       ),
                     ),
-                    SizedBox(height: 2.0),
+                    const SizedBox(height: 2.0),
                     job.pendingPayment > 0
                         ? Row(
                             mainAxisSize: MainAxisSize.min,
@@ -105,8 +112,8 @@ class JobListItem extends StatelessWidget {
                             ],
                           )
                         : Container(
-                            padding: EdgeInsets.all(2.0),
-                            child: Icon(
+                            padding: const EdgeInsets.all(2.0),
+                            child: const Icon(
                               Icons.attach_money,
                               size: 12.0,
                               color: Colors.white,

@@ -1,7 +1,6 @@
-import 'dart:math' show max;
-
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/job.dart';
+import 'package:tailor_made/utils/mk_sliver_separator_builder_delegate.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 import 'package:tailor_made/widgets/screens/jobs/job_list_item.dart';
 
@@ -22,16 +21,16 @@ class JobList extends StatelessWidget {
     }
 
     return SliverPadding(
-      padding: EdgeInsets.only(bottom: 96.0),
+      padding: const EdgeInsets.only(bottom: 96.0),
       sliver: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            final int itemIndex = index ~/ 2;
-            return (index == 0 || index.isEven)
-                ? JobListItem(job: jobs[itemIndex])
-                : const Divider();
+        delegate: MkSliverSeparatorBuilderDelegate(
+          childCount: jobs.length,
+          builder: (BuildContext context, int index) {
+            return JobListItem(job: jobs[index]);
           },
-          childCount: max(0, jobs.length * 2 - 1),
+          separatorBuilder: (BuildContext context, int index) {
+            return const Divider();
+          },
         ),
       ),
     );

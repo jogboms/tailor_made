@@ -22,7 +22,7 @@ class TaskListItem extends StatelessWidget {
       dense: true,
       leading: CircleAvatar(
         backgroundColor: Colors.transparent,
-        child: Icon(
+        child: const Icon(
           Icons.event,
           color: kHintColor,
         ),
@@ -37,17 +37,18 @@ class TaskListItem extends StatelessWidget {
         children: <Widget>[
           Text(
             task.name,
+            // TODO
             style: mkFontBold(16.0, kTextBaseColor),
           ),
-          SizedBox(height: 2.0),
+          const SizedBox(height: 2.0),
           Row(
             children: <Widget>[
-              Icon(
+              const Icon(
                 Icons.arrow_downward,
                 color: Colors.green,
                 size: 11.0,
               ),
-              SizedBox(width: 2.0),
+              const SizedBox(width: 2.0),
               Text(
                 MkDates(
                   task.dueAt,
@@ -62,16 +63,18 @@ class TaskListItem extends StatelessWidget {
       ),
       subtitle: Row(
         children: <Widget>[
-          Icon(
+          const Icon(
             Icons.arrow_downward,
             color: Colors.red,
             size: 11.0,
           ),
-          SizedBox(width: 2.0),
+          const SizedBox(width: 2.0),
           Text(timeAgo(task.dueAt, until: true)),
         ],
       ),
-      onTap: () => MkNavigate(context, JobPage(job: task)),
+      onTap: () {
+        MkNavigate(context, JobPage(job: task));
+      },
     );
   }
 

@@ -24,7 +24,7 @@ class MkProfileAvatar extends StatefulWidget {
   final double radius;
   final String imageUrl;
   final bool simple;
-  final void Function(File file) onPickImage;
+  final ValueSetter<File> onPickImage;
 
   @override
   MkProfileAvatarState createState() => MkProfileAvatarState(imageUrl);

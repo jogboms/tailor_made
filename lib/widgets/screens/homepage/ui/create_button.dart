@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 import 'package:tailor_made/widgets/screens/contacts/contacts_create.dart';
 import 'package:tailor_made/widgets/screens/homepage/ui/helpers.dart';
@@ -23,10 +23,10 @@ class CreateButton extends StatefulWidget {
   final double height;
 
   @override
-  CreateButtonState createState() => CreateButtonState();
+  _CreateButtonState createState() => _CreateButtonState();
 }
 
-class CreateButtonState extends State<CreateButton>
+class _CreateButtonState extends State<CreateButton>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
 
@@ -56,18 +56,19 @@ class CreateButtonState extends State<CreateButton>
     return Align(
       alignment: Alignment.bottomCenter,
       child: SafeArea(
-        child: SizedBox(
-          height: widget.height,
+        child: SizedBox.fromSize(
+          size: Size.fromHeight(widget.height),
           child: MkPrimaryButton(
-            onPressed: _onTapCreate(context, widget.contacts),
+            onPressed: _onTapCreate(widget.contacts),
             shape: const RoundedRectangleBorder(),
             child: ScaleTransition(
               scale: Tween(begin: 0.95, end: 1.025).animate(controller),
               alignment: FractionalOffset.center,
               child: Text(
                 "TAP TO CREATE",
-                style: mkFontBold(14.0, Colors.white)
-                    .copyWith(letterSpacing: 1.25),
+                style: MkTheme.of(context)
+                    .body3Medium
+                    .copyWith(color: Colors.white, letterSpacing: 1.25),
               ),
             ),
           ),
@@ -76,15 +77,16 @@ class CreateButtonState extends State<CreateButton>
     );
   }
 
-  void Function() _onTapCreate(
-      BuildContext context, List<ContactModel> contacts) {
+  VoidCallback _onTapCreate(List<ContactModel> contacts) {
     return () async {
       final CreateOptions result = await showDialog<CreateOptions>(
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: const Text('Select action',
-                style: const TextStyle(fontSize: 14.0)),
+            title: Text(
+              'Select action',
+              style: MkTheme.of(context).body3,
+            ),
             children: <Widget>[
               SimpleDialogOption(
                 onPressed: () => Navigator.pop(context, CreateOptions.contacts),

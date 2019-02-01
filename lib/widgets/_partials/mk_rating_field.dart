@@ -14,7 +14,7 @@ class MkRatingField extends StatelessWidget {
     this.validator,
   }) : super(key: key);
 
-  final void Function(int) onSaved;
+  final ValueSetter<int> onSaved;
   final int initialValue;
   final bool autovalidate;
   final double iconSize;

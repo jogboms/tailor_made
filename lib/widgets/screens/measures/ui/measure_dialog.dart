@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/utils/mk_validators.dart';
+import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 
 class MeasureDialog extends StatefulWidget {
   const MeasureDialog({
@@ -13,10 +14,10 @@ class MeasureDialog extends StatefulWidget {
   final MeasureModel measure;
 
   @override
-  MeasureDialogState createState() => MeasureDialogState();
+  _MeasureDialogState createState() => _MeasureDialogState();
 }
 
-class MeasureDialogState extends State<MeasureDialog> {
+class _MeasureDialogState extends State<MeasureDialog> {
   final FocusNode _unitNode = FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
@@ -42,74 +43,70 @@ class MeasureDialogState extends State<MeasureDialog> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(5.0),
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Theme(
-            data: ThemeData(
-              hintColor: kHintColor,
-              primaryColor: kPrimaryColor,
-            ),
-            child: Form(
-              key: _formKey,
-              autovalidate: _autovalidate,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const SizedBox(height: 32.0),
-                  Center(
-                    child: CircleAvatar(
-                      backgroundColor: kPrimaryColor,
-                      foregroundColor: Colors.white,
-                      child: Icon(
-                        Icons.content_cut,
-                        size: 50.0,
-                      ),
-                      radius: 36.0,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Form(
+            key: _formKey,
+            autovalidate: _autovalidate,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const SizedBox(height: 32.0),
+                Center(
+                  child: CircleAvatar(
+                    backgroundColor: kPrimaryColor,
+                    foregroundColor: Colors.white,
+                    child: const Icon(
+                      Icons.content_cut,
+                      size: 50.0,
                     ),
+                    radius: 36.0,
                   ),
-                  const SizedBox(height: 16.0),
-                  TextFormField(
-                    textCapitalization: TextCapitalization.words,
-                    textInputAction: TextInputAction.next,
-                    onEditingComplete: () =>
-                        FocusScope.of(context).requestFocus(_unitNode),
-                    onSaved: (value) => widget.measure.name = value.trim(),
-                    decoration: InputDecoration(
-                      labelText: "Name (eg. Length)",
+                ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  textCapitalization: TextCapitalization.words,
+                  textInputAction: TextInputAction.next,
+                  onEditingComplete: () =>
+                      FocusScope.of(context).requestFocus(_unitNode),
+                  onSaved: (value) => widget.measure.name = value.trim(),
+                  decoration: const InputDecoration(
+                    labelText: "Name (eg. Length)",
+                  ),
+                  // TODO
+                  style: TextStyle(fontSize: 14.0, color: Colors.black),
+                  validator: MkValidate.tryAlpha(),
+                ),
+                const SizedBox(height: 4.0),
+                TextFormField(
+                  initialValue: widget.measure.unit,
+                  focusNode: _unitNode,
+                  textInputAction: TextInputAction.done,
+                  decoration: const InputDecoration(
+                    labelText: "Unit (eg. In, cm)",
+                  ),
+                  // TODO
+                  style: TextStyle(fontSize: 14.0, color: Colors.black),
+                  validator: MkValidate.tryAlpha(),
+                  onFieldSubmitted: (value) => _onSaved(),
+                  onSaved: (value) => widget.measure.unit = value.trim(),
+                ),
+                const SizedBox(height: 16.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    MkClearButton(
+                      onPressed: () => Navigator.pop(context),
+                      color: Colors.grey,
+                      child: const Text("CANCEL"),
                     ),
-                    style: TextStyle(fontSize: 14.0, color: Colors.black),
-                    validator: MkValidate.tryAlpha(),
-                  ),
-                  SizedBox(height: 4.0),
-                  TextFormField(
-                    initialValue: widget.measure.unit,
-                    focusNode: _unitNode,
-                    textInputAction: TextInputAction.done,
-                    decoration: InputDecoration(
-                      labelText: "Unit (eg. In, cm)",
+                    MkClearButton(
+                      onPressed: _onSaved,
+                      child: const Text("DONE"),
                     ),
-                    style: TextStyle(fontSize: 14.0, color: Colors.black),
-                    validator: MkValidate.tryAlpha(),
-                    onFieldSubmitted: (value) => _onSaved(),
-                    onSaved: (value) => widget.measure.unit = value.trim(),
-                  ),
-                  const SizedBox(height: 16.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      FlatButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text("CANCEL",
-                            style: TextStyle(color: Colors.grey)),
-                      ),
-                      FlatButton(
-                        onPressed: _onSaved,
-                        child: Text("DONE"),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8.0),
-                ],
-              ),
+                  ],
+                ),
+                const SizedBox(height: 8.0),
+              ],
             ),
           ),
         ),

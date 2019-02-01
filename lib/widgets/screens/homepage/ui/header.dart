@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/utils/mk_dates.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
 
 class HeaderWidget extends StatelessWidget {
   const HeaderWidget({
@@ -14,11 +15,11 @@ class HeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(20.0, 35.0, 20.0, 40.0),
+      padding: const EdgeInsets.fromLTRB(20.0, 35.0, 20.0, 40.0),
       width: double.infinity,
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: MkBorderSide(),
+      decoration: const BoxDecoration(
+        border: const Border(
+          bottom: const MkBorderSide(),
         ),
       ),
       child: Column(
@@ -27,19 +28,15 @@ class HeaderWidget extends StatelessWidget {
         children: <Widget>[
           Text(
             "Hello",
-            style: TextStyle(
-              color: kTextBaseColor,
-              fontSize: 32.0,
-              fontWeight: FontWeight.w200,
-              letterSpacing: 2.5,
-            ),
+            style: MkTheme.of(context).display4Light.copyWith(
+                  letterSpacing: 2.5,
+                ),
           ),
           Text(
             account.storeName.split(" ").first,
             style: TextStyle(
-              color: kTextBaseColor,
               fontSize: 52.0,
-              fontWeight: FontWeight.w300,
+              fontWeight: MkStyle.light,
               height: 1.15,
             ),
             maxLines: 1,
@@ -48,11 +45,7 @@ class HeaderWidget extends StatelessWidget {
           ),
           Text(
             MkDates(DateTime.now(), day: "EEEE", month: "MMMM").format,
-            style: TextStyle(
-              fontSize: 14.0,
-              fontWeight: FontWeight.w300,
-              height: 1.75,
-            ),
+            style: MkTheme.of(context).body3Light.copyWith(height: 1.75),
           ),
         ],
       ),

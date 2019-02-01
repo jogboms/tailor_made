@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/utils/mk_theme.dart';
 
 class AccessDeniedPage extends StatelessWidget {
   const AccessDeniedPage({
@@ -12,7 +13,7 @@ class AccessDeniedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme.subhead;
+    final textTheme = MkTheme.of(context).subhead1;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -26,7 +27,7 @@ class AccessDeniedPage extends StatelessWidget {
             "ACCESS DENIED",
             style: textTheme.copyWith(
               color: Colors.black87,
-              fontWeight: FontWeight.w700,
+              fontWeight: MkStyle.bold,
             ),
             textAlign: TextAlign.center,
           ),

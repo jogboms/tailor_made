@@ -47,70 +47,68 @@ class JobMeasureBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final length = measures.length;
-    return Theme(
-      data: ThemeData(primaryColor: kPrimaryColor),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: MkBorderSide(),
-          ),
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        border: const Border(
+          bottom: const MkBorderSide(),
         ),
-        child: Wrap(
-          alignment: WrapAlignment.spaceBetween,
-          children: measures.map((MeasureModel measure) {
-            final index = measures.indexOf(measure);
+      ),
+      child: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        children: measures.map((MeasureModel measure) {
+          final index = measures.indexOf(measure);
 
-            final _value = measurements.containsKey(measure.id)
-                ? measurements[measure.id]
-                : 0;
-            final value = _value != null && _value > 0 ? _value.toString() : "";
-            final _controller = TextEditingController(text: value);
+          final _value = measurements.containsKey(measure.id)
+              ? measurements[measure.id]
+              : 0;
+          final value = _value != null && _value > 0 ? _value.toString() : "";
+          final _controller = TextEditingController(text: value);
 
-            return LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                final removeBorder =
-                    (length % 2 != 0 && (index == length - 1)) ||
-                        (length % 2 == 0 &&
-                            (index == length - 1 || index == length - 2));
-                return Container(
-                  padding: EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: MkBorderSide(
-                        style:
-                            removeBorder ? BorderStyle.none : BorderStyle.solid,
-                      ),
-                      right: MkBorderSide(
-                        style: index % 2 == 0
-                            ? BorderStyle.solid
-                            : BorderStyle.none,
-                      ),
+          return LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              final removeBorder = (length % 2 != 0 && (index == length - 1)) ||
+                  (length % 2 == 0 &&
+                      (index == length - 1 || index == length - 2));
+              return Container(
+                padding: const EdgeInsets.only(
+                  top: 8.0,
+                  bottom: 8.0,
+                  left: 16.0,
+                ),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: MkBorderSide(
+                      style:
+                          removeBorder ? BorderStyle.none : BorderStyle.solid,
+                    ),
+                    right: MkBorderSide(
+                      style:
+                          index % 2 == 0 ? BorderStyle.solid : BorderStyle.none,
                     ),
                   ),
-                  width: constraints.maxWidth / 2,
-                  child: TextFormField(
-                    // initialValue: value,
-                    controller: _controller,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
-                    style: TextStyle(fontSize: 20.0, color: Colors.black),
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.zero,
-                      labelText: measure.name,
-                      border: InputBorder.none,
-                      labelStyle: TextStyle(fontSize: 14.0),
-                    ),
-                    onFieldSubmitted: (value) =>
-                        measurements[measure.id] = double.tryParse(value),
-                    onSaved: (value) =>
-                        measurements[measure.id] = double.tryParse(value),
+                ),
+                width: constraints.maxWidth / 2,
+                child: TextFormField(
+                  // initialValue: value,
+                  controller: _controller,
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  style: TextStyle(fontSize: 20.0, color: Colors.black),
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.zero,
+                    labelText: measure.name,
+                    border: InputBorder.none,
                   ),
-                );
-              },
-            );
-          }).toList(),
-        ),
+                  onFieldSubmitted: (value) =>
+                      measurements[measure.id] = double.tryParse(value),
+                  onSaved: (value) =>
+                      measurements[measure.id] = double.tryParse(value),
+                ),
+              );
+            },
+          );
+        }).toList(),
       ),
     );
   }

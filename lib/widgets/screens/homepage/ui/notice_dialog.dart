@@ -28,7 +28,7 @@ class NoticeDialog extends StatelessWidget {
               CircleAvatar(
                 backgroundColor: kAccentColor,
                 foregroundColor: Colors.white,
-                child: Icon(
+                child: const Icon(
                   Icons.notifications_none,
                   size: 36.0,
                 ),

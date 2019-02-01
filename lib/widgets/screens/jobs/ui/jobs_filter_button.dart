@@ -12,13 +12,17 @@ class JobsFilterButton extends StatelessWidget {
   }) : super(key: key);
 
   final JobsViewModel vm;
-  final void Function(SortType) onTapSort;
+  final ValueSetter<SortType> onTapSort;
 
   @override
   Widget build(BuildContext context) {
     final MkTheme theme = MkTheme.of(context);
+    final _optionTheme = theme.body3;
+    final _colorTestFn = (SortType type) {
+      return vm.sortFn == type ? kAccentColor : Colors.black87;
+    };
     return SizedBox.fromSize(
-      size: Size.square(48.0),
+      size: const Size.square(48.0),
       child: Stack(
         children: <Widget>[
           Positioned.fill(
@@ -28,40 +32,70 @@ class JobsFilterButton extends StatelessWidget {
                 color: theme.appBarTitle.color,
               ),
               onSelected: onTapSort,
-              itemBuilder: (BuildContext context) => [
-                    buildTextOption(
-                      "Sort by Active",
-                      SortType.active,
+              itemBuilder: (BuildContext context) {
+                return [
+                  _Option(
+                    text: "Sort by Active",
+                    type: SortType.active,
+                    enabled: vm.sortFn != SortType.active,
+                    style: _optionTheme.copyWith(
+                      color: _colorTestFn(SortType.active),
                     ),
-                    buildTextOption(
-                      "Sort by Name",
-                      SortType.name,
+                  ),
+                  _Option(
+                    text: "Sort by Name",
+                    type: SortType.name,
+                    enabled: vm.sortFn != SortType.name,
+                    style: _optionTheme.copyWith(
+                      color: _colorTestFn(SortType.name),
                     ),
-                    buildTextOption(
-                      "Sort by Owed",
-                      SortType.owed,
+                  ),
+                  _Option(
+                    text: "Sort by Owed",
+                    type: SortType.owed,
+                    enabled: vm.sortFn != SortType.owed,
+                    style: _optionTheme.copyWith(
+                      color: _colorTestFn(SortType.owed),
                     ),
-                    buildTextOption(
-                      "Sort by Payments",
-                      SortType.payments,
+                  ),
+                  _Option(
+                    text: "Sort by Payments",
+                    type: SortType.payments,
+                    enabled: vm.sortFn != SortType.payments,
+                    style: _optionTheme.copyWith(
+                      color: _colorTestFn(SortType.payments),
                     ),
-                    buildTextOption(
-                      "Sort by Price",
-                      SortType.price,
+                  ),
+                  _Option(
+                    text: "Sort by Price",
+                    type: SortType.price,
+                    enabled: vm.sortFn != SortType.price,
+                    style: _optionTheme.copyWith(
+                      color: _colorTestFn(SortType.price),
                     ),
-                    buildTextOption(
-                      "Sort by Recent",
-                      SortType.recent,
+                  ),
+                  _Option(
+                    text: "Sort by Recent",
+                    type: SortType.recent,
+                    enabled: vm.sortFn != SortType.recent,
+                    style: _optionTheme.copyWith(
+                      color: _colorTestFn(SortType.recent),
                     ),
-                    buildTextOption(
-                      "No Sort",
-                      SortType.reset,
+                  ),
+                  _Option(
+                    text: "No Sort",
+                    type: SortType.reset,
+                    enabled: vm.sortFn != SortType.reset,
+                    style: _optionTheme.copyWith(
+                      color: _colorTestFn(SortType.reset),
                     ),
-                  ],
+                  ),
+                ];
+              },
             ),
           ),
           Align(
-            alignment: Alignment(0.75, -0.5),
+            alignment: const Alignment(0.75, -0.5),
             child: vm.hasSortFn
                 ? Container(
                     width: 15.5,
@@ -82,18 +116,23 @@ class JobsFilterButton extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget buildTextOption(String text, SortType type) {
-    return PopupMenuItem<SortType>(
-      value: type,
-      enabled: vm.sortFn != type,
-      child: Text(
-        text,
-        style: mkFontRegular(
-          14.0,
-          vm.sortFn == type ? kAccentColor : Colors.black87,
-        ),
-      ),
-    );
-  }
+class _Option extends PopupMenuItem<SortType> {
+  _Option({
+    Key key,
+    @required bool enabled,
+    @required this.text,
+    @required this.type,
+    @required this.style,
+  }) : super(
+          key: key,
+          enabled: enabled,
+          value: type,
+          child: Text(text, style: style),
+        );
+
+  final String text;
+  final SortType type;
+  final TextStyle style;
 }

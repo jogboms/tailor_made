@@ -13,13 +13,35 @@ import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/screens/splash/splash.dart';
 
+class BootstrapModel {
+  const BootstrapModel({
+    @required this.isFirstTime,
+  });
+
+  final bool isFirstTime;
+}
+
 class App extends StatefulWidget {
   App({
     @required Environment env,
+    @required this.isFirstTime,
   }) {
     Settings.environment = env;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  }
+
+  final bool isFirstTime;
+
+  static Future<BootstrapModel> bootstrap() async {
+    final isFirstTime = await Settings.checkIsFirstTimeLogin();
+    try {
+      await Settings.initVersion();
+    } catch (e) {
+      //
+    }
+
+    return BootstrapModel(isFirstTime: isFirstTime);
   }
 
   @override

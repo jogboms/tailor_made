@@ -18,7 +18,7 @@ class EmptyResultView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Icon(
+          const Icon(
             Icons.equalizer,
             color: kPrimaryColor,
             size: 36.0,

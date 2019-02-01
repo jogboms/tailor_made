@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' show DateFormat;
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_fake_text_field.dart';
-import 'package:intl/intl.dart' show DateFormat;
 
 class MkDatePicker extends StatefulWidget {
   const MkDatePicker({
@@ -16,8 +16,8 @@ class MkDatePicker extends StatefulWidget {
 
   final String hint;
   final DateTime initialValue;
-  final void Function(DateTime) onChanged;
-  final void Function(DateTime) onSaved;
+  final ValueSetter<DateTime> onChanged;
+  final ValueSetter<DateTime> onSaved;
   final FormFieldValidator<DateTime> validator;
   final bool autovalidate;
 

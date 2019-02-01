@@ -22,11 +22,16 @@ class PaymentListItem extends StatelessWidget {
 
     return Material(
       child: InkResponse(
-        onTap: () => MkNavigate(context, PaymentPage(payment: payment),
-            fullscreenDialog: true),
+        onTap: () {
+          MkNavigate(
+            context,
+            PaymentPage(payment: payment),
+            fullscreenDialog: true,
+          );
+        },
         radius: 300.0,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
           child: Stack(
             children: [
               Align(
@@ -36,12 +41,14 @@ class PaymentListItem extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: _date.day.toString(),
+                        // TODO
                         style: mkFontMedium(16.0, kAccentColor),
                       ),
-                      TextSpan(text: "\n"),
+                      const TextSpan(text: "\n"),
                       TextSpan(
                         text:
                             "${MkStrings.monthsShort[_date.month - 1].toUpperCase()}, ${_date.year}",
+                        // TODO
                         style: mkFontMedium(10.0, textColor),
                       ),
                     ],
@@ -57,14 +64,15 @@ class PaymentListItem extends StatelessWidget {
                       Container(
                         width: 4.0,
                         height: 4.0,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: kAccentColor,
                           shape: BoxShape.circle,
                         ),
                       ),
-                      SizedBox(width: 8.0),
+                      const SizedBox(width: 8.0),
                       Text(
                         _price,
+                        // TODO
                         style: mkFontMedium(18.0, Colors.black87).copyWith(
                           letterSpacing: 1.5,
                         ),

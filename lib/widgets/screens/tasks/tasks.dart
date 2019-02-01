@@ -8,6 +8,8 @@ import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 import 'package:tailor_made/widgets/screens/tasks/task_list_item.dart';
 
 class TasksPage extends StatelessWidget {
+  const TasksPage({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,12 +1,14 @@
-import 'dart:math' show max;
-
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/payment.dart';
+import 'package:tailor_made/utils/mk_sliver_separator_builder_delegate.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 import 'package:tailor_made/widgets/screens/payments/payment_list_item.dart';
 
 class PaymentList extends StatelessWidget {
-  const PaymentList({this.payments});
+  const PaymentList({
+    Key key,
+    @required this.payments,
+  }) : super(key: key);
 
   final List<PaymentModel> payments;
 
@@ -19,14 +21,14 @@ class PaymentList extends StatelessWidget {
     }
 
     return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          final int itemIndex = index ~/ 2;
-          return (index == 0 || index.isEven)
-              ? PaymentListItem(payment: payments[itemIndex])
-              : const Divider();
+      delegate: MkSliverSeparatorBuilderDelegate(
+        childCount: payments.length,
+        builder: (BuildContext context, int index) {
+          return PaymentListItem(payment: payments[index]);
         },
-        childCount: max(0, payments.length * 2 - 1),
+        separatorBuilder: (BuildContext context, int index) {
+          return const Divider();
+        },
       ),
     );
   }
