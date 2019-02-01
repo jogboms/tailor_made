@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tailor_made/models/main.dart';
-import 'package:tailor_made/utils/tm_uuid.dart';
+import 'package:tailor_made/utils/mk_uuid.dart';
 
 List<MeasureModel> createDefaultMeasures() {
   return [
@@ -38,14 +38,6 @@ class MeasureModelType {
 }
 
 class MeasureModel extends Model {
-  String id;
-  String name;
-  // TODO only for UI purposes
-  double value;
-  String unit;
-  String group;
-  DateTime createdAt;
-
   MeasureModel({
     String id,
     @required this.name,
@@ -58,7 +50,7 @@ class MeasureModel extends Model {
 
   factory MeasureModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
-    return new MeasureModel(
+    return MeasureModel(
       id: json['id'],
       name: json['name'],
       unit: json['unit'],
@@ -70,6 +62,14 @@ class MeasureModel extends Model {
   factory MeasureModel.fromDoc(DocumentSnapshot doc) {
     return MeasureModel.fromJson(doc.data)..reference = doc.reference;
   }
+
+  String id;
+  String name;
+  // TODO only for UI purposes
+  double value;
+  String unit;
+  String group;
+  DateTime createdAt;
 
   @override
   Map<String, dynamic> toMap() {

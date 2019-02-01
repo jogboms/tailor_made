@@ -5,28 +5,29 @@ version: 1.1.0
 dependencies:
   flutter:
     sdk: flutter
-  firebase_analytics: ^1.0.1
-  cloud_firestore: ^0.7.3
-  cloud_functions: ^0.0.1
+  firebase_analytics: 1.2.0+1
+  cloud_functions: 0.0.5
+  cloud_firestore: 0.8.2+3
+  firebase_storage: 1.1.0+1
+  firebase_auth: 0.7.0
   image_picker: ^0.4.5
-  firebase_storage: ^0.3.7
-  firebase_auth: ^0.5.11
   intl: ^0.15.6
   url_launcher: ^3.0.2
-  redux: ^3.0.0
-  flutter_redux: ^0.5.2
-  redux_epics: ^0.10.0
   rxdart: ^0.18.0
-  redux_logging: ^0.3.0
-  flutter_masked_text: ^0.5.0
+  flutter_masked_text: ^0.7.0
   photo_view: ^0.0.2
-  cached_network_image: ^0.4.1
-  flutter_spinkit: ^2.0.0
+  cached_network_image: ^0.5.0
+  flutter_spinkit: ^3.0.0
   google_sign_in: ^3.0.4
   get_version: ^0.0.5
   contact_picker: ^0.0.2
   version: ^1.0.0
   timeago: ^1.2.7
+  flutter_native_image:
+    git:
+      url: https://github.com/btastic/flutter_native_image.git
+  equatable: ^0.1.10
+  rebloc: ^0.2.0
 
 dev_dependencies:
   flutter_test:

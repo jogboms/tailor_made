@@ -1,4 +1,4 @@
-PENDING:
+TASKS:
   ☐ delete-able payment + images + jobs + contacts @goals
   ☐ implement share payment + image @goals
   ☐ Collect account details on account creation @goals
@@ -11,8 +11,11 @@ PENDING:
   ☐ gradual migration to BLoC to reduce boilerplate from Redux @goals
   ☐ copy and paste jobs @goals
   ☐ migrate all firebase actions to within epics @goals
+  ☐ update README with SS @critical
 
-COMPLETED:
+  ✔ add tasks + measures menu options @high @done(18-07-28 19:37)
+  ✔ add due-date to job @high @done(18-07-28 19:37)
+  ✔ add cancel + done action buttons to modals with editable @critical @done(18-07-28 14:41)
   ✔ indicator for premium accounts @goals @done(18-07-27 04:38)
   ✔ add in-app review @quickie @done(18-07-27 03:16)
   ✔ personalize measurements w/ account @critical @done(18-07-25 18:47)

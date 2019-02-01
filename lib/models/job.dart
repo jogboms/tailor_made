@@ -4,24 +4,9 @@ import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/services/auth.dart';
-import 'package:tailor_made/utils/tm_uuid.dart';
+import 'package:tailor_made/utils/mk_uuid.dart';
 
 class JobModel extends Model {
-  String id;
-  String userID;
-  String contactID;
-  String name;
-  double price;
-  double completedPayment;
-  double pendingPayment;
-  String notes;
-  List<ImageModel> images;
-  Map<String, double> measurements;
-  List<PaymentModel> payments;
-  bool isComplete;
-  DateTime createdAt;
-  DateTime dueAt;
-
   JobModel({
     String id,
     String userID,
@@ -62,7 +47,7 @@ class JobModel extends Model {
             images.add(ImageModel.fromJson(image.cast<String, dynamic>())),
       );
     }
-    return new JobModel(
+    return JobModel(
       id: json['id'],
       userID: json['userID'],
       contactID: json['contactID'],
@@ -84,13 +69,28 @@ class JobModel extends Model {
     return JobModel.fromJson(doc.data)..reference = doc.reference;
   }
 
+  String id;
+  String userID;
+  String contactID;
+  String name;
+  double price;
+  double completedPayment;
+  double pendingPayment;
+  String notes;
+  List<ImageModel> images;
+  Map<String, double> measurements;
+  List<PaymentModel> payments;
+  bool isComplete;
+  DateTime createdAt;
+  DateTime dueAt;
+
   // TODO implement others
   JobModel copyWith({
     String contactID,
     Map<String, double> measurements,
     DateTime dueAt,
   }) {
-    return new JobModel(
+    return JobModel(
       id: this.id,
       userID: this.userID,
       contactID: contactID ?? this.contactID,
