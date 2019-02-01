@@ -18,17 +18,17 @@ class MeasuresBloc extends SimpleBloc<AppState> {
       (context) {
         final _action = context.action;
 
-        if (_action is OnInitMeasureEvent) {
+        if (_action is OnInitMeasureAction) {
           Observable.fromFuture(
             _init(_action.payload).catchError(
               (dynamic e) => print(e),
             ),
           ).take(1).listen(
-                (_) => context.dispatcher(InitDataEvents()),
+                (_) => context.dispatcher(InitDataAction()),
               );
         }
 
-        if (_action is InitDataEvents) {
+        if (_action is InitDataAction) {
           Observable(CloudDb.measurements.snapshots())
               .map((snapshot) {
                 return snapshot.documents
@@ -36,11 +36,11 @@ class MeasuresBloc extends SimpleBloc<AppState> {
                     .toList();
               })
               .takeUntil<dynamic>(
-                input.where((action) => action is DisposeDataEvents),
+                input.where((action) => action is DisposeDataAction),
               )
               .listen((measures) {
                 if (measures.isEmpty) {
-                  return context.dispatcher(OnInitMeasureEvent(
+                  return context.dispatcher(OnInitMeasureAction(
                     payload: createDefaultMeasures(),
                   ));
                 }
@@ -50,7 +50,7 @@ class MeasuresBloc extends SimpleBloc<AppState> {
                   (measure) => measure.group,
                 );
 
-                return context.dispatcher(OnDataMeasureEvent(
+                return context.dispatcher(OnDataMeasureAction(
                   payload: measures,
                   grouped: grouped,
                 ));
@@ -66,7 +66,7 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final _measures = state.measures;
 
-    if (action is OnDataMeasureEvent) {
+    if (action is OnDataMeasureAction) {
       return state.copyWith(
         measures: _measures.copyWith(
           measures: action.payload..sort((a, b) => a.group.compareTo(b.group)),
@@ -76,7 +76,7 @@ class MeasuresBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is ToggleMeasuresLoading || action is OnInitMeasureEvent) {
+    if (action is ToggleMeasuresLoading || action is OnInitMeasureAction) {
       return state.copyWith(
         measures: _measures.copyWith(
           status: MeasuresStatus.loading,

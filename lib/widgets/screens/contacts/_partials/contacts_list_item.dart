@@ -5,6 +5,7 @@ import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/_partials/mk_dots.dart';
 import 'package:tailor_made/widgets/screens/contacts/contact.dart';
 
 class ContactsListItem extends StatelessWidget {
@@ -28,23 +29,28 @@ class ContactsListItem extends StatelessWidget {
     return ListTile(
       dense: true,
       onTap: onTapContact ??
-          () => MkNavigate(context, ContactPage(contact: contact)),
+          () {
+            return MkNavigate(
+              context,
+              ContactPage(contact: contact),
+            );
+          },
       leading: _Avatar(contact: contact),
       title: Text(
         contact.fullname,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: theme.subhead3,
+        style: theme.subhead3Semi,
       ),
       subtitle: Text(
         pending >= 1
             ? "$pending pending"
             : "${contact.totalJobs > 0 ? contact.totalJobs : 'none'} completed",
-        style: theme.body3,
+        style: theme.body3Hint,
       ),
       trailing: showActions
           ? IconButton(
-              icon: const Icon(Icons.call, size: 22.0),
+              icon: const Icon(Icons.call),
               onPressed: () => call(contact.phone),
             )
           : null,
@@ -75,19 +81,7 @@ class _Avatar extends StatelessWidget {
             Align(
               alignment: const Alignment(1.05, -1.05),
               child: contact.pendingJobs > 0
-                  ? Container(
-                      width: 15.5,
-                      height: 15.5,
-                      decoration: BoxDecoration(
-                        color: kAccentColor,
-                        border: Border.all(
-                          color: Colors.white,
-                          style: BorderStyle.solid,
-                          width: 2.5,
-                        ),
-                        shape: BoxShape.circle,
-                      ),
-                    )
+                  ? const MkDots(color: kAccentColor)
                   : null,
             ),
             contact.imageUrl != null

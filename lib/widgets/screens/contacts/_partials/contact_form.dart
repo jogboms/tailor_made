@@ -5,10 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/constants/mk_colors.dart';
+import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/services/cloud_storage.dart';
 import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
+import 'package:tailor_made/utils/mk_snackbar.dart';
 import 'package:tailor_made/utils/mk_validators.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
@@ -19,13 +21,9 @@ class ContactForm extends StatefulWidget {
     Key key,
     @required this.contact,
     @required this.onHandleSubmit,
-    @required this.onHandleValidate,
-    @required this.onHandleUpload,
   }) : super(key: key);
 
   final ValueSetter<ContactModel> onHandleSubmit;
-  final VoidCallback onHandleValidate;
-  final ValueSetter<String> onHandleUpload;
   final ContactModel contact;
 
   @override
@@ -142,7 +140,7 @@ class ContactFormState extends State<ContactForm> {
     }
     if (!form.validate()) {
       _autovalidate = true; // Start validating on every change.
-      widget.onHandleValidate();
+      MkSnackBar.of(context).show(MkStrings.fixErrors);
     } else {
       form.save();
       widget.onHandleSubmit(contact);
@@ -165,7 +163,7 @@ class ContactFormState extends State<ContactForm> {
     try {
       contact.imageUrl = (await ref.getDownloadURL()).downloadUrl?.toString();
       if (mounted) {
-        widget.onHandleUpload("Upload Successful");
+        MkSnackBar.of(context).show("Upload Successful");
         setState(() {
           if (_lastImgRef != null) {
             _lastImgRef.delete();
@@ -176,7 +174,7 @@ class ContactFormState extends State<ContactForm> {
       }
     } catch (e) {
       if (mounted) {
-        widget.onHandleUpload("Please try again");
+        MkSnackBar.of(context).show("Please try again");
         setState(() => isLoading = false);
       }
     }

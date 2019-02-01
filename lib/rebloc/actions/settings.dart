@@ -14,8 +14,8 @@ class OnErrorSettingsEvents extends Action {
   const OnErrorSettingsEvents();
 }
 
-class OnDataSettingEvent extends Action {
-  const OnDataSettingEvent({
+class OnDataSettingAction extends Action {
+  const OnDataSettingAction({
     @required this.payload,
   });
 

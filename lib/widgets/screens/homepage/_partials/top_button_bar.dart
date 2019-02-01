@@ -2,18 +2,24 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
+import 'package:tailor_made/constants/mk_routes.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/rebloc/actions/account.dart';
+import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/rebloc/view_models/home_view_model.dart';
+import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/utils/mk_child_dialog.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
+import 'package:tailor_made/widgets/_partials/mk_dots.dart';
 import 'package:tailor_made/widgets/screens/homepage/_partials/helpers.dart';
 import 'package:tailor_made/widgets/screens/homepage/_views/notice_dialog.dart';
 import 'package:tailor_made/widgets/screens/homepage/_views/review_modal.dart';
 import 'package:tailor_made/widgets/screens/homepage/_views/store_name_dialog.dart';
+import 'package:tailor_made/widgets/screens/splash/splash.dart';
 
 enum AccountOptions {
   logout,
@@ -23,17 +29,16 @@ enum AccountOptions {
 class TopButtonBar extends StatelessWidget {
   const TopButtonBar({
     Key key,
-    @required this.vm,
-    @required this.onLogout,
+    @required this.account,
+    @required this.shouldSendRating,
   }) : super(key: key);
 
-  final HomeViewModel vm;
-  final VoidCallback onLogout;
+  final AccountModel account;
+  final bool shouldSendRating;
 
   @override
   Widget build(BuildContext context) {
     final MkTheme theme = MkTheme.of(context);
-    final account = vm.account;
     return Align(
       alignment: Alignment.topRight,
       child: SafeArea(
@@ -52,7 +57,7 @@ class TopButtonBar extends StatelessWidget {
                 ),
               ),
               child: GestureDetector(
-                onTap: _onTapAccount(context, vm),
+                onTap: _onTapAccount(context),
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
@@ -68,7 +73,7 @@ class TopButtonBar extends StatelessWidget {
                           ),
                     Align(
                       alignment: const Alignment(0.0, 2.25),
-                      child: vm.account.hasPremiumEnabled
+                      child: account.hasPremiumEnabled
                           ? const ImageIcon(
                               MkImages.verified,
                               color: kPrimaryColor,
@@ -78,22 +83,10 @@ class TopButtonBar extends StatelessWidget {
                     Align(
                       alignment: Alignment(
                         1.25,
-                        vm.account.hasPremiumEnabled ? -1.25 : 1.25,
+                        account.hasPremiumEnabled ? -1.25 : 1.25,
                       ),
-                      child: _shouldShowIndicator(vm)
-                          ? Container(
-                              width: 15.5,
-                              height: 15.5,
-                              decoration: BoxDecoration(
-                                color: kAccentColor,
-                                border: Border.all(
-                                  color: Colors.white,
-                                  style: BorderStyle.solid,
-                                  width: 2.5,
-                                ),
-                                shape: BoxShape.circle,
-                              ),
-                            )
+                      child: _shouldShowIndicator
+                          ? const MkDots(color: kAccentColor)
                           : null,
                     ),
                   ],
@@ -106,14 +99,12 @@ class TopButtonBar extends StatelessWidget {
     );
   }
 
-  bool _shouldShowIndicator(HomeViewModel vm) {
-    return !(vm.account?.hasReadNotice ?? false) || vm.shouldSendRating;
-  }
+  bool get _shouldShowIndicator =>
+      !(account?.hasReadNotice ?? false) || shouldSendRating;
 
-  VoidCallback _onTapAccount(BuildContext context, HomeViewModel vm) {
-    final account = vm.account;
+  VoidCallback _onTapAccount(BuildContext context) {
     return () async {
-      if (vm.shouldSendRating) {
+      if (shouldSendRating) {
         final _res = await mkShowChildDialog<int>(
           context: context,
           child: const ReviewModal(),
@@ -127,7 +118,7 @@ class TopButtonBar extends StatelessWidget {
         return;
       }
 
-      if (_shouldShowIndicator(vm)) {
+      if (_shouldShowIndicator) {
         await mkShowChildDialog<dynamic>(
           context: context,
           child: NoticeDialog(
@@ -184,9 +175,8 @@ class TopButtonBar extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   elevation: 0.0,
                   automaticallyImplyLeading: false,
-                  leading: IconButton(
-                    icon: Icon(Icons.close, color: Colors.white),
-                    onPressed: () => Navigator.pop(context),
+                  leading: const MkCloseButton(
+                    color: Colors.white,
                   ),
                 ),
                 backgroundColor: Colors.black38,
@@ -211,7 +201,18 @@ class TopButtonBar extends StatelessWidget {
           );
 
           if (response == true) {
-            onLogout();
+            StoreProvider.of<AppState>(context).dispatcher(
+              const OnLogoutAction(),
+            );
+            await Auth.signOutWithGoogle();
+            Navigator.pushAndRemoveUntil<void>(
+              context,
+              MkNavigate.fadeIn<void>(
+                const SplashPage(isColdStart: false),
+                name: MkRoutes.start,
+              ),
+              (Route<void> route) => false,
+            );
           }
           break;
       }

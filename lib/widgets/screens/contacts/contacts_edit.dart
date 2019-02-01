@@ -1,7 +1,6 @@
 import 'package:contact_picker/contact_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
@@ -44,8 +43,6 @@ class _ContactsEditPageState extends State<ContactsEditPage>
         key: _formKey,
         contact: widget.contact,
         onHandleSubmit: _handleSubmit,
-        onHandleValidate: _handleValidate,
-        onHandleUpload: _handleUpload,
       ),
     );
   }
@@ -58,14 +55,6 @@ class _ContactsEditPageState extends State<ContactsEditPage>
         phone: _selectedContact.phoneNumber.number,
       ),
     );
-  }
-
-  void _handleValidate() {
-    showInSnackBar(MkStrings.fixErrors);
-  }
-
-  void _handleUpload(String message) {
-    showInSnackBar(message);
   }
 
   void _handleSubmit(ContactModel contact) async {

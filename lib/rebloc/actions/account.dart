@@ -2,8 +2,8 @@ import 'package:meta/meta.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/models/account.dart';
 
-class OnDataAccountEvent extends Action {
-  const OnDataAccountEvent({
+class OnDataAccountAction extends Action {
+  const OnDataAccountAction({
     @required this.payload,
   });
   final AccountModel payload;

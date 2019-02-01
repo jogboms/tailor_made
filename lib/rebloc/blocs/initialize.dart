@@ -13,7 +13,7 @@ class InitializeBloc extends SimpleBloc<AppState> {
     Action action,
   ) async {
     if (action is OnInitAction) {
-      dispatcher(const InitDataEvents());
+      dispatcher(const InitDataAction());
       dispatcher(const InitSettingsEvents());
     }
     return action;
@@ -26,7 +26,7 @@ class InitializeBloc extends SimpleBloc<AppState> {
     Action action,
   ) async {
     if (action is OnDisposeAction) {
-      dispatcher(const DisposeDataEvents());
+      dispatcher(const DisposeDataAction());
     }
     return action;
   }

@@ -31,7 +31,7 @@ class SettingsBloc extends SimpleBloc<AppState> {
                 (settings) {
                   // Keep Static copy
                   Settings.setData(settings);
-                  context.dispatcher(OnDataSettingEvent(payload: settings));
+                  context.dispatcher(OnDataSettingAction(payload: settings));
                 },
                 onError: () {
                   context.dispatcher(OnErrorSettingsEvents());
@@ -55,7 +55,7 @@ class SettingsBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is OnDataSettingEvent) {
+    if (action is OnDataSettingAction) {
       return state.copyWith(
         settings: _settings.copyWith(
           settings: action.payload,

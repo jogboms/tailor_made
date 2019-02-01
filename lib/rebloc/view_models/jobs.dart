@@ -78,7 +78,7 @@ class JobsViewModel extends Equatable {
 
   // void setSortFn(SortType type) => store.dispatch(SortJobs(payload: type));
 
-  // void search(String term) => store.dispatch(SearchJobEvent(payload: term));
+  // void search(String term) => store.dispatch(SearchJobAction(payload: term));
 
-  // void cancelSearch() => store.dispatch(CancelSearchJobEvent());
+  // void cancelSearch() => store.dispatch(CancelSearchJobAction());
 }

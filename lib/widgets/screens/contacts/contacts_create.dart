@@ -74,8 +74,6 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
         key: _formKey,
         contact: contact,
         onHandleSubmit: _handleSubmit,
-        onHandleValidate: _handleValidate,
-        onHandleUpload: _handleUpload,
       ),
     );
   }
@@ -91,14 +89,6 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
       fullname: _selectedContact.fullName,
       phone: _selectedContact.phoneNumber?.number,
     ));
-  }
-
-  void _handleValidate() {
-    showInSnackBar(MkStrings.fixErrors);
-  }
-
-  void _handleUpload(String message) {
-    showInSnackBar(message);
   }
 
   void _handleSubmit(ContactModel _contact) async {

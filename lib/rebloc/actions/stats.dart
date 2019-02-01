@@ -2,8 +2,8 @@ import 'package:meta/meta.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/models/stats.dart';
 
-class OnDataStatEvent extends Action {
-  const OnDataStatEvent({
+class OnDataStatAction extends Action {
+  const OnDataStatAction({
     @required this.payload,
   });
 

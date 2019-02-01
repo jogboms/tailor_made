@@ -19,32 +19,32 @@ class SortContacts extends Action {
   final SortType payload;
 }
 
-class SearchContactEvent extends Action {
-  const SearchContactEvent({
+class SearchContactAction extends Action {
+  const SearchContactAction({
     @required this.payload,
   });
 
   final String payload;
 }
 
-class SearchSuccessContactEvent extends Action {
-  const SearchSuccessContactEvent({
+class SearchSuccessContactAction extends Action {
+  const SearchSuccessContactAction({
     @required this.payload,
   });
 
   final List<ContactModel> payload;
 }
 
-class CancelSearchContactEvent extends Action {
-  const CancelSearchContactEvent();
+class CancelSearchContactAction extends Action {
+  const CancelSearchContactAction();
 }
 
-class StartSearchContactEvent extends Action {
-  const StartSearchContactEvent();
+class StartSearchContactAction extends Action {
+  const StartSearchContactAction();
 }
 
-class OnDataContactEvent extends Action {
-  const OnDataContactEvent({
+class OnDataContactAction extends Action {
+  const OnDataContactAction({
     @required this.payload,
   });
 

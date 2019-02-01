@@ -2,8 +2,8 @@ import 'package:meta/meta.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/models/measure.dart';
 
-class OnDataMeasureEvent extends Action {
-  const OnDataMeasureEvent({
+class OnDataMeasureAction extends Action {
+  const OnDataMeasureAction({
     @required this.payload,
     @required this.grouped,
   });
@@ -12,8 +12,8 @@ class OnDataMeasureEvent extends Action {
   final Map<String, List<MeasureModel>> grouped;
 }
 
-class OnInitMeasureEvent extends Action {
-  const OnInitMeasureEvent({
+class OnInitMeasureAction extends Action {
+  const OnInitMeasureAction({
     @required this.payload,
   });
 

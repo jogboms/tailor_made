@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/rebloc/actions/jobs.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/jobs.dart';
@@ -8,6 +7,7 @@ import 'package:tailor_made/utils/mk_dispatch_provider.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
+import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/screens/jobs/_partials/jobs_filter_button.dart';
 import 'package:tailor_made/widgets/screens/jobs/_partials/jobs_list.dart';
@@ -110,29 +110,30 @@ class _AppBarState extends State<_AppBar> with MkDispatchProvider<AppState> {
         : AppBar(
             centerTitle: false,
             elevation: 1.0,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: theme.appBarTitle.color),
-              onPressed: _handleSearchEnd(widget.vm),
-              tooltip: 'Back',
+            leading: MkCloseButton(
+              color: Colors.white,
+              onPop: _handleSearchEnd(widget.vm),
             ),
             title: TextField(
               autofocus: true,
               decoration: InputDecoration(
                 hintText: 'Search...',
-                // TODO
-                hintStyle: mkFontBold(16.0),
+                hintStyle: MkTheme.of(context)
+                    .subhead1Bold
+                    .copyWith(color: Colors.white),
               ),
-              // TODO
-              style: mkFontBold(16.0, theme.appBarTitle.color),
+              style: MkTheme.of(context)
+                  .subhead1Bold
+                  .copyWith(color: Colors.white),
               onChanged: (term) =>
-                  dispatchAction(SearchJobEvent(payload: term)),
+                  dispatchAction(SearchJobAction(payload: term)),
             ),
             bottom: PreferredSize(
               child: SizedBox(
                 height: 1.0,
                 child: widget.vm.isLoading
-                    ? const MkLoadingSpinner(
-                        color: Colors.white,
+                    ? const LinearProgressIndicator(
+                        backgroundColor: Colors.white,
                       )
                     : null,
               ),
@@ -149,7 +150,7 @@ class _AppBarState extends State<_AppBar> with MkDispatchProvider<AppState> {
 
   VoidCallback _handleSearchEnd(JobsViewModel vm) {
     return () {
-      dispatchAction(const CancelSearchJobEvent());
+      dispatchAction(const CancelSearchJobAction());
       setState(() {
         _isSearching = false;
       });

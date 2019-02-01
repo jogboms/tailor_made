@@ -28,32 +28,32 @@ class SortJobs extends Action {
   final SortType payload;
 }
 
-class SearchSuccessJobEvent extends Action {
-  const SearchSuccessJobEvent({
+class SearchSuccessJobAction extends Action {
+  const SearchSuccessJobAction({
     @required this.payload,
   });
 
   final List<JobModel> payload;
 }
 
-class CancelSearchJobEvent extends Action {
-  const CancelSearchJobEvent();
+class CancelSearchJobAction extends Action {
+  const CancelSearchJobAction();
 }
 
-class StartSearchJobEvent extends Action {
-  const StartSearchJobEvent();
+class StartSearchJobAction extends Action {
+  const StartSearchJobAction();
 }
 
-class SearchJobEvent extends Action {
-  const SearchJobEvent({
+class SearchJobAction extends Action {
+  const SearchJobAction({
     @required this.payload,
   });
 
   final String payload;
 }
 
-class OnDataJobEvent extends Action {
-  const OnDataJobEvent({
+class OnDataJobAction extends Action {
+  const OnDataJobAction({
     @required this.payload,
   });
 

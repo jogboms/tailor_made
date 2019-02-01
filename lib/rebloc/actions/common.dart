@@ -22,14 +22,10 @@ class VoidAction extends Action {
   const VoidAction();
 }
 
-class OnLogoutEvent extends Action {
-  const OnLogoutEvent();
+class InitDataAction extends Action {
+  const InitDataAction();
 }
 
-class InitDataEvents extends Action {
-  const InitDataEvents();
-}
-
-class DisposeDataEvents extends Action {
-  const DisposeDataEvents();
+class DisposeDataAction extends Action {
+  const DisposeDataAction();
 }

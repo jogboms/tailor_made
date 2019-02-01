@@ -35,7 +35,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
       (context) {
         final _action = context.action;
 
-        if (_action is SearchContactEvent) {
+        if (_action is SearchContactAction) {
           Observable<String>.just(_action.payload)
               .map<String>((String text) => text.trim())
               .distinct()
@@ -43,7 +43,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
               .debounce(const Duration(milliseconds: 750))
               .switchMap<Action>(
                 (text) => Observable.concat([
-                      Observable.just(StartSearchContactEvent()),
+                      Observable.just(StartSearchContactAction()),
                       Observable.timer(
                         _doSearch(
                           context.state.contacts.contacts,
@@ -53,13 +53,13 @@ class ContactsBloc extends SimpleBloc<AppState> {
                       )
                     ]).takeUntil<dynamic>(
                       input.where(
-                          (action) => action is CancelSearchContactEvent),
+                          (action) => action is CancelSearchContactAction),
                     ),
               )
               .listen((action) => context.dispatcher(action));
         }
 
-        if (_action is InitDataEvents) {
+        if (_action is InitDataAction) {
           Observable(CloudDb.contacts.snapshots())
               .map(
                 (snapshot) {
@@ -70,11 +70,11 @@ class ContactsBloc extends SimpleBloc<AppState> {
                 },
               )
               .takeUntil<dynamic>(
-                input.where((action) => action is DisposeDataEvents),
+                input.where((action) => action is DisposeDataAction),
               )
               .listen(
                 (contacts) =>
-                    context.dispatcher(OnDataContactEvent(payload: contacts)),
+                    context.dispatcher(OnDataContactAction(payload: contacts)),
               );
         }
 
@@ -87,7 +87,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final _contacts = state.contacts;
 
-    if (action is OnDataContactEvent) {
+    if (action is OnDataContactAction) {
       return state.copyWith(
         contacts: _contacts.copyWith(
           contacts: List<ContactModel>.of(action.payload)
@@ -97,7 +97,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is StartSearchContactEvent) {
+    if (action is StartSearchContactAction) {
       return state.copyWith(
         contacts: _contacts.copyWith(
           status: ContactsStatus.loading,
@@ -106,7 +106,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is SearchSuccessContactEvent) {
+    if (action is SearchSuccessContactAction) {
       return state.copyWith(
         contacts: _contacts.copyWith(
           searchResults: List<ContactModel>.of(action.payload)
@@ -128,7 +128,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is CancelSearchContactEvent) {
+    if (action is CancelSearchContactAction) {
       return state.copyWith(
         contacts: _contacts.copyWith(
           status: ContactsStatus.success,
@@ -142,8 +142,8 @@ class ContactsBloc extends SimpleBloc<AppState> {
   }
 }
 
-SearchSuccessContactEvent _doSearch(List<ContactModel> contacts, String text) {
-  return SearchSuccessContactEvent(
+SearchSuccessContactAction _doSearch(List<ContactModel> contacts, String text) {
+  return SearchSuccessContactAction(
     payload: contacts
         .where((contact) => contact.fullname.contains(
               RegExp(r'' + text + '', caseSensitive: false),

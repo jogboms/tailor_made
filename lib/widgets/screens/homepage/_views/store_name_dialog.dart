@@ -54,9 +54,7 @@ class StoreNameDialog extends StatelessWidget {
                   keyboardType: TextInputType.text,
                   controller: controller,
                   textAlign: TextAlign.center,
-                  style: MkTheme.of(context).title.copyWith(
-                        color: Colors.black,
-                      ),
+                  style: MkTheme.of(context).title,
                   onSubmitted: (value) => _handleSubmit(context),
                   decoration: const InputDecoration(
                     isDense: true,

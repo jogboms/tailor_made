@@ -114,7 +114,7 @@ class _TextTile extends StatelessWidget {
         subTitle != null
             ? Text(
                 subTitle,
-                style: MkTheme.of(context).smallLight,
+                style: MkTheme.of(context).small,
               )
             : const SizedBox(),
       ],

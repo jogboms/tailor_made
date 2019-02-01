@@ -113,7 +113,7 @@ class _SlideBody extends StatelessWidget {
     @required this.isExpanded,
   }) : super(key: key);
 
-  final SlideDownItem child;
+  final Widget child;
   final bool isExpanded;
 
   @override

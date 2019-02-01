@@ -3,6 +3,7 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/rebloc/actions/contacts.dart';
 import 'package:tailor_made/rebloc/view_models/contacts.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/_partials/mk_dots.dart';
 
 class ContactsFilterButton extends StatelessWidget {
   const ContactsFilterButton({
@@ -87,22 +88,8 @@ class ContactsFilterButton extends StatelessWidget {
             ),
           ),
           Align(
-            alignment: Alignment(0.75, -0.5),
-            child: vm.hasSortFn
-                ? Container(
-                    width: 15.5,
-                    height: 15.5,
-                    decoration: BoxDecoration(
-                      color: kAccentColor,
-                      border: Border.all(
-                        color: Colors.white,
-                        style: BorderStyle.solid,
-                        width: 2.5,
-                      ),
-                      shape: BoxShape.circle,
-                    ),
-                  )
-                : null,
+            alignment: const Alignment(0.75, -0.5),
+            child: vm.hasSortFn ? const MkDots(color: kAccentColor) : null,
           ),
         ],
       ),

@@ -30,6 +30,7 @@ class MkTheme extends InheritedWidget {
   TextStyle get body1 => _text13Style;
   TextStyle get body2 => body1.copyWith(height: 1.5);
   TextStyle get body3 => _text14Style;
+  TextStyle get body3Hint => body3.copyWith(color: Colors.grey);
   TextStyle get body3Light => body3.copyWith(fontWeight: MkStyle.light);
   TextStyle get body3Medium => _text14MediumStyle;
   TextStyle get body3MediumHint => body3Medium.copyWith(color: Colors.grey);

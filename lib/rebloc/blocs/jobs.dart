@@ -42,7 +42,7 @@ class JobsBloc extends SimpleBloc<AppState> {
       (context) {
         final _action = context.action;
 
-        if (_action is SearchJobEvent) {
+        if (_action is SearchJobAction) {
           Observable<String>.just(_action.payload)
               .map<String>((String text) => text.trim())
               .distinct()
@@ -50,7 +50,7 @@ class JobsBloc extends SimpleBloc<AppState> {
               .debounce(const Duration(milliseconds: 750))
               .switchMap<Action>(
                 (text) => Observable.concat([
-                      Observable.just(StartSearchJobEvent()),
+                      Observable.just(StartSearchJobAction()),
                       Observable.timer(
                         _doSearch(
                           context.state.jobs.jobs,
@@ -59,13 +59,13 @@ class JobsBloc extends SimpleBloc<AppState> {
                         Duration(seconds: 1),
                       )
                     ]).takeUntil<dynamic>(
-                      input.where((action) => action is CancelSearchJobEvent),
+                      input.where((action) => action is CancelSearchJobAction),
                     ),
               )
               .listen((action) => context.dispatcher(action));
         }
 
-        if (_action is InitDataEvents) {
+        if (_action is InitDataAction) {
           Observable(CloudDb.jobs.snapshots())
               .map((snapshot) {
                 return snapshot.documents
@@ -73,10 +73,10 @@ class JobsBloc extends SimpleBloc<AppState> {
                     .toList();
               })
               .takeUntil<dynamic>(
-                input.where((action) => action is DisposeDataEvents),
+                input.where((action) => action is DisposeDataAction),
               )
               .listen(
-                (jobs) => context.dispatcher(OnDataJobEvent(payload: jobs)),
+                (jobs) => context.dispatcher(OnDataJobAction(payload: jobs)),
               );
         }
 
@@ -89,7 +89,7 @@ class JobsBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final _jobs = state.jobs;
 
-    if (action is OnDataJobEvent) {
+    if (action is OnDataJobAction) {
       return state.copyWith(
         jobs: _jobs.copyWith(
           jobs: List<JobModel>.of(action.payload)..sort(_sort(_jobs.sortFn)),
@@ -98,7 +98,7 @@ class JobsBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is StartSearchJobEvent) {
+    if (action is StartSearchJobAction) {
       return state.copyWith(
         jobs: _jobs.copyWith(
           status: JobsStatus.loading,
@@ -107,7 +107,7 @@ class JobsBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is CancelSearchJobEvent) {
+    if (action is CancelSearchJobAction) {
       return state.copyWith(
         jobs: _jobs.copyWith(
           status: JobsStatus.success,
@@ -117,7 +117,7 @@ class JobsBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is SearchSuccessJobEvent) {
+    if (action is SearchSuccessJobAction) {
       return state.copyWith(
         jobs: _jobs.copyWith(
           searchResults: List<JobModel>.of(action.payload)
@@ -142,8 +142,8 @@ class JobsBloc extends SimpleBloc<AppState> {
   }
 }
 
-SearchSuccessJobEvent _doSearch(List<JobModel> jobs, String text) {
-  return SearchSuccessJobEvent(
+SearchSuccessJobAction _doSearch(List<JobModel> jobs, String text) {
+  return SearchSuccessJobAction(
     payload: jobs
         .where((job) => job.name.contains(
               RegExp(r'' + text + '', caseSensitive: false),

@@ -36,7 +36,7 @@ class HeaderWidget extends StatelessWidget {
             account.storeName.split(" ").first,
             style: TextStyle(
               fontSize: 52.0,
-              fontWeight: MkStyle.light,
+              fontWeight: MkStyle.regular,
               height: 1.15,
             ),
             maxLines: 1,
@@ -45,7 +45,7 @@ class HeaderWidget extends StatelessWidget {
           ),
           Text(
             MkDates(DateTime.now(), day: "EEEE", month: "MMMM").format,
-            style: MkTheme.of(context).body3Light.copyWith(height: 1.75),
+            style: MkTheme.of(context).body3.copyWith(height: 1.75),
           ),
         ],
       ),
