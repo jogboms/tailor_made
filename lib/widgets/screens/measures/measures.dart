@@ -4,7 +4,7 @@ import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/measures.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
-import 'package:tailor_made/widgets/screens/measures/ui/measure_list_item.dart';
+import 'package:tailor_made/widgets/screens/measures/_partials/measure_list_item.dart';
 
 class MeasuresPage extends StatelessWidget {
   const MeasuresPage({

@@ -3,7 +3,7 @@ import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
-import 'package:tailor_made/widgets/screens/gallery/gallery_grid.dart';
+import 'package:tailor_made/widgets/screens/gallery/_partials/gallery_grid.dart';
 
 class GalleryGridWidget extends StatelessWidget {
   const GalleryGridWidget({

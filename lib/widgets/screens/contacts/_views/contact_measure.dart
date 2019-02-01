@@ -10,7 +10,7 @@ import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 import 'package:tailor_made/widgets/screens/measures/measures.dart';
-import 'package:tailor_made/widgets/screens/measures/ui/measure_create_items.dart';
+import 'package:tailor_made/widgets/screens/measures/_partials/measure_create_items.dart';
 
 class ContactMeasure extends StatefulWidget {
   const ContactMeasure({

@@ -10,8 +10,8 @@ import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 import 'package:tailor_made/widgets/screens/contacts/contacts_create.dart';
-import 'package:tailor_made/widgets/screens/contacts/ui/contacts_filter_button.dart';
-import 'package:tailor_made/widgets/screens/contacts/ui/contacts_list_item.dart';
+import 'package:tailor_made/widgets/screens/contacts/_partials/contacts_filter_button.dart';
+import 'package:tailor_made/widgets/screens/contacts/_partials/contacts_list_item.dart';
 
 class ContactsPage extends StatefulWidget {
   const ContactsPage({Key key}) : super(key: key);

@@ -9,9 +9,9 @@ import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
+import 'package:tailor_made/widgets/screens/jobs/_partials/jobs_filter_button.dart';
+import 'package:tailor_made/widgets/screens/jobs/_partials/jobs_list.dart';
 import 'package:tailor_made/widgets/screens/jobs/jobs_create.dart';
-import 'package:tailor_made/widgets/screens/jobs/jobs_list.dart';
-import 'package:tailor_made/widgets/screens/jobs/ui/jobs_filter_button.dart';
 
 class JobsPage extends StatelessWidget {
   const JobsPage({Key key}) : super(key: key);

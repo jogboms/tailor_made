@@ -3,7 +3,7 @@ import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
-import 'package:tailor_made/widgets/screens/payments/payments_list.dart';
+import 'package:tailor_made/widgets/screens/payments/_partials/payments_list.dart';
 
 class PaymentsListWidget extends StatelessWidget {
   const PaymentsListWidget({

@@ -16,7 +16,7 @@ import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
-import 'package:tailor_made/widgets/screens/measures/ui/measure_dialog.dart';
+import 'package:tailor_made/widgets/screens/measures/_views/measure_dialog.dart';
 
 class MeasuresCreate extends StatefulWidget {
   const MeasuresCreate({

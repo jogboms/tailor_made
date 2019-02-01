@@ -5,7 +5,7 @@ import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
-import 'package:tailor_made/widgets/screens/contacts/ui/contact_form.dart';
+import 'package:tailor_made/widgets/screens/contacts/_partials/contact_form.dart';
 
 class ContactsEditPage extends StatefulWidget {
   const ContactsEditPage({

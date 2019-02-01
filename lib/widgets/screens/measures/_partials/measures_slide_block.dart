@@ -10,7 +10,7 @@ import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/widgets/_views/slide_down.dart';
 import 'package:tailor_made/widgets/screens/measures/measures_create.dart';
 import 'package:tailor_made/widgets/screens/measures/measures_manage.dart';
-import 'package:tailor_made/widgets/screens/measures/ui/measures_slide_block_item.dart';
+import 'package:tailor_made/widgets/screens/measures/_partials/measures_slide_block_item.dart';
 
 enum ActionChoice {
   edit,

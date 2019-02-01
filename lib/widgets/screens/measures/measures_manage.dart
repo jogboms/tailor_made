@@ -12,7 +12,7 @@ import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 import 'package:tailor_made/widgets/screens/measures/measures_create.dart';
-import 'package:tailor_made/widgets/screens/measures/ui/measures_slide_block.dart';
+import 'package:tailor_made/widgets/screens/measures/_partials/measures_slide_block.dart';
 
 class MeasuresManagePage extends StatefulWidget {
   const MeasuresManagePage({

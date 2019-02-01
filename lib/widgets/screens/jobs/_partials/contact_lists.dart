@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
-import 'package:tailor_made/widgets/screens/contacts/ui/contacts_list_item.dart';
+import 'package:tailor_made/widgets/screens/contacts/_partials/contacts_list_item.dart';
 
 class ContactLists extends StatelessWidget {
   const ContactLists({

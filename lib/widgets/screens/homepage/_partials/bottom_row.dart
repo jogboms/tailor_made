@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/stats.dart';
-import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/widgets/screens/gallery/gallery.dart';
-import 'package:tailor_made/widgets/screens/homepage/ui/helpers.dart';
-import 'package:tailor_made/widgets/screens/payments/payments.dart';
+import 'package:tailor_made/widgets/screens/homepage/_partials/helpers.dart';
+import 'package:tailor_made/widgets/screens/measures/measures_manage.dart';
+import 'package:tailor_made/widgets/screens/tasks/tasks.dart';
 
-class MidRowWidget extends StatelessWidget {
-  const MidRowWidget({
+class BottomRowWidget extends StatelessWidget {
+  const BottomRowWidget({
     Key key,
     @required this.height,
     @required this.stats,
+    @required this.account,
   }) : super(key: key);
 
   final StatsModel stats;
+  final AccountModel account;
   final double height;
 
   @override
@@ -34,22 +36,25 @@ class MidRowWidget extends StatelessWidget {
                 ),
               ),
               child: TMGridTile(
-                color: Colors.redAccent,
-                icon: Icons.attach_money,
-                title: "Payments",
-                subTitle: "${MkMoney(stats.payments.total).format} Total",
-                onPressed: () => MkNavigate(context, const PaymentsPage()),
+                color: kPrimaryColor,
+                icon: Icons.content_cut,
+                title: "Measures",
+                subTitle: "Custom",
+                onPressed: () => MkNavigate(
+                      context,
+                      MeasuresManagePage(account: account),
+                    ),
               ),
             ),
           ),
           Expanded(
             child: SizedBox(
               child: TMGridTile(
-                color: Colors.blueAccent,
-                icon: Icons.image,
-                title: "Gallery",
-                subTitle: "${stats.gallery.total} Photos",
-                onPressed: () => MkNavigate(context, const GalleryPage()),
+                color: Colors.grey,
+                icon: Icons.event,
+                title: "Tasks",
+                subTitle: "${stats.jobs.pending} Pending",
+                onPressed: () => MkNavigate(context, const TasksPage()),
               ),
             ),
           ),

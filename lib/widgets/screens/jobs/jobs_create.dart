@@ -26,9 +26,9 @@ import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 import 'package:tailor_made/widgets/screens/jobs/job.dart';
-import 'package:tailor_made/widgets/screens/jobs/ui/contact_lists.dart';
-import 'package:tailor_made/widgets/screens/jobs/ui/gallery_grid_item.dart';
-import 'package:tailor_made/widgets/screens/measures/ui/measure_create_items.dart';
+import 'package:tailor_made/widgets/screens/jobs/_partials/contact_lists.dart';
+import 'package:tailor_made/widgets/screens/jobs/_partials/gallery_grid_item.dart';
+import 'package:tailor_made/widgets/screens/measures/_partials/measure_create_items.dart';
 
 const _kGridWidth = 85.0;
 

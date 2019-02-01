@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/utils/mk_fade_in_route.dart';
-import 'package:tailor_made/widgets/screens/gallery/gallery_view.dart';
+import 'package:tailor_made/widgets/screens/gallery/_views/gallery_view.dart';
 
 const _kGridWidth = 70.0;
 

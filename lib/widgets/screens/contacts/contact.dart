@@ -6,10 +6,10 @@ import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/contacts.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
-import 'package:tailor_made/widgets/screens/contacts/ui/contact_appbar.dart';
-import 'package:tailor_made/widgets/screens/contacts/ui/contact_gallery_grid.dart';
-import 'package:tailor_made/widgets/screens/contacts/ui/contact_payments_list.dart';
-import 'package:tailor_made/widgets/screens/jobs/jobs_list.dart';
+import 'package:tailor_made/widgets/screens/contacts/_partials/contact_appbar.dart';
+import 'package:tailor_made/widgets/screens/contacts/_partials/contact_gallery_grid.dart';
+import 'package:tailor_made/widgets/screens/contacts/_partials/contact_payments_list.dart';
+import 'package:tailor_made/widgets/screens/jobs/_partials/jobs_list.dart';
 
 const TABS = const ["Jobs", "Gallery", "Payments"];
 

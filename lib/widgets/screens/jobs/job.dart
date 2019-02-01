@@ -16,8 +16,8 @@ import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/avatar_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/screens/contacts/contact.dart';
-import 'package:tailor_made/widgets/screens/jobs/ui/gallery_grids.dart';
-import 'package:tailor_made/widgets/screens/jobs/ui/payment_grids.dart';
+import 'package:tailor_made/widgets/screens/jobs/_partials/gallery_grids.dart';
+import 'package:tailor_made/widgets/screens/jobs/_partials/payment_grids.dart';
 import 'package:tailor_made/widgets/screens/measures/measures.dart';
 
 class JobPage extends StatefulWidget {

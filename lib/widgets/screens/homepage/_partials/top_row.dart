@@ -3,7 +3,7 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/stats.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/widgets/screens/contacts/contacts.dart';
-import 'package:tailor_made/widgets/screens/homepage/ui/helpers.dart';
+import 'package:tailor_made/widgets/screens/homepage/_partials/helpers.dart';
 import 'package:tailor_made/widgets/screens/jobs/jobs.dart';
 
 class TopRowWidget extends StatelessWidget {

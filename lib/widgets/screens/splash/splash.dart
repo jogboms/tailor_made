@@ -69,13 +69,7 @@ class SplashPage extends StatelessWidget {
               ],
             ),
           ),
-          Positioned(
-            height: 124.0,
-            bottom: 72.0,
-            left: 0.0,
-            right: 0.0,
-            child: _Content(isColdStart: isColdStart),
-          ),
+          _Content(isColdStart: isColdStart),
         ],
       ),
     );
@@ -124,8 +118,9 @@ class _ContentState extends State<_Content> {
         SettingsViewModel vm,
       ) {
         return Stack(
+          // fit: StackFit.expand,
           children: [
-            _isImageVisible(vm)
+            isLoading && (widget.isColdStart || isRestartable) && !vm.hasError
                 ? const SizedBox()
                 : const Center(
                     child: const Image(
@@ -135,81 +130,81 @@ class _ContentState extends State<_Content> {
                       colorBlendMode: BlendMode.saturation,
                     ),
                   ),
-            Builder(
-              builder: (_) {
-                if (vm.isLoading && widget.isColdStart) {
-                  return Center(
-                    child: const MkLoadingSpinner(),
-                  );
-                }
+            Positioned.fill(
+              top: null,
+              bottom: 124.0,
+              child: Builder(
+                builder: (_) {
+                  if (vm.isLoading && widget.isColdStart) {
+                    return Center(
+                      child: const MkLoadingSpinner(),
+                    );
+                  }
 
-                if (vm.hasError) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(48.0, 16.0, 48.0, 16.0),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Text(
-                            "You need a stable internet connection to proceed.",
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 8.0),
-                          MkRaisedButton(
-                            backgroundColor: Colors.white,
-                            color: kTextBaseColor,
-                            onPressed: () =>
-                                dispatcher(const InitSettingsEvents()),
-                            child: const Text("RETRY"),
-                          ),
-                        ],
+                  if (vm.hasError) {
+                    return Padding(
+                      padding:
+                          const EdgeInsets.fromLTRB(48.0, 16.0, 48.0, 16.0),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Text(
+                              "You need a stable internet connection to proceed.",
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 8.0),
+                            MkRaisedButton(
+                              backgroundColor: Colors.white,
+                              color: kTextBaseColor,
+                              onPressed: () =>
+                                  dispatcher(const InitSettingsEvents()),
+                              child: const Text("RETRY"),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+
+                  if (widget.isColdStart && !isRestartable) {
+                    WidgetsBinding.instance.addPostFrameCallback(
+                      (_) async => _onLogin(),
+                    );
+                  }
+
+                  if (isLoading) {
+                    const MkLoadingSpinner();
+                  }
+
+                  return Center(
+                    child: RaisedButton.icon(
+                      color: Colors.white,
+                      onPressed: () {
+                        setState(() => isLoading = true);
+                        try {
+                          _onLogin();
+                        } catch (e) {
+                          setState(() => isLoading = false);
+                          MkSnackBar.of(context).show(e.toString());
+                        }
+                      },
+                      icon: const Image(
+                        image: MkImages.google_logo,
+                        width: 24.0,
+                      ),
+                      label: Text(
+                        "Continue with Google",
+                        style: MkTheme.of(context).bodyBold,
                       ),
                     ),
                   );
-                }
-
-                if (widget.isColdStart && !isRestartable) {
-                  _tryLoginSilent();
-                }
-
-                if (isLoading) {
-                  const MkLoadingSpinner();
-                }
-
-                return Center(
-                  child: RaisedButton.icon(
-                    color: Colors.white,
-                    onPressed: () {
-                      setState(() => isLoading = true);
-                      try {
-                        _onLogin();
-                      } catch (e) {
-                        setState(() => isLoading = false);
-                        MkSnackBar.of(context).show(e.toString());
-                      }
-                    },
-                    icon: const Image(
-                      image: MkImages.google_logo,
-                      width: 24.0,
-                    ),
-                    label: Text(
-                      "Continue with Google",
-                      style: MkTheme.of(context).bodyBold,
-                    ),
-                  ),
-                );
-              },
+                },
+              ),
             )
           ],
         );
       },
-    );
-  }
-
-  Future<void> _tryLoginSilent() async {
-    // Give the navigation animations, etc, some time to finish
-    await Future<dynamic>.delayed(Duration(seconds: 1)).then(
-      (dynamic _) => _onLogin(),
     );
   }
 
@@ -259,9 +254,5 @@ class _ContentState extends State<_Content> {
         isRestartable = true;
       });
     });
-  }
-
-  bool _isImageVisible(SettingsViewModel vm) {
-    return isLoading && (widget.isColdStart || isRestartable) && !vm.hasError;
   }
 }

@@ -6,7 +6,7 @@ import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
-import 'package:tailor_made/widgets/screens/jobs/ui/payment_grid_item.dart';
+import 'package:tailor_made/widgets/screens/jobs/_partials/payment_grid_item.dart';
 import 'package:tailor_made/widgets/screens/payments/payments.dart';
 import 'package:tailor_made/widgets/screens/payments/payments_create.dart';
 

@@ -11,9 +11,9 @@ import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
+import 'package:tailor_made/widgets/screens/contacts/_partials/contact_form.dart';
+import 'package:tailor_made/widgets/screens/contacts/_views/contact_measure.dart';
 import 'package:tailor_made/widgets/screens/contacts/contact.dart';
-import 'package:tailor_made/widgets/screens/contacts/ui/contact_form.dart';
-import 'package:tailor_made/widgets/screens/contacts/ui/contact_measure.dart';
 
 class ContactsCreatePage extends StatefulWidget {
   const ContactsCreatePage({
