@@ -59,7 +59,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
               .listen((action) => context.dispatcher(action));
         }
 
-        if (_action is InitDataAction) {
+        if (_action is OnInitAction) {
           Observable(CloudDb.contacts.snapshots())
               .map(
                 (snapshot) {
@@ -70,7 +70,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
                 },
               )
               .takeUntil<dynamic>(
-                input.where((action) => action is DisposeDataAction),
+                input.where((action) => action is OnDisposeAction),
               )
               .listen(
                 (contacts) =>

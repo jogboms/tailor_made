@@ -65,7 +65,7 @@ class JobsBloc extends SimpleBloc<AppState> {
               .listen((action) => context.dispatcher(action));
         }
 
-        if (_action is InitDataAction) {
+        if (_action is OnInitAction) {
           Observable(CloudDb.jobs.snapshots())
               .map((snapshot) {
                 return snapshot.documents
@@ -73,7 +73,7 @@ class JobsBloc extends SimpleBloc<AppState> {
                     .toList();
               })
               .takeUntil<dynamic>(
-                input.where((action) => action is DisposeDataAction),
+                input.where((action) => action is OnDisposeAction),
               )
               .listen(
                 (jobs) => context.dispatcher(OnDataJobAction(payload: jobs)),

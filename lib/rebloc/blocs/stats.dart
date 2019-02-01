@@ -14,13 +14,13 @@ class StatsBloc extends SimpleBloc<AppState> {
   ) {
     return Observable(input).map(
       (context) {
-        if (context.action is InitDataAction) {
+        if (context.action is OnInitAction) {
           Observable(CloudDb.stats.snapshots())
               .map(
                 (snapshot) => StatsModel.fromJson(snapshot.data),
               )
               .takeUntil<dynamic>(
-                input.where((dynamic action) => action is DisposeDataAction),
+                input.where((dynamic action) => action is OnDisposeAction),
               )
               .listen(
                 (stats) => context.dispatcher(OnDataStatAction(payload: stats)),

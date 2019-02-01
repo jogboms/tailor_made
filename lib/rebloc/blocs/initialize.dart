@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
-import 'package:tailor_made/rebloc/actions/settings.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 
 class InitializeBloc extends SimpleBloc<AppState> {
@@ -12,10 +11,7 @@ class InitializeBloc extends SimpleBloc<AppState> {
     AppState state,
     Action action,
   ) async {
-    if (action is OnInitAction) {
-      dispatcher(const InitDataAction());
-      dispatcher(const InitSettingsEvents());
-    }
+    if (action is OnInitAction) {}
     return action;
   }
 
@@ -25,9 +21,7 @@ class InitializeBloc extends SimpleBloc<AppState> {
     AppState state,
     Action action,
   ) async {
-    if (action is OnDisposeAction) {
-      dispatcher(const DisposeDataAction());
-    }
+    if (action is OnDisposeAction) {}
     return action;
   }
 }

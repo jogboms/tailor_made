@@ -6,10 +6,6 @@ class InitSettingsEvents extends Action {
   const InitSettingsEvents();
 }
 
-class DisposeSettingsEvents extends Action {
-  const DisposeSettingsEvents();
-}
-
 class OnErrorSettingsEvents extends Action {
   const OnErrorSettingsEvents();
 }

@@ -24,11 +24,11 @@ class MeasuresBloc extends SimpleBloc<AppState> {
               (dynamic e) => print(e),
             ),
           ).take(1).listen(
-                (_) => context.dispatcher(InitDataAction()),
+                (_) => context.dispatcher(OnInitAction()),
               );
         }
 
-        if (_action is InitDataAction) {
+        if (_action is OnInitAction) {
           Observable(CloudDb.measurements.snapshots())
               .map((snapshot) {
                 return snapshot.documents
@@ -36,7 +36,7 @@ class MeasuresBloc extends SimpleBloc<AppState> {
                     .toList();
               })
               .takeUntil<dynamic>(
-                input.where((action) => action is DisposeDataAction),
+                input.where((action) => action is OnDisposeAction),
               )
               .listen((measures) {
                 if (measures.isEmpty) {

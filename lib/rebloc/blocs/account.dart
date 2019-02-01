@@ -47,16 +47,15 @@ class AccountBloc extends SimpleBloc<AppState> {
               );
         }
 
-        if (_action is InitDataAction) {
+        if (_action is OnInitAction) {
           Observable(CloudDb.account.snapshots())
               .map((snapshot) => AccountModel.fromDoc(snapshot))
               .takeUntil<dynamic>(
-                input.where((action) => action is DisposeDataAction),
+                input.where((action) => action is OnDisposeAction),
               )
-              .listen(
-                (account) =>
-                    context.dispatcher(OnDataAccountAction(payload: account)),
-              );
+              .listen((account) => context.dispatcher(
+                    OnDataAccountAction(payload: account),
+                  ));
         }
 
         return context;

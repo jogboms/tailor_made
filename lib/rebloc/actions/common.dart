@@ -21,11 +21,3 @@ class OnLogoutAction extends Action {
 class VoidAction extends Action {
   const VoidAction();
 }
-
-class InitDataAction extends Action {
-  const InitDataAction();
-}
-
-class DisposeDataAction extends Action {
-  const DisposeDataAction();
-}

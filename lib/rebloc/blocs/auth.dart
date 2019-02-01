@@ -11,9 +11,7 @@ class AuthBloc extends SimpleBloc<AppState> {
     AppState state,
     Action action,
   ) async {
-    // if (action is OnLoginAction) {
-    //   dispatcher(const JobsAsyncInitAction());
-    // }
+    if (action is OnLoginAction) {}
     return action;
   }
 
