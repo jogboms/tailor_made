@@ -36,7 +36,7 @@ class SettingsBloc extends SimpleBloc<AppState> {
                   context.dispatcher(OnDataSettingAction(payload: settings));
                 },
                 onError: () {
-                  context.dispatcher(OnErrorSettingsEvents());
+                  context.dispatcher(const OnErrorSettingsEvents());
                 },
               );
         }

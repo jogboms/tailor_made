@@ -41,9 +41,8 @@ class ContactModel extends Model {
     );
   }
 
-  factory ContactModel.fromDoc(DocumentSnapshot doc) {
-    return ContactModel.fromJson(doc.data)..reference = doc.reference;
-  }
+  factory ContactModel.fromDoc(DocumentSnapshot doc) =>
+      ContactModel.fromJson(doc.data)..reference = doc.reference;
 
   String id;
   String userID;

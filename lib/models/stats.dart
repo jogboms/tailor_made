@@ -7,14 +7,11 @@ class IntStatsModel extends Model {
     this.completed,
   });
 
-  factory IntStatsModel.fromJson(Map<String, dynamic> json) {
-    assert(json != null);
-    return IntStatsModel(
-      total: int.tryParse(json['total'].toString()),
-      pending: int.tryParse(json['pending'].toString()),
-      completed: int.tryParse(json['completed'].toString()),
-    );
-  }
+  IntStatsModel.fromJson(Map<String, dynamic> json)
+      : assert(json != null),
+        total = int.tryParse(json['total'].toString()),
+        pending = int.tryParse(json['pending'].toString()),
+        completed = int.tryParse(json['completed'].toString());
 
   final int total;
   final int pending;
@@ -37,14 +34,11 @@ class DoubleStatsModel extends Model {
     this.completed,
   });
 
-  factory DoubleStatsModel.fromJson(Map<String, dynamic> json) {
-    assert(json != null);
-    return DoubleStatsModel(
-      total: double.tryParse(json['total'].toString()),
-      pending: double.tryParse(json['pending'].toString()),
-      completed: double.tryParse(json['completed'].toString()),
-    );
-  }
+  DoubleStatsModel.fromJson(Map<String, dynamic> json)
+      : assert(json != null),
+        total = double.tryParse(json['total'].toString()),
+        pending = double.tryParse(json['pending'].toString()),
+        completed = double.tryParse(json['completed'].toString());
 
   final double total;
   final double pending;
@@ -88,17 +82,15 @@ class StatsModel extends Model {
     this.payments,
   });
 
-  factory StatsModel.fromJson(Map<String, dynamic> json) {
-    assert(json != null);
-    return StatsModel(
-      jobs: IntStatsModel.fromJson(json['jobs'].cast<String, dynamic>()),
-      contacts:
-          IntStatsModel.fromJson(json['contacts'].cast<String, dynamic>()),
-      gallery: IntStatsModel.fromJson(json['gallery'].cast<String, dynamic>()),
-      payments:
-          DoubleStatsModel.fromJson(json['payments'].cast<String, dynamic>()),
-    );
-  }
+  StatsModel.fromJson(Map<String, dynamic> json)
+      : assert(json != null),
+        jobs = IntStatsModel.fromJson(json['jobs'].cast<String, dynamic>()),
+        contacts =
+            IntStatsModel.fromJson(json['contacts'].cast<String, dynamic>()),
+        gallery =
+            IntStatsModel.fromJson(json['gallery'].cast<String, dynamic>()),
+        payments =
+            DoubleStatsModel.fromJson(json['payments'].cast<String, dynamic>());
 
   final IntStatsModel jobs;
   final IntStatsModel contacts;

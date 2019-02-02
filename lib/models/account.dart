@@ -20,28 +20,24 @@ class AccountModel extends Model {
     @required this.hasReadNotice,
   });
 
-  factory AccountModel.fromJson(Map<String, dynamic> json) {
-    assert(json != null);
-    return AccountModel(
-      uid: json['uid'],
-      storeName: json['storeName'],
-      email: json['email'],
-      displayName: json['displayName'],
-      phoneNumber: int.tryParse(json['phoneNumber'].toString()),
-      photoURL: json['photoURL'],
-      status:
-          AccountModelStatus.values[int.tryParse(json['status'].toString())],
-      hasPremiumEnabled: json['hasPremiumEnabled'],
-      hasSendRating: json['hasSendRating'] ?? false,
-      rating: json['rating'],
-      notice: json['notice'],
-      hasReadNotice: json['hasReadNotice'],
-    );
-  }
+  AccountModel.fromJson(Map<String, dynamic> json)
+      : assert(json != null),
+        uid = json['uid'],
+        storeName = json['storeName'],
+        email = json['email'],
+        displayName = json['displayName'],
+        phoneNumber = int.tryParse(json['phoneNumber'].toString()),
+        photoURL = json['photoURL'],
+        status =
+            AccountModelStatus.values[int.tryParse(json['status'].toString())],
+        hasPremiumEnabled = json['hasPremiumEnabled'],
+        hasSendRating = json['hasSendRating'] ?? false,
+        rating = json['rating'],
+        notice = json['notice'],
+        hasReadNotice = json['hasReadNotice'];
 
-  factory AccountModel.fromDoc(DocumentSnapshot doc) {
-    return AccountModel.fromJson(doc.data)..reference = doc.reference;
-  }
+  factory AccountModel.fromDoc(DocumentSnapshot doc) =>
+      AccountModel.fromJson(doc.data)..reference = doc.reference;
 
   String uid;
   String storeName;

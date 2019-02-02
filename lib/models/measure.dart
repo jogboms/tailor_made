@@ -48,24 +48,19 @@ class MeasureModel extends Model {
   })  : id = id ?? uuid(),
         createdAt = createdAt ?? DateTime.now();
 
-  factory MeasureModel.fromJson(Map<String, dynamic> json) {
-    assert(json != null);
-    return MeasureModel(
-      id: json['id'],
-      name: json['name'],
-      unit: json['unit'],
-      group: json['group'],
-      createdAt: DateTime.tryParse(json['createdAt'].toString()),
-    );
-  }
+  MeasureModel.fromJson(Map<String, dynamic> json)
+      : assert(json != null),
+        id = json['id'],
+        name = json['name'],
+        unit = json['unit'],
+        group = json['group'],
+        createdAt = DateTime.tryParse(json['createdAt'].toString());
 
-  factory MeasureModel.fromDoc(DocumentSnapshot doc) {
-    return MeasureModel.fromJson(doc.data)..reference = doc.reference;
-  }
+  factory MeasureModel.fromDoc(DocumentSnapshot doc) =>
+      MeasureModel.fromJson(doc.data)..reference = doc.reference;
 
   String id;
   String name;
-  // TODO only for UI purposes
   double value;
   String unit;
   String group;

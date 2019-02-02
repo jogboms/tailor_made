@@ -33,20 +33,6 @@ class JobModel extends Model {
     if (json['measurements'] != null) {
       measurements = json['measurements'].cast<String, double>();
     }
-    final List<PaymentModel> payments = [];
-    if (json['payments'] != null) {
-      json['payments'].forEach(
-        (dynamic payment) => payments
-            .add(PaymentModel.fromJson(payment.cast<String, dynamic>())),
-      );
-    }
-    final List<ImageModel> images = [];
-    if (json['images'] != null) {
-      json['images'].forEach(
-        (dynamic image) =>
-            images.add(ImageModel.fromJson(image.cast<String, dynamic>())),
-      );
-    }
     return JobModel(
       id: json['id'],
       userID: json['userID'],
@@ -56,18 +42,24 @@ class JobModel extends Model {
       pendingPayment: double.tryParse(json['pendingPayment'].toString()),
       completedPayment: double.tryParse(json['completedPayment'].toString()),
       notes: json['notes'],
-      images: images,
+      images: Model.generator(
+        json['images'],
+        (dynamic image) => ImageModel.fromJson(image.cast<String, dynamic>()),
+      ),
       createdAt: DateTime.tryParse(json['createdAt'].toString()),
       dueAt: DateTime.tryParse(json['dueAt'].toString()),
       measurements: measurements,
-      payments: payments,
+      payments: Model.generator(
+        json['payments'],
+        (dynamic payment) =>
+            PaymentModel.fromJson(payment.cast<String, dynamic>()),
+      ),
       isComplete: json['isComplete'],
     );
   }
 
-  factory JobModel.fromDoc(DocumentSnapshot doc) {
-    return JobModel.fromJson(doc.data)..reference = doc.reference;
-  }
+  factory JobModel.fromDoc(DocumentSnapshot doc) =>
+      JobModel.fromJson(doc.data)..reference = doc.reference;
 
   String id;
   String userID;
@@ -84,7 +76,6 @@ class JobModel extends Model {
   DateTime createdAt;
   DateTime dueAt;
 
-  // TODO implement others
   JobModel copyWith({
     String contactID,
     Map<String, double> measurements,

@@ -50,13 +50,13 @@ class JobsBloc extends SimpleBloc<AppState> {
               .debounce(const Duration(milliseconds: 750))
               .switchMap<Action>(
                 (text) => Observable.concat([
-                      Observable.just(StartSearchJobAction()),
+                      Observable.just(const StartSearchJobAction()),
                       Observable.timer(
                         _doSearch(
                           context.state.jobs.jobs,
                           text,
                         ),
-                        Duration(seconds: 1),
+                        const Duration(seconds: 1),
                       )
                     ]).takeUntil<dynamic>(
                       input.where((action) => action is CancelSearchJobAction),

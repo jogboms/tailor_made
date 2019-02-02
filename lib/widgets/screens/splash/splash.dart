@@ -6,6 +6,7 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/actions/settings.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/settings.dart';
@@ -101,6 +102,8 @@ class _ContentState extends State<_Content> {
 
     Auth.onAuthStateChanged.firstWhere((user) => user != null).then(
       (user) {
+        // TODO: maybe not needed
+        StoreProvider.of<AppState>(context).dispatcher(OnLoginAction(user));
         Auth.setUser(user);
         Navigator.pushReplacement<String, dynamic>(
           context,

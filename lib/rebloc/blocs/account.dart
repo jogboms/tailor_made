@@ -20,31 +20,21 @@ class AccountBloc extends SimpleBloc<AppState> {
         final _action = context.action;
 
         if (_action is OnReadNotice) {
-          Observable.fromFuture(
-            _readNotice(_action.payload).catchError(
-              (dynamic e) => print(e),
-            ),
-          ).take(1).listen(
-                (_) => context.dispatcher(VoidAction()),
-              );
+          _readNotice(_action.payload)
+              .catchError((dynamic e) => print(e))
+              .then((_) => context.dispatcher(const VoidAction()));
         }
 
         if (_action is OnSendRating) {
-          Observable.fromFuture(
-            _sendRating(_action.payload, _action.rating).catchError(
-              (dynamic e) => print(e),
-            ),
-          ).take(1).listen(
-                (_) => context.dispatcher(VoidAction()),
-              );
+          _sendRating(_action.payload, _action.rating)
+              .catchError((dynamic e) => print(e))
+              .then((_) => context.dispatcher(const VoidAction()));
         }
 
         if (_action is OnPremiumSignUp) {
-          Observable.fromFuture(_signUp(_action.payload).catchError(
-            (dynamic e) => print(e),
-          )).take(1).listen(
-                (_) => context.dispatcher(VoidAction()),
-              );
+          _signUp(_action.payload)
+              .catchError((dynamic e) => print(e))
+              .then((_) => context.dispatcher(const VoidAction()));
         }
 
         if (_action is OnInitAction) {

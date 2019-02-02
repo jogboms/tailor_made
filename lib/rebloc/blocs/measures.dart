@@ -18,14 +18,11 @@ class MeasuresBloc extends SimpleBloc<AppState> {
       (context) {
         final _action = context.action;
 
+        // TODO: should really check this out
         if (_action is OnInitMeasureAction) {
-          Observable.fromFuture(
-            _init(_action.payload).catchError(
-              (dynamic e) => print(e),
-            ),
-          ).take(1).listen(
-                (_) => context.dispatcher(OnInitAction()),
-              );
+          _init(_action.payload)
+              .catchError((dynamic e) => print(e))
+              .then((_) => context.dispatcher(const OnInitAction()));
         }
 
         if (_action is OnInitAction) {

@@ -16,18 +16,15 @@ class ImageModel extends Model {
         userID = userID ?? Auth.getUser.uid,
         createdAt = createdAt ?? DateTime.now();
 
-  factory ImageModel.fromJson(Map<String, dynamic> json) {
-    assert(json != null);
-    return ImageModel(
-      id: json['id'],
-      userID: json['userID'],
-      contactID: json['contactID'],
-      jobID: json['jobID'],
-      path: json['path'],
-      src: json['src'],
-      createdAt: DateTime.tryParse(json['createdAt'].toString()),
-    );
-  }
+  ImageModel.fromJson(Map<String, dynamic> json)
+      : assert(json != null),
+        id = json['id'],
+        userID = json['userID'],
+        contactID = json['contactID'],
+        jobID = json['jobID'],
+        path = json['path'],
+        src = json['src'],
+        createdAt = DateTime.tryParse(json['createdAt'].toString());
 
   String id;
   String userID;
