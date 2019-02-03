@@ -12,23 +12,19 @@ class StatsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    return Observable(input).map(
-      (context) {
-        if (context.action is OnInitAction) {
-          Observable(CloudDb.stats.snapshots())
-              .map(
-                (snapshot) => StatsModel.fromJson(snapshot.data),
-              )
-              .takeUntil<dynamic>(
-                input.where((dynamic action) => action is OnDisposeAction),
-              )
-              .listen(
-                (stats) => context.dispatcher(OnDataStatAction(payload: stats)),
-              );
-        }
-        return context;
-      },
-    );
+    Observable(input)
+        .where((_) => _.action is InitStatsAction)
+        .switchMap(
+          (context) => CloudDb.stats
+              .snapshots()
+              .map((snapshot) => StatsModel.fromJson(snapshot.data))
+              .map((stats) => OnDataStatAction(payload: stats))
+              .map((action) => context.copyWith(action))
+              .takeWhile((_) => _.action is! OnDisposeAction),
+        )
+        .listen((context) => context.dispatcher(context.action));
+
+    return input;
   }
 
   @override

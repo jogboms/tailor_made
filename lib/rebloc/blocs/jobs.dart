@@ -34,55 +34,68 @@ Comparator<JobModel> _sort(SortType sortType) {
 }
 
 class JobsBloc extends SimpleBloc<AppState> {
+  Stream<WareContext<AppState>> _makeSearch(
+    WareContext<AppState> context,
+  ) {
+    return Observable<String>.just((context.action as SearchJobAction).payload)
+        .map<String>((String text) => text.trim())
+        .distinct()
+        .where((text) => text.length > 1)
+        .debounce(const Duration(milliseconds: 750))
+        .switchMap<Action>(
+          (text) => Stream.fromIterable(
+                [
+                  const StartSearchJobAction(),
+                  SearchSuccessJobAction(
+                    payload: context.state.jobs.jobs.where(
+                      (job) {
+                        return job.name.contains(
+                          RegExp(r'' + text + '', caseSensitive: false),
+                        );
+                      },
+                    ).toList(),
+                  ),
+                ],
+              ).takeWhile(
+                (action) => action is! CancelSearchJobAction,
+              ),
+        )
+        .map((action) => context.copyWith(action));
+  }
+
+  Stream<WareContext<AppState>> _onAfterLogin(
+    WareContext<AppState> context,
+  ) {
+    return CloudDb.jobs
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.documents
+              .map((item) => JobModel.fromDoc(item))
+              .toList();
+        })
+        .map((jobs) => OnDataJobAction(payload: jobs))
+        .map((action) => context.copyWith(action))
+        .takeWhile((_) => _.action is! OnDisposeAction);
+  }
+
   @override
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    return Observable(input).map(
-      (context) {
-        final _action = context.action;
-
-        if (_action is SearchJobAction) {
-          Observable<String>.just(_action.payload)
-              .map<String>((String text) => text.trim())
-              .distinct()
-              .where((text) => text.length > 1)
-              .debounce(const Duration(milliseconds: 750))
-              .switchMap<Action>(
-                (text) => Observable.concat([
-                      Observable.just(const StartSearchJobAction()),
-                      Observable.timer(
-                        _doSearch(
-                          context.state.jobs.jobs,
-                          text,
-                        ),
-                        const Duration(seconds: 1),
-                      )
-                    ]).takeUntil<dynamic>(
-                      input.where((action) => action is CancelSearchJobAction),
-                    ),
-              )
-              .listen((action) => context.dispatcher(action));
-        }
-
-        if (_action is OnInitAction) {
-          Observable(CloudDb.jobs.snapshots())
-              .map((snapshot) {
-                return snapshot.documents
-                    .map((item) => JobModel.fromDoc(item))
-                    .toList();
-              })
-              .takeUntil<dynamic>(
-                input.where((action) => action is OnDisposeAction),
-              )
-              .listen(
-                (jobs) => context.dispatcher(OnDataJobAction(payload: jobs)),
-              );
-        }
-
-        return context;
-      },
+    MergeStream(
+      [
+        Observable(input)
+            .where((_) => _.action is SearchJobAction)
+            .switchMap(_makeSearch),
+        Observable(input)
+            .where((_) => _.action is InitJobsAction)
+            .switchMap(_onAfterLogin),
+      ],
+    ).listen(
+      (context) => context.dispatcher(context.action),
     );
+
+    return input;
   }
 
   @override
@@ -140,14 +153,4 @@ class JobsBloc extends SimpleBloc<AppState> {
 
     return state;
   }
-}
-
-SearchSuccessJobAction _doSearch(List<JobModel> jobs, String text) {
-  return SearchSuccessJobAction(
-    payload: jobs
-        .where((job) => job.name.contains(
-              RegExp(r'' + text + '', caseSensitive: false),
-            ))
-        .toList(),
-  );
 }

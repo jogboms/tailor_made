@@ -11,46 +11,99 @@ import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/services/settings.dart';
 
 class AccountBloc extends SimpleBloc<AppState> {
+  Stream<WareContext<AppState>> _readNotice(
+    WareContext<AppState> context,
+  ) async* {
+    final _account = (context.action as OnReadNotice).payload;
+    try {
+      await _account.reference.updateData(
+        _account.copyWith(hasReadNotice: true).toMap(),
+      );
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+    yield context;
+  }
+
+  Stream<WareContext<AppState>> _sendRating(
+    WareContext<AppState> context,
+  ) async* {
+    final _action = context.action as OnSendRating;
+
+    try {
+      await _action.payload.reference.updateData(
+        _action.payload
+            .copyWith(hasSendRating: true, rating: _action.rating)
+            .toMap(),
+      );
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+
+    yield context;
+  }
+
+  Stream<WareContext<AppState>> _signUp(
+    WareContext<AppState> context,
+  ) async* {
+    final _action = context.action as OnPremiumSignUp;
+
+    try {
+      final _account = _action.payload.copyWith(
+        status: AccountModelStatus.pending,
+        notice: Settings.getData().premiumNotice,
+        hasReadNotice: false,
+        hasPremiumEnabled: true,
+      );
+      await _action.payload.reference.updateData(_account.toMap());
+      await CloudDb.premium
+          .document(_action.payload.uid)
+          .setData(_account.toMap());
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+
+    yield context;
+  }
+
+  Stream<WareContext<AppState>> _getAccount(
+    WareContext<AppState> context,
+  ) {
+    return CloudDb.account
+        .snapshots()
+        .map((snapshot) => AccountModel.fromDoc(snapshot))
+        .map((account) => OnDataAccountAction(payload: account))
+        .map((action) => context.copyWith(action))
+        .takeWhile((_) => _.action is! OnDisposeAction);
+  }
+
   @override
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    return Observable(input).map(
-      (context) {
-        final _action = context.action;
-
-        if (_action is OnReadNotice) {
-          _readNotice(_action.payload)
-              .catchError((dynamic e) => print(e))
-              .then((_) => context.dispatcher(const VoidAction()));
-        }
-
-        if (_action is OnSendRating) {
-          _sendRating(_action.payload, _action.rating)
-              .catchError((dynamic e) => print(e))
-              .then((_) => context.dispatcher(const VoidAction()));
-        }
-
-        if (_action is OnPremiumSignUp) {
-          _signUp(_action.payload)
-              .catchError((dynamic e) => print(e))
-              .then((_) => context.dispatcher(const VoidAction()));
-        }
-
-        if (_action is OnInitAction) {
-          Observable(CloudDb.account.snapshots())
-              .map((snapshot) => AccountModel.fromDoc(snapshot))
-              .takeUntil<dynamic>(
-                input.where((action) => action is OnDisposeAction),
-              )
-              .listen((account) => context.dispatcher(
-                    OnDataAccountAction(payload: account),
-                  ));
-        }
-
-        return context;
-      },
+    MergeStream(
+      [
+        Observable(input)
+            .where((_) => _.action is InitAccountAction)
+            .switchMap(_getAccount),
+        Observable(input)
+            .where((_) => _.action is OnReadNotice)
+            .switchMap(_readNotice),
+        Observable(input)
+            .where((_) => _.action is OnSendRating)
+            .switchMap(_sendRating),
+        Observable(input)
+            .where((_) => _.action is OnPremiumSignUp)
+            .switchMap(_signUp),
+      ],
+    ).listen(
+      (context) => context.dispatcher(context.action),
     );
+
+    return input;
   }
 
   @override
@@ -76,43 +129,4 @@ class AccountBloc extends SimpleBloc<AppState> {
 
     return state;
   }
-}
-
-Future<AccountModel> _sendRating(AccountModel account, int rating) async {
-  final _account = account.copyWith(
-    hasSendRating: true,
-    rating: rating,
-  );
-  try {
-    await account.reference.updateData(_account.toMap());
-  } catch (e) {
-    rethrow;
-  }
-  return _account;
-}
-
-Future<AccountModel> _readNotice(AccountModel account) async {
-  final _account = account.copyWith(hasReadNotice: true);
-  try {
-    await account.reference.updateData(_account.toMap());
-  } catch (e) {
-    rethrow;
-  }
-  return _account;
-}
-
-Future<AccountModel> _signUp(AccountModel account) async {
-  final _account = account.copyWith(
-    status: AccountModelStatus.pending,
-    notice: Settings.getData().premiumNotice,
-    hasReadNotice: false,
-    hasPremiumEnabled: true,
-  );
-  try {
-    await account.reference.updateData(_account.toMap());
-    await CloudDb.premium.document(account.uid).setData(_account.toMap());
-  } catch (e) {
-    rethrow;
-  }
-  return _account;
 }

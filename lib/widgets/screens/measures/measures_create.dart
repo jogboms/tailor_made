@@ -171,7 +171,6 @@ class _MeasuresCreateState extends State<MeasuresCreate>
   void _onTapDeleteItem(MeasuresViewModel vm, MeasureModel measure) async {
     final choice = await mkChoiceDialog(
       context: context,
-      title: "",
       message: "Are you sure?",
     );
     if (choice == null || choice == false) {

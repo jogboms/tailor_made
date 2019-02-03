@@ -2,12 +2,12 @@ import 'package:meta/meta.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/models/settings.dart';
 
-class InitSettingsEvents extends Action {
-  const InitSettingsEvents();
+class InitSettingsAction extends Action {
+  const InitSettingsAction();
 }
 
-class OnErrorSettingsEvents extends Action {
-  const OnErrorSettingsEvents();
+class OnErrorSettingsAction extends Action {
+  const OnErrorSettingsAction();
 }
 
 class OnDataSettingAction extends Action {

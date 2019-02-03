@@ -11,6 +11,10 @@ enum SortType {
   reset,
 }
 
+class InitContactsAction extends Action {
+  const InitContactsAction();
+}
+
 class SortContacts extends Action {
   const SortContacts({
     @required this.payload,

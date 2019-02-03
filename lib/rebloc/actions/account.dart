@@ -2,6 +2,10 @@ import 'package:meta/meta.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/models/account.dart';
 
+class InitAccountAction extends Action {
+  const InitAccountAction();
+}
+
 class OnDataAccountAction extends Action {
   const OnDataAccountAction({
     @required this.payload,

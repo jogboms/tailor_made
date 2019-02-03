@@ -63,7 +63,11 @@ class ContactsState {
   }
 
   @override
-  String toString() {
-    return '\nContacts: $contacts, \nHasSortFn: $hasSortFn, \nSortFn: $sortFn, \nSearchResults: $searchResults, \nIsSearching: $isSearching';
-  }
+  String toString() => """
+Contacts: $contacts,
+HasSortFn: $hasSortFn,
+SortFn: $sortFn,
+SearchResults: $searchResults,
+IsSearching: $isSearching
+    """;
 }

@@ -7,7 +7,7 @@ import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 
 Future<bool> mkChoiceDialog({
-  @required String title,
+  String title,
   @required String message,
   @required BuildContext context,
 }) =>
@@ -33,11 +33,11 @@ class _MkChoiceDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final _theme = MkTheme.of(context);
     return AlertDialog(
-      title: Text(title, textAlign: TextAlign.center),
-      content: Text(message, textAlign: TextAlign.center),
-      titleTextStyle: _theme.bodySemi.copyWith(color: MkColors.primary),
-      contentTextStyle: _theme.bodyMedium.copyWith(height: 1.5),
-      contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 8.0),
+      title: title != null ? Text(title) : null,
+      content: Text(message),
+      titleTextStyle: _theme.title.copyWith(color: MkColors.primary),
+      contentTextStyle: _theme.subhead1Semi.copyWith(height: 1.5),
+      contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
       elevation: 2,
       actions: <Widget>[
         MkClearButton(
@@ -46,7 +46,7 @@ class _MkChoiceDialog extends StatelessWidget {
           onPressed: () => Navigator.pop(context, false),
         ),
         MkClearButton(
-          child: const Text("Yes"),
+          child: const Text("Continue"),
           onPressed: () => Navigator.pop(context, true),
         ),
       ],

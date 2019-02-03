@@ -42,7 +42,7 @@ class SettingsState {
   }
 
   @override
-  String toString() {
-    return '\nSettings: $settings';
-  }
+  String toString() => """
+Settings: $settings
+    """;
 }

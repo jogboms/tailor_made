@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
@@ -7,11 +8,10 @@ import 'package:tailor_made/rebloc/states/account.dart';
 import 'package:tailor_made/rebloc/states/contacts.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/states/stats.dart';
-import 'package:tailor_made/rebloc/view_models/stats.dart';
 import 'package:tailor_made/services/settings.dart';
 import 'package:version/version.dart';
 
-class HomeViewModel extends StatsViewModel {
+class HomeViewModel extends Equatable {
   HomeViewModel(AppState state)
       : account = state.account.account,
         contacts = state.contacts.contacts,
@@ -19,26 +19,28 @@ class HomeViewModel extends StatsViewModel {
         stats = state.stats.stats,
         settings = state.settings.settings,
         hasSkipedPremium = state.account.hasSkipedPremium == true,
-        _isLoading = state.stats.status == StatsStatus.loading ||
+        isLoading = state.stats.status == StatsStatus.loading ||
             state.contacts.status == ContactsStatus.loading ||
             state.account.status == AccountStatus.loading,
-        super(state);
+        super(<AppState>[state]);
 
   final AccountModel account;
   final List<ContactModel> contacts;
   final List<JobModel> jobs;
   final StatsModel stats;
   final SettingsModel settings;
-  final bool _isLoading;
-  @override
-  bool get isLoading => _isLoading;
+  final bool isLoading;
   final bool hasSkipedPremium;
-  bool get isDisabled => account.status == AccountModelStatus.disabled;
-  bool get isWarning => account.status == AccountModelStatus.warning;
-  bool get isPending => account.status == AccountModelStatus.pending;
+  bool get isDisabled =>
+      account != null && account.status == AccountModelStatus.disabled;
+  bool get isWarning =>
+      account != null && account.status == AccountModelStatus.warning;
+  bool get isPending =>
+      account != null && account.status == AccountModelStatus.pending;
 
   bool get shouldSendRating {
-    return !account.hasSendRating &&
+    return account != null &&
+        !account.hasSendRating &&
         (((contacts?.length ?? 0) >= 10) || ((jobs?.length ?? 0) >= 10));
   }
 

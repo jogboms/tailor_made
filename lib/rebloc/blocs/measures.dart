@@ -10,53 +10,77 @@ import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/utils/mk_group_model_by.dart';
 
 class MeasuresBloc extends SimpleBloc<AppState> {
+  Stream<WareContext<AppState>> _onUpdateMeasure(
+    WareContext<AppState> context,
+  ) async* {
+    final WriteBatch batch = CloudDb.instance.batch();
+
+    try {
+      (context.action as UpdateMeasureAction).payload.forEach((measure) {
+        batch.setData(
+          CloudDb.measurements.document(measure.id),
+          measure.toMap(),
+          merge: true,
+        );
+      });
+
+      await batch.commit();
+      yield context.copyWith(const InitMeasuresAction());
+    } catch (e) {
+      print(e);
+      yield context;
+    }
+  }
+
+  Stream<WareContext<AppState>> _onInitMeasure(
+    WareContext<AppState> context,
+  ) {
+    return CloudDb.measurements
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.documents
+              .map((item) => MeasureModel.fromDoc(item))
+              .toList();
+        })
+        .map((measures) {
+          if (measures.isEmpty) {
+            return UpdateMeasureAction(
+              payload: createDefaultMeasures(),
+            );
+          }
+
+          final grouped = groupModelBy<MeasureModel>(
+            measures,
+            (measure) => measure.group,
+          );
+
+          return OnDataMeasureAction(
+            payload: measures,
+            grouped: grouped,
+          );
+        })
+        .map((action) => context.copyWith(action))
+        .takeWhile((_) => _.action is! OnDisposeAction);
+  }
+
   @override
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    return Observable(input).map(
-      (context) {
-        final _action = context.action;
-
-        // TODO: should really check this out
-        if (_action is OnInitMeasureAction) {
-          _init(_action.payload)
-              .catchError((dynamic e) => print(e))
-              .then((_) => context.dispatcher(const OnInitAction()));
-        }
-
-        if (_action is OnInitAction) {
-          Observable(CloudDb.measurements.snapshots())
-              .map((snapshot) {
-                return snapshot.documents
-                    .map((item) => MeasureModel.fromDoc(item))
-                    .toList();
-              })
-              .takeUntil<dynamic>(
-                input.where((action) => action is OnDisposeAction),
-              )
-              .listen((measures) {
-                if (measures.isEmpty) {
-                  return context.dispatcher(OnInitMeasureAction(
-                    payload: createDefaultMeasures(),
-                  ));
-                }
-
-                final grouped = groupModelBy<MeasureModel>(
-                  measures,
-                  (measure) => measure.group,
-                );
-
-                return context.dispatcher(OnDataMeasureAction(
-                  payload: measures,
-                  grouped: grouped,
-                ));
-              });
-        }
-
-        return context;
-      },
+    MergeStream(
+      [
+        Observable(input)
+            .where((_) => _.action is UpdateMeasureAction)
+            .switchMap(_onUpdateMeasure),
+        Observable(input)
+            .where((_) => _.action is InitMeasuresAction)
+            .switchMap(_onInitMeasure),
+      ],
+    ).listen(
+      (context) => context.dispatcher(context.action),
     );
+
+    return input;
   }
 
   @override
@@ -73,7 +97,7 @@ class MeasuresBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is ToggleMeasuresLoading || action is OnInitMeasureAction) {
+    if (action is ToggleMeasuresLoading || action is UpdateMeasureAction) {
       return state.copyWith(
         measures: _measures.copyWith(
           status: MeasuresStatus.loading,
@@ -82,23 +106,5 @@ class MeasuresBloc extends SimpleBloc<AppState> {
     }
 
     return state;
-  }
-}
-
-Future<void> _init(List<MeasureModel> measures) async {
-  final WriteBatch batch = CloudDb.instance.batch();
-
-  measures.forEach((measure) {
-    batch.setData(
-      CloudDb.measurements.document(measure.id),
-      measure.toMap(),
-      merge: true,
-    );
-  });
-
-  try {
-    await batch.commit();
-  } catch (e) {
-    rethrow;
   }
 }

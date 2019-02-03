@@ -52,7 +52,9 @@ class MeasuresState {
   }
 
   @override
-  String toString() {
-    return '\nMeasures: $measures, \nGrouped: $grouped, \nHasSkipedPremium: $hasSkipedPremium';
-  }
+  String toString() => """
+Measures: $measures,
+Grouped: $grouped,
+HasSkipedPremium: $hasSkipedPremium
+    """;
 }

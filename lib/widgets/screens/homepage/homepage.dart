@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
+import 'package:tailor_made/constants/mk_routes.dart';
 import 'package:tailor_made/rebloc/actions/account.dart';
+import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/home_view_model.dart';
+import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
+import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
+import 'package:tailor_made/utils/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/access_denied.dart';
 import 'package:tailor_made/widgets/_views/out_dated.dart';
@@ -17,6 +22,7 @@ import 'package:tailor_made/widgets/screens/homepage/_partials/mid_row.dart';
 import 'package:tailor_made/widgets/screens/homepage/_partials/stats.dart';
 import 'package:tailor_made/widgets/screens/homepage/_partials/top_button_bar.dart';
 import 'package:tailor_made/widgets/screens/homepage/_partials/top_row.dart';
+import 'package:tailor_made/widgets/screens/splash/splash.dart';
 
 const double _kBottomBarHeight = 46.0;
 const double _kBottomGridsHeight = 280.0;
@@ -31,78 +37,76 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        return await mkChoiceDialog(
-          context: context,
-          title: "",
-          message: "Continue with Exit?",
-        );
-      },
-      child: Scaffold(
-        resizeToAvoidBottomPadding: false,
-        body: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            const Opacity(
-              opacity: .5,
-              child: const DecoratedBox(
-                decoration: const BoxDecoration(
-                  image: const DecorationImage(
-                    image: MkImages.pattern,
-                    fit: BoxFit.cover,
+      onWillPop: () => mkChoiceDialog(
+            context: context,
+            message: "Continue with Exit?",
+          ),
+      child: MkStatusBar(
+        brightness: Brightness.dark,
+        child: Scaffold(
+          resizeToAvoidBottomPadding: false,
+          body: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              const Opacity(
+                opacity: .5,
+                child: const DecoratedBox(
+                  decoration: const BoxDecoration(
+                    image: const DecorationImage(
+                      image: MkImages.pattern,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
-            ),
-            ViewModelSubscriber<AppState, HomeViewModel>(
-              converter: (store) => HomeViewModel(store),
-              builder: (
-                BuildContext context,
-                DispatchFunction dispatcher,
-                HomeViewModel vm,
-              ) {
-                if (vm.isLoading) {
-                  return Center(
-                    child: const MkLoadingSpinner(),
-                  );
-                }
+              ViewModelSubscriber<AppState, HomeViewModel>(
+                converter: (store) => HomeViewModel(store),
+                builder: (
+                  BuildContext context,
+                  DispatchFunction dispatcher,
+                  HomeViewModel vm,
+                ) {
+                  if (vm.isLoading) {
+                    return const MkLoadingSpinner();
+                  }
 
-                if (vm.isOutdated) {
-                  return OutDatedPage(
-                    onUpdate: () {
-                      open(
-                        'https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade',
-                      );
-                    },
-                  );
-                }
+                  if (vm.isOutdated) {
+                    return OutDatedPage(
+                      onUpdate: () {
+                        open(
+                          'https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade',
+                        );
+                      },
+                    );
+                  }
 
-                if (vm.isDisabled) {
-                  return AccessDeniedPage(
-                    onSendMail: () {
-                      email(
-                        "jeremiahogbomo@gmail.com",
-                        'Unwarranted%20Account%20Suspension%20%23${vm.account.uid}',
-                      );
-                    },
-                  );
-                }
+                  if (vm.isDisabled) {
+                    return AccessDeniedPage(
+                      onSendMail: () {
+                        email(
+                          "jeremiahogbomo@gmail.com",
+                          'Unwarranted%20Account%20Suspension%20%23${vm.account.uid}',
+                        );
+                      },
+                    );
+                  }
 
-                if (vm.isWarning && vm.hasSkipedPremium == false) {
-                  return RateLimitPage(
-                    onSignUp: () {
-                      dispatcher(OnPremiumSignUp(payload: vm.account));
-                    },
-                    onSkipedPremium: () {
-                      dispatcher(const OnSkipedPremium());
-                    },
-                  );
-                }
+                  if (vm.isWarning && vm.hasSkipedPremium == false) {
+                    return RateLimitPage(
+                      onSignUp: () {
+                        dispatcher(OnPremiumSignUp(payload: vm.account));
+                      },
+                      onSkipedPremium: () {
+                        dispatcher(const OnSkipedPremium());
+                      },
+                    );
+                  }
 
-                return _Body(vm: vm);
-              },
-            ),
-          ],
+                  return _Body(vm: vm);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -160,6 +164,20 @@ class _Body extends StatelessWidget {
             TopButtonBar(
               account: vm.account,
               shouldSendRating: vm.shouldSendRating,
+              onLogout: () async {
+                await Auth.signOutWithGoogle();
+                StoreProvider.of<AppState>(context).dispatcher(
+                  const OnLogoutAction(),
+                );
+                Navigator.pushAndRemoveUntil<void>(
+                  context,
+                  MkNavigate.fadeIn<void>(
+                    const SplashPage(isColdStart: false),
+                    name: MkRoutes.start,
+                  ),
+                  (Route<void> route) => false,
+                );
+              },
             ),
           ],
         );

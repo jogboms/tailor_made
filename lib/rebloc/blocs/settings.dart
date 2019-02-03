@@ -13,49 +13,38 @@ class SettingsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    return Observable(input).map(
-      (context) {
-        if (context.action is OnInitAction ||
-            context.action is InitSettingsEvents) {
-          Observable(CloudDb.settings.snapshots())
-              .map(
-                (snapshot) {
-                  if (snapshot.data == null) {
-                    throw FormatException("Internet Error");
-                  }
-                  return SettingsModel.fromJson(snapshot.data);
-                },
+    Observable(input)
+        .where((_) => _.action is InitSettingsAction)
+        .switchMap(
+          (context) => CloudDb.settings
+              .snapshots()
+              .map((snapshot) {
+                if (snapshot.data == null) {
+                  throw FormatException("Internet Error");
+                }
+                return SettingsModel.fromJson(snapshot.data);
+              })
+              .handleError(
+                () => context.dispatcher(const OnErrorSettingsAction()),
               )
-              .takeUntil<dynamic>(
-                input.where((action) => action is OnDisposeAction),
-              )
-              .listen(
-                (settings) {
-                  // Keep Static copy
-                  Settings.setData(settings);
-                  context.dispatcher(OnDataSettingAction(payload: settings));
-                },
-                onError: () {
-                  context.dispatcher(const OnErrorSettingsEvents());
-                },
-              );
-        }
-        return context;
-      },
-    );
+              .map((settings) {
+                // Keep Static copy
+                Settings.setData(settings);
+                return OnDataSettingAction(payload: settings);
+              })
+              .map((action) => context.copyWith(action))
+              .takeWhile((_) => _.action is! OnDisposeAction),
+        )
+        .listen(
+          (context) => context.dispatcher(context.action),
+        );
+
+    return input;
   }
 
   @override
   AppState reducer(AppState state, Action action) {
     final _settings = state.settings;
-
-    if (action is OnInitAction || action is InitSettingsEvents) {
-      return state.copyWith(
-        settings: _settings.copyWith(
-          status: SettingsStatus.loading,
-        ),
-      );
-    }
 
     if (action is OnDataSettingAction) {
       return state.copyWith(
@@ -66,7 +55,7 @@ class SettingsBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is OnErrorSettingsEvents) {
+    if (action is OnErrorSettingsAction) {
       return state.copyWith(
         settings: _settings.copyWith(
           status: SettingsStatus.failure,
