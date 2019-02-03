@@ -27,52 +27,63 @@ Comparator<ContactModel> _sort(SortType sortType) {
 }
 
 class ContactsBloc extends SimpleBloc<AppState> {
+  Stream<WareContext<AppState>> _onAfterLogin(
+    WareContext<AppState> context,
+  ) {
+    return CloudDb.contacts
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.documents
+              .where((doc) => doc.data.containsKey('fullname'))
+              .map((item) => ContactModel.fromDoc(item))
+              .toList(),
+        )
+        .map((contacts) => OnDataContactAction(payload: contacts))
+        .map((action) => context.copyWith(action))
+        .takeWhile((_) => _.action is! OnDisposeAction);
+  }
+
+  Stream<WareContext<AppState>> _makeSearch(
+    WareContext<AppState> context,
+  ) {
+    return Observable<String>.just(
+            (context.action as SearchContactAction).payload)
+        .map<String>((String text) => text.trim())
+        .distinct()
+        .where((text) => text.length > 1)
+        .debounce(const Duration(milliseconds: 750))
+        .switchMap<Action>(
+          (text) => ConcatStream<Action>(
+                [
+                  Stream.fromIterable([const StartSearchContactAction()]),
+                  Observable.timer(
+                    SearchSuccessContactAction(
+                      payload: context.state.contacts.contacts.where(
+                        (contact) {
+                          return contact.fullname.contains(
+                            RegExp(r'' + text + '', caseSensitive: false),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                    const Duration(seconds: 1),
+                  )
+                ],
+              ).takeWhile((action) => action is! CancelSearchContactAction),
+        )
+        .map((action) => context.copyWith(action));
+  }
+
   @override
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    final a = input.where((_) => _.action is SearchContactAction).asyncExpand(
-      (context) {
-        return Observable<String>.just(
-          (context.action as SearchContactAction).payload,
-        )
-            .map<String>((String text) => text.trim())
-            .distinct()
-            .where((text) => text.length > 1)
-            .debounce(const Duration(milliseconds: 750))
-            .switchMap<Action>(
-              (text) => ConcatStream<Action>(
-                    [
-                      Stream.fromIterable([const StartSearchContactAction()]),
-                      Observable.timer(
-                        _doSearch(
-                          context.state.contacts.contacts,
-                          text,
-                        ),
-                        const Duration(seconds: 1),
-                      )
-                    ],
-                  ).takeWhile((action) => action is! CancelSearchContactAction),
-            )
-            .map((action) => context.copyWith(action));
-      },
-    );
-
-    final b = input.where((_) => _.action is OnLoginAction).asyncExpand(
-          (context) => CloudDb.contacts
-              .snapshots()
-              .map(
-                (snapshot) => snapshot.documents
-                    .where((doc) => doc.data.containsKey('fullname'))
-                    .map((item) => ContactModel.fromDoc(item))
-                    .toList(),
-              )
-              .map((contacts) => OnDataContactAction(payload: contacts))
-              .map((action) => context.copyWith(action))
-              .takeWhile((_) => _.action is! OnDisposeAction),
-        );
-
-    MergeStream([a, b]).listen(
+    MergeStream([
+      input.where((_) => _.action is SearchContactAction).asyncExpand(
+            _makeSearch,
+          ),
+      input.where((_) => _.action is OnLoginAction).asyncExpand(_onAfterLogin),
+    ]).listen(
       (context) => context.dispatcher(context.action),
     );
 
@@ -136,14 +147,4 @@ class ContactsBloc extends SimpleBloc<AppState> {
 
     return state;
   }
-}
-
-SearchSuccessContactAction _doSearch(List<ContactModel> contacts, String text) {
-  return SearchSuccessContactAction(
-    payload: contacts
-        .where((contact) => contact.fullname.contains(
-              RegExp(r'' + text + '', caseSensitive: false),
-            ))
-        .toList(),
-  );
 }
