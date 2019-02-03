@@ -63,7 +63,11 @@ class JobsState {
   }
 
   @override
-  String toString() {
-    return '\nJobs: $jobs, \nHasSortFn: $hasSortFn, \nSortFn: $sortFn, \nSearchResults: $searchResults, \nIsSearching: $isSearching';
-  }
+  String toString() => """
+Jobs: $jobs,
+HasSortFn: $hasSortFn,
+SortFn: $sortFn,
+SearchResults: $searchResults,
+IsSearching: $isSearching
+    """;
 }

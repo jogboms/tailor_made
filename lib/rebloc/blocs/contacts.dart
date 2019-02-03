@@ -42,18 +42,19 @@ class ContactsBloc extends SimpleBloc<AppState> {
               .where((text) => text.length > 1)
               .debounce(const Duration(milliseconds: 750))
               .switchMap<Action>(
-                (text) => Observable.concat([
-                      Observable.just(StartSearchContactAction()),
-                      Observable.timer(
-                        _doSearch(
-                          context.state.contacts.contacts,
-                          text,
-                        ),
-                        Duration(seconds: 1),
-                      )
-                    ]).takeUntil<dynamic>(
-                      input.where(
-                          (action) => action is CancelSearchContactAction),
+                (text) => ConcatStream<Action>(
+                      [
+                        Stream.fromIterable([const StartSearchContactAction()]),
+                        Observable.timer(
+                          _doSearch(
+                            context.state.contacts.contacts,
+                            text,
+                          ),
+                          const Duration(seconds: 1),
+                        )
+                      ],
+                    ).takeWhile(
+                      (action) => action is! CancelSearchContactAction,
                     ),
               )
               .listen((action) => context.dispatcher(action));

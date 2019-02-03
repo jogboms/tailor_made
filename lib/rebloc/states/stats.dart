@@ -42,7 +42,7 @@ class StatsState {
   }
 
   @override
-  String toString() {
-    return '\nStats: $stats';
-  }
+  String toString() => """
+Stats: $stats
+    """;
 }

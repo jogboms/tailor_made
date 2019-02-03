@@ -47,7 +47,8 @@ class AccountState {
   }
 
   @override
-  String toString() {
-    return '\nAccount: ${account?.toMap()}, \nHasSkipedPremium: $hasSkipedPremium';
-  }
+  String toString() => """
+Account: ${account?.toMap()},
+HasSkipedPremium: $hasSkipedPremium
+    """;
 }

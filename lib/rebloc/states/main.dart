@@ -53,11 +53,11 @@ class AppState {
 
   @override
   String toString() => """
-			\nContacts => $contacts,
-			\nJobs => $jobs,
-			\nStats => $stats,
-			\nMeasures => $measures,
-			\nSettings => $settings,
-			\nAccount => $account
+$contacts,
+$jobs,
+$stats,
+$measures,
+$settings,
+$account
 		""";
 }
