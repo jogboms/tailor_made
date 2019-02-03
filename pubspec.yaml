@@ -1,6 +1,6 @@
 name: tailor_made
 description: Tailor-Made with love.
-version: 1.1.0
+version: 1.2.0
 
 dependencies:
   flutter:
