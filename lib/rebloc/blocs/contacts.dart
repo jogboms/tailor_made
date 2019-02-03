@@ -31,7 +31,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    return Observable(input).map(
+    return input.map(
       (context) {
         final _action = context.action;
 
@@ -60,22 +60,18 @@ class ContactsBloc extends SimpleBloc<AppState> {
         }
 
         if (_action is OnInitAction) {
-          Observable(CloudDb.contacts.snapshots())
+          CloudDb.contacts
+              .snapshots()
               .map(
-                (snapshot) {
-                  return snapshot.documents
-                      .where((doc) => doc.data.containsKey('fullname'))
-                      .map((item) => ContactModel.fromDoc(item))
-                      .toList();
-                },
+                (snapshot) => snapshot.documents
+                    .where((doc) => doc.data.containsKey('fullname'))
+                    .map((item) => ContactModel.fromDoc(item))
+                    .toList(),
               )
-              .takeUntil<dynamic>(
-                input.where((action) => action is OnDisposeAction),
-              )
-              .listen(
-                (contacts) =>
-                    context.dispatcher(OnDataContactAction(payload: contacts)),
-              );
+              .takeWhile((action) => action is! OnDisposeAction)
+              .listen((contacts) => context.dispatcher(
+                    OnDataContactAction(payload: contacts),
+                  ));
         }
 
         return context;

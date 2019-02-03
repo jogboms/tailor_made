@@ -38,7 +38,7 @@ class JobsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    return Observable(input).map(
+    return input.map(
       (context) {
         final _action = context.action;
 
@@ -66,15 +66,14 @@ class JobsBloc extends SimpleBloc<AppState> {
         }
 
         if (_action is OnInitAction) {
-          Observable(CloudDb.jobs.snapshots())
+          CloudDb.jobs
+              .snapshots()
               .map((snapshot) {
                 return snapshot.documents
                     .map((item) => JobModel.fromDoc(item))
                     .toList();
               })
-              .takeUntil<dynamic>(
-                input.where((action) => action is OnDisposeAction),
-              )
+              .takeWhile((action) => action is! OnDisposeAction)
               .listen(
                 (jobs) => context.dispatcher(OnDataJobAction(payload: jobs)),
               );

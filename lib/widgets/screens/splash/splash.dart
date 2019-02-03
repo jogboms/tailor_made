@@ -148,8 +148,10 @@ class _ContentState extends State<_Content> {
 
                   if (vm.hasError) {
                     return Padding(
-                      padding:
-                          const EdgeInsets.fromLTRB(48.0, 16.0, 48.0, 16.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 48.0,
+                        vertical: 16.0,
+                      ),
                       child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

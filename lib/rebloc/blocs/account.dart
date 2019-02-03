@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:rebloc/rebloc.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/rebloc/actions/account.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
@@ -15,7 +14,7 @@ class AccountBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    return Observable(input).map(
+    return input.map(
       (context) {
         final _action = context.action;
 
@@ -38,11 +37,10 @@ class AccountBloc extends SimpleBloc<AppState> {
         }
 
         if (_action is OnInitAction) {
-          Observable(CloudDb.account.snapshots())
+          CloudDb.account
+              .snapshots()
               .map((snapshot) => AccountModel.fromDoc(snapshot))
-              .takeUntil<dynamic>(
-                input.where((action) => action is OnDisposeAction),
-              )
+              .takeWhile((action) => action is! OnDisposeAction)
               .listen((account) => context.dispatcher(
                     OnDataAccountAction(payload: account),
                   ));

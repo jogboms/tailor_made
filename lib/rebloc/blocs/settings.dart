@@ -17,7 +17,8 @@ class SettingsBloc extends SimpleBloc<AppState> {
       (context) {
         if (context.action is OnInitAction ||
             context.action is InitSettingsEvents) {
-          Observable(CloudDb.settings.snapshots())
+          CloudDb.settings
+              .snapshots()
               .map(
                 (snapshot) {
                   if (snapshot.data == null) {
@@ -26,9 +27,7 @@ class SettingsBloc extends SimpleBloc<AppState> {
                   return SettingsModel.fromJson(snapshot.data);
                 },
               )
-              .takeUntil<dynamic>(
-                input.where((action) => action is OnDisposeAction),
-              )
+              .takeWhile((action) => action is! OnDisposeAction)
               .listen(
                 (settings) {
                   // Keep Static copy

@@ -26,15 +26,14 @@ class MeasuresBloc extends SimpleBloc<AppState> {
         }
 
         if (_action is OnInitAction) {
-          Observable(CloudDb.measurements.snapshots())
+          CloudDb.measurements
+              .snapshots()
               .map((snapshot) {
                 return snapshot.documents
                     .map((item) => MeasureModel.fromDoc(item))
                     .toList();
               })
-              .takeUntil<dynamic>(
-                input.where((action) => action is OnDisposeAction),
-              )
+              .takeWhile((action) => action is! OnDisposeAction)
               .listen((measures) {
                 if (measures.isEmpty) {
                   return context.dispatcher(OnInitMeasureAction(

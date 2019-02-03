@@ -1,5 +1,4 @@
 import 'package:rebloc/rebloc.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/models/stats.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/actions/stats.dart';
@@ -12,16 +11,15 @@ class StatsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    return Observable(input).map(
+    return input.map(
       (context) {
         if (context.action is OnInitAction) {
-          Observable(CloudDb.stats.snapshots())
+          CloudDb.stats
+              .snapshots()
               .map(
                 (snapshot) => StatsModel.fromJson(snapshot.data),
               )
-              .takeUntil<dynamic>(
-                input.where((dynamic action) => action is OnDisposeAction),
-              )
+              .takeWhile((dynamic action) => action is! OnDisposeAction)
               .listen(
                 (stats) => context.dispatcher(OnDataStatAction(payload: stats)),
               );
