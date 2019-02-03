@@ -1,24 +1,21 @@
 import 'package:tailor_made/models/main.dart';
 
 class IntStatsModel extends Model {
-  final int total;
-  final int pending;
-  final int completed;
-
   IntStatsModel({
     this.total,
     this.pending,
     this.completed,
   });
 
-  factory IntStatsModel.fromJson(Map<String, dynamic> json) {
-    assert(json != null);
-    return IntStatsModel(
-      total: int.tryParse(json['total'].toString()),
-      pending: int.tryParse(json['pending'].toString()),
-      completed: int.tryParse(json['completed'].toString()),
-    );
-  }
+  IntStatsModel.fromJson(Map<String, dynamic> json)
+      : assert(json != null),
+        total = int.tryParse(json['total'].toString()),
+        pending = int.tryParse(json['pending'].toString()),
+        completed = int.tryParse(json['completed'].toString());
+
+  final int total;
+  final int pending;
+  final int completed;
 
   @override
   Map<String, dynamic> toMap() {
@@ -31,24 +28,21 @@ class IntStatsModel extends Model {
 }
 
 class DoubleStatsModel extends Model {
-  final double total;
-  final double pending;
-  final double completed;
-
   DoubleStatsModel({
     this.total,
     this.pending,
     this.completed,
   });
 
-  factory DoubleStatsModel.fromJson(Map<String, dynamic> json) {
-    assert(json != null);
-    return DoubleStatsModel(
-      total: double.tryParse(json['total'].toString()),
-      pending: double.tryParse(json['pending'].toString()),
-      completed: double.tryParse(json['completed'].toString()),
-    );
-  }
+  DoubleStatsModel.fromJson(Map<String, dynamic> json)
+      : assert(json != null),
+        total = double.tryParse(json['total'].toString()),
+        pending = double.tryParse(json['pending'].toString()),
+        completed = double.tryParse(json['completed'].toString());
+
+  final double total;
+  final double pending;
+  final double completed;
 
   @override
   Map<String, dynamic> toMap() {
@@ -81,11 +75,6 @@ class DoubleStatsModel extends Model {
 // }
 
 class StatsModel extends Model {
-  final IntStatsModel jobs;
-  final IntStatsModel contacts;
-  final IntStatsModel gallery;
-  final DoubleStatsModel payments;
-
   StatsModel({
     this.jobs,
     this.contacts,
@@ -93,17 +82,20 @@ class StatsModel extends Model {
     this.payments,
   });
 
-  factory StatsModel.fromJson(Map<String, dynamic> json) {
-    assert(json != null);
-    return StatsModel(
-      jobs: IntStatsModel.fromJson(json['jobs'].cast<String, dynamic>()),
-      contacts:
-          IntStatsModel.fromJson(json['contacts'].cast<String, dynamic>()),
-      gallery: IntStatsModel.fromJson(json['gallery'].cast<String, dynamic>()),
-      payments:
-          DoubleStatsModel.fromJson(json['payments'].cast<String, dynamic>()),
-    );
-  }
+  StatsModel.fromJson(Map<String, dynamic> json)
+      : assert(json != null),
+        jobs = IntStatsModel.fromJson(json['jobs'].cast<String, dynamic>()),
+        contacts =
+            IntStatsModel.fromJson(json['contacts'].cast<String, dynamic>()),
+        gallery =
+            IntStatsModel.fromJson(json['gallery'].cast<String, dynamic>()),
+        payments =
+            DoubleStatsModel.fromJson(json['payments'].cast<String, dynamic>());
+
+  final IntStatsModel jobs;
+  final IntStatsModel contacts;
+  final IntStatsModel gallery;
+  final DoubleStatsModel payments;
 
   @override
   Map<String, dynamic> toMap() {

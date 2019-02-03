@@ -1,17 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/services/auth.dart';
-import 'package:tailor_made/utils/tm_uuid.dart';
+import 'package:tailor_made/utils/mk_uuid.dart';
 
 class ImageModel extends Model {
-  String id;
-  String userID;
-  String contactID;
-  String jobID;
-  String path;
-  String src;
-  DateTime createdAt;
-
   ImageModel({
     String id,
     String userID,
@@ -24,18 +16,23 @@ class ImageModel extends Model {
         userID = userID ?? Auth.getUser.uid,
         createdAt = createdAt ?? DateTime.now();
 
-  factory ImageModel.fromJson(Map<String, dynamic> json) {
-    assert(json != null);
-    return new ImageModel(
-      id: json['id'],
-      userID: json['userID'],
-      contactID: json['contactID'],
-      jobID: json['jobID'],
-      path: json['path'],
-      src: json['src'],
-      createdAt: DateTime.tryParse(json['createdAt'].toString()),
-    );
-  }
+  ImageModel.fromJson(Map<String, dynamic> json)
+      : assert(json != null),
+        id = json['id'],
+        userID = json['userID'],
+        contactID = json['contactID'],
+        jobID = json['jobID'],
+        path = json['path'],
+        src = json['src'],
+        createdAt = DateTime.tryParse(json['createdAt'].toString());
+
+  String id;
+  String userID;
+  String contactID;
+  String jobID;
+  String path;
+  String src;
+  DateTime createdAt;
 
   @override
   Map<String, dynamic> toMap() {

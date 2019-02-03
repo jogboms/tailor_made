@@ -4,23 +4,9 @@ import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/services/auth.dart';
-import 'package:tailor_made/utils/tm_uuid.dart';
+import 'package:tailor_made/utils/mk_uuid.dart';
 
 class JobModel extends Model {
-  String id;
-  String userID;
-  String contactID;
-  String name;
-  double price;
-  double completedPayment;
-  double pendingPayment;
-  String notes;
-  List<ImageModel> images;
-  Map<String, double> measurements;
-  List<PaymentModel> payments;
-  bool isComplete;
-  DateTime createdAt;
-
   JobModel({
     String id,
     String userID,
@@ -35,9 +21,11 @@ class JobModel extends Model {
     this.payments = const [],
     this.isComplete = false,
     DateTime createdAt,
+    DateTime dueAt,
   })  : id = id ?? uuid(),
         userID = userID ?? Auth.getUser.uid,
-        createdAt = createdAt ?? DateTime.now();
+        createdAt = createdAt ?? DateTime.now(),
+        dueAt = dueAt ?? DateTime.now().add(Duration(days: 7));
 
   factory JobModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
@@ -45,21 +33,7 @@ class JobModel extends Model {
     if (json['measurements'] != null) {
       measurements = json['measurements'].cast<String, double>();
     }
-    final List<PaymentModel> payments = [];
-    if (json['payments'] != null) {
-      json['payments'].forEach(
-        (dynamic payment) => payments
-            .add(PaymentModel.fromJson(payment.cast<String, dynamic>())),
-      );
-    }
-    final List<ImageModel> images = [];
-    if (json['images'] != null) {
-      json['images'].forEach(
-        (dynamic image) =>
-            images.add(ImageModel.fromJson(image.cast<String, dynamic>())),
-      );
-    }
-    return new JobModel(
+    return JobModel(
       id: json['id'],
       userID: json['userID'],
       contactID: json['contactID'],
@@ -68,29 +42,52 @@ class JobModel extends Model {
       pendingPayment: double.tryParse(json['pendingPayment'].toString()),
       completedPayment: double.tryParse(json['completedPayment'].toString()),
       notes: json['notes'],
-      images: images,
+      images: Model.generator(
+        json['images'],
+        (dynamic image) => ImageModel.fromJson(image.cast<String, dynamic>()),
+      ),
       createdAt: DateTime.tryParse(json['createdAt'].toString()),
+      dueAt: DateTime.tryParse(json['dueAt'].toString()),
       measurements: measurements,
-      payments: payments,
+      payments: Model.generator(
+        json['payments'],
+        (dynamic payment) =>
+            PaymentModel.fromJson(payment.cast<String, dynamic>()),
+      ),
       isComplete: json['isComplete'],
     );
   }
 
-  factory JobModel.fromDoc(DocumentSnapshot doc) {
-    return JobModel.fromJson(doc.data)..reference = doc.reference;
-  }
+  factory JobModel.fromDoc(DocumentSnapshot doc) =>
+      JobModel.fromJson(doc.data)..reference = doc.reference;
 
-  // TODO implement others
+  String id;
+  String userID;
+  String contactID;
+  String name;
+  double price;
+  double completedPayment;
+  double pendingPayment;
+  String notes;
+  List<ImageModel> images;
+  Map<String, double> measurements;
+  List<PaymentModel> payments;
+  bool isComplete;
+  DateTime createdAt;
+  DateTime dueAt;
+
   JobModel copyWith({
     String contactID,
     Map<String, double> measurements,
+    DateTime dueAt,
   }) {
-    return new JobModel(
+    return JobModel(
       id: this.id,
       userID: this.userID,
       contactID: contactID ?? this.contactID,
       measurements: measurements ?? this.measurements,
       createdAt: this.createdAt,
+      dueAt: dueAt ?? this.dueAt,
     )..reference = this.reference;
   }
 
@@ -107,6 +104,7 @@ class JobModel extends Model {
       'notes': notes,
       'images': images.map((image) => image.toMap()).toList(),
       'createdAt': createdAt.toString(),
+      'dueAt': dueAt.toString(),
       'measurements': measurements,
       'payments': payments.map((payment) => payment.toMap()).toList(),
       'isComplete': isComplete,

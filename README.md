@@ -2,7 +2,7 @@
 
 # TailorMade: Managing a Fashion designer's daily routine.
 
-TailorMade is what actually started out as an experiment with [Flutter](https://flutter.io/), [flutter_redux](https://github.com/brianegan/flutter_redux) and [Firebase Cloud Functions](https://github.com/flutter/plugins/tree/master/packages/cloud_functions) but instead turned out to be a valuable tool for managing a Fashion designer's daily routine. It is clean, easy on the eyes and overall has a very smooth feel. It also handles offline use cases with Firebase Cloud. Logo, Design & Concept by Me.
+TailorMade is what actually started out as an experiment with [Flutter](https://flutter.io/), [~flutter_redux~](https://github.com/brianegan/flutter_redux) [ReBLoC](https://github.com/redbrogdon/rebloc) and [Firebase Cloud Functions](https://github.com/flutter/plugins/tree/master/packages/cloud_functions) but instead turned out to be a valuable tool for managing a Fashion designer's daily routine. It is clean, easy on the eyes and overall has a very smooth feel. It also handles offline use cases with Firebase Cloud. Logo, Design & Concept by Me.
 
 <div>
 <a href='https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade'><img alt='Get it on Google Play' src='./screenshots/google_play.png' height='40px'/></a>
@@ -16,14 +16,13 @@ TailorMade is what actually started out as an experiment with [Flutter](https://
 4.  Firebase Storage
 5.  Google SignIn
 6.  RxDart
-7.  Flutter Redux
-8.  Redux Epics
-9.  Image Picker
-10. Photo View
-11. Cached Network Image
-12. Flutter SpinKit
-13. Flutter Get Version
-14. Flutter Masked Text
+7.  ReBLoC
+8.  Image Picker
+9.  Photo View
+10. Cached Network Image
+11. Flutter SpinKit
+12. Flutter Get Version
+13. Flutter Masked Text
 
 For a full description of OSS used, see pubspec.yaml
 

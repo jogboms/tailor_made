@@ -4,12 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-final GoogleSignIn _googleSignIn = new GoogleSignIn();
+final GoogleSignIn _googleSignIn = GoogleSignIn();
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class Auth {
-  static FirebaseUser _user;
   Auth._();
+
+  static FirebaseUser _user;
 
   static FirebaseUser setUser(FirebaseUser user) => _user = user;
   static FirebaseUser get getUser => _user;
@@ -36,10 +37,11 @@ class Auth {
       final GoogleSignInAuthentication auth = await currentUser.authentication;
 
       // Authenticate with firebase
-      final FirebaseUser user = await _auth.signInWithGoogle(
-        idToken: auth.idToken,
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: auth.accessToken,
+        idToken: auth.idToken,
       );
+      final FirebaseUser user = await _auth.signInWithCredential(credential);
       assert(user != null);
       assert(!user.isAnonymous);
 

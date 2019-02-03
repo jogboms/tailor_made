@@ -19,14 +19,14 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 ext.versionMajor = 1
-ext.versionMinor = 1
+ext.versionMinor = 2
 ext.versionPatch = 0
-ext.versionClassifier = "beta"
+ext.versionClassifier = null
 ext.isSnapshot = false
-ext.minimumSdkVersion = 16
+ext.minimumSdkVersion = 17
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
 
     lintOptions {
         disable 'InvalidPackage'
@@ -34,8 +34,9 @@ android {
 
     defaultConfig {
         applicationId "io.github.jogboms.tailormade"
-        minSdkVersion 16
-        targetSdkVersion 27
+        minSdkVersion 17
+        targetSdkVersion 28
+        multiDexEnabled true
         versionCode generateVersionCode()
         versionName generateVersionName()
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

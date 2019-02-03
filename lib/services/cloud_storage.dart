@@ -1,11 +1,11 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:tailor_made/services/auth.dart';
-import 'package:tailor_made/utils/tm_uuid.dart';
+import 'package:tailor_made/utils/mk_uuid.dart';
 
 class CloudStorage {
-  static FirebaseStorage instance = FirebaseStorage.instance;
-
   CloudStorage._();
+
+  static FirebaseStorage instance = FirebaseStorage.instance;
 
   static String get authUserId => Auth.getUser?.uid ?? "0";
 
