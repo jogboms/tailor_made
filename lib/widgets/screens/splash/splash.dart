@@ -14,6 +14,7 @@ import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/services/settings.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar.dart';
+import 'package:tailor_made/utils/mk_status_bar.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_raised_button.dart';
@@ -31,49 +32,52 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = MkTheme.of(context);
 
-    return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          const Opacity(
-            opacity: .5,
-            child: const DecoratedBox(
-              decoration: const BoxDecoration(
-                image: const DecorationImage(
-                  image: MkImages.pattern,
-                  fit: BoxFit.cover,
+    return MkStatusBar(
+      brightness: Brightness.dark,
+      child: Scaffold(
+        body: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            const Opacity(
+              opacity: .5,
+              child: const DecoratedBox(
+                decoration: const BoxDecoration(
+                  image: const DecorationImage(
+                    image: MkImages.pattern,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned.fill(
-            top: null,
-            bottom: 32.0,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  MkStrings.appName,
-                  style: theme.display2Semi.copyWith(
-                    color: kTextBaseColor.withOpacity(.6),
+            Positioned.fill(
+              top: null,
+              bottom: 32.0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    MkStrings.appName,
+                    style: theme.display2Semi.copyWith(
+                      color: kTextBaseColor.withOpacity(.6),
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                Settings.getVersion() != null
-                    ? Text(
-                        "v" + Settings.getVersion(),
-                        style: theme.small.copyWith(
-                          color: kTextBaseColor.withOpacity(.4),
-                          height: 1.5,
-                        ),
-                        textAlign: TextAlign.center,
-                      )
-                    : const SizedBox(),
-              ],
+                  Settings.getVersion() != null
+                      ? Text(
+                          "v" + Settings.getVersion(),
+                          style: theme.small.copyWith(
+                            color: kTextBaseColor.withOpacity(.4),
+                            height: 1.5,
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                      : const SizedBox(),
+                ],
+              ),
             ),
-          ),
-          _Content(isColdStart: isColdStart),
-        ],
+            _Content(isColdStart: isColdStart),
+          ],
+        ),
       ),
     );
   }
@@ -106,9 +110,10 @@ class _ContentState extends State<_Content> {
           (_) async {
             StoreProvider.of<AppState>(context).dispatcher(OnLoginAction(user));
             Auth.setUser(user);
-            Navigator.pushReplacement<String, dynamic>(
+            Navigator.pushAndRemoveUntil<void>(
               context,
-              MkNavigate.fadeIn<String>(const HomePage()),
+              MkPageRoute.fadeIn<void>(const HomePage()),
+              (Route<void> route) => false,
             );
           },
         );
@@ -157,7 +162,7 @@ class _ContentState extends State<_Content> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            Text(
+                            const Text(
                               "You need a stable internet connection to proceed.",
                               textAlign: TextAlign.center,
                             ),

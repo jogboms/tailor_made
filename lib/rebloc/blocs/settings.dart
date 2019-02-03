@@ -45,14 +45,6 @@ class SettingsBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final _settings = state.settings;
 
-    if (action is InitSettingsAction) {
-      return state.copyWith(
-        settings: _settings.copyWith(
-          status: SettingsStatus.loading,
-        ),
-      );
-    }
-
     if (action is OnDataSettingAction) {
       return state.copyWith(
         settings: _settings.copyWith(

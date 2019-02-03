@@ -34,7 +34,7 @@ Comparator<JobModel> _sort(SortType sortType) {
 }
 
 class JobsBloc extends SimpleBloc<AppState> {
-  Stream<WareContext<AppState>> _onAfterLogin(
+  Stream<WareContext<AppState>> _makeSearch(
     WareContext<AppState> context,
   ) {
     return Observable<String>.just((context.action as SearchJobAction).payload)
@@ -63,7 +63,7 @@ class JobsBloc extends SimpleBloc<AppState> {
         .map((action) => context.copyWith(action));
   }
 
-  Stream<WareContext<AppState>> _makeSearch(
+  Stream<WareContext<AppState>> _onAfterLogin(
     WareContext<AppState> context,
   ) {
     return CloudDb.jobs
