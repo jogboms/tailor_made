@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
+import 'package:tailor_made/constants/mk_routes.dart';
 import 'package:tailor_made/rebloc/actions/account.dart';
+import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/home_view_model.dart';
+import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
+import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/access_denied.dart';
@@ -17,6 +21,7 @@ import 'package:tailor_made/widgets/screens/homepage/_partials/mid_row.dart';
 import 'package:tailor_made/widgets/screens/homepage/_partials/stats.dart';
 import 'package:tailor_made/widgets/screens/homepage/_partials/top_button_bar.dart';
 import 'package:tailor_made/widgets/screens/homepage/_partials/top_row.dart';
+import 'package:tailor_made/widgets/screens/splash/splash.dart';
 
 const double _kBottomBarHeight = 46.0;
 const double _kBottomGridsHeight = 280.0;
@@ -31,13 +36,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        return await mkChoiceDialog(
-          context: context,
-          title: "",
-          message: "Continue with Exit?",
-        );
-      },
+      onWillPop: () => mkChoiceDialog(
+            context: context,
+            message: "Continue with Exit?",
+          ),
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         body: Stack(
@@ -158,6 +160,20 @@ class _Body extends StatelessWidget {
             TopButtonBar(
               account: vm.account,
               shouldSendRating: vm.shouldSendRating,
+              onLogout: () async {
+                StoreProvider.of<AppState>(context).dispatcher(
+                  const OnLogoutAction(),
+                );
+                await Auth.signOutWithGoogle();
+                Navigator.pushAndRemoveUntil<void>(
+                  context,
+                  MkNavigate.fadeIn<void>(
+                    const SplashPage(isColdStart: false),
+                    name: MkRoutes.start,
+                  ),
+                  (Route<void> route) => false,
+                );
+              },
             ),
           ],
         );

@@ -34,7 +34,9 @@ class SettingsBloc extends SimpleBloc<AppState> {
               .map((action) => context.copyWith(action))
               .takeWhile((_) => _.action is! OnDisposeAction),
         )
-        .listen((context) => context.dispatcher(context.action));
+        .listen(
+          (context) => context.dispatcher(context.action),
+        );
 
     return input;
   }
@@ -43,7 +45,7 @@ class SettingsBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final _settings = state.settings;
 
-    if (action is OnInitAction || action is InitSettingsAction) {
+    if (action is InitSettingsAction) {
       return state.copyWith(
         settings: _settings.copyWith(
           status: SettingsStatus.loading,

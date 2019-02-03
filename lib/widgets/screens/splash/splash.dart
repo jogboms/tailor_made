@@ -143,7 +143,7 @@ class _ContentState extends State<_Content> {
               bottom: 124.0,
               child: Builder(
                 builder: (_) {
-                  if ((vm.isLoading && widget.isColdStart) || isLoading) {
+                  if (vm.isLoading && widget.isColdStart) {
                     return const MkLoadingSpinner();
                   }
 
@@ -179,6 +179,10 @@ class _ContentState extends State<_Content> {
                     WidgetsBinding.instance.addPostFrameCallback(
                       (_) async => _onLogin(),
                     );
+                  }
+
+                  if (isLoading) {
+                    return const MkLoadingSpinner();
                   }
 
                   return Center(

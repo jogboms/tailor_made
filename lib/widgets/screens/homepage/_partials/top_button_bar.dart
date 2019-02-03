@@ -2,13 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
-import 'package:tailor_made/constants/mk_routes.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/rebloc/actions/account.dart';
-import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/utils/mk_child_dialog.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
@@ -19,7 +16,6 @@ import 'package:tailor_made/widgets/screens/homepage/_partials/helpers.dart';
 import 'package:tailor_made/widgets/screens/homepage/_views/notice_dialog.dart';
 import 'package:tailor_made/widgets/screens/homepage/_views/review_modal.dart';
 import 'package:tailor_made/widgets/screens/homepage/_views/store_name_dialog.dart';
-import 'package:tailor_made/widgets/screens/splash/splash.dart';
 
 enum AccountOptions {
   logout,
@@ -31,10 +27,12 @@ class TopButtonBar extends StatelessWidget {
     Key key,
     @required this.account,
     @required this.shouldSendRating,
+    @required this.onLogout,
   }) : super(key: key);
 
   final AccountModel account;
   final bool shouldSendRating;
+  final VoidCallback onLogout;
 
   @override
   Widget build(BuildContext context) {
@@ -197,22 +195,10 @@ class TopButtonBar extends StatelessWidget {
           final response = await mkChoiceDialog(
             context: context,
             message: "You are about to logout.",
-            title: "",
           );
 
           if (response == true) {
-            StoreProvider.of<AppState>(context).dispatcher(
-              const OnLogoutAction(),
-            );
-            await Auth.signOutWithGoogle();
-            Navigator.pushAndRemoveUntil<void>(
-              context,
-              MkNavigate.fadeIn<void>(
-                const SplashPage(isColdStart: false),
-                name: MkRoutes.start,
-              ),
-              (Route<void> route) => false,
-            );
+            onLogout();
           }
           break;
       }

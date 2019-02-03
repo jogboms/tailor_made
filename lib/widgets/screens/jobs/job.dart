@@ -165,7 +165,6 @@ class _JobPageState extends State<JobPage> with MkSnackBarProvider {
   void onTapComplete() async {
     final choice = await mkChoiceDialog(
       context: context,
-      title: "",
       message: "Are you sure?",
     );
     if (choice == null || choice == false) {
@@ -197,7 +196,6 @@ class _JobPageState extends State<JobPage> with MkSnackBarProvider {
     }
     final choice = await mkChoiceDialog(
       context: context,
-      title: "",
       message: "Are you sure?",
     );
     if (choice == null || choice == false) {
