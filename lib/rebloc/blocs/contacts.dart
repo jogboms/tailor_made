@@ -72,8 +72,11 @@ class ContactsBloc extends SimpleBloc<AppState> {
               .takeWhile((_) => _.action is! OnDisposeAction),
         );
 
-    return b;
-    return MergeStream([a, b]);
+    MergeStream([a, b]).listen(
+      (context) => context.dispatcher(context.action),
+    );
+
+    return input;
   }
 
   @override

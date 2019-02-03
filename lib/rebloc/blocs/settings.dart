@@ -12,7 +12,7 @@ class SettingsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    return input
+    input
         .where(
           (_) => _.action is OnInitAction || _.action is InitSettingsEvents,
         )
@@ -35,37 +35,10 @@ class SettingsBloc extends SimpleBloc<AppState> {
               })
               .map((action) => context.copyWith(action))
               .takeWhile((_) => _.action is! OnDisposeAction),
-        );
+        )
+        .listen((context) => context.dispatcher(context.action));
 
-    // return Observable(input).map(
-    //   (context) {
-    //     if (context.action is OnInitAction ||
-    //         context.action is InitSettingsEvents) {
-    //       CloudDb.settings
-    //           .snapshots()
-    //           .map(
-    //             (snapshot) {
-    //               if (snapshot.data == null) {
-    //                 throw FormatException("Internet Error");
-    //               }
-    //               return SettingsModel.fromJson(snapshot.data);
-    //             },
-    //           )
-    //           .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)
-    //           .listen(
-    //             (settings) {
-    //               // Keep Static copy
-    //               Settings.setData(settings);
-    //               context.dispatcher(OnDataSettingAction(payload: settings));
-    //             },
-    //             onError: () {
-    //               context.dispatcher(const OnErrorSettingsEvents());
-    //             },
-    //           );
-    //     }
-    //     return context;
-    //   },
-    // );
+    return input;
   }
 
   @override

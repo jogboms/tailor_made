@@ -102,12 +102,15 @@ class _ContentState extends State<_Content> {
 
     Auth.onAuthStateChanged.firstWhere((user) => user != null).then(
       (user) {
-        // TODO: maybe not needed
-        StoreProvider.of<AppState>(context).dispatcher(OnLoginAction(user));
-        Auth.setUser(user);
-        Navigator.pushReplacement<String, dynamic>(
-          context,
-          MkNavigate.fadeIn<String>(const HomePage()),
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) async {
+            StoreProvider.of<AppState>(context).dispatcher(OnLoginAction(user));
+            Auth.setUser(user);
+            Navigator.pushReplacement<String, dynamic>(
+              context,
+              MkNavigate.fadeIn<String>(const HomePage()),
+            );
+          },
         );
       },
     );
@@ -140,10 +143,8 @@ class _ContentState extends State<_Content> {
               bottom: 124.0,
               child: Builder(
                 builder: (_) {
-                  if (vm.isLoading && widget.isColdStart) {
-                    return Center(
-                      child: const MkLoadingSpinner(),
-                    );
+                  if ((vm.isLoading && widget.isColdStart) || isLoading) {
+                    return const MkLoadingSpinner();
                   }
 
                   if (vm.hasError) {
@@ -178,10 +179,6 @@ class _ContentState extends State<_Content> {
                     WidgetsBinding.instance.addPostFrameCallback(
                       (_) async => _onLogin(),
                     );
-                  }
-
-                  if (isLoading) {
-                    const MkLoadingSpinner();
                   }
 
                   return Center(

@@ -42,44 +42,11 @@ class AccountBloc extends SimpleBloc<AppState> {
               .then((_) => context),
         );
 
-    return a;
-    return MergeStream([a, b, c, d]);
+    MergeStream([a, b, c, d]).listen(
+      (context) => context.dispatcher(context.action),
+    );
 
-    // return input.map(
-    //   (context) {
-    //     final _action = context.action;
-
-    //     if (_action is OnReadNotice) {
-    //       _readNotice(_action.payload)
-    //           .catchError((dynamic e) => print(e))
-    //           .then((_) => context.dispatcher(const VoidAction()));
-    //     }
-
-    //     if (_action is OnSendRating) {
-    //       _sendRating(_action.payload, _action.rating)
-    //           .catchError((dynamic e) => print(e))
-    //           .then((_) => context.dispatcher(const VoidAction()));
-    //     }
-
-    //     if (_action is OnPremiumSignUp) {
-    //       _signUp(_action.payload)
-    //           .catchError((dynamic e) => print(e))
-    //           .then((_) => context.dispatcher(const VoidAction()));
-    //     }
-
-    //     if (_action is OnInitAction) {
-    //       CloudDb.account
-    //           .snapshots()
-    //           .map((snapshot) => AccountModel.fromDoc(snapshot))
-    //           .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)
-    //           .listen((account) => context.dispatcher(
-    //                 OnDataAccountAction(payload: account),
-    //               ));
-    //     }
-
-    //     return context;
-    //   },
-    // );
+    return input;
   }
 
   @override

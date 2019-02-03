@@ -62,9 +62,7 @@ class HomePage extends StatelessWidget {
                 HomeViewModel vm,
               ) {
                 if (vm.isLoading) {
-                  return Center(
-                    child: const MkLoadingSpinner(),
-                  );
+                  return const MkLoadingSpinner();
                 }
 
                 if (vm.isOutdated) {

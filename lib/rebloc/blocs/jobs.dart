@@ -77,55 +77,11 @@ class JobsBloc extends SimpleBloc<AppState> {
               .takeWhile((_) => _.action is! OnDisposeAction),
         );
 
-    return b;
-    return MergeStream([a, b]);
+    MergeStream([a, b]).listen(
+      (context) => context.dispatcher(context.action),
+    );
 
-    // return input.map(
-    //   (context) {
-    //     final _action = context.action;
-
-    //     if (_action is SearchJobAction) {
-    //       Observable<String>.just(_action.payload)
-    //           .map<String>((String text) => text.trim())
-    //           .distinct()
-    //           .where((text) => text.length > 1)
-    //           .debounce(const Duration(milliseconds: 750))
-    //           .switchMap<Action>(
-    //             (text) => ConcatStream<Action>(
-    //                   [
-    //                     Stream.fromIterable([const StartSearchJobAction()]),
-    //                     Observable.timer(
-    //                       _doSearch(
-    //                         context.state.jobs.jobs,
-    //                         text,
-    //                       ),
-    //                       const Duration(seconds: 1),
-    //                     )
-    //                   ],
-    //                 ).takeWhile(
-    //                   (action) => action is! CancelSearchJobAction,
-    //                 ),
-    //           )
-    //           .listen((action) => context.dispatcher(action));
-    //     }
-
-    //     if (_action is OnInitAction) {
-    //       CloudDb.jobs
-    //           .snapshots()
-    //           .map((snapshot) {
-    //             return snapshot.documents
-    //                 .map((item) => JobModel.fromDoc(item))
-    //                 .toList();
-    //           })
-    //           .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)
-    //           .listen(
-    //             (jobs) => context.dispatcher(OnDataJobAction(payload: jobs)),
-    //           );
-    //     }
-
-    //     return context;
-    //   },
-    // );
+    return input;
   }
 
   @override

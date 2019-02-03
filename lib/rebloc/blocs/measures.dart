@@ -49,51 +49,11 @@ class MeasuresBloc extends SimpleBloc<AppState> {
               .takeWhile((_) => _.action is! OnDisposeAction),
         );
 
-    return b;
-    return MergeStream([a, b]);
+    MergeStream([a, b]).listen(
+      (context) => context.dispatcher(context.action),
+    );
 
-    // return Observable(input).map(
-    //   (context) {
-    //     final _action = context.action;
-
-    //     // TODO: should really check this out
-    //     if (_action is OnInitMeasureAction) {
-    //       _init(_action.payload)
-    //           .catchError((dynamic e) => print(e))
-    //           .then((_) => context.dispatcher(const OnInitAction()));
-    //     }
-
-    //     if (_action is OnInitAction) {
-    //       CloudDb.measurements
-    //           .snapshots()
-    //           .map((snapshot) {
-    //             return snapshot.documents
-    //                 .map((item) => MeasureModel.fromDoc(item))
-    //                 .toList();
-    //           })
-    //           .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)
-    //           .listen((measures) {
-    //             if (measures.isEmpty) {
-    //               return context.dispatcher(OnInitMeasureAction(
-    //                 payload: createDefaultMeasures(),
-    //               ));
-    //             }
-
-    //             final grouped = groupModelBy<MeasureModel>(
-    //               measures,
-    //               (measure) => measure.group,
-    //             );
-
-    //             return context.dispatcher(OnDataMeasureAction(
-    //               payload: measures,
-    //               grouped: grouped,
-    //             ));
-    //           });
-    //     }
-
-    //     return context;
-    //   },
-    // );
+    return input;
   }
 
   @override
