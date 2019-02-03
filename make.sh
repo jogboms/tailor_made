@@ -1,51 +1,14 @@
-#!/bin/bash
+xcode:
+	open ios/Runner.xcworkspace
 
-module="$1"
-Module="$(tr '[:lower:]' '[:upper:]' <<< ${module:0:1})${module:1}"
+prod_ios:
+	flutter build ios -t lib/main_prod.dart --flavor prod
 
-[ $# -eq 0 ] && { echo "Usage: $0 module-name"; exit 1; }
+prod_android:
+	flutter build apk -t lib/main_prod.dart --flavor prod
 
-## Create new directories
+install_dev:
+	flutter build apk -t lib/main_dev.dart --flavor dev && flutter install -d ce041714616c00130c
 
-if [ ! -d "lib/redux/$module" ]
-then
-   echo "Creating directory: lib/redux/$module"
-   mkdir "lib/redux/$module"
-fi
-
-if [ ! -d "lib/ui/$module" ]
-then
-   echo "Creating directory: lib/ui/$module"
-   mkdir "lib/ui/$module"
-fi
-
-if [ ! -d "lib/ui/$module/edit" ]
-then
-   echo "Creating directory: lib/ui/$module/edit"
-   mkdir "lib/ui/$module/edit"
-fi
-
-## Create new files
-
-declare -a files=(
-   'lib/redux/product/product_actions.dart'
-   'lib/redux/product/product_reducer.dart'
-   'lib/redux/product/product_state.dart'
-   'lib/redux/product/product_middleware.dart'
-   'lib/redux/product/product_selectors.dart'
-   'lib/ui/product/edit/product_edit.dart'
-   'lib/ui/product/edit/product_edit_vm.dart'
-   'lib/ui/product/product_item.dart'
-   'lib/ui/product/product_list_vm.dart'
-   'lib/ui/product/product_list.dart'
-   'lib/ui/product/product_screen.dart')
-
-for i in "${files[@]}"
-do
-   filename=$(echo $i | sed "s/product/$module/g")
-   echo "Creating file: $filename"
-   cp $i $filename
-   sed -i "s/product/$module/g" $filename
-   sed -i "s/Product/$Module/g" $filename
-done
-
+install_prod:
+	make prod_android && flutter install -d ce041714616c00130c
