@@ -53,23 +53,22 @@ class ContactsBloc extends SimpleBloc<AppState> {
         .where((text) => text.length > 1)
         .debounce(const Duration(milliseconds: 750))
         .switchMap<Action>(
-          (text) => ConcatStream<Action>(
+          (text) => Stream.fromIterable(
                 [
-                  Stream.fromIterable([const StartSearchContactAction()]),
-                  Observable.timer(
-                    SearchSuccessContactAction(
-                      payload: context.state.contacts.contacts.where(
-                        (contact) {
-                          return contact.fullname.contains(
-                            RegExp(r'' + text + '', caseSensitive: false),
-                          );
-                        },
-                      ).toList(),
-                    ),
-                    const Duration(seconds: 1),
-                  )
+                  const StartSearchContactAction(),
+                  SearchSuccessContactAction(
+                    payload: context.state.contacts.contacts.where(
+                      (contact) {
+                        return contact.fullname.contains(
+                          RegExp(r'' + text + '', caseSensitive: false),
+                        );
+                      },
+                    ).toList(),
+                  ),
                 ],
-              ).takeWhile((action) => action is! CancelSearchContactAction),
+              ).takeWhile(
+                (action) => action is! CancelSearchContactAction,
+              ),
         )
         .map((action) => context.copyWith(action));
   }
@@ -82,7 +81,9 @@ class ContactsBloc extends SimpleBloc<AppState> {
       input.where((_) => _.action is SearchContactAction).asyncExpand(
             _makeSearch,
           ),
-      input.where((_) => _.action is OnLoginAction).asyncExpand(_onAfterLogin),
+      input.where((_) => _.action is InitContactsAction).asyncExpand(
+            _onAfterLogin,
+          ),
     ]).listen(
       (context) => context.dispatcher(context.action),
     );

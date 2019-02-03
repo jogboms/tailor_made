@@ -12,6 +12,10 @@ enum SortType {
   reset,
 }
 
+class InitJobsAction extends Action {
+  const InitJobsAction();
+}
+
 class ToggleCompleteJob extends Action {
   const ToggleCompleteJob({
     @required this.payload,

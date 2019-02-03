@@ -16,7 +16,7 @@ class MeasuresBloc extends SimpleBloc<AppState> {
     final WriteBatch batch = CloudDb.instance.batch();
 
     try {
-      (context.action as OnInitMeasureAction).payload.forEach((measure) {
+      (context.action as UpdateMeasureAction).payload.forEach((measure) {
         batch.setData(
           CloudDb.measurements.document(measure.id),
           measure.toMap(),
@@ -25,7 +25,7 @@ class MeasuresBloc extends SimpleBloc<AppState> {
       });
 
       await batch.commit();
-      return context.copyWith(const OnInitMeasuresAction());
+      return context.copyWith(const InitMeasuresAction());
     } catch (e) {
       print(e);
       return context;
@@ -44,7 +44,7 @@ class MeasuresBloc extends SimpleBloc<AppState> {
         })
         .map((measures) {
           if (measures.isEmpty) {
-            return OnInitMeasureAction(
+            return UpdateMeasureAction(
               payload: createDefaultMeasures(),
             );
           }
@@ -69,10 +69,10 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   ) {
     MergeStream(
       [
-        input.where((_) => _.action is OnInitMeasureAction).asyncMap(
+        input.where((_) => _.action is UpdateMeasureAction).asyncMap(
               _onInitMeasure,
             ),
-        input.where((_) => _.action is OnInitMeasuresAction).asyncExpand(
+        input.where((_) => _.action is InitMeasuresAction).asyncExpand(
               _onInitMeasures,
             ),
       ],
@@ -97,7 +97,7 @@ class MeasuresBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is ToggleMeasuresLoading || action is OnInitMeasureAction) {
+    if (action is ToggleMeasuresLoading || action is UpdateMeasureAction) {
       return state.copyWith(
         measures: _measures.copyWith(
           status: MeasuresStatus.loading,

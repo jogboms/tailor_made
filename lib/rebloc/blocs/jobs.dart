@@ -43,21 +43,18 @@ class JobsBloc extends SimpleBloc<AppState> {
         .where((text) => text.length > 1)
         .debounce(const Duration(milliseconds: 750))
         .switchMap<Action>(
-          (text) => ConcatStream<Action>(
+          (text) => Stream.fromIterable(
                 [
-                  Stream.fromIterable([const StartSearchJobAction()]),
-                  Observable.timer(
-                    SearchSuccessJobAction(
-                      payload: context.state.jobs.jobs.where(
-                        (job) {
-                          return job.name.contains(
-                            RegExp(r'' + text + '', caseSensitive: false),
-                          );
-                        },
-                      ).toList(),
-                    ),
-                    const Duration(seconds: 1),
-                  )
+                  const StartSearchJobAction(),
+                  SearchSuccessJobAction(
+                    payload: context.state.jobs.jobs.where(
+                      (job) {
+                        return job.name.contains(
+                          RegExp(r'' + text + '', caseSensitive: false),
+                        );
+                      },
+                    ).toList(),
+                  ),
                 ],
               ).takeWhile(
                 (action) => action is! CancelSearchJobAction,
@@ -87,7 +84,7 @@ class JobsBloc extends SimpleBloc<AppState> {
   ) {
     MergeStream([
       input.where((_) => _.action is SearchJobAction).asyncExpand(_makeSearch),
-      input.where((_) => _.action is OnLoginAction).asyncExpand(_onAfterLogin),
+      input.where((_) => _.action is InitJobsAction).asyncExpand(_onAfterLogin),
     ]).listen(
       (context) => context.dispatcher(context.action),
     );

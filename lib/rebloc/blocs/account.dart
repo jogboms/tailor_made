@@ -34,10 +34,7 @@ class AccountBloc extends SimpleBloc<AppState> {
     try {
       await _action.payload.reference.updateData(
         _action.payload
-            .copyWith(
-              hasSendRating: true,
-              rating: _action.rating,
-            )
+            .copyWith(hasSendRating: true, rating: _action.rating)
             .toMap(),
       );
     } catch (e) {
@@ -88,7 +85,9 @@ class AccountBloc extends SimpleBloc<AppState> {
     Stream<WareContext<AppState>> input,
   ) {
     MergeStream([
-      input.where((_) => _.action is OnLoginAction).asyncExpand(_getAccount),
+      input.where((_) => _.action is InitAccountAction).asyncExpand(
+            _getAccount,
+          ),
       input.where((_) => _.action is OnReadNotice).asyncMap(_readNotice),
       input.where((_) => _.action is OnSendRating).asyncMap(_sendRating),
       input.where((_) => _.action is OnPremiumSignUp).asyncMap(_signUp),

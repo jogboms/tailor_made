@@ -2,6 +2,10 @@ import 'package:meta/meta.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/models/measure.dart';
 
+class InitMeasuresAction extends Action {
+  const InitMeasuresAction();
+}
+
 class OnDataMeasureAction extends Action {
   const OnDataMeasureAction({
     @required this.payload,
@@ -12,12 +16,8 @@ class OnDataMeasureAction extends Action {
   final Map<String, List<MeasureModel>> grouped;
 }
 
-class OnInitMeasuresAction extends Action {
-  const OnInitMeasuresAction();
-}
-
-class OnInitMeasureAction extends Action {
-  const OnInitMeasureAction({
+class UpdateMeasureAction extends Action {
+  const UpdateMeasureAction({
     @required this.payload,
   });
 

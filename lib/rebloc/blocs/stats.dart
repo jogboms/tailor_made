@@ -12,7 +12,7 @@ class StatsBloc extends SimpleBloc<AppState> {
     Stream<WareContext<AppState>> input,
   ) {
     input
-        .where((_) => _.action is OnLoginAction)
+        .where((_) => _.action is InitStatsAction)
         .asyncExpand(
           (context) => CloudDb.stats
               .snapshots()

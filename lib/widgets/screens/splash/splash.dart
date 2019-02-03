@@ -166,7 +166,7 @@ class _ContentState extends State<_Content> {
                               backgroundColor: Colors.white,
                               color: kTextBaseColor,
                               onPressed: () =>
-                                  dispatcher(const InitSettingsEvents()),
+                                  dispatcher(const InitSettingsAction()),
                               child: const Text("RETRY"),
                             ),
                           ],

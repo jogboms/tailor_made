@@ -13,9 +13,7 @@ class SettingsBloc extends SimpleBloc<AppState> {
     Stream<WareContext<AppState>> input,
   ) {
     input
-        .where(
-          (_) => _.action is OnInitAction || _.action is InitSettingsEvents,
-        )
+        .where((_) => _.action is InitSettingsAction)
         .asyncExpand(
           (context) => CloudDb.settings
               .snapshots()
@@ -26,7 +24,7 @@ class SettingsBloc extends SimpleBloc<AppState> {
                 return SettingsModel.fromJson(snapshot.data);
               })
               .handleError(
-                () => context.dispatcher(const OnErrorSettingsEvents()),
+                () => context.dispatcher(const OnErrorSettingsAction()),
               )
               .map((settings) {
                 // Keep Static copy
@@ -45,7 +43,7 @@ class SettingsBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final _settings = state.settings;
 
-    if (action is OnInitAction || action is InitSettingsEvents) {
+    if (action is OnInitAction || action is InitSettingsAction) {
       return state.copyWith(
         settings: _settings.copyWith(
           status: SettingsStatus.loading,
@@ -62,7 +60,7 @@ class SettingsBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is OnErrorSettingsEvents) {
+    if (action is OnErrorSettingsAction) {
       return state.copyWith(
         settings: _settings.copyWith(
           status: SettingsStatus.failure,
