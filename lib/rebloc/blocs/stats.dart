@@ -11,22 +11,14 @@ class StatsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    return input.map(
-      (context) {
-        if (context.action is OnInitAction) {
-          CloudDb.stats
+    return input.where((_) => _.action is OnLoginAction).asyncExpand(
+          (context) => CloudDb.stats
               .snapshots()
-              .map(
-                (snapshot) => StatsModel.fromJson(snapshot.data),
-              )
-              .takeWhile((dynamic action) => action is! OnDisposeAction)
-              .listen(
-                (stats) => context.dispatcher(OnDataStatAction(payload: stats)),
-              );
-        }
-        return context;
-      },
-    );
+              .map((snapshot) => StatsModel.fromJson(snapshot.data))
+              .map((stats) => OnDataStatAction(payload: stats))
+              .map((action) => context.copyWith(action))
+              .takeWhile((_) => _.action is! OnDisposeAction),
+        );
   }
 
   @override

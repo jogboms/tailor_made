@@ -38,12 +38,9 @@ class JobsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    return input.map(
-      (context) {
-        final _action = context.action;
-
-        if (_action is SearchJobAction) {
-          Observable<String>.just(_action.payload)
+    final a = input.where((_) => _.action is SearchJobAction).asyncExpand(
+          (context) => Observable<String>.just(
+                  (context.action as SearchJobAction).payload)
               .map<String>((String text) => text.trim())
               .distinct()
               .where((text) => text.length > 1)
@@ -64,26 +61,71 @@ class JobsBloc extends SimpleBloc<AppState> {
                       (action) => action is! CancelSearchJobAction,
                     ),
               )
-              .listen((action) => context.dispatcher(action));
-        }
+              .map((action) => context.copyWith(action)),
+        );
 
-        if (_action is OnInitAction) {
-          CloudDb.jobs
+    final b = input.where((_) => _.action is OnLoginAction).asyncExpand(
+          (context) => CloudDb.jobs
               .snapshots()
               .map((snapshot) {
                 return snapshot.documents
                     .map((item) => JobModel.fromDoc(item))
                     .toList();
               })
-              .takeWhile((action) => action is! OnDisposeAction)
-              .listen(
-                (jobs) => context.dispatcher(OnDataJobAction(payload: jobs)),
-              );
-        }
+              .map((jobs) => OnDataJobAction(payload: jobs))
+              .map((action) => context.copyWith(action))
+              .takeWhile((_) => _.action is! OnDisposeAction),
+        );
 
-        return context;
-      },
-    );
+    return b;
+    return MergeStream([a, b]);
+
+    // return input.map(
+    //   (context) {
+    //     final _action = context.action;
+
+    //     if (_action is SearchJobAction) {
+    //       Observable<String>.just(_action.payload)
+    //           .map<String>((String text) => text.trim())
+    //           .distinct()
+    //           .where((text) => text.length > 1)
+    //           .debounce(const Duration(milliseconds: 750))
+    //           .switchMap<Action>(
+    //             (text) => ConcatStream<Action>(
+    //                   [
+    //                     Stream.fromIterable([const StartSearchJobAction()]),
+    //                     Observable.timer(
+    //                       _doSearch(
+    //                         context.state.jobs.jobs,
+    //                         text,
+    //                       ),
+    //                       const Duration(seconds: 1),
+    //                     )
+    //                   ],
+    //                 ).takeWhile(
+    //                   (action) => action is! CancelSearchJobAction,
+    //                 ),
+    //           )
+    //           .listen((action) => context.dispatcher(action));
+    //     }
+
+    //     if (_action is OnInitAction) {
+    //       CloudDb.jobs
+    //           .snapshots()
+    //           .map((snapshot) {
+    //             return snapshot.documents
+    //                 .map((item) => JobModel.fromDoc(item))
+    //                 .toList();
+    //           })
+    //           .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)
+    //           .listen(
+    //             (jobs) => context.dispatcher(OnDataJobAction(payload: jobs)),
+    //           );
+    //     }
+
+    //     return context;
+    //   },
+    // );
   }
 
   @override

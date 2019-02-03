@@ -1,5 +1,4 @@
 import 'package:rebloc/rebloc.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/models/settings.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/actions/settings.dart';
@@ -13,35 +12,60 @@ class SettingsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    return Observable(input).map(
-      (context) {
-        if (context.action is OnInitAction ||
-            context.action is InitSettingsEvents) {
-          CloudDb.settings
+    return input
+        .where(
+          (_) => _.action is OnInitAction || _.action is InitSettingsEvents,
+        )
+        .asyncExpand(
+          (context) => CloudDb.settings
               .snapshots()
-              .map(
-                (snapshot) {
-                  if (snapshot.data == null) {
-                    throw FormatException("Internet Error");
-                  }
-                  return SettingsModel.fromJson(snapshot.data);
-                },
+              .map((snapshot) {
+                if (snapshot.data == null) {
+                  throw FormatException("Internet Error");
+                }
+                return SettingsModel.fromJson(snapshot.data);
+              })
+              .handleError(
+                () => context.dispatcher(const OnErrorSettingsEvents()),
               )
-              .takeWhile((action) => action is! OnDisposeAction)
-              .listen(
-                (settings) {
-                  // Keep Static copy
-                  Settings.setData(settings);
-                  context.dispatcher(OnDataSettingAction(payload: settings));
-                },
-                onError: () {
-                  context.dispatcher(const OnErrorSettingsEvents());
-                },
-              );
-        }
-        return context;
-      },
-    );
+              .map((settings) {
+                // Keep Static copy
+                Settings.setData(settings);
+                return OnDataSettingAction(payload: settings);
+              })
+              .map((action) => context.copyWith(action))
+              .takeWhile((_) => _.action is! OnDisposeAction),
+        );
+
+    // return Observable(input).map(
+    //   (context) {
+    //     if (context.action is OnInitAction ||
+    //         context.action is InitSettingsEvents) {
+    //       CloudDb.settings
+    //           .snapshots()
+    //           .map(
+    //             (snapshot) {
+    //               if (snapshot.data == null) {
+    //                 throw FormatException("Internet Error");
+    //               }
+    //               return SettingsModel.fromJson(snapshot.data);
+    //             },
+    //           )
+    //           .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)
+    //           .listen(
+    //             (settings) {
+    //               // Keep Static copy
+    //               Settings.setData(settings);
+    //               context.dispatcher(OnDataSettingAction(payload: settings));
+    //             },
+    //             onError: () {
+    //               context.dispatcher(const OnErrorSettingsEvents());
+    //             },
+    //           );
+    //     }
+    //     return context;
+    //   },
+    // );
   }
 
   @override

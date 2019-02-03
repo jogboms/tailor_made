@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:rebloc/rebloc.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/rebloc/actions/account.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
@@ -14,41 +15,71 @@ class AccountBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    return input.map(
-      (context) {
-        final _action = context.action;
-
-        if (_action is OnReadNotice) {
-          _readNotice(_action.payload)
-              .catchError((dynamic e) => print(e))
-              .then((_) => context.dispatcher(const VoidAction()));
-        }
-
-        if (_action is OnSendRating) {
-          _sendRating(_action.payload, _action.rating)
-              .catchError((dynamic e) => print(e))
-              .then((_) => context.dispatcher(const VoidAction()));
-        }
-
-        if (_action is OnPremiumSignUp) {
-          _signUp(_action.payload)
-              .catchError((dynamic e) => print(e))
-              .then((_) => context.dispatcher(const VoidAction()));
-        }
-
-        if (_action is OnInitAction) {
-          CloudDb.account
+    final a = input.where((_) => _.action is OnLoginAction).asyncExpand(
+          (context) => CloudDb.account
               .snapshots()
               .map((snapshot) => AccountModel.fromDoc(snapshot))
-              .takeWhile((action) => action is! OnDisposeAction)
-              .listen((account) => context.dispatcher(
-                    OnDataAccountAction(payload: account),
-                  ));
-        }
+              .map((account) => OnDataAccountAction(payload: account))
+              .map((action) => context.copyWith(action))
+              .takeWhile((_) => _.action is! OnDisposeAction),
+        );
 
-        return context;
-      },
-    );
+    final b = input.where((_) => _.action is OnReadNotice).asyncMap(
+          (context) => _readNotice((context.action as OnReadNotice).payload)
+              .catchError((dynamic e) => print(e))
+              .then((_) => context),
+        );
+
+    final c = input.where((_) => _.action is OnSendRating).asyncMap(
+          (context) => _readNotice((context.action as OnSendRating).payload)
+              .catchError((dynamic e) => print(e))
+              .then((_) => context),
+        );
+
+    final d = input.where((_) => _.action is OnPremiumSignUp).asyncMap(
+          (context) => _signUp((context.action as OnPremiumSignUp).payload)
+              .catchError((dynamic e) => print(e))
+              .then((_) => context),
+        );
+
+    return a;
+    return MergeStream([a, b, c, d]);
+
+    // return input.map(
+    //   (context) {
+    //     final _action = context.action;
+
+    //     if (_action is OnReadNotice) {
+    //       _readNotice(_action.payload)
+    //           .catchError((dynamic e) => print(e))
+    //           .then((_) => context.dispatcher(const VoidAction()));
+    //     }
+
+    //     if (_action is OnSendRating) {
+    //       _sendRating(_action.payload, _action.rating)
+    //           .catchError((dynamic e) => print(e))
+    //           .then((_) => context.dispatcher(const VoidAction()));
+    //     }
+
+    //     if (_action is OnPremiumSignUp) {
+    //       _signUp(_action.payload)
+    //           .catchError((dynamic e) => print(e))
+    //           .then((_) => context.dispatcher(const VoidAction()));
+    //     }
+
+    //     if (_action is OnInitAction) {
+    //       CloudDb.account
+    //           .snapshots()
+    //           .map((snapshot) => AccountModel.fromDoc(snapshot))
+    //           .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)
+    //           .listen((account) => context.dispatcher(
+    //                 OnDataAccountAction(payload: account),
+    //               ));
+    //     }
+
+    //     return context;
+    //   },
+    // );
   }
 
   @override

@@ -31,37 +31,35 @@ class ContactsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    return input.map(
+    final a = input.where((_) => _.action is SearchContactAction).asyncExpand(
       (context) {
-        final _action = context.action;
+        return Observable<String>.just(
+          (context.action as SearchContactAction).payload,
+        )
+            .map<String>((String text) => text.trim())
+            .distinct()
+            .where((text) => text.length > 1)
+            .debounce(const Duration(milliseconds: 750))
+            .switchMap<Action>(
+              (text) => ConcatStream<Action>(
+                    [
+                      Stream.fromIterable([const StartSearchContactAction()]),
+                      Observable.timer(
+                        _doSearch(
+                          context.state.contacts.contacts,
+                          text,
+                        ),
+                        const Duration(seconds: 1),
+                      )
+                    ],
+                  ).takeWhile((action) => action is! CancelSearchContactAction),
+            )
+            .map((action) => context.copyWith(action));
+      },
+    );
 
-        if (_action is SearchContactAction) {
-          Observable<String>.just(_action.payload)
-              .map<String>((String text) => text.trim())
-              .distinct()
-              .where((text) => text.length > 1)
-              .debounce(const Duration(milliseconds: 750))
-              .switchMap<Action>(
-                (text) => ConcatStream<Action>(
-                      [
-                        Stream.fromIterable([const StartSearchContactAction()]),
-                        Observable.timer(
-                          _doSearch(
-                            context.state.contacts.contacts,
-                            text,
-                          ),
-                          const Duration(seconds: 1),
-                        )
-                      ],
-                    ).takeWhile(
-                      (action) => action is! CancelSearchContactAction,
-                    ),
-              )
-              .listen((action) => context.dispatcher(action));
-        }
-
-        if (_action is OnInitAction) {
-          CloudDb.contacts
+    final b = input.where((_) => _.action is OnLoginAction).asyncExpand(
+          (context) => CloudDb.contacts
               .snapshots()
               .map(
                 (snapshot) => snapshot.documents
@@ -69,15 +67,13 @@ class ContactsBloc extends SimpleBloc<AppState> {
                     .map((item) => ContactModel.fromDoc(item))
                     .toList(),
               )
-              .takeWhile((action) => action is! OnDisposeAction)
-              .listen((contacts) => context.dispatcher(
-                    OnDataContactAction(payload: contacts),
-                  ));
-        }
+              .map((contacts) => OnDataContactAction(payload: contacts))
+              .map((action) => context.copyWith(action))
+              .takeWhile((_) => _.action is! OnDisposeAction),
+        );
 
-        return context;
-      },
-    );
+    return b;
+    return MergeStream([a, b]);
   }
 
   @override

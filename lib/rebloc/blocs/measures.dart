@@ -14,31 +14,25 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    return Observable(input).map(
-      (context) {
-        final _action = context.action;
-
-        // TODO: should really check this out
-        if (_action is OnInitMeasureAction) {
-          _init(_action.payload)
+    final a = input.where((_) => _.action is OnInitMeasureAction).asyncMap(
+          (context) => _init((context.action as OnInitMeasureAction).payload)
               .catchError((dynamic e) => print(e))
-              .then((_) => context.dispatcher(const OnInitAction()));
-        }
+              .then((_) => context.copyWith(const OnInitMeasuresAction())),
+        );
 
-        if (_action is OnInitAction) {
-          CloudDb.measurements
+    final b = input.where((_) => _.action is OnInitMeasuresAction).asyncExpand(
+          (context) => CloudDb.measurements
               .snapshots()
               .map((snapshot) {
                 return snapshot.documents
                     .map((item) => MeasureModel.fromDoc(item))
                     .toList();
               })
-              .takeWhile((action) => action is! OnDisposeAction)
-              .listen((measures) {
+              .map((measures) {
                 if (measures.isEmpty) {
-                  return context.dispatcher(OnInitMeasureAction(
+                  return OnInitMeasureAction(
                     payload: createDefaultMeasures(),
-                  ));
+                  );
                 }
 
                 final grouped = groupModelBy<MeasureModel>(
@@ -46,16 +40,60 @@ class MeasuresBloc extends SimpleBloc<AppState> {
                   (measure) => measure.group,
                 );
 
-                return context.dispatcher(OnDataMeasureAction(
+                return OnDataMeasureAction(
                   payload: measures,
                   grouped: grouped,
-                ));
-              });
-        }
+                );
+              })
+              .map((action) => context.copyWith(action))
+              .takeWhile((_) => _.action is! OnDisposeAction),
+        );
 
-        return context;
-      },
-    );
+    return b;
+    return MergeStream([a, b]);
+
+    // return Observable(input).map(
+    //   (context) {
+    //     final _action = context.action;
+
+    //     // TODO: should really check this out
+    //     if (_action is OnInitMeasureAction) {
+    //       _init(_action.payload)
+    //           .catchError((dynamic e) => print(e))
+    //           .then((_) => context.dispatcher(const OnInitAction()));
+    //     }
+
+    //     if (_action is OnInitAction) {
+    //       CloudDb.measurements
+    //           .snapshots()
+    //           .map((snapshot) {
+    //             return snapshot.documents
+    //                 .map((item) => MeasureModel.fromDoc(item))
+    //                 .toList();
+    //           })
+    //           .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)
+    //           .listen((measures) {
+    //             if (measures.isEmpty) {
+    //               return context.dispatcher(OnInitMeasureAction(
+    //                 payload: createDefaultMeasures(),
+    //               ));
+    //             }
+
+    //             final grouped = groupModelBy<MeasureModel>(
+    //               measures,
+    //               (measure) => measure.group,
+    //             );
+
+    //             return context.dispatcher(OnDataMeasureAction(
+    //               payload: measures,
+    //               grouped: grouped,
+    //             ));
+    //           });
+    //     }
+
+    //     return context;
+    //   },
+    // );
   }
 
   @override

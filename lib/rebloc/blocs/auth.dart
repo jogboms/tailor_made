@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
+import 'package:tailor_made/rebloc/actions/measures.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 
 class AuthBloc extends SimpleBloc<AppState> {
@@ -13,6 +14,7 @@ class AuthBloc extends SimpleBloc<AppState> {
   ) async {
     if (action is OnLoginAction) {
       // dispatcher(const OnInitAction());
+      dispatcher(const OnInitMeasuresAction());
     }
     return action;
   }

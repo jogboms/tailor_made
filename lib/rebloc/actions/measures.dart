@@ -12,6 +12,10 @@ class OnDataMeasureAction extends Action {
   final Map<String, List<MeasureModel>> grouped;
 }
 
+class OnInitMeasuresAction extends Action {
+  const OnInitMeasuresAction();
+}
+
 class OnInitMeasureAction extends Action {
   const OnInitMeasureAction({
     @required this.payload,
