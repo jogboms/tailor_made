@@ -1,4 +1,5 @@
 import 'package:rebloc/rebloc.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/models/settings.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/actions/settings.dart';
@@ -12,9 +13,9 @@ class SettingsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    input
+    Observable(input)
         .where((_) => _.action is InitSettingsAction)
-        .asyncExpand(
+        .switchMap(
           (context) => CloudDb.settings
               .snapshots()
               .map((snapshot) {

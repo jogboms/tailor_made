@@ -77,14 +77,16 @@ class ContactsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    MergeStream([
-      input.where((_) => _.action is SearchContactAction).asyncExpand(
-            _makeSearch,
-          ),
-      input.where((_) => _.action is InitContactsAction).asyncExpand(
-            _onAfterLogin,
-          ),
-    ]).listen(
+    MergeStream(
+      [
+        Observable(input)
+            .where((_) => _.action is SearchContactAction)
+            .switchMap(_makeSearch),
+        Observable(input)
+            .where((_) => _.action is InitContactsAction)
+            .switchMap(_onAfterLogin),
+      ],
+    ).listen(
       (context) => context.dispatcher(context.action),
     );
 

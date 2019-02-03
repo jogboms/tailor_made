@@ -82,10 +82,16 @@ class JobsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    MergeStream([
-      input.where((_) => _.action is SearchJobAction).asyncExpand(_makeSearch),
-      input.where((_) => _.action is InitJobsAction).asyncExpand(_onAfterLogin),
-    ]).listen(
+    MergeStream(
+      [
+        Observable(input)
+            .where((_) => _.action is SearchJobAction)
+            .switchMap(_makeSearch),
+        Observable(input)
+            .where((_) => _.action is InitJobsAction)
+            .switchMap(_onAfterLogin),
+      ],
+    ).listen(
       (context) => context.dispatcher(context.action),
     );
 

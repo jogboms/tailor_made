@@ -10,9 +10,9 @@ import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/utils/mk_group_model_by.dart';
 
 class MeasuresBloc extends SimpleBloc<AppState> {
-  Future<WareContext<AppState>> _onInitMeasure(
+  Stream<WareContext<AppState>> _onUpdateMeasure(
     WareContext<AppState> context,
-  ) async {
+  ) async* {
     final WriteBatch batch = CloudDb.instance.batch();
 
     try {
@@ -25,14 +25,14 @@ class MeasuresBloc extends SimpleBloc<AppState> {
       });
 
       await batch.commit();
-      return context.copyWith(const InitMeasuresAction());
+      yield context.copyWith(const InitMeasuresAction());
     } catch (e) {
       print(e);
-      return context;
+      yield context;
     }
   }
 
-  Stream<WareContext<AppState>> _onInitMeasures(
+  Stream<WareContext<AppState>> _onInitMeasure(
     WareContext<AppState> context,
   ) {
     return CloudDb.measurements
@@ -69,12 +69,12 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   ) {
     MergeStream(
       [
-        input.where((_) => _.action is UpdateMeasureAction).asyncMap(
-              _onInitMeasure,
-            ),
-        input.where((_) => _.action is InitMeasuresAction).asyncExpand(
-              _onInitMeasures,
-            ),
+        Observable(input)
+            .where((_) => _.action is UpdateMeasureAction)
+            .switchMap(_onUpdateMeasure),
+        Observable(input)
+            .where((_) => _.action is InitMeasuresAction)
+            .switchMap(_onInitMeasure),
       ],
     ).listen(
       (context) => context.dispatcher(context.action),

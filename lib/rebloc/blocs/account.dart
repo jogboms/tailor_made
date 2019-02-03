@@ -11,9 +11,9 @@ import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/services/settings.dart';
 
 class AccountBloc extends SimpleBloc<AppState> {
-  Future<WareContext<AppState>> _readNotice(
+  Stream<WareContext<AppState>> _readNotice(
     WareContext<AppState> context,
-  ) async {
+  ) async* {
     final _account = (context.action as OnReadNotice).payload;
     try {
       await _account.reference.updateData(
@@ -23,12 +23,12 @@ class AccountBloc extends SimpleBloc<AppState> {
       print(e);
       rethrow;
     }
-    return context;
+    yield context;
   }
 
-  Future<WareContext<AppState>> _sendRating(
+  Stream<WareContext<AppState>> _sendRating(
     WareContext<AppState> context,
-  ) async {
+  ) async* {
     final _action = context.action as OnSendRating;
 
     try {
@@ -42,12 +42,12 @@ class AccountBloc extends SimpleBloc<AppState> {
       rethrow;
     }
 
-    return context;
+    yield context;
   }
 
-  Future<WareContext<AppState>> _signUp(
+  Stream<WareContext<AppState>> _signUp(
     WareContext<AppState> context,
-  ) async {
+  ) async* {
     final _action = context.action as OnPremiumSignUp;
 
     try {
@@ -66,7 +66,7 @@ class AccountBloc extends SimpleBloc<AppState> {
       rethrow;
     }
 
-    return context;
+    yield context;
   }
 
   Stream<WareContext<AppState>> _getAccount(
@@ -84,14 +84,22 @@ class AccountBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> applyMiddleware(
     Stream<WareContext<AppState>> input,
   ) {
-    MergeStream([
-      input.where((_) => _.action is InitAccountAction).asyncExpand(
-            _getAccount,
-          ),
-      input.where((_) => _.action is OnReadNotice).asyncMap(_readNotice),
-      input.where((_) => _.action is OnSendRating).asyncMap(_sendRating),
-      input.where((_) => _.action is OnPremiumSignUp).asyncMap(_signUp),
-    ]).listen(
+    MergeStream(
+      [
+        Observable(input)
+            .where((_) => _.action is InitAccountAction)
+            .switchMap(_getAccount),
+        Observable(input)
+            .where((_) => _.action is OnReadNotice)
+            .switchMap(_readNotice),
+        Observable(input)
+            .where((_) => _.action is OnSendRating)
+            .switchMap(_sendRating),
+        Observable(input)
+            .where((_) => _.action is OnPremiumSignUp)
+            .switchMap(_signUp),
+      ],
+    ).listen(
       (context) => context.dispatcher(context.action),
     );
 

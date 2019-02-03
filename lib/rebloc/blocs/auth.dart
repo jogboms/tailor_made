@@ -30,16 +30,7 @@ class AuthBloc extends SimpleBloc<AppState> {
   @override
   AppState reducer(AppState state, Action action) {
     if (action is OnLogoutAction) {
-      // TODO: critical
       return AppState.initialState();
-      // return state.copyWith(
-      //   // contacts: const ContactsState.initialState(),
-      //   // jobs: const JobsState.initialState(),
-      //   // account: const AccountState.initialState(),
-      //   measures: const MeasuresState.initialState(),
-      //   // settings: const SettingsState.initialState(),
-      //   // stats: const StatsState.initialState(),
-      // );
     }
 
     return state;
