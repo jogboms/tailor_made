@@ -35,32 +35,29 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _onInitMeasure(
     WareContext<AppState> context,
   ) {
-    return CloudDb.measurements
-        .snapshots()
-        .map((snapshot) {
-          return snapshot.documents
-              .map((item) => MeasureModel.fromDoc(item))
-              .toList();
-        })
-        .map((measures) {
-          if (measures.isEmpty) {
-            return UpdateMeasureAction(
-              payload: createDefaultMeasures(),
-            );
-          }
+    return CloudDb.measurements.snapshots().map(
+      (snapshot) {
+        return snapshot.documents
+            .map((item) => MeasureModel.fromDoc(item))
+            .toList();
+      },
+    ).map((measures) {
+      if (measures.isEmpty) {
+        return UpdateMeasureAction(
+          payload: createDefaultMeasures(),
+        );
+      }
 
-          final grouped = groupModelBy<MeasureModel>(
-            measures,
-            (measure) => measure.group,
-          );
+      final grouped = groupModelBy<MeasureModel>(
+        measures,
+        (measure) => measure.group,
+      );
 
-          return OnDataMeasureAction(
-            payload: measures,
-            grouped: grouped,
-          );
-        })
-        .map((action) => context.copyWith(action))
-        .takeWhile((_) => _.action is! OnDisposeAction);
+      return OnDataMeasureAction(
+        payload: measures,
+        grouped: grouped,
+      );
+    }).map((action) => context.copyWith(action));
   }
 
   @override
@@ -76,9 +73,13 @@ class MeasuresBloc extends SimpleBloc<AppState> {
             .where((_) => _.action is InitMeasuresAction)
             .switchMap(_onInitMeasure),
       ],
-    ).listen(
-      (context) => context.dispatcher(context.action),
-    );
+    )
+        .takeWhile(
+          (_) => _.action is! OnDisposeAction,
+        )
+        .listen(
+          (context) => context.dispatcher(context.action),
+        );
 
     return input;
   }

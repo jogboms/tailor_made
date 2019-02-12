@@ -39,8 +39,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
               .toList(),
         )
         .map((contacts) => OnDataContactAction(payload: contacts))
-        .map((action) => context.copyWith(action))
-        .takeWhile((_) => _.action is! OnDisposeAction);
+        .map((action) => context.copyWith(action));
   }
 
   Stream<WareContext<AppState>> _makeSearch(
@@ -48,28 +47,23 @@ class ContactsBloc extends SimpleBloc<AppState> {
   ) {
     return Observable<String>.just(
             (context.action as SearchContactAction).payload)
+        .doOnData((_) => context.dispatcher(const StartSearchContactAction()))
         .map<String>((String text) => text.trim())
         .distinct()
         .where((text) => text.length > 1)
         .debounce(const Duration(milliseconds: 750))
-        .switchMap<Action>(
-          (text) => Stream.fromIterable(
-                [
-                  const StartSearchContactAction(),
-                  SearchSuccessContactAction(
-                    payload: context.state.contacts.contacts.where(
-                      (contact) {
-                        return contact.fullname.contains(
-                          RegExp(r'' + text + '', caseSensitive: false),
-                        );
-                      },
-                    ).toList(),
-                  ),
-                ],
-              ).takeWhile(
-                (action) => action is! CancelSearchContactAction,
-              ),
-        )
+        .map((text) {
+          return SearchSuccessContactAction(
+            payload: context.state.contacts.contacts.where(
+              (contact) {
+                return contact.fullname.contains(
+                  RegExp(r'' + text + '', caseSensitive: false),
+                );
+              },
+            ).toList(),
+          );
+        })
+        .takeWhile((action) => action is! CancelSearchContactAction)
         .map((action) => context.copyWith(action));
   }
 
@@ -86,9 +80,13 @@ class ContactsBloc extends SimpleBloc<AppState> {
             .where((_) => _.action is InitContactsAction)
             .switchMap(_onAfterLogin),
       ],
-    ).listen(
-      (context) => context.dispatcher(context.action),
-    );
+    )
+        .takeWhile(
+          (_) => _.action is! OnDisposeAction,
+        )
+        .listen(
+          (context) => context.dispatcher(context.action),
+        );
 
     return input;
   }

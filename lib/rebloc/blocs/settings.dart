@@ -32,9 +32,9 @@ class SettingsBloc extends SimpleBloc<AppState> {
                 Settings.setData(settings);
                 return OnDataSettingAction(payload: settings);
               })
-              .map((action) => context.copyWith(action))
-              .takeWhile((_) => _.action is! OnDisposeAction),
+              .map((action) => context.copyWith(action)),
         )
+        .takeWhile((_) => _.action is! OnDisposeAction)
         .listen(
           (context) => context.dispatcher(context.action),
         );
