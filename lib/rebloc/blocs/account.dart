@@ -76,8 +76,7 @@ class AccountBloc extends SimpleBloc<AppState> {
         .snapshots()
         .map((snapshot) => AccountModel.fromDoc(snapshot))
         .map((account) => OnDataAccountAction(payload: account))
-        .map((action) => context.copyWith(action))
-        .takeWhile((_) => _.action is! OnDisposeAction);
+        .map((action) => context.copyWith(action));
   }
 
   @override
@@ -99,9 +98,13 @@ class AccountBloc extends SimpleBloc<AppState> {
             .where((_) => _.action is OnPremiumSignUp)
             .switchMap(_signUp),
       ],
-    ).listen(
-      (context) => context.dispatcher(context.action),
-    );
+    )
+        .takeWhile(
+          (_) => _.action is! OnDisposeAction,
+        )
+        .listen(
+          (context) => context.dispatcher(context.action),
+        );
 
     return input;
   }

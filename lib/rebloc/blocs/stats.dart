@@ -19,9 +19,9 @@ class StatsBloc extends SimpleBloc<AppState> {
               .snapshots()
               .map((snapshot) => StatsModel.fromJson(snapshot.data))
               .map((stats) => OnDataStatAction(payload: stats))
-              .map((action) => context.copyWith(action))
-              .takeWhile((_) => _.action is! OnDisposeAction),
+              .map((action) => context.copyWith(action)),
         )
+        .takeWhile((_) => _.action is! OnDisposeAction)
         .listen((context) => context.dispatcher(context.action));
 
     return input;

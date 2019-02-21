@@ -38,28 +38,23 @@ class JobsBloc extends SimpleBloc<AppState> {
     WareContext<AppState> context,
   ) {
     return Observable<String>.just((context.action as SearchJobAction).payload)
+        .doOnData((_) => context.dispatcher(const StartSearchJobAction()))
         .map<String>((String text) => text.trim())
         .distinct()
         .where((text) => text.length > 1)
         .debounce(const Duration(milliseconds: 750))
-        .switchMap<Action>(
-          (text) => Stream.fromIterable(
-                [
-                  const StartSearchJobAction(),
-                  SearchSuccessJobAction(
-                    payload: context.state.jobs.jobs.where(
-                      (job) {
-                        return job.name.contains(
-                          RegExp(r'' + text + '', caseSensitive: false),
-                        );
-                      },
-                    ).toList(),
-                  ),
-                ],
-              ).takeWhile(
-                (action) => action is! CancelSearchJobAction,
-              ),
-        )
+        .map((text) {
+          return SearchSuccessJobAction(
+            payload: context.state.jobs.jobs.where(
+              (job) {
+                return job.name.contains(
+                  RegExp(r'' + text + '', caseSensitive: false),
+                );
+              },
+            ).toList(),
+          );
+        })
+        .takeWhile((action) => action is! CancelSearchJobAction)
         .map((action) => context.copyWith(action));
   }
 
@@ -74,8 +69,7 @@ class JobsBloc extends SimpleBloc<AppState> {
               .toList();
         })
         .map((jobs) => OnDataJobAction(payload: jobs))
-        .map((action) => context.copyWith(action))
-        .takeWhile((_) => _.action is! OnDisposeAction);
+        .map((action) => context.copyWith(action));
   }
 
   @override
@@ -91,9 +85,13 @@ class JobsBloc extends SimpleBloc<AppState> {
             .where((_) => _.action is InitJobsAction)
             .switchMap(_onAfterLogin),
       ],
-    ).listen(
-      (context) => context.dispatcher(context.action),
-    );
+    )
+        .takeWhile(
+          (_) => _.action is! OnDisposeAction,
+        )
+        .listen(
+          (context) => context.dispatcher(context.action),
+        );
 
     return input;
   }
