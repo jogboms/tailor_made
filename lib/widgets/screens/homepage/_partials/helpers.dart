@@ -61,8 +61,8 @@ class TMGridTile extends StatelessWidget {
 class _CircleIcon extends StatelessWidget {
   const _CircleIcon({
     this.icon,
-    this.color: MkColors.accent,
-    this.small: false,
+    this.color = MkColors.accent,
+    this.small = false,
   });
 
   final IconData icon;
@@ -92,7 +92,7 @@ class _TextTile extends StatelessWidget {
   const _TextTile({
     this.title,
     this.subTitle,
-    this.small: false,
+    this.small = false,
   });
 
   final String title;

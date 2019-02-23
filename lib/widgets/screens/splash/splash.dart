@@ -110,7 +110,7 @@ class _ContentState extends State<_Content> {
           (_) async {
             StoreProvider.of<AppState>(context).dispatcher(OnLoginAction(user));
             Auth.setUser(user);
-            Navigator.pushAndRemoveUntil<void>(
+            await Navigator.pushAndRemoveUntil<void>(
               context,
               MkPageRoute.fadeIn<void>(const HomePage()),
               (Route<void> route) => false,

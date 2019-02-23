@@ -169,7 +169,7 @@ class _Body extends StatelessWidget {
                 StoreProvider.of<AppState>(context).dispatcher(
                   const OnLogoutAction(),
                 );
-                Navigator.pushAndRemoveUntil<void>(
+                await Navigator.pushAndRemoveUntil<void>(
                   context,
                   MkNavigate.fadeIn<void>(
                     const SplashPage(isColdStart: false),

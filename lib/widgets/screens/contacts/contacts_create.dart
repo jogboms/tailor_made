@@ -114,7 +114,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
         closeLoadingSnackBar();
         showInSnackBar("Successfully Added");
 
-        Navigator.pushReplacement<dynamic, dynamic>(
+        await Navigator.pushReplacement<dynamic, dynamic>(
           context,
           MkNavigate.slideIn<String>(
             ContactPage(contact: ContactModel.fromDoc(snap)),

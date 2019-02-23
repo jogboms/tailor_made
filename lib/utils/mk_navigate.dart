@@ -5,8 +5,8 @@ class MkPageRoute {
   static CupertinoPageRoute slideIn<T>(
     Widget widget, {
     RouteSettings settings,
-    bool maintainState: true,
-    bool fullscreenDialog: false,
+    bool maintainState = true,
+    bool fullscreenDialog = false,
   }) {
     return CupertinoPageRoute<T>(
       builder: (BuildContext context) => widget,
@@ -19,7 +19,7 @@ class MkPageRoute {
   static Route<T> fadeIn<T>(
     Widget widget, {
     RouteSettings settings,
-    bool maintainState: true,
+    bool maintainState = true,
   }) {
     return PageRouteBuilder<T>(
       opaque: false,
@@ -35,7 +35,7 @@ class MkPageRoute {
   static Route<T> slideUp<T>(
     Widget widget, {
     RouteSettings settings,
-    bool maintainState: true,
+    bool maintainState = true,
   }) {
     return MaterialPageRoute<T>(
       settings: settings,
@@ -52,8 +52,8 @@ class MkNavigate {
     Widget widget, {
     String name,
     RouteSettings settings,
-    bool maintainState: true,
-    bool fullscreenDialog: false,
+    bool maintainState = true,
+    bool fullscreenDialog = false,
     PageRoute hostRoute,
   }) {
     Navigator.push<dynamic>(
@@ -73,8 +73,8 @@ class MkNavigate {
     Widget widget, {
     String name,
     RouteSettings settings,
-    bool maintainState: true,
-    bool fullscreenDialog: false,
+    bool maintainState = true,
+    bool fullscreenDialog = false,
     PageRoute hostRoute,
   }) {
     final _settings = name != null ? RouteSettings(name: name) : settings;
@@ -90,7 +90,7 @@ class MkNavigate {
     Widget widget, {
     String name,
     RouteSettings settings,
-    bool maintainState: true,
+    bool maintainState = true,
   }) {
     final _settings = name != null ? RouteSettings(name: name) : settings;
     return MkPageRoute.fadeIn<T>(
@@ -104,7 +104,7 @@ class MkNavigate {
     Widget widget, {
     String name,
     RouteSettings settings,
-    bool maintainState: true,
+    bool maintainState = true,
   }) {
     final _settings = name != null ? RouteSettings(name: name) : settings;
     return MkPageRoute.slideUp<T>(
