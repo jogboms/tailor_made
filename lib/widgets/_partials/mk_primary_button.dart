@@ -40,7 +40,6 @@ class MkPrimaryButton extends StatelessWidget {
       constraints: BoxConstraints(
         minWidth: kButtonMinWidth,
       ),
-      color: Colors.black,
       child: FlatButton(
         color: backgroundColor,
         padding: _padding,

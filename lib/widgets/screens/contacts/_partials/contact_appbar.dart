@@ -61,6 +61,7 @@ class _ContactAppBarState extends State<ContactAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    final _popTextStyle = MkTheme.of(context).body1;
     return PreferredSize(
       preferredSize: const Size.fromHeight(kToolbarHeight),
       child: SafeArea(
@@ -97,21 +98,21 @@ class _ContactAppBarState extends State<ContactAppBar> {
               onSelected: _selectChoice,
               itemBuilder: (_) {
                 return [
-                  const PopupMenuItem<Choice>(
+                  PopupMenuItem<Choice>(
                     value: Choice.CreateJob,
-                    child: const Text('New Job'),
+                    child: Text('New Job', style: _popTextStyle),
                   ),
-                  const PopupMenuItem<Choice>(
+                  PopupMenuItem<Choice>(
                     value: Choice.SendText,
-                    child: const Text('Text Message'),
+                    child: Text('Text Message', style: _popTextStyle),
                   ),
-                  const PopupMenuItem<Choice>(
+                  PopupMenuItem<Choice>(
                     value: Choice.EditMeasure,
-                    child: const Text('Edit Measurements'),
+                    child: Text('Edit Measurements', style: _popTextStyle),
                   ),
-                  const PopupMenuItem<Choice>(
+                  PopupMenuItem<Choice>(
                     value: Choice.EditAccount,
-                    child: const Text('Edit Account'),
+                    child: Text('Edit Account', style: _popTextStyle),
                   ),
                 ];
               },

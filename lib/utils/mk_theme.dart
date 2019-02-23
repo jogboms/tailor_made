@@ -122,7 +122,7 @@ class MkTheme extends InheritedWidget {
       ),
       canvasColor: Colors.white,
       buttonTheme: theme.buttonTheme.copyWith(
-        height: 48.0,
+        height: kButtonHeight,
       ),
       inputDecorationTheme: InputDecorationTheme(
         isDense: false,

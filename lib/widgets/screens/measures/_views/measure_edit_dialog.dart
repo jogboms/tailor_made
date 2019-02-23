@@ -71,13 +71,15 @@ class MeasureEditDialog extends StatelessWidget {
                 children: <Widget>[
                   MkClearButton(
                     onPressed: onCancel,
-                    color: Colors.grey,
+                    color: Colors.grey.shade300,
                     child: const Text("CANCEL"),
                   ),
+                  const SizedBox(width: 16.0),
                   MkClearButton(
                     onPressed: onDone,
                     child: const Text("DONE"),
                   ),
+                  const SizedBox(width: 16.0),
                 ],
               ),
               const SizedBox(height: 8.0),

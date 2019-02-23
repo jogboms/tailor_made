@@ -5,7 +5,7 @@ import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/_partials/form_section_header.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
@@ -45,7 +45,9 @@ class _ContactMeasureState extends State<ContactMeasure>
   Widget build(BuildContext context) {
     final List<Widget> children = [];
 
-    children.add(const _Header(title: "Measurements", trailing: "Inches (In)"));
+    children.add(
+      const FormSectionHeader(title: "Measurements", trailing: "Inches (In)"),
+    );
     children.add(MeasureCreateItems(
       grouped: widget.grouped,
       measurements: contact.measurements,
@@ -132,34 +134,5 @@ class _ContactMeasureState extends State<ContactMeasure>
         showInSnackBar(e.toString());
       }
     }
-  }
-}
-
-class _Header extends StatelessWidget {
-  const _Header({
-    Key key,
-    @required this.title,
-    @required this.trailing,
-  }) : super(key: key);
-
-  final String title;
-  final String trailing;
-
-  @override
-  Widget build(BuildContext context) {
-    final style = MkTheme.of(context).smallSemi;
-    return Container(
-      color: Colors.grey[100].withOpacity(.4),
-      margin: const EdgeInsets.only(top: 8.0),
-      padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-      alignment: AlignmentDirectional.centerStart,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(title.toUpperCase(), style: style),
-          Text(trailing, style: style),
-        ],
-      ),
-    );
   }
 }

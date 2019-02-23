@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_routes.dart';
+import 'package:tailor_made/constants/mk_strings.dart';
+import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/rebloc/actions/account.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
@@ -23,11 +25,6 @@ import 'package:tailor_made/widgets/screens/homepage/_partials/stats.dart';
 import 'package:tailor_made/widgets/screens/homepage/_partials/top_button_bar.dart';
 import 'package:tailor_made/widgets/screens/homepage/_partials/top_row.dart';
 import 'package:tailor_made/widgets/screens/splash/splash.dart';
-
-const double _kBottomBarHeight = 46.0;
-const double _kBottomGridsHeight = 280.0;
-const double _kStatGridsHeight = 40.0;
-const double _kRowGridsHeight = (_kBottomGridsHeight - _kStatGridsHeight) / 3;
 
 class HomePage extends StatelessWidget {
   const HomePage({
@@ -85,7 +82,7 @@ class HomePage extends StatelessWidget {
                       onSendMail: () {
                         email(
                           "jeremiahogbomo@gmail.com",
-                          'Unwarranted%20Account%20Suspension%20%23${vm.account.uid}',
+                          '${MkStrings.appName} - Unwarranted%20Account%20Suspension%20%23${vm.account.uid}',
                         );
                       },
                     );
@@ -123,66 +120,52 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraint) {
-        final bool isLandscape = constraint.maxWidth > constraint.maxHeight;
-
-        // Somehow, i mathematically came up w/ these numbers & they made sense :)
-        final _height = constraint.maxHeight -
-            (isLandscape
-                ? _kBottomBarHeight
-                : _kBottomGridsHeight + (_kBottomBarHeight * 1.45)) -
-            MediaQuery.of(context).padding.bottom;
-
-        return Stack(
-          fit: StackFit.expand,
+    return Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            SafeArea(
-              top: false,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    ConstrainedBox(
-                      constraints: BoxConstraints.expand(height: _height),
-                      child: HeaderWidget(account: vm.account),
-                    ),
-                    StatsWidget(stats: vm.stats, height: _kStatGridsHeight),
-                    TopRowWidget(stats: vm.stats, height: _kRowGridsHeight),
-                    MidRowWidget(stats: vm.stats, height: _kRowGridsHeight),
-                    BottomRowWidget(
-                      stats: vm.stats,
-                      account: vm.account,
-                      height: _kRowGridsHeight,
-                    ),
-                    SizedBox(height: _kBottomBarHeight),
-                  ],
-                ),
+            Expanded(
+              flex: 12,
+              child: HeaderWidget(account: vm.account),
+            ),
+            StatsWidget(stats: vm.stats),
+            Expanded(flex: 2, child: TopRowWidget(stats: vm.stats)),
+            Expanded(flex: 2, child: MidRowWidget(stats: vm.stats)),
+            Expanded(
+              flex: 2,
+              child: BottomRowWidget(
+                stats: vm.stats,
+                account: vm.account,
               ),
             ),
-            CreateButton(contacts: vm.contacts),
-            TopButtonBar(
-              account: vm.account,
-              shouldSendRating: vm.shouldSendRating,
-              onLogout: () async {
-                await Auth.signOutWithGoogle();
-                StoreProvider.of<AppState>(context).dispatcher(
-                  const OnLogoutAction(),
-                );
-                await Navigator.pushAndRemoveUntil<void>(
-                  context,
-                  MkNavigate.fadeIn<void>(
-                    const SplashPage(isColdStart: false),
-                    name: MkRoutes.start,
-                  ),
-                  (Route<void> route) => false,
-                );
-              },
+            SizedBox(
+              height: kButtonHeight + MediaQuery.of(context).padding.bottom,
             ),
           ],
-        );
-      },
+        ),
+        CreateButton(contacts: vm.contacts),
+        TopButtonBar(
+          account: vm.account,
+          shouldSendRating: vm.shouldSendRating,
+          onLogout: () async {
+            await Auth.signOutWithGoogle();
+            StoreProvider.of<AppState>(context).dispatcher(
+              const OnLogoutAction(),
+            );
+            await Navigator.pushAndRemoveUntil<void>(
+              context,
+              MkNavigate.fadeIn<void>(
+                const SplashPage(isColdStart: false),
+                name: MkRoutes.start,
+              ),
+              (Route<void> route) => false,
+            );
+          },
+        ),
+      ],
     );
   }
 }

@@ -20,6 +20,7 @@ import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/avatar_app_bar.dart';
+import 'package:tailor_made/widgets/_partials/form_section_header.dart';
 import 'package:tailor_made/widgets/_partials/input_dropdown.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
@@ -95,26 +96,34 @@ class _JobsCreatePageState extends State<JobsCreatePage>
     final List<Widget> children = [];
 
     if (contact != null) {
-      children.add(const _Header(title: "Style Name"));
+      children.add(
+        const FormSectionHeader(title: "Style Name"),
+      );
       children.add(buildEnterName());
 
       children.add(
-        const _Header(title: "Payment", trailing: "Naira (₦)"),
+        const FormSectionHeader(title: "Payment", trailing: "Naira (₦)"),
       );
       children.add(buildEnterAmount());
 
-      children.add(const _Header(title: "Due Date"));
+      children.add(
+        const FormSectionHeader(title: "Due Date"),
+      );
       children.add(buildDueDate());
 
-      children.add(const _Header(title: "References"));
+      children.add(
+        const FormSectionHeader(title: "References"),
+      );
       children.add(buildImageGrid());
 
       children.add(
-        const _Header(title: "Measurements", trailing: "Inches (In)"),
+        const FormSectionHeader(title: "Measurements", trailing: "Inches (In)"),
       );
       children.add(buildCreateMeasure());
 
-      children.add(const _Header(title: "Additional Notes"));
+      children.add(
+        const FormSectionHeader(title: "Additional Notes"),
+      );
       children.add(buildAdditional());
 
       children.add(
@@ -453,45 +462,6 @@ class _NewGrid extends StatelessWidget {
             color: kTextBaseColor.withOpacity(.35),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _Header extends StatelessWidget {
-  const _Header({
-    Key key,
-    @required this.title,
-    this.trailing,
-  }) : super(key: key);
-
-  final String title;
-  final String trailing;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.grey[100].withOpacity(.4),
-      margin: const EdgeInsets.only(top: 8.0),
-      padding: const EdgeInsets.only(
-        top: 8.0,
-        bottom: 8.0,
-        left: 16.0,
-        right: 16.0,
-      ),
-      alignment: AlignmentDirectional.centerStart,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            title.toUpperCase(),
-            style: MkTheme.of(context).smallLight,
-          ),
-          Text(
-            trailing,
-            style: MkTheme.of(context).smallLight,
-          ),
-        ],
       ),
     );
   }

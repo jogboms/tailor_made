@@ -4,15 +4,15 @@ import 'package:tailor_made/models/stats.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 
+const double _kStatGridsHeight = 40.0;
+
 class StatsWidget extends StatelessWidget {
   const StatsWidget({
     Key key,
-    @required this.height,
     @required this.stats,
   }) : super(key: key);
 
   final StatsModel stats;
-  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +31,14 @@ class StatsWidget extends StatelessWidget {
               count: stats.jobs.pending.toString(),
             ),
           ),
-          _Divider(height: height),
+          const _Divider(),
           Expanded(
             child: _StatTile(
               title: "Received",
               count: MkMoney(stats.payments.completed).format,
             ),
           ),
-          _Divider(height: height),
+          const _Divider(),
           Expanded(
             child: _StatTile(
               title: "Completed",
@@ -52,20 +52,14 @@ class StatsWidget extends StatelessWidget {
 }
 
 class _Divider extends StatelessWidget {
-  const _Divider({
-    Key key,
-    @required this.height,
-  }) : super(key: key);
-
-  final double height;
+  const _Divider({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: kBorderSideColor,
       width: 1.0,
-      height: height,
-      margin: const EdgeInsets.only(left: 0.0, right: 0.0),
+      height: _kStatGridsHeight,
     );
   }
 }
