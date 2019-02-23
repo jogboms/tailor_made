@@ -16,11 +16,9 @@ class CreateButton extends StatefulWidget {
   const CreateButton({
     Key key,
     @required this.contacts,
-    @required this.height,
   }) : super(key: key);
 
   final List<ContactModel> contacts;
-  final double height;
 
   @override
   _CreateButtonState createState() => _CreateButtonState();
@@ -33,16 +31,10 @@ class _CreateButtonState extends State<CreateButton>
   @override
   void initState() {
     super.initState();
-    controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 1200))
-          ..addStatusListener((status) {
-            if (status == AnimationStatus.completed) {
-              controller.reverse();
-            } else if (status == AnimationStatus.dismissed) {
-              controller.forward();
-            }
-          })
-          ..forward();
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat(reverse: true);
   }
 
   @override
@@ -55,21 +47,20 @@ class _CreateButtonState extends State<CreateButton>
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
-      child: SafeArea(
-        child: SizedBox.fromSize(
-          size: Size.fromHeight(widget.height),
-          child: MkPrimaryButton(
-            onPressed: _onTapCreate(widget.contacts),
-            shape: const RoundedRectangleBorder(),
-            child: ScaleTransition(
-              scale: Tween(begin: 0.95, end: 1.025).animate(controller),
-              alignment: FractionalOffset.center,
-              child: Text(
-                "TAP TO CREATE",
-                style: MkTheme.of(context)
-                    .body3Medium
-                    .copyWith(color: Colors.white, letterSpacing: 1.25),
-              ),
+      child: SizedBox(
+        width: double.infinity,
+        child: MkPrimaryButton(
+          useSafeArea: true,
+          onPressed: _onTapCreate(widget.contacts),
+          shape: const RoundedRectangleBorder(),
+          child: ScaleTransition(
+            scale: Tween(begin: 0.95, end: 1.025).animate(controller),
+            alignment: FractionalOffset.center,
+            child: Text(
+              "TAP TO CREATE",
+              style: MkTheme.of(context)
+                  .body3Medium
+                  .copyWith(color: Colors.white, letterSpacing: 1.25),
             ),
           ),
         ),

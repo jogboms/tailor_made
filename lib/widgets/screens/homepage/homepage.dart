@@ -131,7 +131,8 @@ class _Body extends StatelessWidget {
         final _height = constraint.maxHeight -
             (isLandscape
                 ? _kBottomBarHeight
-                : _kBottomGridsHeight + (_kBottomBarHeight * 1.45));
+                : _kBottomGridsHeight + (_kBottomBarHeight * 1.45)) -
+            MediaQuery.of(context).padding.bottom;
 
         return Stack(
           fit: StackFit.expand,
@@ -160,7 +161,7 @@ class _Body extends StatelessWidget {
                 ),
               ),
             ),
-            CreateButton(contacts: vm.contacts, height: _kBottomBarHeight),
+            CreateButton(contacts: vm.contacts),
             TopButtonBar(
               account: vm.account,
               shouldSendRating: vm.shouldSendRating,
