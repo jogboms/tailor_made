@@ -16,8 +16,10 @@
     <string>${APP_NAME}</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
+    <key>CFBundleVersion</key>
+    <string>1.2.0</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0</string>
+    <string>1.2.0</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleURLTypes</key>
@@ -27,12 +29,18 @@
         <string>Editor</string>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>http://com.googleusercontent.apps.825955979349-llfp7aheo7il83p3ltltncfmi60bsbeg</string>
+          <string>com.googleusercontent.apps.825955979349-llfp7aheo7il83p3ltltncfmi60bsbeg</string>
+        </array>
+      </dict>
+      <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.411406804353-c9vnhao4j14ain2tltl5hf1qonndoeqr</string>
         </array>
       </dict>
     </array>
-    <key>CFBundleVersion</key>
-    <string>1</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSCameraUsageDescription</key>

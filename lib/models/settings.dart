@@ -1,4 +1,6 @@
-class SettingsModel {
+import 'package:tailor_made/models/main.dart';
+
+class SettingsModel extends Model {
   SettingsModel({
     this.premiumNotice,
     this.versionName,
@@ -11,4 +13,12 @@ class SettingsModel {
 
   final String premiumNotice;
   final String versionName;
+
+  @override
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'premiumNotice': premiumNotice,
+      'versionName': versionName,
+    };
+  }
 }
