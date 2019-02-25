@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tailor_made/firebase/auth.dart';
 import 'package:tailor_made/models/main.dart';
-import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/utils/mk_uuid.dart';
 
 class ContactModel extends Model {

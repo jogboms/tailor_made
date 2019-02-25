@@ -5,7 +5,7 @@ import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/actions/contacts.dart';
 import 'package:tailor_made/rebloc/states/contacts.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/services/cloud_db.dart';
+import 'package:tailor_made/services/contacts.dart';
 
 Comparator<ContactModel> _sort(SortType sortType) {
   switch (sortType) {
@@ -30,14 +30,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _onAfterLogin(
     WareContext<AppState> context,
   ) {
-    return CloudDb.contacts
-        .snapshots()
-        .map(
-          (snapshot) => snapshot.documents
-              .where((doc) => doc.data.containsKey('fullname'))
-              .map((item) => ContactModel.fromDoc(item))
-              .toList(),
-        )
+    return Contacts.fetchAll()
         .map((contacts) => OnDataContactAction(payload: contacts))
         .map((action) => context.copyWith(action));
   }

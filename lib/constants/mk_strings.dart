@@ -1,6 +1,6 @@
 import 'dart:async' show TimeoutException;
 
-import 'package:tailor_made/services/settings.dart';
+import 'package:tailor_made/firebase/settings.dart';
 import 'package:tailor_made/utils/mk_response_wrapper.dart';
 
 class MkStrings {

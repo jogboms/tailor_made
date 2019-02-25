@@ -1,12 +1,11 @@
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:tailor_made/models/settings.dart';
+import 'package:tailor_made/firebase/settings.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/actions/settings.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/states/settings.dart';
-import 'package:tailor_made/services/cloud_db.dart';
-import 'package:tailor_made/services/settings.dart';
+import 'package:tailor_made/services/config.dart';
 
 class SettingsBloc extends SimpleBloc<AppState> {
   @override
@@ -15,25 +14,16 @@ class SettingsBloc extends SimpleBloc<AppState> {
   ) {
     Observable(input)
         .where((_) => _.action is InitSettingsAction)
-        .switchMap(
-          (context) => CloudDb.settings
-              .snapshots()
-              .map((snapshot) {
-                if (snapshot.data == null) {
-                  throw FormatException("Internet Error");
-                }
-                return SettingsModel.fromJson(snapshot.data);
-              })
+        .switchMap((context) {
+          return Config.fetch()
               .handleError(
-                () => context.dispatcher(const OnErrorSettingsAction()),
-              )
+                  () => context.dispatcher(const OnErrorSettingsAction()))
               .map((settings) {
-                // Keep Static copy
-                Settings.setData(settings);
-                return OnDataSettingAction(payload: settings);
-              })
-              .map((action) => context.copyWith(action)),
-        )
+            // Keep Static copy
+            Settings.setData(settings);
+            return OnDataSettingAction(payload: settings);
+          }).map((action) => context.copyWith(action));
+        })
         .takeWhile((_) => _.action is! OnDisposeAction)
         .listen(
           (context) => context.dispatcher(context.action),

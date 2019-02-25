@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'package:tailor_made/firebase/auth.dart';
 import 'package:tailor_made/models/main.dart';
-import 'package:tailor_made/services/auth.dart';
 import 'package:tailor_made/utils/mk_uuid.dart';
 
 class ImageModel extends Model {

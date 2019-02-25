@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/firebase/cloud_db.dart';
 import 'package:tailor_made/models/image.dart';
-import 'package:tailor_made/services/cloud_db.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';

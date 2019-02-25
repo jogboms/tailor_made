@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/models/measure.dart';
@@ -6,25 +5,15 @@ import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/actions/measures.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/states/measures.dart';
-import 'package:tailor_made/services/cloud_db.dart';
+import 'package:tailor_made/services/measures.dart';
 import 'package:tailor_made/utils/mk_group_model_by.dart';
 
 class MeasuresBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _onUpdateMeasure(
     WareContext<AppState> context,
   ) async* {
-    final WriteBatch batch = CloudDb.instance.batch();
-
     try {
-      (context.action as UpdateMeasureAction).payload.forEach((measure) {
-        batch.setData(
-          CloudDb.measurements.document(measure.id),
-          measure.toMap(),
-          merge: true,
-        );
-      });
-
-      await batch.commit();
+      await Measures.update((context.action as UpdateMeasureAction).payload);
       yield context.copyWith(const InitMeasuresAction());
     } catch (e) {
       print(e);
@@ -35,13 +24,7 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _onInitMeasure(
     WareContext<AppState> context,
   ) {
-    return CloudDb.measurements.snapshots().map(
-      (snapshot) {
-        return snapshot.documents
-            .map((item) => MeasureModel.fromDoc(item))
-            .toList();
-      },
-    ).map((measures) {
+    return Measures.fetchAll().map((measures) {
       if (measures.isEmpty) {
         return UpdateMeasureAction(
           payload: createDefaultMeasures(),

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:tailor_made/firebase/settings.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
@@ -8,7 +9,6 @@ import 'package:tailor_made/rebloc/states/account.dart';
 import 'package:tailor_made/rebloc/states/contacts.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/states/stats.dart';
-import 'package:tailor_made/services/settings.dart';
 import 'package:version/version.dart';
 
 class HomeViewModel extends Equatable {

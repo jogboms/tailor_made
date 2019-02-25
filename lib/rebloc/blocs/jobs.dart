@@ -6,7 +6,7 @@ import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/actions/jobs.dart';
 import 'package:tailor_made/rebloc/states/jobs.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/services/cloud_db.dart';
+import 'package:tailor_made/services/jobs.dart';
 
 final _foldPrice = (double acc, PaymentModel model) => acc + model.price;
 
@@ -61,13 +61,7 @@ class JobsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _onAfterLogin(
     WareContext<AppState> context,
   ) {
-    return CloudDb.jobs
-        .snapshots()
-        .map((snapshot) {
-          return snapshot.documents
-              .map((item) => JobModel.fromDoc(item))
-              .toList();
-        })
+    return Jobs.fetchAll()
         .map((jobs) => OnDataJobAction(payload: jobs))
         .map((action) => context.copyWith(action));
   }

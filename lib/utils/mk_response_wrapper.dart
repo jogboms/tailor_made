@@ -1,8 +1,8 @@
 import 'dart:convert' show json;
 
-import 'package:tailor_made/constants/mk_strings.dart';
-import 'package:tailor_made/services/settings.dart';
 import 'package:http/http.dart' as http;
+import 'package:tailor_made/constants/mk_strings.dart';
+import 'package:tailor_made/firebase/settings.dart';
 
 typedef T TransformFunction<T>(dynamic data, String message);
 
