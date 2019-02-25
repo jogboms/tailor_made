@@ -5,7 +5,7 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_routes.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/environments/environment.dart';
-import 'package:tailor_made/firebase/settings.dart';
+import 'package:tailor_made/utils/mk_settings.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/main.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
@@ -26,7 +26,7 @@ class App extends StatefulWidget {
     @required Environment env,
     @required this.isFirstTime,
   }) {
-    Settings.environment = env;
+    MkSettings.environment = env;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
@@ -34,9 +34,9 @@ class App extends StatefulWidget {
   final bool isFirstTime;
 
   static Future<BootstrapModel> bootstrap() async {
-    final isFirstTime = await Settings.checkIsFirstTimeLogin();
+    final isFirstTime = await MkSettings.checkIsFirstTimeLogin();
     try {
-      await Settings.initVersion();
+      await MkSettings.initVersion();
     } catch (e) {
       //
     }

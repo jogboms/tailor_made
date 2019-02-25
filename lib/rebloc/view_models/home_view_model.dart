@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:tailor_made/firebase/settings.dart';
+import 'package:tailor_made/utils/mk_settings.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
@@ -45,7 +45,7 @@ class HomeViewModel extends Equatable {
   }
 
   bool get isOutdated {
-    final currentVersion = Version.parse(Settings.getVersion());
+    final currentVersion = Version.parse(MkSettings.getVersion());
     final latestVersion = Version.parse(settings?.versionName ?? "1.0.0");
 
     return latestVersion > currentVersion;

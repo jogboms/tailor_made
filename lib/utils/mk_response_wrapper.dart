@@ -2,7 +2,7 @@ import 'dart:convert' show json;
 
 import 'package:http/http.dart' as http;
 import 'package:tailor_made/constants/mk_strings.dart';
-import 'package:tailor_made/firebase/settings.dart';
+import 'package:tailor_made/utils/mk_settings.dart';
 
 typedef T TransformFunction<T>(dynamic data, String message);
 
@@ -42,10 +42,10 @@ class MkResponseWrapper<T> {
       final dynamic responseJson = json.decode(_response.body);
       message = responseJson != null && responseJson["message"] != null
           ? responseJson["message"]
-          : Settings.isDev ? _response.reasonPhrase : MkStrings.errorMessage;
+          : MkSettings.isDev ? _response.reasonPhrase : MkStrings.errorMessage;
       rawData = _response.statusCode < 300 ? responseJson["data"] : null;
     } catch (e) {
-      message = _response.statusCode == 502 && !Settings.isDev
+      message = _response.statusCode == 502 && !MkSettings.isDev
           ? MkStrings.errorMessage
           : e.toString();
       rawData = null;

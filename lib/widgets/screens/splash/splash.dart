@@ -7,7 +7,7 @@ import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/firebase/auth.dart';
-import 'package:tailor_made/firebase/settings.dart';
+import 'package:tailor_made/utils/mk_settings.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/actions/settings.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
@@ -62,9 +62,9 @@ class SplashPage extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  Settings.getVersion() != null
+                  MkSettings.getVersion() != null
                       ? Text(
-                          "v" + Settings.getVersion(),
+                          "v" + MkSettings.getVersion(),
                           style: theme.small.copyWith(
                             color: kTextBaseColor.withOpacity(.4),
                             height: 1.5,

@@ -1,11 +1,11 @@
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:tailor_made/firebase/settings.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/actions/settings.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/states/settings.dart';
-import 'package:tailor_made/services/config.dart';
+import 'package:tailor_made/services/settings.dart';
+import 'package:tailor_made/utils/mk_settings.dart';
 
 class SettingsBloc extends SimpleBloc<AppState> {
   @override
@@ -15,12 +15,12 @@ class SettingsBloc extends SimpleBloc<AppState> {
     Observable(input)
         .where((_) => _.action is InitSettingsAction)
         .switchMap((context) {
-          return Config.fetch()
+          return Settings.fetch()
               .handleError(
                   () => context.dispatcher(const OnErrorSettingsAction()))
               .map((settings) {
             // Keep Static copy
-            Settings.setData(settings);
+            MkSettings.setData(settings);
             return OnDataSettingAction(payload: settings);
           }).map((action) => context.copyWith(action));
         })

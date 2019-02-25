@@ -1,6 +1,6 @@
-import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/firebase/cloud_db.dart';
-import 'package:tailor_made/firebase/settings.dart';
+import 'package:tailor_made/models/account.dart';
+import 'package:tailor_made/utils/mk_settings.dart';
 
 class Accounts {
   static Future<void> readNotice(AccountModel account) async {
@@ -32,7 +32,7 @@ class Accounts {
     try {
       final _account = account.copyWith(
         status: AccountModelStatus.pending,
-        notice: Settings.getData().premiumNotice,
+        notice: MkSettings.getData().premiumNotice,
         hasReadNotice: false,
         hasPremiumEnabled: true,
       );
