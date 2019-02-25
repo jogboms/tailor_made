@@ -6,13 +6,13 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/firebase/auth.dart';
-import 'package:tailor_made/utils/mk_settings.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/actions/settings.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/settings.dart';
+import 'package:tailor_made/services/accounts.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
+import 'package:tailor_made/utils/mk_settings.dart';
 import 'package:tailor_made/utils/mk_snackbar.dart';
 import 'package:tailor_made/utils/mk_status_bar.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
@@ -104,12 +104,11 @@ class _ContentState extends State<_Content> {
     super.initState();
     isLoading = widget.isColdStart;
 
-    Auth.onAuthStateChanged.firstWhere((user) => user != null).then(
+    Accounts.onAuthStateChanged.then(
       (user) {
         WidgetsBinding.instance.addPostFrameCallback(
           (_) async {
             StoreProvider.of<AppState>(context).dispatcher(OnLoginAction(user));
-            Auth.setUser(user);
             await Navigator.pushAndRemoveUntil<void>(
               context,
               MkPageRoute.fadeIn<void>(const HomePage()),
@@ -222,7 +221,7 @@ class _ContentState extends State<_Content> {
   }
 
   Future<void> _onLogin() async {
-    return await Auth.signInWithGoogle().catchError((dynamic e) async {
+    return await Accounts.signInWithGoogle().catchError((dynamic e) async {
       // TODO disabled
       String message = "";
 
@@ -258,7 +257,9 @@ class _ContentState extends State<_Content> {
           duration: const Duration(milliseconds: 3500),
         );
       }
-      await Auth.signOutWithGoogle();
+
+      await Accounts.signout();
+
       if (!mounted) {
         return;
       }

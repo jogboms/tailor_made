@@ -1,9 +1,8 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tailor_made/firebase/cloud_db.dart';
 import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/services/measures.dart';
 import 'package:tailor_made/utils/mk_child_dialog.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
@@ -111,17 +110,9 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
       return;
     }
 
-    final WriteBatch batch = CloudDb.instance.batch();
-
-    widget.measures.forEach((measure) {
-      batch.delete(
-        CloudDb.measurements.document(measure.id),
-      );
-    });
-
     MkSnackBar.of(context).loading();
     try {
-      await batch.commit();
+      await Measures.delete(widget.measures);
 
       MkSnackBar.of(context).hide();
     } catch (e) {

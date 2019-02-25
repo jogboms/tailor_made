@@ -1,8 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/firebase/cloud_db.dart';
 import 'package:tailor_made/models/payment.dart';
+import 'package:tailor_made/services/payments.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
@@ -63,20 +62,17 @@ class _PaymentsPageState extends State<PaymentsPage> {
           Builder(builder: (context) {
             if (payments == null) {
               return StreamBuilder(
-                stream: CloudDb.payments.snapshots(),
+                stream: Payments.fetchAll(),
                 builder: (
                   BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot,
+                  AsyncSnapshot<List<PaymentModel>> snapshot,
                 ) {
                   if (!snapshot.hasData) {
                     return const SliverFillRemaining(
                       child: const MkLoadingSpinner(),
                     );
                   }
-                  payments = snapshot.data.documents
-                      .map((item) => PaymentModel.fromJson(item.data))
-                      .toList();
-                  return _Content(payments: payments);
+                  return _Content(payments: snapshot.data);
                 },
               );
             }

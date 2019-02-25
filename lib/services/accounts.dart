@@ -1,8 +1,21 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:tailor_made/firebase/auth.dart';
 import 'package:tailor_made/firebase/cloud_db.dart';
+import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/utils/mk_settings.dart';
 
 class Accounts {
+  static FirebaseUser get getUser => Auth.getUser;
+
+  static Future<FirebaseUser> signInWithGoogle() => Auth.signInWithGoogle();
+
+  static Future<FirebaseUser> get onAuthStateChanged => Auth.onAuthStateChanged
+      .firstWhere((user) => user != null)
+      .then((user) => Auth.setUser(user));
+
+  static Future<Null> signout() => Auth.signOutWithGoogle();
+
   static Future<void> readNotice(AccountModel account) async {
     try {
       await account.reference.updateData(
@@ -47,6 +60,6 @@ class Accounts {
   static Stream<AccountModel> getAccount() {
     return CloudDb.account
         .snapshots()
-        .map((snapshot) => AccountModel.fromDoc(snapshot));
+        .map((snapshot) => AccountModel.fromDoc(Snapshot.fromFire(snapshot)));
   }
 }

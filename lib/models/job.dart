@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:tailor_made/firebase/auth.dart';
+import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/models/payment.dart';
+import 'package:tailor_made/services/accounts.dart';
 import 'package:tailor_made/utils/mk_uuid.dart';
 
 class JobModel extends Model {
@@ -23,7 +23,7 @@ class JobModel extends Model {
     DateTime createdAt,
     DateTime dueAt,
   })  : id = id ?? uuid(),
-        userID = userID ?? Auth.getUser.uid,
+        userID = userID ?? Accounts.getUser.uid,
         createdAt = createdAt ?? DateTime.now(),
         dueAt = dueAt ?? DateTime.now().add(Duration(days: 7));
 
@@ -58,7 +58,7 @@ class JobModel extends Model {
     );
   }
 
-  factory JobModel.fromDoc(DocumentSnapshot doc) =>
+  factory JobModel.fromDoc(Snapshot doc) =>
       JobModel.fromJson(doc.data)..reference = doc.reference;
 
   String id;
