@@ -8,7 +8,7 @@ import 'package:tailor_made/rebloc/actions/account.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/home_view_model.dart';
-import 'package:tailor_made/services/auth.dart';
+import 'package:tailor_made/services/accounts.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
@@ -151,7 +151,7 @@ class _Body extends StatelessWidget {
           account: vm.account,
           shouldSendRating: vm.shouldSendRating,
           onLogout: () async {
-            await Auth.signOutWithGoogle();
+            await Accounts.signout();
             StoreProvider.of<AppState>(context).dispatcher(
               const OnLogoutAction(),
             );

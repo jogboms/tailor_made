@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rebloc/rebloc.dart';
@@ -7,7 +6,7 @@ import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/rebloc/actions/measures.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/measures.dart';
-import 'package:tailor_made/services/cloud_db.dart';
+import 'package:tailor_made/services/measures.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_dispatch_provider.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
@@ -228,31 +227,15 @@ class _MeasuresCreateState extends State<MeasuresCreate>
 
   void _handleSubmit(MeasuresViewModel vm) async {
     if (_isOkForm()) {
-      final WriteBatch batch = CloudDb.instance.batch();
-
-      measures.forEach((measure) {
-        if (measure?.reference != null) {
-          batch.updateData(
-            measure.reference,
-            <String, String>{
-              "group": groupName,
-              "unit": unitValue,
-            },
-          );
-        } else {
-          batch.setData(
-            CloudDb.measurements.document(measure.id),
-            measure.toMap(),
-            merge: true,
-          );
-        }
-      });
-
       showLoadingSnackBar();
+
       try {
         dispatchAction(const ToggleMeasuresLoading());
-        await batch.commit();
-
+        await Measures.create(
+          measures,
+          groupName: groupName,
+          unitValue: unitValue,
+        );
         closeLoadingSnackBar();
         Navigator.pop(context);
       } catch (e) {

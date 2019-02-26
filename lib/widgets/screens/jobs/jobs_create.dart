@@ -13,8 +13,7 @@ import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/measures.dart';
-import 'package:tailor_made/services/cloud_db.dart';
-import 'package:tailor_made/services/cloud_storage.dart';
+import 'package:tailor_made/services/jobs.dart';
 import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
@@ -260,13 +259,11 @@ class _JobsCreatePageState extends State<JobsCreatePage>
         ..contactID = contact.id;
 
       try {
-        final ref = CloudDb.jobsRef.document(job.id);
-        await ref.setData(job.toMap());
-        ref.snapshots().listen((snap) {
+        Jobs.update(job).listen((snap) {
           closeLoadingSnackBar();
           Navigator.pushReplacement<dynamic, dynamic>(
             context,
-            MkNavigate.slideIn<String>(JobPage(job: JobModel.fromDoc(snap))),
+            MkNavigate.slideIn<String>(JobPage(job: snap)),
           );
         });
       } catch (e) {
@@ -346,7 +343,8 @@ class _JobsCreatePageState extends State<JobsCreatePage>
     if (imageFile == null) {
       return;
     }
-    final ref = CloudStorage.createReferenceImage()..putFile(imageFile);
+    // TODO: remove firebase coupling
+    final ref = Jobs.createFile(imageFile);
 
     setState(() {
       fireImages.add(FireImage()..ref = ref);

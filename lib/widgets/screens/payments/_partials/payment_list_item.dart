@@ -19,12 +19,10 @@ class PaymentListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _date = payment.createdAt;
-    final _price = MkMoney(payment.price).format;
-    const textColor = Colors.black54;
     final theme = MkTheme.of(context);
 
     return Material(
-      child: InkResponse(
+      child: InkWell(
         onTap: () {
           MkNavigate(
             context,
@@ -32,49 +30,42 @@ class PaymentListItem extends StatelessWidget {
             fullscreenDialog: true,
           );
         },
-        radius: 300.0,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-          child: Stack(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
             children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: _date.day.toString(),
-                        style: theme.subhead3Semi.copyWith(color: kAccentColor),
-                      ),
-                      const TextSpan(text: "\n"),
-                      TextSpan(
-                        text:
-                            "${MkStrings.monthsShort[_date.month - 1].toUpperCase()}, ${_date.year}",
-                        style: theme.smallMedium.copyWith(color: textColor),
-                      ),
-                    ],
-                  ),
-                  textAlign: TextAlign.right,
+              Expanded(
+                child: Row(
+                  children: <Widget>[
+                    const MkDots(
+                      color: kAccentColor,
+                      size: 12,
+                    ),
+                    const SizedBox(width: 8.0),
+                    Text(
+                      MkMoney(payment.price).format,
+                      style: theme.title.copyWith(letterSpacing: 1.5),
+                    ),
+                  ],
                 ),
               ),
-              Positioned.fill(
-                child: Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Row(
-                    children: <Widget>[
-                      const MkDots(
-                        color: kAccentColor,
-                        size: 12,
-                      ),
-                      const SizedBox(width: 8.0),
-                      Text(
-                        _price,
-                        style: theme.title.copyWith(letterSpacing: 1.5),
-                      ),
-                    ],
-                  ),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: _date.day.toString(),
+                      style: theme.subhead3Semi.copyWith(color: kAccentColor),
+                    ),
+                    const TextSpan(text: "\n"),
+                    TextSpan(
+                      text:
+                          "${MkStrings.monthsShort[_date.month - 1].toUpperCase()}, ${_date.year}",
+                      style: theme.smallMedium.copyWith(color: Colors.black54),
+                    ),
+                  ],
                 ),
-              )
+                textAlign: TextAlign.right,
+              ),
             ],
           ),
         ),

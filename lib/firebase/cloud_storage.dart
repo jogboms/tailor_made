@@ -1,5 +1,5 @@
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:tailor_made/services/auth.dart';
+import 'package:tailor_made/firebase/auth.dart';
 import 'package:tailor_made/utils/mk_uuid.dart';
 
 class CloudStorage {

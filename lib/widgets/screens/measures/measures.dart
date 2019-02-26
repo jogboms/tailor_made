@@ -44,7 +44,7 @@ class MeasuresPage extends StatelessWidget {
             itemBuilder: (context, index) {
               final measure = vm.model[index];
               final _value = measurements[measure.id] ?? 0.0;
-              return MeasureListItem(measure..value = _value);
+              return MeasureListItem(item: measure..value = _value);
             },
             separatorBuilder: (_, __) => const Divider(),
           );

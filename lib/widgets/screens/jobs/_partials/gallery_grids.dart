@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
-import 'package:tailor_made/services/cloud_storage.dart';
+import 'package:tailor_made/services/gallery.dart';
 import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
@@ -98,10 +98,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
               ),
             ),
             MkClearButton(
-              child: Text(
-                "SHOW ALL",
-                style: theme.xsmall,
-              ),
+              child: Text("SHOW ALL", style: theme.smallBtn),
               onPressed: () {
                 MkNavigate(
                   context,
@@ -110,6 +107,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
                 );
               },
             ),
+            const SizedBox(width: 16.0),
           ],
         ),
         Container(
@@ -139,7 +137,8 @@ class _GalleryGridsState extends State<GalleryGrids> {
     if (imageFile == null) {
       return;
     }
-    final ref = CloudStorage.createReferenceImage()..putFile(imageFile);
+    // TODO: remove firebase coupling
+    final ref = Gallery.createFile(imageFile);
 
     setState(() {
       fireImages.add(FireImage()..ref = ref);

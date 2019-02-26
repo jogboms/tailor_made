@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tailor_made/services/auth.dart';
+import 'package:tailor_made/firebase/auth.dart';
 
 class CloudDb {
   CloudDb._();

@@ -14,6 +14,7 @@ import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/avatar_app_bar.dart';
+import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/screens/contacts/contact.dart';
 import 'package:tailor_made/widgets/screens/jobs/_partials/gallery_grids.dart';
@@ -106,13 +107,14 @@ class _JobPageState extends State<JobPage> with MkSnackBarProvider {
                             ),
                           ),
                         ),
-                        CupertinoButton(
+                        MkClearButton(
                           child: Text(
                             "EXTEND DATE",
-                            style: theme.xsmall,
+                            style: theme.smallBtn,
                           ),
                           onPressed: job.isComplete ? null : _onSaveDate,
                         ),
+                        const SizedBox(width: 16.0),
                       ],
                     ),
                     Padding(
@@ -124,7 +126,7 @@ class _JobPageState extends State<JobPage> with MkSnackBarProvider {
                           month: "MMMM",
                           year: "yyyy",
                         ).format,
-                        style: theme.subhead3,
+                        style: theme.body3Medium,
                       ),
                     ),
                     const SizedBox(height: 4.0),

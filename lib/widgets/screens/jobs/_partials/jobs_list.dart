@@ -29,7 +29,7 @@ class JobList extends StatelessWidget {
             return JobListItem(job: jobs[index]);
           },
           separatorBuilder: (BuildContext context, int index) {
-            return const Divider();
+            return const Divider(height: 0);
           },
         ),
       ),

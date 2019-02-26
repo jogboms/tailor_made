@@ -13,7 +13,7 @@ import 'package:tailor_made/widgets/screens/jobs/_partials/jobs_list.dart';
 
 const TABS = const ["Jobs", "Gallery", "Payments"];
 
-class ContactPage extends StatefulWidget {
+class ContactPage extends StatelessWidget {
   const ContactPage({
     Key key,
     this.contact,
@@ -22,22 +22,16 @@ class ContactPage extends StatefulWidget {
   final ContactModel contact;
 
   @override
-  _ContactState createState() => _ContactState();
-}
-
-class _ContactState extends State<ContactPage> {
-  @override
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, ContactsViewModel>(
-      converter: (state) =>
-          ContactsViewModel(state)..contactID = widget.contact.id,
+      converter: (state) => ContactsViewModel(state)..contactID = contact.id,
       builder: (
         BuildContext context,
         DispatchFunction dispatcher,
         ContactsViewModel viewModel,
       ) {
         // in the case of newly created contacts
-        final contact = viewModel.selected ?? widget.contact;
+        final _contact = viewModel.selected ?? contact;
         return DefaultTabController(
           length: TABS.length,
           child: Scaffold(
@@ -45,7 +39,7 @@ class _ContactState extends State<ContactPage> {
               backgroundColor: kAccentColor,
               automaticallyImplyLeading: false,
               title: ContactAppBar(
-                contact: contact,
+                contact: _contact,
                 grouped: viewModel.measuresGrouped,
               ),
               titleSpacing: 0.0,
@@ -53,11 +47,7 @@ class _ContactState extends State<ContactPage> {
               brightness: Brightness.dark,
               bottom: TabBar(
                 labelStyle: MkTheme.of(context).body3Medium,
-                tabs: [
-                  Tab(child: Text(TABS[0])),
-                  Tab(child: Text(TABS[1])),
-                  Tab(child: Text(TABS[2])),
-                ],
+                tabs: TABS.map((tab) => Tab(child: Text(tab))).toList(),
               ),
             ),
             body: Builder(builder: (context) {
@@ -78,14 +68,14 @@ class _ContactState extends State<ContactPage> {
                   _TabView(
                     name: TABS[1].toLowerCase(),
                     child: GalleryGridWidget(
-                      contact: contact,
+                      contact: _contact,
                       jobs: viewModel.selectedJobs,
                     ),
                   ),
                   _TabView(
                     name: TABS[2].toLowerCase(),
                     child: PaymentsListWidget(
-                      contact: contact,
+                      contact: _contact,
                       jobs: viewModel.selectedJobs,
                     ),
                   ),

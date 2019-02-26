@@ -1,6 +1,6 @@
 import 'dart:async' show TimeoutException;
 
-import 'package:tailor_made/services/settings.dart';
+import 'package:tailor_made/utils/mk_settings.dart';
 import 'package:tailor_made/utils/mk_response_wrapper.dart';
 
 class MkStrings {
@@ -47,7 +47,7 @@ class MkStrings {
     if (error is TimeoutException) {
       return "This action took too long. Please Retry.";
     }
-    return Settings.isDev || error is MkResponseException
+    return MkSettings.isDev || error is MkResponseException
         ? "$error"
         : errorMessage;
   }

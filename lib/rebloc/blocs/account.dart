@@ -2,27 +2,20 @@ import 'dart:async';
 
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/rebloc/actions/account.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/states/account.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/services/cloud_db.dart';
-import 'package:tailor_made/services/settings.dart';
+import 'package:tailor_made/services/accounts.dart';
 
 class AccountBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _readNotice(
     WareContext<AppState> context,
   ) async* {
-    final _account = (context.action as OnReadNotice).payload;
-    try {
-      await _account.reference.updateData(
-        _account.copyWith(hasReadNotice: true).toMap(),
-      );
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
+    await Accounts.readNotice(
+      (context.action as OnReadNotice).payload,
+    );
+
     yield context;
   }
 
@@ -30,17 +23,7 @@ class AccountBloc extends SimpleBloc<AppState> {
     WareContext<AppState> context,
   ) async* {
     final _action = context.action as OnSendRating;
-
-    try {
-      await _action.payload.reference.updateData(
-        _action.payload
-            .copyWith(hasSendRating: true, rating: _action.rating)
-            .toMap(),
-      );
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
+    await Accounts.sendRating(_action.payload, _action.rating);
 
     yield context;
   }
@@ -48,23 +31,9 @@ class AccountBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _signUp(
     WareContext<AppState> context,
   ) async* {
-    final _action = context.action as OnPremiumSignUp;
-
-    try {
-      final _account = _action.payload.copyWith(
-        status: AccountModelStatus.pending,
-        notice: Settings.getData().premiumNotice,
-        hasReadNotice: false,
-        hasPremiumEnabled: true,
-      );
-      await _action.payload.reference.updateData(_account.toMap());
-      await CloudDb.premium
-          .document(_action.payload.uid)
-          .setData(_account.toMap());
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
+    await Accounts.signUp(
+      (context.action as OnPremiumSignUp).payload,
+    );
 
     yield context;
   }
@@ -72,9 +41,7 @@ class AccountBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _getAccount(
     WareContext<AppState> context,
   ) {
-    return CloudDb.account
-        .snapshots()
-        .map((snapshot) => AccountModel.fromDoc(snapshot))
+    return Accounts.getAccount()
         .map((account) => OnDataAccountAction(payload: account))
         .map((action) => context.copyWith(action));
   }

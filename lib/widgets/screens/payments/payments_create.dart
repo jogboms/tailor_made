@@ -46,11 +46,11 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
   Widget build(BuildContext context) {
     final List<Widget> children = [];
 
-    children.add(makeHeader("Payment", "Naira (₦)"));
-    children.add(buildEnterAmount());
+    children.add(const _Header(title: "Payment", trailing: "Naira (₦)"));
+    children.add(_buildEnterAmount());
 
-    children.add(makeHeader("Additional Notes"));
-    children.add(buildAdditional());
+    children.add(const _Header(title: "Additional Notes"));
+    children.add(_buildAdditional());
 
     children.add(
       Padding(
@@ -58,11 +58,12 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
           child: const Text("FINISH"),
           onPressed: _handleSubmit,
         ),
-        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 50),
       ),
     );
 
-    children.add(SizedBox(height: 32.0));
+    children.add(const SizedBox(height: 32.0));
+
     return Scaffold(
       key: scaffoldKey,
       appBar: const MkAppBar(
@@ -85,29 +86,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
     );
   }
 
-  Widget makeHeader(String title, [String trailing = ""]) {
-    return Container(
-      color: Colors.grey[100].withOpacity(.4),
-      margin: const EdgeInsets.only(top: 8.0),
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      alignment: AlignmentDirectional.centerStart,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            title.toUpperCase(),
-            style: MkTheme.of(context).smallLight,
-          ),
-          Text(
-            trailing,
-            style: MkTheme.of(context).smallLight,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildEnterAmount() {
+  Widget _buildEnterAmount() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: TextFormField(
@@ -133,7 +112,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
     );
   }
 
-  Widget buildAdditional() {
+  Widget _buildAdditional() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: TextFormField(
@@ -166,5 +145,39 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage>
         {"price": price, "notes": notes},
       );
     }
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header({
+    Key key,
+    @required this.title,
+    this.trailing = "",
+  }) : super(key: key);
+
+  final String title;
+  final String trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.grey[100].withOpacity(.4),
+      margin: const EdgeInsets.only(top: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      alignment: AlignmentDirectional.centerStart,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            title.toUpperCase(),
+            style: MkTheme.of(context).smallLight,
+          ),
+          Text(
+            trailing,
+            style: MkTheme.of(context).smallLight,
+          ),
+        ],
+      ),
+    );
   }
 }

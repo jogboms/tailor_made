@@ -1,11 +1,10 @@
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:tailor_made/models/stats.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/actions/stats.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/states/stats.dart';
-import 'package:tailor_made/services/cloud_db.dart';
+import 'package:tailor_made/services/stats.dart';
 
 class StatsBloc extends SimpleBloc<AppState> {
   @override
@@ -15,9 +14,7 @@ class StatsBloc extends SimpleBloc<AppState> {
     Observable(input)
         .where((_) => _.action is InitStatsAction)
         .switchMap(
-          (context) => CloudDb.stats
-              .snapshots()
-              .map((snapshot) => StatsModel.fromJson(snapshot.data))
+          (context) => Stats.fetch()
               .map((stats) => OnDataStatAction(payload: stats))
               .map((action) => context.copyWith(action)),
         )
