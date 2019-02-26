@@ -20,7 +20,7 @@ const Color kAppBarBackgroundColor = Colors.white;
 const double kBaseScreenHeight = 896.0;
 const double kBaseScreenWidth = 414.0;
 
-const double kButtonHeight = 60.0;
+const double kButtonHeight = 48.0;
 const double kButtonMinWidth = 200.0;
 
 const BorderRadius kBorderRadius = const BorderRadius.all(Radius.circular(4.0));

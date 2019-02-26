@@ -7,7 +7,7 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/rebloc/view_models/measures.dart';
-import 'package:tailor_made/services/cloud_db.dart';
+import 'package:tailor_made/services/contacts.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
@@ -107,18 +107,13 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
         location: _contact.location,
       );
 
-      final ref = CloudDb.contactsRef.document(contact.id);
-      await ref.setData(contact.toMap());
-
-      ref.snapshots().listen((snap) async {
+      Contacts.update(contact).listen((snap) async {
         closeLoadingSnackBar();
         showInSnackBar("Successfully Added");
 
-        Navigator.pushReplacement<dynamic, dynamic>(
+        await Navigator.pushReplacement<dynamic, dynamic>(
           context,
-          MkNavigate.slideIn<String>(
-            ContactPage(contact: ContactModel.fromDoc(snap)),
-          ),
+          MkNavigate.slideIn<String>(ContactPage(contact: snap)),
         );
       });
     } catch (e) {

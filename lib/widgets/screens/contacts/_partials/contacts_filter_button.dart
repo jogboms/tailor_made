@@ -18,7 +18,7 @@ class ContactsFilterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MkTheme theme = MkTheme.of(context);
-    final _optionTheme = theme.body3;
+    final _optionTheme = theme.body1;
     final _colorTestFn = (SortType type) {
       return vm.sortFn == type ? kAccentColor : Colors.black87;
     };

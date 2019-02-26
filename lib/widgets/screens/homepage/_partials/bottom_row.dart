@@ -10,19 +10,16 @@ import 'package:tailor_made/widgets/screens/tasks/tasks.dart';
 class BottomRowWidget extends StatelessWidget {
   const BottomRowWidget({
     Key key,
-    @required this.height,
     @required this.stats,
     @required this.account,
   }) : super(key: key);
 
   final StatsModel stats;
   final AccountModel account;
-  final double height;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
+    return DecoratedBox(
       decoration: const BoxDecoration(
         border: const Border(bottom: const MkBorderSide()),
       ),

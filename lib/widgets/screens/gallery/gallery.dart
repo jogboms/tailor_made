@@ -1,8 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/image.dart';
-import 'package:tailor_made/services/cloud_db.dart';
+import 'package:tailor_made/services/gallery.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
@@ -53,10 +52,10 @@ class GalleryPage extends StatelessWidget {
           Builder(builder: (context) {
             if (images == null) {
               return StreamBuilder(
-                stream: CloudDb.gallery.snapshots(),
+                stream: Gallery.fetchAll(),
                 builder: (
                   BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot,
+                  AsyncSnapshot<List<ImageModel>> snapshot,
                 ) {
                   if (!snapshot.hasData) {
                     return const SliverFillRemaining(
@@ -64,9 +63,7 @@ class GalleryPage extends StatelessWidget {
                     );
                   }
                   return _Content(
-                    images: snapshot.data.documents
-                        .map((item) => ImageModel.fromJson(item.data))
-                        .toList(),
+                    images: snapshot.data,
                   );
                 },
               );

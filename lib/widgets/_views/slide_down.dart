@@ -8,7 +8,7 @@ class SlideDownItem extends StatefulWidget {
     Key key,
     this.title,
     this.body,
-    this.isExpanded: false,
+    this.isExpanded = false,
     this.onLongPress,
   }) : super(key: key);
 

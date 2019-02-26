@@ -10,17 +10,14 @@ import 'package:tailor_made/widgets/screens/payments/payments.dart';
 class MidRowWidget extends StatelessWidget {
   const MidRowWidget({
     Key key,
-    @required this.height,
     @required this.stats,
   }) : super(key: key);
 
   final StatsModel stats;
-  final double height;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
+    return DecoratedBox(
       decoration: const BoxDecoration(
         border: const Border(bottom: const MkBorderSide()),
       ),

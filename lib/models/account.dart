@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/main.dart';
 
 enum AccountModelStatus { enabled, disabled, warning, pending }
@@ -39,7 +39,7 @@ class AccountModel extends Model {
     );
   }
 
-  factory AccountModel.fromDoc(DocumentSnapshot doc) =>
+  factory AccountModel.fromDoc(Snapshot doc) =>
       AccountModel.fromJson(doc.data)..reference = doc.reference;
 
   String uid;

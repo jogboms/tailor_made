@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/main.dart';
-import 'package:tailor_made/services/auth.dart';
+import 'package:tailor_made/services/accounts.dart';
 import 'package:tailor_made/utils/mk_uuid.dart';
 
 class ContactModel extends Model {
@@ -17,7 +17,7 @@ class ContactModel extends Model {
     this.pendingJobs = 0,
   })  : id = id ?? uuid(),
         createdAt = createdAt ?? DateTime.now(),
-        userID = userID ?? Auth.getUser.uid,
+        userID = userID ?? Accounts.getUser.uid,
         measurements =
             measurements != null && measurements.isNotEmpty ? measurements : {};
 
@@ -41,7 +41,7 @@ class ContactModel extends Model {
     );
   }
 
-  factory ContactModel.fromDoc(DocumentSnapshot doc) =>
+  factory ContactModel.fromDoc(Snapshot doc) =>
       ContactModel.fromJson(doc.data)..reference = doc.reference;
 
   String id;

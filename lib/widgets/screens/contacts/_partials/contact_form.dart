@@ -8,7 +8,7 @@ import 'package:tailor_made/constants/mk_colors.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
-import 'package:tailor_made/services/cloud_storage.dart';
+import 'package:tailor_made/services/contacts.dart';
 import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_snackbar.dart';
 import 'package:tailor_made/utils/mk_validators.dart';
@@ -157,7 +157,8 @@ class ContactFormState extends State<ContactForm> {
     if (imageFile == null) {
       return;
     }
-    final ref = CloudStorage.createContactImage()..putFile(imageFile);
+    // TODO: remove firebase coupling
+    final ref = Contacts.createFile(imageFile);
 
     setState(() => isLoading = true);
     try {

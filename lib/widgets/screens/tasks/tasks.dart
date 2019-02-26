@@ -39,7 +39,7 @@ class TasksPage extends StatelessWidget {
             shrinkWrap: true,
             padding: const EdgeInsets.only(bottom: 96.0),
             itemBuilder: (context, index) => TaskListItem(task: _tasks[index]),
-            separatorBuilder: (_, __) => const Divider(height: 8.0),
+            separatorBuilder: (_, __) => const Divider(height: 0.0),
           );
         },
       ),

@@ -5,6 +5,7 @@ import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/screens/jobs/_partials/payment_grid_item.dart';
 import 'package:tailor_made/widgets/screens/payments/payments.dart';
@@ -78,11 +79,8 @@ class _PaymentGridsState extends State<PaymentGrids> {
                 ),
               ),
             ),
-            CupertinoButton(
-              child: Text(
-                "SHOW ALL",
-                style: theme.xsmall,
-              ),
+            MkClearButton(
+              child: Text("SHOW ALL", style: theme.smallBtn),
               onPressed: () {
                 MkNavigate(
                   context,
@@ -91,6 +89,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
                 );
               },
             ),
+            const SizedBox(width: 16.0),
           ],
         ),
         Container(

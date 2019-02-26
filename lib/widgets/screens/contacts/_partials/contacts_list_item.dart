@@ -28,6 +28,7 @@ class ContactsListItem extends StatelessWidget {
 
     return ListTile(
       dense: true,
+      contentPadding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
       onTap: onTapContact ??
           () {
             return MkNavigate(

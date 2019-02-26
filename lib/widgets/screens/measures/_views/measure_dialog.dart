@@ -95,10 +95,12 @@ class _MeasureDialogState extends State<MeasureDialog> {
                       color: Colors.grey,
                       child: const Text("CANCEL"),
                     ),
+                    const SizedBox(width: 16.0),
                     MkClearButton(
                       onPressed: _onSaved,
                       child: const Text("DONE"),
                     ),
+                    const SizedBox(width: 16.0),
                   ],
                 ),
                 const SizedBox(height: 8.0),

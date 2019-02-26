@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/utils/mk_uuid.dart';
 
@@ -56,7 +56,7 @@ class MeasureModel extends Model {
         group = json['group'],
         createdAt = DateTime.tryParse(json['createdAt'].toString());
 
-  factory MeasureModel.fromDoc(DocumentSnapshot doc) =>
+  factory MeasureModel.fromDoc(Snapshot doc) =>
       MeasureModel.fromJson(doc.data)..reference = doc.reference;
 
   String id;

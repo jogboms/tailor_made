@@ -15,44 +15,41 @@ class MeasuresPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelSubscriber<AppState, MeasuresViewModel>(
-      converter: (store) => MeasuresViewModel(store),
-      builder: (
-        BuildContext context,
-        DispatchFunction dispatcher,
-        MeasuresViewModel vm,
-      ) {
-        return Scaffold(
-          appBar: AppBar(
-            brightness: Brightness.light,
-            // TODO
-            iconTheme: const IconThemeData(color: Colors.black87),
-            backgroundColor: Colors.transparent,
-            elevation: 0.0,
-          ),
-          body: Builder(builder: (context) {
-            if (vm.model.isEmpty) {
-              return const Center(
-                child: const EmptyResultView(
-                  message: "No measurements available",
-                ),
-              );
-            }
-
-            return ListView.separated(
-              itemCount: vm.model.length,
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(bottom: 96.0),
-              itemBuilder: (context, index) {
-                final measure = vm.model[index];
-                final _value = measurements[measure.id] ?? 0.0;
-                return MeasureListItem(measure..value = _value);
-              },
-              separatorBuilder: (_, __) => const Divider(),
+    return Scaffold(
+      appBar: AppBar(
+        brightness: Brightness.light,
+        iconTheme: const IconThemeData(color: Colors.black87),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+      ),
+      body: ViewModelSubscriber<AppState, MeasuresViewModel>(
+        converter: (store) => MeasuresViewModel(store),
+        builder: (
+          BuildContext context,
+          DispatchFunction dispatcher,
+          MeasuresViewModel vm,
+        ) {
+          if (vm.model.isEmpty) {
+            return const Center(
+              child: const EmptyResultView(
+                message: "No measurements available",
+              ),
             );
-          }),
-        );
-      },
+          }
+
+          return ListView.separated(
+            itemCount: vm.model.length,
+            shrinkWrap: true,
+            padding: const EdgeInsets.only(bottom: 96.0),
+            itemBuilder: (context, index) {
+              final measure = vm.model[index];
+              final _value = measurements[measure.id] ?? 0.0;
+              return MeasureListItem(item: measure..value = _value);
+            },
+            separatorBuilder: (_, __) => const Divider(),
+          );
+        },
+      ),
     );
   }
 }

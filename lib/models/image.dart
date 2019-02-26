@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:tailor_made/models/main.dart';
-import 'package:tailor_made/services/auth.dart';
+import 'package:tailor_made/services/accounts.dart';
 import 'package:tailor_made/utils/mk_uuid.dart';
 
 class ImageModel extends Model {
@@ -13,7 +13,7 @@ class ImageModel extends Model {
     @required this.src,
     DateTime createdAt,
   })  : id = id ?? uuid(),
-        userID = userID ?? Auth.getUser.uid,
+        userID = userID ?? Accounts.getUser.uid,
         createdAt = createdAt ?? DateTime.now();
 
   ImageModel.fromJson(Map<String, dynamic> json)

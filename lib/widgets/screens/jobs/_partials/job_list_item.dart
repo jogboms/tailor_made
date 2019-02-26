@@ -29,7 +29,7 @@ class JobListItem extends StatelessWidget {
           MkNavigate(context, JobPage(job: job));
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+          padding: const EdgeInsets.all(8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[

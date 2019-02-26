@@ -26,7 +26,7 @@ class PaymentList extends StatelessWidget {
         builder: (BuildContext context, int index) {
           return PaymentListItem(payment: payments[index]);
         },
-        separatorBuilder: (_, __) => const Divider(),
+        separatorBuilder: (_, __) => const Divider(height: 0),
       ),
     );
   }

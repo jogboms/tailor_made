@@ -36,7 +36,7 @@ class MkStringCase {
   }
 
   // snake_case
-  String _getSnakeCase({String separator: '_'}) {
+  String _getSnakeCase({String separator = '_'}) {
     final List<String> words =
         this._words.map((word) => word.toLowerCase()).toList();
 
@@ -44,14 +44,14 @@ class MkStringCase {
   }
 
   // PascalCase
-  String _getPascalCase({String separator: ''}) {
+  String _getPascalCase({String separator = ''}) {
     final List<String> words = this._words.map(_upperCaseFirstLetter).toList();
 
     return words.join(separator);
   }
 
   // CONSTANT_CASE
-  String _getConstantCase({String separator: '_'}) {
+  String _getConstantCase({String separator = '_'}) {
     final List<String> words =
         this._words.map((word) => word.toUpperCase()).toList();
 
@@ -59,7 +59,7 @@ class MkStringCase {
   }
 
   // camelCase
-  String _getCamelCase({String separator: ''}) {
+  String _getCamelCase({String separator = ''}) {
     final List<String> words = this._words.map(_upperCaseFirstLetter).toList();
     if (words.isNotEmpty) {
       words[0] = words[0].toLowerCase();
@@ -69,7 +69,7 @@ class MkStringCase {
   }
 
   // Sentence case
-  String _getSentenceCase({String separator: ' '}) {
+  String _getSentenceCase({String separator = ' '}) {
     final List<String> words =
         this._words.map((word) => word.toLowerCase()).toList();
     if (words.isNotEmpty) {

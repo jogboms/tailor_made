@@ -6,7 +6,7 @@ import "dart:async" show Future;
 
 Future<T> mkRetry<T>(
   Future<T> f(), {
-  int tryLimit: 6,
+  int tryLimit = 6,
   Duration interval,
 }) async {
   interval ??= Duration(seconds: 10);
