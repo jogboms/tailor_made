@@ -98,10 +98,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
               ),
             ),
             MkClearButton(
-              child: Text(
-                "SHOW ALL",
-                style: theme.xsmall,
-              ),
+              child: Text("SHOW ALL", style: theme.smallBtn),
               onPressed: () {
                 MkNavigate(
                   context,
@@ -110,6 +107,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
                 );
               },
             ),
+            const SizedBox(width: 16.0),
           ],
         ),
         Container(

@@ -8,26 +8,13 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 import 'package:tailor_made/widgets/screens/payments/_partials/payments_list.dart';
 
-class PaymentsPage extends StatefulWidget {
+class PaymentsPage extends StatelessWidget {
   const PaymentsPage({
     Key key,
     this.payments,
   }) : super(key: key);
 
   final List<PaymentModel> payments;
-
-  @override
-  _PaymentsPageState createState() => _PaymentsPageState();
-}
-
-class _PaymentsPageState extends State<PaymentsPage> {
-  List<PaymentModel> payments;
-
-  @override
-  void initState() {
-    payments = widget.payments;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,8 +90,6 @@ class _Content extends StatelessWidget {
     return SliverPadding(
       padding: const EdgeInsets.only(
         top: 3.0,
-        left: 16.0,
-        right: 16.0,
         bottom: 16.0,
       ),
       sliver: PaymentList(payments: payments),

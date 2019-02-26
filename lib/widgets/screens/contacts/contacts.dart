@@ -54,7 +54,7 @@ class _ContactsPageState extends State<ContactsPage>
                 padding: const EdgeInsets.only(bottom: 96.0),
                 itemBuilder: (context, index) =>
                     ContactsListItem(contact: vm.contacts[index]),
-                separatorBuilder: (_, __) => const Divider(),
+                separatorBuilder: (_, __) => const Divider(height: 0),
               );
             }),
             floatingActionButton: FloatingActionButton(

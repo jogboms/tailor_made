@@ -4,7 +4,10 @@ import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
 
 class MeasureListItem extends StatelessWidget {
-  const MeasureListItem(this.item);
+  const MeasureListItem({
+    Key key,
+    @required this.item,
+  }) : super(key: key);
 
   final MeasureModel item;
 

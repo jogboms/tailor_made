@@ -21,12 +21,10 @@ class TaskListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       dense: true,
+      contentPadding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
       leading: CircleAvatar(
         backgroundColor: Colors.transparent,
-        child: const Icon(
-          Icons.event,
-          color: kHintColor,
-        ),
+        child: const Icon(Icons.event, color: kHintColor),
       ),
       trailing: Icon(
         Icons.timelapse,
@@ -81,12 +79,12 @@ class TaskListItem extends StatelessWidget {
   Color get _iconColor {
     final now = DateTime.now();
     if (now.isAfter(task.dueAt)) {
-      return Colors.redAccent;
+      return Colors.redAccent.shade400;
     }
     final diff = task.dueAt.difference(now).inDays;
     if (diff >= 0 && diff < _kDayLimit) {
-      return Colors.orangeAccent;
+      return Colors.orangeAccent.shade400;
     }
-    return Colors.greenAccent;
+    return Colors.greenAccent.shade400;
   }
 }
