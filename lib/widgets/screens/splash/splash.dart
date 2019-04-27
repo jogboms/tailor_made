@@ -243,6 +243,7 @@ class _ContentState extends State<_Content> {
           }
           continue fallthrough;
 
+        // ignore: no_duplicate_case_values
         fallthrough:
         case "sign_in_failed":
           message = "Sorry, We could not connect. Try again.";
