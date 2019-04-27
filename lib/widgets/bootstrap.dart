@@ -57,17 +57,7 @@ Future<BootstrapModel> bootstrap(Environment env) async {
       (_) => MkSettings.isMock ? StatsMockImpl() : StatsImpl(),
     );
 
-  final isFirstTime = await MkSettings.checkIsFirstTimeLogin();
-
-  try {
-    await MkSettings.initVersion();
-  } catch (e) {
-    //
-  }
-
-  return BootstrapModel(
-    isFirstTime: isFirstTime,
-  );
+  return _BootstrapService.init();
 }
 
 class BootstrapModel {
@@ -76,4 +66,26 @@ class BootstrapModel {
   });
 
   final bool isFirstTime;
+}
+
+class _BootstrapService {
+  static Future<BootstrapModel> init() async {
+    if (MkSettings.isMock) {
+      return BootstrapModel(
+        isFirstTime: true,
+      );
+    }
+
+    final isFirstTime = await MkSettings.checkIsFirstTimeLogin();
+
+    try {
+      await MkSettings.initVersion();
+    } catch (e) {
+      //
+    }
+
+    return BootstrapModel(
+      isFirstTime: isFirstTime,
+    );
+  }
 }

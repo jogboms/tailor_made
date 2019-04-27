@@ -16,9 +16,9 @@ class MeasuresMockImpl extends Measures {
   }
 
   @override
-  Stream<List<MeasureModel>> fetchAll() {
+  Stream<List<MeasureModel>> fetchAll() async* {
     // TODO: implement fetchAll
-    return null;
+    yield [];
   }
 
   @override

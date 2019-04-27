@@ -20,7 +20,7 @@ void main() {
       App(bootstrap: bs),
     );
 
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(seconds: 5));
 
     expect(find.byType(App), findsOneWidget);
   });

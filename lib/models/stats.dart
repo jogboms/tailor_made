@@ -1,10 +1,11 @@
+import 'package:meta/meta.dart';
 import 'package:tailor_made/models/main.dart';
 
 class IntStatsModel extends Model {
   IntStatsModel({
-    this.total,
-    this.pending,
-    this.completed,
+    @required this.total,
+    @required this.pending,
+    @required this.completed,
   });
 
   IntStatsModel.fromJson(Map<String, dynamic> json)
@@ -29,9 +30,9 @@ class IntStatsModel extends Model {
 
 class DoubleStatsModel extends Model {
   DoubleStatsModel({
-    this.total,
-    this.pending,
-    this.completed,
+    @required this.total,
+    @required this.pending,
+    @required this.completed,
   });
 
   DoubleStatsModel.fromJson(Map<String, dynamic> json)
@@ -76,10 +77,10 @@ class DoubleStatsModel extends Model {
 
 class StatsModel extends Model {
   StatsModel({
-    this.jobs,
-    this.contacts,
-    this.gallery,
-    this.payments,
+    @required this.jobs,
+    @required this.contacts,
+    @required this.gallery,
+    @required this.payments,
   });
 
   StatsModel.fromJson(Map<String, dynamic> json)

@@ -1,7 +1,7 @@
 import 'dart:async' show Future;
 
-import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/rebloc/states/main.dart';
 
 /// Logs each incoming action.
 class LoggerBloc extends SimpleBloc<AppState> {
@@ -20,8 +20,6 @@ class LoggerBloc extends SimpleBloc<AppState> {
   Future<Action> middleware(dispatcher, state, action) async {
     print("[ReBLoC]: ${action.runtimeType}");
 
-    // This is just to demonstrate that middleware can be async. In most cases,
-    // you'll want to cancel or return immediately.
-    return await Future.delayed(Duration.zero, () => action);
+    return action;
   }
 }

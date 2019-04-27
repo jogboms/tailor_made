@@ -19,7 +19,8 @@ class MkSettings {
   static String _versionName = "";
   static Future<void> initVersion() async {
     if (isMock) {
-      return true;
+      _versionName = 'v1.0';
+      return null;
     }
     return _versionName = await GetVersion.projectVersion.catchError(
       (dynamic e) => null,
