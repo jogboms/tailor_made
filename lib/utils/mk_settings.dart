@@ -9,12 +9,15 @@ class MkSettings {
 
   static SettingsModel _settings;
   static Environment environment;
+  static bool isTestMode;
   static int userId;
   static String tokenKey;
 
   static bool get isDev => environment == Environment.DEVELOPMENT;
 
   static bool get isMock => environment == Environment.MOCK;
+
+  static bool get isTesting => isTestMode;
 
   static String _versionName = "";
   static Future<void> initVersion() async {

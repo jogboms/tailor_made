@@ -11,16 +11,12 @@ import 'package:tailor_made/widgets/bootstrap.dart';
 
 void main() {
   testWidgets('Smoke test', (WidgetTester tester) async {
-    tester.binding.addTime(Duration(seconds: 3));
-
-    final BootstrapModel bs = await bootstrap(Environment.MOCK);
+    final BootstrapModel bs = await bootstrap(Environment.MOCK, true);
 
     // Build our app and trigger a frame.
     await tester.pumpWidget(
       App(bootstrap: bs),
     );
-
-    await tester.pumpAndSettle(const Duration(seconds: 5));
 
     expect(find.byType(App), findsOneWidget);
   });

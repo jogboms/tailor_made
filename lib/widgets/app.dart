@@ -22,11 +22,14 @@ class App extends StatefulWidget {
   final BootstrapModel bootstrap;
 
   @override
-  _AppState createState() => _AppState();
+  _AppState createState() => _AppState(bootstrap);
 }
 
 class _AppState extends State<App> {
-  final Store<AppState> store = reblocStore();
+  _AppState(this._bs) : store = reblocStore();
+
+  final BootstrapModel _bs;
+  final Store<AppState> store;
 
   final MkScreenUtilConfig screenConfig = const MkScreenUtilConfig(
     width: 412,
@@ -69,6 +72,10 @@ class _AppState extends State<App> {
                 onGenerateRoute: (RouteSettings settings) {
                   return MkNavigateRoute<dynamic>(
                     builder: (_) {
+                      if (_bs.isTestMode) {
+                        return const SizedBox();
+                      }
+
                       return SplashPage(isColdStart: true);
                     },
                     settings: settings.copyWith(

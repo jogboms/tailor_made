@@ -28,8 +28,12 @@ import 'package:tailor_made/services/settings.dart';
 import 'package:tailor_made/services/stats.dart';
 import 'package:tailor_made/utils/mk_settings.dart';
 
-Future<BootstrapModel> bootstrap(Environment env) async {
+Future<BootstrapModel> bootstrap(
+  Environment env, [
+  bool isTestMode = false,
+]) async {
   MkSettings.environment = env;
+  MkSettings.isTestMode = isTestMode;
 
   Injector.appInstance
     ..registerSingleton<Accounts>(
@@ -57,22 +61,25 @@ Future<BootstrapModel> bootstrap(Environment env) async {
       (_) => MkSettings.isMock ? StatsMockImpl() : StatsImpl(),
     );
 
-  return _BootstrapService.init();
+  return _BootstrapService.init(isTestMode);
 }
 
 class BootstrapModel {
   const BootstrapModel({
     @required this.isFirstTime,
+    this.isTestMode = false,
   });
 
   final bool isFirstTime;
+  final bool isTestMode;
 }
 
 class _BootstrapService {
-  static Future<BootstrapModel> init() async {
+  static Future<BootstrapModel> init([bool isTestMode = false]) async {
     if (MkSettings.isMock) {
       return BootstrapModel(
         isFirstTime: true,
+        isTestMode: isTestMode,
       );
     }
 
@@ -86,6 +93,7 @@ class _BootstrapService {
 
     return BootstrapModel(
       isFirstTime: isFirstTime,
+      isTestMode: isTestMode,
     );
   }
 }
