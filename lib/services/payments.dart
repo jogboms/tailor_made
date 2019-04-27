@@ -1,12 +1,10 @@
-import 'package:tailor_made/firebase/cloud_db.dart';
+import 'package:injector/injector.dart';
 import 'package:tailor_made/models/payment.dart';
 
-class Payments {
-  static Stream<List<PaymentModel>> fetchAll() {
-    return CloudDb.payments.snapshots().map(
-          (snap) => snap.documents
-              .map((item) => PaymentModel.fromJson(item.data))
-              .toList(),
-        );
+abstract class Payments {
+  static Payments di() {
+    return Injector.appInstance.getDependency<Payments>();
   }
+
+  Stream<List<PaymentModel>> fetchAll();
 }

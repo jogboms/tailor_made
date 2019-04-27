@@ -49,7 +49,7 @@ class PaymentsPage extends StatelessWidget {
           Builder(builder: (context) {
             if (payments == null) {
               return StreamBuilder(
-                stream: Payments.fetchAll(),
+                stream: Payments.di().fetchAll(),
                 builder: (
                   BuildContext context,
                   AsyncSnapshot<List<PaymentModel>> snapshot,

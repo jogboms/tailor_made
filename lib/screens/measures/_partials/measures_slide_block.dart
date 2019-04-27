@@ -112,7 +112,7 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
 
     MkSnackBar.of(context).loading();
     try {
-      await Measures.delete(widget.measures);
+      await Measures.di().delete(widget.measures);
 
       MkSnackBar.of(context).hide();
     } catch (e) {

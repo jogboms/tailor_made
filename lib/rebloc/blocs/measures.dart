@@ -13,7 +13,8 @@ class MeasuresBloc extends SimpleBloc<AppState> {
     WareContext<AppState> context,
   ) async* {
     try {
-      await Measures.update((context.action as UpdateMeasureAction).payload);
+      await Measures.di()
+          .update((context.action as UpdateMeasureAction).payload);
       yield context.copyWith(const InitMeasuresAction());
     } catch (e) {
       print(e);
@@ -24,7 +25,7 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _onInitMeasure(
     WareContext<AppState> context,
   ) {
-    return Measures.fetchAll().map((measures) {
+    return Measures.di().fetchAll().map((measures) {
       if (measures.isEmpty) {
         return UpdateMeasureAction(
           payload: createDefaultMeasures(),
