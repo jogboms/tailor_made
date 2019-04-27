@@ -14,6 +14,8 @@ class MkSettings {
 
   static bool get isDev => environment == Environment.DEVELOPMENT;
 
+  static bool get isMock => environment == Environment.MOCK;
+
   static String _versionName = "";
   static Future<void> initVersion() async => _versionName =
       await GetVersion.projectVersion.catchError((dynamic e) => null);
