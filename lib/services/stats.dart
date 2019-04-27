@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:injector/injector.dart';
 import 'package:tailor_made/models/stats.dart';
 

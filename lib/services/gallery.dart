@@ -1,20 +1,15 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:tailor_made/firebase/cloud_db.dart';
-import 'package:tailor_made/firebase/cloud_storage.dart';
+import 'package:injector/injector.dart';
 import 'package:tailor_made/models/image.dart';
 
-class Gallery {
-  static Stream<List<ImageModel>> fetchAll() {
-    return CloudDb.gallery.snapshots().map(
-          (snap) => snap.documents
-              .map((item) => ImageModel.fromJson(item.data))
-              .toList(),
-        );
+abstract class Gallery {
+  static Gallery di() {
+    return Injector.appInstance.getDependency<Gallery>();
   }
 
-  static StorageReference createFile(File file) {
-    return CloudStorage.createReferenceImage()..putFile(file);
-  }
+  Stream<List<ImageModel>> fetchAll();
+
+  StorageReference createFile(File file);
 }

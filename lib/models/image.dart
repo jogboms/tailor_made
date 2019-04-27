@@ -13,7 +13,7 @@ class ImageModel extends Model {
     @required this.src,
     DateTime createdAt,
   })  : id = id ?? uuid(),
-        userID = userID ?? Accounts.getUser.uid,
+        userID = userID ?? Accounts.di().getUser.uid,
         createdAt = createdAt ?? DateTime.now();
 
   ImageModel.fromJson(Map<String, dynamic> json)

@@ -4,31 +4,24 @@
 // find child widgets in the widget tree, read text, and verify that the values of widget properties
 // are correct.
 
-// import 'package:flutter/material.dart';
-// import 'package:flutter_test/flutter_test.dart';
-
-// import 'package:tailor_made/main.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:tailor_made/environments/environment.dart';
+import 'package:tailor_made/widgets/app.dart';
+import 'package:tailor_made/widgets/bootstrap.dart';
 
 void main() {
-  // testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-  // // Build our app and trigger a frame.
-  // await tester.pumpWidget(MyApp());
+  testWidgets('Smoke test', (WidgetTester tester) async {
+    tester.binding.addTime(Duration(seconds: 3));
 
-  // // Verify that our counter starts at 0.
-  // expect(find.text('0'), findsOneWidget);
-  // expect(find.text('1'), findsNothing);
+    final BootstrapModel bs = await bootstrap(Environment.MOCK);
 
-  // // Tap the '+' icon and trigger a frame.
-  // await tester.tap(find.byIcon(Icons.add));
-  // await tester.pump();
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(
+      App(bootstrap: bs),
+    );
 
-  // // Verify that our counter has incremented.
-  // expect(find.text('0'), findsNothing);
-  // expect(find.text('1'), findsOneWidget);
-  // });
+    await tester.pumpAndSettle();
 
-  // test('test group_mode_by', () {
-  //   const answer = 42;
-  //   expect(answer, 42);
-  // });
+    expect(find.byType(App), findsOneWidget);
+  });
 }

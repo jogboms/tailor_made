@@ -61,7 +61,8 @@ class JobsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _onAfterLogin(
     WareContext<AppState> context,
   ) {
-    return Jobs.fetchAll()
+    return Jobs.di()
+        .fetchAll()
         .map((jobs) => OnDataJobAction(payload: jobs))
         .map((action) => context.copyWith(action));
   }

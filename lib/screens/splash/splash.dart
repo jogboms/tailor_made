@@ -104,7 +104,7 @@ class _ContentState extends State<_Content> {
     super.initState();
     isLoading = widget.isColdStart;
 
-    Accounts.onAuthStateChanged.then(
+    Accounts.di().onAuthStateChanged.then(
       (user) {
         WidgetsBinding.instance.addPostFrameCallback(
           (_) async {
@@ -221,7 +221,7 @@ class _ContentState extends State<_Content> {
   }
 
   Future<void> _onLogin() async {
-    return await Accounts.signInWithGoogle().catchError((dynamic e) async {
+    return await Accounts.di().signInWithGoogle().catchError((dynamic e) async {
       // TODO disabled
       String message = "";
 
@@ -259,7 +259,7 @@ class _ContentState extends State<_Content> {
         );
       }
 
-      await Accounts.signout();
+      await Accounts.di().signout();
 
       if (!mounted) {
         return;

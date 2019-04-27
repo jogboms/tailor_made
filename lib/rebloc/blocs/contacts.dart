@@ -30,7 +30,8 @@ class ContactsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _onAfterLogin(
     WareContext<AppState> context,
   ) {
-    return Contacts.fetchAll()
+    return Contacts.di()
+        .fetchAll()
         .map((contacts) => OnDataContactAction(payload: contacts))
         .map((action) => context.copyWith(action));
   }
