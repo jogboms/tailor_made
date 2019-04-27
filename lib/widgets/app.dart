@@ -5,13 +5,13 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_routes.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/environments/environment.dart';
-import 'package:tailor_made/utils/mk_settings.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/main.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
+import 'package:tailor_made/screens/splash/splash.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
+import 'package:tailor_made/utils/mk_settings.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
-import 'package:tailor_made/widgets/screens/splash/splash.dart';
 
 class BootstrapModel {
   const BootstrapModel({

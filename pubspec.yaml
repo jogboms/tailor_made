@@ -33,7 +33,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mfsao: 0.1.0
+  mfsao: ^0.1.3
 
 flutter:
   uses-material-design: true
