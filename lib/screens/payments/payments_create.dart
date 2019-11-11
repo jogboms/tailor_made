@@ -3,9 +3,9 @@ import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class PaymentsCreatePage extends StatefulWidget {
   const PaymentsCreatePage({
@@ -167,11 +167,11 @@ class _Header extends StatelessWidget {
         children: <Widget>[
           Text(
             title.toUpperCase(),
-            style: MkTheme.of(context).smallLight,
+            style: ThemeProvider.of(context).smallLight,
           ),
           Text(
             trailing,
-            style: MkTheme.of(context).smallLight,
+            style: ThemeProvider.of(context).smallLight,
           ),
         ],
       ),

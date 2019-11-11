@@ -14,9 +14,7 @@ void main() {
     final BootstrapModel bs = await bootstrap(Environment.MOCK, true);
 
     // Build our app and trigger a frame.
-    await tester.pumpWidget(
-      App(bootstrap: bs),
-    );
+    await tester.pumpWidget(App(bootstrap: bs));
 
     expect(find.byType(App), findsOneWidget);
   });

@@ -30,6 +30,7 @@ dependencies:
   equatable: ^0.1.10
   rebloc: ^0.2.0
   injector: ^1.0.6
+  uuid: ^1.0.3
 
 dev_dependencies:
   flutter_test:

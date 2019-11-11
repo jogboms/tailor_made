@@ -5,9 +5,10 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
-import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/rebloc/view_models/jobs.dart';
+import 'package:tailor_made/rebloc/app_state.dart';
+import 'package:tailor_made/rebloc/jobs/view_model.dart';
 import 'package:tailor_made/screens/contacts/contact.dart';
+import 'package:tailor_made/screens/jobs/_partials/avatar_app_bar.dart';
 import 'package:tailor_made/screens/jobs/_partials/gallery_grids.dart';
 import 'package:tailor_made/screens/jobs/_partials/payment_grids.dart';
 import 'package:tailor_made/screens/measures/measures.dart';
@@ -16,10 +17,9 @@ import 'package:tailor_made/utils/mk_dates.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
-import 'package:tailor_made/widgets/_partials/avatar_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class JobPage extends StatefulWidget {
   const JobPage({
@@ -47,7 +47,7 @@ class _JobPageState extends State<JobPage> with MkSnackBarProvider {
 
   @override
   Widget build(BuildContext context) {
-    final MkTheme theme = MkTheme.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     return ViewModelSubscriber<AppState, JobsViewModel>(
       converter: (store) => JobsViewModel(store)..jobID = widget.job.id,
@@ -228,7 +228,7 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textColor = Colors.grey.shade800;
-    final theme = MkTheme.of(context);
+    final theme = ThemeProvider.of(context);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -291,7 +291,7 @@ class _AvatarAppBar extends StatelessWidget {
     final textColor = Colors.grey.shade800;
 
     final date = MkDates(job.createdAt).format;
-    final theme = MkTheme.of(context);
+    final theme = ThemeProvider.of(context);
 
     return AvatarAppBar(
       tag: contact.createdAt.toString(),
@@ -350,7 +350,7 @@ class _PaidBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = MkTheme.of(context);
+    final theme = ThemeProvider.of(context);
 
     return Expanded(
       child: Container(
@@ -399,7 +399,7 @@ class _UnpaidBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = MkTheme.of(context);
+    final theme = ThemeProvider.of(context);
     return Expanded(
       child: Column(
         children: <Widget>[

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/utils/mk_dates.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class HeaderWidget extends StatelessWidget {
   const HeaderWidget({
@@ -28,7 +28,7 @@ class HeaderWidget extends StatelessWidget {
         children: <Widget>[
           Text(
             "Hello",
-            style: MkTheme.of(context).display4Light.copyWith(
+            style: ThemeProvider.of(context).display4Light.copyWith(
                   letterSpacing: 2.5,
                 ),
           ),
@@ -45,7 +45,7 @@ class HeaderWidget extends StatelessWidget {
           ),
           Text(
             MkDates(DateTime.now(), day: "EEEE", month: "MMMM").format,
-            style: MkTheme.of(context).body3.copyWith(height: 1.75),
+            style: ThemeProvider.of(context).body3.copyWith(height: 1.75),
           ),
         ],
       ),

@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/screens/measures/_partials/measures_slide_block_item.dart';
+import 'package:tailor_made/screens/measures/_views/slide_down.dart';
 import 'package:tailor_made/screens/measures/measures_create.dart';
-import 'package:tailor_made/services/measures.dart';
+import 'package:tailor_made/services/measures/measures.dart';
 import 'package:tailor_made/utils/mk_child_dialog.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar.dart';
-import 'package:tailor_made/widgets/_views/slide_down.dart';
 
 enum ActionChoice {
   edit,

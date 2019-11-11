@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/main.dart';
-import 'package:tailor_made/utils/mk_uuid.dart';
+import 'package:uuid/uuid.dart';
 
 List<MeasureModel> createDefaultMeasures() {
   return [
@@ -45,7 +45,7 @@ class MeasureModel extends Model {
     this.unit = 'In',
     DateTime createdAt,
     @required this.group,
-  })  : id = id ?? uuid(),
+  })  : id = id ?? Uuid().v1(),
         createdAt = createdAt ?? DateTime.now();
 
   MeasureModel.fromJson(Map<String, dynamic> json)

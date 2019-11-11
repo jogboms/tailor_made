@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:tailor_made/models/main.dart';
-import 'package:tailor_made/services/accounts.dart';
-import 'package:tailor_made/utils/mk_uuid.dart';
+import 'package:tailor_made/services/accounts/accounts.dart';
+import 'package:uuid/uuid.dart';
 
 class ImageModel extends Model {
   ImageModel({
@@ -12,7 +12,7 @@ class ImageModel extends Model {
     @required this.path,
     @required this.src,
     DateTime createdAt,
-  })  : id = id ?? uuid(),
+  })  : id = id ?? Uuid().v1(),
         userID = userID ?? Accounts.di().getUser.uid,
         createdAt = createdAt ?? DateTime.now();
 

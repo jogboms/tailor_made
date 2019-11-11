@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/rebloc/view_models/jobs.dart';
+import 'package:tailor_made/rebloc/jobs/view_model.dart';
+import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/screens/tasks/_partials/task_list_item.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';

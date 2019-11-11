@@ -7,9 +7,9 @@ import 'package:tailor_made/screens/jobs/_partials/payment_grid_item.dart';
 import 'package:tailor_made/screens/payments/payments.dart';
 import 'package:tailor_made/screens/payments/payments_create.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 const _kGridWidth = 120.0;
 
@@ -45,7 +45,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = MkTheme.of(context);
+    final theme = ThemeProvider.of(context);
     final List<Widget> paymentsList = List<Widget>.generate(
       firePayments.length,
       (int index) {

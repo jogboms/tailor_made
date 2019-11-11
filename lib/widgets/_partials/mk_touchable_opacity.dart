@@ -42,20 +42,13 @@ class _MkTouchableOpacityState extends State<MkTouchableOpacity> with SingleTick
   AnimationController _animationController;
 
   void _setTween() {
-    _opacityTween = Tween<double>(
-      begin: 1.0,
-      end: widget.pressedOpacity ?? 1.0,
-    );
+    _opacityTween = Tween<double>(begin: 1.0, end: widget.pressedOpacity ?? 1.0);
   }
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 200),
-      value: 0.0,
-      vsync: this,
-    );
+    _animationController = AnimationController(duration: const Duration(milliseconds: 200), value: 0.0, vsync: this);
     _setTween();
   }
 
@@ -123,17 +116,10 @@ class _MkTouchableOpacityState extends State<MkTouchableOpacity> with SingleTick
       child: Semantics(
         button: true,
         child: FadeTransition(
-          opacity: _opacityTween.animate(CurvedAnimation(
-            parent: _animationController,
-            curve: Curves.decelerate,
-          )),
+          opacity: _opacityTween.animate(CurvedAnimation(parent: _animationController, curve: Curves.decelerate)),
           child: Padding(
             padding: widget.padding ?? EdgeInsets.zero,
-            child: Center(
-              widthFactor: 1.0,
-              heightFactor: 1.0,
-              child: widget.child,
-            ),
+            child: Center(widthFactor: 1.0, heightFactor: 1.0, child: widget.child),
           ),
         ),
       ),

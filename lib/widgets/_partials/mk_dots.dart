@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 
 class MkDots extends StatelessWidget {
-  const MkDots({
-    Key key,
-    @required this.color,
-    this.size = 16.0,
-    this.shape,
-  }) : super(key: key);
+  const MkDots({Key key, @required this.color, this.size = 16.0, this.shape}) : super(key: key);
 
   final double size;
   final Color color;
@@ -19,13 +14,7 @@ class MkDots extends StatelessWidget {
       size: Size.square(size),
       child: Material(
         color: color,
-        shape: shape ??
-            const CircleBorder(
-              side: MkBorderSide(
-                width: 2.5,
-                color: Colors.white,
-              ),
-            ),
+        shape: shape ?? const CircleBorder(side: MkBorderSide(width: 2.5, color: Colors.white)),
       ),
     );
   }

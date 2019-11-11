@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/measure.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class MeasureListItem extends StatelessWidget {
   const MeasureListItem({
@@ -13,7 +13,7 @@ class MeasureListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = MkTheme.of(context);
+    final theme = ThemeProvider.of(context);
 
     final List<Widget> children = [
       Expanded(

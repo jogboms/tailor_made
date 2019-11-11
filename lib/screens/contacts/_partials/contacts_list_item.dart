@@ -5,8 +5,8 @@ import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/screens/contacts/contact.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_dots.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class ContactsListItem extends StatelessWidget {
   const ContactsListItem({
@@ -22,7 +22,7 @@ class ContactsListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MkTheme theme = MkTheme.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     final int pending = contact.pendingJobs;
 

@@ -1,11 +1,9 @@
 import 'dart:async' show TimeoutException;
 
-import 'package:tailor_made/utils/mk_settings.dart';
 import 'package:tailor_made/utils/mk_response_wrapper.dart';
+import 'package:tailor_made/utils/mk_settings.dart';
 
 class MkStrings {
-  MkStrings._();
-
   static const String appName = "TailorMade";
   static const String networkError =
       "Please check your network connection or contact your service provider if the problem persists.";

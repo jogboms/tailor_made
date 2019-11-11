@@ -5,7 +5,7 @@ import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/screens/jobs/job.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class JobListItem extends StatelessWidget {
   const JobListItem({
@@ -21,7 +21,7 @@ class JobListItem extends StatelessWidget {
     final _price = MkMoney(job.price).format;
     final _paid = MkMoney(job.completedPayment).format;
     final _owed = MkMoney(job.pendingPayment).format;
-    final MkTheme theme = MkTheme.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     return Material(
       child: InkWell(

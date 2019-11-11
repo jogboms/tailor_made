@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_colors.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class MkPrimaryButton extends StatelessWidget {
   const MkPrimaryButton({
@@ -36,17 +36,12 @@ class MkPrimaryButton extends StatelessWidget {
 
     return Container(
       height: _height ?? kButtonHeight,
-      constraints: BoxConstraints(
-        minWidth: kButtonMinWidth,
-      ),
+      constraints: BoxConstraints(minWidth: kButtonMinWidth),
       child: FlatButton(
         color: backgroundColor,
         padding: _padding,
         shape: shape ?? const StadiumBorder(),
-        child: DefaultTextStyle(
-          style: MkTheme.of(context).button.copyWith(color: color),
-          child: child,
-        ),
+        child: DefaultTextStyle(style: ThemeProvider.of(context).button.copyWith(color: color), child: child),
         onPressed: onPressed,
       ),
     );

@@ -5,8 +5,8 @@ import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/screens/payments/payment.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_dots.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class PaymentListItem extends StatelessWidget {
   const PaymentListItem({
@@ -19,7 +19,7 @@ class PaymentListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _date = payment.createdAt;
-    final theme = MkTheme.of(context);
+    final theme = ThemeProvider.of(context);
 
     return Material(
       child: InkWell(

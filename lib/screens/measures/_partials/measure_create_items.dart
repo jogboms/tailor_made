@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/measure.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
-import 'package:tailor_made/widgets/_views/slide_down.dart';
+import 'package:tailor_made/screens/measures/_views/slide_down.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class MeasureCreateItems extends StatelessWidget {
   const MeasureCreateItems({
@@ -89,7 +89,7 @@ class JobMeasureBlock extends StatelessWidget {
                   // initialValue: value,
                   controller: _controller,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  style: MkTheme.of(context).headline,
+                  style: ThemeProvider.of(context).headline,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.zero,
                     labelText: measure.name,

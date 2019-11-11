@@ -3,8 +3,6 @@ import 'package:flutter/widgets.dart';
 const _kPackage = 'tailor_made';
 
 class MkIcons {
-  MkIcons._();
-
   static const ImageProvider cards = AssetImage('assets/icons/cards.png', package: _kPackage);
   static const ImageProvider list = AssetImage('assets/icons/list.png', package: _kPackage);
   static const ImageProvider logout = AssetImage('assets/icons/logout.png', package: _kPackage);

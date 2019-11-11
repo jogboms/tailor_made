@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/stats.dart';
 import 'package:tailor_made/utils/mk_money.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 const double _kStatGridsHeight = 40.0;
 
@@ -78,9 +78,9 @@ class _StatTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Text(count, style: MkTheme.of(context).headline),
+        Text(count, style: ThemeProvider.of(context).headline),
         const SizedBox(height: 2.0),
-        Text(title, style: MkTheme.of(context).small),
+        Text(title, style: ThemeProvider.of(context).small),
       ],
     );
   }

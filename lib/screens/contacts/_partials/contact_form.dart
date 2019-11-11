@@ -8,7 +8,7 @@ import 'package:tailor_made/constants/mk_colors.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
-import 'package:tailor_made/services/contacts.dart';
+import 'package:tailor_made/services/contacts/contacts.dart';
 import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_snackbar.dart';
 import 'package:tailor_made/utils/mk_validators.dart';

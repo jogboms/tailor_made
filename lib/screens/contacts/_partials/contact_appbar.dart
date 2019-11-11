@@ -7,8 +7,8 @@ import 'package:tailor_made/screens/jobs/jobs_create.dart';
 import 'package:tailor_made/screens/measures/measures.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_circle_avatar.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 enum Choice {
   CreateJob,
@@ -61,7 +61,7 @@ class _ContactAppBarState extends State<ContactAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    final _popTextStyle = MkTheme.of(context).body1;
+    final _popTextStyle = ThemeProvider.of(context).body1;
     return PreferredSize(
       preferredSize: const Size.fromHeight(kToolbarHeight),
       child: SafeArea(
@@ -157,7 +157,7 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = MkTheme.of(context);
+    final theme = ThemeProvider.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,

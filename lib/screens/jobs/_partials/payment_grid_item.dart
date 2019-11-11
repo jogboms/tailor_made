@@ -5,7 +5,7 @@ import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/screens/payments/payment.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 const _kGridWidth = 120.0;
 
@@ -24,7 +24,7 @@ class PaymentGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final _date = payment.createdAt;
     final _price = MkMoney(payment.price).format;
-    final theme = MkTheme.of(context);
+    final theme = ThemeProvider.of(context);
 
     return Container(
       width: size.width,

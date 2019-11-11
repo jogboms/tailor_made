@@ -8,8 +8,6 @@ final GoogleSignIn _googleSignIn = GoogleSignIn();
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class Auth {
-  Auth._();
-
   static FirebaseUser _user;
 
   static FirebaseUser setUser(FirebaseUser user) => _user = user;
@@ -20,42 +18,31 @@ class Auth {
   static Stream<FirebaseUser> get onAuthStateChanged => _auth.onAuthStateChanged;
 
   static Future<FirebaseUser> signInWithGoogle() async {
-    try {
-      // Attempt to get the currently authenticated user
-      GoogleSignInAccount currentUser = _googleSignIn.currentUser;
-      // Attempt to sign in without user interaction
-      currentUser ??= await _googleSignIn.signInSilently();
-      // Force the user to interactively sign in
-      currentUser ??= await _googleSignIn.signIn();
+    GoogleSignInAccount currentUser = _googleSignIn.currentUser;
+    currentUser ??= await _googleSignIn.signInSilently();
+    currentUser ??= await _googleSignIn.signIn();
 
-      if (currentUser == null) {
-        throw PlatformException(code: "canceled");
-      }
-
-      final GoogleSignInAuthentication auth = await currentUser.authentication;
-
-      // Authenticate with firebase
-      final AuthCredential credential = GoogleAuthProvider.getCredential(
-        accessToken: auth.accessToken,
-        idToken: auth.idToken,
-      );
-      final FirebaseUser user = await _auth.signInWithCredential(credential);
-      assert(user != null);
-      assert(!user.isAnonymous);
-
-      setUser(user);
-      return user;
-    } catch (e) {
-      rethrow;
+    if (currentUser == null) {
+      throw PlatformException(code: "canceled");
     }
+
+    final GoogleSignInAuthentication auth = await currentUser.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: auth.accessToken,
+      idToken: auth.idToken,
+    );
+    final FirebaseUser user = await _auth.signInWithCredential(credential);
+    assert(user != null);
+    assert(!user.isAnonymous);
+
+    setUser(user);
+    return user;
   }
 
   static Future<Null> signOutWithGoogle() async {
-    // Sign out with firebase
     await _auth.signOut();
-    // Sign out with google
     await _googleSignIn.signOut();
-    // Clear state
     _user = null;
   }
 }

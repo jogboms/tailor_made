@@ -3,12 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 
 class MkCircleAvatar extends StatelessWidget {
-  const MkCircleAvatar({
-    Key key,
-    this.radius,
-    this.useAlt = false,
-    this.imageUrl,
-  }) : super(key: key);
+  const MkCircleAvatar({Key key, this.radius, this.useAlt = false, this.imageUrl}) : super(key: key);
 
   final double radius;
   final bool useAlt;
@@ -22,14 +17,7 @@ class MkCircleAvatar extends StatelessWidget {
       radius: radius,
       backgroundColor: imageUrl != null ? Colors.grey.shade400 : backgroundColor,
       backgroundImage: imageUrl != null ? CachedNetworkImageProvider(imageUrl) : null,
-      child: imageUrl != null
-          ? null
-          : Center(
-              child: Icon(
-                Icons.person_outline,
-                color: iconColor,
-              ),
-            ),
+      child: imageUrl != null ? null : Center(child: Icon(Icons.person_outline, color: iconColor)),
     );
   }
 }

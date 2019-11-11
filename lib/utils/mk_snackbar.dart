@@ -19,10 +19,7 @@ class MkSnackBar {
     state?.showSnackBar(
       SnackBar(
         backgroundColor: kAccentColor,
-        content: Text(
-          value,
-          style: mkFontMedium(14.0, Colors.white),
-        ),
+        content: Text(value, style: mkFontMedium(14.0, Colors.white)),
         duration: duration ?? const Duration(seconds: 5),
       ),
     );
@@ -32,8 +29,6 @@ class MkSnackBar {
 
   void loading({Widget content}) {
     hide();
-    state?.showSnackBar(
-      MkLoadingSnackBar(content: content),
-    );
+    state?.showSnackBar(MkLoadingSnackBar(content: content));
   }
 }

@@ -3,8 +3,8 @@ import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/models/payment.dart';
-import 'package:tailor_made/services/accounts.dart';
-import 'package:tailor_made/utils/mk_uuid.dart';
+import 'package:tailor_made/services/accounts/accounts.dart';
+import 'package:uuid/uuid.dart';
 
 class JobModel extends Model {
   JobModel({
@@ -22,7 +22,7 @@ class JobModel extends Model {
     this.isComplete = false,
     DateTime createdAt,
     DateTime dueAt,
-  })  : id = id ?? uuid(),
+  })  : id = id ?? Uuid().v1(),
         userID = userID ?? Accounts.di().getUser.uid,
         createdAt = createdAt ?? DateTime.now(),
         dueAt = dueAt ?? DateTime.now().add(Duration(days: 7));

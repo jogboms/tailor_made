@@ -2,8 +2,8 @@ import 'dart:async' show Future;
 
 import 'package:flutter/material.dart';
 import 'package:tailor_made/utils/mk_child_dialog.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 Future<String> showEditDialog({
   @required BuildContext context,
@@ -52,7 +52,7 @@ class MeasureEditDialog extends StatelessWidget {
               Center(
                 child: Text(
                   title,
-                  style: MkTheme.of(context).smallLight,
+                  style: ThemeProvider.of(context).smallLight,
                 ),
               ),
               const SizedBox(height: 8.0),

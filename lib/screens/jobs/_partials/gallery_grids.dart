@@ -7,12 +7,12 @@ import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/screens/gallery/gallery.dart';
 import 'package:tailor_made/screens/jobs/_partials/gallery_grid_item.dart';
-import 'package:tailor_made/services/gallery.dart';
+import 'package:tailor_made/services/gallery/gallery.dart';
 import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 const _kGridWidth = 70.0;
 
@@ -53,7 +53,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = MkTheme.of(context);
+    final theme = ThemeProvider.of(context);
 
     final List<Widget> imagesList = List<Widget>.generate(
       fireImages.length,

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/screens/payments/_partials/payments_list.dart';
-import 'package:tailor_made/services/payments.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/services/payments/payments.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class PaymentsPage extends StatelessWidget {
   const PaymentsPage({
@@ -18,7 +18,7 @@ class PaymentsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MkTheme theme = MkTheme.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     return Scaffold(
       body: CustomScrollView(
@@ -32,7 +32,7 @@ class PaymentsPage extends StatelessWidget {
                 payments != null
                     ? Text(
                         "${payments.length} Tickets",
-                        style: MkTheme.of(context).xsmall,
+                        style: ThemeProvider.of(context).xsmall,
                       )
                     : const SizedBox(),
               ],

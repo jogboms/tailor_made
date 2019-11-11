@@ -26,11 +26,8 @@ const double kButtonMinWidth = 200.0;
 const BorderRadius kBorderRadius = BorderRadius.all(Radius.circular(4.0));
 
 class MkBorderSide extends BorderSide {
-  const MkBorderSide({
-    Color color,
-    BorderStyle style,
-    double width,
-  }) : super(
+  const MkBorderSide({Color color, BorderStyle style, double width})
+      : super(
           color: color ?? kBorderSideColor,
           style: style ?? BorderStyle.solid,
           width: width ?? 1.0,
@@ -38,11 +35,8 @@ class MkBorderSide extends BorderSide {
 }
 
 class MkStyle extends TextStyle {
-  const MkStyle.mkFont({
-    double fontSize,
-    FontWeight fontWeight,
-    Color color,
-  }) : super(
+  const MkStyle.mkFont({double fontSize, FontWeight fontWeight, Color color})
+      : super(
           inherit: false,
           color: color ?? kTextBaseColor,
           fontFamily: MkFonts.base,
@@ -66,28 +60,17 @@ TextStyle mkFontSize(double fontSize) => MkStyle.mkFont(fontSize: fontSize);
 
 TextStyle mkFontColor(Color color) => MkStyle.mkFont(color: color);
 
-TextStyle mkFontLight(double fontSize, [Color color]) => MkStyle.mkFont(
-      fontSize: fontSize,
-      fontWeight: MkStyle.light,
-      color: color ?? kTextBaseColor,
-    );
-TextStyle mkFontRegular(double fontSize, [Color color]) => MkStyle.mkFont(
-      fontSize: fontSize,
-      fontWeight: MkStyle.regular,
-      color: color ?? kTextBaseColor,
-    );
-TextStyle mkFontMedium(double fontSize, [Color color]) => MkStyle.mkFont(
-      fontSize: fontSize,
-      fontWeight: MkStyle.medium,
-      color: color ?? kTextBaseColor,
-    );
-TextStyle mkFontSemi(double fontSize, [Color color]) => MkStyle.mkFont(
-      fontSize: fontSize,
-      fontWeight: MkStyle.semibold,
-      color: color ?? kTextBaseColor,
-    );
-TextStyle mkFontBold(double fontSize, [Color color]) => MkStyle.mkFont(
-      fontSize: fontSize,
-      fontWeight: MkStyle.bold,
-      color: color ?? kTextBaseColor,
-    );
+TextStyle mkFontLight(double fontSize, [Color color]) =>
+    MkStyle.mkFont(fontSize: fontSize, fontWeight: MkStyle.light, color: color ?? kTextBaseColor);
+
+TextStyle mkFontRegular(double fontSize, [Color color]) =>
+    MkStyle.mkFont(fontSize: fontSize, fontWeight: MkStyle.regular, color: color ?? kTextBaseColor);
+
+TextStyle mkFontMedium(double fontSize, [Color color]) =>
+    MkStyle.mkFont(fontSize: fontSize, fontWeight: MkStyle.medium, color: color ?? kTextBaseColor);
+
+TextStyle mkFontSemi(double fontSize, [Color color]) =>
+    MkStyle.mkFont(fontSize: fontSize, fontWeight: MkStyle.semibold, color: color ?? kTextBaseColor);
+
+TextStyle mkFontBold(double fontSize, [Color color]) =>
+    MkStyle.mkFont(fontSize: fontSize, fontWeight: MkStyle.bold, color: color ?? kTextBaseColor);

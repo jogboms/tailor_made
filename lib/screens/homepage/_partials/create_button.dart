@@ -4,8 +4,8 @@ import 'package:tailor_made/screens/contacts/contacts_create.dart';
 import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
 import 'package:tailor_made/screens/jobs/jobs_create.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 enum CreateOptions {
   contacts,
@@ -57,7 +57,7 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
             alignment: FractionalOffset.center,
             child: Text(
               "TAP TO CREATE",
-              style: MkTheme.of(context).body3Medium.copyWith(color: Colors.white, letterSpacing: 1.25),
+              style: ThemeProvider.of(context).body3Medium.copyWith(color: Colors.white, letterSpacing: 1.25),
             ),
           ),
         ),
@@ -73,7 +73,7 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
           return SimpleDialog(
             title: Text(
               'Select action',
-              style: MkTheme.of(context).body3,
+              style: ThemeProvider.of(context).body3,
             ),
             children: <Widget>[
               SimpleDialogOption(

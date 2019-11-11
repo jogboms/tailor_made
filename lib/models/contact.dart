@@ -1,7 +1,7 @@
 import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/main.dart';
-import 'package:tailor_made/services/accounts.dart';
-import 'package:tailor_made/utils/mk_uuid.dart';
+import 'package:tailor_made/services/accounts/accounts.dart';
+import 'package:uuid/uuid.dart';
 
 class ContactModel extends Model {
   ContactModel({
@@ -15,7 +15,7 @@ class ContactModel extends Model {
     Map<String, double> measurements,
     this.totalJobs = 0,
     this.pendingJobs = 0,
-  })  : id = id ?? uuid(),
+  })  : id = id ?? Uuid().v1(),
         createdAt = createdAt ?? DateTime.now(),
         userID = userID ?? Accounts.di().getUser.uid,
         measurements = measurements != null && measurements.isNotEmpty ? measurements : {};

@@ -6,19 +6,19 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/rebloc/actions/common.dart';
-import 'package:tailor_made/rebloc/actions/settings.dart';
-import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/rebloc/view_models/settings.dart';
+import 'package:tailor_made/rebloc/app_state.dart';
+import 'package:tailor_made/rebloc/auth/actions.dart';
+import 'package:tailor_made/rebloc/settings/actions.dart';
+import 'package:tailor_made/rebloc/settings/view_model.dart';
 import 'package:tailor_made/screens/homepage/homepage.dart';
-import 'package:tailor_made/services/accounts.dart';
+import 'package:tailor_made/services/accounts/accounts.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_settings.dart';
 import 'package:tailor_made/utils/mk_snackbar.dart';
 import 'package:tailor_made/utils/mk_status_bar.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_raised_button.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({
@@ -30,7 +30,7 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = MkTheme.of(context);
+    final theme = ThemeProvider.of(context);
 
     return MkStatusBar(
       brightness: Brightness.dark,
@@ -206,7 +206,7 @@ class _ContentState extends State<_Content> {
                       ),
                       label: Text(
                         "Continue with Google",
-                        style: MkTheme.of(context).bodyBold,
+                        style: ThemeProvider.of(context).bodyBold,
                       ),
                     ),
                   );

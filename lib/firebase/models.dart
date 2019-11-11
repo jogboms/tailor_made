@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Snapshot {
   Snapshot({this.data, this.reference});
 
-  Snapshot.fromFire(DocumentSnapshot doc)
+  Snapshot.fromDocumentSnapshot(DocumentSnapshot doc)
       : data = doc.data,
         reference = doc.reference;
 

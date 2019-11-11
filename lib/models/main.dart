@@ -11,9 +11,7 @@ abstract class Model {
 
   static DateTime parseTimestamp(String timestamp) {
     try {
-      return DateTime.fromMillisecondsSinceEpoch(
-        int.parse(timestamp),
-      );
+      return DateTime.fromMillisecondsSinceEpoch(int.parse(timestamp));
     } catch (e) {
       return DateTime.now();
     }

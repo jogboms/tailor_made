@@ -4,8 +4,8 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/account.dart';
-import 'package:tailor_made/rebloc/actions/account.dart';
-import 'package:tailor_made/rebloc/states/main.dart';
+import 'package:tailor_made/rebloc/accounts/actions.dart';
+import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
 import 'package:tailor_made/screens/homepage/_views/notice_dialog.dart';
 import 'package:tailor_made/screens/homepage/_views/review_modal.dart';
@@ -13,9 +13,9 @@ import 'package:tailor_made/screens/homepage/_views/store_name_dialog.dart';
 import 'package:tailor_made/utils/mk_child_dialog.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_dots.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 enum AccountOptions {
   logout,
@@ -36,7 +36,7 @@ class TopButtonBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MkTheme theme = MkTheme.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context);
     return Align(
       alignment: Alignment.topRight,
       child: SafeArea(
@@ -131,7 +131,7 @@ class TopButtonBar extends StatelessWidget {
           return SimpleDialog(
             title: Text(
               'Select action',
-              style: MkTheme.of(context).body3,
+              style: ThemeProvider.of(context).body3,
             ),
             children: <Widget>[
               SimpleDialogOption(

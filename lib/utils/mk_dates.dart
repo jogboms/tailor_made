@@ -1,12 +1,7 @@
 import 'package:intl/intl.dart';
 
 class MkDates {
-  MkDates(
-    this.date, {
-    String day = "EEE",
-    String month = "MMM",
-    String year = "yy",
-  }) {
+  MkDates(this.date, {String day = "EEE", String month = "MMM", String year = "yy"}) {
     if (date == null) {
       return;
     }

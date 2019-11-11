@@ -4,10 +4,10 @@ import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_routes.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/rebloc/actions/account.dart';
-import 'package:tailor_made/rebloc/actions/common.dart';
-import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/rebloc/view_models/home_view_model.dart';
+import 'package:tailor_made/rebloc/accounts/actions.dart';
+import 'package:tailor_made/rebloc/app_state.dart';
+import 'package:tailor_made/rebloc/auth/actions.dart';
+import 'package:tailor_made/rebloc/common/home_view_model.dart';
 import 'package:tailor_made/screens/homepage/_partials/bottom_row.dart';
 import 'package:tailor_made/screens/homepage/_partials/create_button.dart';
 import 'package:tailor_made/screens/homepage/_partials/header.dart';
@@ -15,16 +15,16 @@ import 'package:tailor_made/screens/homepage/_partials/mid_row.dart';
 import 'package:tailor_made/screens/homepage/_partials/stats.dart';
 import 'package:tailor_made/screens/homepage/_partials/top_button_bar.dart';
 import 'package:tailor_made/screens/homepage/_partials/top_row.dart';
+import 'package:tailor_made/screens/homepage/_views/access_denied.dart';
+import 'package:tailor_made/screens/homepage/_views/out_dated.dart';
+import 'package:tailor_made/screens/homepage/_views/rate_limit.dart';
 import 'package:tailor_made/screens/splash/splash.dart';
-import 'package:tailor_made/services/accounts.dart';
+import 'package:tailor_made/services/accounts/accounts.dart';
 import 'package:tailor_made/utils/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
 import 'package:tailor_made/utils/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
-import 'package:tailor_made/widgets/_views/access_denied.dart';
-import 'package:tailor_made/widgets/_views/out_dated.dart';
-import 'package:tailor_made/widgets/_views/rate_limit.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({

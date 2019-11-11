@@ -11,24 +11,24 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
-import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/rebloc/view_models/measures.dart';
+import 'package:tailor_made/rebloc/app_state.dart';
+import 'package:tailor_made/rebloc/measures/view_model.dart';
+import 'package:tailor_made/screens/jobs/_partials/avatar_app_bar.dart';
 import 'package:tailor_made/screens/jobs/_partials/contact_lists.dart';
 import 'package:tailor_made/screens/jobs/_partials/gallery_grid_item.dart';
+import 'package:tailor_made/screens/jobs/_partials/input_dropdown.dart';
 import 'package:tailor_made/screens/jobs/job.dart';
 import 'package:tailor_made/screens/measures/_partials/measure_create_items.dart';
-import 'package:tailor_made/services/jobs.dart';
+import 'package:tailor_made/services/jobs/jobs.dart';
 import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_snackbar_provider.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
-import 'package:tailor_made/widgets/_partials/avatar_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/form_section_header.dart';
-import 'package:tailor_made/widgets/_partials/input_dropdown.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 const _kGridWidth = 85.0;
 
@@ -89,7 +89,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with MkSnackBarProvider
 
   @override
   Widget build(BuildContext context) {
-    final MkTheme theme = MkTheme.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     final List<Widget> children = [];
 
@@ -184,7 +184,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with MkSnackBarProvider
     );
   }
 
-  Widget buildBody(MkTheme theme, List<Widget> children) {
+  Widget buildBody(ThemeProvider theme, List<Widget> children) {
     return contact != null
         ? SafeArea(
             top: false,
@@ -275,7 +275,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with MkSnackBarProvider
       child: TextFormField(
         focusNode: _additionFocusNode,
         keyboardType: TextInputType.text,
-        style: MkTheme.of(context).title.copyWith(color: Colors.black),
+        style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
         maxLines: 6,
         decoration: const InputDecoration(
           isDense: true,
@@ -371,7 +371,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with MkSnackBarProvider
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: InputDropdown(
         valueText: DateFormat.yMMMd().format(job.dueAt),
-        valueStyle: MkTheme.of(context).title.copyWith(color: Colors.black),
+        valueStyle: ThemeProvider.of(context).title.copyWith(color: Colors.black),
         onPressed: () async {
           final DateTime picked = await showDatePicker(
             context: context,
@@ -396,7 +396,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with MkSnackBarProvider
         textInputAction: TextInputAction.next,
         keyboardType: TextInputType.text,
         textCapitalization: TextCapitalization.words,
-        style: MkTheme.of(context).title.copyWith(color: Colors.black),
+        style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
         decoration: const InputDecoration(
           isDense: true,
           hintText: "Enter Style Name",
@@ -416,7 +416,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with MkSnackBarProvider
         controller: controller,
         textInputAction: TextInputAction.next,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        style: MkTheme.of(context).title.copyWith(color: Colors.black),
+        style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
         decoration: const InputDecoration(
           isDense: true,
           hintText: "Enter Amount",

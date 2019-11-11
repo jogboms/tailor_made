@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/rebloc/actions/jobs.dart';
-import 'package:tailor_made/rebloc/view_models/jobs.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/rebloc/jobs/actions.dart';
+import 'package:tailor_made/rebloc/jobs/view_model.dart';
 import 'package:tailor_made/widgets/_partials/mk_dots.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class JobsFilterButton extends StatelessWidget {
   const JobsFilterButton({
@@ -17,7 +17,7 @@ class JobsFilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MkTheme theme = MkTheme.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context);
     final _optionTheme = theme.body1;
     final _colorTestFn = (SortType type) {
       return vm.sortFn == type ? kAccentColor : Colors.black87;

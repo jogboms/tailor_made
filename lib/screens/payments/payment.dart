@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/payment.dart';
-import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/rebloc/view_models/contacts_job.dart';
+import 'package:tailor_made/rebloc/app_state.dart';
+import 'package:tailor_made/rebloc/common/contact_job_view_model.dart';
 import 'package:tailor_made/screens/contacts/contact.dart';
 import 'package:tailor_made/screens/jobs/job.dart';
 import 'package:tailor_made/utils/mk_dates.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class PaymentPage extends StatelessWidget {
   const PaymentPage({
@@ -91,7 +91,7 @@ class PaymentPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   date,
-                  style: MkTheme.of(context).body3Light,
+                  style: ThemeProvider.of(context).body3Light,
                   textAlign: TextAlign.justify,
                 ),
               ),
@@ -99,7 +99,7 @@ class PaymentPage extends StatelessWidget {
                 padding: const EdgeInsets.all(24.0),
                 child: Text(
                   payment.notes,
-                  style: MkTheme.of(context).body3Light,
+                  style: ThemeProvider.of(context).body3Light,
                   textAlign: TextAlign.justify,
                 ),
               ),

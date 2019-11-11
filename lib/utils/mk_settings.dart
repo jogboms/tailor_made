@@ -5,8 +5,6 @@ import 'package:tailor_made/models/settings.dart';
 import 'package:tailor_made/utils/mk_prefs.dart';
 
 class MkSettings {
-  MkSettings._();
-
   static SettingsModel _settings;
   static Environment environment;
   static bool isTestMode;

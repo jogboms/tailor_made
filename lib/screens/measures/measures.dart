@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/rebloc/view_models/measures.dart';
+import 'package:tailor_made/rebloc/app_state.dart';
+import 'package:tailor_made/rebloc/measures/view_model.dart';
 import 'package:tailor_made/screens/measures/_partials/measure_list_item.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 

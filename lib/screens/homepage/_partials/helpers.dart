@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_colors.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class TMListTile extends StatelessWidget {
   const TMListTile({
@@ -114,7 +114,7 @@ class _TextTile extends StatelessWidget {
         subTitle != null
             ? Text(
                 subTitle,
-                style: MkTheme.of(context).small,
+                style: ThemeProvider.of(context).small,
               )
             : const SizedBox(),
       ],

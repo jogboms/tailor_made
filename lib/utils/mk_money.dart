@@ -13,10 +13,7 @@ class MkMoney {
   MkMoney(this.money, {bool isLong = false})
       : _nfmt = isLong
             ? NumberFormat.simpleCurrency(name: _symbol, decimalDigits: 2)
-            : NumberFormat.compactSimpleCurrency(
-                name: _symbol,
-                decimalDigits: 2,
-              );
+            : NumberFormat.compactSimpleCurrency(name: _symbol, decimalDigits: 2);
 
   num money;
   NumberFormat _nfmt;

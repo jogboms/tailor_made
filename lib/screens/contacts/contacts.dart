@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/rebloc/actions/contacts.dart';
-import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/rebloc/view_models/contacts.dart';
+import 'package:tailor_made/rebloc/app_state.dart';
+import 'package:tailor_made/rebloc/contacts/actions.dart';
+import 'package:tailor_made/rebloc/contacts/view_model.dart';
 import 'package:tailor_made/screens/contacts/_partials/contacts_filter_button.dart';
 import 'package:tailor_made/screens/contacts/_partials/contacts_list_item.dart';
 import 'package:tailor_made/screens/contacts/contacts_create.dart';
 import 'package:tailor_made/utils/mk_dispatch_provider.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class ContactsPage extends StatefulWidget {
   const ContactsPage({Key key}) : super(key: key);
@@ -93,7 +93,7 @@ class _AppBarState extends State<_AppBar> with MkDispatchProvider<AppState> {
 
   @override
   Widget build(BuildContext context) {
-    final MkTheme theme = MkTheme.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     return !_isSearching
         ? MkAppBar(
@@ -125,9 +125,9 @@ class _AppBarState extends State<_AppBar> with MkDispatchProvider<AppState> {
               autofocus: true,
               decoration: InputDecoration(
                 hintText: 'Search...',
-                hintStyle: MkTheme.of(context).subhead1Bold.copyWith(color: Colors.white),
+                hintStyle: ThemeProvider.of(context).subhead1Bold.copyWith(color: Colors.white),
               ),
-              style: MkTheme.of(context).subhead1Bold.copyWith(color: Colors.white),
+              style: ThemeProvider.of(context).subhead1Bold.copyWith(color: Colors.white),
               onChanged: (term) => dispatchAction(SearchContactAction(payload: term)),
             ),
             bottom: PreferredSize(

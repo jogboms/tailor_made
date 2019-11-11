@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MkPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
-  const MkPersistentHeaderDelegate({
-    @required this.builder,
-    double height,
-    double minExtent,
-    double maxExtent,
-  })  : minExtent = height ?? minExtent ?? kTextTabBarHeight,
+  const MkPersistentHeaderDelegate({@required this.builder, double height, double minExtent, double maxExtent})
+      : minExtent = height ?? minExtent ?? kTextTabBarHeight,
         maxExtent = height ?? maxExtent ?? kTextTabBarHeight;
 
   final Widget Function(BuildContext context, bool isAtTop) builder;
@@ -16,13 +12,7 @@ class MkPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   final double minExtent;
 
   @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    return builder(context, shrinkOffset != 0);
-  }
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) => builder(context, shrinkOffset != 0);
 
   @override
   bool shouldRebuild(MkPersistentHeaderDelegate oldDelegate) => true;

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
-import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/rebloc/view_models/contacts.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
-import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
+import 'package:tailor_made/rebloc/app_state.dart';
+import 'package:tailor_made/rebloc/contacts/view_model.dart';
 import 'package:tailor_made/screens/contacts/_partials/contact_appbar.dart';
 import 'package:tailor_made/screens/contacts/_partials/contact_gallery_grid.dart';
 import 'package:tailor_made/screens/contacts/_partials/contact_payments_list.dart';
 import 'package:tailor_made/screens/jobs/_partials/jobs_list.dart';
+import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 const TABS = ["Jobs", "Gallery", "Payments"];
 
@@ -46,7 +46,7 @@ class ContactPage extends StatelessWidget {
               centerTitle: false,
               brightness: Brightness.dark,
               bottom: TabBar(
-                labelStyle: MkTheme.of(context).body3Medium,
+                labelStyle: ThemeProvider.of(context).body3Medium,
                 tabs: TABS.map((tab) => Tab(child: Text(tab))).toList(),
               ),
             ),

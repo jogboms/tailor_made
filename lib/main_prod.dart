@@ -1,15 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:tailor_made/environments/environment.dart';
-import 'package:tailor_made/widgets/app.dart';
-import 'package:tailor_made/widgets/bootstrap.dart';
+import 'package:tailor_made/main.dart' as def;
 
-void main() async {
-  // NOTE: so flutter has enough time to calculate sizes
-  await Future<dynamic>.delayed(const Duration(seconds: 1));
-
-  final BootstrapModel bs = await bootstrap(Environment.PRODUCTION);
-
-  return runApp(
-    App(bootstrap: bs),
-  );
-}
+// NOTE: so flutter has enough time to calculate sizes
+void main() => def.main(delay: 1, environment: Environment.PRODUCTION);

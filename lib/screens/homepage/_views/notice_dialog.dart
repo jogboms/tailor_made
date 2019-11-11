@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/account.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class NoticeDialog extends StatelessWidget {
   const NoticeDialog({
@@ -13,7 +13,7 @@ class NoticeDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = MkTheme.of(context).subhead1;
+    final textTheme = ThemeProvider.of(context).subhead1;
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32.0),

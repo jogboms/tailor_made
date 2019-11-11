@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/firebase/auth.dart';
 
 class CloudDb {
-  CloudDb._();
-
   static Firestore instance = Firestore.instance;
 
   static String get authUserId => Auth.getUser?.uid ?? "0";
