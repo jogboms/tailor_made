@@ -8,10 +8,10 @@ import 'package:tailor_made/constants/mk_colors.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/services/contacts/contacts.dart';
-import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
-import 'package:tailor_made/utils/mk_snackbar.dart';
 import 'package:tailor_made/utils/mk_validators.dart';
+import 'package:tailor_made/utils/ui/mk_image_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
@@ -136,7 +136,7 @@ class ContactFormState extends State<ContactForm> {
     }
     if (!form.validate()) {
       _autovalidate = true; // Start validating on every change.
-      MkSnackBar.of(context).show(MkStrings.fixErrors);
+      SnackBarProvider.of(context).show(MkStrings.fixErrors);
     } else {
       form.save();
       widget.onHandleSubmit(contact);
@@ -159,7 +159,7 @@ class ContactFormState extends State<ContactForm> {
     try {
       contact.imageUrl = (await ref.getDownloadURL()).downloadUrl?.toString();
       if (mounted) {
-        MkSnackBar.of(context).show("Upload Successful");
+        SnackBarProvider.of(context).show("Upload Successful");
         setState(() {
           if (_lastImgRef != null) {
             _lastImgRef.delete();
@@ -170,7 +170,7 @@ class ContactFormState extends State<ContactForm> {
       }
     } catch (e) {
       if (mounted) {
-        MkSnackBar.of(context).show("Please try again");
+        SnackBarProvider.of(context).show("Please try again");
         setState(() => isLoading = false);
       }
     }

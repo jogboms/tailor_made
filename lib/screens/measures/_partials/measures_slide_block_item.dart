@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/screens/measures/_views/measure_edit_dialog.dart';
-import 'package:tailor_made/utils/mk_snackbar.dart';
 
 class MeasuresSlideBlockItem extends StatefulWidget {
   const MeasuresSlideBlockItem({
@@ -67,16 +67,16 @@ class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
       return;
     }
 
-    MkSnackBar.of(context).loading();
+    SnackBarProvider.of(context).loading();
 
     try {
       await measure.reference.updateData(<String, String>{
         "name": itemName,
         // "unit": "",
       });
-      MkSnackBar.of(context).hide();
+      SnackBarProvider.of(context).hide();
     } catch (e) {
-      MkSnackBar.of(context).show(e.toString());
+      SnackBarProvider.of(context).show(e.toString());
     }
   }
 }

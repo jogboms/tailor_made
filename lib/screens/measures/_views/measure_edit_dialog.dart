@@ -1,7 +1,7 @@
 import 'dart:async' show Future;
 
 import 'package:flutter/material.dart';
-import 'package:tailor_made/utils/mk_child_dialog.dart';
+import 'package:tailor_made/utils/ui/mk_child_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 

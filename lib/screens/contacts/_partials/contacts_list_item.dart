@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/screens/contacts/contact.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
 import 'package:tailor_made/widgets/_partials/mk_dots.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class ContactsListItem extends StatelessWidget {
   const ContactsListItem({
@@ -31,10 +31,7 @@ class ContactsListItem extends StatelessWidget {
       contentPadding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
       onTap: onTapContact ??
           () {
-            return MkNavigate(
-              context,
-              ContactPage(contact: contact),
-            );
+            return Navigator.push<void>(context, MkNavigate.slideIn<void>(ContactPage(contact: contact)));
           },
       leading: _Avatar(contact: contact),
       title: Text(

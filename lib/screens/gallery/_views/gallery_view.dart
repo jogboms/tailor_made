@@ -9,10 +9,10 @@ import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/contact_job_view_model.dart';
 import 'package:tailor_made/screens/contacts/contact.dart';
 import 'package:tailor_made/screens/jobs/job.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_status_bar.dart';
+import 'package:tailor_made/utils/ui/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class GalleryView extends StatelessWidget {
   const GalleryView({
@@ -30,7 +30,7 @@ class GalleryView extends StatelessWidget {
         ..jobID = image.jobID,
       builder: (
         BuildContext context,
-        DispatchFunction dispatcher,
+        DispatchFunction dispatch,
         ContactJobViewModel vm,
       ) {
         return Scaffold(
@@ -43,7 +43,7 @@ class GalleryView extends StatelessWidget {
           body: PhotoView(
             imageProvider: NetworkImage(image.src),
             loadingChild: const MkLoadingSpinner(),
-            heroTag: image.src,
+            heroAttributes: PhotoViewHeroAttributes(tag: image.src),
           ),
         );
       },
@@ -85,7 +85,7 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                         color: Colors.white,
                       ),
                       onPressed: () {
-                        MkNavigate(context, JobPage(job: job));
+                        Navigator.of(context).push<void>(MkNavigate.slideIn<void>(JobPage(job: job)));
                       },
                     )
                   : const SizedBox(),
@@ -96,10 +96,7 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                         color: Colors.white,
                       ),
                       onPressed: () {
-                        MkNavigate(
-                          context,
-                          ContactPage(contact: contact),
-                        );
+                        Navigator.of(context).push<void>(MkNavigate.slideIn<void>(ContactPage(contact: contact)));
                       },
                     )
                   : const SizedBox(),

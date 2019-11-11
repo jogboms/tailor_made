@@ -4,9 +4,9 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/screens/payments/payment.dart';
 import 'package:tailor_made/utils/mk_money.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/widgets/_partials/mk_dots.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class PaymentListItem extends StatelessWidget {
   const PaymentListItem({
@@ -24,11 +24,10 @@ class PaymentListItem extends StatelessWidget {
     return Material(
       child: InkWell(
         onTap: () {
-          MkNavigate(
-            context,
+          Navigator.of(context).push<void>(MkNavigate.slideIn(
             PaymentPage(payment: payment),
             fullscreenDialog: true,
-          );
+          ));
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -43,7 +42,7 @@ class PaymentListItem extends StatelessWidget {
                     ),
                     const SizedBox(width: 8.0),
                     Text(
-                      MkMoney(payment.price).format,
+                      MkMoney(payment.price).formatted,
                       style: theme.title.copyWith(letterSpacing: 1.5),
                     ),
                   ],

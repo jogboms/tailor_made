@@ -27,7 +27,7 @@ class ContactPage extends StatelessWidget {
       converter: (state) => ContactsViewModel(state)..contactID = contact.id,
       builder: (
         BuildContext context,
-        DispatchFunction dispatcher,
+        DispatchFunction dispatch,
         ContactsViewModel viewModel,
       ) {
         // in the case of newly created contacts

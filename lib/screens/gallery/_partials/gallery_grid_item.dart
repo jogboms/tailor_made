@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/screens/gallery/_views/gallery_view.dart';
-import 'package:tailor_made/utils/mk_fade_in_route.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class GalleryGridItem extends StatelessWidget {
   const GalleryGridItem({
@@ -27,11 +27,7 @@ class GalleryGridItem extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () {
-              Navigator.of(context).push<dynamic>(
-                mkFadeInRoute(
-                  builder: (_) => GalleryView(image: image),
-                ),
-              );
+              Navigator.of(context).push<dynamic>(MkNavigate.fadeIn(GalleryView(image: image)));
             },
           ),
         ),

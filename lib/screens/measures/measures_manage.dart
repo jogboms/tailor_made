@@ -3,15 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/measures/view_model.dart';
 import 'package:tailor_made/screens/measures/_partials/measures_slide_block.dart';
 import 'package:tailor_made/screens/measures/measures_create.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class MeasuresManagePage extends StatefulWidget {
   const MeasuresManagePage({
@@ -22,7 +22,7 @@ class MeasuresManagePage extends StatefulWidget {
   _MeasuresManagePageState createState() => _MeasuresManagePageState();
 }
 
-class _MeasuresManagePageState extends State<MeasuresManagePage> with MkSnackBarProvider {
+class _MeasuresManagePageState extends State<MeasuresManagePage> with SnackBarProviderMixin {
   @override
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -51,11 +51,10 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> with MkSnackBar
         foregroundColor: Colors.white,
         label: const Text("Add Group"),
         onPressed: () {
-          MkNavigate(
-            context,
+          Navigator.of(context).push<void>(MkNavigate.slideIn(
             const MeasuresCreate(),
             fullscreenDialog: true,
-          );
+          ));
         },
       ),
     );
@@ -66,7 +65,7 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> with MkSnackBar
       converter: (store) => MeasuresViewModel(store),
       builder: (
         BuildContext context,
-        DispatchFunction dispatcher,
+        DispatchFunction dispatch,
         MeasuresViewModel vm,
       ) {
         if (vm.isLoading) {

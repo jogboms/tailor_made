@@ -2,8 +2,8 @@ import 'package:contact_picker/contact_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/screens/contacts/_partials/contact_form.dart';
-import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 
 class ContactsEditPage extends StatefulWidget {
@@ -18,7 +18,7 @@ class ContactsEditPage extends StatefulWidget {
   _ContactsEditPageState createState() => _ContactsEditPageState();
 }
 
-class _ContactsEditPageState extends State<ContactsEditPage> with MkSnackBarProvider {
+class _ContactsEditPageState extends State<ContactsEditPage> with SnackBarProviderMixin {
   final ContactPicker _contactPicker = ContactPicker();
   final GlobalKey<ContactFormState> _formKey = GlobalKey<ContactFormState>();
 

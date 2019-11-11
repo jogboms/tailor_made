@@ -44,7 +44,7 @@ class HeaderWidget extends StatelessWidget {
             softWrap: false,
           ),
           Text(
-            MkDates(DateTime.now(), day: "EEEE", month: "MMMM").format,
+            MkDates(DateTime.now(), day: "EEEE", month: "MMMM").formatted,
             style: ThemeProvider.of(context).body3.copyWith(height: 1.75),
           ),
         ],

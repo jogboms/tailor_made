@@ -11,16 +11,16 @@ const String _symbol = "₦";
 
 class MkMoney {
   MkMoney(this.money, {bool isLong = false})
-      : _nfmt = isLong
+      : _format = isLong
             ? NumberFormat.simpleCurrency(name: _symbol, decimalDigits: 2)
             : NumberFormat.compactSimpleCurrency(name: _symbol, decimalDigits: 2);
 
   num money;
-  NumberFormat _nfmt;
+  final NumberFormat _format;
 
-  String get format {
+  String get formatted {
     try {
-      return _nfmt.format(money ?? 0);
+      return _format.format(money ?? 0);
     } catch (e) {
       return "₦0.0";
     }

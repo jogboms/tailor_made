@@ -3,14 +3,14 @@ import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/screens/measures/_partials/measure_create_items.dart';
 import 'package:tailor_made/screens/measures/measures.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/widgets/_partials/form_section_header.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class ContactMeasure extends StatefulWidget {
   const ContactMeasure({
@@ -26,7 +26,7 @@ class ContactMeasure extends StatefulWidget {
   _ContactMeasureState createState() => _ContactMeasureState();
 }
 
-class _ContactMeasureState extends State<ContactMeasure> with MkSnackBarProvider {
+class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
   ContactModel contact;
@@ -78,12 +78,8 @@ class _ContactMeasureState extends State<ContactMeasure> with MkSnackBarProvider
               color: kTitleBaseColor,
             ),
             onPressed: () {
-              MkNavigate(
-                context,
-                MeasuresPage(
-                  measurements: contact.measurements,
-                ),
-                fullscreenDialog: true,
+              Navigator.of(context).push<void>(
+                MkNavigate.slideIn<void>(MeasuresPage(measurements: contact.measurements), fullscreenDialog: true),
               );
             },
           )

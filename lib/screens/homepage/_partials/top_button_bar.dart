@@ -10,12 +10,12 @@ import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
 import 'package:tailor_made/screens/homepage/_views/notice_dialog.dart';
 import 'package:tailor_made/screens/homepage/_views/review_modal.dart';
 import 'package:tailor_made/screens/homepage/_views/store_name_dialog.dart';
-import 'package:tailor_made/utils/mk_child_dialog.dart';
-import 'package:tailor_made/utils/mk_choice_dialog.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
+import 'package:tailor_made/utils/ui/mk_child_dialog.dart';
+import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_dots.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 enum AccountOptions {
   logout,
@@ -105,7 +105,7 @@ class TopButtonBar extends StatelessWidget {
         );
 
         if (_res != null) {
-          StoreProvider.of<AppState>(context).dispatcher(
+          StoreProvider.of<AppState>(context).dispatch(
             OnSendRating(payload: account, rating: _res),
           );
         }
@@ -119,7 +119,7 @@ class TopButtonBar extends StatelessWidget {
             account: account,
           ),
         );
-        StoreProvider.of<AppState>(context).dispatcher(
+        StoreProvider.of<AppState>(context).dispatch(
           OnReadNotice(payload: account),
         );
         return;

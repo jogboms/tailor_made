@@ -5,10 +5,10 @@ import 'package:tailor_made/screens/contacts/_views/contact_measure.dart';
 import 'package:tailor_made/screens/contacts/contacts_edit.dart';
 import 'package:tailor_made/screens/jobs/jobs_create.dart';
 import 'package:tailor_made/screens/measures/measures.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
 import 'package:tailor_made/widgets/_partials/mk_circle_avatar.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 enum Choice {
   CreateJob,
@@ -35,23 +35,17 @@ class _ContactAppBarState extends State<ContactAppBar> {
   dynamic _selectChoice(Choice choice) {
     switch (choice) {
       case Choice.CreateJob:
-        return MkNavigate(
-          context,
+        return Navigator.of(context).push<void>(MkNavigate.slideIn<void>(
           JobsCreatePage(contact: widget.contact, contacts: []),
-        );
+        ));
       case Choice.EditMeasure:
-        return MkNavigate(
-          context,
-          ContactMeasure(
-            contact: widget.contact,
-            grouped: widget.grouped,
-          ),
-        );
+        return Navigator.of(context).push<void>(MkNavigate.slideIn<void>(
+          ContactMeasure(contact: widget.contact, grouped: widget.grouped),
+        ));
       case Choice.EditAccount:
-        return MkNavigate(
-          context,
+        return Navigator.of(context).push<void>(MkNavigate.slideIn<void>(
           ContactsEditPage(contact: widget.contact),
-        );
+        ));
       case Choice.SendText:
         return sms(widget.contact.phone);
       default:
@@ -77,10 +71,11 @@ class _ContactAppBarState extends State<ContactAppBar> {
             _Icon(
               icon: Icons.content_cut,
               onTap: () {
-                MkNavigate(
-                  context,
-                  MeasuresPage(measurements: widget.contact.measurements),
-                  fullscreenDialog: true,
+                Navigator.of(context).push<void>(
+                  MkNavigate.slideIn<void>(
+                    MeasuresPage(measurements: widget.contact.measurements),
+                    fullscreenDialog: true,
+                  ),
                 );
               },
             ),

@@ -8,7 +8,6 @@ import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/store_factory.dart';
 import 'package:tailor_made/screens/splash/splash.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/utils/mk_screen_util.dart';
 import 'package:tailor_made/widgets/bootstrap.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
@@ -35,7 +34,7 @@ class _AppState extends State<App> {
 
   @override
   void dispose() {
-    store.dispatcher(const OnDisposeAction());
+    store.dispatch(const OnDisposeAction());
     super.dispose();
   }
 
@@ -58,7 +57,7 @@ class _AppState extends State<App> {
                 return child;
               }),
               onGenerateRoute: (RouteSettings settings) {
-                return MkNavigateRoute<dynamic>(
+                return _PageRoute(
                   builder: (_) {
                     if (_bs.isTestMode) {
                       return const SizedBox();
@@ -72,6 +71,25 @@ class _AppState extends State<App> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _PageRoute<T extends Object> extends MaterialPageRoute<T> {
+  _PageRoute({WidgetBuilder builder, RouteSettings settings}) : super(builder: builder, settings: settings);
+
+  @override
+  Widget buildTransitions(_, Animation<double> animation, __, Widget child) {
+    if (settings.isInitialRoute) {
+      return child;
+    }
+
+    return FadeTransition(
+      opacity: animation,
+      child: SlideTransition(
+        position: Tween<Offset>(begin: const Offset(0.0, 0.3), end: Offset.zero).animate(animation),
+        child: child,
       ),
     );
   }

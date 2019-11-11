@@ -2,7 +2,7 @@ import 'dart:async' show Future;
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tailor_made/utils/mk_child_dialog.dart';
+import 'package:tailor_made/utils/ui/mk_child_dialog.dart';
 
 Future<ImageSource> mkImageChoiceDialog({@required BuildContext context}) => mkShowChildDialog(
       context: context,

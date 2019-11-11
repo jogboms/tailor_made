@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/screens/gallery/_views/gallery_view.dart';
-import 'package:tailor_made/utils/mk_fade_in_route.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 const _kGridWidth = 70.0;
 
@@ -41,11 +41,7 @@ class GalleryGridItem extends StatelessWidget {
                   fit: BoxFit.cover,
                   child: InkWell(
                     onTap: () {
-                      Navigator.of(context).push<dynamic>(
-                        mkFadeInRoute(
-                          builder: (_) => GalleryView(image: image),
-                        ),
-                      );
+                      Navigator.of(context).push<dynamic>(MkNavigate.fadeIn(GalleryView(image: image)));
                     },
                     child: onTapDelete != null
                         ? Align(

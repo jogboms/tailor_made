@@ -3,9 +3,9 @@ import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/screens/contacts/contacts_create.dart';
 import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
 import 'package:tailor_made/screens/jobs/jobs_create.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 enum CreateOptions {
   contacts,
@@ -98,10 +98,10 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
       );
       switch (result) {
         case CreateOptions.contacts:
-          MkNavigate(context, const ContactsCreatePage());
+          await Navigator.of(context).push<void>(MkNavigate.slideIn<void>(const ContactsCreatePage()));
           break;
         case CreateOptions.jobs:
-          MkNavigate(context, JobsCreatePage(contacts: contacts));
+          await Navigator.of(context).push<void>(MkNavigate.slideIn<void>(JobsCreatePage(contacts: contacts)));
           break;
       }
     };

@@ -5,7 +5,7 @@ import 'package:tailor_made/screens/gallery/gallery.dart';
 import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
 import 'package:tailor_made/screens/payments/payments.dart';
 import 'package:tailor_made/utils/mk_money.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class MidRowWidget extends StatelessWidget {
   const MidRowWidget({
@@ -34,8 +34,8 @@ class MidRowWidget extends StatelessWidget {
                 color: Colors.redAccent,
                 icon: Icons.attach_money,
                 title: "Payments",
-                subTitle: "${MkMoney(stats.payments.total).format} Total",
-                onPressed: () => MkNavigate(context, const PaymentsPage()),
+                subTitle: "${MkMoney(stats.payments.total).formatted} Total",
+                onPressed: () => Navigator.of(context).push<void>(MkNavigate.slideIn<void>(const PaymentsPage())),
               ),
             ),
           ),
@@ -46,7 +46,7 @@ class MidRowWidget extends StatelessWidget {
                 icon: Icons.image,
                 title: "Gallery",
                 subTitle: "${stats.gallery.total} Photos",
-                onPressed: () => MkNavigate(context, const GalleryPage()),
+                onPressed: () => Navigator.of(context).push<void>(MkNavigate.slideIn<void>(const GalleryPage())),
               ),
             ),
           ),

@@ -11,6 +11,7 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
+import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/measures/view_model.dart';
 import 'package:tailor_made/screens/jobs/_partials/avatar_app_bar.dart';
@@ -20,15 +21,14 @@ import 'package:tailor_made/screens/jobs/_partials/input_dropdown.dart';
 import 'package:tailor_made/screens/jobs/job.dart';
 import 'package:tailor_made/screens/measures/_partials/measure_create_items.dart';
 import 'package:tailor_made/services/jobs/jobs.dart';
-import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_snackbar_provider.dart';
+import 'package:tailor_made/utils/ui/mk_image_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/form_section_header.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 const _kGridWidth = 85.0;
 
@@ -53,7 +53,7 @@ class JobsCreatePage extends StatefulWidget {
   _JobsCreatePageState createState() => _JobsCreatePageState();
 }
 
-class _JobsCreatePageState extends State<JobsCreatePage> with MkSnackBarProvider {
+class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<FireImage> fireImages = [];
   JobModel job;
@@ -173,7 +173,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with MkSnackBarProvider
       converter: (store) => MeasuresViewModel(store),
       builder: (
         BuildContext context,
-        DispatchFunction dispatcher,
+        DispatchFunction dispatch,
         MeasuresViewModel vm,
       ) {
         return MeasureCreateItems(

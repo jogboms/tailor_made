@@ -5,6 +5,7 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
+import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/jobs/view_model.dart';
 import 'package:tailor_made/screens/contacts/contact.dart';
@@ -12,14 +13,13 @@ import 'package:tailor_made/screens/jobs/_partials/avatar_app_bar.dart';
 import 'package:tailor_made/screens/jobs/_partials/gallery_grids.dart';
 import 'package:tailor_made/screens/jobs/_partials/payment_grids.dart';
 import 'package:tailor_made/screens/measures/measures.dart';
-import 'package:tailor_made/utils/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_dates.dart';
 import 'package:tailor_made/utils/mk_money.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_snackbar_provider.dart';
+import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class JobPage extends StatefulWidget {
   const JobPage({
@@ -33,7 +33,7 @@ class JobPage extends StatefulWidget {
   _JobPageState createState() => _JobPageState();
 }
 
-class _JobPageState extends State<JobPage> with MkSnackBarProvider {
+class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
   JobModel job;
 
   @override
@@ -53,7 +53,7 @@ class _JobPageState extends State<JobPage> with MkSnackBarProvider {
       converter: (store) => JobsViewModel(store)..jobID = widget.job.id,
       builder: (
         BuildContext context,
-        DispatchFunction dispatcher,
+        DispatchFunction dispatch,
         JobsViewModel vm,
       ) {
         // in the case of newly created jobs
@@ -125,7 +125,7 @@ class _JobPageState extends State<JobPage> with MkSnackBarProvider {
                           day: "EEEE",
                           month: "MMMM",
                           year: "yyyy",
-                        ).format,
+                        ).formatted,
                         style: theme.body3Medium,
                       ),
                     ),
@@ -245,7 +245,7 @@ class _Header extends StatelessWidget {
         ),
         const SizedBox(height: 12.0),
         Text(
-          MkMoney(job.price).format,
+          MkMoney(job.price).formatted,
           style: theme.display2Semi.copyWith(
             color: textColor,
             letterSpacing: 1.5,
@@ -290,7 +290,7 @@ class _AvatarAppBar extends StatelessWidget {
     // final textColor = Colors.white;
     final textColor = Colors.grey.shade800;
 
-    final date = MkDates(job.createdAt).format;
+    final date = MkDates(job.createdAt).formatted;
     final theme = ThemeProvider.of(context);
 
     return AvatarAppBar(
@@ -298,7 +298,7 @@ class _AvatarAppBar extends StatelessWidget {
       imageUrl: contact.imageUrl,
       title: GestureDetector(
         onTap: () {
-          MkNavigate(context, ContactPage(contact: contact));
+          Navigator.of(context).push<void>(MkNavigate.slideIn<void>(ContactPage(contact: contact)));
         },
         child: Text(
           contact.fullname,
@@ -321,11 +321,10 @@ class _AvatarAppBar extends StatelessWidget {
             Icons.content_cut,
           ),
           onPressed: () {
-            MkNavigate(
-              context,
+            Navigator.of(context).push<void>(MkNavigate.slideIn(
               MeasuresPage(measurements: job.measurements),
               fullscreenDialog: true,
-            );
+            ));
           },
         ),
         IconButton(
@@ -374,7 +373,7 @@ class _PaidBox extends StatelessWidget {
                 ),
                 const SizedBox(width: 4.0),
                 Text(
-                  MkMoney(job.completedPayment).format,
+                  MkMoney(job.completedPayment).formatted,
                   style: theme.title.copyWith(
                     letterSpacing: 1.25,
                   ),
@@ -418,7 +417,7 @@ class _UnpaidBox extends StatelessWidget {
               ),
               const SizedBox(width: 4.0),
               Text(
-                MkMoney(job.pendingPayment).format,
+                MkMoney(job.pendingPayment).formatted,
                 style: theme.title.copyWith(
                   letterSpacing: 1.25,
                 ),

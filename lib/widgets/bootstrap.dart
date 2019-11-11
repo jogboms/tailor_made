@@ -10,23 +10,37 @@ import 'package:tailor_made/services/measures/main.dart';
 import 'package:tailor_made/services/payments/main.dart';
 import 'package:tailor_made/services/settings/main.dart';
 import 'package:tailor_made/services/stats/main.dart';
+import 'package:tailor_made/utils/mk_first_time_login_check.dart';
 import 'package:tailor_made/utils/mk_settings.dart';
+import 'package:tailor_made/utils/mk_version_check.dart';
 
 Future<BootstrapModel> bootstrap(Environment env, [bool isTestMode = false]) async {
-  MkSettings.environment = env;
-  MkSettings.isTestMode = isTestMode;
+  final _settings = MkSettings(environment: env, isTestMode: isTestMode);
 
   Injector.appInstance
-    ..registerSingleton<Accounts>((_) => MkSettings.isMock ? AccountsMockImpl() : AccountsImpl())
-    ..registerSingleton<Contacts>((_) => MkSettings.isMock ? ContactsMockImpl() : ContactsImpl())
-    ..registerSingleton<Jobs>((_) => MkSettings.isMock ? JobsMockImpl() : JobsImpl())
-    ..registerSingleton<Gallery>((_) => MkSettings.isMock ? GalleryMockImpl() : GalleryImpl())
-    ..registerSingleton<Settings>((_) => MkSettings.isMock ? SettingsMockImpl() : SettingsImpl())
-    ..registerSingleton<Payments>((_) => MkSettings.isMock ? PaymentsMockImpl() : PaymentsImpl())
-    ..registerSingleton<Measures>((_) => MkSettings.isMock ? MeasuresMockImpl() : MeasuresImpl())
-    ..registerSingleton<Stats>((_) => MkSettings.isMock ? StatsMockImpl() : StatsImpl());
+    ..registerSingleton<MkSettings>((_) => _settings)
+    ..registerSingleton<Accounts>((_) => _settings.isMock ? AccountsMockImpl() : AccountsImpl())
+    ..registerSingleton<Contacts>((_) => _settings.isMock ? ContactsMockImpl() : ContactsImpl())
+    ..registerSingleton<Jobs>((_) => _settings.isMock ? JobsMockImpl() : JobsImpl())
+    ..registerSingleton<Gallery>((_) => _settings.isMock ? GalleryMockImpl() : GalleryImpl())
+    ..registerSingleton<Settings>((_) => _settings.isMock ? SettingsMockImpl() : SettingsImpl())
+    ..registerSingleton<Payments>((_) => _settings.isMock ? PaymentsMockImpl() : PaymentsImpl())
+    ..registerSingleton<Measures>((_) => _settings.isMock ? MeasuresMockImpl() : MeasuresImpl())
+    ..registerSingleton<Stats>((_) => _settings.isMock ? StatsMockImpl() : StatsImpl());
 
-  return _BootstrapService.init(isTestMode);
+  if (_settings.isMock) {
+    return BootstrapModel(isFirstTime: true, isTestMode: isTestMode);
+  }
+
+  final isFirstTime = await MkFirstTimeLoginCheck.check(_settings.environment);
+
+  try {
+    await MkVersionCheck.init(_settings.environment);
+  } catch (e) {
+    //
+  }
+
+  return BootstrapModel(isFirstTime: isFirstTime, isTestMode: isTestMode);
 }
 
 class BootstrapModel {
@@ -34,22 +48,4 @@ class BootstrapModel {
 
   final bool isFirstTime;
   final bool isTestMode;
-}
-
-class _BootstrapService {
-  static Future<BootstrapModel> init([bool isTestMode = false]) async {
-    if (MkSettings.isMock) {
-      return BootstrapModel(isFirstTime: true, isTestMode: isTestMode);
-    }
-
-    final isFirstTime = await MkSettings.checkIsFirstTimeLogin();
-
-    try {
-      await MkSettings.initVersion();
-    } catch (e) {
-      //
-    }
-
-    return BootstrapModel(isFirstTime: isFirstTime, isTestMode: isTestMode);
-  }
 }

@@ -50,7 +50,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
         .map<String>((String text) => text.trim())
         .distinct()
         .where((text) => text.length > 1)
-        .debounce(const Duration(milliseconds: 750))
+        .debounceTime(const Duration(milliseconds: 750))
         .map((text) => SearchSuccessContactAction(
               payload: context.state.contacts.contacts
                   .where((contact) => contact.fullname.contains(RegExp(r'' + text + '', caseSensitive: false)))

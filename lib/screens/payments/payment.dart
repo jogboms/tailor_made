@@ -8,8 +8,8 @@ import 'package:tailor_made/screens/contacts/contact.dart';
 import 'package:tailor_made/screens/jobs/job.dart';
 import 'package:tailor_made/utils/mk_dates.dart';
 import 'package:tailor_made/utils/mk_money.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class PaymentPage extends StatelessWidget {
   const PaymentPage({
@@ -21,9 +21,9 @@ class PaymentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _price = MkMoney(payment.price).format;
+    final _price = MkMoney(payment.price).formatted;
 
-    final date = MkDates(payment.createdAt, day: "EEEE", month: "MMMM").format;
+    final date = MkDates(payment.createdAt, day: "EEEE", month: "MMMM").formatted;
 
     return ViewModelSubscriber<AppState, ContactJobViewModel>(
       converter: (store) => ContactJobViewModel(store)
@@ -31,7 +31,7 @@ class PaymentPage extends StatelessWidget {
         ..jobID = payment.jobID,
       builder: (
         BuildContext context,
-        DispatchFunction dispatcher,
+        DispatchFunction dispatch,
         ContactJobViewModel vm,
       ) {
         return Scaffold(
@@ -47,7 +47,7 @@ class PaymentPage extends StatelessWidget {
                   color: kTitleBaseColor,
                 ),
                 onPressed: () {
-                  MkNavigate(context, JobPage(job: vm.selectedJob));
+                  Navigator.push<void>(context, MkNavigate.slideIn<void>(JobPage(job: vm.selectedJob)));
                 },
               ),
               IconButton(
@@ -56,10 +56,7 @@ class PaymentPage extends StatelessWidget {
                   color: kTitleBaseColor,
                 ),
                 onPressed: () {
-                  MkNavigate(
-                    context,
-                    ContactPage(contact: vm.selectedContact),
-                  );
+                  Navigator.push<void>(context, MkNavigate.slideIn<void>(ContactPage(contact: vm.selectedContact)));
                 },
               ),
               vm.account.hasPremiumEnabled

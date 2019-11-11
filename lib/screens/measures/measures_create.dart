@@ -3,19 +3,19 @@ import 'package:flutter/services.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/providers/dispatch_provider.dart';
+import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/measures/actions.dart';
 import 'package:tailor_made/rebloc/measures/view_model.dart';
 import 'package:tailor_made/screens/measures/_views/measure_dialog.dart';
 import 'package:tailor_made/services/measures/measures.dart';
-import 'package:tailor_made/utils/mk_choice_dialog.dart';
-import 'package:tailor_made/utils/mk_dispatch_provider.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_snackbar_provider.dart';
+import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/form_section_header.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class MeasuresCreate extends StatefulWidget {
   const MeasuresCreate({
@@ -32,7 +32,7 @@ class MeasuresCreate extends StatefulWidget {
   _MeasuresCreateState createState() => _MeasuresCreateState();
 }
 
-class _MeasuresCreateState extends State<MeasuresCreate> with MkSnackBarProvider, MkDispatchProvider<AppState> {
+class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMixin, DispatchProvider<AppState> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
   String groupName, unitValue;
@@ -62,7 +62,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with MkSnackBarProvider
       converter: (store) => MeasuresViewModel(store),
       builder: (
         BuildContext context,
-        DispatchFunction dispatcher,
+        DispatchFunction dispatch,
         MeasuresViewModel vm,
       ) {
         final List<Widget> children = [];

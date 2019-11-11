@@ -6,19 +6,19 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/auth/actions.dart';
 import 'package:tailor_made/rebloc/settings/actions.dart';
 import 'package:tailor_made/rebloc/settings/view_model.dart';
 import 'package:tailor_made/screens/homepage/homepage.dart';
 import 'package:tailor_made/services/accounts/accounts.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_settings.dart';
-import 'package:tailor_made/utils/mk_snackbar.dart';
-import 'package:tailor_made/utils/mk_status_bar.dart';
+import 'package:tailor_made/utils/mk_version_check.dart';
+import 'package:tailor_made/utils/ui/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_raised_button.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({
@@ -62,16 +62,12 @@ class SplashPage extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  MkSettings.getVersion() != null
-                      ? Text(
-                          "v" + MkSettings.getVersion(),
-                          style: theme.small.copyWith(
-                            color: kTextBaseColor.withOpacity(.4),
-                            height: 1.5,
-                          ),
-                          textAlign: TextAlign.center,
-                        )
-                      : const SizedBox(),
+                  if (MkVersionCheck.get() != null)
+                    Text(
+                      "v" + MkVersionCheck.get(),
+                      style: theme.small.copyWith(color: kTextBaseColor.withOpacity(.4), height: 1.5),
+                      textAlign: TextAlign.center,
+                    )
                 ],
               ),
             ),
@@ -108,10 +104,10 @@ class _ContentState extends State<_Content> {
       (user) {
         WidgetsBinding.instance.addPostFrameCallback(
           (_) async {
-            StoreProvider.of<AppState>(context).dispatcher(OnLoginAction(user));
+            StoreProvider.of<AppState>(context).dispatch(OnLoginAction(user));
             await Navigator.pushAndRemoveUntil<void>(
               context,
-              MkPageRoute.fadeIn<void>(const HomePage()),
+              MkNavigate.fadeIn<void>(const HomePage()),
               (Route<void> route) => false,
             );
           },
@@ -126,7 +122,7 @@ class _ContentState extends State<_Content> {
       converter: (store) => SettingsViewModel(store),
       builder: (
         BuildContext context,
-        DispatchFunction dispatcher,
+        DispatchFunction dispatch,
         SettingsViewModel vm,
       ) {
         return Stack(
@@ -169,7 +165,7 @@ class _ContentState extends State<_Content> {
                             MkRaisedButton(
                               backgroundColor: Colors.white,
                               color: kTextBaseColor,
-                              onPressed: () => dispatcher(const InitSettingsAction()),
+                              onPressed: () => dispatch(const InitSettingsAction()),
                               child: const Text("RETRY"),
                             ),
                           ],
@@ -197,7 +193,7 @@ class _ContentState extends State<_Content> {
                           _onLogin();
                         } catch (e) {
                           setState(() => isLoading = false);
-                          MkSnackBar.of(context).show(e.toString());
+                          SnackBarProvider.of(context).show(e.toString());
                         }
                       },
                       icon: const Image(
@@ -251,7 +247,7 @@ class _ContentState extends State<_Content> {
         default:
       }
       if (message.isNotEmpty) {
-        MkSnackBar.of(context).show(
+        SnackBarProvider.of(context).show(
           message,
           duration: const Duration(milliseconds: 3500),
         );

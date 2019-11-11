@@ -12,7 +12,7 @@ class LoggerBloc extends SimpleBloc<AppState> {
     //   print('State just became: $state');
     //   lastState = state;
     // }
-    if (!MkSettings.isTesting) {
+    if (!MkSettings.di().isTesting) {
       print("{\n$state\n}");
     }
     return action;

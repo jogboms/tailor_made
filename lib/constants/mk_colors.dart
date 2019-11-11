@@ -67,6 +67,7 @@ class MkColors {
   static const Color accent = Color(_basePink);
   static const Color primary = Color(_baseBlue);
   static const Color light_grey = Color(0xFF9B9B9B);
+  static const Color success = Color(0xFF7ED321);
   static const Color danger = Color(0xFFEB5757);
   static const Color info = Color(0xFF2D9CDB);
   static const Color warning = Color(0xFFF1B61E);

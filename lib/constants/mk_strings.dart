@@ -1,7 +1,7 @@
 import 'dart:async' show TimeoutException;
 
-import 'package:tailor_made/utils/mk_response_wrapper.dart';
 import 'package:tailor_made/utils/mk_settings.dart';
+import 'package:tailor_made/wrappers/mk_exceptions.dart';
 
 class MkStrings {
   static const String appName = "TailorMade";
@@ -43,6 +43,6 @@ class MkStrings {
     if (error is TimeoutException) {
       return "This action took too long. Please Retry.";
     }
-    return MkSettings.isDev || error is MkResponseException ? "$error" : errorMessage;
+    return MkSettings.di().isDev || error is MkResponseException ? "$error" : errorMessage;
   }
 }

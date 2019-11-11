@@ -8,11 +8,11 @@ import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/screens/gallery/gallery.dart';
 import 'package:tailor_made/screens/jobs/_partials/gallery_grid_item.dart';
 import 'package:tailor_made/services/gallery/gallery.dart';
-import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
+import 'package:tailor_made/utils/ui/mk_image_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 const _kGridWidth = 70.0;
 
@@ -100,11 +100,10 @@ class _GalleryGridsState extends State<GalleryGrids> {
             MkClearButton(
               child: Text("SHOW ALL", style: theme.smallBtn),
               onPressed: () {
-                MkNavigate(
-                  context,
+                Navigator.of(context).push<void>(MkNavigate.slideIn(
                   GalleryPage(images: widget.job.images),
                   fullscreenDialog: true,
-                );
+                ));
               },
             ),
             const SizedBox(width: 16.0),

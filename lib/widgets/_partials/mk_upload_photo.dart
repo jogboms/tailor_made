@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/constants/mk_colors.dart';
-import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_image_utils.dart';
+import 'package:tailor_made/utils/ui/mk_image_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_touchable_opacity.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 

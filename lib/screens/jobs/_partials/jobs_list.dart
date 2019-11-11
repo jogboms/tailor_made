@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/screens/jobs/_partials/job_list_item.dart';
-import 'package:tailor_made/utils/mk_sliver_separator_builder_delegate.dart';
+import 'package:tailor_made/utils/ui/mk_sliver_separator_builder_delegate.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 
 class JobList extends StatelessWidget {

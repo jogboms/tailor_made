@@ -5,7 +5,7 @@ import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/models/settings.dart';
 import 'package:tailor_made/models/stats.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
-import 'package:tailor_made/utils/mk_settings.dart';
+import 'package:tailor_made/utils/mk_version_check.dart';
 import 'package:version/version.dart';
 
 class HomeViewModel extends Equatable {
@@ -36,7 +36,7 @@ class HomeViewModel extends Equatable {
       account != null && !account.hasSendRating && (((contacts?.length ?? 0) >= 10) || ((jobs?.length ?? 0) >= 10));
 
   bool get isOutdated {
-    final currentVersion = Version.parse(MkSettings.getVersion());
+    final currentVersion = Version.parse(MkVersionCheck.get());
     final latestVersion = Version.parse(settings?.versionName ?? "1.0.0");
 
     return latestVersion > currentVersion;

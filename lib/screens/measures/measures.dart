@@ -26,7 +26,7 @@ class MeasuresPage extends StatelessWidget {
         converter: (store) => MeasuresViewModel(store),
         builder: (
           BuildContext context,
-          DispatchFunction dispatcher,
+          DispatchFunction dispatch,
           MeasuresViewModel vm,
         ) {
           if (vm.model.isEmpty) {

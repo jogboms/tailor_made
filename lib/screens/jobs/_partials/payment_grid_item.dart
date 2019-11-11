@@ -4,8 +4,8 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/screens/payments/payment.dart';
 import 'package:tailor_made/utils/mk_money.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 const _kGridWidth = 120.0;
 
@@ -23,7 +23,7 @@ class PaymentGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _date = payment.createdAt;
-    final _price = MkMoney(payment.price).format;
+    final _price = MkMoney(payment.price).formatted;
     final theme = ThemeProvider.of(context);
 
     return Container(
@@ -35,11 +35,10 @@ class PaymentGridItem extends StatelessWidget {
         color: kPrimaryColor,
         child: InkWell(
           onTap: () {
-            MkNavigate(
-              context,
+            Navigator.of(context).push<void>(MkNavigate.slideIn(
               PaymentPage(payment: payment),
               fullscreenDialog: true,
-            );
+            ));
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),

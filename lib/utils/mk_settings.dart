@@ -1,68 +1,30 @@
-import 'package:get_version/get_version.dart';
-import 'package:tailor_made/constants/mk_constants.dart';
+import 'package:flutter/foundation.dart';
+import 'package:injector/injector.dart';
 import 'package:tailor_made/environments/environment.dart';
 import 'package:tailor_made/models/settings.dart';
-import 'package:tailor_made/utils/mk_prefs.dart';
 
 class MkSettings {
-  static SettingsModel _settings;
-  static Environment environment;
-  static bool isTestMode;
-  static int userId;
-  static String tokenKey;
+  MkSettings({@required this.environment, @required this.isTestMode});
 
-  static bool get isDev => environment == Environment.DEVELOPMENT;
+  static MkSettings di() => Injector.appInstance.getDependency<MkSettings>();
 
-  static bool get isMock => environment == Environment.MOCK;
+  final Environment environment;
+  final bool isTestMode;
 
-  static bool get isTesting => isTestMode;
+  SettingsModel _settings;
+  int _userId;
 
-  static String _versionName = "";
-  static Future<void> initVersion() async {
-    if (isMock) {
-      _versionName = 'v1.0';
-      return null;
-    }
-    return _versionName = await GetVersion.projectVersion.catchError(
-      (dynamic e) => null,
-    );
-  }
+  bool get isDev => environment == Environment.DEVELOPMENT;
 
-  static void setData(SettingsModel data) => _settings = data;
+  bool get isMock => environment == Environment.MOCK;
 
-  static SettingsModel getData() => _settings;
+  bool get isTesting => isTestMode;
 
-  static void setVersion(String version) => _versionName = version;
+  void setUserId(int id) => _userId = id;
 
-  static String getVersion() => _versionName;
+  int getUserId() => _userId;
 
-  static Future<bool> checkIsFirstTime() async {
-    if (isMock) {
-      return true;
-    }
-    final state = await MkPrefs.getBool(IS_FIRST_TIME);
-    if (state != false) {
-      await MkPrefs.setBool(IS_FIRST_TIME, false);
-      return true;
-    }
-    return false;
-  }
+  void setData(SettingsModel data) => _settings = data;
 
-  static Future<bool> checkIsFirstTimeLogin() async {
-    if (isMock) {
-      return true;
-    }
-    final state = await MkPrefs.getBool(IS_FIRST_TIME_LOGIN);
-    if (state != false) {
-      return true;
-    }
-    return false;
-  }
-
-  static Future<void> updateIsFirstTimeLogin() {
-    if (isMock) {
-      return Future.value();
-    }
-    return MkPrefs.setBool(IS_FIRST_TIME_LOGIN, false);
-  }
+  SettingsModel getData() => _settings;
 }

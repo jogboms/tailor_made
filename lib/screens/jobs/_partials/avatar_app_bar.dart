@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tailor_made/utils/mk_status_bar.dart';
+import 'package:tailor_made/utils/ui/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_circle_avatar.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 

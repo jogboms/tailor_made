@@ -4,7 +4,7 @@ import 'package:tailor_made/models/stats.dart';
 import 'package:tailor_made/screens/contacts/contacts.dart';
 import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
 import 'package:tailor_made/screens/jobs/jobs.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class TopRowWidget extends StatelessWidget {
   const TopRowWidget({
@@ -33,7 +33,7 @@ class TopRowWidget extends StatelessWidget {
                 color: Colors.orangeAccent,
                 title: "Contacts",
                 subTitle: "${stats.contacts.total} Contacts",
-                onPressed: () => MkNavigate(context, const ContactsPage()),
+                onPressed: () => Navigator.of(context).push<void>(MkNavigate.slideIn<void>(const ContactsPage())),
               ),
             ),
           ),
@@ -44,7 +44,7 @@ class TopRowWidget extends StatelessWidget {
                 color: Colors.greenAccent.shade400,
                 title: "Jobs",
                 subTitle: "${stats.jobs.total} Total",
-                onPressed: () => MkNavigate(context, const JobsPage()),
+                onPressed: () => Navigator.of(context).push<void>(MkNavigate.slideIn<void>(const JobsPage())),
               ),
             ),
           ),

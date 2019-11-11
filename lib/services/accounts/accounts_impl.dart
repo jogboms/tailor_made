@@ -34,7 +34,7 @@ class AccountsImpl extends Accounts {
   Future<void> signUp(AccountModel account) async {
     final _account = account.copyWith(
       status: AccountModelStatus.pending,
-      notice: MkSettings.getData().premiumNotice,
+      notice: MkSettings.di().getData().premiumNotice,
       hasReadNotice: false,
       hasPremiumEnabled: true,
     );

@@ -5,15 +5,15 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/measures/view_model.dart';
 import 'package:tailor_made/screens/contacts/_partials/contact_form.dart';
 import 'package:tailor_made/screens/contacts/_views/contact_measure.dart';
 import 'package:tailor_made/screens/contacts/contact.dart';
 import 'package:tailor_made/services/contacts/contacts.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class ContactsCreatePage extends StatefulWidget {
   const ContactsCreatePage({
@@ -24,7 +24,7 @@ class ContactsCreatePage extends StatefulWidget {
   _ContactsCreatePageState createState() => _ContactsCreatePageState();
 }
 
-class _ContactsCreatePageState extends State<ContactsCreatePage> with MkSnackBarProvider {
+class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarProviderMixin {
   final GlobalKey<ContactFormState> _formKey = GlobalKey<ContactFormState>();
   ContactModel contact;
   final ContactPicker _contactPicker = ContactPicker();
@@ -53,7 +53,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with MkSnackBar
             converter: (store) => MeasuresViewModel(store),
             builder: (
               BuildContext context,
-              DispatchFunction dispatcher,
+              DispatchFunction dispatch,
               MeasuresViewModel vm,
             ) {
               return IconButton(

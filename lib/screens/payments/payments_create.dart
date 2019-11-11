@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
+import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/utils/mk_money.dart';
-import 'package:tailor_made/utils/mk_snackbar_provider.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
@@ -19,7 +19,7 @@ class PaymentsCreatePage extends StatefulWidget {
   _PaymentsCreatePageState createState() => _PaymentsCreatePageState();
 }
 
-class _PaymentsCreatePageState extends State<PaymentsCreatePage> with MkSnackBarProvider {
+class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarProviderMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
   double price = 0.0;
@@ -99,7 +99,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with MkSnackBar
         ),
         validator: (value) {
           if (controller.numberValue > widget.limit) {
-            return MkMoney(widget.limit).format + " is the remainder on this job.";
+            return MkMoney(widget.limit).formatted + " is the remainder on this job.";
           }
           return (controller.numberValue > 0) ? null : "Please input a price";
         },

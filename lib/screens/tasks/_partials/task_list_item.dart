@@ -3,9 +3,9 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/screens/jobs/job.dart';
 import 'package:tailor_made/utils/mk_dates.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
-import 'package:timeago/timeago.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
+import 'package:timeago/timeago.dart' as time_ago;
 
 const int _kDayLimit = 5;
 
@@ -53,7 +53,7 @@ class TaskListItem extends StatelessWidget {
                   day: "EEEE",
                   month: "MMMM",
                   year: "yyyy",
-                ).format,
+                ).formatted,
               ),
             ],
           ),
@@ -67,11 +67,11 @@ class TaskListItem extends StatelessWidget {
             size: 11.0,
           ),
           const SizedBox(width: 2.0),
-          Text(timeAgo(task.dueAt, until: true)),
+          Text(time_ago.format(task.dueAt, allowFromNow: true)),
         ],
       ),
       onTap: () {
-        MkNavigate(context, JobPage(job: task));
+        Navigator.of(context).push<void>(MkNavigate.slideIn(JobPage(job: task)));
       },
     );
   }

@@ -6,10 +6,10 @@ import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/screens/jobs/_partials/payment_grid_item.dart';
 import 'package:tailor_made/screens/payments/payments.dart';
 import 'package:tailor_made/screens/payments/payments_create.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 const _kGridWidth = 120.0;
 
@@ -80,11 +80,10 @@ class _PaymentGridsState extends State<PaymentGrids> {
             MkClearButton(
               child: Text("SHOW ALL", style: theme.smallBtn),
               onPressed: () {
-                MkNavigate(
-                  context,
+                Navigator.of(context).push<void>(MkNavigate.slideIn(
                   PaymentsPage(payments: widget.job.payments),
                   fullscreenDialog: true,
-                );
+                ));
               },
             ),
             const SizedBox(width: 16.0),

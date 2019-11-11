@@ -35,7 +35,7 @@ class StatsWidget extends StatelessWidget {
           Expanded(
             child: _StatTile(
               title: "Received",
-              count: MkMoney(stats.payments.completed).format,
+              count: MkMoney(stats.payments.completed).formatted,
             ),
           ),
           const _Divider(),

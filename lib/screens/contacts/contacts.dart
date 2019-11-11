@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/providers/dispatch_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/contacts/actions.dart';
 import 'package:tailor_made/rebloc/contacts/view_model.dart';
 import 'package:tailor_made/screens/contacts/_partials/contacts_filter_button.dart';
 import 'package:tailor_made/screens/contacts/_partials/contacts_list_item.dart';
 import 'package:tailor_made/screens/contacts/contacts_create.dart';
-import 'package:tailor_made/utils/mk_dispatch_provider.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class ContactsPage extends StatefulWidget {
   const ContactsPage({Key key}) : super(key: key);
@@ -21,14 +21,14 @@ class ContactsPage extends StatefulWidget {
   _ContactsPageState createState() => _ContactsPageState();
 }
 
-class _ContactsPageState extends State<ContactsPage> with MkDispatchProvider<AppState> {
+class _ContactsPageState extends State<ContactsPage> with DispatchProvider<AppState> {
   @override
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, ContactsViewModel>(
       converter: (store) => ContactsViewModel(store),
       builder: (
         BuildContext context,
-        DispatchFunction dispatcher,
+        DispatchFunction dispatch,
         ContactsViewModel vm,
       ) {
         return WillPopScope(
@@ -57,7 +57,7 @@ class _ContactsPageState extends State<ContactsPage> with MkDispatchProvider<App
             }),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.person_add),
-              onPressed: () => MkNavigate(context, const ContactsCreatePage()),
+              onPressed: () => Navigator.push<void>(context, MkNavigate.slideIn<void>(const ContactsCreatePage())),
             ),
           ),
           onWillPop: () async {
@@ -88,7 +88,7 @@ class _AppBar extends StatefulWidget implements PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
 
-class _AppBarState extends State<_AppBar> with MkDispatchProvider<AppState> {
+class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
   bool _isSearching = false;
 
   @override

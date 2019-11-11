@@ -11,13 +11,7 @@ class MkPrefs {
     return _prefs;
   }
 
-  static Future<bool> remove(String key) async {
-    return (await _getInstance()).remove(key);
-  }
-
-  static Future<String> getString(String key) async {
-    return (await _getInstance()).getString(key) ?? '';
-  }
+  static Future<String> getString(String key) async => (await _getInstance()).getString(key) ?? '';
 
   static Future<String> setString(String key, String value) async {
     await (await _getInstance()).setString(key, value);
@@ -38,21 +32,21 @@ class MkPrefs {
     return value;
   }
 
-  static Future<int> getInt(String key) async {
-    return (await _getInstance()).getInt(key);
-  }
+  static Future<int> getInt(String key) async => (await _getInstance()).getInt(key);
 
   static Future<int> setInt(String key, int value) async {
     await (await _getInstance()).setInt(key, value);
     return value;
   }
 
-  static Future<bool> getBool(String key) async {
-    return (await _getInstance()).getBool(key);
-  }
+  static Future<bool> getBool(String key) async => (await _getInstance()).getBool(key);
 
   static Future<bool> setBool(String key, bool value) async {
     await (await _getInstance()).setBool(key, value);
     return value;
   }
+
+  static Future<bool> contains(String key) async => (await _getInstance()).containsKey(key);
+
+  static Future<bool> remove(String key) async => (await _getInstance()).remove(key);
 }

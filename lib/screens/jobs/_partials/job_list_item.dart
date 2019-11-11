@@ -4,8 +4,8 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/screens/jobs/job.dart';
 import 'package:tailor_made/utils/mk_money.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class JobListItem extends StatelessWidget {
   const JobListItem({
@@ -18,15 +18,15 @@ class JobListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _date = job.createdAt;
-    final _price = MkMoney(job.price).format;
-    final _paid = MkMoney(job.completedPayment).format;
-    final _owed = MkMoney(job.pendingPayment).format;
+    final _price = MkMoney(job.price).formatted;
+    final _paid = MkMoney(job.completedPayment).formatted;
+    final _owed = MkMoney(job.pendingPayment).formatted;
     final ThemeProvider theme = ThemeProvider.of(context);
 
     return Material(
       child: InkWell(
         onTap: () {
-          MkNavigate(context, JobPage(job: job));
+          Navigator.of(context).push<void>(MkNavigate.slideIn<void>(JobPage(job: job)));
         },
         child: Padding(
           padding: const EdgeInsets.all(8),

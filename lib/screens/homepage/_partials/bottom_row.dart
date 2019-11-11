@@ -5,7 +5,7 @@ import 'package:tailor_made/models/stats.dart';
 import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
 import 'package:tailor_made/screens/measures/measures_manage.dart';
 import 'package:tailor_made/screens/tasks/tasks.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class BottomRowWidget extends StatelessWidget {
   const BottomRowWidget({
@@ -37,10 +37,7 @@ class BottomRowWidget extends StatelessWidget {
                 icon: Icons.content_cut,
                 title: "Measures",
                 subTitle: "Custom",
-                onPressed: () => MkNavigate(
-                  context,
-                  const MeasuresManagePage(),
-                ),
+                onPressed: () => Navigator.of(context).push<void>(MkNavigate.slideIn(const MeasuresManagePage())),
               ),
             ),
           ),
@@ -51,7 +48,7 @@ class BottomRowWidget extends StatelessWidget {
                 icon: Icons.event,
                 title: "Tasks",
                 subTitle: "${stats.jobs.pending} Pending",
-                onPressed: () => MkNavigate(context, const TasksPage()),
+                onPressed: () => Navigator.of(context).push<void>(MkNavigate.slideIn<void>(const TasksPage())),
               ),
             ),
           ),

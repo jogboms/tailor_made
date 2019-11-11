@@ -50,7 +50,7 @@ class JobsBloc extends SimpleBloc<AppState> {
         .map<String>((String text) => text.trim())
         .distinct()
         .where((text) => text.length > 1)
-        .debounce(const Duration(milliseconds: 750))
+        .debounceTime(const Duration(milliseconds: 750))
         .map((text) => SearchSuccessJobAction(
               payload: context.state.jobs.jobs
                   .where((job) => job.name.contains(RegExp(r'' + text + '', caseSensitive: false)))

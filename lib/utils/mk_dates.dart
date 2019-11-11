@@ -10,12 +10,13 @@ class MkDates {
     if ((digit > 0 && digit < 4) && (date.day < 11 || date.day > 13)) {
       suffix = ["st", "nd", "rd"][digit - 1];
     }
-    // _dfmt = DateFormat("$day, d'$suffix' $month, $year");
-    _dfmt = DateFormat("d'$suffix' $month, $year");
+    _format = DateFormat("d'$suffix' $month, $year");
   }
 
-  DateTime date;
-  DateFormat _dfmt;
+  MkDates.withFormat(this.date, this._format);
 
-  String get format => date == null ? null : _dfmt.format(date);
+  DateTime date;
+  DateFormat _format;
+
+  String get formatted => date == null ? null : _format.format(date);
 }

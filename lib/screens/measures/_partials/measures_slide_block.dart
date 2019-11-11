@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/screens/measures/_partials/measures_slide_block_item.dart';
 import 'package:tailor_made/screens/measures/_views/slide_down.dart';
 import 'package:tailor_made/screens/measures/measures_create.dart';
 import 'package:tailor_made/services/measures/measures.dart';
-import 'package:tailor_made/utils/mk_child_dialog.dart';
-import 'package:tailor_made/utils/mk_choice_dialog.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_snackbar.dart';
+import 'package:tailor_made/utils/ui/mk_child_dialog.dart';
+import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
+import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 enum ActionChoice {
   edit,
@@ -89,15 +89,14 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
   }
 
   void onTapEditBlock() {
-    MkNavigate(
-      context,
+    Navigator.of(context).push<void>(MkNavigate.slideIn(
       MeasuresCreate(
         groupName: widget.title,
         unitValue: widget.measures.first.unit,
         measures: widget.measures,
       ),
       fullscreenDialog: true,
-    );
+    ));
   }
 
   void onTapDeleteBlock() async {
@@ -110,13 +109,13 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
       return;
     }
 
-    MkSnackBar.of(context).loading();
+    SnackBarProvider.of(context).loading();
     try {
       await Measures.di().delete(widget.measures);
 
-      MkSnackBar.of(context).hide();
+      SnackBarProvider.of(context).hide();
     } catch (e) {
-      MkSnackBar.of(context).show(e.toString());
+      SnackBarProvider.of(context).show(e.toString());
     }
   }
 }

@@ -3,7 +3,7 @@ description: Tailor-Made with love.
 version: 1.2.0
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0-dev <3.0.0"
 
 dependencies:
   flutter:
