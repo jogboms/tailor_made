@@ -52,7 +52,7 @@ class GalleryPage extends StatelessWidget {
           Builder(builder: (context) {
             if (images == null) {
               return StreamBuilder(
-                stream: Gallery.fetchAll(),
+                stream: Gallery.di().fetchAll(),
                 builder: (
                   BuildContext context,
                   AsyncSnapshot<List<ImageModel>> snapshot,

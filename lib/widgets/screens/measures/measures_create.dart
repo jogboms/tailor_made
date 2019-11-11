@@ -226,7 +226,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with MkSnackBarProvider
 
       try {
         dispatchAction(const ToggleMeasuresLoading());
-        await Measures.create(
+        await Measures.di().create(
           measures,
           groupName: groupName,
           unitValue: unitValue,

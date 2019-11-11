@@ -153,7 +153,7 @@ class ContactFormState extends State<ContactForm> {
       return;
     }
     // TODO: remove firebase coupling
-    final ref = Contacts.createFile(imageFile);
+    final ref = Contacts.di().createFile(imageFile);
 
     setState(() => isLoading = true);
     try {

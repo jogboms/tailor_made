@@ -138,7 +138,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
       return;
     }
     // TODO: remove firebase coupling
-    final ref = Gallery.createFile(imageFile);
+    final ref = Gallery.di().createFile(imageFile);
 
     setState(() {
       fireImages.add(FireImage()..ref = ref);

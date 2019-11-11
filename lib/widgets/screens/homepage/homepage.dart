@@ -151,7 +151,7 @@ class _Body extends StatelessWidget {
           account: vm.account,
           shouldSendRating: vm.shouldSendRating,
           onLogout: () async {
-            await Accounts.signout();
+            await Accounts.di().signout();
             StoreProvider.of<AppState>(context).dispatcher(
               const OnLogoutAction(),
             );

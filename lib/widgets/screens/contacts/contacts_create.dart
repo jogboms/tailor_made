@@ -104,7 +104,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with MkSnackBar
         location: _contact.location,
       );
 
-      Contacts.update(contact).listen((snap) async {
+      Contacts.di().update(contact).listen((snap) async {
         closeLoadingSnackBar();
         showInSnackBar("Successfully Added");
 
