@@ -107,7 +107,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
         location: _contact.location,
       );
 
-      Contacts.update(contact).listen((snap) async {
+      Contacts.di().update(contact).listen((snap) async {
         closeLoadingSnackBar();
         showInSnackBar("Successfully Added");
 

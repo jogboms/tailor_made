@@ -23,7 +23,7 @@ class JobModel extends Model {
     DateTime createdAt,
     DateTime dueAt,
   })  : id = id ?? uuid(),
-        userID = userID ?? Accounts.getUser.uid,
+        userID = userID ?? Accounts.di().getUser.uid,
         createdAt = createdAt ?? DateTime.now(),
         dueAt = dueAt ?? DateTime.now().add(Duration(days: 7));
 

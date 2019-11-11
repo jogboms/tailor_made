@@ -14,7 +14,8 @@ class StatsBloc extends SimpleBloc<AppState> {
     Observable(input)
         .where((_) => _.action is InitStatsAction)
         .switchMap(
-          (context) => Stats.fetch()
+          (context) => Stats.di()
+              .fetch()
               .map((stats) => OnDataStatAction(payload: stats))
               .map((action) => context.copyWith(action)),
         )

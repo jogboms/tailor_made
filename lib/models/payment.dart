@@ -13,7 +13,7 @@ class PaymentModel extends Model {
     @required this.notes,
     DateTime createdAt,
   })  : id = id ?? uuid(),
-        userID = userID ?? Accounts.getUser.uid,
+        userID = userID ?? Accounts.di().getUser.uid,
         createdAt = createdAt ?? DateTime.now();
 
   PaymentModel.fromJson(Map<String, dynamic> json)

@@ -29,6 +29,7 @@ dependencies:
       url: https://github.com/btastic/flutter_native_image.git
   equatable: ^0.1.10
   rebloc: ^0.2.0
+  injector: ^1.0.6
 
 dev_dependencies:
   flutter_test:

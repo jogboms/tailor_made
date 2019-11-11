@@ -4,52 +4,38 @@ import 'package:flutter/widgets.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_routes.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
-import 'package:tailor_made/environments/environment.dart';
 import 'package:tailor_made/rebloc/actions/common.dart';
 import 'package:tailor_made/rebloc/main.dart';
 import 'package:tailor_made/rebloc/states/main.dart';
 import 'package:tailor_made/screens/splash/splash.dart';
 import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_settings.dart';
+import 'package:tailor_made/utils/mk_screen_util.dart';
 import 'package:tailor_made/utils/mk_theme.dart';
-
-class BootstrapModel {
-  const BootstrapModel({
-    @required this.isFirstTime,
-  });
-
-  final bool isFirstTime;
-}
+import 'package:tailor_made/widgets/bootstrap.dart';
 
 class App extends StatefulWidget {
-  App({
-    @required Environment env,
-    @required this.isFirstTime,
-  }) {
-    MkSettings.environment = env;
+  App({@required this.bootstrap}) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
-  final bool isFirstTime;
-
-  static Future<BootstrapModel> bootstrap() async {
-    final isFirstTime = await MkSettings.checkIsFirstTimeLogin();
-    try {
-      await MkSettings.initVersion();
-    } catch (e) {
-      //
-    }
-
-    return BootstrapModel(isFirstTime: isFirstTime);
-  }
+  final BootstrapModel bootstrap;
 
   @override
-  _AppState createState() => _AppState();
+  _AppState createState() => _AppState(bootstrap);
 }
 
 class _AppState extends State<App> {
-  final Store<AppState> store = reblocStore();
+  _AppState(this._bs) : store = reblocStore();
+
+  final BootstrapModel _bs;
+  final Store<AppState> store;
+
+  final MkScreenUtilConfig screenConfig = const MkScreenUtilConfig(
+    width: 412,
+    height: 732,
+    allowFontScaling: true,
+  );
 
   @override
   void dispose() {
@@ -72,9 +58,24 @@ class _AppState extends State<App> {
                 title: MkStrings.appName,
                 color: Colors.white,
                 theme: MkTheme.of(context).themeData(Theme.of(context)),
+                builder: (context, child) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      MkScreenUtil.initialize(
+                        context: context,
+                        config: screenConfig,
+                      );
+                      return child;
+                    },
+                  );
+                },
                 onGenerateRoute: (RouteSettings settings) {
                   return MkNavigateRoute<dynamic>(
                     builder: (_) {
+                      if (_bs.isTestMode) {
+                        return const SizedBox();
+                      }
+
                       return SplashPage(isColdStart: true);
                     },
                     settings: settings.copyWith(

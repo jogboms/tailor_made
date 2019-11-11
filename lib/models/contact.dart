@@ -17,7 +17,7 @@ class ContactModel extends Model {
     this.pendingJobs = 0,
   })  : id = id ?? uuid(),
         createdAt = createdAt ?? DateTime.now(),
-        userID = userID ?? Accounts.getUser.uid,
+        userID = userID ?? Accounts.di().getUser.uid,
         measurements =
             measurements != null && measurements.isNotEmpty ? measurements : {};
 

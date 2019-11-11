@@ -259,7 +259,7 @@ class _JobsCreatePageState extends State<JobsCreatePage>
         ..contactID = contact.id;
 
       try {
-        Jobs.update(job).listen((snap) {
+        Jobs.di().update(job).listen((snap) {
           closeLoadingSnackBar();
           Navigator.pushReplacement<dynamic, dynamic>(
             context,
@@ -344,7 +344,7 @@ class _JobsCreatePageState extends State<JobsCreatePage>
       return;
     }
     // TODO: remove firebase coupling
-    final ref = Jobs.createFile(imageFile);
+    final ref = Jobs.di().createFile(imageFile);
 
     setState(() {
       fireImages.add(FireImage()..ref = ref);

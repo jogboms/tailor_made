@@ -15,9 +15,11 @@ class SettingsBloc extends SimpleBloc<AppState> {
     Observable(input)
         .where((_) => _.action is InitSettingsAction)
         .switchMap((context) {
-          return Settings.fetch()
+          return Settings.di()
+              .fetch()
               .handleError(
-                  () => context.dispatcher(const OnErrorSettingsAction()))
+                () => context.dispatcher(const OnErrorSettingsAction()),
+              )
               .map((settings) {
             // Keep Static copy
             MkSettings.setData(settings);

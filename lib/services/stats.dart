@@ -1,10 +1,10 @@
+import 'package:injector/injector.dart';
 import 'package:tailor_made/models/stats.dart';
-import 'package:tailor_made/firebase/cloud_db.dart';
 
-class Stats {
-  static Stream<StatsModel> fetch() {
-    return CloudDb.stats
-        .snapshots()
-        .map((snapshot) => StatsModel.fromJson(snapshot.data));
+abstract class Stats {
+  static Stats di() {
+    return Injector.appInstance.getDependency<Stats>();
   }
+
+  Stream<StatsModel> fetch();
 }

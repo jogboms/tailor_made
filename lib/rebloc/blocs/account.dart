@@ -12,7 +12,7 @@ class AccountBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _readNotice(
     WareContext<AppState> context,
   ) async* {
-    await Accounts.readNotice(
+    await Accounts.di().readNotice(
       (context.action as OnReadNotice).payload,
     );
 
@@ -23,7 +23,7 @@ class AccountBloc extends SimpleBloc<AppState> {
     WareContext<AppState> context,
   ) async* {
     final _action = context.action as OnSendRating;
-    await Accounts.sendRating(_action.payload, _action.rating);
+    await Accounts.di().sendRating(_action.payload, _action.rating);
 
     yield context;
   }
@@ -31,7 +31,7 @@ class AccountBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _signUp(
     WareContext<AppState> context,
   ) async* {
-    await Accounts.signUp(
+    await Accounts.di().signUp(
       (context.action as OnPremiumSignUp).payload,
     );
 
@@ -41,7 +41,8 @@ class AccountBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _getAccount(
     WareContext<AppState> context,
   ) {
-    return Accounts.getAccount()
+    return Accounts.di()
+        .getAccount()
         .map((account) => OnDataAccountAction(payload: account))
         .map((action) => context.copyWith(action));
   }

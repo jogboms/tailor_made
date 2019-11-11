@@ -7,7 +7,7 @@ void main() async {
   // NOTE: only for demo purposes
   await Future<dynamic>.delayed(const Duration(seconds: 2));
 
-  final BootstrapModel bs = await bootstrap(Environment.DEVELOPMENT);
+  final BootstrapModel bs = await bootstrap(Environment.MOCK);
 
   return runApp(
     App(bootstrap: bs),
