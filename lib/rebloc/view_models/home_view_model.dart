@@ -31,12 +31,9 @@ class HomeViewModel extends Equatable {
   final SettingsModel settings;
   final bool isLoading;
   final bool hasSkipedPremium;
-  bool get isDisabled =>
-      account != null && account.status == AccountModelStatus.disabled;
-  bool get isWarning =>
-      account != null && account.status == AccountModelStatus.warning;
-  bool get isPending =>
-      account != null && account.status == AccountModelStatus.pending;
+  bool get isDisabled => account != null && account.status == AccountModelStatus.disabled;
+  bool get isWarning => account != null && account.status == AccountModelStatus.warning;
+  bool get isPending => account != null && account.status == AccountModelStatus.pending;
 
   bool get shouldSendRating {
     return account != null &&

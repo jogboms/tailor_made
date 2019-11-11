@@ -40,9 +40,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
   @override
   void initState() {
     super.initState();
-    firePayments = widget.job.payments
-        .map((payment) => FirePayment()..payment = payment)
-        .toList();
+    firePayments = widget.job.payments.map((payment) => FirePayment()..payment = payment).toList();
   }
 
   @override
@@ -57,7 +55,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
         if (payment == null) {
           return const Center(
             widthFactor: 2.5,
-            child: const MkLoadingSpinner(),
+            child: MkLoadingSpinner(),
           );
         }
 
@@ -134,10 +132,8 @@ class _PaymentGridsState extends State<PaymentGrids> {
           );
         });
 
-        await widget.job.reference
-            .updateData(<String, List<Map<String, dynamic>>>{
-          "payments":
-              firePayments.map((payment) => payment.payment.toMap()).toList(),
+        await widget.job.reference.updateData(<String, List<Map<String, dynamic>>>{
+          "payments": firePayments.map((payment) => payment.payment.toMap()).toList(),
         });
 
         setState(() {

@@ -33,8 +33,7 @@ class MkPrefs {
     }
   }
 
-  static Future<Map<String, dynamic>> setMap(
-      String key, Map<String, dynamic> value) async {
+  static Future<Map<String, dynamic>> setMap(String key, Map<String, dynamic> value) async {
     await setString(key, json.encode(value));
     return value;
   }

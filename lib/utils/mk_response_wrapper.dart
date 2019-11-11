@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/utils/mk_settings.dart';
 
-typedef T TransformFunction<T>(dynamic data, String message);
+typedef TransformFunction<T> = T Function(dynamic data, String message);
 
 class ForbiddenException implements Exception {
   ForbiddenException([this.message]);
@@ -45,9 +45,7 @@ class MkResponseWrapper<T> {
           : MkSettings.isDev ? _response.reasonPhrase : MkStrings.errorMessage;
       rawData = _response.statusCode < 300 ? responseJson["data"] : null;
     } catch (e) {
-      message = _response.statusCode == 502 && !MkSettings.isDev
-          ? MkStrings.errorMessage
-          : e.toString();
+      message = _response.statusCode == 502 && !MkSettings.isDev ? MkStrings.errorMessage : e.toString();
       rawData = null;
     }
 

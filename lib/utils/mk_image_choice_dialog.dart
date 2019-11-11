@@ -14,15 +14,15 @@ Future<ImageSource> mkImageChoiceDialog({
           SimpleDialogOption(
             onPressed: () => Navigator.pop(context, ImageSource.camera),
             child: const Padding(
-              child: const Text("Camera"),
-              padding: const EdgeInsets.all(8.0),
+              child: Text("Camera"),
+              padding: EdgeInsets.all(8.0),
             ),
           ),
           SimpleDialogOption(
             onPressed: () => Navigator.pop(context, ImageSource.gallery),
             child: const Padding(
-              child: const Text("Gallery"),
-              padding: const EdgeInsets.all(8.0),
+              child: Text("Gallery"),
+              padding: EdgeInsets.all(8.0),
             ),
           ),
         ],

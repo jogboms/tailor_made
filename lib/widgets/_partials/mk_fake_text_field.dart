@@ -31,8 +31,7 @@ class MkFakeTextField<T> extends StatefulWidget {
   MkFakeTextFieldState<T> createState() => MkFakeTextFieldState<T>();
 }
 
-class MkFakeTextFieldState<T> extends State<MkFakeTextField<T>>
-    with MkKeyboardProvider {
+class MkFakeTextFieldState<T> extends State<MkFakeTextField<T>> with MkKeyboardProvider {
   bool get isEnabled => widget.onTap != null;
 
   @override
@@ -55,9 +54,7 @@ class MkFakeTextFieldState<T> extends State<MkFakeTextField<T>>
             decoration: InputDecoration(
               border: UnderlineInputBorder(
                 borderSide: MkBorderSide(
-                  color: (field.hasError ?? false)
-                      ? _theme.errorStyle.color
-                      : null,
+                  color: (field.hasError ?? false) ? _theme.errorStyle.color : null,
                 ),
               ),
               errorText: field.errorText,
@@ -69,14 +66,10 @@ class MkFakeTextFieldState<T> extends State<MkFakeTextField<T>>
                   () {
                     if (field.value != null) {
                       if (field.value is List) {
-                        return (field.value as List).isNotEmpty
-                            ? "Successfully Added!"
-                            : widget.hint;
+                        return (field.value as List).isNotEmpty ? "Successfully Added!" : widget.hint;
                       }
                       if (field.value is String) {
-                        return (field.value as String).isNotEmpty
-                            ? field.value.toString()
-                            : widget.hint;
+                        return (field.value as String).isNotEmpty ? field.value.toString() : widget.hint;
                       }
                       return field.value.toString();
                     }
@@ -86,13 +79,9 @@ class MkFakeTextFieldState<T> extends State<MkFakeTextField<T>>
                     if (!isEnabled) {
                       return _theme.title;
                     }
-                    if ((field.value != null &&
-                            field.value is! List &&
-                            field.value is! String) ||
-                        (field.value is List &&
-                            (field.value as List).isNotEmpty) ||
-                        (field.value is String &&
-                            (field.value as String).isNotEmpty)) {
+                    if ((field.value != null && field.value is! List && field.value is! String) ||
+                        (field.value is List && (field.value as List).isNotEmpty) ||
+                        (field.value is String && (field.value as String).isNotEmpty)) {
                       return _theme.textfield;
                     }
 

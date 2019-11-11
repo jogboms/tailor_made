@@ -14,9 +14,9 @@ Future<bool> mkChoiceDialog({
     showDialog<bool>(
       context: context,
       builder: (_) => _MkChoiceDialog(
-            title: title,
-            message: message,
-          ),
+        title: title,
+        message: message,
+      ),
     );
 
 class _MkChoiceDialog extends StatelessWidget {

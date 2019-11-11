@@ -6,9 +6,7 @@ class PaymentsImpl extends Payments {
   @override
   Stream<List<PaymentModel>> fetchAll() {
     return CloudDb.payments.snapshots().map(
-          (snap) => snap.documents
-              .map((item) => PaymentModel.fromJson(item.data))
-              .toList(),
+          (snap) => snap.documents.map((item) => PaymentModel.fromJson(item.data)).toList(),
         );
   }
 }

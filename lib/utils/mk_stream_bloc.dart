@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart' show BehaviorSubject, Observable, Subject;
 
-typedef Future<T> MkStreamBlocBuilder<T>();
-typedef Future<T> MkStreamPageBlocBuilder<T>(int limit);
+typedef MkStreamBlocBuilder<T> = Future<T> Function();
+typedef MkStreamPageBlocBuilder<T> = Future<T> Function(int limit);
 
 // NOTE: hack-like in-memory storage of the last list bloc
 // since we don't have sockets, i need a means to refresh the list after updating a job
@@ -46,9 +46,7 @@ abstract class MkStreamable<T> {
 class MkStreamBloc<T> implements MkStreamable<StreamState<T>> {
   MkStreamBloc(this._builder, {this.cachedData, this.skipFirst = false})
       : assert(skipFirst != null),
-        _controller = skipFirst
-            ? BehaviorSubject<Future<T>>()
-            : BehaviorSubject<Future<T>>(seedValue: _builder());
+        _controller = skipFirst ? BehaviorSubject<Future<T>>() : BehaviorSubject<Future<T>>(seedValue: _builder());
 
   T cachedData;
   bool skipFirst;
@@ -58,19 +56,18 @@ class MkStreamBloc<T> implements MkStreamable<StreamState<T>> {
   final _error = BehaviorSubject<dynamic>(seedValue: 0);
 
   @override
-  Stream<StreamState<T>> get stream =>
-      Observable.combineLatest3<T, bool, dynamic, StreamState<T>>(
+  Stream<StreamState<T>> get stream => Observable.combineLatest3<T, bool, dynamic, StreamState<T>>(
         _controller.stream.switchMap(
           (mapper) => Observable.fromFuture(mapper).doOnEach(
-                (_) {
-                  _isLoading.add(false);
-                },
-              ).onErrorReturnWith(
-                (dynamic error) {
-                  _error.add(error);
-                  return null;
-                },
-              ).doOnData((data) => cachedData = data),
+            (_) {
+              _isLoading.add(false);
+            },
+          ).onErrorReturnWith(
+            (dynamic error) {
+              _error.add(error);
+              return null;
+            },
+          ).doOnData((data) => cachedData = data),
         ),
         _isLoading.stream,
         _error.stream,

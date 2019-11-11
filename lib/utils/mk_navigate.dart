@@ -116,12 +116,11 @@ class MkNavigate {
 }
 
 class MkNavigateRoute<T> extends MaterialPageRoute<T> {
-  MkNavigateRoute({WidgetBuilder builder, RouteSettings settings})
-      : super(builder: builder, settings: settings);
+  MkNavigateRoute({WidgetBuilder builder, RouteSettings settings}) : super(builder: builder, settings: settings);
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
+  Widget buildTransitions(
+      BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
     Animation<Offset> positionIn(Animation<double> animation) => Tween<Offset>(
           // begin: const Offset(1.0, 0.0),
           // begin: const Offset(0.0, 1.0),

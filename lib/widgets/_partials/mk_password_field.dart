@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart'
-    show InputDecoration, TextCapitalization, Icons, TextFormField;
+import 'package:flutter/material.dart' show InputDecoration, TextCapitalization, Icons, TextFormField;
 import 'package:flutter/widgets.dart';
 
 class MkPasswordField extends StatefulWidget {

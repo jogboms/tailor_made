@@ -18,8 +18,7 @@ class ContactModel extends Model {
   })  : id = id ?? uuid(),
         createdAt = createdAt ?? DateTime.now(),
         userID = userID ?? Accounts.di().getUser.uid,
-        measurements =
-            measurements != null && measurements.isNotEmpty ? measurements : {};
+        measurements = measurements != null && measurements.isNotEmpty ? measurements : {};
 
   factory ContactModel.fromJson(Map<String, dynamic> json) {
     assert(json != null);
@@ -41,8 +40,7 @@ class ContactModel extends Model {
     );
   }
 
-  factory ContactModel.fromDoc(Snapshot doc) =>
-      ContactModel.fromJson(doc.data)..reference = doc.reference;
+  factory ContactModel.fromDoc(Snapshot doc) => ContactModel.fromJson(doc.data)..reference = doc.reference;
 
   String id;
   String userID;

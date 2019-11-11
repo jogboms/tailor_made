@@ -32,8 +32,7 @@ class MeasuresCreate extends StatefulWidget {
   _MeasuresCreateState createState() => _MeasuresCreateState();
 }
 
-class _MeasuresCreateState extends State<MeasuresCreate>
-    with MkSnackBarProvider, MkDispatchProvider<AppState> {
+class _MeasuresCreateState extends State<MeasuresCreate> with MkSnackBarProvider, MkDispatchProvider<AppState> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
   String groupName, unitValue;
@@ -75,15 +74,13 @@ class _MeasuresCreateState extends State<MeasuresCreate>
             initialValue: groupName,
             textCapitalization: TextCapitalization.words,
             textInputAction: TextInputAction.next,
-            onEditingComplete: () =>
-                FocusScope.of(context).requestFocus(_unitNode),
+            onEditingComplete: () => FocusScope.of(context).requestFocus(_unitNode),
             keyboardType: TextInputType.text,
             decoration: const InputDecoration(
               isDense: true,
               hintText: "eg Blouse",
             ),
-            validator: (value) =>
-                (value.isNotEmpty) ? null : "Please input a name",
+            validator: (value) => (value.isNotEmpty) ? null : "Please input a name",
             onSaved: (value) => groupName = value.trim(),
           ),
         ));
@@ -99,8 +96,7 @@ class _MeasuresCreateState extends State<MeasuresCreate>
               isDense: true,
               hintText: "Unit (eg. In, cm)",
             ),
-            validator: (value) =>
-                (value.isNotEmpty) ? null : "Please input a value",
+            validator: (value) => (value.isNotEmpty) ? null : "Please input a value",
             onSaved: (value) => unitValue = value.trim(),
           ),
         ));
@@ -153,8 +149,7 @@ class _MeasuresCreateState extends State<MeasuresCreate>
               ),
             ),
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: FloatingActionButton.extended(
             icon: const Icon(Icons.add_circle_outline),
             backgroundColor: Colors.white,
@@ -280,9 +275,7 @@ class _GroupItems extends StatelessWidget {
         subtitle: Text(measure.unit),
         trailing: IconButton(
           icon: Icon(
-            measure?.reference != null
-                ? Icons.delete
-                : Icons.remove_circle_outline,
+            measure?.reference != null ? Icons.delete : Icons.remove_circle_outline,
           ),
           iconSize: 20.0,
           onPressed: () => onPressed(measure),

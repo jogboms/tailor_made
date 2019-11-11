@@ -32,8 +32,7 @@ class MkPrimaryButton extends StatelessWidget {
       left: padding?.left ?? 0.0,
       right: padding?.right ?? 0.0,
     );
-    final _height =
-        useSafeArea ? kButtonHeight + _safeAreaBottom : kButtonHeight;
+    final _height = useSafeArea ? kButtonHeight + _safeAreaBottom : kButtonHeight;
 
     return Container(
       height: _height ?? kButtonHeight,

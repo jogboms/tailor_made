@@ -50,9 +50,7 @@ class MkTimePickerState extends State<MkTimePicker> {
             )
           : Text(
               _value.format(context),
-              style: widget.isEnabled
-                  ? _theme.textfield
-                  : _theme.textfield.copyWith(color: kHintColor),
+              style: widget.isEnabled ? _theme.textfield : _theme.textfield.copyWith(color: kHintColor),
               textAlign: TextAlign.start,
             ),
       onTap: widget.isEnabled

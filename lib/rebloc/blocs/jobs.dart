@@ -13,8 +13,7 @@ final _foldPrice = (double acc, PaymentModel model) => acc + model.price;
 Comparator<JobModel> _sort(SortType sortType) {
   switch (sortType) {
     case SortType.active:
-      return (a, b) =>
-          (a.isComplete == b.isComplete) ? 0 : a.isComplete ? 1 : -1;
+      return (a, b) => (a.isComplete == b.isComplete) ? 0 : a.isComplete ? 1 : -1;
     case SortType.name:
       return (a, b) => a.name.compareTo(b.name);
     case SortType.payments:
@@ -61,10 +60,7 @@ class JobsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _onAfterLogin(
     WareContext<AppState> context,
   ) {
-    return Jobs.di()
-        .fetchAll()
-        .map((jobs) => OnDataJobAction(payload: jobs))
-        .map((action) => context.copyWith(action));
+    return Jobs.di().fetchAll().map((jobs) => OnDataJobAction(payload: jobs)).map((action) => context.copyWith(action));
   }
 
   @override
@@ -73,12 +69,8 @@ class JobsBloc extends SimpleBloc<AppState> {
   ) {
     MergeStream(
       [
-        Observable(input)
-            .where((_) => _.action is SearchJobAction)
-            .switchMap(_makeSearch),
-        Observable(input)
-            .where((_) => _.action is InitJobsAction)
-            .switchMap(_onAfterLogin),
+        Observable(input).where((_) => _.action is SearchJobAction).switchMap(_makeSearch),
+        Observable(input).where((_) => _.action is InitJobsAction).switchMap(_onAfterLogin),
       ],
     )
         .takeWhile(
@@ -126,8 +118,7 @@ class JobsBloc extends SimpleBloc<AppState> {
     if (action is SearchSuccessJobAction) {
       return state.copyWith(
         jobs: _jobs.copyWith(
-          searchResults: List<JobModel>.of(action.payload)
-            ..sort(_sort(_jobs.sortFn)),
+          searchResults: List<JobModel>.of(action.payload)..sort(_sort(_jobs.sortFn)),
           status: JobsStatus.success,
         ),
       );

@@ -53,18 +53,10 @@ class AccountBloc extends SimpleBloc<AppState> {
   ) {
     MergeStream(
       [
-        Observable(input)
-            .where((_) => _.action is InitAccountAction)
-            .switchMap(_getAccount),
-        Observable(input)
-            .where((_) => _.action is OnReadNotice)
-            .switchMap(_readNotice),
-        Observable(input)
-            .where((_) => _.action is OnSendRating)
-            .switchMap(_sendRating),
-        Observable(input)
-            .where((_) => _.action is OnPremiumSignUp)
-            .switchMap(_signUp),
+        Observable(input).where((_) => _.action is InitAccountAction).switchMap(_getAccount),
+        Observable(input).where((_) => _.action is OnReadNotice).switchMap(_readNotice),
+        Observable(input).where((_) => _.action is OnSendRating).switchMap(_sendRating),
+        Observable(input).where((_) => _.action is OnPremiumSignUp).switchMap(_signUp),
       ],
     )
         .takeWhile(

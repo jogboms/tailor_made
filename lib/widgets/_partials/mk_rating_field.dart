@@ -38,9 +38,7 @@ class MkRatingField extends StatelessWidget {
                 child: Icon(
                   Icons.star,
                   size: iconSize ?? 32.0,
-                  color: index < field.value
-                      ? MkColors.accent
-                      : MkColors.light_grey.withOpacity(.35),
+                  color: index < field.value ? MkColors.accent : MkColors.light_grey.withOpacity(.35),
                 ),
                 onTap: () => field.didChange(index + 1),
               ),
@@ -50,8 +48,7 @@ class MkRatingField extends StatelessWidget {
 
         return field.hasError
             ? Column(
-                crossAxisAlignment:
-                    errorCrossAxisAlignment ?? CrossAxisAlignment.start,
+                crossAxisAlignment: errorCrossAxisAlignment ?? CrossAxisAlignment.start,
                 children: [
                   child,
                   const SizedBox(height: 4.0),

@@ -3,8 +3,7 @@ import 'package:tailor_made/services/measures.dart';
 
 class MeasuresMockImpl extends Measures {
   @override
-  Future<void> create(List<MeasureModel> measures,
-      {String groupName, String unitValue}) {
+  Future<void> create(List<MeasureModel> measures, {String groupName, String unitValue}) {
     // TODO: implement create
     return null;
   }

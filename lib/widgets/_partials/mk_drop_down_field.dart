@@ -27,8 +27,7 @@ class MkDropDownField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormField<String>(
-      initialValue:
-          initialValue != null && initialValue.isNotEmpty ? initialValue : null,
+      initialValue: initialValue != null && initialValue.isNotEmpty ? initialValue : null,
       autovalidate: autovalidate,
       builder: (FormFieldState<String> field) {
         final child = MkDropDown(

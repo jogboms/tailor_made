@@ -44,9 +44,7 @@ class ContactsListItem extends StatelessWidget {
         style: theme.subhead3Semi,
       ),
       subtitle: Text(
-        pending >= 1
-            ? "$pending pending"
-            : "${contact.totalJobs > 0 ? contact.totalJobs : 'none'} completed",
+        pending >= 1 ? "$pending pending" : "${contact.totalJobs > 0 ? contact.totalJobs : 'none'} completed",
         style: theme.body3Hint,
       ),
       trailing: showActions
@@ -74,21 +72,17 @@ class _Avatar extends StatelessWidget {
       child: CircleAvatar(
         radius: 24.0,
         backgroundColor: kPrimaryColor,
-        backgroundImage: contact.imageUrl != null
-            ? CachedNetworkImageProvider(contact.imageUrl)
-            : null,
+        backgroundImage: contact.imageUrl != null ? CachedNetworkImageProvider(contact.imageUrl) : null,
         child: Stack(
           children: [
             Align(
               alignment: const Alignment(1.05, -1.05),
-              child: contact.pendingJobs > 0
-                  ? const MkDots(color: kAccentColor)
-                  : null,
+              child: contact.pendingJobs > 0 ? const MkDots(color: kAccentColor) : null,
             ),
             contact.imageUrl != null
                 ? const SizedBox()
                 : const Center(
-                    child: const Icon(
+                    child: Icon(
                       Icons.person_outline,
                       color: Colors.white,
                     ),

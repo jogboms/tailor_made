@@ -77,7 +77,7 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               const MkBackButton(
                 color: Colors.white,
               ),
-              const Expanded(child: const SizedBox()),
+              const Expanded(child: SizedBox()),
               job != null
                   ? IconButton(
                       icon: const Icon(

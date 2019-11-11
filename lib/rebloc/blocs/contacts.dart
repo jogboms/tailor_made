@@ -14,8 +14,7 @@ Comparator<ContactModel> _sort(SortType sortType) {
     case SortType.name:
       return (a, b) => a.fullname.compareTo(b.fullname);
     case SortType.completed:
-      return (a, b) =>
-          (b.totalJobs - b.pendingJobs).compareTo(a.totalJobs - a.pendingJobs);
+      return (a, b) => (b.totalJobs - b.pendingJobs).compareTo(a.totalJobs - a.pendingJobs);
     case SortType.pending:
       return (a, b) => b.pendingJobs.compareTo(a.pendingJobs);
     case SortType.recent:
@@ -39,8 +38,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _makeSearch(
     WareContext<AppState> context,
   ) {
-    return Observable<String>.just(
-            (context.action as SearchContactAction).payload)
+    return Observable<String>.just((context.action as SearchContactAction).payload)
         .doOnData((_) => context.dispatcher(const StartSearchContactAction()))
         .map<String>((String text) => text.trim())
         .distinct()
@@ -67,12 +65,8 @@ class ContactsBloc extends SimpleBloc<AppState> {
   ) {
     MergeStream(
       [
-        Observable(input)
-            .where((_) => _.action is SearchContactAction)
-            .switchMap(_makeSearch),
-        Observable(input)
-            .where((_) => _.action is InitContactsAction)
-            .switchMap(_onAfterLogin),
+        Observable(input).where((_) => _.action is SearchContactAction).switchMap(_makeSearch),
+        Observable(input).where((_) => _.action is InitContactsAction).switchMap(_onAfterLogin),
       ],
     )
         .takeWhile(
@@ -92,8 +86,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
     if (action is OnDataContactAction) {
       return state.copyWith(
         contacts: _contacts.copyWith(
-          contacts: List<ContactModel>.of(action.payload)
-            ..sort(_sort(_contacts.sortFn)),
+          contacts: List<ContactModel>.of(action.payload)..sort(_sort(_contacts.sortFn)),
           status: ContactsStatus.success,
         ),
       );
@@ -111,8 +104,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
     if (action is SearchSuccessContactAction) {
       return state.copyWith(
         contacts: _contacts.copyWith(
-          searchResults: List<ContactModel>.of(action.payload)
-            ..sort(_sort(_contacts.sortFn)),
+          searchResults: List<ContactModel>.of(action.payload)..sort(_sort(_contacts.sortFn)),
           status: ContactsStatus.success,
         ),
       );
@@ -121,8 +113,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
     if (action is SortContacts) {
       return state.copyWith(
         contacts: _contacts.copyWith(
-          contacts: List<ContactModel>.of(_contacts.contacts)
-            ..sort(_sort(action.payload)),
+          contacts: List<ContactModel>.of(_contacts.contacts)..sort(_sort(action.payload)),
           hasSortFn: action.payload != SortType.reset,
           sortFn: action.payload,
           status: ContactsStatus.success,

@@ -21,8 +21,7 @@ class ContactsPage extends StatefulWidget {
   _ContactsPageState createState() => _ContactsPageState();
 }
 
-class _ContactsPageState extends State<ContactsPage>
-    with MkDispatchProvider<AppState> {
+class _ContactsPageState extends State<ContactsPage> with MkDispatchProvider<AppState> {
   @override
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, ContactsViewModel>(
@@ -52,8 +51,7 @@ class _ContactsPageState extends State<ContactsPage>
                 itemCount: vm.contacts.length,
                 shrinkWrap: true,
                 padding: const EdgeInsets.only(bottom: 96.0),
-                itemBuilder: (context, index) =>
-                    ContactsListItem(contact: vm.contacts[index]),
+                itemBuilder: (context, index) => ContactsListItem(contact: vm.contacts[index]),
                 separatorBuilder: (_, __) => const Divider(height: 0),
               );
             }),
@@ -127,15 +125,10 @@ class _AppBarState extends State<_AppBar> with MkDispatchProvider<AppState> {
               autofocus: true,
               decoration: InputDecoration(
                 hintText: 'Search...',
-                hintStyle: MkTheme.of(context)
-                    .subhead1Bold
-                    .copyWith(color: Colors.white),
+                hintStyle: MkTheme.of(context).subhead1Bold.copyWith(color: Colors.white),
               ),
-              style: MkTheme.of(context)
-                  .subhead1Bold
-                  .copyWith(color: Colors.white),
-              onChanged: (term) =>
-                  dispatchAction(SearchContactAction(payload: term)),
+              style: MkTheme.of(context).subhead1Bold.copyWith(color: Colors.white),
+              onChanged: (term) => dispatchAction(SearchContactAction(payload: term)),
             ),
             bottom: PreferredSize(
               child: SizedBox(

@@ -19,15 +19,15 @@ class MidRowWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: const BoxDecoration(
-        border: const Border(bottom: const MkBorderSide()),
+        border: Border(bottom: MkBorderSide()),
       ),
       child: Row(
         children: <Widget>[
           Expanded(
             child: DecoratedBox(
               decoration: const BoxDecoration(
-                border: const Border(
-                  right: const MkBorderSide(),
+                border: Border(
+                  right: MkBorderSide(),
                 ),
               ),
               child: TMGridTile(

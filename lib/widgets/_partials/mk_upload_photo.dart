@@ -73,8 +73,7 @@ class MkUploadPhoto extends StatelessWidget {
       return;
     }
     if (onPickImage != null) {
-      final _file =
-          await MkImageUtils(context: context, file: file).resize(width: 1500);
+      final _file = await MkImageUtils(context: context, file: file).resize(width: 1500);
       onPickImage(_file);
     }
   }

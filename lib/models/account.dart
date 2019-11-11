@@ -29,8 +29,7 @@ class AccountModel extends Model {
       displayName: json['displayName'],
       phoneNumber: int.tryParse(json['phoneNumber'].toString()),
       photoURL: json['photoURL'],
-      status:
-          AccountModelStatus.values[int.tryParse(json['status'].toString())],
+      status: AccountModelStatus.values[int.tryParse(json['status'].toString())],
       hasPremiumEnabled: json['hasPremiumEnabled'],
       hasSendRating: json['hasSendRating'] ?? false,
       rating: json['rating'],
@@ -39,8 +38,7 @@ class AccountModel extends Model {
     );
   }
 
-  factory AccountModel.fromDoc(Snapshot doc) =>
-      AccountModel.fromJson(doc.data)..reference = doc.reference;
+  factory AccountModel.fromDoc(Snapshot doc) => AccountModel.fromJson(doc.data)..reference = doc.reference;
 
   String uid;
   String storeName;

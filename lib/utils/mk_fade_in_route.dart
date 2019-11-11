@@ -13,8 +13,8 @@ PageRouteBuilder<dynamic> mkFadeInRoute({
       Widget child,
     ) =>
         FadeTransition(
-          opacity: animation,
-          child: child,
-        ),
+      opacity: animation,
+      child: child,
+    ),
   );
 }

@@ -24,8 +24,7 @@ class CreateButton extends StatefulWidget {
   _CreateButtonState createState() => _CreateButtonState();
 }
 
-class _CreateButtonState extends State<CreateButton>
-    with SingleTickerProviderStateMixin {
+class _CreateButtonState extends State<CreateButton> with SingleTickerProviderStateMixin {
   AnimationController controller;
 
   @override
@@ -58,9 +57,7 @@ class _CreateButtonState extends State<CreateButton>
             alignment: FractionalOffset.center,
             child: Text(
               "TAP TO CREATE",
-              style: MkTheme.of(context)
-                  .body3Medium
-                  .copyWith(color: Colors.white, letterSpacing: 1.25),
+              style: MkTheme.of(context).body3Medium.copyWith(color: Colors.white, letterSpacing: 1.25),
             ),
           ),
         ),

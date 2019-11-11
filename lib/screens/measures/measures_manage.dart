@@ -22,8 +22,7 @@ class MeasuresManagePage extends StatefulWidget {
   _MeasuresManagePageState createState() => _MeasuresManagePageState();
 }
 
-class _MeasuresManagePageState extends State<MeasuresManagePage>
-    with MkSnackBarProvider {
+class _MeasuresManagePageState extends State<MeasuresManagePage> with MkSnackBarProvider {
   @override
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -42,7 +41,7 @@ class _MeasuresManagePageState extends State<MeasuresManagePage>
       resizeToAvoidBottomPadding: false,
       key: scaffoldKey,
       appBar: const MkAppBar(
-        title: const Text("Measurements"),
+        title: Text("Measurements"),
       ),
       body: _buildBody(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

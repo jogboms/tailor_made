@@ -10,10 +10,8 @@ class MkStrings {
   static const String networkError =
       "Please check your network connection or contact your service provider if the problem persists.";
   static const String errorMessage = "An error occurred. Please try again.";
-  static const String fixErrors =
-      "Please fix the errors in red before submitting";
-  static const String leavingEmptyMeasures =
-      "Leaving Measurements empty? Click on Scissors button.";
+  static const String fixErrors = "Please fix the errors in red before submitting";
+  static const String leavingEmptyMeasures = "Leaving Measurements empty? Click on Scissors button.";
   static const List<String> monthsShort = <String>[
     "Jan",
     "Feb",
@@ -47,8 +45,6 @@ class MkStrings {
     if (error is TimeoutException) {
       return "This action took too long. Please Retry.";
     }
-    return MkSettings.isDev || error is MkResponseException
-        ? "$error"
-        : errorMessage;
+    return MkSettings.isDev || error is MkResponseException ? "$error" : errorMessage;
   }
 }

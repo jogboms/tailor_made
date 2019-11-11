@@ -11,7 +11,7 @@ import 'package:tailor_made/screens/contacts/_partials/contact_gallery_grid.dart
 import 'package:tailor_made/screens/contacts/_partials/contact_payments_list.dart';
 import 'package:tailor_made/screens/jobs/_partials/jobs_list.dart';
 
-const TABS = const ["Jobs", "Gallery", "Payments"];
+const TABS = ["Jobs", "Gallery", "Payments"];
 
 class ContactPage extends StatelessWidget {
   const ContactPage({
@@ -53,7 +53,7 @@ class ContactPage extends StatelessWidget {
             body: Builder(builder: (context) {
               if (viewModel.isLoading) {
                 return const Center(
-                  child: const MkLoadingSpinner(),
+                  child: MkLoadingSpinner(),
                 );
               }
 

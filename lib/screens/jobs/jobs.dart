@@ -118,15 +118,10 @@ class _AppBarState extends State<_AppBar> with MkDispatchProvider<AppState> {
               autofocus: true,
               decoration: InputDecoration(
                 hintText: 'Search...',
-                hintStyle: MkTheme.of(context)
-                    .subhead1Bold
-                    .copyWith(color: Colors.white),
+                hintStyle: MkTheme.of(context).subhead1Bold.copyWith(color: Colors.white),
               ),
-              style: MkTheme.of(context)
-                  .subhead1Bold
-                  .copyWith(color: Colors.white),
-              onChanged: (term) =>
-                  dispatchAction(SearchJobAction(payload: term)),
+              style: MkTheme.of(context).subhead1Bold.copyWith(color: Colors.white),
+              onChanged: (term) => dispatchAction(SearchJobAction(payload: term)),
             ),
             bottom: PreferredSize(
               child: SizedBox(

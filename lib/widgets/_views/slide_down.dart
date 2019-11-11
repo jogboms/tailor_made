@@ -122,8 +122,7 @@ class _SlideBody extends StatelessWidget {
       firstChild: const SizedBox(width: double.infinity),
       secondChild: child,
       sizeCurve: Curves.decelerate,
-      crossFadeState:
-          isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      crossFadeState: isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
       duration: const Duration(milliseconds: 250),
     );
   }

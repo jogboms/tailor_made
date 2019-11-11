@@ -13,8 +13,7 @@ class MeasuresBloc extends SimpleBloc<AppState> {
     WareContext<AppState> context,
   ) async* {
     try {
-      await Measures.di()
-          .update((context.action as UpdateMeasureAction).payload);
+      await Measures.di().update((context.action as UpdateMeasureAction).payload);
       yield context.copyWith(const InitMeasuresAction());
     } catch (e) {
       print(e);
@@ -50,12 +49,8 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   ) {
     MergeStream(
       [
-        Observable(input)
-            .where((_) => _.action is UpdateMeasureAction)
-            .switchMap(_onUpdateMeasure),
-        Observable(input)
-            .where((_) => _.action is InitMeasuresAction)
-            .switchMap(_onInitMeasure),
+        Observable(input).where((_) => _.action is UpdateMeasureAction).switchMap(_onUpdateMeasure),
+        Observable(input).where((_) => _.action is InitMeasuresAction).switchMap(_onInitMeasure),
       ],
     )
         .takeWhile(

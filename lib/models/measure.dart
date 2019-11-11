@@ -56,8 +56,7 @@ class MeasureModel extends Model {
         group = json['group'],
         createdAt = DateTime.tryParse(json['createdAt'].toString());
 
-  factory MeasureModel.fromDoc(Snapshot doc) =>
-      MeasureModel.fromJson(doc.data)..reference = doc.reference;
+  factory MeasureModel.fromDoc(Snapshot doc) => MeasureModel.fromJson(doc.data)..reference = doc.reference;
 
   String id;
   String name;

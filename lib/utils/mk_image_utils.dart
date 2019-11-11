@@ -28,8 +28,7 @@ class MkImageUtils {
   Future<File> resize({
     int width = 120,
   }) async {
-    final ImageProperties props =
-        await FlutterNativeImage.getImageProperties(file.path);
+    final ImageProperties props = await FlutterNativeImage.getImageProperties(file.path);
     return FlutterNativeImage.compressImage(
       file.path,
       targetWidth: width,

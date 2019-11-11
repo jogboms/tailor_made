@@ -23,8 +23,7 @@ class _RowBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment:
-          content == null ? MainAxisAlignment.center : MainAxisAlignment.start,
+      mainAxisAlignment: content == null ? MainAxisAlignment.center : MainAxisAlignment.start,
       children: [
         SizedBox.fromSize(
           size: const Size(48.0, 24.0),

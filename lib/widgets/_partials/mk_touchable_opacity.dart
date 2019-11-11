@@ -9,8 +9,7 @@ class MkTouchableOpacity extends StatefulWidget {
     this.disabledColor,
     this.pressedOpacity = 0.1,
     @required this.onPressed,
-  })  : assert(pressedOpacity == null ||
-            (pressedOpacity >= 0.0 && pressedOpacity <= 1.0)),
+  })  : assert(pressedOpacity == null || (pressedOpacity >= 0.0 && pressedOpacity <= 1.0)),
         super(key: key);
 
   final Widget child;
@@ -35,8 +34,7 @@ class MkTouchableOpacity extends StatefulWidget {
   }
 }
 
-class _MkTouchableOpacityState extends State<MkTouchableOpacity>
-    with SingleTickerProviderStateMixin {
+class _MkTouchableOpacityState extends State<MkTouchableOpacity> with SingleTickerProviderStateMixin {
   static const Duration kFadeOutDuration = Duration(milliseconds: 10);
   static const Duration kFadeInDuration = Duration(milliseconds: 100);
   Tween<double> _opacityTween;

@@ -18,8 +18,7 @@ class ContactsEditPage extends StatefulWidget {
   _ContactsEditPageState createState() => _ContactsEditPageState();
 }
 
-class _ContactsEditPageState extends State<ContactsEditPage>
-    with MkSnackBarProvider {
+class _ContactsEditPageState extends State<ContactsEditPage> with MkSnackBarProvider {
   final ContactPicker _contactPicker = ContactPicker();
   final GlobalKey<ContactFormState> _formKey = GlobalKey<ContactFormState>();
 

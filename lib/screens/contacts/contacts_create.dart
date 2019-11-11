@@ -24,8 +24,7 @@ class ContactsCreatePage extends StatefulWidget {
   _ContactsCreatePageState createState() => _ContactsCreatePageState();
 }
 
-class _ContactsCreatePageState extends State<ContactsCreatePage>
-    with MkSnackBarProvider {
+class _ContactsCreatePageState extends State<ContactsCreatePage> with MkSnackBarProvider {
   final GlobalKey<ContactFormState> _formKey = GlobalKey<ContactFormState>();
   ContactModel contact;
   final ContactPicker _contactPicker = ContactPicker();
@@ -60,9 +59,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage>
               return IconButton(
                 icon: Icon(
                   Icons.content_cut,
-                  color: contact.measurements.isEmpty
-                      ? kAccentColor
-                      : kTitleBaseColor,
+                  color: contact.measurements.isEmpty ? kAccentColor : kTitleBaseColor,
                 ),
                 onPressed: () => _handleSelectMeasure(vm),
               );

@@ -16,11 +16,11 @@ class ContactLists extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MkAppBar(
-        title: const Text("Select Client"),
+        title: Text("Select Client"),
       ),
       body: (contacts ?? []).isEmpty
           ? const Center(
-              child: const EmptyResultView(message: "No contacts available"),
+              child: EmptyResultView(message: "No contacts available"),
             )
           : ListView.separated(
               itemCount: contacts.length,
@@ -33,8 +33,7 @@ class ContactLists extends StatelessWidget {
                   onTapContact: () => Navigator.pop(context, item),
                 );
               },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
+              separatorBuilder: (BuildContext context, int index) => const Divider(),
             ),
     );
   }

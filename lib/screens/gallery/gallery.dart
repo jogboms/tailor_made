@@ -59,7 +59,7 @@ class GalleryPage extends StatelessWidget {
                 ) {
                   if (!snapshot.hasData) {
                     return const SliverFillRemaining(
-                      child: const MkLoadingSpinner(),
+                      child: MkLoadingSpinner(),
                     );
                   }
                   return _Content(
@@ -88,7 +88,7 @@ class _Content extends StatelessWidget {
   Widget build(BuildContext context) {
     if (images.isEmpty) {
       return const SliverFillRemaining(
-        child: const EmptyResultView(message: "No images available"),
+        child: EmptyResultView(message: "No images available"),
       );
     }
 

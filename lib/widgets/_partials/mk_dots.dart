@@ -21,7 +21,7 @@ class MkDots extends StatelessWidget {
         color: color,
         shape: shape ??
             const CircleBorder(
-              side: const MkBorderSide(
+              side: MkBorderSide(
                 width: 2.5,
                 color: Colors.white,
               ),

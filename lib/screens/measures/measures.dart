@@ -31,7 +31,7 @@ class MeasuresPage extends StatelessWidget {
         ) {
           if (vm.model.isEmpty) {
             return const Center(
-              child: const EmptyResultView(
+              child: EmptyResultView(
                 message: "No measurements available",
               ),
             );

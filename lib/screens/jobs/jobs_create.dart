@@ -53,8 +53,7 @@ class JobsCreatePage extends StatefulWidget {
   _JobsCreatePageState createState() => _JobsCreatePageState();
 }
 
-class _JobsCreatePageState extends State<JobsCreatePage>
-    with MkSnackBarProvider {
+class _JobsCreatePageState extends State<JobsCreatePage> with MkSnackBarProvider {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<FireImage> fireImages = [];
   JobModel job;
@@ -163,7 +162,7 @@ class _JobsCreatePageState extends State<JobsCreatePage>
                   : null,
             )
           : const MkAppBar(
-              title: const Text(""),
+              title: Text(""),
             ),
       body: buildBody(theme, children),
     );
@@ -252,10 +251,7 @@ class _JobsCreatePageState extends State<JobsCreatePage>
 
       job
         ..pendingPayment = job.price
-        ..images = fireImages
-            .where((img) => img.image != null)
-            .map((img) => img.image)
-            .toList()
+        ..images = fireImages.where((img) => img.image != null).map((img) => img.image).toList()
         ..contactID = contact.id;
 
       try {
@@ -301,7 +297,7 @@ class _JobsCreatePageState extends State<JobsCreatePage>
         if (image == null) {
           return const Center(
             widthFactor: 2.5,
-            child: const MkLoadingSpinner(),
+            child: MkLoadingSpinner(),
           );
         }
 
@@ -407,8 +403,7 @@ class _JobsCreatePageState extends State<JobsCreatePage>
         ),
         validator: (value) => (value.isNotEmpty) ? null : "Please input a name",
         onSaved: (value) => job.name = value.trim(),
-        onEditingComplete: () =>
-            FocusScope.of(context).requestFocus(_amountFocusNode),
+        onEditingComplete: () => FocusScope.of(context).requestFocus(_amountFocusNode),
       ),
     );
   }
@@ -426,11 +421,9 @@ class _JobsCreatePageState extends State<JobsCreatePage>
           isDense: true,
           hintText: "Enter Amount",
         ),
-        validator: (value) =>
-            (controller.numberValue > 0) ? null : "Please input a price",
+        validator: (value) => (controller.numberValue > 0) ? null : "Please input a price",
         onSaved: (value) => job.price = controller.numberValue,
-        onEditingComplete: () =>
-            FocusScope.of(context).requestFocus(_additionFocusNode),
+        onEditingComplete: () => FocusScope.of(context).requestFocus(_additionFocusNode),
       ),
     );
   }

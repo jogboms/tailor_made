@@ -12,9 +12,7 @@ class JobsImpl extends Jobs {
   Stream<List<JobModel>> fetchAll() {
     return CloudDb.jobs.snapshots().map(
       (snapshot) {
-        return snapshot.documents
-            .map((item) => JobModel.fromDoc(Snapshot.fromFire(item)))
-            .toList();
+        return snapshot.documents.map((item) => JobModel.fromDoc(Snapshot.fromFire(item))).toList();
       },
     );
   }

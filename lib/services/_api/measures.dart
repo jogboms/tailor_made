@@ -10,9 +10,7 @@ class MeasuresImpl extends Measures {
   Stream<List<MeasureModel>> fetchAll() {
     return CloudDb.measurements.snapshots().map(
       (snapshot) {
-        return snapshot.documents
-            .map((item) => MeasureModel.fromDoc(Snapshot.fromFire(item)))
-            .toList();
+        return snapshot.documents.map((item) => MeasureModel.fromDoc(Snapshot.fromFire(item))).toList();
       },
     );
   }

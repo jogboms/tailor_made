@@ -14,9 +14,8 @@ class AccountsImpl extends Accounts {
   Future<FirebaseUser> signInWithGoogle() => Auth.signInWithGoogle();
 
   @override
-  Future<FirebaseUser> get onAuthStateChanged => Auth.onAuthStateChanged
-      .firstWhere((user) => user != null)
-      .then((user) => Auth.setUser(user));
+  Future<FirebaseUser> get onAuthStateChanged =>
+      Auth.onAuthStateChanged.firstWhere((user) => user != null).then((user) => Auth.setUser(user));
 
   @override
   Future<Null> signout() => Auth.signOutWithGoogle();
@@ -67,8 +66,6 @@ class AccountsImpl extends Accounts {
 
   @override
   Stream<AccountModel> getAccount() {
-    return CloudDb.account
-        .snapshots()
-        .map((snapshot) => AccountModel.fromDoc(Snapshot.fromFire(snapshot)));
+    return CloudDb.account.snapshots().map((snapshot) => AccountModel.fromDoc(Snapshot.fromFire(snapshot)));
   }
 }

@@ -14,9 +14,7 @@ class MkStatusBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: brightness == Brightness.dark
-          ? SystemUiOverlayStyle.dark
-          : SystemUiOverlayStyle.light,
+      value: brightness == Brightness.dark ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light,
       child: child,
     );
   }

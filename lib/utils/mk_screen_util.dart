@@ -69,9 +69,8 @@ class MkScreenUtil {
   double setWidth(double width) => width * screenWidthDp / config.width;
   double setHeight(double height) => height * screenHeightDp / config.height;
   double setSquare(double length) => min(setWidth(length), setHeight(length));
-  double setFont(double fontSize) => config.allowFontScaling
-      ? setWidth(fontSize)
-      : setWidth(fontSize) / textScaleFactor;
+  double setFont(double fontSize) =>
+      config.allowFontScaling ? setWidth(fontSize) : setWidth(fontSize) / textScaleFactor;
 
   @override
   String toString() {

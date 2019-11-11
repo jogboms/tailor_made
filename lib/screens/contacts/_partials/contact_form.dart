@@ -80,13 +80,12 @@ class ContactFormState extends State<ContactForm> {
                     controller: _fNController,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
-                      prefixIcon: const Icon(Icons.person),
+                      prefixIcon: Icon(Icons.person),
                       labelText: "Fullname",
                     ),
                     validator: MkValidate.tryAlpha(),
                     onSaved: (fullname) => contact.fullname = fullname.trim(),
-                    onEditingComplete: () =>
-                        FocusScope.of(context).requestFocus(_pNFocusNode),
+                    onEditingComplete: () => FocusScope.of(context).requestFocus(_pNFocusNode),
                   ),
                   const SizedBox(height: 4.0),
                   TextFormField(
@@ -95,14 +94,12 @@ class ContactFormState extends State<ContactForm> {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.phone,
                     decoration: const InputDecoration(
-                      prefixIcon: const Icon(Icons.phone),
+                      prefixIcon: Icon(Icons.phone),
                       labelText: "Phone",
                     ),
-                    validator: (value) =>
-                        (value.isNotEmpty) ? null : "Please input a value",
+                    validator: (value) => (value.isNotEmpty) ? null : "Please input a value",
                     onSaved: (phone) => contact.phone = phone.trim(),
-                    onEditingComplete: () =>
-                        FocusScope.of(context).requestFocus(_locFocusNode),
+                    onEditingComplete: () => FocusScope.of(context).requestFocus(_locFocusNode),
                   ),
                   const SizedBox(height: 4.0),
                   TextFormField(
@@ -110,11 +107,10 @@ class ContactFormState extends State<ContactForm> {
                     controller: _lNController,
                     textInputAction: TextInputAction.done,
                     decoration: const InputDecoration(
-                      prefixIcon: const Icon(Icons.location_city),
+                      prefixIcon: Icon(Icons.location_city),
                       labelText: "Location",
                     ),
-                    validator: (value) =>
-                        (value.isNotEmpty) ? null : "Please input a value",
+                    validator: (value) => (value.isNotEmpty) ? null : "Please input a value",
                     onSaved: (location) => contact.location = location.trim(),
                     onFieldSubmitted: (value) => _handleSubmit(),
                   ),
@@ -152,8 +148,7 @@ class ContactFormState extends State<ContactForm> {
     if (source == null) {
       return;
     }
-    final imageFile = await ImagePicker.pickImage(
-        source: source, maxWidth: 200.0, maxHeight: 200.0);
+    final imageFile = await ImagePicker.pickImage(source: source, maxWidth: 200.0, maxHeight: 200.0);
     if (imageFile == null) {
       return;
     }

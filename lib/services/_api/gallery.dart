@@ -10,9 +10,7 @@ class GalleryImpl extends Gallery {
   @override
   Stream<List<ImageModel>> fetchAll() {
     return CloudDb.gallery.snapshots().map(
-          (snap) => snap.documents
-              .map((item) => ImageModel.fromJson(item.data))
-              .toList(),
+          (snap) => snap.documents.map((item) => ImageModel.fromJson(item.data)).toList(),
         );
   }
 

@@ -20,10 +20,8 @@ class MkCircleAvatar extends StatelessWidget {
     final backgroundColor = useAlt ? Colors.white : kPrimaryColor;
     return CircleAvatar(
       radius: radius,
-      backgroundColor:
-          imageUrl != null ? Colors.grey.shade400 : backgroundColor,
-      backgroundImage:
-          imageUrl != null ? CachedNetworkImageProvider(imageUrl) : null,
+      backgroundColor: imageUrl != null ? Colors.grey.shade400 : backgroundColor,
+      backgroundImage: imageUrl != null ? CachedNetworkImageProvider(imageUrl) : null,
       child: imageUrl != null
           ? null
           : Center(

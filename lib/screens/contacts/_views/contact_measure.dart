@@ -26,8 +26,7 @@ class ContactMeasure extends StatefulWidget {
   _ContactMeasureState createState() => _ContactMeasureState();
 }
 
-class _ContactMeasureState extends State<ContactMeasure>
-    with MkSnackBarProvider {
+class _ContactMeasureState extends State<ContactMeasure> with MkSnackBarProvider {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
   ContactModel contact;
@@ -70,9 +69,7 @@ class _ContactMeasureState extends State<ContactMeasure>
       appBar: MkAppBar(
         title: const Text("Measurements"),
         leading: MkBackButton(
-          onPop: contact?.reference != null
-              ? null
-              : () => Navigator.pop<ContactModel>(context, contact),
+          onPop: contact?.reference != null ? null : () => Navigator.pop<ContactModel>(context, contact),
         ),
         actions: [
           IconButton(

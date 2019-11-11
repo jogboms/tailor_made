@@ -14,7 +14,7 @@ class TasksPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MkAppBar(
-        title: const Text("Tasks"),
+        title: Text("Tasks"),
       ),
       body: ViewModelSubscriber<AppState, JobsViewModel>(
         converter: (store) => JobsViewModel(store),
@@ -30,7 +30,7 @@ class TasksPage extends StatelessWidget {
 
           if (_tasks == null || _tasks.isEmpty) {
             return const Center(
-              child: const EmptyResultView(message: "No tasks available"),
+              child: EmptyResultView(message: "No tasks available"),
             );
           }
 

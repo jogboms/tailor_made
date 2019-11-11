@@ -40,9 +40,9 @@ class SplashPage extends StatelessWidget {
           children: <Widget>[
             const Opacity(
               opacity: .5,
-              child: const DecoratedBox(
-                decoration: const BoxDecoration(
-                  image: const DecorationImage(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
                     image: MkImages.pattern,
                     fit: BoxFit.cover,
                   ),
@@ -135,7 +135,7 @@ class _ContentState extends State<_Content> {
             isLoading && (widget.isColdStart || isRestartable) && !vm.hasError
                 ? const SizedBox()
                 : const Center(
-                    child: const Image(
+                    child: Image(
                       image: MkImages.logo,
                       width: 148.0,
                       color: Colors.white30,
@@ -169,8 +169,7 @@ class _ContentState extends State<_Content> {
                             MkRaisedButton(
                               backgroundColor: Colors.white,
                               color: kTextBaseColor,
-                              onPressed: () =>
-                                  dispatcher(const InitSettingsAction()),
+                              onPressed: () => dispatcher(const InitSettingsAction()),
                               child: const Text("RETRY"),
                             ),
                           ],
@@ -229,8 +228,7 @@ class _ContentState extends State<_Content> {
         case "exception":
         case "sign_in_failed":
           if (e?.message?.contains("administrator") ?? false) {
-            message =
-                "It seems this account has been disabled. Contact an Admin.";
+            message = "It seems this account has been disabled. Contact an Admin.";
             break;
           }
           if (e?.message?.contains("NETWORK_ERROR") ?? false) {

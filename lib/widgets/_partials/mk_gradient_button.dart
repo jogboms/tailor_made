@@ -51,9 +51,7 @@ class MkGradientButton extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           gradient: mkLinearGradient(),
-          borderRadius: borderRadius != null
-              ? BorderRadius.circular(borderRadius)
-              : kBorderRadius,
+          borderRadius: borderRadius != null ? BorderRadius.circular(borderRadius) : kBorderRadius,
           boxShadow: [
             BoxShadow(
               offset: Offset(0.0, elevation),

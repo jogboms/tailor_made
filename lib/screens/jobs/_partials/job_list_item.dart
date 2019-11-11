@@ -37,7 +37,7 @@ class JobListItem extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.grey.shade100,
                   borderRadius: const BorderRadius.all(
-                    const Radius.circular(4.0),
+                    Radius.circular(4.0),
                   ),
                 ),
                 padding: const EdgeInsets.symmetric(
@@ -52,8 +52,7 @@ class JobListItem extends StatelessWidget {
                         style: theme.display1,
                       ),
                       TextSpan(
-                        text: MkStrings.monthsShort[_date.month - 1]
-                            .toUpperCase(),
+                        text: MkStrings.monthsShort[_date.month - 1].toUpperCase(),
                         style: theme.small.copyWith(
                           letterSpacing: 2.0,
                         ),

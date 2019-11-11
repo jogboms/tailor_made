@@ -58,8 +58,7 @@ class PaymentListItem extends StatelessWidget {
                     ),
                     const TextSpan(text: "\n"),
                     TextSpan(
-                      text:
-                          "${MkStrings.monthsShort[_date.month - 1].toUpperCase()}, ${_date.year}",
+                      text: "${MkStrings.monthsShort[_date.month - 1].toUpperCase()}, ${_date.year}",
                       style: theme.smallMedium.copyWith(color: Colors.black54),
                     ),
                   ],

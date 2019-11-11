@@ -54,8 +54,7 @@ class GalleryGridItem extends StatelessWidget {
                               onTap: () => onTapDelete(image),
                               child: Padding(
                                 padding: const EdgeInsets.all(2.0),
-                                child:
-                                    const Icon(Icons.cancel, color: Colors.red),
+                                child: const Icon(Icons.cancel, color: Colors.red),
                               ),
                             ),
                           )

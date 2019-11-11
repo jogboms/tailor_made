@@ -56,7 +56,7 @@ class PaymentsPage extends StatelessWidget {
                 ) {
                   if (!snapshot.hasData) {
                     return const SliverFillRemaining(
-                      child: const MkLoadingSpinner(),
+                      child: MkLoadingSpinner(),
                     );
                   }
                   return _Content(payments: snapshot.data);
@@ -83,7 +83,7 @@ class _Content extends StatelessWidget {
   Widget build(BuildContext context) {
     if (payments.isEmpty) {
       return const SliverFillRemaining(
-        child: const EmptyResultView(message: "No payments available"),
+        child: EmptyResultView(message: "No payments available"),
       );
     }
 

@@ -51,15 +51,13 @@ class JobModel extends Model {
       measurements: measurements,
       payments: Model.generator(
         json['payments'],
-        (dynamic payment) =>
-            PaymentModel.fromJson(payment.cast<String, dynamic>()),
+        (dynamic payment) => PaymentModel.fromJson(payment.cast<String, dynamic>()),
       ),
       isComplete: json['isComplete'],
     );
   }
 
-  factory JobModel.fromDoc(Snapshot doc) =>
-      JobModel.fromJson(doc.data)..reference = doc.reference;
+  factory JobModel.fromDoc(Snapshot doc) => JobModel.fromJson(doc.data)..reference = doc.reference;
 
   String id;
   String userID;

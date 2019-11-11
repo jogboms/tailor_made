@@ -148,8 +148,7 @@ class _JobPageState extends State<JobPage> with MkSnackBarProvider {
               ),
             ),
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: FloatingActionButton.extended(
             icon: Icon(
               job.isComplete ? Icons.undo : Icons.check,
@@ -257,9 +256,9 @@ class _Header extends StatelessWidget {
         Container(
           decoration: const BoxDecoration(
             color: Colors.white,
-            border: const Border(
-              top: const MkBorderSide(),
-              bottom: const MkBorderSide(),
+            border: Border(
+              top: MkBorderSide(),
+              bottom: MkBorderSide(),
             ),
           ),
           padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
@@ -356,7 +355,7 @@ class _PaidBox extends StatelessWidget {
     return Expanded(
       child: Container(
         decoration: const BoxDecoration(
-          border: const Border(right: const MkBorderSide()),
+          border: Border(right: MkBorderSide()),
         ),
         child: Column(
           children: <Widget>[

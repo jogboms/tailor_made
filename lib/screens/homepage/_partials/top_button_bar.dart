@@ -62,8 +62,7 @@ class TopButtonBar extends StatelessWidget {
                     account?.photoURL != null
                         ? CircleAvatar(
                             backgroundColor: Colors.white,
-                            backgroundImage:
-                                CachedNetworkImageProvider(account.photoURL),
+                            backgroundImage: CachedNetworkImageProvider(account.photoURL),
                           )
                         : Icon(
                             Icons.person,
@@ -83,9 +82,7 @@ class TopButtonBar extends StatelessWidget {
                         1.25,
                         account.hasPremiumEnabled ? -1.25 : 1.25,
                       ),
-                      child: _shouldShowIndicator
-                          ? const MkDots(color: kAccentColor)
-                          : null,
+                      child: _shouldShowIndicator ? const MkDots(color: kAccentColor) : null,
                     ),
                   ],
                 ),
@@ -97,8 +94,7 @@ class TopButtonBar extends StatelessWidget {
     );
   }
 
-  bool get _shouldShowIndicator =>
-      !(account?.hasReadNotice ?? false) || shouldSendRating;
+  bool get _shouldShowIndicator => !(account?.hasReadNotice ?? false) || shouldSendRating;
 
   VoidCallback _onTapAccount(BuildContext context) {
     return () async {

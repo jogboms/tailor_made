@@ -35,9 +35,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => mkChoiceDialog(
-            context: context,
-            message: "Continue with Exit?",
-          ),
+        context: context,
+        message: "Continue with Exit?",
+      ),
       child: MkStatusBar(
         brightness: Brightness.dark,
         child: Scaffold(
@@ -47,9 +47,9 @@ class HomePage extends StatelessWidget {
             children: <Widget>[
               const Opacity(
                 opacity: .5,
-                child: const DecoratedBox(
-                  decoration: const BoxDecoration(
-                    image: const DecorationImage(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
                       image: MkImages.pattern,
                       fit: BoxFit.cover,
                     ),

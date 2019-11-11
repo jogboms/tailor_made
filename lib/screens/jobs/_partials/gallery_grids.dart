@@ -64,7 +64,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
         if (image == null) {
           return const Center(
             widthFactor: 2.5,
-            child: const MkLoadingSpinner(),
+            child: MkLoadingSpinner(),
           );
         }
 
@@ -157,10 +157,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
 
       await widget.job.reference.updateData(
         <String, List<Map<String, dynamic>>>{
-          "images": fireImages
-              .where((img) => img.image != null)
-              .map((img) => img.image.toMap())
-              .toList(),
+          "images": fireImages.where((img) => img.image != null).map((img) => img.image.toMap()).toList(),
         },
       );
 
