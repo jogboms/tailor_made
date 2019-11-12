@@ -8,11 +8,36 @@ void main() {
       final _date = DateTime.now();
       const _id = "id_123456", _unit = "In";
       final List<MeasureModel> measures = [
-        MeasureModel(group: "Blouse", name: "length", id: _id, unit: _unit, createdAt: _date),
-        MeasureModel(group: "Blouse", name: "Waist", id: _id, unit: _unit, createdAt: _date),
-        MeasureModel(group: "Trouser", name: "Waist", id: _id, unit: _unit, createdAt: _date),
-        MeasureModel(group: "Trouser", name: "length", id: _id, unit: _unit, createdAt: _date),
-        MeasureModel(group: "Blouse", name: "Arm", id: _id, unit: _unit, createdAt: _date),
+        MeasureModel((b) => b
+          ..group = "Blouse"
+          ..name = "length"
+          ..id = _id
+          ..unit = _unit
+          ..createdAt = _date),
+        MeasureModel((b) => b
+          ..group = "Blouse"
+          ..name = "Waist"
+          ..id = _id
+          ..unit = _unit
+          ..createdAt = _date),
+        MeasureModel((b) => b
+          ..group = "Trouser"
+          ..name = "Waist"
+          ..id = _id
+          ..unit = _unit
+          ..createdAt = _date),
+        MeasureModel((b) => b
+          ..group = "Trouser"
+          ..name = "length"
+          ..id = _id
+          ..unit = _unit
+          ..createdAt = _date),
+        MeasureModel((b) => b
+          ..group = "Blouse"
+          ..name = "Arm"
+          ..id = _id
+          ..unit = _unit
+          ..createdAt = _date),
       ];
 
       final grouped = groupModelBy<MeasureModel>(measures, (measure) => measure.group);

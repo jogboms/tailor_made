@@ -1,68 +1,47 @@
-import 'package:flutter/foundation.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
-import 'package:tailor_made/rebloc/contacts/actions.dart';
+import 'package:tailor_made/rebloc/contacts/sort_type.dart';
 
-@immutable
-class ContactsState {
-  const ContactsState({
-    @required this.contacts,
-    @required this.status,
-    @required this.message,
-    @required this.hasSortFn,
-    @required this.sortFn,
-    @required this.searchResults,
-    @required this.isSearching,
-    this.error,
-  });
+part 'state.g.dart';
 
-  const ContactsState.initialState()
-      : contacts = null,
-        status = StateStatus.loading,
-        hasSortFn = true,
-        sortFn = SortType.name,
-        searchResults = null,
-        isSearching = false,
-        message = '',
-        error = null;
+abstract class ContactsState implements Built<ContactsState, ContactsStateBuilder> {
+  factory ContactsState([ContactsState updates(ContactsStateBuilder b)]) = _$ContactsState;
 
-  final List<ContactModel> contacts;
-  final StateStatus status;
-  final String message;
-  final bool hasSortFn;
-  final SortType sortFn;
-  final List<ContactModel> searchResults;
-  final bool isSearching;
-  final dynamic error;
+  factory ContactsState.initialState() => _$ContactsState(
+        (ContactsStateBuilder b) => b
+          ..contacts = null
+          ..status = StateStatus.loading
+          ..hasSortFn = true
+          ..sortFn = SortType.names
+          ..searchResults = null
+          ..isSearching = false
+          ..message = ''
+          ..error = null,
+      );
 
-  ContactsState copyWith({
-    List<ContactModel> contacts,
-    StateStatus status,
-    String message,
-    bool hasSortFn,
-    SortType sortFn,
-    List<ContactModel> searchResults,
-    bool isSearching,
-    dynamic error,
-  }) {
-    return ContactsState(
-      contacts: contacts ?? this.contacts,
-      status: status ?? this.status,
-      message: message ?? this.message,
-      hasSortFn: hasSortFn ?? this.hasSortFn,
-      sortFn: sortFn ?? this.sortFn,
-      searchResults: searchResults ?? this.searchResults,
-      isSearching: isSearching ?? this.isSearching,
-      error: error ?? this.error,
-    );
-  }
+  ContactsState._();
 
-  @override
-  String toString() => """
-Contacts: $contacts,
-HasSortFn: $hasSortFn,
-SortFn: $sortFn,
-SearchResults: $searchResults,
-IsSearching: $isSearching
-    """;
+  @nullable
+  BuiltList<ContactModel> get contacts;
+
+  StateStatus get status;
+
+  String get message;
+
+  bool get hasSortFn;
+
+  SortType get sortFn;
+
+  @nullable
+  BuiltList<ContactModel> get searchResults;
+
+  bool get isSearching;
+
+  @nullable
+  String get error;
+
+  static Serializer<ContactsState> get serializer => _$contactsStateSerializer;
 }

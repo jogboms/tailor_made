@@ -1,8 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/models/job.dart';
-
-enum SortType { recent, active, name, owed, payments, price, reset }
+import 'package:tailor_made/rebloc/jobs/sort_type.dart';
 
 class InitJobsAction extends Action {
   const InitJobsAction();

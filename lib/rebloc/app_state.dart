@@ -1,5 +1,6 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:tailor_made/rebloc/accounts/state.dart';
 import 'package:tailor_made/rebloc/contacts/state.dart';
 import 'package:tailor_made/rebloc/jobs/state.dart';
@@ -7,59 +8,48 @@ import 'package:tailor_made/rebloc/measures/state.dart';
 import 'package:tailor_made/rebloc/settings/state.dart';
 import 'package:tailor_made/rebloc/stats/state.dart';
 
-enum StateStatus { loading, success, failure }
+part 'app_state.g.dart';
 
-@immutable
-class AppState {
-  const AppState({
-    @required this.contacts,
-    @required this.jobs,
-    @required this.stats,
-    @required this.account,
-    @required this.measures,
-    @required this.settings,
-  });
+abstract class AppState implements Built<AppState, AppStateBuilder> {
+  factory AppState([void updates(AppStateBuilder b)]) = _$AppState;
 
-  const AppState.initialState()
-      : contacts = const ContactsState.initialState(),
-        jobs = const JobsState.initialState(),
-        account = const AccountState.initialState(),
-        measures = const MeasuresState.initialState(),
-        settings = const SettingsState.initialState(),
-        stats = const StatsState.initialState();
+  factory AppState.initialState() => _$AppState(
+        (AppStateBuilder b) => b
+          ..contacts = ContactsState.initialState().toBuilder()
+          ..jobs = JobsState.initialState().toBuilder()
+          ..account = AccountState.initialState().toBuilder()
+          ..measures = MeasuresState.initialState().toBuilder()
+          ..settings = SettingsState.initialState().toBuilder()
+          ..stats = StatsState.initialState().toBuilder(),
+      );
 
-  final ContactsState contacts;
-  final JobsState jobs;
-  final StatsState stats;
-  final AccountState account;
-  final MeasuresState measures;
-  final SettingsState settings;
+  AppState._();
 
-  AppState copyWith({
-    ContactsState contacts,
-    JobsState jobs,
-    StatsState stats,
-    AccountState account,
-    MeasuresState measures,
-    SettingsState settings,
-  }) {
-    return AppState(
-      contacts: contacts ?? this.contacts,
-      jobs: jobs ?? this.jobs,
-      stats: stats ?? this.stats,
-      account: account ?? this.account,
-      measures: measures ?? this.measures,
-      settings: settings ?? this.settings,
-    );
-  }
+  ContactsState get contacts;
 
-  @override
-  String toString() => """
-$contacts
-$jobs
-$stats
-$measures
-$settings
-$account
-		""";
+  JobsState get jobs;
+
+  StatsState get stats;
+
+  AccountState get account;
+
+  MeasuresState get measures;
+
+  SettingsState get settings;
+
+  static Serializer<AppState> get serializer => _$appStateSerializer;
+}
+
+class StateStatus extends EnumClass {
+  const StateStatus._(String name) : super(name);
+
+  static const StateStatus loading = _$loading;
+  static const StateStatus success = _$success;
+  static const StateStatus failure = _$failure;
+
+  static Serializer<StateStatus> get serializer => _$stateStatusSerializer;
+
+  static BuiltSet<StateStatus> get values => _$values;
+
+  static StateStatus valueOf(String name) => _$valueOf(name);
 }

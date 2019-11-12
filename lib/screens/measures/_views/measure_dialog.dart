@@ -21,12 +21,12 @@ class _MeasureDialogState extends State<MeasureDialog> {
   final FocusNode _unitNode = FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
-  MeasureModel measure;
+  MeasureModelBuilder measure;
 
   @override
   void initState() {
     super.initState();
-    measure = widget.measure;
+    measure = widget.measure.toBuilder();
   }
 
   @override
@@ -67,7 +67,7 @@ class _MeasureDialogState extends State<MeasureDialog> {
                   textCapitalization: TextCapitalization.words,
                   textInputAction: TextInputAction.next,
                   onEditingComplete: () => FocusScope.of(context).requestFocus(_unitNode),
-                  onSaved: (value) => widget.measure.name = value.trim(),
+                  onSaved: (value) => measure.name = value.trim(),
                   decoration: const InputDecoration(
                     labelText: "Name (eg. Length)",
                   ),
@@ -83,7 +83,7 @@ class _MeasureDialogState extends State<MeasureDialog> {
                   ),
                   validator: MkValidate.tryAlpha(),
                   onFieldSubmitted: (value) => _onSaved(),
-                  onSaved: (value) => widget.measure.unit = value.trim(),
+                  onSaved: (value) => measure.unit = value.trim(),
                 ),
                 const SizedBox(height: 16.0),
                 Row(
@@ -121,7 +121,7 @@ class _MeasureDialogState extends State<MeasureDialog> {
       // widget.onHandleValidate();
     } else {
       form.save();
-      Navigator.pop<MeasureModel>(context, measure);
+      Navigator.pop<MeasureModel>(context, measure.build());
     }
   }
 }

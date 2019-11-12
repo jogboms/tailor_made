@@ -1,43 +1,32 @@
-import 'package:flutter/foundation.dart';
-import 'package:tailor_made/models/stats.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
+import 'package:tailor_made/models/stats/stats.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 
-@immutable
-class StatsState {
-  const StatsState({
-    @required this.stats,
-    @required this.status,
-    @required this.message,
-    this.error,
-  });
+part 'state.g.dart';
 
-  const StatsState.initialState()
-      : stats = null,
-        status = StateStatus.loading,
-        message = '',
-        error = null;
+abstract class StatsState implements Built<StatsState, StatsStateBuilder> {
+  factory StatsState([StatsState updates(StatsStateBuilder b)]) = _$StatsState;
 
-  final StatsModel stats;
-  final StateStatus status;
-  final String message;
-  final dynamic error;
+  factory StatsState.initialState() => _$StatsState(
+        (StatsStateBuilder b) => b
+          ..stats = null
+          ..status = StateStatus.loading
+          ..message = ""
+          ..error = null,
+      );
 
-  StatsState copyWith({
-    StatsModel stats,
-    StateStatus status,
-    String message,
-    dynamic error,
-  }) {
-    return StatsState(
-      stats: stats ?? this.stats,
-      status: status ?? this.status,
-      message: message ?? this.message,
-      error: error ?? this.error,
-    );
-  }
+  StatsState._();
 
-  @override
-  String toString() => """
-Stats: $stats
-    """;
+  @nullable
+  StatsModel get stats;
+
+  StateStatus get status;
+
+  String get message;
+
+  @nullable
+  String get error;
+
+  static Serializer<StatsState> get serializer => _$statsStateSerializer;
 }

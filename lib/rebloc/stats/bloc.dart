@@ -27,8 +27,13 @@ class StatsBloc extends SimpleBloc<AppState> {
     final _stats = state.stats;
 
     if (action is OnDataStatAction) {
-      return state.copyWith(
-        stats: _stats.copyWith(stats: action.payload, status: StateStatus.success),
+      return state.rebuild(
+        (b) => b
+          ..stats = _stats
+              .rebuild((b) => b
+                ..stats = action.payload.toBuilder()
+                ..status = StateStatus.success)
+              .toBuilder(),
       );
     }
 

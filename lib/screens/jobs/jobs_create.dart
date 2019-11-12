@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +57,7 @@ class JobsCreatePage extends StatefulWidget {
 class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<FireImage> fireImages = [];
-  JobModel job;
+  JobModelBuilder job;
   ContactModel contact;
   MoneyMaskedTextController controller = MoneyMaskedTextController(
     decimalSeparator: '.',
@@ -75,9 +76,10 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
     super.initState();
     contact = widget.contact;
     job = JobModel(
-      contactID: contact?.id,
-      measurements: contact?.measurements ?? {},
-    );
+      (b) => b
+        ..contactID = contact?.id
+        ..measurements = contact?.measurements?.toBuilder(),
+    ).toBuilder();
   }
 
   @override
@@ -171,14 +173,10 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
   Widget buildCreateMeasure() {
     return ViewModelSubscriber<AppState, MeasuresViewModel>(
       converter: (store) => MeasuresViewModel(store),
-      builder: (
-        BuildContext context,
-        DispatchFunction dispatch,
-        MeasuresViewModel vm,
-      ) {
+      builder: (BuildContext context, DispatchFunction dispatch, MeasuresViewModel vm) {
         return MeasureCreateItems(
           grouped: vm.grouped,
-          measurements: job.measurements,
+          measurements: job.measurements.build().toMap(),
         );
       },
     );
@@ -227,10 +225,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
     if (selectedContact != null) {
       setState(() {
         contact = selectedContact;
-        job = job.copyWith(
-          contactID: contact?.id,
-          measurements: contact?.measurements ?? {},
-        );
+        job
+          ..contactID = contact?.id
+          ..measurements = (contact?.measurements ?? BuiltMap.from(<String, double>{})).toBuilder();
       });
     }
   }
@@ -251,11 +248,13 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
 
       job
         ..pendingPayment = job.price
-        ..images = fireImages.where((img) => img.image != null).map((img) => img.image).toList()
+        ..images =
+            BuiltList<ImageModel>(fireImages.where((img) => img.image != null).map<ImageModel>((img) => img.image))
+                .toBuilder()
         ..contactID = contact.id;
 
       try {
-        Jobs.di().update(job).listen((snap) {
+        Jobs.di().update(job.build()).listen((snap) {
           closeLoadingSnackBar();
           Navigator.pushReplacement<dynamic, dynamic>(
             context,
@@ -352,10 +351,11 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
           ..isLoading = false
           ..isSucess = true
           ..image = ImageModel(
-            contactID: contact.id,
-            jobID: job.id,
-            src: imageUrl,
-            path: ref.path,
+            (b) => b
+              ..contactID = contact.id
+              ..jobID = job.id
+              ..src = imageUrl
+              ..path = ref.path,
           );
         //
       });
@@ -381,7 +381,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
           );
           if (picked != null && picked != job.dueAt) {
             setState(() {
-              job = job.copyWith(dueAt: picked);
+              job = job..dueAt = picked;
             });
           }
         },

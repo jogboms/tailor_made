@@ -37,7 +37,8 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMi
   @override
   void initState() {
     super.initState();
-    contact = widget.contact.copyWith();
+    // TODO: look into this
+    contact = widget.contact.rebuild((b) => b);
   }
 
   @override
@@ -49,7 +50,7 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMi
     );
     children.add(MeasureCreateItems(
       grouped: widget.grouped,
-      measurements: contact.measurements,
+      measurements: contact.measurements.toMap(),
     ));
 
     children.add(
@@ -79,7 +80,10 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMi
             ),
             onPressed: () {
               Navigator.of(context).push<void>(
-                MkNavigate.slideIn<void>(MeasuresPage(measurements: contact.measurements), fullscreenDialog: true),
+                MkNavigate.slideIn<void>(
+                  MeasuresPage(measurements: contact.measurements.toMap()),
+                  fullscreenDialog: true,
+                ),
               );
             },
           )

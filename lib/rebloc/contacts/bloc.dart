@@ -1,9 +1,11 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/contacts/actions.dart';
+import 'package:tailor_made/rebloc/contacts/sort_type.dart';
 import 'package:tailor_made/services/contacts/contacts.dart';
 
 Comparator<ContactModel> _sort(SortType sortType) {
@@ -12,7 +14,7 @@ Comparator<ContactModel> _sort(SortType sortType) {
       {
         return (a, b) => b.totalJobs.compareTo(a.totalJobs);
       }
-    case SortType.name:
+    case SortType.names:
       {
         return (a, b) => a.fullname.compareTo(b.fullname);
       }
@@ -81,43 +83,68 @@ class ContactsBloc extends SimpleBloc<AppState> {
     final _contacts = state.contacts;
 
     if (action is OnDataContactAction) {
-      return state.copyWith(
-        contacts: _contacts.copyWith(
-          contacts: List<ContactModel>.of(action.payload)..sort(_sort(_contacts.sortFn)),
-          status: StateStatus.success,
-        ),
+      return state.rebuild(
+        (b) => b
+          ..contacts = _contacts
+              .rebuild(
+                (b) => b
+                  ..contacts = BuiltList<ContactModel>.of(action.payload..sort(_sort(_contacts.sortFn))).toBuilder()
+                  ..status = StateStatus.success,
+              )
+              .toBuilder(),
       );
     }
 
     if (action is StartSearchContactAction) {
-      return state.copyWith(
-        contacts: _contacts.copyWith(status: StateStatus.loading, isSearching: true),
+      return state.rebuild(
+        (b) => b
+          ..contacts = _contacts
+              .rebuild((b) => b
+                ..status = StateStatus.loading
+                ..isSearching = true)
+              .toBuilder(),
       );
     }
 
     if (action is SearchSuccessContactAction) {
-      return state.copyWith(
-        contacts: _contacts.copyWith(
-          searchResults: List<ContactModel>.of(action.payload)..sort(_sort(_contacts.sortFn)),
-          status: StateStatus.success,
-        ),
+      return state.rebuild(
+        (b) => b
+          ..contacts = _contacts
+              .rebuild(
+                (b) => b
+                  ..searchResults =
+                      BuiltList<ContactModel>.of(action.payload..sort(_sort(_contacts.sortFn))).toBuilder()
+                  ..status = StateStatus.success,
+              )
+              .toBuilder(),
       );
     }
 
     if (action is SortContacts) {
-      return state.copyWith(
-        contacts: _contacts.copyWith(
-          contacts: List<ContactModel>.of(_contacts.contacts)..sort(_sort(action.payload)),
-          hasSortFn: action.payload != SortType.reset,
-          sortFn: action.payload,
-          status: StateStatus.success,
-        ),
+      return state.rebuild(
+        (b) => b
+          ..contacts = _contacts
+              .rebuild(
+                (b) => b
+                  ..contacts =
+                      BuiltList<ContactModel>.of(_contacts.contacts.toList()..sort(_sort(action.payload))).toBuilder()
+                  ..hasSortFn = action.payload != SortType.reset
+                  ..sortFn = action.payload
+                  ..status = StateStatus.success,
+              )
+              .toBuilder(),
       );
     }
 
     if (action is CancelSearchContactAction) {
-      return state.copyWith(
-        contacts: _contacts.copyWith(status: StateStatus.success, isSearching: false, searchResults: []),
+      return state.rebuild(
+        (b) => b
+          ..contacts = _contacts
+              .rebuild((b) => b
+                ..status = StateStatus.success
+                ..isSearching = false
+                ..searchResults = BuiltList<ContactModel>(<ContactModel>[]).toBuilder())
+              .toBuilder(),
       );
     }
 

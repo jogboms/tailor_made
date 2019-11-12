@@ -73,7 +73,7 @@ class _ContactAppBarState extends State<ContactAppBar> {
               onTap: () {
                 Navigator.of(context).push<void>(
                   MkNavigate.slideIn<void>(
-                    MeasuresPage(measurements: widget.contact.measurements),
+                    MeasuresPage(measurements: widget.contact.measurements.toMap()),
                     fullscreenDialog: true,
                   ),
                 );

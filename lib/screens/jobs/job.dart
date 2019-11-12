@@ -322,7 +322,7 @@ class _AvatarAppBar extends StatelessWidget {
           ),
           onPressed: () {
             Navigator.of(context).push<void>(MkNavigate.slideIn(
-              MeasuresPage(measurements: job.measurements),
+              MeasuresPage(measurements: job.measurements.toMap()),
               fullscreenDialog: true,
             ));
           },

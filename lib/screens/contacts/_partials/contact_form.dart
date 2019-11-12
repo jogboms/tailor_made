@@ -33,7 +33,7 @@ class ContactForm extends StatefulWidget {
 class ContactFormState extends State<ContactForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isLoading = false;
-  ContactModel contact;
+  ContactModelBuilder contact;
   bool _autovalidate = false;
   StorageReference _lastImgRef;
   TextEditingController _fNController, _pNController, _lNController;
@@ -42,7 +42,8 @@ class ContactFormState extends State<ContactForm> {
   @override
   void initState() {
     super.initState();
-    contact = widget.contact;
+    // TODO: look into this
+    contact = widget.contact.toBuilder();
     _fNController = TextEditingController(text: contact.fullname);
     _pNController = TextEditingController(text: contact.phone);
     _lNController = TextEditingController(text: contact.location);
@@ -63,7 +64,7 @@ class ContactFormState extends State<ContactForm> {
         children: <Widget>[
           const SizedBox(height: 32.0),
           _Avatar(
-            contact: contact,
+            contact: contact.build(),
             isLoading: isLoading,
             onTap: _handlePhotoButtonPressed,
           ),
@@ -139,7 +140,7 @@ class ContactFormState extends State<ContactForm> {
       SnackBarProvider.of(context).show(MkStrings.fixErrors);
     } else {
       form.save();
-      widget.onHandleSubmit(contact);
+      widget.onHandleSubmit(contact.build());
     }
   }
 
@@ -181,7 +182,7 @@ class ContactFormState extends State<ContactForm> {
   void updateContact(ContactModel _contact) {
     setState(() {
       reset();
-      contact = _contact;
+      contact = _contact.toBuilder();
       _fNController.text = contact.fullname ?? "";
       _pNController.text = contact.phone ?? "";
       _lNController.text = contact.location ?? "";

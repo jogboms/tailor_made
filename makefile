@@ -1,6 +1,12 @@
 xcode:
 	open ios/Runner.xcworkspace
 
+built_value_build:
+	flutter packages pub run build_runner build --delete-conflicting-outputs
+
+built_value_watch:
+	flutter packages pub run build_runner watch --delete-conflicting-outputs
+
 prod_ios:
 	flutter build ios -t lib/main_prod.dart --flavor prod
 

@@ -1,68 +1,47 @@
-import 'package:flutter/foundation.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
-import 'package:tailor_made/rebloc/jobs/actions.dart';
+import 'package:tailor_made/rebloc/jobs/sort_type.dart';
 
-@immutable
-class JobsState {
-  const JobsState({
-    @required this.jobs,
-    @required this.status,
-    @required this.message,
-    @required this.hasSortFn,
-    @required this.sortFn,
-    @required this.searchResults,
-    @required this.isSearching,
-    this.error,
-  });
+part 'state.g.dart';
 
-  const JobsState.initialState()
-      : jobs = null,
-        status = StateStatus.loading,
-        hasSortFn = true,
-        sortFn = SortType.active,
-        searchResults = null,
-        isSearching = false,
-        message = '',
-        error = null;
+abstract class JobsState implements Built<JobsState, JobsStateBuilder> {
+  factory JobsState([JobsState updates(JobsStateBuilder b)]) = _$JobsState;
 
-  final List<JobModel> jobs;
-  final StateStatus status;
-  final String message;
-  final bool hasSortFn;
-  final SortType sortFn;
-  final List<JobModel> searchResults;
-  final bool isSearching;
-  final dynamic error;
+  factory JobsState.initialState() => _$JobsState(
+        (JobsStateBuilder b) => b
+          ..jobs = null
+          ..status = StateStatus.loading
+          ..hasSortFn = true
+          ..sortFn = SortType.active
+          ..searchResults = null
+          ..isSearching = false
+          ..message = ''
+          ..error = null,
+      );
 
-  JobsState copyWith({
-    List<JobModel> jobs,
-    StateStatus status,
-    String message,
-    bool hasSortFn,
-    SortType sortFn,
-    List<JobModel> searchResults,
-    bool isSearching,
-    dynamic error,
-  }) {
-    return JobsState(
-      jobs: jobs ?? this.jobs,
-      status: status ?? this.status,
-      message: message ?? this.message,
-      hasSortFn: hasSortFn ?? this.hasSortFn,
-      sortFn: sortFn ?? this.sortFn,
-      searchResults: searchResults ?? this.searchResults,
-      isSearching: isSearching ?? this.isSearching,
-      error: error ?? this.error,
-    );
-  }
+  JobsState._();
 
-  @override
-  String toString() => """
-Jobs: $jobs,
-HasSortFn: $hasSortFn,
-SortFn: $sortFn,
-SearchResults: $searchResults,
-IsSearching: $isSearching
-    """;
+  @nullable
+  BuiltList<JobModel> get jobs;
+
+  bool get hasSortFn;
+
+  SortType get sortFn;
+
+  @nullable
+  BuiltList<JobModel> get searchResults;
+
+  bool get isSearching;
+
+  StateStatus get status;
+
+  String get message;
+
+  @nullable
+  String get error;
+
+  static Serializer<JobsState> get serializer => _$jobsStateSerializer;
 }

@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/models/measure.dart';
@@ -52,20 +53,23 @@ class MeasuresBloc extends SimpleBloc<AppState> {
     final _measures = state.measures;
 
     if (action is OnDataMeasureAction) {
-      return state.copyWith(
-        measures: _measures.copyWith(
-          measures: action.payload..sort((a, b) => a.group.compareTo(b.group)),
-          grouped: action.grouped,
-          status: StateStatus.success,
-        ),
+      return state.rebuild(
+        (b) => b
+          ..measures = _measures
+              .rebuild(
+                (b) => b
+                  ..measures =
+                      BuiltList<MeasureModel>(action.payload..sort((a, b) => a.group.compareTo(b.group))).toBuilder()
+                  ..grouped = action.grouped
+                  ..status = StateStatus.success,
+              )
+              .toBuilder(),
       );
     }
 
     if (action is ToggleMeasuresLoading || action is UpdateMeasureAction) {
-      return state.copyWith(
-        measures: _measures.copyWith(
-          status: StateStatus.loading,
-        ),
+      return state.rebuild(
+        (b) => b..measures = _measures.rebuild((b) => b..status = StateStatus.loading).toBuilder(),
       );
     }
 

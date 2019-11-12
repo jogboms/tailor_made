@@ -1,49 +1,35 @@
-import 'package:flutter/foundation.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 
-@immutable
-class AccountState {
-  const AccountState({
-    @required this.account,
-    @required this.status,
-    @required this.hasSkipedPremium,
-    @required this.message,
-    this.error,
-  });
+part 'state.g.dart';
 
-  const AccountState.initialState()
-      : account = null,
-        status = StateStatus.loading,
-        hasSkipedPremium = false,
-        message = '',
-        error = null;
+abstract class AccountState implements Built<AccountState, AccountStateBuilder> {
+  factory AccountState([AccountState updates(AccountStateBuilder b)]) = _$AccountState;
 
-  final AccountModel account;
-  final StateStatus status;
-  final bool hasSkipedPremium;
-  final String message;
-  final dynamic error;
+  factory AccountState.initialState() => _$AccountState(
+        (AccountStateBuilder b) => b
+          ..account = null
+          ..status = StateStatus.loading
+          ..hasSkipedPremium = false
+          ..message = ""
+          ..error = null,
+      );
 
-  AccountState copyWith({
-    AccountModel account,
-    StateStatus status,
-    bool hasSkipedPremium,
-    String message,
-    dynamic error,
-  }) {
-    return AccountState(
-      account: account ?? this.account,
-      status: status ?? this.status,
-      hasSkipedPremium: hasSkipedPremium ?? this.hasSkipedPremium,
-      message: message ?? this.message,
-      error: error ?? this.error,
-    );
-  }
+  AccountState._();
 
-  @override
-  String toString() => """
-Account: ${account?.toMap()},
-HasSkipedPremium: $hasSkipedPremium
-    """;
+  @nullable
+  AccountModel get account;
+
+  StateStatus get status;
+
+  bool get hasSkipedPremium;
+
+  String get message;
+
+  @nullable
+  String get error;
+
+  static Serializer<AccountState> get serializer => _$accountStateSerializer;
 }

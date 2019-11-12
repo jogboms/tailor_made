@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/rebloc/contacts/actions.dart';
+import 'package:tailor_made/rebloc/contacts/sort_type.dart';
 import 'package:tailor_made/rebloc/contacts/view_model.dart';
 import 'package:tailor_made/widgets/_partials/mk_dots.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
@@ -44,12 +44,12 @@ class ContactsFilterButton extends StatelessWidget {
                     type: SortType.jobs,
                   ),
                   _Option(
-                    enabled: vm.sortFn != SortType.name,
+                    enabled: vm.sortFn != SortType.names,
                     style: _optionTheme.copyWith(
-                      color: _colorTestFn(SortType.name),
+                      color: _colorTestFn(SortType.names),
                     ),
                     text: "Sort by Name",
-                    type: SortType.name,
+                    type: SortType.names,
                   ),
                   _Option(
                     enabled: vm.sortFn != SortType.completed,

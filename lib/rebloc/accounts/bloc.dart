@@ -37,12 +37,10 @@ class AccountBloc extends SimpleBloc<AppState> {
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     MergeStream([
-      Observable(input)
-          .where((WareContext<AppState> context) => context.action is InitAccountAction)
-          .switchMap(_getAccount),
-      Observable(input).where((WareContext<AppState> context) => context.action is OnReadNotice).switchMap(_readNotice),
-      Observable(input).where((WareContext<AppState> context) => context.action is OnSendRating).switchMap(_sendRating),
-      Observable(input).where((WareContext<AppState> context) => context.action is OnPremiumSignUp).switchMap(_signUp),
+      Observable(input).where((context) => context.action is InitAccountAction).switchMap(_getAccount),
+      Observable(input).where((context) => context.action is OnReadNotice).switchMap(_readNotice),
+      Observable(input).where((context) => context.action is OnSendRating).switchMap(_sendRating),
+      Observable(input).where((context) => context.action is OnPremiumSignUp).switchMap(_signUp),
     ])
         .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)
         .listen((context) => context.dispatcher(context.action));
@@ -55,14 +53,19 @@ class AccountBloc extends SimpleBloc<AppState> {
     final _account = state.account;
 
     if (action is OnDataAccountAction) {
-      return state.copyWith(
-        account: _account.copyWith(account: action.payload, status: StateStatus.success),
+      return state.rebuild(
+        (b) => b
+          ..account = _account
+              .rebuild((b) => b
+                ..account = action.payload.toBuilder()
+                ..status = StateStatus.success)
+              .toBuilder(),
       );
     }
 
     if (action is OnSkipedPremium) {
-      return state.copyWith(
-        account: _account.copyWith(hasSkipedPremium: true),
+      return state.rebuild(
+        (b) => b..account = _account.rebuild((b) => b..hasSkipedPremium = true).toBuilder(),
       );
     }
 

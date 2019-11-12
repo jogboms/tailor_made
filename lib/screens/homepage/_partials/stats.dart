@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/models/stats.dart';
+import 'package:tailor_made/models/stats/stats.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 

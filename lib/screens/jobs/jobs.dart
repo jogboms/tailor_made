@@ -3,6 +3,7 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/providers/dispatch_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/jobs/actions.dart';
+import 'package:tailor_made/rebloc/jobs/sort_type.dart';
 import 'package:tailor_made/rebloc/jobs/view_model.dart';
 import 'package:tailor_made/screens/jobs/_partials/jobs_filter_button.dart';
 import 'package:tailor_made/screens/jobs/_partials/jobs_list.dart';

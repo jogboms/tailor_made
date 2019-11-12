@@ -1,101 +1,49 @@
-import 'package:flutter/foundation.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/main.dart';
+import 'package:tailor_made/models/serializers.dart';
+
+part 'account.g.dart';
 
 enum AccountModelStatus { enabled, disabled, warning, pending }
 
-class AccountModel extends Model {
-  AccountModel({
-    @required this.uid,
-    @required this.storeName,
-    @required this.email,
-    @required this.displayName,
-    @required this.phoneNumber,
-    @required this.photoURL,
-    @required this.status,
-    @required this.hasPremiumEnabled,
-    @required this.hasSendRating,
-    @required this.rating,
-    @required this.notice,
-    @required this.hasReadNotice,
-  });
-
-  factory AccountModel.fromJson(Map<String, dynamic> json) {
-    assert(json != null);
-    return AccountModel(
-      uid: json['uid'],
-      storeName: json['storeName'],
-      email: json['email'],
-      displayName: json['displayName'],
-      phoneNumber: int.tryParse(json['phoneNumber'].toString()),
-      photoURL: json['photoURL'],
-      status: AccountModelStatus.values[int.tryParse(json['status'].toString())],
-      hasPremiumEnabled: json['hasPremiumEnabled'],
-      hasSendRating: json['hasSendRating'] ?? false,
-      rating: json['rating'],
-      notice: json['notice'],
-      hasReadNotice: json['hasReadNotice'],
-    );
-  }
+abstract class AccountModel with ModelInterface implements Built<AccountModel, AccountModelBuilder> {
+  factory AccountModel([void updates(AccountModelBuilder b)]) = _$AccountModel;
 
   factory AccountModel.fromDoc(Snapshot doc) => AccountModel.fromJson(doc.data)..reference = doc.reference;
 
-  String uid;
-  String storeName;
-  String email;
-  String displayName;
-  int phoneNumber;
-  String photoURL;
-  AccountModelStatus status;
-  bool hasPremiumEnabled;
-  bool hasSendRating;
-  int rating;
-  String notice;
-  bool hasReadNotice;
+  AccountModel._();
 
-  AccountModel copyWith({
-    String storeName,
-    String displayName,
-    int phoneNumber,
-    String photoURL,
-    AccountModelStatus status,
-    bool hasPremiumEnabled,
-    bool hasSendRating,
-    int rating,
-    String notice,
-    bool hasReadNotice,
-  }) {
-    return AccountModel(
-      uid: this.uid,
-      storeName: storeName ?? this.storeName,
-      email: this.email,
-      displayName: displayName ?? this.displayName,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
-      photoURL: photoURL ?? this.photoURL,
-      status: status ?? this.status,
-      hasPremiumEnabled: hasPremiumEnabled ?? this.hasPremiumEnabled,
-      hasSendRating: hasSendRating ?? this.hasSendRating,
-      rating: rating ?? this.rating,
-      notice: notice ?? this.notice,
-      hasReadNotice: hasReadNotice ?? this.hasReadNotice,
-    )..reference = this.reference;
-  }
+  String get uid;
+
+  String get storeName;
+
+  String get email;
+
+  String get displayName;
+
+  @nullable
+  int get phoneNumber;
+
+  String get photoURL;
+
+  AccountModelStatus get status;
+
+  bool get hasPremiumEnabled;
+
+  bool get hasSendRating;
+
+  int get rating;
+
+  String get notice;
+
+  bool get hasReadNotice;
 
   @override
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'uid': uid,
-      'storeName': storeName,
-      'email': email,
-      'displayName': displayName,
-      'phoneNumber': phoneNumber,
-      'photoURL': photoURL,
-      'status': status.index,
-      'hasPremiumEnabled': hasPremiumEnabled,
-      'hasSendRating': hasSendRating,
-      'rating': rating,
-      'notice': notice,
-      'hasReadNotice': hasReadNotice,
-    };
-  }
+  Map<String, dynamic> toMap() => serializers.serializeWith(AccountModel.serializer, this);
+
+  static AccountModel fromJson(Map<String, dynamic> map) => serializers.deserializeWith(AccountModel.serializer, map);
+
+  static Serializer<AccountModel> get serializer => _$accountModelSerializer;
 }

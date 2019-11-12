@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/rebloc/jobs/actions.dart';
+import 'package:tailor_made/rebloc/jobs/sort_type.dart';
 import 'package:tailor_made/rebloc/jobs/view_model.dart';
 import 'package:tailor_made/widgets/_partials/mk_dots.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
@@ -45,10 +45,10 @@ class JobsFilterButton extends StatelessWidget {
                   ),
                   _Option(
                     text: "Sort by Name",
-                    type: SortType.name,
-                    enabled: vm.sortFn != SortType.name,
+                    type: SortType.names,
+                    enabled: vm.sortFn != SortType.names,
                     style: _optionTheme.copyWith(
-                      color: _colorTestFn(SortType.name),
+                      color: _colorTestFn(SortType.names),
                     ),
                   ),
                   _Option(

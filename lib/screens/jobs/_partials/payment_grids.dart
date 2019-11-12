@@ -81,7 +81,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
               child: Text("SHOW ALL", style: theme.smallBtn),
               onPressed: () {
                 Navigator.of(context).push<void>(MkNavigate.slideIn(
-                  PaymentsPage(payments: widget.job.payments),
+                  PaymentsPage(payments: widget.job.payments.toList()),
                   fullscreenDialog: true,
                 ));
               },
@@ -124,10 +124,11 @@ class _PaymentGridsState extends State<PaymentGrids> {
       try {
         setState(() {
           firePayments.last.payment = PaymentModel(
-            contactID: widget.job.contactID,
-            jobID: widget.job.id,
-            price: result["price"],
-            notes: result["notes"],
+            (b) => b
+              ..contactID = widget.job.contactID
+              ..jobID = widget.job.id
+              ..price = result["price"]
+              ..notes = result["notes"],
           );
         });
 

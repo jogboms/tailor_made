@@ -101,7 +101,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
               child: Text("SHOW ALL", style: theme.smallBtn),
               onPressed: () {
                 Navigator.of(context).push<void>(MkNavigate.slideIn(
-                  GalleryPage(images: widget.job.images),
+                  GalleryPage(images: widget.job.images.toList()),
                   fullscreenDialog: true,
                 ));
               },
@@ -147,10 +147,11 @@ class _GalleryGridsState extends State<GalleryGrids> {
 
       setState(() {
         fireImages.last.image = ImageModel(
-          contactID: widget.job.contactID,
-          jobID: widget.job.id,
-          src: imageUrl,
-          path: ref.path,
+          (b) => b
+            ..contactID = widget.job.contactID
+            ..jobID = widget.job.id
+            ..src = imageUrl
+            ..path = ref.path,
         );
       });
 

@@ -42,9 +42,9 @@ class MeasuresPage extends StatelessWidget {
             shrinkWrap: true,
             padding: const EdgeInsets.only(bottom: 96.0),
             itemBuilder: (context, index) {
-              final measure = vm.model[index];
+              final measure = vm.model[index].toBuilder();
               final _value = measurements[measure.id] ?? 0.0;
-              return MeasureListItem(item: measure..value = _value);
+              return MeasureListItem(item: (measure..value = _value).build());
             },
             separatorBuilder: (_, __) => const Divider(),
           );

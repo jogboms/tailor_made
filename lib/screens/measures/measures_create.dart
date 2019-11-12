@@ -201,9 +201,10 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
             backgroundColor: Colors.black38,
             body: MeasureDialog(
               measure: MeasureModel(
-                name: "",
-                group: groupName,
-                unit: unitValue,
+                (b) => b
+                  ..name = ""
+                  ..group = groupName
+                  ..unit = unitValue,
               ),
             ),
           ),

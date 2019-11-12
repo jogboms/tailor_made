@@ -1,23 +1,24 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
-import 'package:tailor_made/rebloc/contacts/actions.dart';
+import 'package:tailor_made/rebloc/contacts/sort_type.dart';
 
+// ignore: must_be_immutable
 class ContactsViewModel extends Equatable {
   ContactsViewModel(AppState state)
-      : model = state.contacts.contacts,
-        searchResults = state.contacts.searchResults,
+      : _model = state.contacts.contacts,
+        _searchResults = state.contacts.searchResults,
         isSearching = state.contacts.isSearching,
         hasSortFn = state.contacts.hasSortFn,
         measures = state.measures.grouped,
-        jobs = state.jobs.jobs,
+        _jobs = state.jobs.jobs,
         sortFn = state.contacts.sortFn,
         isLoading = state.contacts.status == StateStatus.loading,
         hasError = state.contacts.status == StateStatus.failure,
-        error = state.contacts.error,
-        super(<AppState>[state]);
+        error = state.contacts.error;
 
   List<ContactModel> get contacts => isSearching ? searchResults : model;
 
@@ -46,14 +47,29 @@ class ContactsViewModel extends Equatable {
   }
 
   String contactID;
-  final List<ContactModel> searchResults;
+
+  final BuiltList _searchResults;
+
+  List<ContactModel> get searchResults => _searchResults?.toList();
+
   final Map<String, List<MeasureModel>> measures;
-  final List<JobModel> jobs;
-  final List<ContactModel> model;
+
+  final BuiltList _jobs;
+
+  List<JobModel> get jobs => _jobs?.toList();
+
+  final BuiltList _model;
+
+  List<ContactModel> get model => _model?.toList();
+
   final bool hasSortFn;
   final SortType sortFn;
   final bool isLoading;
   final bool hasError;
   final bool isSearching;
   final dynamic error;
+
+  @override
+  List<Object> get props =>
+      [model, hasSortFn, sortFn, isSearching, jobs, contacts, searchResults, isLoading, hasError, error];
 }

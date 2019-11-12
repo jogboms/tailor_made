@@ -49,9 +49,10 @@ class _ContactsEditPageState extends State<ContactsEditPage> with SnackBarProvid
   void _handleSelectContact() async {
     final _selectedContact = await _contactPicker.selectContact();
     _formKey.currentState.updateContact(
-      widget.contact.copyWith(
-        fullname: _selectedContact.fullName,
-        phone: _selectedContact.phoneNumber.number,
+      widget.contact.rebuild(
+        (b) => b
+          ..fullname = _selectedContact.fullName
+          ..phone = _selectedContact.phoneNumber.number,
       ),
     );
   }

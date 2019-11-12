@@ -82,10 +82,11 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
       return;
     }
 
-    _formKey.currentState.updateContact(contact.copyWith(
-      fullname: _selectedContact.fullName,
-      phone: _selectedContact.phoneNumber?.number,
-    ));
+    _formKey.currentState.updateContact(
+      contact.rebuild((b) => b
+        ..fullname = _selectedContact.fullName
+        ..phone = _selectedContact.phoneNumber?.number),
+    );
   }
 
   void _handleSubmit(ContactModel _contact) async {
@@ -97,11 +98,12 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
     showLoadingSnackBar();
 
     try {
-      contact = contact.copyWith(
-        fullname: _contact.fullname,
-        phone: _contact.phone,
-        imageUrl: _contact.imageUrl,
-        location: _contact.location,
+      contact = contact.rebuild(
+        (b) => b
+          ..fullname = _contact.fullname
+          ..phone = _contact.phone
+          ..imageUrl = _contact.imageUrl
+          ..location = _contact.location,
       );
 
       Contacts.di().update(contact).listen((snap) async {
@@ -129,9 +131,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
     );
 
     setState(() {
-      contact = contact.copyWith(
-        measurements: _contact.measurements,
-      );
+      contact = contact.rebuild((b) => b..measurements = _contact.measurements.toBuilder());
     });
   }
 }

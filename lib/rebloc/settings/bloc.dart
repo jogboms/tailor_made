@@ -28,14 +28,19 @@ class SettingsBloc extends SimpleBloc<AppState> {
     final _settings = state.settings;
 
     if (action is OnDataSettingAction) {
-      return state.copyWith(
-        settings: _settings.copyWith(settings: action.payload, status: StateStatus.success),
+      return state.rebuild(
+        (b) => b
+          ..settings = _settings
+              .rebuild((b) => b
+                ..settings = action.payload.toBuilder()
+                ..status = StateStatus.success)
+              .toBuilder(),
       );
     }
 
     if (action is OnErrorSettingsAction) {
-      return state.copyWith(
-        settings: _settings.copyWith(status: StateStatus.failure),
+      return state.rebuild(
+        (b) => b..settings = _settings.rebuild((b) => b..status = StateStatus.failure).toBuilder(),
       );
     }
 

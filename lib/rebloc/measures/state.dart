@@ -1,55 +1,40 @@
-import 'package:flutter/foundation.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 
-@immutable
-class MeasuresState {
-  const MeasuresState({
-    @required this.measures,
-    @required this.grouped,
-    @required this.status,
-    @required this.hasSkipedPremium,
-    @required this.message,
-    this.error,
-  });
+part 'state.g.dart';
 
-  const MeasuresState.initialState()
-      : measures = null,
-        grouped = null,
-        status = StateStatus.loading,
-        hasSkipedPremium = false,
-        message = '',
-        error = null;
+abstract class MeasuresState implements Built<MeasuresState, MeasuresStateBuilder> {
+  factory MeasuresState([MeasuresState updates(MeasuresStateBuilder b)]) = _$MeasuresState;
 
-  final List<MeasureModel> measures;
-  final Map<String, List<MeasureModel>> grouped;
-  final StateStatus status;
-  final bool hasSkipedPremium;
-  final String message;
-  final dynamic error;
+  factory MeasuresState.initialState() => _$MeasuresState(
+        (MeasuresStateBuilder b) => b
+          ..measures = null
+          ..grouped = null
+          ..status = StateStatus.loading
+          ..hasSkipedPremium = false
+          ..message = ''
+          ..error = null,
+      );
 
-  MeasuresState copyWith({
-    List<MeasureModel> measures,
-    Map<String, List<MeasureModel>> grouped,
-    StateStatus status,
-    bool hasSkipedPremium,
-    String message,
-    dynamic error,
-  }) {
-    return MeasuresState(
-      measures: measures ?? this.measures,
-      grouped: grouped ?? this.grouped,
-      status: status ?? this.status,
-      hasSkipedPremium: hasSkipedPremium ?? this.hasSkipedPremium,
-      message: message ?? this.message,
-      error: error ?? this.error,
-    );
-  }
+  MeasuresState._();
 
-  @override
-  String toString() => """
-Measures: $measures,
-Grouped: $grouped,
-HasSkipedPremium: $hasSkipedPremium
-    """;
+  @nullable
+  BuiltList<MeasureModel> get measures;
+
+  @nullable
+  Map<String, List<MeasureModel>> get grouped;
+
+  bool get hasSkipedPremium;
+
+  StateStatus get status;
+
+  String get message;
+
+  @nullable
+  String get error;
+
+  static Serializer<MeasuresState> get serializer => _$measuresStateSerializer;
 }

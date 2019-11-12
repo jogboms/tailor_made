@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/models/job.dart';
@@ -5,6 +6,7 @@ import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/jobs/actions.dart';
+import 'package:tailor_made/rebloc/jobs/sort_type.dart';
 import 'package:tailor_made/services/jobs/jobs.dart';
 
 final _foldPrice = (double acc, PaymentModel model) => acc + model.price;
@@ -15,7 +17,7 @@ Comparator<JobModel> _sort(SortType sortType) {
       {
         return (a, b) => (a.isComplete == b.isComplete) ? 0 : a.isComplete ? 1 : -1;
       }
-    case SortType.name:
+    case SortType.names:
       {
         return (a, b) => a.name.compareTo(b.name);
       }
@@ -85,43 +87,62 @@ class JobsBloc extends SimpleBloc<AppState> {
     final _jobs = state.jobs;
 
     if (action is OnDataJobAction) {
-      return state.copyWith(
-        jobs: _jobs.copyWith(
-          jobs: List<JobModel>.of(action.payload)..sort(_sort(_jobs.sortFn)),
-          status: StateStatus.success,
-        ),
+      return state.rebuild(
+        (b) => b
+          ..jobs = _jobs
+              .rebuild((b) => b
+                ..jobs = BuiltList<JobModel>.of(action.payload..sort(_sort(_jobs.sortFn))).toBuilder()
+                ..status = StateStatus.success)
+              .toBuilder(),
       );
     }
 
     if (action is StartSearchJobAction) {
-      return state.copyWith(
-        jobs: _jobs.copyWith(status: StateStatus.loading, isSearching: true),
+      return state.rebuild(
+        (b) => b
+          ..jobs = _jobs
+              .rebuild((b) => b
+                ..status = StateStatus.loading
+                ..isSearching = true)
+              .toBuilder(),
       );
     }
 
     if (action is CancelSearchJobAction) {
-      return state.copyWith(
-        jobs: _jobs.copyWith(status: StateStatus.success, isSearching: false, searchResults: []),
+      return state.rebuild(
+        (b) => b
+          ..jobs = _jobs
+              .rebuild((b) => b
+                ..status = StateStatus.success
+                ..isSearching = false
+                ..searchResults = BuiltList<JobModel>(<JobModel>[]).toBuilder())
+              .toBuilder(),
       );
     }
 
     if (action is SearchSuccessJobAction) {
-      return state.copyWith(
-        jobs: _jobs.copyWith(
-          searchResults: List<JobModel>.of(action.payload)..sort(_sort(_jobs.sortFn)),
-          status: StateStatus.success,
-        ),
+      return state.rebuild(
+        (b) => b
+          ..jobs = _jobs
+              .rebuild((b) => b
+                ..searchResults = BuiltList<JobModel>.of(action.payload..sort(_sort(_jobs.sortFn))).toBuilder()
+                ..status = StateStatus.success)
+              .toBuilder(),
       );
     }
 
     if (action is SortJobs) {
-      return state.copyWith(
-        jobs: _jobs.copyWith(
-          jobs: List<JobModel>.of(_jobs.jobs)..sort(_sort(action.payload)),
-          hasSortFn: action.payload != SortType.reset,
-          sortFn: action.payload,
-          status: StateStatus.success,
-        ),
+      return state.rebuild(
+        (b) => b
+          ..jobs = _jobs
+              .rebuild(
+                (b) => b
+                  ..jobs = BuiltList<JobModel>.of(_jobs.jobs.toList()..sort(_sort(action.payload))).toBuilder()
+                  ..hasSortFn = action.payload != SortType.reset
+                  ..sortFn = action.payload
+                  ..status = StateStatus.success,
+              )
+              .toBuilder(),
       );
     }
 

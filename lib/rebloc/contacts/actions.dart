@@ -1,8 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/models/contact.dart';
-
-enum SortType { recent, jobs, completed, pending, name, reset }
+import 'package:tailor_made/rebloc/contacts/sort_type.dart';
 
 class InitContactsAction extends Action {
   const InitContactsAction();

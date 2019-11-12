@@ -1,43 +1,32 @@
-import 'package:flutter/foundation.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:tailor_made/models/settings.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 
-@immutable
-class SettingsState {
-  const SettingsState({
-    @required this.settings,
-    @required this.status,
-    @required this.message,
-    this.error,
-  });
+part 'state.g.dart';
 
-  const SettingsState.initialState()
-      : settings = null,
-        status = StateStatus.loading,
-        message = '',
-        error = null;
+abstract class SettingsState implements Built<SettingsState, SettingsStateBuilder> {
+  factory SettingsState([SettingsState updates(SettingsStateBuilder b)]) = _$SettingsState;
 
-  final SettingsModel settings;
-  final StateStatus status;
-  final String message;
-  final dynamic error;
+  factory SettingsState.initialState() => _$SettingsState(
+        (SettingsStateBuilder b) => b
+          ..settings = null
+          ..status = StateStatus.loading
+          ..message = ""
+          ..error = null,
+      );
 
-  SettingsState copyWith({
-    SettingsModel settings,
-    StateStatus status,
-    String message,
-    dynamic error,
-  }) {
-    return SettingsState(
-      settings: settings ?? this.settings,
-      status: status ?? this.status,
-      message: message ?? this.message,
-      error: error ?? this.error,
-    );
-  }
+  SettingsState._();
 
-  @override
-  String toString() => """
-Settings: $settings
-    """;
+  @nullable
+  SettingsModel get settings;
+
+  StateStatus get status;
+
+  String get message;
+
+  @nullable
+  String get error;
+
+  static Serializer<SettingsState> get serializer => _$settingsStateSerializer;
 }

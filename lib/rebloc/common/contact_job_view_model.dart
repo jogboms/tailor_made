@@ -1,15 +1,16 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 
+// ignore: must_be_immutable
 class ContactJobViewModel extends Equatable {
   ContactJobViewModel(AppState state)
-      : contacts = state.contacts.contacts,
-        account = state.account.account,
-        jobs = state.jobs.jobs,
-        super(<AppState>[state]);
+      : _contacts = state.contacts.contacts,
+        _jobs = state.jobs.jobs,
+        account = state.account.account;
 
   ContactModel get selectedContact {
     if (contactID != null) {
@@ -36,6 +37,15 @@ class ContactJobViewModel extends Equatable {
   String contactID;
   String jobID;
   final AccountModel account;
-  final List<JobModel> jobs;
-  final List<ContactModel> contacts;
+
+  final BuiltList _jobs;
+
+  List<JobModel> get jobs => _jobs?.toList();
+
+  final BuiltList _contacts;
+
+  List<ContactModel> get contacts => _contacts?.toList();
+
+  @override
+  List<Object> get props => [account, jobs, contacts];
 }

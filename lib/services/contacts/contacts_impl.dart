@@ -31,6 +31,6 @@ class ContactsImpl extends Contacts {
   Stream<ContactModel> update(ContactModel contact) {
     final ref = CloudDb.contactsRef.document(contact.id);
     ref.setData(contact.toMap()).then((r) {});
-    return ref.snapshots().map<ContactModel>((doc) => ContactModel.fromDoc(Snapshot.fromDocumentSnapshot(doc)));
+    return ref.snapshots().map((doc) => ContactModel.fromDoc(Snapshot.fromDocumentSnapshot(doc)));
   }
 }

@@ -11,7 +11,7 @@ class OnErrorSettingsAction extends Action {
 }
 
 class OnDataSettingAction extends Action {
-  const OnDataSettingAction({@required this.payload});
+  const OnDataSettingAction({@required this.payload}) : assert(payload != null);
 
   final SettingsModel payload;
 }

@@ -22,21 +22,26 @@ class AccountsImpl extends Accounts {
 
   @override
   Future<void> readNotice(AccountModel account) async {
-    await account.reference.updateData(account.copyWith(hasReadNotice: true).toMap());
+    await account.reference.updateData(account.rebuild((b) => b..hasReadNotice = true).toMap());
   }
 
   @override
   Future<void> sendRating(AccountModel account, int rating) async {
-    await account.reference.updateData(account.copyWith(hasSendRating: true, rating: rating).toMap());
+    await account.reference.updateData(account
+        .rebuild((b) => b
+          ..hasSendRating = true
+          ..rating = rating)
+        .toMap());
   }
 
   @override
   Future<void> signUp(AccountModel account) async {
-    final _account = account.copyWith(
-      status: AccountModelStatus.pending,
-      notice: MkSettings.di().getData().premiumNotice,
-      hasReadNotice: false,
-      hasPremiumEnabled: true,
+    final _account = account.rebuild(
+      (b) => b
+        ..status = AccountModelStatus.pending
+        ..notice = MkSettings.di().getData().premiumNotice
+        ..hasReadNotice = false
+        ..hasPremiumEnabled = true,
     );
     await account.reference.updateData(_account.toMap());
     await CloudDb.premium.document(account.uid).setData(_account.toMap());

@@ -23,6 +23,6 @@ class JobsImpl extends Jobs {
   Stream<JobModel> update(JobModel job) {
     final ref = CloudDb.jobsRef.document(job.id);
     ref.setData(job.toMap()).then((r) {});
-    return ref.snapshots().map<JobModel>((doc) => JobModel.fromDoc(Snapshot.fromDocumentSnapshot(doc)));
+    return ref.snapshots().map((doc) => JobModel.fromDoc(Snapshot.fromDocumentSnapshot(doc)));
   }
 }

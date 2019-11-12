@@ -28,6 +28,9 @@
 .pub/
 build/
 
+# Generated Dart code
+*.g.dart
+
 # Android related
 **/android/**/gradle-wrapper.jar
 **/android/.gradle

@@ -3,6 +3,7 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/providers/dispatch_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/contacts/actions.dart';
+import 'package:tailor_made/rebloc/contacts/sort_type.dart';
 import 'package:tailor_made/rebloc/contacts/view_model.dart';
 import 'package:tailor_made/screens/contacts/_partials/contacts_filter_button.dart';
 import 'package:tailor_made/screens/contacts/_partials/contacts_list_item.dart';
