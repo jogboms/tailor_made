@@ -3,8 +3,8 @@ import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/settings/actions.dart';
+import 'package:tailor_made/services/session.dart';
 import 'package:tailor_made/services/settings/settings.dart';
-import 'package:tailor_made/utils/mk_settings.dart';
 
 class SettingsBloc extends SimpleBloc<AppState> {
   @override
@@ -14,7 +14,7 @@ class SettingsBloc extends SimpleBloc<AppState> {
         .switchMap((context) =>
             Settings.di().fetch().handleError(() => context.dispatcher(const OnErrorSettingsAction())).map((settings) {
               // Keep Static copy
-              MkSettings.di().setData(settings);
+              Session.di().setData(settings);
               return OnDataSettingAction(payload: settings);
             }).map((action) => context.copyWith(action)))
         .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)

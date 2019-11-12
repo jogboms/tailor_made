@@ -4,7 +4,7 @@ import 'package:tailor_made/firebase/cloud_db.dart';
 import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/services/accounts/accounts.dart';
-import 'package:tailor_made/utils/mk_settings.dart';
+import 'package:tailor_made/services/session.dart';
 
 class AccountsImpl extends Accounts {
   @override
@@ -39,7 +39,7 @@ class AccountsImpl extends Accounts {
     final _account = account.rebuild(
       (b) => b
         ..status = AccountModelStatus.pending
-        ..notice = MkSettings.di().getData().premiumNotice
+        ..notice = Session.di().getData().premiumNotice
         ..hasReadNotice = false
         ..hasPremiumEnabled = true,
     );

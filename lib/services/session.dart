@@ -3,10 +3,10 @@ import 'package:injector/injector.dart';
 import 'package:tailor_made/environments/environment.dart';
 import 'package:tailor_made/models/settings.dart';
 
-class MkSettings {
-  MkSettings({@required this.environment, @required this.isTestMode});
+class Session {
+  Session({@required this.environment, @required this.isTestMode});
 
-  static MkSettings di() => Injector.appInstance.getDependency<MkSettings>();
+  static Session di() => Injector.appInstance.getDependency<Session>();
 
   final Environment environment;
   final bool isTestMode;

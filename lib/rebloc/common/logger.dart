@@ -2,7 +2,7 @@ import 'dart:async' show Future;
 
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
-import 'package:tailor_made/utils/mk_settings.dart';
+import 'package:tailor_made/services/session.dart';
 
 /// Logs each incoming action.
 class LoggerBloc extends SimpleBloc<AppState> {
@@ -12,7 +12,7 @@ class LoggerBloc extends SimpleBloc<AppState> {
     //   print('State just became: $state');
     //   lastState = state;
     // }
-    if (!MkSettings.di().isTesting) {
+    if (!Session.di().isTesting) {
       print("{\n$state\n}");
     }
     return action;
