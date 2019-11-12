@@ -1,15 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:tailor_made/environments/environment.dart';
-import 'package:tailor_made/widgets/app.dart';
+import 'package:tailor_made/main.dart' as def;
 
-void main() async {
-  // NOTE: only for demo purposes
-  await Future<dynamic>.delayed(const Duration(seconds: 2));
-
-  final BootstrapModel bs = await App.bootstrap();
-
-  return runApp(App(
-    env: Environment.DEVELOPMENT,
-    isFirstTime: bs.isFirstTime,
-  ));
-}
+void main() => def.main(delay: 2, environment: Environment.DEVELOPMENT);

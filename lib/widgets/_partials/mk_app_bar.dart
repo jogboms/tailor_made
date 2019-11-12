@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class MkAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MkAppBar({
@@ -26,17 +26,14 @@ class MkAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _style = MkTheme.of(context).appBarTitle;
+    final _style = ThemeProvider.of(context).appBarTitle;
 
     return AppBar(
       brightness: brightness ?? Brightness.light,
       backgroundColor: Colors.white,
       automaticallyImplyLeading: useLeading,
       leading: useLeading ? leading ?? MkBackButton(color: _style.color) : null,
-      title: DefaultTextStyle(
-        child: title,
-        style: _style,
-      ),
+      title: DefaultTextStyle(child: title, style: _style),
       elevation: elevation,
       centerTitle: false,
       actions: actions,
@@ -45,7 +42,5 @@ class MkAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(
-        kToolbarHeight + (bottom != null ? bottom.preferredSize.height : 0),
-      );
+  Size get preferredSize => Size.fromHeight(kToolbarHeight + (bottom != null ? bottom.preferredSize.height : 0));
 }

@@ -4,89 +4,92 @@ import 'package:flutter/widgets.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_routes.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
-import 'package:tailor_made/environments/environment.dart';
-import 'package:tailor_made/rebloc/actions/common.dart';
-import 'package:tailor_made/rebloc/main.dart';
-import 'package:tailor_made/rebloc/states/main.dart';
-import 'package:tailor_made/services/settings.dart';
-import 'package:tailor_made/utils/mk_navigate.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
-import 'package:tailor_made/widgets/screens/splash/splash.dart';
-
-class BootstrapModel {
-  const BootstrapModel({
-    @required this.isFirstTime,
-  });
-
-  final bool isFirstTime;
-}
+import 'package:tailor_made/rebloc/app_state.dart';
+import 'package:tailor_made/rebloc/common/actions.dart';
+import 'package:tailor_made/rebloc/store_factory.dart';
+import 'package:tailor_made/screens/splash/splash.dart';
+import 'package:tailor_made/utils/mk_screen_util.dart';
+import 'package:tailor_made/widgets/bootstrap.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class App extends StatefulWidget {
-  App({
-    @required Environment env,
-    @required this.isFirstTime,
-  }) {
-    Settings.environment = env;
+  App({@required this.bootstrap}) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
-  final bool isFirstTime;
-
-  static Future<BootstrapModel> bootstrap() async {
-    final isFirstTime = await Settings.checkIsFirstTimeLogin();
-    try {
-      await Settings.initVersion();
-    } catch (e) {
-      //
-    }
-
-    return BootstrapModel(isFirstTime: isFirstTime);
-  }
+  final BootstrapModel bootstrap;
 
   @override
-  _AppState createState() => _AppState();
+  _AppState createState() => _AppState(bootstrap);
 }
 
 class _AppState extends State<App> {
-  final Store<AppState> store = reblocStore();
+  _AppState(this._bs) : store = storeFactory();
+
+  final BootstrapModel _bs;
+  final Store<AppState> store;
+
+  final MkScreenUtilConfig screenConfig = const MkScreenUtilConfig(width: 412, height: 732, allowFontScaling: true);
 
   @override
   void dispose() {
-    store.dispatcher(const OnDisposeAction());
+    store.dispatch(const OnDisposeAction());
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MkTheme(
+    return ThemeProvider(
       child: StoreProvider<AppState>(
         store: store,
         child: FirstBuildDispatcher<AppState>(
           // Initialize action
           action: const OnInitAction(),
           child: Builder(
-            builder: (BuildContext context) {
-              return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                title: MkStrings.appName,
-                color: Colors.white,
-                theme: MkTheme.of(context).themeData(Theme.of(context)),
-                onGenerateRoute: (RouteSettings settings) {
-                  return MkNavigateRoute<dynamic>(
-                    builder: (_) {
-                      return SplashPage(isColdStart: true);
-                    },
-                    settings: settings.copyWith(
-                      name: MkRoutes.start,
-                      isInitialRoute: true,
-                    ),
-                  );
-                },
-              );
-            },
+            builder: (BuildContext context) => MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: MkStrings.appName,
+              color: Colors.white,
+              theme: ThemeProvider.of(context).themeData(Theme.of(context)),
+              builder: (context, child) => Builder(builder: (BuildContext context) {
+                MkScreenUtil.initialize(context: context, config: screenConfig);
+                return child;
+              }),
+              onGenerateRoute: (RouteSettings settings) {
+                return _PageRoute(
+                  builder: (_) {
+                    if (_bs.isTestMode) {
+                      return const SizedBox();
+                    }
+
+                    return SplashPage(isColdStart: true);
+                  },
+                  settings: settings.copyWith(name: MkRoutes.start, isInitialRoute: true),
+                );
+              },
+            ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _PageRoute<T extends Object> extends MaterialPageRoute<T> {
+  _PageRoute({WidgetBuilder builder, RouteSettings settings}) : super(builder: builder, settings: settings);
+
+  @override
+  Widget buildTransitions(_, Animation<double> animation, __, Widget child) {
+    if (settings.isInitialRoute) {
+      return child;
+    }
+
+    return FadeTransition(
+      opacity: animation,
+      child: SlideTransition(
+        position: Tween<Offset>(begin: const Offset(0.0, 0.3), end: Offset.zero).animate(animation),
+        child: child,
       ),
     );
   }

@@ -5,17 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/constants/mk_colors.dart';
-import 'package:tailor_made/utils/mk_image_choice_dialog.dart';
 import 'package:tailor_made/utils/mk_image_utils.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/utils/ui/mk_image_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_touchable_opacity.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class MkUploadPhoto extends StatelessWidget {
-  const MkUploadPhoto({
-    Key key,
-    this.size = const Size.square(86.0),
-    @required this.onPickImage,
-  }) : super(key: key);
+  const MkUploadPhoto({Key key, this.size = const Size.square(86.0), @required this.onPickImage}) : super(key: key);
 
   final ValueSetter<File> onPickImage;
   final Size size;
@@ -39,14 +35,11 @@ class MkUploadPhoto extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Icon(
-                Icons.add_circle,
-                color: _color,
-              ),
+              Icon(Icons.add_circle, color: _color),
               const SizedBox(height: 2.0),
               Text(
                 "Add\nPhoto",
-                style: MkTheme.of(context).button.copyWith(color: _color),
+                style: ThemeProvider.of(context).button.copyWith(color: _color),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -73,8 +66,7 @@ class MkUploadPhoto extends StatelessWidget {
       return;
     }
     if (onPickImage != null) {
-      final _file =
-          await MkImageUtils(context: context, file: file).resize(width: 1500);
+      final _file = await MkImageUtils(context: context, file: file).resize(width: 1500);
       onPickImage(_file);
     }
   }

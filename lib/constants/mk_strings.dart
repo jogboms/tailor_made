@@ -1,19 +1,15 @@
 import 'dart:async' show TimeoutException;
 
-import 'package:tailor_made/services/settings.dart';
-import 'package:tailor_made/utils/mk_response_wrapper.dart';
+import 'package:tailor_made/utils/mk_settings.dart';
+import 'package:tailor_made/wrappers/mk_exceptions.dart';
 
 class MkStrings {
-  MkStrings._();
-
   static const String appName = "TailorMade";
   static const String networkError =
       "Please check your network connection or contact your service provider if the problem persists.";
   static const String errorMessage = "An error occurred. Please try again.";
-  static const String fixErrors =
-      "Please fix the errors in red before submitting";
-  static const String leavingEmptyMeasures =
-      "Leaving Measurements empty? Click on Scissors button.";
+  static const String fixErrors = "Please fix the errors in red before submitting";
+  static const String leavingEmptyMeasures = "Leaving Measurements empty? Click on Scissors button.";
   static const List<String> monthsShort = <String>[
     "Jan",
     "Feb",
@@ -47,8 +43,6 @@ class MkStrings {
     if (error is TimeoutException) {
       return "This action took too long. Please Retry.";
     }
-    return Settings.isDev || error is MkResponseException
-        ? "$error"
-        : errorMessage;
+    return MkSettings.di().isDev || error is MkResponseException ? "$error" : errorMessage;
   }
 }

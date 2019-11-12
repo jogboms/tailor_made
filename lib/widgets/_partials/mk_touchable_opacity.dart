@@ -9,8 +9,7 @@ class MkTouchableOpacity extends StatefulWidget {
     this.disabledColor,
     this.pressedOpacity = 0.1,
     @required this.onPressed,
-  })  : assert(pressedOpacity == null ||
-            (pressedOpacity >= 0.0 && pressedOpacity <= 1.0)),
+  })  : assert(pressedOpacity == null || (pressedOpacity >= 0.0 && pressedOpacity <= 1.0)),
         super(key: key);
 
   final Widget child;
@@ -35,8 +34,7 @@ class MkTouchableOpacity extends StatefulWidget {
   }
 }
 
-class _MkTouchableOpacityState extends State<MkTouchableOpacity>
-    with SingleTickerProviderStateMixin {
+class _MkTouchableOpacityState extends State<MkTouchableOpacity> with SingleTickerProviderStateMixin {
   static const Duration kFadeOutDuration = Duration(milliseconds: 10);
   static const Duration kFadeInDuration = Duration(milliseconds: 100);
   Tween<double> _opacityTween;
@@ -44,20 +42,13 @@ class _MkTouchableOpacityState extends State<MkTouchableOpacity>
   AnimationController _animationController;
 
   void _setTween() {
-    _opacityTween = Tween<double>(
-      begin: 1.0,
-      end: widget.pressedOpacity ?? 1.0,
-    );
+    _opacityTween = Tween<double>(begin: 1.0, end: widget.pressedOpacity ?? 1.0);
   }
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 200),
-      value: 0.0,
-      vsync: this,
-    );
+    _animationController = AnimationController(duration: const Duration(milliseconds: 200), value: 0.0, vsync: this);
     _setTween();
   }
 
@@ -125,17 +116,10 @@ class _MkTouchableOpacityState extends State<MkTouchableOpacity>
       child: Semantics(
         button: true,
         child: FadeTransition(
-          opacity: _opacityTween.animate(CurvedAnimation(
-            parent: _animationController,
-            curve: Curves.decelerate,
-          )),
+          opacity: _opacityTween.animate(CurvedAnimation(parent: _animationController, curve: Curves.decelerate)),
           child: Padding(
             padding: widget.padding ?? EdgeInsets.zero,
-            child: Center(
-              widthFactor: 1.0,
-              heightFactor: 1.0,
-              child: widget.child,
-            ),
+            child: Center(widthFactor: 1.0, heightFactor: 1.0, child: widget.child),
           ),
         ),
       ),

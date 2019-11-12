@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_colors.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class MkRaisedButton extends StatelessWidget {
   const MkRaisedButton({
@@ -25,10 +25,7 @@ class MkRaisedButton extends StatelessWidget {
     return RaisedButton(
       color: backgroundColor,
       padding: padding,
-      child: DefaultTextStyle(
-        style: MkTheme.of(context).button.copyWith(color: color),
-        child: child,
-      ),
+      child: DefaultTextStyle(style: ThemeProvider.of(context).button.copyWith(color: color), child: child),
       onPressed: onPressed,
     );
   }

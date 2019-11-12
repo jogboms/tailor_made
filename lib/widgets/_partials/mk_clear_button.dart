@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:tailor_made/constants/mk_colors.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/utils/mk_theme.dart';
+import 'package:tailor_made/widgets/theme_provider.dart';
 
 class MkClearButton extends StatelessWidget {
   const MkClearButton({
@@ -42,10 +42,7 @@ class MkClearButton extends StatelessWidget {
       minSize: _height ?? kButtonHeight,
       color: backgroundColor,
       borderRadius: borderRadius ?? BorderRadius.zero,
-      child: DefaultTextStyle(
-        style: MkTheme.of(context).button.copyWith(color: color),
-        child: child,
-      ),
+      child: DefaultTextStyle(style: ThemeProvider.of(context).button.copyWith(color: color), child: child),
       onPressed: onPressed,
     );
   }
