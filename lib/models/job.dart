@@ -16,7 +16,7 @@ abstract class JobModel with ModelInterface implements Built<JobModel, JobModelB
 
   JobModel._();
 
-  factory JobModel.fromDoc(Snapshot doc) => JobModel.fromJson(doc.data)..reference = doc.reference;
+  factory JobModel.fromSnapshot(Snapshot snapshot) => JobModel.fromJson(snapshot.data)..reference = snapshot.reference;
 
   static void _initializeBuilder(JobModelBuilder b) => b
     ..id = Uuid().v1()

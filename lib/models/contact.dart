@@ -14,7 +14,8 @@ abstract class ContactModel with ModelInterface implements Built<ContactModel, C
 
   ContactModel._();
 
-  factory ContactModel.fromDoc(Snapshot doc) => ContactModel.fromJson(doc.data)..reference = doc.reference;
+  factory ContactModel.fromSnapshot(Snapshot snapshot) =>
+      ContactModel.fromJson(snapshot.data)..reference = snapshot.reference;
 
   static void _initializeBuilder(ContactModelBuilder b) => b
     ..id = Uuid().v1()

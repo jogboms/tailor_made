@@ -9,10 +9,8 @@ class Session {
   static Session di() => Injector.appInstance.getDependency<Session>();
 
   final Environment environment;
-  final bool isTestMode;
 
-  SettingsModel _settings;
-  int _userId;
+  final bool isTestMode;
 
   bool get isDev => environment == Environment.DEVELOPMENT;
 
@@ -20,11 +18,15 @@ class Session {
 
   bool get isTesting => isTestMode;
 
+  int _userId;
+
   void setUserId(int id) => _userId = id;
 
   int getUserId() => _userId;
 
-  void setData(SettingsModel data) => _settings = data;
+  SettingsModel _settings;
 
-  SettingsModel getData() => _settings;
+  void setSettings(SettingsModel data) => _settings = data;
+
+  SettingsModel getSettings() => _settings;
 }

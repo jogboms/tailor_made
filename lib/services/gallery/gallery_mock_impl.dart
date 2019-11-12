@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/services/gallery/gallery.dart';
 
@@ -12,7 +12,7 @@ class GalleryMockImpl extends Gallery {
   }
 
   @override
-  StorageReference createFile(File file) {
+  Storage createFile(File file) {
     // TODO
     return null;
   }

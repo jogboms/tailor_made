@@ -7,11 +7,7 @@ abstract class Measures {
 
   Stream<List<MeasureModel>> fetchAll();
 
-  Future<void> create(
-    List<MeasureModel> measures, {
-    @required String groupName,
-    @required String unitValue,
-  });
+  Future<void> create(List<MeasureModel> measures, {@required String groupName, @required String unitValue});
 
   Future<void> delete(List<MeasureModel> measures);
 

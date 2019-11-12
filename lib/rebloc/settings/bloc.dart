@@ -14,7 +14,7 @@ class SettingsBloc extends SimpleBloc<AppState> {
         .switchMap((context) =>
             Settings.di().fetch().handleError(() => context.dispatcher(const OnErrorSettingsAction())).map((settings) {
               // Keep Static copy
-              Session.di().setData(settings);
+              Session.di().setSettings(settings);
               return OnDataSettingAction(payload: settings);
             }).map((action) => context.copyWith(action)))
         .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)

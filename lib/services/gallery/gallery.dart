@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:injector/injector.dart';
+import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/image.dart';
 
 abstract class Gallery {
@@ -9,5 +9,5 @@ abstract class Gallery {
 
   Stream<List<ImageModel>> fetchAll();
 
-  StorageReference createFile(File file);
+  Storage createFile(File file);
 }

@@ -11,7 +11,8 @@ enum AccountModelStatus { enabled, disabled, warning, pending }
 abstract class AccountModel with ModelInterface implements Built<AccountModel, AccountModelBuilder> {
   factory AccountModel([void updates(AccountModelBuilder b)]) = _$AccountModel;
 
-  factory AccountModel.fromDoc(Snapshot doc) => AccountModel.fromJson(doc.data)..reference = doc.reference;
+  factory AccountModel.fromSnapshot(Snapshot snapshot) =>
+      AccountModel.fromJson(snapshot.data)..reference = snapshot.reference;
 
   AccountModel._();
 

@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/constants/mk_colors.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/services/contacts/contacts.dart';
@@ -35,7 +35,7 @@ class ContactFormState extends State<ContactForm> {
   bool isLoading = false;
   ContactModelBuilder contact;
   bool _autovalidate = false;
-  StorageReference _lastImgRef;
+  Storage _lastImgRef;
   TextEditingController _fNController, _pNController, _lNController;
   final FocusNode _pNFocusNode = FocusNode(), _locFocusNode = FocusNode();
 

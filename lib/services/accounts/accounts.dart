@@ -1,15 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injector/injector.dart';
+import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/account.dart';
 
 abstract class Accounts {
   static Accounts di() => Injector.appInstance.getDependency<Accounts>();
 
-  FirebaseUser get getUser;
+  User get getUser;
 
-  Future<FirebaseUser> signInWithGoogle();
+  Future<User> signInWithGoogle();
 
-  Future<FirebaseUser> get onAuthStateChanged;
+  Future<User> get onAuthStateChanged;
 
   Future<Null> signout();
 
