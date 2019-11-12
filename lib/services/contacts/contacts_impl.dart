@@ -22,12 +22,12 @@ class ContactsImpl extends Contacts {
 
   @override
   Reference fetch(ContactModel contact) {
-    return Reference(CloudDb.contactsRef.document(contact.id));
+    return Reference(CloudDb.contacts.reference().document(contact.id));
   }
 
   @override
   Stream<ContactModel> update(ContactModel contact) {
-    final ref = CloudDb.contactsRef.document(contact.id);
+    final ref = CloudDb.contacts.reference().document(contact.id);
     ref.setData(contact.toMap()).then((r) {});
     return ref.snapshots().map((doc) => ContactModel.fromSnapshot(Snapshot(doc)));
   }

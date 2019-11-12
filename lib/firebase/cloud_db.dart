@@ -18,19 +18,11 @@ class CloudDb {
 
   static Query get gallery => _instance.collection('gallery').where('userID', isEqualTo: _authUserId);
 
-  static CollectionReference get galleryRef => gallery.reference();
-
   static Query get payments => _instance.collection('payments').where('userID', isEqualTo: _authUserId);
-
-  static CollectionReference get paymentsRef => payments.reference();
 
   static Query get contacts => _instance.collection('contacts').where('userID', isEqualTo: _authUserId);
 
-  static CollectionReference get contactsRef => contacts.reference();
-
   static Query get jobs => _instance.collection('jobs').where('userID', isEqualTo: _authUserId);
-
-  static CollectionReference get jobsRef => jobs.reference();
 
   static Future<void> batchAction(void Function(WriteBatch batch) action) {
     final WriteBatch batch = _instance.batch();
