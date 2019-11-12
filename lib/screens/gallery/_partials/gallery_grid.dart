@@ -3,10 +3,7 @@ import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/screens/gallery/_partials/gallery_grid_item.dart';
 
 class GalleryGrid extends StatelessWidget {
-  const GalleryGrid({
-    Key key,
-    this.images,
-  }) : super(key: key);
+  const GalleryGrid({Key key, this.images}) : super(key: key);
 
   final List<ImageModel> images;
 

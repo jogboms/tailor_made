@@ -17,10 +17,7 @@ import 'package:tailor_made/widgets/_partials/mk_dots.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
-enum AccountOptions {
-  logout,
-  storename,
-}
+enum AccountOptions { logout, storename }
 
 class TopButtonBar extends StatelessWidget {
   const TopButtonBar({
@@ -49,10 +46,7 @@ class TopButtonBar extends StatelessWidget {
               padding: const EdgeInsets.all(1.5),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: kPrimaryColor.withOpacity(.5),
-                  width: 1.5,
-                ),
+                border: Border.all(color: kPrimaryColor.withOpacity(.5), width: 1.5),
               ),
               child: GestureDetector(
                 onTap: _onTapAccount(context),
@@ -64,24 +58,14 @@ class TopButtonBar extends StatelessWidget {
                             backgroundColor: Colors.white,
                             backgroundImage: CachedNetworkImageProvider(account.photoURL),
                           )
-                        : Icon(
-                            Icons.person,
-                            color: theme.appBarTitle.color,
-                          ),
+                        : Icon(Icons.person, color: theme.appBarTitle.color),
                     Align(
                       alignment: const Alignment(0.0, 2.25),
-                      child: account.hasPremiumEnabled
-                          ? const ImageIcon(
-                              MkImages.verified,
-                              color: kPrimaryColor,
-                            )
-                          : null,
+                      child:
+                          account.hasPremiumEnabled ? const ImageIcon(MkImages.verified, color: kPrimaryColor) : null,
                     ),
                     Align(
-                      alignment: Alignment(
-                        1.25,
-                        account.hasPremiumEnabled ? -1.25 : 1.25,
-                      ),
+                      alignment: Alignment(1.25, account.hasPremiumEnabled ? -1.25 : 1.25),
                       child: _shouldShowIndicator ? const MkDots(color: kAccentColor) : null,
                     ),
                   ],
@@ -99,29 +83,17 @@ class TopButtonBar extends StatelessWidget {
   VoidCallback _onTapAccount(BuildContext context) {
     return () async {
       if (shouldSendRating) {
-        final _res = await mkShowChildDialog<int>(
-          context: context,
-          child: const ReviewModal(),
-        );
+        final _res = await mkShowChildDialog<int>(context: context, child: const ReviewModal());
 
         if (_res != null) {
-          StoreProvider.of<AppState>(context).dispatch(
-            OnSendRating(payload: account, rating: _res),
-          );
+          StoreProvider.of<AppState>(context).dispatch(OnSendRating(payload: account, rating: _res));
         }
         return;
       }
 
       if (_shouldShowIndicator) {
-        await mkShowChildDialog<dynamic>(
-          context: context,
-          child: NoticeDialog(
-            account: account,
-          ),
-        );
-        StoreProvider.of<AppState>(context).dispatch(
-          OnReadNotice(payload: account),
-        );
+        await mkShowChildDialog<dynamic>(context: context, child: NoticeDialog(account: account));
+        StoreProvider.of<AppState>(context).dispatch(OnReadNotice(payload: account));
         return;
       }
 
@@ -129,30 +101,19 @@ class TopButtonBar extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Text(
-              'Select action',
-              style: ThemeProvider.of(context).body3,
-            ),
+            title: Text('Select action', style: ThemeProvider.of(context).body3),
             children: <Widget>[
               SimpleDialogOption(
                 onPressed: () {
                   Navigator.pop(context, AccountOptions.storename);
                 },
-                child: const TMListTile(
-                  color: kAccentColor,
-                  icon: Icons.store,
-                  title: "Store",
-                ),
+                child: const TMListTile(color: kAccentColor, icon: Icons.store, title: "Store"),
               ),
               SimpleDialogOption(
                 onPressed: () {
                   Navigator.pop(context, AccountOptions.logout);
                 },
-                child: TMListTile(
-                  color: Colors.grey.shade400,
-                  icon: Icons.power_settings_new,
-                  title: "Logout",
-                ),
+                child: TMListTile(color: Colors.grey.shade400, icon: Icons.power_settings_new, title: "Logout"),
               ),
             ],
           );
@@ -161,37 +122,27 @@ class TopButtonBar extends StatelessWidget {
 
       switch (result) {
         case AccountOptions.storename:
-          final _storeName = await Navigator.push<String>(
-            context,
-            MkNavigate.fadeIn<String>(
-              Scaffold(
-                appBar: AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0.0,
-                  automaticallyImplyLeading: false,
-                  leading: const MkCloseButton(
-                    color: Colors.white,
-                  ),
-                ),
-                backgroundColor: Colors.black38,
-                body: StoreNameDialog(account: account),
+          final _storeName = await Navigator.of(context).push<String>(MkNavigate.fadeIn<String>(
+            Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0.0,
+                automaticallyImplyLeading: false,
+                leading: const MkCloseButton(color: Colors.white),
               ),
+              backgroundColor: Colors.black38,
+              body: StoreNameDialog(account: account),
             ),
-          );
+          ));
 
           if (_storeName != null && _storeName != account.storeName) {
-            await account.reference.updateData(<String, String>{
-              "storeName": _storeName,
-            });
+            await account.reference.updateData(<String, String>{"storeName": _storeName});
           }
 
           break;
 
         case AccountOptions.logout:
-          final response = await mkChoiceDialog(
-            context: context,
-            message: "You are about to logout.",
-          );
+          final response = await mkChoiceDialog(context: context, message: "You are about to logout.");
 
           if (response == true) {
             onLogout();

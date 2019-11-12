@@ -15,10 +15,7 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class GalleryView extends StatelessWidget {
-  const GalleryView({
-    Key key,
-    this.image,
-  }) : super(key: key);
+  const GalleryView({Key key, this.image}) : super(key: key);
 
   final ImageModel image;
 
@@ -28,18 +25,10 @@ class GalleryView extends StatelessWidget {
       converter: (store) => ContactJobViewModel(store)
         ..contactID = image.contactID
         ..jobID = image.jobID,
-      builder: (
-        BuildContext context,
-        DispatchFunction dispatch,
-        ContactJobViewModel vm,
-      ) {
+      builder: (_, __, ContactJobViewModel vm) {
         return Scaffold(
           backgroundColor: Colors.black87,
-          appBar: _MyAppBar(
-            contact: vm.selectedContact,
-            job: vm.selectedJob,
-            account: vm.account,
-          ),
+          appBar: _MyAppBar(contact: vm.selectedContact, job: vm.selectedJob, account: vm.account),
           body: PhotoView(
             imageProvider: NetworkImage(image.src),
             loadingChild: const MkLoadingSpinner(),
@@ -52,12 +41,7 @@ class GalleryView extends StatelessWidget {
 }
 
 class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const _MyAppBar({
-    Key key,
-    this.contact,
-    this.job,
-    @required this.account,
-  }) : super(key: key);
+  const _MyAppBar({Key key, this.contact, this.job, @required this.account}) : super(key: key);
 
   final ContactModel contact;
   final JobModel job;
@@ -67,49 +51,33 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return MkStatusBar(
       child: DecoratedBox(
-        decoration: const BoxDecoration(
-          color: Colors.black26,
-        ),
+        decoration: const BoxDecoration(color: Colors.black26),
         child: SafeArea(
           bottom: false,
           child: Row(
             children: <Widget>[
-              const MkBackButton(
-                color: Colors.white,
-              ),
+              const MkBackButton(color: Colors.white),
               const Expanded(child: SizedBox()),
-              job != null
-                  ? IconButton(
-                      icon: const Icon(
-                        Icons.work,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).push<void>(MkNavigate.slideIn<void>(JobPage(job: job)));
-                      },
-                    )
-                  : const SizedBox(),
-              contact != null
-                  ? IconButton(
-                      icon: const Icon(
-                        Icons.person,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).push<void>(MkNavigate.slideIn<void>(ContactPage(contact: contact)));
-                      },
-                    )
-                  : const SizedBox(),
-              account.hasPremiumEnabled
-                  ? IconButton(
-                      icon: const Icon(
-                        Icons.share,
-                        color: Colors.white,
-                      ),
-                      // TODO
-                      onPressed: null,
-                    )
-                  : const SizedBox(),
+              if (job != null)
+                IconButton(
+                  icon: const Icon(Icons.work, color: Colors.white),
+                  onPressed: () {
+                    Navigator.of(context).push<void>(MkNavigate.slideIn<void>(JobPage(job: job)));
+                  },
+                ),
+              if (contact != null)
+                IconButton(
+                  icon: const Icon(Icons.person, color: Colors.white),
+                  onPressed: () {
+                    Navigator.of(context).push<void>(MkNavigate.slideIn<void>(ContactPage(contact: contact)));
+                  },
+                ),
+              if (account.hasPremiumEnabled)
+                IconButton(
+                  icon: const Icon(Icons.share, color: Colors.white),
+                  // TODO
+                  onPressed: null,
+                ),
             ],
           ),
         ),

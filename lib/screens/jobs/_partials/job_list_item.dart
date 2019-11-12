@@ -8,10 +8,7 @@ import 'package:tailor_made/widgets/theme_provider.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class JobListItem extends StatelessWidget {
-  const JobListItem({
-    Key key,
-    @required this.job,
-  }) : super(key: key);
+  const JobListItem({Key key, @required this.job}) : super(key: key);
 
   final JobModel job;
 
@@ -36,26 +33,16 @@ class JobListItem extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   color: Colors.grey.shade100,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(4.0),
-                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                 ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 12.0,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                 child: Text.rich(
                   TextSpan(
                     children: [
-                      TextSpan(
-                        text: "${_date.day}\n",
-                        style: theme.display1,
-                      ),
+                      TextSpan(text: "${_date.day}\n", style: theme.display1),
                       TextSpan(
                         text: MkStrings.monthsShort[_date.month - 1].toUpperCase(),
-                        style: theme.small.copyWith(
-                          letterSpacing: 2.0,
-                        ),
+                        style: theme.small.copyWith(letterSpacing: 2.0),
                       ),
                     ],
                   ),
@@ -68,50 +55,26 @@ class JobListItem extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      job.name,
-                      style: theme.subhead3Semi,
-                    ),
+                    Text(job.name, style: theme.subhead3Semi),
                     const SizedBox(height: 2.0),
-                    Text(
-                      _price,
-                      style: theme.body1,
-                    ),
+                    Text(_price, style: theme.body1),
                     const SizedBox(height: 2.0),
                     job.pendingPayment > 0
                         ? Row(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              Icon(
-                                Icons.arrow_drop_up,
-                                color: Colors.green.shade600,
-                                size: 12.0,
-                              ),
+                              Icon(Icons.arrow_drop_up, color: Colors.green.shade600, size: 12.0),
                               const SizedBox(width: 2.0),
-                              Text(
-                                _paid,
-                                style: TextStyle(fontSize: 11.0),
-                              ),
+                              Text(_paid, style: TextStyle(fontSize: 11.0)),
                               const SizedBox(width: 4.0),
-                              Icon(
-                                Icons.arrow_drop_down,
-                                color: Colors.red.shade600,
-                                size: 12.0,
-                              ),
+                              Icon(Icons.arrow_drop_down, color: Colors.red.shade600, size: 12.0),
                               const SizedBox(width: 2.0),
-                              Text(
-                                _owed,
-                                style: TextStyle(fontSize: 11.0),
-                              ),
+                              Text(_owed, style: TextStyle(fontSize: 11.0)),
                             ],
                           )
                         : Container(
                             padding: const EdgeInsets.all(2.0),
-                            child: const Icon(
-                              Icons.attach_money,
-                              size: 12.0,
-                              color: Colors.white,
-                            ),
+                            child: const Icon(Icons.attach_money, size: 12.0, color: Colors.white),
                             decoration: BoxDecoration(
                               color: Colors.green.shade600,
                               borderRadius: BorderRadius.circular(10.0),
@@ -120,10 +83,7 @@ class JobListItem extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(
-                Icons.check,
-                color: job.isComplete ? kPrimaryColor : kTextBaseColor,
-              ),
+              Icon(Icons.check, color: job.isComplete ? kPrimaryColor : kTextBaseColor),
             ],
           ),
         ),

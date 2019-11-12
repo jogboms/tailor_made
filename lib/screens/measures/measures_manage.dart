@@ -14,9 +14,7 @@ import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class MeasuresManagePage extends StatefulWidget {
-  const MeasuresManagePage({
-    Key key,
-  }) : super(key: key);
+  const MeasuresManagePage({Key key}) : super(key: key);
 
   @override
   _MeasuresManagePageState createState() => _MeasuresManagePageState();
@@ -40,9 +38,7 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> with SnackBarPr
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       key: scaffoldKey,
-      appBar: const MkAppBar(
-        title: Text("Measurements"),
-      ),
+      appBar: const MkAppBar(title: Text("Measurements")),
       body: _buildBody(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
@@ -63,41 +59,27 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> with SnackBarPr
   Widget _buildBody() {
     return ViewModelSubscriber<AppState, MeasuresViewModel>(
       converter: (store) => MeasuresViewModel(store),
-      builder: (
-        BuildContext context,
-        DispatchFunction dispatch,
-        MeasuresViewModel vm,
-      ) {
+      builder: (_, __, MeasuresViewModel vm) {
         if (vm.isLoading) {
-          return Center(
-            child: const MkLoadingSpinner(),
-          );
+          return Center(child: const MkLoadingSpinner());
         }
 
         if (vm.model == null || vm.model.isEmpty) {
-          return Center(
-            child: const EmptyResultView(message: "No measurements available"),
-          );
+          return Center(child: const EmptyResultView(message: "No measurements available"));
         }
-
-        final slides = <Widget>[];
-
-        vm.grouped.forEach((key, data) {
-          slides.add(
-            MeasureSlideBlock(
-              title: key,
-              measures: data.toList(),
-            ),
-          );
-        });
 
         return SafeArea(
           top: false,
           child: SingleChildScrollView(
             child: Column(
-              children: slides
-                ..add(const SizedBox(height: 72.0))
-                ..toList(),
+              children: [
+                for (var i = 0; i < vm.grouped.length; i++)
+                  MeasureSlideBlock(
+                    title: vm.grouped.keys.elementAt(i),
+                    measures: vm.grouped.values.elementAt(i),
+                  ),
+                const SizedBox(height: 72.0)
+              ],
             ),
           ),
         );

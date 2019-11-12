@@ -11,17 +11,10 @@ import 'package:tailor_made/utils/ui/mk_child_dialog.dart';
 import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
-enum ActionChoice {
-  edit,
-  delete,
-}
+enum _ActionChoice { edit, delete }
 
 class MeasureSlideBlock extends StatefulWidget {
-  const MeasureSlideBlock({
-    Key key,
-    @required this.measures,
-    @required this.title,
-  }) : super(key: key);
+  const MeasureSlideBlock({Key key, @required this.measures, @required this.title}) : super(key: key);
 
   final List<MeasureModel> measures;
   final String title;
@@ -33,17 +26,11 @@ class MeasureSlideBlock extends StatefulWidget {
 class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
   @override
   Widget build(BuildContext context) {
-    final children = widget.measures
-        .map<Widget>(
-          (measure) => MeasuresSlideBlockItem(measure: measure),
-        )
-        .toList();
-
     return SlideDownItem(
       title: widget.title,
-      body: Column(
-        children: children,
-      ),
+      body: Column(children: [
+        for (var measure in widget.measures) MeasuresSlideBlockItem(measure: measure),
+      ]),
       onLongPress: () async {
         final choice = await _showOptionsDialog();
 
@@ -51,23 +38,23 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
           return;
         }
 
-        if (choice == ActionChoice.edit) {
+        if (choice == _ActionChoice.edit) {
           onTapEditBlock();
-        } else if (choice == ActionChoice.delete) {
+        } else if (choice == _ActionChoice.delete) {
           onTapDeleteBlock();
         }
       },
     );
   }
 
-  Future<ActionChoice> _showOptionsDialog() {
-    return mkShowChildDialog<ActionChoice>(
+  Future<_ActionChoice> _showOptionsDialog() {
+    return mkShowChildDialog<_ActionChoice>(
       context: context,
       child: SimpleDialog(
         children: <Widget>[
           SimpleDialogOption(
             onPressed: () {
-              Navigator.pop(context, ActionChoice.edit);
+              Navigator.pop(context, _ActionChoice.edit);
             },
             child: Padding(
               child: const Text("Edit"),
@@ -76,7 +63,7 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
           ),
           SimpleDialogOption(
             onPressed: () {
-              Navigator.pop(context, ActionChoice.delete);
+              Navigator.pop(context, _ActionChoice.delete);
             },
             child: Padding(
               child: const Text("Delete"),

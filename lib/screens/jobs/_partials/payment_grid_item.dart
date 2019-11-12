@@ -10,11 +10,8 @@ import 'package:tailor_made/wrappers/mk_navigate.dart';
 const _kGridWidth = 120.0;
 
 class PaymentGridItem extends StatelessWidget {
-  PaymentGridItem({
-    Key key,
-    this.payment,
-    double size,
-  })  : size = Size.square(size ?? _kGridWidth),
+  PaymentGridItem({Key key, this.payment, double size})
+      : size = Size.square(size ?? _kGridWidth),
         super(key: key);
 
   final PaymentModel payment;
@@ -53,30 +50,19 @@ class PaymentGridItem extends StatelessWidget {
                       children: [
                         TextSpan(
                           text: _date.day.toString(),
-                          style: theme.subhead3.copyWith(
-                            fontWeight: MkStyle.medium,
-                            color: Colors.white,
-                          ),
+                          style: theme.subhead3.copyWith(fontWeight: MkStyle.medium, color: Colors.white),
                         ),
                         const TextSpan(text: "\n"),
                         TextSpan(
                           text: "${MkStrings.monthsShort[_date.month - 1].toUpperCase()}, ${_date.year}",
-                          style: theme.xxsmall.copyWith(
-                            fontWeight: MkStyle.medium,
-                            color: Colors.white,
-                          ),
+                          style: theme.xxsmall.copyWith(fontWeight: MkStyle.medium, color: Colors.white),
                         ),
                       ],
                     ),
                     textAlign: TextAlign.right,
                   ),
                 ),
-                Text(
-                  _price,
-                  style: theme.title.copyWith(
-                    color: Colors.white,
-                  ),
-                )
+                Text(_price, style: theme.title.copyWith(color: Colors.white))
               ],
             ),
           ),

@@ -21,10 +21,7 @@ import 'package:tailor_made/widgets/theme_provider.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class SplashPage extends StatelessWidget {
-  const SplashPage({
-    Key key,
-    @required this.isColdStart,
-  }) : super(key: key);
+  const SplashPage({Key key, @required this.isColdStart}) : super(key: key);
 
   final bool isColdStart;
 
@@ -42,10 +39,7 @@ class SplashPage extends StatelessWidget {
               opacity: .5,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: MkImages.pattern,
-                    fit: BoxFit.cover,
-                  ),
+                  image: DecorationImage(image: MkImages.pattern, fit: BoxFit.cover),
                 ),
               ),
             ),
@@ -57,9 +51,7 @@ class SplashPage extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     MkStrings.appName,
-                    style: theme.display2Semi.copyWith(
-                      color: kTextBaseColor.withOpacity(.6),
-                    ),
+                    style: theme.display2Semi.copyWith(color: kTextBaseColor.withOpacity(.6)),
                     textAlign: TextAlign.center,
                   ),
                   if (MkVersionCheck.get() != null)
@@ -80,10 +72,7 @@ class SplashPage extends StatelessWidget {
 }
 
 class _Content extends StatefulWidget {
-  const _Content({
-    Key key,
-    @required this.isColdStart,
-  }) : super(key: key);
+  const _Content({Key key, @required this.isColdStart}) : super(key: key);
 
   final bool isColdStart;
 
@@ -93,121 +82,89 @@ class _Content extends StatefulWidget {
 
 class _ContentState extends State<_Content> {
   bool isLoading;
-  bool isRestartable = false;
+  bool canRestartSignin = false;
 
   @override
   void initState() {
     super.initState();
     isLoading = widget.isColdStart;
 
-    Accounts.di().onAuthStateChanged.then(
-      (user) {
-        WidgetsBinding.instance.addPostFrameCallback(
+    Accounts.di().onAuthStateChanged.then((user) => WidgetsBinding.instance.addPostFrameCallback(
           (_) async {
             StoreProvider.of<AppState>(context).dispatch(OnLoginAction(user));
-            await Navigator.pushAndRemoveUntil<void>(
-              context,
+            await Navigator.of(context).pushAndRemoveUntil<void>(
               MkNavigate.fadeIn<void>(const HomePage()),
               (Route<void> route) => false,
             );
           },
-        );
-      },
-    );
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, SettingsViewModel>(
       converter: (store) => SettingsViewModel(store),
-      builder: (
-        BuildContext context,
-        DispatchFunction dispatch,
-        SettingsViewModel vm,
-      ) {
+      builder: (BuildContext context, DispatchFunction dispatch, SettingsViewModel vm) {
         return Stack(
-          // fit: StackFit.expand,
           children: [
-            isLoading && (widget.isColdStart || isRestartable) && !vm.hasError
-                ? const SizedBox()
-                : const Center(
-                    child: Image(
-                      image: MkImages.logo,
-                      width: 148.0,
-                      color: Colors.white30,
-                      colorBlendMode: BlendMode.saturation,
-                    ),
-                  ),
+            if (!(isLoading && (widget.isColdStart || canRestartSignin) && !vm.hasError))
+              const Center(
+                child: Image(
+                  image: MkImages.logo,
+                  width: 148.0,
+                  color: Colors.white30,
+                  colorBlendMode: BlendMode.saturation,
+                ),
+              ),
             Positioned.fill(
               top: null,
               bottom: 124.0,
-              child: Builder(
-                builder: (_) {
-                  if (vm.isLoading && widget.isColdStart) {
-                    return const MkLoadingSpinner();
-                  }
+              child: Builder(builder: (_) {
+                if (vm.isLoading && widget.isColdStart) {
+                  return const MkLoadingSpinner();
+                }
 
-                  if (vm.hasError) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 48.0,
-                        vertical: 16.0,
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            const Text(
-                              "You need a stable internet connection to proceed.",
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 8.0),
-                            MkRaisedButton(
-                              backgroundColor: Colors.white,
-                              color: kTextBaseColor,
-                              onPressed: () => dispatch(const InitSettingsAction()),
-                              child: const Text("RETRY"),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-
-                  if (widget.isColdStart && !isRestartable) {
-                    WidgetsBinding.instance.addPostFrameCallback(
-                      (_) async => _onLogin(),
-                    );
-                  }
-
-                  if (isLoading) {
-                    return const MkLoadingSpinner();
-                  }
-
-                  return Center(
-                    child: RaisedButton.icon(
-                      color: Colors.white,
-                      onPressed: () {
-                        setState(() => isLoading = true);
-                        try {
-                          _onLogin();
-                        } catch (e) {
-                          setState(() => isLoading = false);
-                          SnackBarProvider.of(context).show(e.toString());
-                        }
-                      },
-                      icon: const Image(
-                        image: MkImages.google_logo,
-                        width: 24.0,
-                      ),
-                      label: Text(
-                        "Continue with Google",
-                        style: ThemeProvider.of(context).bodyBold,
+                if (vm.hasError) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 48.0, vertical: 16.0),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          const Text(
+                            "You need a stable internet connection to proceed.",
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 8.0),
+                          MkRaisedButton(
+                            backgroundColor: Colors.white,
+                            color: kTextBaseColor,
+                            onPressed: () => dispatch(const InitSettingsAction()),
+                            child: const Text("RETRY"),
+                          ),
+                        ],
                       ),
                     ),
                   );
-                },
-              ),
+                }
+
+                if (widget.isColdStart && !canRestartSignin) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) async => _onLogin());
+                }
+
+                if (isLoading) {
+                  return const MkLoadingSpinner();
+                }
+
+                return Center(
+                  child: RaisedButton.icon(
+                    color: Colors.white,
+                    icon: const Image(image: MkImages.google_logo, width: 24.0),
+                    label: Text("Continue with Google", style: ThemeProvider.of(context).bodyBold),
+                    onPressed: _onLogin,
+                  ),
+                );
+              }),
             )
           ],
         );
@@ -216,7 +173,10 @@ class _ContentState extends State<_Content> {
   }
 
   Future<void> _onLogin() async {
-    return await Accounts.di().signInWithGoogle().catchError((dynamic e) async {
+    setState(() => isLoading = true);
+    try {
+      await Accounts.di().signInWithGoogle();
+    } catch (e) {
       // TODO disabled
       String message = "";
 
@@ -246,6 +206,7 @@ class _ContentState extends State<_Content> {
         case "canceled":
         default:
       }
+
       if (message.isNotEmpty) {
         SnackBarProvider.of(context).show(
           message,
@@ -258,10 +219,13 @@ class _ContentState extends State<_Content> {
       if (!mounted) {
         return;
       }
+
       setState(() {
         isLoading = false;
-        isRestartable = true;
+        canRestartSignin = true;
       });
-    });
+
+      SnackBarProvider.of(context).show(e.toString());
+    }
   }
 }

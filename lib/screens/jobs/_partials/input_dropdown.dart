@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 
 class InputDropdown extends StatelessWidget {
-  const InputDropdown({
-    Key key,
-    this.child,
-    this.labelText,
-    this.valueText,
-    this.valueStyle,
-    this.onPressed,
-  }) : super(key: key);
+  const InputDropdown({Key key, this.child, this.labelText, this.valueText, this.valueStyle, this.onPressed})
+      : super(key: key);
 
   final String labelText;
   final String valueText;
@@ -21,10 +15,7 @@ class InputDropdown extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: InputDecorator(
-        decoration: InputDecoration(
-          labelText: labelText,
-          isDense: true,
-        ),
+        decoration: InputDecoration(labelText: labelText, isDense: true),
         baseStyle: valueStyle,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

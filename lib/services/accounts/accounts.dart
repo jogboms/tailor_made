@@ -11,7 +11,7 @@ abstract class Accounts {
 
   Future<User> get onAuthStateChanged;
 
-  Future<Null> signout();
+  Future<void> signout();
 
   Future<void> readNotice(AccountModel account);
 

@@ -14,10 +14,7 @@ class ReviewModal extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                "Can you rate the experience so far?",
-                textAlign: TextAlign.center,
-              ),
+              const Text("Can you rate the experience so far?", textAlign: TextAlign.center),
               const SizedBox(height: 24.0),
               Row(
                 mainAxisSize: MainAxisSize.min,

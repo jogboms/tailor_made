@@ -5,42 +5,29 @@ import 'package:tailor_made/screens/measures/_views/slide_down.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class MeasureCreateItems extends StatelessWidget {
-  const MeasureCreateItems({
-    Key key,
-    @required this.grouped,
-    @required this.measurements,
-  }) : super(key: key);
+  const MeasureCreateItems({Key key, @required this.grouped, @required this.measurements}) : super(key: key);
 
   final Map<String, List<MeasureModel>> grouped;
   final Map<String, double> measurements;
 
   @override
   Widget build(BuildContext context) {
-    final slides = <SlideDownItem>[];
-
-    grouped.forEach((key, data) {
-      slides.add(SlideDownItem(
-        title: key,
-        body: JobMeasureBlock(
-          measures: data.toList(),
-          measurements: measurements,
+    return Column(children: [
+      for (var i = 0; i < grouped.length; i++)
+        SlideDownItem(
+          title: grouped.keys.elementAt(i),
+          body: JobMeasureBlock(
+            measures: grouped.values.elementAt(i),
+            measurements: measurements,
+          ),
         ),
-        // isExpanded: true,
-      ));
-    });
-
-    return Column(
-      children: slides.toList(),
-    );
+    ]);
   }
 }
 
+// TODO: should rework this
 class JobMeasureBlock extends StatelessWidget {
-  const JobMeasureBlock({
-    Key key,
-    @required this.measures,
-    @required this.measurements,
-  }) : super(key: key);
+  const JobMeasureBlock({Key key, @required this.measures, @required this.measurements}) : super(key: key);
 
   final List<MeasureModel> measures;
   final Map<String, double> measurements;
@@ -50,11 +37,7 @@ class JobMeasureBlock extends StatelessWidget {
     final length = measures.length;
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: MkBorderSide(),
-        ),
-      ),
+      decoration: const BoxDecoration(border: Border(bottom: MkBorderSide())),
       child: Wrap(
         alignment: WrapAlignment.spaceBetween,
         children: measures.map((MeasureModel measure) {
@@ -69,11 +52,7 @@ class JobMeasureBlock extends StatelessWidget {
               final removeBorder = (length % 2 != 0 && (index == length - 1)) ||
                   (length % 2 == 0 && (index == length - 1 || index == length - 2));
               return Container(
-                padding: const EdgeInsets.only(
-                  top: 8.0,
-                  bottom: 8.0,
-                  left: 16.0,
-                ),
+                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0),
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: MkBorderSide(
@@ -86,7 +65,6 @@ class JobMeasureBlock extends StatelessWidget {
                 ),
                 width: constraints.maxWidth / 2,
                 child: TextFormField(
-                  // initialValue: value,
                   controller: _controller,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   style: ThemeProvider.of(context).headline,

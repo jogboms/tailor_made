@@ -5,10 +5,7 @@ import 'package:tailor_made/utils/ui/mk_sliver_separator_builder_delegate.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 
 class PaymentList extends StatelessWidget {
-  const PaymentList({
-    Key key,
-    @required this.payments,
-  }) : super(key: key);
+  const PaymentList({Key key, @required this.payments}) : super(key: key);
 
   final List<PaymentModel> payments;
 
@@ -23,9 +20,7 @@ class PaymentList extends StatelessWidget {
     return SliverList(
       delegate: MkSliverSeparatorBuilderDelegate(
         childCount: payments.length,
-        builder: (BuildContext context, int index) {
-          return PaymentListItem(payment: payments[index]);
-        },
+        builder: (_, int index) => PaymentListItem(payment: payments[index]),
         separatorBuilder: (_, __) => const Divider(height: 0),
       ),
     );

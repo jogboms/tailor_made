@@ -7,16 +7,10 @@ import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
-enum CreateOptions {
-  contacts,
-  jobs,
-}
+enum _CreateOptions { contacts, jobs }
 
 class CreateButton extends StatefulWidget {
-  const CreateButton({
-    Key key,
-    @required this.contacts,
-  }) : super(key: key);
+  const CreateButton({Key key, @required this.contacts}) : super(key: key);
 
   final List<ContactModel> contacts;
 
@@ -30,10 +24,7 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    )..repeat(reverse: true);
+    controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200))..repeat(reverse: true);
   }
 
   @override
@@ -67,40 +58,29 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
 
   VoidCallback _onTapCreate(List<ContactModel> contacts) {
     return () async {
-      final CreateOptions result = await showDialog<CreateOptions>(
+      final _CreateOptions result = await showDialog<_CreateOptions>(
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Text(
-              'Select action',
-              style: ThemeProvider.of(context).body3,
-            ),
+            title: Text('Select action', style: ThemeProvider.of(context).body3),
             children: <Widget>[
               SimpleDialogOption(
-                onPressed: () => Navigator.pop(context, CreateOptions.contacts),
-                child: TMListTile(
-                  color: Colors.orangeAccent,
-                  icon: Icons.supervisor_account,
-                  title: "Contact",
-                ),
+                onPressed: () => Navigator.pop(context, _CreateOptions.contacts),
+                child: TMListTile(color: Colors.orangeAccent, icon: Icons.supervisor_account, title: "Contact"),
               ),
               SimpleDialogOption(
-                onPressed: () => Navigator.pop(context, CreateOptions.jobs),
-                child: TMListTile(
-                  color: Colors.greenAccent.shade400,
-                  icon: Icons.attach_money,
-                  title: "Job",
-                ),
+                onPressed: () => Navigator.pop(context, _CreateOptions.jobs),
+                child: TMListTile(color: Colors.greenAccent.shade400, icon: Icons.attach_money, title: "Job"),
               ),
             ],
           );
         },
       );
       switch (result) {
-        case CreateOptions.contacts:
+        case _CreateOptions.contacts:
           await Navigator.of(context).push<void>(MkNavigate.slideIn<void>(const ContactsCreatePage()));
           break;
-        case CreateOptions.jobs:
+        case _CreateOptions.jobs:
           await Navigator.of(context).push<void>(MkNavigate.slideIn<void>(JobsCreatePage(contacts: contacts)));
           break;
       }

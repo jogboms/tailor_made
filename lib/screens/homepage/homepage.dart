@@ -27,17 +27,12 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({
-    Key key,
-  }) : super(key: key);
+  const HomePage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => mkChoiceDialog(
-        context: context,
-        message: "Continue with Exit?",
-      ),
+      onWillPop: () => mkChoiceDialog(context: context, message: "Continue with Exit?"),
       child: MkStatusBar(
         brightness: Brightness.dark,
         child: Scaffold(
@@ -49,53 +44,38 @@ class HomePage extends StatelessWidget {
                 opacity: .5,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: MkImages.pattern,
-                      fit: BoxFit.cover,
-                    ),
+                    image: DecorationImage(image: MkImages.pattern, fit: BoxFit.cover),
                   ),
                 ),
               ),
               ViewModelSubscriber<AppState, HomeViewModel>(
                 converter: (store) => HomeViewModel(store),
-                builder: (
-                  BuildContext context,
-                  DispatchFunction dispatch,
-                  HomeViewModel vm,
-                ) {
+                builder: (BuildContext context, DispatchFunction dispatch, HomeViewModel vm) {
                   if (vm.isLoading) {
                     return const MkLoadingSpinner();
                   }
 
                   if (vm.isOutdated) {
-                    return OutDatedPage(
-                      onUpdate: () {
-                        open(
-                          'https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade',
-                        );
-                      },
-                    );
+                    return OutDatedPage(onUpdate: () {
+                      open(
+                        'https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade',
+                      );
+                    });
                   }
 
                   if (vm.isDisabled) {
-                    return AccessDeniedPage(
-                      onSendMail: () {
-                        email(
-                          "jeremiahogbomo@gmail.com",
-                          '${MkStrings.appName} - Unwarranted%20Account%20Suspension%20%23${vm.account.uid}',
-                        );
-                      },
-                    );
+                    return AccessDeniedPage(onSendMail: () {
+                      email(
+                        "jeremiahogbomo@gmail.com",
+                        '${MkStrings.appName} - Unwarranted%20Account%20Suspension%20%23${vm.account.uid}',
+                      );
+                    });
                   }
 
                   if (vm.isWarning && vm.hasSkipedPremium == false) {
                     return RateLimitPage(
-                      onSignUp: () {
-                        dispatch(OnPremiumSignUp(payload: vm.account));
-                      },
-                      onSkipedPremium: () {
-                        dispatch(const OnSkipedPremium());
-                      },
+                      onSignUp: () => dispatch(OnPremiumSignUp(payload: vm.account)),
+                      onSkipedPremium: () => dispatch(const OnSkipedPremium()),
                     );
                   }
 
@@ -111,10 +91,7 @@ class HomePage extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({
-    Key key,
-    @required this.vm,
-  }) : super(key: key);
+  const _Body({Key key, @required this.vm}) : super(key: key);
 
   final HomeViewModel vm;
 
@@ -124,26 +101,14 @@ class _Body extends StatelessWidget {
       fit: StackFit.expand,
       children: <Widget>[
         Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Expanded(
-              flex: 12,
-              child: HeaderWidget(account: vm.account),
-            ),
+            Expanded(flex: 12, child: HeaderWidget(account: vm.account)),
             StatsWidget(stats: vm.stats),
             Expanded(flex: 2, child: TopRowWidget(stats: vm.stats)),
             Expanded(flex: 2, child: MidRowWidget(stats: vm.stats)),
-            Expanded(
-              flex: 2,
-              child: BottomRowWidget(
-                stats: vm.stats,
-                account: vm.account,
-              ),
-            ),
-            SizedBox(
-              height: kButtonHeight + MediaQuery.of(context).padding.bottom,
-            ),
+            Expanded(flex: 2, child: BottomRowWidget(stats: vm.stats, account: vm.account)),
+            SizedBox(height: kButtonHeight + MediaQuery.of(context).padding.bottom),
           ],
         ),
         CreateButton(contacts: vm.contacts),
@@ -152,15 +117,9 @@ class _Body extends StatelessWidget {
           shouldSendRating: vm.shouldSendRating,
           onLogout: () async {
             await Accounts.di().signout();
-            StoreProvider.of<AppState>(context).dispatch(
-              const OnLogoutAction(),
-            );
-            await Navigator.pushAndRemoveUntil<void>(
-              context,
-              MkNavigate.fadeIn<void>(
-                const SplashPage(isColdStart: false),
-                name: MkRoutes.start,
-              ),
+            StoreProvider.of<AppState>(context).dispatch(const OnLogoutAction());
+            await Navigator.of(context).pushAndRemoveUntil<void>(
+              MkNavigate.fadeIn<void>(const SplashPage(isColdStart: false), name: MkRoutes.start),
               (Route<void> route) => false,
             );
           },

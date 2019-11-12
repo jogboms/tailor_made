@@ -6,10 +6,7 @@ import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/screens/measures/_views/measure_edit_dialog.dart';
 
 class MeasuresSlideBlockItem extends StatefulWidget {
-  const MeasuresSlideBlockItem({
-    Key key,
-    @required this.measure,
-  }) : super(key: key);
+  const MeasuresSlideBlockItem({Key key, @required this.measure}) : super(key: key);
 
   final MeasureModel measure;
 
@@ -28,26 +25,23 @@ class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           InkResponse(
-            child: Icon(
-              Icons.settings,
-              color: kPrimaryColor.withOpacity(.75),
-            ),
-            onTap: () => onTapEditItem(widget.measure),
+            child: Icon(Icons.settings, color: kPrimaryColor.withOpacity(.75)),
+            onTap: () => _onTapEditItem(widget.measure),
           ),
         ],
       ),
     );
   }
 
-  void onTapEditItem(MeasureModel measure) async {
-    final _controller = TextEditingController(text: measure.name);
-
-    void _onSave(String value) {
-      final _value = value.trim();
-      if (_value.length > 1) {
-        Navigator.pop(context, _value);
-      }
+  void _onSave(String value) {
+    final _value = value.trim();
+    if (_value.length > 1) {
+      Navigator.pop(context, _value);
     }
+  }
+
+  void _onTapEditItem(MeasureModel measure) async {
+    final _controller = TextEditingController(text: measure.name);
 
     final itemName = await showEditDialog(
       context: context,
@@ -57,7 +51,7 @@ class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
           textCapitalization: TextCapitalization.words,
           controller: _controller,
           onSubmitted: (value) => _onSave(value),
-        ),
+        )
       ],
       onDone: () => _onSave(_controller.text),
       onCancel: () => Navigator.pop(context),
@@ -70,10 +64,7 @@ class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
     SnackBarProvider.of(context).loading();
 
     try {
-      await measure.reference.updateData(<String, String>{
-        "name": itemName,
-        // "unit": "",
-      });
+      await measure.reference.updateData(<String, String>{"name": itemName});
       SnackBarProvider.of(context).hide();
     } catch (e) {
       SnackBarProvider.of(context).show(e.toString());

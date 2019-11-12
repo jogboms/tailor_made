@@ -4,10 +4,7 @@ import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class NoticeDialog extends StatelessWidget {
-  const NoticeDialog({
-    Key key,
-    @required this.account,
-  }) : super(key: key);
+  const NoticeDialog({Key key, @required this.account}) : super(key: key);
 
   final AccountModel account;
 
@@ -29,10 +26,7 @@ class NoticeDialog extends StatelessWidget {
               CircleAvatar(
                 backgroundColor: kAccentColor,
                 foregroundColor: Colors.white,
-                child: const Icon(
-                  Icons.notifications_none,
-                  size: 36.0,
-                ),
+                child: const Icon(Icons.notifications_none, size: 36.0),
                 radius: 24.0,
               ),
               const SizedBox(height: 32.0),

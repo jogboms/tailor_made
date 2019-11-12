@@ -22,7 +22,7 @@ class AccountsMockImpl extends Accounts {
   }
 
   @override
-  Future<Null> signout() {
+  Future<void> signout() {
     // TODO
     return null;
   }

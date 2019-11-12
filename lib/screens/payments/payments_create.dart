@@ -132,7 +132,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
       return;
     }
     if (!form.validate()) {
-      _autovalidate = true; // Start validating on every change.
+      _autovalidate = true;
       showInSnackBar(MkStrings.fixErrors);
     } else {
       form.save();

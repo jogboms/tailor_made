@@ -17,7 +17,7 @@ class AccountsImpl extends Accounts {
       Auth.onAuthStateChanged.firstWhere((user) => user != null).then((user) => Auth.setUser(user));
 
   @override
-  Future<Null> signout() => Auth.signOutWithGoogle();
+  Future<void> signout() => Auth.signOutWithGoogle();
 
   @override
   Future<void> readNotice(AccountModel account) async {

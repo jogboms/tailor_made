@@ -17,11 +17,7 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 
 class ContactForm extends StatefulWidget {
-  const ContactForm({
-    Key key,
-    @required this.contact,
-    @required this.onHandleSubmit,
-  }) : super(key: key);
+  const ContactForm({Key key, @required this.contact, @required this.onHandleSubmit}) : super(key: key);
 
   final ValueSetter<ContactModel> onHandleSubmit;
   final ContactModel contact;
@@ -63,11 +59,7 @@ class ContactFormState extends State<ContactForm> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           const SizedBox(height: 32.0),
-          _Avatar(
-            contact: contact.build(),
-            isLoading: isLoading,
-            onTap: _handlePhotoButtonPressed,
-          ),
+          _Avatar(contact: contact.build(), isLoading: isLoading, onTap: _handlePhotoButtonPressed),
           const SizedBox(height: 16.0),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -80,10 +72,7 @@ class ContactFormState extends State<ContactForm> {
                   TextFormField(
                     controller: _fNController,
                     textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.person),
-                      labelText: "Fullname",
-                    ),
+                    decoration: const InputDecoration(prefixIcon: Icon(Icons.person), labelText: "Fullname"),
                     validator: MkValidate.tryAlpha(),
                     onSaved: (fullname) => contact.fullname = fullname.trim(),
                     onEditingComplete: () => FocusScope.of(context).requestFocus(_pNFocusNode),
@@ -94,10 +83,7 @@ class ContactFormState extends State<ContactForm> {
                     controller: _pNController,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.phone,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.phone),
-                      labelText: "Phone",
-                    ),
+                    decoration: const InputDecoration(prefixIcon: Icon(Icons.phone), labelText: "Phone"),
                     validator: (value) => (value.isNotEmpty) ? null : "Please input a value",
                     onSaved: (phone) => contact.phone = phone.trim(),
                     onEditingComplete: () => FocusScope.of(context).requestFocus(_locFocusNode),
@@ -107,19 +93,13 @@ class ContactFormState extends State<ContactForm> {
                     focusNode: _locFocusNode,
                     controller: _lNController,
                     textInputAction: TextInputAction.done,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.location_city),
-                      labelText: "Location",
-                    ),
+                    decoration: const InputDecoration(prefixIcon: Icon(Icons.location_city), labelText: "Location"),
                     validator: (value) => (value.isNotEmpty) ? null : "Please input a value",
                     onSaved: (location) => contact.location = location.trim(),
                     onFieldSubmitted: (value) => _handleSubmit(),
                   ),
                   const SizedBox(height: 32.0),
-                  MkPrimaryButton(
-                    onPressed: _handleSubmit,
-                    child: const Text("SUBMIT"),
-                  ),
+                  MkPrimaryButton(onPressed: _handleSubmit, child: const Text("SUBMIT")),
                   const SizedBox(height: 32.0),
                 ],
               ),
@@ -136,7 +116,7 @@ class ContactFormState extends State<ContactForm> {
       return;
     }
     if (!form.validate()) {
-      _autovalidate = true; // Start validating on every change.
+      _autovalidate = true;
       SnackBarProvider.of(context).show(MkStrings.fixErrors);
     } else {
       form.save();
@@ -144,7 +124,7 @@ class ContactFormState extends State<ContactForm> {
     }
   }
 
-  Future<Null> _handlePhotoButtonPressed() async {
+  Future<void> _handlePhotoButtonPressed() async {
     final source = await mkImageChoiceDialog(context: context);
     if (source == null) {
       return;
@@ -153,7 +133,6 @@ class ContactFormState extends State<ContactForm> {
     if (imageFile == null) {
       return;
     }
-    // TODO: remove firebase coupling
     final ref = Contacts.di().createFile(imageFile);
 
     setState(() => isLoading = true);
@@ -209,16 +188,10 @@ class _Avatar extends StatelessWidget {
       padding: const EdgeInsets.all(4.0),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(
-          color: MkColors.primary,
-          width: 2.0,
-        ),
+        border: Border.all(color: MkColors.primary, width: 2.0),
       ),
       child: DecoratedBox(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: kPrimarySwatch.shade100,
-        ),
+        decoration: BoxDecoration(shape: BoxShape.circle, color: kPrimarySwatch.shade100),
         child: Center(
           child: GestureDetector(
             onTap: onTap,
@@ -227,19 +200,15 @@ class _Avatar extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  contact.imageUrl != null
-                      ? CircleAvatar(
-                          backgroundImage: NetworkImage(contact.imageUrl),
-                          backgroundColor: kPrimarySwatch.shade100,
-                        )
-                      : const SizedBox(),
+                  if (contact.imageUrl != null)
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(contact.imageUrl),
+                      backgroundColor: kPrimarySwatch.shade100,
+                    ),
                   isLoading
                       ? const MkLoadingSpinner()
                       : MkClearButton(
-                          child: const Icon(
-                            Icons.add_a_photo,
-                            color: Colors.white,
-                          ),
+                          child: const Icon(Icons.add_a_photo, color: Colors.white),
                           onPressed: null,
                         ),
                 ],

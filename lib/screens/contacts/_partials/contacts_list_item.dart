@@ -9,12 +9,7 @@ import 'package:tailor_made/widgets/theme_provider.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class ContactsListItem extends StatelessWidget {
-  const ContactsListItem({
-    Key key,
-    this.contact,
-    this.onTapContact,
-    this.showActions = true,
-  }) : super(key: key);
+  const ContactsListItem({Key key, this.contact, this.onTapContact, this.showActions = true}) : super(key: key);
 
   final ContactModel contact;
   final VoidCallback onTapContact;
@@ -30,9 +25,9 @@ class ContactsListItem extends StatelessWidget {
       dense: true,
       contentPadding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
       onTap: onTapContact ??
-          () {
-            return Navigator.push<void>(context, MkNavigate.slideIn<void>(ContactPage(contact: contact)));
-          },
+          () => Navigator.of(context).push<void>(
+                MkNavigate.slideIn<void>(ContactPage(contact: contact)),
+              ),
       leading: _Avatar(contact: contact),
       title: Text(
         contact.fullname,
@@ -55,10 +50,7 @@ class ContactsListItem extends StatelessWidget {
 }
 
 class _Avatar extends StatelessWidget {
-  const _Avatar({
-    Key key,
-    @required this.contact,
-  }) : super(key: key);
+  const _Avatar({Key key, @required this.contact}) : super(key: key);
 
   final ContactModel contact;
 
@@ -76,14 +68,7 @@ class _Avatar extends StatelessWidget {
               alignment: const Alignment(1.05, -1.05),
               child: contact.pendingJobs > 0 ? const MkDots(color: kAccentColor) : null,
             ),
-            contact.imageUrl != null
-                ? const SizedBox()
-                : const Center(
-                    child: Icon(
-                      Icons.person_outline,
-                      color: Colors.white,
-                    ),
-                  ),
+            if (contact.imageUrl == null) const Center(child: Icon(Icons.person_outline, color: Colors.white)),
           ],
         ),
       ),

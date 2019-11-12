@@ -6,10 +6,7 @@ import 'package:tailor_made/screens/measures/_partials/measure_list_item.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 
 class MeasuresPage extends StatelessWidget {
-  const MeasuresPage({
-    Key key,
-    this.measurements,
-  }) : super(key: key);
+  const MeasuresPage({Key key, this.measurements}) : super(key: key);
 
   final Map<String, double> measurements;
 
@@ -24,16 +21,10 @@ class MeasuresPage extends StatelessWidget {
       ),
       body: ViewModelSubscriber<AppState, MeasuresViewModel>(
         converter: (store) => MeasuresViewModel(store),
-        builder: (
-          BuildContext context,
-          DispatchFunction dispatch,
-          MeasuresViewModel vm,
-        ) {
+        builder: (BuildContext context, _, MeasuresViewModel vm) {
           if (vm.model.isEmpty) {
             return const Center(
-              child: EmptyResultView(
-                message: "No measurements available",
-              ),
+              child: EmptyResultView(message: "No measurements available"),
             );
           }
 
@@ -41,7 +32,7 @@ class MeasuresPage extends StatelessWidget {
             itemCount: vm.model.length,
             shrinkWrap: true,
             padding: const EdgeInsets.only(bottom: 96.0),
-            itemBuilder: (context, index) {
+            itemBuilder: (_, index) {
               final measure = vm.model[index].toBuilder();
               final _value = measurements[measure.id] ?? 0.0;
               return MeasureListItem(item: (measure..value = _value).build());

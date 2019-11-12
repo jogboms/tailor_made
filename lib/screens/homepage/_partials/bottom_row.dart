@@ -8,11 +8,7 @@ import 'package:tailor_made/screens/tasks/tasks.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class BottomRowWidget extends StatelessWidget {
-  const BottomRowWidget({
-    Key key,
-    @required this.stats,
-    @required this.account,
-  }) : super(key: key);
+  const BottomRowWidget({Key key, @required this.stats, @required this.account}) : super(key: key);
 
   final StatsModel stats;
   final AccountModel account;
@@ -20,18 +16,12 @@ class BottomRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: const BoxDecoration(
-        border: Border(bottom: MkBorderSide()),
-      ),
+      decoration: const BoxDecoration(border: Border(bottom: MkBorderSide())),
       child: Row(
         children: <Widget>[
           Expanded(
             child: DecoratedBox(
-              decoration: const BoxDecoration(
-                border: Border(
-                  right: MkBorderSide(),
-                ),
-              ),
+              decoration: const BoxDecoration(border: Border(right: MkBorderSide())),
               child: TMGridTile(
                 color: kPrimaryColor,
                 icon: Icons.content_cut,

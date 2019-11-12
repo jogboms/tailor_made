@@ -11,20 +11,9 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
-const _kGridWidth = 120.0;
-
-class FirePayment {
-  PaymentModel payment;
-  bool isLoading = true;
-  bool isSucess = false;
-}
-
 class PaymentGrids extends StatefulWidget {
-  PaymentGrids({
-    Key key,
-    double gridSize,
-    @required this.job,
-  })  : gridSize = Size.square(gridSize ?? _kGridWidth),
+  PaymentGrids({Key key, double gridSize, @required this.job})
+      : gridSize = Size.square(gridSize ?? _kGridWidth),
         super(key: key);
 
   final Size gridSize;
@@ -35,33 +24,30 @@ class PaymentGrids extends StatefulWidget {
 }
 
 class _PaymentGridsState extends State<PaymentGrids> {
-  List<FirePayment> firePayments = [];
+  List<_FirePayment> _firePayments = [];
 
   @override
   void initState() {
     super.initState();
-    firePayments = widget.job.payments.map((payment) => FirePayment()..payment = payment).toList();
+    _firePayments = widget.job.payments.map((payment) => _FirePayment()..payment = payment).toList();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = ThemeProvider.of(context);
     final List<Widget> paymentsList = List<Widget>.generate(
-      firePayments.length,
+      _firePayments.length,
       (int index) {
-        final fireImage = firePayments[index];
+        final fireImage = _firePayments[index];
         final payment = fireImage.payment;
 
         if (payment == null) {
-          return const Center(
-            widthFactor: 2.5,
-            child: MkLoadingSpinner(),
-          );
+          return const Center(widthFactor: 2.5, child: MkLoadingSpinner());
         }
 
         return PaymentGridItem(payment: payment);
       },
-    ).toList();
+    ).reversed.toList();
 
     return Column(
       children: <Widget>[
@@ -70,12 +56,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
           children: <Widget>[
             const SizedBox(width: 16.0),
             Expanded(
-              child: Text(
-                "PAYMENTS",
-                style: theme.small.copyWith(
-                  color: Colors.black87,
-                ),
-              ),
+              child: Text("PAYMENTS", style: theme.small.copyWith(color: Colors.black87)),
             ),
             MkClearButton(
               child: Text("SHOW ALL", style: theme.smallBtn),
@@ -96,11 +77,9 @@ class _PaymentGridsState extends State<PaymentGrids> {
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             scrollDirection: Axis.horizontal,
             children: [
-              _NewGrid(
-                gridSize: widget.gridSize,
-                onPressed: _onCreateNew,
-              )
-            ]..addAll(paymentsList.reversed.toList()),
+              _NewGrid(gridSize: widget.gridSize, onPressed: _onCreateNew),
+              ...paymentsList,
+            ],
           ),
         ),
       ],
@@ -118,12 +97,12 @@ class _PaymentGridsState extends State<PaymentGrids> {
     );
     if (result != null) {
       setState(() {
-        firePayments.add(FirePayment());
+        _firePayments.add(_FirePayment());
       });
 
       try {
         setState(() {
-          firePayments.last.payment = PaymentModel(
+          _firePayments.last.payment = PaymentModel(
             (b) => b
               ..contactID = widget.job.contactID
               ..jobID = widget.job.id
@@ -133,17 +112,17 @@ class _PaymentGridsState extends State<PaymentGrids> {
         });
 
         await widget.job.reference.updateData(<String, List<Map<String, dynamic>>>{
-          "payments": firePayments.map((payment) => payment.payment.toMap()).toList(),
+          "payments": _firePayments.map((payment) => payment.payment.toMap()).toList(),
         });
 
         setState(() {
-          firePayments.last
+          _firePayments.last
             ..isLoading = false
             ..isSucess = true;
         });
       } catch (e) {
         setState(() {
-          firePayments.last.isLoading = false;
+          _firePayments.last.isLoading = false;
         });
       }
     }
@@ -179,4 +158,12 @@ class _NewGrid extends StatelessWidget {
       ),
     );
   }
+}
+
+const _kGridWidth = 120.0;
+
+class _FirePayment {
+  PaymentModel payment;
+  bool isLoading = true;
+  bool isSucess = false;
 }

@@ -12,10 +12,7 @@ import 'package:tailor_made/widgets/theme_provider.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class PaymentPage extends StatelessWidget {
-  const PaymentPage({
-    Key key,
-    @required this.payment,
-  }) : super(key: key);
+  const PaymentPage({Key key, @required this.payment}) : super(key: key);
 
   final PaymentModel payment;
 
@@ -29,11 +26,7 @@ class PaymentPage extends StatelessWidget {
       converter: (store) => ContactJobViewModel(store)
         ..contactID = payment.contactID
         ..jobID = payment.jobID,
-      builder: (
-        BuildContext context,
-        DispatchFunction dispatch,
-        ContactJobViewModel vm,
-      ) {
+      builder: (BuildContext context, __, ContactJobViewModel vm) {
         return Scaffold(
           appBar: AppBar(
             iconTheme: IconThemeData(color: Colors.black87),
@@ -42,33 +35,22 @@ class PaymentPage extends StatelessWidget {
             brightness: Brightness.light,
             actions: <Widget>[
               IconButton(
-                icon: const Icon(
-                  Icons.work,
-                  color: kTitleBaseColor,
-                ),
+                icon: const Icon(Icons.work, color: kTitleBaseColor),
                 onPressed: () {
                   Navigator.push<void>(context, MkNavigate.slideIn<void>(JobPage(job: vm.selectedJob)));
                 },
               ),
               IconButton(
-                icon: Icon(
-                  Icons.person,
-                  color: kTitleBaseColor,
-                ),
+                icon: Icon(Icons.person, color: kTitleBaseColor),
                 onPressed: () {
                   Navigator.push<void>(context, MkNavigate.slideIn<void>(ContactPage(contact: vm.selectedContact)));
                 },
               ),
-              vm.account.hasPremiumEnabled
-                  ? IconButton(
-                      icon: const Icon(
-                        Icons.share,
-                        color: kTitleBaseColor,
-                      ),
-                      // TODO
-                      onPressed: null,
-                    )
-                  : const SizedBox(),
+              if (vm.account.hasPremiumEnabled)
+                IconButton(
+                  icon: const Icon(Icons.share, color: kTitleBaseColor),
+                  onPressed: null,
+                ),
             ],
           ),
           body: Column(
@@ -77,28 +59,15 @@ class PaymentPage extends StatelessWidget {
               SizedBox(
                 height: 180.0,
                 width: double.infinity,
-                child: Center(
-                  child: Text(
-                    _price,
-                    style: mkFontLight(50.0, Colors.black87),
-                  ),
-                ),
+                child: Center(child: Text(_price, style: mkFontLight(50.0, Colors.black87))),
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  date,
-                  style: ThemeProvider.of(context).body3Light,
-                  textAlign: TextAlign.justify,
-                ),
+                child: Text(date, style: ThemeProvider.of(context).body3Light, textAlign: TextAlign.justify),
               ),
               Padding(
                 padding: const EdgeInsets.all(24.0),
-                child: Text(
-                  payment.notes,
-                  style: ThemeProvider.of(context).body3Light,
-                  textAlign: TextAlign.justify,
-                ),
+                child: Text(payment.notes, style: ThemeProvider.of(context).body3Light, textAlign: TextAlign.justify),
               ),
             ],
           ),
