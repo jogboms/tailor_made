@@ -9,10 +9,7 @@ import 'package:tailor_made/widgets/theme_provider.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class PaymentListItem extends StatelessWidget {
-  const PaymentListItem({
-    Key key,
-    this.payment,
-  }) : super(key: key);
+  const PaymentListItem({Key key, this.payment}) : super(key: key);
 
   final PaymentModel payment;
 
@@ -36,10 +33,7 @@ class PaymentListItem extends StatelessWidget {
               Expanded(
                 child: Row(
                   children: <Widget>[
-                    const MkDots(
-                      color: kAccentColor,
-                      size: 12,
-                    ),
+                    const MkDots(color: kAccentColor, size: 12),
                     const SizedBox(width: 8.0),
                     Text(
                       MkMoney(payment.price).formatted,
@@ -51,10 +45,7 @@ class PaymentListItem extends StatelessWidget {
               Text.rich(
                 TextSpan(
                   children: [
-                    TextSpan(
-                      text: _date.day.toString(),
-                      style: theme.subhead3Semi.copyWith(color: kAccentColor),
-                    ),
+                    TextSpan(text: _date.day.toString(), style: theme.subhead3Semi.copyWith(color: kAccentColor)),
                     const TextSpan(text: "\n"),
                     TextSpan(
                       text: "${MkStrings.monthsShort[_date.month - 1].toUpperCase()}, ${_date.year}",

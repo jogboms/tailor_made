@@ -4,10 +4,7 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class AccessDeniedPage extends StatelessWidget {
-  const AccessDeniedPage({
-    Key key,
-    @required this.onSendMail,
-  }) : super(key: key);
+  const AccessDeniedPage({Key key, @required this.onSendMail}) : super(key: key);
 
   final VoidCallback onSendMail;
 
@@ -19,16 +16,11 @@ class AccessDeniedPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SpinKitFadingCube(
-            color: Colors.grey.shade300,
-          ),
+          SpinKitFadingCube(color: Colors.grey.shade300),
           const SizedBox(height: 48.0),
           Text(
             "ACCESS DENIED",
-            style: textTheme.copyWith(
-              color: Colors.black87,
-              fontWeight: MkStyle.bold,
-            ),
+            style: textTheme.copyWith(color: Colors.black87, fontWeight: MkStyle.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16.0),

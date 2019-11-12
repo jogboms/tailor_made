@@ -90,7 +90,8 @@ abstract class MeasureModel with ModelInterface implements Built<MeasureModel, M
 
   MeasureModel._();
 
-  factory MeasureModel.fromDoc(Snapshot doc) => MeasureModel.fromJson(doc.data)..reference = doc.reference;
+  factory MeasureModel.fromSnapshot(Snapshot snapshot) =>
+      MeasureModel.fromJson(snapshot.data)..reference = snapshot.reference;
 
   static void _initializeBuilder(MeasureModelBuilder b) => b
     ..id = Uuid().v1()

@@ -5,23 +5,16 @@ import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 
 class ContactLists extends StatelessWidget {
-  const ContactLists({
-    Key key,
-    @required this.contacts,
-  }) : super(key: key);
+  const ContactLists({Key key, @required this.contacts}) : super(key: key);
 
   final List<ContactModel> contacts;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MkAppBar(
-        title: Text("Select Client"),
-      ),
-      body: (contacts ?? []).isEmpty
-          ? const Center(
-              child: EmptyResultView(message: "No contacts available"),
-            )
+      appBar: const MkAppBar(title: Text("Select Client")),
+      body: (contacts == null || contacts.isEmpty)
+          ? const Center(child: EmptyResultView(message: "No contacts available"))
           : ListView.separated(
               itemCount: contacts.length,
               shrinkWrap: true,
@@ -33,7 +26,7 @@ class ContactLists extends StatelessWidget {
                   onTapContact: () => Navigator.pop(context, item),
                 );
               },
-              separatorBuilder: (BuildContext context, int index) => const Divider(),
+              separatorBuilder: (_, __) => const Divider(),
             ),
     );
   }

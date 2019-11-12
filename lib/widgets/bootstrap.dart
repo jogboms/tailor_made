@@ -8,17 +8,17 @@ import 'package:tailor_made/services/gallery/main.dart';
 import 'package:tailor_made/services/jobs/main.dart';
 import 'package:tailor_made/services/measures/main.dart';
 import 'package:tailor_made/services/payments/main.dart';
+import 'package:tailor_made/services/session.dart';
 import 'package:tailor_made/services/settings/main.dart';
 import 'package:tailor_made/services/stats/main.dart';
 import 'package:tailor_made/utils/mk_first_time_login_check.dart';
-import 'package:tailor_made/utils/mk_settings.dart';
 import 'package:tailor_made/utils/mk_version_check.dart';
 
 Future<BootstrapModel> bootstrap(Environment env, [bool isTestMode = false]) async {
-  final _settings = MkSettings(environment: env, isTestMode: isTestMode);
+  final _settings = Session(environment: env, isTestMode: isTestMode);
 
   Injector.appInstance
-    ..registerSingleton<MkSettings>((_) => _settings)
+    ..registerSingleton<Session>((_) => _settings)
     ..registerSingleton<Accounts>((_) => _settings.isMock ? AccountsMockImpl() : AccountsImpl())
     ..registerSingleton<Contacts>((_) => _settings.isMock ? ContactsMockImpl() : ContactsImpl())
     ..registerSingleton<Jobs>((_) => _settings.isMock ? JobsMockImpl() : JobsImpl())

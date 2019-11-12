@@ -21,11 +21,7 @@ class JobsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, JobsViewModel>(
       converter: (store) => JobsViewModel(store),
-      builder: (
-        BuildContext context,
-        DispatchFunction dispatch,
-        JobsViewModel vm,
-      ) {
+      builder: (BuildContext context, _, JobsViewModel vm) {
         return WillPopScope(
           child: Scaffold(
             appBar: _AppBar(vm: vm),
@@ -37,9 +33,7 @@ class JobsPage extends StatelessWidget {
               return SafeArea(
                 top: false,
                 child: CustomScrollView(
-                  slivers: <Widget>[
-                    JobList(jobs: vm.jobs),
-                  ],
+                  slivers: <Widget>[JobList(jobs: vm.jobs)],
                 ),
               );
             }),
@@ -67,10 +61,7 @@ class JobsPage extends StatelessWidget {
 }
 
 class _AppBar extends StatefulWidget implements PreferredSizeWidget {
-  const _AppBar({
-    Key key,
-    @required this.vm,
-  }) : super(key: key);
+  const _AppBar({Key key, @required this.vm}) : super(key: key);
 
   final JobsViewModel vm;
 
@@ -88,67 +79,48 @@ class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
   Widget build(BuildContext context) {
     final ThemeProvider theme = ThemeProvider.of(context);
 
-    return !_isSearching
-        ? MkAppBar(
-            title: Text("Jobs"),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.search,
-                  color: theme.appBarTitle.color,
-                ),
-                onPressed: onTapSearch,
-              ),
-              JobsFilterButton(
-                vm: widget.vm,
-                onTapSort: (SortType type) {
-                  dispatchAction(SortJobs(payload: type));
-                },
-              ),
-            ],
-          )
-        : AppBar(
-            centerTitle: false,
-            elevation: 1.0,
-            leading: MkCloseButton(
-              color: Colors.white,
-              onPop: _handleSearchEnd(widget.vm),
-            ),
-            title: TextField(
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: 'Search...',
-                hintStyle: ThemeProvider.of(context).subhead1Bold.copyWith(color: Colors.white),
-              ),
-              style: ThemeProvider.of(context).subhead1Bold.copyWith(color: Colors.white),
-              onChanged: (term) => dispatchAction(SearchJobAction(payload: term)),
-            ),
-            bottom: PreferredSize(
-              child: SizedBox(
-                height: 1.0,
-                child: widget.vm.isLoading
-                    ? const LinearProgressIndicator(
-                        backgroundColor: Colors.white,
-                      )
-                    : null,
-              ),
-              preferredSize: const Size.fromHeight(1.0),
-            ),
-          );
+    if (!_isSearching) {
+      return MkAppBar(
+        title: Text("Jobs"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search, color: theme.appBarTitle.color),
+            onPressed: _onTapSearch,
+          ),
+          JobsFilterButton(
+            vm: widget.vm,
+            onTapSort: (SortType type) => dispatchAction(SortJobs(payload: type)),
+          ),
+        ],
+      );
+    }
+
+    final _textStyle = theme.subhead1Bold;
+
+    return AppBar(
+      centerTitle: false,
+      elevation: 1.0,
+      leading: MkCloseButton(color: Colors.white, onPop: _handleSearchEnd),
+      title: TextField(
+        autofocus: true,
+        decoration: InputDecoration(hintText: 'Search...', hintStyle: _textStyle.copyWith(color: Colors.white)),
+        style: _textStyle.copyWith(color: Colors.white),
+        onChanged: (term) => dispatchAction(SearchJobAction(payload: term)),
+      ),
+      bottom: PreferredSize(
+        child: SizedBox(
+          height: 1.0,
+          child: widget.vm.isLoading ? const LinearProgressIndicator(backgroundColor: Colors.white) : null,
+        ),
+        preferredSize: const Size.fromHeight(1.0),
+      ),
+    );
   }
 
-  void onTapSearch() {
-    setState(() {
-      _isSearching = true;
-    });
-  }
+  void _onTapSearch() => setState(() => _isSearching = true);
 
-  VoidCallback _handleSearchEnd(JobsViewModel vm) {
-    return () {
-      dispatchAction(const CancelSearchJobAction());
-      setState(() {
-        _isSearching = false;
-      });
-    };
+  void _handleSearchEnd() {
+    dispatchAction(const CancelSearchJobAction());
+    setState(() => _isSearching = false);
   }
 }

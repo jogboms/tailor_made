@@ -1,8 +1,8 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/screens/gallery/gallery.dart';
@@ -14,21 +14,9 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
-const _kGridWidth = 70.0;
-
-class FireImage {
-  StorageReference ref;
-  ImageModel image;
-  bool isLoading = true;
-  bool isSucess = false;
-}
-
 class GalleryGrids extends StatefulWidget {
-  GalleryGrids({
-    Key key,
-    double gridSize,
-    @required this.job,
-  })  : gridSize = Size.square(gridSize ?? _kGridWidth),
+  GalleryGrids({Key key, double gridSize, @required this.job})
+      : gridSize = Size.square(gridSize ?? _kGridWidth),
         super(key: key);
 
   final Size gridSize;
@@ -39,16 +27,12 @@ class GalleryGrids extends StatefulWidget {
 }
 
 class _GalleryGridsState extends State<GalleryGrids> {
-  List<FireImage> fireImages = [];
+  List<_FireImage> _fireImages = [];
 
   @override
   void initState() {
     super.initState();
-    fireImages = widget.job.images
-        .map(
-          (img) => FireImage()..image = img,
-        )
-        .toList();
+    _fireImages = widget.job.images.map((img) => _FireImage()..image = img).toList();
   }
 
   @override
@@ -56,16 +40,13 @@ class _GalleryGridsState extends State<GalleryGrids> {
     final theme = ThemeProvider.of(context);
 
     final List<Widget> imagesList = List<Widget>.generate(
-      fireImages.length,
+      _fireImages.length,
       (int index) {
-        final fireImage = fireImages[index];
+        final fireImage = _fireImages[index];
         final image = fireImage.image;
 
         if (image == null) {
-          return const Center(
-            widthFactor: 2.5,
-            child: MkLoadingSpinner(),
-          );
+          return const Center(widthFactor: 2.5, child: MkLoadingSpinner());
         }
 
         return GalleryGridItem(
@@ -74,16 +55,14 @@ class _GalleryGridsState extends State<GalleryGrids> {
           size: _kGridWidth,
           // Remove images from storage using path
           onTapDelete: fireImage.ref != null
-              ? (image) {
-                  setState(() {
+              ? (image) => setState(() {
                     fireImage.ref.delete();
-                    fireImages.removeAt(index);
-                  });
-                }
+                    _fireImages.removeAt(index);
+                  })
               : null,
         );
       },
-    ).toList();
+    ).reversed.toList();
 
     return Column(
       children: <Widget>[
@@ -92,10 +71,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
           children: <Widget>[
             const SizedBox(width: 16.0),
             Expanded(
-              child: Text(
-                "GALLERY",
-                style: theme.small.copyWith(color: Colors.black87),
-              ),
+              child: Text("GALLERY", style: theme.small.copyWith(color: Colors.black87)),
             ),
             MkClearButton(
               child: Text("SHOW ALL", style: theme.smallBtn),
@@ -116,11 +92,9 @@ class _GalleryGridsState extends State<GalleryGrids> {
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             scrollDirection: Axis.horizontal,
             children: [
-              _NewGrid(
-                gridSize: widget.gridSize,
-                onPressed: _handlePhotoButtonPressed,
-              )
-            ]..addAll(imagesList.reversed.toList()),
+              _NewGrid(gridSize: widget.gridSize, onPressed: _handlePhotoButtonPressed),
+              ...imagesList,
+            ],
           ),
         ),
       ],
@@ -136,17 +110,16 @@ class _GalleryGridsState extends State<GalleryGrids> {
     if (imageFile == null) {
       return;
     }
-    // TODO: remove firebase coupling
     final ref = Gallery.di().createFile(imageFile);
 
     setState(() {
-      fireImages.add(FireImage()..ref = ref);
+      _fireImages.add(_FireImage()..ref = ref);
     });
     try {
       final imageUrl = (await ref.getDownloadURL()).downloadUrl?.toString();
 
       setState(() {
-        fireImages.last.image = ImageModel(
+        _fireImages.last.image = ImageModel(
           (b) => b
             ..contactID = widget.job.contactID
             ..jobID = widget.job.id
@@ -157,30 +130,25 @@ class _GalleryGridsState extends State<GalleryGrids> {
 
       await widget.job.reference.updateData(
         <String, List<Map<String, dynamic>>>{
-          "images": fireImages.where((img) => img.image != null).map((img) => img.image.toMap()).toList(),
+          "images": _fireImages.where((img) => img.image != null).map((img) => img.image.toMap()).toList(),
         },
       );
 
-      // Redraw
       setState(() {
-        fireImages.last
+        _fireImages.last
           ..isLoading = false
           ..isSucess = true;
       });
     } catch (e) {
       setState(() {
-        fireImages.last.isLoading = false;
+        _fireImages.last.isLoading = false;
       });
     }
   }
 }
 
 class _NewGrid extends StatelessWidget {
-  const _NewGrid({
-    Key key,
-    @required this.gridSize,
-    @required this.onPressed,
-  }) : super(key: key);
+  const _NewGrid({Key key, @required this.gridSize, @required this.onPressed}) : super(key: key);
 
   final Size gridSize;
   final VoidCallback onPressed;
@@ -195,13 +163,18 @@ class _NewGrid extends StatelessWidget {
         color: Colors.grey[100],
         child: InkWell(
           onTap: onPressed,
-          child: Icon(
-            Icons.add_a_photo,
-            size: 24.0,
-            color: kTextBaseColor.withOpacity(.35),
-          ),
+          child: Icon(Icons.add_a_photo, size: 24.0, color: kTextBaseColor.withOpacity(.35)),
         ),
       ),
     );
   }
+}
+
+const _kGridWidth = 70.0;
+
+class _FireImage {
+  Storage ref;
+  ImageModel image;
+  bool isLoading = true;
+  bool isSucess = false;
 }

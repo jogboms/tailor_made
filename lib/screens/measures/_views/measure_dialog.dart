@@ -6,10 +6,7 @@ import 'package:tailor_made/utils/mk_validators.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 
 class MeasureDialog extends StatefulWidget {
-  const MeasureDialog({
-    Key key,
-    @required this.measure,
-  }) : super(key: key);
+  const MeasureDialog({Key key, @required this.measure}) : super(key: key);
 
   final MeasureModel measure;
 
@@ -55,10 +52,7 @@ class _MeasureDialogState extends State<MeasureDialog> {
                   child: CircleAvatar(
                     backgroundColor: kPrimaryColor,
                     foregroundColor: Colors.white,
-                    child: const Icon(
-                      Icons.content_cut,
-                      size: 50.0,
-                    ),
+                    child: const Icon(Icons.content_cut, size: 50.0),
                     radius: 36.0,
                   ),
                 ),
@@ -68,9 +62,7 @@ class _MeasureDialogState extends State<MeasureDialog> {
                   textInputAction: TextInputAction.next,
                   onEditingComplete: () => FocusScope.of(context).requestFocus(_unitNode),
                   onSaved: (value) => measure.name = value.trim(),
-                  decoration: const InputDecoration(
-                    labelText: "Name (eg. Length)",
-                  ),
+                  decoration: const InputDecoration(labelText: "Name (eg. Length)"),
                   validator: MkValidate.tryAlpha(),
                 ),
                 const SizedBox(height: 4.0),
@@ -78,9 +70,7 @@ class _MeasureDialogState extends State<MeasureDialog> {
                   initialValue: widget.measure.unit,
                   focusNode: _unitNode,
                   textInputAction: TextInputAction.done,
-                  decoration: const InputDecoration(
-                    labelText: "Unit (eg. In, cm)",
-                  ),
+                  decoration: const InputDecoration(labelText: "Unit (eg. In, cm)"),
                   validator: MkValidate.tryAlpha(),
                   onFieldSubmitted: (value) => _onSaved(),
                   onSaved: (value) => measure.unit = value.trim(),
@@ -95,10 +85,7 @@ class _MeasureDialogState extends State<MeasureDialog> {
                       child: const Text("CANCEL"),
                     ),
                     const SizedBox(width: 16.0),
-                    MkClearButton(
-                      onPressed: _onSaved,
-                      child: const Text("DONE"),
-                    ),
+                    MkClearButton(onPressed: _onSaved, child: const Text("DONE")),
                     const SizedBox(width: 16.0),
                   ],
                 ),
@@ -117,7 +104,7 @@ class _MeasureDialogState extends State<MeasureDialog> {
       return;
     }
     if (!form.validate()) {
-      _autovalidate = true; // Start validating on every change.
+      _autovalidate = true;
       // widget.onHandleValidate();
     } else {
       form.save();

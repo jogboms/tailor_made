@@ -3,16 +3,14 @@ import 'package:injector/injector.dart';
 import 'package:tailor_made/environments/environment.dart';
 import 'package:tailor_made/models/settings.dart';
 
-class MkSettings {
-  MkSettings({@required this.environment, @required this.isTestMode});
+class Session {
+  Session({@required this.environment, @required this.isTestMode});
 
-  static MkSettings di() => Injector.appInstance.getDependency<MkSettings>();
+  static Session di() => Injector.appInstance.getDependency<Session>();
 
   final Environment environment;
-  final bool isTestMode;
 
-  SettingsModel _settings;
-  int _userId;
+  final bool isTestMode;
 
   bool get isDev => environment == Environment.DEVELOPMENT;
 
@@ -20,11 +18,15 @@ class MkSettings {
 
   bool get isTesting => isTestMode;
 
+  int _userId;
+
   void setUserId(int id) => _userId = id;
 
   int getUserId() => _userId;
 
-  void setData(SettingsModel data) => _settings = data;
+  SettingsModel _settings;
 
-  SettingsModel getData() => _settings;
+  void setSettings(SettingsModel data) => _settings = data;
+
+  SettingsModel getSettings() => _settings;
 }

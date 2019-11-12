@@ -9,10 +9,7 @@ import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class GalleryPage extends StatelessWidget {
-  const GalleryPage({
-    Key key,
-    this.images,
-  }) : super(key: key);
+  const GalleryPage({Key key, this.images}) : super(key: key);
 
   final List<ImageModel> images;
 
@@ -28,16 +25,8 @@ class GalleryPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  "Gallery",
-                  style: theme.appBarTitle,
-                ),
-                images != null
-                    ? Text(
-                        "${images.length} Photos",
-                        style: theme.xsmall,
-                      )
-                    : const SizedBox(),
+                Text("Gallery", style: theme.appBarTitle),
+                if (images != null) Text("${images.length} Photos", style: theme.xsmall),
               ],
             ),
             backgroundColor: kAppBarBackgroundColor,
@@ -53,18 +42,11 @@ class GalleryPage extends StatelessWidget {
             if (images == null) {
               return StreamBuilder(
                 stream: Gallery.di().fetchAll(),
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<List<ImageModel>> snapshot,
-                ) {
+                builder: (_, AsyncSnapshot<List<ImageModel>> snapshot) {
                   if (!snapshot.hasData) {
-                    return const SliverFillRemaining(
-                      child: MkLoadingSpinner(),
-                    );
+                    return const SliverFillRemaining(child: MkLoadingSpinner());
                   }
-                  return _Content(
-                    images: snapshot.data,
-                  );
+                  return _Content(images: snapshot.data);
                 },
               );
             }
@@ -77,19 +59,14 @@ class GalleryPage extends StatelessWidget {
 }
 
 class _Content extends StatelessWidget {
-  const _Content({
-    Key key,
-    @required this.images,
-  }) : super(key: key);
+  const _Content({Key key, @required this.images}) : super(key: key);
 
   final List<ImageModel> images;
 
   @override
   Widget build(BuildContext context) {
     if (images.isEmpty) {
-      return const SliverFillRemaining(
-        child: EmptyResultView(message: "No images available"),
-      );
+      return const SliverFillRemaining(child: EmptyResultView(message: "No images available"));
     }
 
     return SliverPadding(

@@ -1,5 +1,4 @@
 import 'package:built_collection/built_collection.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
@@ -34,7 +34,7 @@ import 'package:tailor_made/wrappers/mk_navigate.dart';
 const _kGridWidth = 85.0;
 
 class FireImage {
-  StorageReference ref;
+  Storage ref;
   ImageModel image;
   bool isLoading = true;
   bool isSucess = false;
@@ -239,7 +239,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
     }
 
     if (!form.validate()) {
-      _autovalidate = true; // Start validating on every change.
+      _autovalidate = true;
       showInSnackBar(MkStrings.fixErrors);
     } else {
       form.save();

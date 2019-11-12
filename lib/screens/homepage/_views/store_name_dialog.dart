@@ -4,10 +4,8 @@ import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class StoreNameDialog extends StatelessWidget {
-  StoreNameDialog({
-    Key key,
-    @required this.account,
-  })  : controller = TextEditingController(text: account.storeName),
+  StoreNameDialog({Key key, @required this.account})
+      : controller = TextEditingController(text: account.storeName),
         super(key: key);
 
   final AccountModel account;
@@ -30,36 +28,25 @@ class StoreNameDialog extends StatelessWidget {
                 child: CircleAvatar(
                   backgroundColor: kAccentColor,
                   foregroundColor: Colors.white,
-                  child: Icon(
-                    Icons.store,
-                    size: 50.0,
-                  ),
+                  child: Icon(Icons.store, size: 50.0),
                   radius: 36.0,
                 ),
               ),
               const SizedBox(height: 16.0),
               Text(
                 "Store Name",
-                style: ThemeProvider.of(context).title.copyWith(
-                      color: Colors.black38,
-                    ),
+                style: ThemeProvider.of(context).title.copyWith(color: Colors.black38),
               ),
               const SizedBox(height: 64.0),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32.0,
-                  vertical: 4.0,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 4.0),
                 child: TextField(
                   keyboardType: TextInputType.text,
                   controller: controller,
                   textAlign: TextAlign.center,
                   style: ThemeProvider.of(context).title,
                   onSubmitted: (value) => _handleSubmit(context),
-                  decoration: const InputDecoration(
-                    isDense: true,
-                    hintText: "Enter Store Name",
-                  ),
+                  decoration: const InputDecoration(isDense: true, hintText: "Enter Store Name"),
                 ),
               ),
               const SizedBox(height: 64.0),

@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:tailor_made/firebase/cloud_db.dart';
 import 'package:tailor_made/firebase/cloud_storage.dart';
+import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/services/gallery/gallery.dart';
 
@@ -15,7 +15,7 @@ class GalleryImpl extends Gallery {
   }
 
   @override
-  StorageReference createFile(File file) {
-    return CloudStorage.createReferenceImage()..putFile(file);
+  Storage createFile(File file) {
+    return Storage(CloudStorage.createReferenceImage()..putFile(file));
   }
 }

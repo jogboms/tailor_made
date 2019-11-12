@@ -7,10 +7,7 @@ import 'package:tailor_made/screens/contacts/_partials/contact_form.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 
 class ContactsEditPage extends StatefulWidget {
-  const ContactsEditPage({
-    Key key,
-    this.contact,
-  }) : super(key: key);
+  const ContactsEditPage({Key key, this.contact}) : super(key: key);
 
   final ContactModel contact;
 
@@ -32,17 +29,10 @@ class _ContactsEditPageState extends State<ContactsEditPage> with SnackBarProvid
       appBar: MkAppBar(
         title: const Text("Edit Contact"),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.contacts),
-            onPressed: _handleSelectContact,
-          ),
+          IconButton(icon: const Icon(Icons.contacts), onPressed: _handleSelectContact),
         ],
       ),
-      body: ContactForm(
-        key: _formKey,
-        contact: widget.contact,
-        onHandleSubmit: _handleSubmit,
-      ),
+      body: ContactForm(key: _formKey, contact: widget.contact, onHandleSubmit: _handleSubmit),
     );
   }
 

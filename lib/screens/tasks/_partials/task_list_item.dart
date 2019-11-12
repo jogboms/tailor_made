@@ -7,13 +7,8 @@ import 'package:tailor_made/widgets/theme_provider.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 import 'package:timeago/timeago.dart' as time_ago;
 
-const int _kDayLimit = 5;
-
 class TaskListItem extends StatelessWidget {
-  const TaskListItem({
-    Key key,
-    @required this.task,
-  }) : super(key: key);
+  const TaskListItem({Key key, @required this.task}) : super(key: key);
 
   final JobModel task;
 
@@ -26,34 +21,18 @@ class TaskListItem extends StatelessWidget {
         backgroundColor: Colors.transparent,
         child: const Icon(Icons.event, color: kHintColor),
       ),
-      trailing: Icon(
-        Icons.timelapse,
-        color: _iconColor,
-        // size: 24.0,
-      ),
+      trailing: Icon(Icons.timelapse, color: _iconColor),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            task.name,
-            style: ThemeProvider.of(context).subhead1Bold,
-          ),
+          Text(task.name, style: ThemeProvider.of(context).subhead1Bold),
           const SizedBox(height: 2.0),
           Row(
             children: <Widget>[
-              const Icon(
-                Icons.arrow_downward,
-                color: Colors.green,
-                size: 11.0,
-              ),
+              const Icon(Icons.arrow_downward, color: Colors.green, size: 11.0),
               const SizedBox(width: 2.0),
               Text(
-                MkDates(
-                  task.dueAt,
-                  day: "EEEE",
-                  month: "MMMM",
-                  year: "yyyy",
-                ).formatted,
+                MkDates(task.dueAt, day: "EEEE", month: "MMMM", year: "yyyy").formatted,
               ),
             ],
           ),
@@ -61,11 +40,7 @@ class TaskListItem extends StatelessWidget {
       ),
       subtitle: Row(
         children: <Widget>[
-          const Icon(
-            Icons.arrow_downward,
-            color: Colors.red,
-            size: 11.0,
-          ),
+          const Icon(Icons.arrow_downward, color: Colors.red, size: 11.0),
           const SizedBox(width: 2.0),
           Text(time_ago.format(task.dueAt, allowFromNow: true)),
         ],
@@ -81,10 +56,14 @@ class TaskListItem extends StatelessWidget {
     if (now.isAfter(task.dueAt)) {
       return Colors.redAccent.shade400;
     }
+
     final diff = task.dueAt.difference(now).inDays;
     if (diff >= 0 && diff < _kDayLimit) {
       return Colors.orangeAccent.shade400;
     }
+
     return Colors.greenAccent.shade400;
   }
 }
+
+const int _kDayLimit = 5;

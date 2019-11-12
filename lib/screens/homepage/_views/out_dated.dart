@@ -4,10 +4,7 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class OutDatedPage extends StatelessWidget {
-  const OutDatedPage({
-    Key key,
-    @required this.onUpdate,
-  }) : super(key: key);
+  const OutDatedPage({Key key, @required this.onUpdate}) : super(key: key);
 
   final VoidCallback onUpdate;
 
@@ -19,16 +16,11 @@ class OutDatedPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SpinKitFadingCube(
-            color: Colors.grey.shade300,
-          ),
+          SpinKitFadingCube(color: Colors.grey.shade300),
           const SizedBox(height: 48.0),
           Text(
             "OUT OF DATE",
-            style: textTheme.copyWith(
-              color: Colors.black87,
-              fontWeight: MkStyle.bold,
-            ),
+            style: textTheme.copyWith(color: Colors.black87, fontWeight: MkStyle.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16.0),

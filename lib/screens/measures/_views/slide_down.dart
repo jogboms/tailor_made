@@ -44,10 +44,7 @@ class _SlideDownItemState extends State<SlideDownItem> {
           onLongPress: widget.onLongPress,
           onExpand: () => setState(() => isExpanded = !isExpanded),
         ),
-        _SlideBody(
-          isExpanded: isExpanded,
-          child: widget.body,
-        ),
+        _SlideBody(isExpanded: isExpanded, child: widget.body),
       ],
     );
   }
@@ -79,22 +76,13 @@ class _SliderHeader extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 16.0,
-                    top: 16.0,
-                    bottom: 16.0,
-                  ),
-                  child: Text(
-                    title,
-                    style: theme.title.copyWith(fontSize: 14.0),
-                  ),
+                  padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 16.0),
+                  child: Text(title, style: theme.title.copyWith(fontSize: 14.0)),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 16.0),
-                child: Icon(
-                  isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-                ),
+                child: Icon(isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down),
               ),
             ],
           ),
@@ -107,11 +95,7 @@ class _SliderHeader extends StatelessWidget {
 }
 
 class _SlideBody extends StatelessWidget {
-  const _SlideBody({
-    Key key,
-    @required this.child,
-    @required this.isExpanded,
-  }) : super(key: key);
+  const _SlideBody({Key key, @required this.child, @required this.isExpanded}) : super(key: key);
 
   final Widget child;
   final bool isExpanded;

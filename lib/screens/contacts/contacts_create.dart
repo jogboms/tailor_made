@@ -16,9 +16,7 @@ import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class ContactsCreatePage extends StatefulWidget {
-  const ContactsCreatePage({
-    Key key,
-  }) : super(key: key);
+  const ContactsCreatePage({Key key}) : super(key: key);
 
   @override
   _ContactsCreatePageState createState() => _ContactsCreatePageState();
@@ -45,33 +43,19 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
       appBar: MkAppBar(
         title: const Text("Create Contact"),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.contacts),
-            onPressed: _handleSelectContact,
-          ),
+          IconButton(icon: const Icon(Icons.contacts), onPressed: _handleSelectContact),
           ViewModelSubscriber<AppState, MeasuresViewModel>(
             converter: (store) => MeasuresViewModel(store),
-            builder: (
-              BuildContext context,
-              DispatchFunction dispatch,
-              MeasuresViewModel vm,
-            ) {
+            builder: (_, __, MeasuresViewModel vm) {
               return IconButton(
-                icon: Icon(
-                  Icons.content_cut,
-                  color: contact.measurements.isEmpty ? kAccentColor : kTitleBaseColor,
-                ),
+                icon: Icon(Icons.content_cut, color: contact.measurements.isEmpty ? kAccentColor : kTitleBaseColor),
                 onPressed: () => _handleSelectMeasure(vm),
               );
             },
           ),
         ],
       ),
-      body: ContactForm(
-        key: _formKey,
-        contact: contact,
-        onHandleSubmit: _handleSubmit,
-      ),
+      body: ContactForm(key: _formKey, contact: contact, onHandleSubmit: _handleSubmit),
     );
   }
 
@@ -110,8 +94,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
         closeLoadingSnackBar();
         showInSnackBar("Successfully Added");
 
-        await Navigator.pushReplacement<dynamic, dynamic>(
-          context,
+        await Navigator.of(context).pushReplacement<dynamic, dynamic>(
           MkNavigate.slideIn<String>(ContactPage(contact: snap)),
         );
       });
@@ -122,13 +105,9 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
   }
 
   void _handleSelectMeasure(MeasuresViewModel vm) async {
-    final _contact = await Navigator.push<ContactModel>(
-      context,
-      MkNavigate.fadeIn(ContactMeasure(
-        contact: contact,
-        grouped: vm.grouped,
-      )),
-    );
+    final _contact = await Navigator.of(context).push<ContactModel>(MkNavigate.fadeIn(
+      ContactMeasure(contact: contact, grouped: vm.grouped),
+    ));
 
     setState(() {
       contact = contact.rebuild((b) => b..measurements = _contact.measurements.toBuilder());

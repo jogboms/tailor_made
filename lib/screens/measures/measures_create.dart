@@ -247,7 +247,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
       return false;
     }
     if (!form.validate()) {
-      _autovalidate = true; // Start validating on every change.
+      _autovalidate = true;
       return false;
     } else {
       form.save();

@@ -14,12 +14,7 @@ Future<String> showEditDialog({
 }) {
   return mkShowChildDialog<String>(
     context: context,
-    child: MeasureEditDialog(
-      title: title,
-      children: children,
-      onDone: onDone,
-      onCancel: onCancel,
-    ),
+    child: MeasureEditDialog(title: title, children: children, onDone: onDone, onCancel: onCancel),
   );
 }
 
@@ -49,36 +44,19 @@ class MeasureEditDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const SizedBox(height: 16.0),
-              Center(
-                child: Text(
-                  title,
-                  style: ThemeProvider.of(context).smallLight,
-                ),
-              ),
+              Center(child: Text(title, style: ThemeProvider.of(context).smallLight)),
               const SizedBox(height: 8.0),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 16.0,
-                  horizontal: 16.0,
-                ),
-                child: Column(
-                  children: children,
-                ),
+                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                child: Column(children: children),
               ),
               const SizedBox(height: 4.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  MkClearButton(
-                    onPressed: onCancel,
-                    color: Colors.grey.shade300,
-                    child: const Text("CANCEL"),
-                  ),
+                  MkClearButton(onPressed: onCancel, color: Colors.grey.shade300, child: const Text("CANCEL")),
                   const SizedBox(width: 16.0),
-                  MkClearButton(
-                    onPressed: onDone,
-                    child: const Text("DONE"),
-                  ),
+                  MkClearButton(onPressed: onDone, child: const Text("DONE")),
                   const SizedBox(width: 16.0),
                 ],
               ),

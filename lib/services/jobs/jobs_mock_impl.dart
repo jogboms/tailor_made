@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/services/jobs/jobs.dart';
 
@@ -12,7 +12,7 @@ class JobsMockImpl extends Jobs {
   }
 
   @override
-  StorageReference createFile(File file) {
+  Storage createFile(File file) {
     // TODO
     return null;
   }

@@ -8,28 +8,19 @@ import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class MidRowWidget extends StatelessWidget {
-  const MidRowWidget({
-    Key key,
-    @required this.stats,
-  }) : super(key: key);
+  const MidRowWidget({Key key, @required this.stats}) : super(key: key);
 
   final StatsModel stats;
 
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: const BoxDecoration(
-        border: Border(bottom: MkBorderSide()),
-      ),
+      decoration: const BoxDecoration(border: Border(bottom: MkBorderSide())),
       child: Row(
         children: <Widget>[
           Expanded(
             child: DecoratedBox(
-              decoration: const BoxDecoration(
-                border: Border(
-                  right: MkBorderSide(),
-                ),
-              ),
+              decoration: const BoxDecoration(border: Border(right: MkBorderSide())),
               child: TMGridTile(
                 color: Colors.redAccent,
                 icon: Icons.attach_money,

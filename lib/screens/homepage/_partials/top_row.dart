@@ -7,27 +7,20 @@ import 'package:tailor_made/screens/jobs/jobs.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class TopRowWidget extends StatelessWidget {
-  const TopRowWidget({
-    Key key,
-    @required this.stats,
-  }) : super(key: key);
+  const TopRowWidget({Key key, @required this.stats}) : super(key: key);
 
   final StatsModel stats;
 
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: const BoxDecoration(
-        border: Border(bottom: MkBorderSide()),
-      ),
+      decoration: const BoxDecoration(border: Border(bottom: MkBorderSide())),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Expanded(
             child: DecoratedBox(
-              decoration: const BoxDecoration(
-                border: Border(right: MkBorderSide()),
-              ),
+              decoration: const BoxDecoration(border: Border(right: MkBorderSide())),
               child: TMGridTile(
                 icon: Icons.supervisor_account,
                 color: Colors.orangeAccent,

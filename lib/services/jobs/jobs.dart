@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:injector/injector.dart';
+import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/job.dart';
 
 abstract class Jobs {
@@ -9,7 +9,7 @@ abstract class Jobs {
 
   Stream<List<JobModel>> fetchAll();
 
-  StorageReference createFile(File file);
+  Storage createFile(File file);
 
   Stream<JobModel> update(JobModel job);
 }

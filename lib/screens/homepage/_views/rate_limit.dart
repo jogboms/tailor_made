@@ -4,11 +4,7 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class RateLimitPage extends StatelessWidget {
-  const RateLimitPage({
-    Key key,
-    @required this.onSkipedPremium,
-    @required this.onSignUp,
-  }) : super(key: key);
+  const RateLimitPage({Key key, @required this.onSkipedPremium, @required this.onSignUp}) : super(key: key);
 
   final VoidCallback onSkipedPremium;
   final VoidCallback onSignUp;
@@ -21,16 +17,11 @@ class RateLimitPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SpinKitFadingCube(
-            color: Colors.grey.shade300,
-          ),
+          SpinKitFadingCube(color: Colors.grey.shade300),
           SizedBox(height: 48.0),
           Text(
             "USAGE POLICY",
-            style: textTheme.copyWith(
-              color: Colors.black87,
-              fontWeight: MkStyle.bold,
-            ),
+            style: textTheme.copyWith(color: Colors.black87, fontWeight: MkStyle.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16.0),
@@ -43,11 +34,7 @@ class RateLimitPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 32.0),
-          FlatButton(
-            onPressed: onSkipedPremium,
-            textColor: Colors.grey.shade500,
-            child: Text("No, Skip now"),
-          ),
+          FlatButton(onPressed: onSkipedPremium, textColor: Colors.grey.shade500, child: Text("No, Skip now")),
           const SizedBox(height: 8.0),
           RaisedButton.icon(
             color: kAccentColor,

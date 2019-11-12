@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tailor_made/firebase/models.dart';
 
 abstract class ModelInterface {
-  DocumentReference reference;
+  Reference reference;
 
   Model clone() => null;
 

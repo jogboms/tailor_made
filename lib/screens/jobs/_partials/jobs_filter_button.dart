@@ -6,11 +6,7 @@ import 'package:tailor_made/widgets/_partials/mk_dots.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class JobsFilterButton extends StatelessWidget {
-  const JobsFilterButton({
-    Key key,
-    @required this.vm,
-    @required this.onTapSort,
-  }) : super(key: key);
+  const JobsFilterButton({Key key, @required this.vm, @required this.onTapSort}) : super(key: key);
 
   final JobsViewModel vm;
   final ValueSetter<SortType> onTapSort;
@@ -19,19 +15,13 @@ class JobsFilterButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeProvider theme = ThemeProvider.of(context);
     final _optionTheme = theme.body1;
-    final _colorTestFn = (SortType type) {
-      return vm.sortFn == type ? kAccentColor : Colors.black87;
-    };
     return SizedBox.fromSize(
       size: const Size.square(48.0),
       child: Stack(
         children: <Widget>[
           Positioned.fill(
             child: PopupMenuButton<SortType>(
-              icon: Icon(
-                Icons.filter_list,
-                color: theme.appBarTitle.color,
-              ),
+              icon: Icon(Icons.filter_list, color: theme.appBarTitle.color),
               onSelected: onTapSort,
               itemBuilder: (BuildContext context) {
                 return [
@@ -39,57 +29,43 @@ class JobsFilterButton extends StatelessWidget {
                     text: "Sort by Active",
                     type: SortType.active,
                     enabled: vm.sortFn != SortType.active,
-                    style: _optionTheme.copyWith(
-                      color: _colorTestFn(SortType.active),
-                    ),
+                    style: _optionTheme.copyWith(color: _colorTestFn(SortType.active)),
                   ),
                   _Option(
                     text: "Sort by Name",
                     type: SortType.names,
                     enabled: vm.sortFn != SortType.names,
-                    style: _optionTheme.copyWith(
-                      color: _colorTestFn(SortType.names),
-                    ),
+                    style: _optionTheme.copyWith(color: _colorTestFn(SortType.names)),
                   ),
                   _Option(
                     text: "Sort by Owed",
                     type: SortType.owed,
                     enabled: vm.sortFn != SortType.owed,
-                    style: _optionTheme.copyWith(
-                      color: _colorTestFn(SortType.owed),
-                    ),
+                    style: _optionTheme.copyWith(color: _colorTestFn(SortType.owed)),
                   ),
                   _Option(
                     text: "Sort by Payments",
                     type: SortType.payments,
                     enabled: vm.sortFn != SortType.payments,
-                    style: _optionTheme.copyWith(
-                      color: _colorTestFn(SortType.payments),
-                    ),
+                    style: _optionTheme.copyWith(color: _colorTestFn(SortType.payments)),
                   ),
                   _Option(
                     text: "Sort by Price",
                     type: SortType.price,
                     enabled: vm.sortFn != SortType.price,
-                    style: _optionTheme.copyWith(
-                      color: _colorTestFn(SortType.price),
-                    ),
+                    style: _optionTheme.copyWith(color: _colorTestFn(SortType.price)),
                   ),
                   _Option(
                     text: "Sort by Recent",
                     type: SortType.recent,
                     enabled: vm.sortFn != SortType.recent,
-                    style: _optionTheme.copyWith(
-                      color: _colorTestFn(SortType.recent),
-                    ),
+                    style: _optionTheme.copyWith(color: _colorTestFn(SortType.recent)),
                   ),
                   _Option(
                     text: "No Sort",
                     type: SortType.reset,
                     enabled: vm.sortFn != SortType.reset,
-                    style: _optionTheme.copyWith(
-                      color: _colorTestFn(SortType.reset),
-                    ),
+                    style: _optionTheme.copyWith(color: _colorTestFn(SortType.reset)),
                   ),
                 ];
               },
@@ -103,6 +79,8 @@ class JobsFilterButton extends StatelessWidget {
       ),
     );
   }
+
+  Color _colorTestFn(SortType type) => vm.sortFn == type ? kAccentColor : Colors.black87;
 }
 
 class _Option extends PopupMenuItem<SortType> {

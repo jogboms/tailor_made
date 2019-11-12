@@ -27,11 +27,7 @@ class _ContactsPageState extends State<ContactsPage> with DispatchProvider<AppSt
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, ContactsViewModel>(
       converter: (store) => ContactsViewModel(store),
-      builder: (
-        BuildContext context,
-        DispatchFunction dispatch,
-        ContactsViewModel vm,
-      ) {
+      builder: (BuildContext context, DispatchFunction dispatch, ContactsViewModel vm) {
         return WillPopScope(
           child: Scaffold(
             appBar: _AppBar(vm: vm),
@@ -42,9 +38,7 @@ class _ContactsPageState extends State<ContactsPage> with DispatchProvider<AppSt
 
               if (vm.contacts == null || vm.contacts.isEmpty) {
                 return Center(
-                  child: const EmptyResultView(
-                    message: "No contacts available",
-                  ),
+                  child: const EmptyResultView(message: "No contacts available"),
                 );
               }
 
@@ -52,13 +46,13 @@ class _ContactsPageState extends State<ContactsPage> with DispatchProvider<AppSt
                 itemCount: vm.contacts.length,
                 shrinkWrap: true,
                 padding: const EdgeInsets.only(bottom: 96.0),
-                itemBuilder: (context, index) => ContactsListItem(contact: vm.contacts[index]),
+                itemBuilder: (_, index) => ContactsListItem(contact: vm.contacts[index]),
                 separatorBuilder: (_, __) => const Divider(height: 0),
               );
             }),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.person_add),
-              onPressed: () => Navigator.push<void>(context, MkNavigate.slideIn<void>(const ContactsCreatePage())),
+              onPressed: () => Navigator.push<void>(context, MkNavigate.slideIn(const ContactsCreatePage())),
             ),
           ),
           onWillPop: () async {
@@ -75,10 +69,7 @@ class _ContactsPageState extends State<ContactsPage> with DispatchProvider<AppSt
 }
 
 class _AppBar extends StatefulWidget implements PreferredSizeWidget {
-  const _AppBar({
-    Key key,
-    @required this.vm,
-  }) : super(key: key);
+  const _AppBar({Key key, @required this.vm}) : super(key: key);
 
   final ContactsViewModel vm;
 
@@ -96,67 +87,48 @@ class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
   Widget build(BuildContext context) {
     final ThemeProvider theme = ThemeProvider.of(context);
 
-    return !_isSearching
-        ? MkAppBar(
-            title: const Text("Contacts"),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.search,
-                  color: theme.appBarTitle.color,
-                ),
-                onPressed: onTapSearch,
-              ),
-              ContactsFilterButton(
-                vm: widget.vm,
-                onTapSort: (SortType type) {
-                  dispatchAction(SortContacts(payload: type));
-                },
-              ),
-            ],
-          )
-        : AppBar(
-            centerTitle: false,
-            elevation: 1.0,
-            leading: MkCloseButton(
-              color: Colors.white,
-              onPop: _handleSearchEnd(widget.vm),
-            ),
-            title: TextField(
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: 'Search...',
-                hintStyle: ThemeProvider.of(context).subhead1Bold.copyWith(color: Colors.white),
-              ),
-              style: ThemeProvider.of(context).subhead1Bold.copyWith(color: Colors.white),
-              onChanged: (term) => dispatchAction(SearchContactAction(payload: term)),
-            ),
-            bottom: PreferredSize(
-              child: SizedBox(
-                height: 1.0,
-                child: widget.vm.isLoading
-                    ? const LinearProgressIndicator(
-                        backgroundColor: Colors.white,
-                      )
-                    : null,
-              ),
-              preferredSize: const Size.fromHeight(1.0),
-            ),
-          );
+    if (!_isSearching) {
+      return MkAppBar(
+        title: const Text("Contacts"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search, color: theme.appBarTitle.color),
+            onPressed: _onTapSearch,
+          ),
+          ContactsFilterButton(
+            vm: widget.vm,
+            onTapSort: (SortType type) => dispatchAction(SortContacts(payload: type)),
+          ),
+        ],
+      );
+    }
+
+    final _textStyle = theme.subhead1Bold;
+
+    return AppBar(
+      centerTitle: false,
+      elevation: 1.0,
+      leading: MkCloseButton(color: Colors.white, onPop: _handleSearchEnd),
+      title: TextField(
+        autofocus: true,
+        decoration: InputDecoration(hintText: 'Search...', hintStyle: _textStyle.copyWith(color: Colors.white)),
+        style: _textStyle.copyWith(color: Colors.white),
+        onChanged: (term) => dispatchAction(SearchContactAction(payload: term)),
+      ),
+      bottom: PreferredSize(
+        child: SizedBox(
+          height: 1.0,
+          child: widget.vm.isLoading ? const LinearProgressIndicator(backgroundColor: Colors.white) : null,
+        ),
+        preferredSize: const Size.fromHeight(1.0),
+      ),
+    );
   }
 
-  void onTapSearch() {
-    setState(() {
-      _isSearching = true;
-    });
-  }
+  void _onTapSearch() => setState(() => _isSearching = true);
 
-  Function() _handleSearchEnd(ContactsViewModel vm) {
-    return () {
-      dispatchAction(const CancelSearchContactAction());
-      setState(() {
-        _isSearching = false;
-      });
-    };
+  void _handleSearchEnd() {
+    dispatchAction(const CancelSearchContactAction());
+    setState(() => _isSearching = false);
   }
 }

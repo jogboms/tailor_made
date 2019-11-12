@@ -13,32 +13,24 @@ class TasksPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MkAppBar(
-        title: Text("Tasks"),
-      ),
+      appBar: const MkAppBar(title: Text("Tasks")),
       body: ViewModelSubscriber<AppState, JobsViewModel>(
         converter: (store) => JobsViewModel(store),
-        builder: (
-          BuildContext context,
-          DispatchFunction dispatch,
-          JobsViewModel vm,
-        ) {
+        builder: (BuildContext context, _, JobsViewModel vm) {
           if (vm.isLoading) {
             return const MkLoadingSpinner();
           }
           final _tasks = vm.tasks;
 
           if (_tasks == null || _tasks.isEmpty) {
-            return const Center(
-              child: EmptyResultView(message: "No tasks available"),
-            );
+            return const Center(child: EmptyResultView(message: "No tasks available"));
           }
 
           return ListView.separated(
             itemCount: _tasks.length,
             shrinkWrap: true,
             padding: const EdgeInsets.only(bottom: 96.0),
-            itemBuilder: (context, index) => TaskListItem(task: _tasks[index]),
+            itemBuilder: (_, index) => TaskListItem(task: _tasks[index]),
             separatorBuilder: (_, __) => const Divider(height: 0.0),
           );
         },

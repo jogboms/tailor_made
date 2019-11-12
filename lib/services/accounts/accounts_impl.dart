@@ -1,24 +1,23 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tailor_made/firebase/auth.dart';
 import 'package:tailor_made/firebase/cloud_db.dart';
 import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/services/accounts/accounts.dart';
-import 'package:tailor_made/utils/mk_settings.dart';
+import 'package:tailor_made/services/session.dart';
 
 class AccountsImpl extends Accounts {
   @override
-  FirebaseUser get getUser => Auth.getUser;
+  User get getUser => Auth.getUser;
 
   @override
-  Future<FirebaseUser> signInWithGoogle() => Auth.signInWithGoogle();
+  Future<User> signInWithGoogle() => Auth.signInWithGoogle();
 
   @override
-  Future<FirebaseUser> get onAuthStateChanged =>
+  Future<User> get onAuthStateChanged =>
       Auth.onAuthStateChanged.firstWhere((user) => user != null).then((user) => Auth.setUser(user));
 
   @override
-  Future<Null> signout() => Auth.signOutWithGoogle();
+  Future<void> signout() => Auth.signOutWithGoogle();
 
   @override
   Future<void> readNotice(AccountModel account) async {
@@ -36,19 +35,17 @@ class AccountsImpl extends Accounts {
 
   @override
   Future<void> signUp(AccountModel account) async {
-    final _account = account.rebuild(
-      (b) => b
-        ..status = AccountModelStatus.pending
-        ..notice = MkSettings.di().getData().premiumNotice
-        ..hasReadNotice = false
-        ..hasPremiumEnabled = true,
-    );
+    final _account = account.rebuild((b) => b
+      ..status = AccountModelStatus.pending
+      ..notice = Session.di().getSettings().premiumNotice
+      ..hasReadNotice = false
+      ..hasPremiumEnabled = true);
     await account.reference.updateData(_account.toMap());
     await CloudDb.premium.document(account.uid).setData(_account.toMap());
   }
 
   @override
   Stream<AccountModel> getAccount() {
-    return CloudDb.account.snapshots().map((snapshot) => AccountModel.fromDoc(Snapshot.fromDocumentSnapshot(snapshot)));
+    return CloudDb.account.snapshots().map((snapshot) => AccountModel.fromSnapshot(Snapshot(snapshot)));
   }
 }

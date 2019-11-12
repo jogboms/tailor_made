@@ -6,6 +6,7 @@ import 'package:tailor_made/widgets/theme_provider.dart';
 
 class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
   const AvatarAppBar({
+    Key key,
     @required this.tag,
     @required this.imageUrl,
     this.useAlt = false,
@@ -15,7 +16,7 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.iconColor,
     this.subtitle,
-  });
+  }) : super(key: key);
 
   final String tag;
   final String imageUrl;
@@ -29,59 +30,6 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> titles = <Widget>[];
-
-    if (title != null) {
-      titles.add(title);
-    }
-
-    if (subtitle != null) {
-      titles.addAll(
-        [
-          const SizedBox(height: 2.0),
-          subtitle,
-        ],
-      );
-      // Text.rich(
-      //   TextSpan(
-      //     children: [
-      //       TextSpan(
-      //         text: widget.contact.pending.toString(),
-      //         style: TextStyle(fontWeight: FontWeight.w600),
-      //       ),
-      //       TextSpan(
-      //         text: " pending wear-ables",
-      //       ),
-      //     ],
-      //   ),
-      //   maxLines: 1,
-      //   overflow: TextOverflow.ellipsis,
-      //   style: TextStyle(
-      //     fontSize: 13.0,
-      //     color: Colors.white,
-      //   ),
-      // ),
-    }
-
-    final List<Widget> children = <Widget>[
-      _Leading(
-        iconColor: iconColor,
-        tag: tag,
-        imageUrl: imageUrl,
-      ),
-      Expanded(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: titles,
-        ),
-      ),
-    ];
-
-    if (actions != null) {
-      children.addAll(actions);
-    }
-
     return MkStatusBar(
       child: Material(
         color: backgroundColor,
@@ -89,9 +37,23 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: SafeArea(
           top: true,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: children,
+            children: [
+              _Leading(iconColor: iconColor, tag: tag, imageUrl: imageUrl),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (title != null) title,
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 2.0),
+                      subtitle,
+                    ],
+                  ],
+                ),
+              ),
+              if (actions != null) ...actions
+            ],
           ),
         ),
       ),
@@ -103,12 +65,7 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class _Leading extends StatelessWidget {
-  const _Leading({
-    Key key,
-    @required this.iconColor,
-    @required this.tag,
-    @required this.imageUrl,
-  }) : super(key: key);
+  const _Leading({Key key, @required this.iconColor, @required this.tag, @required this.imageUrl}) : super(key: key);
 
   final Color iconColor;
   final String tag;
@@ -127,12 +84,7 @@ class _Leading extends StatelessWidget {
             color: iconColor ?? ThemeProvider.of(context).appBarTitle.color,
           ),
           const SizedBox(width: 4.0),
-          Hero(
-            tag: tag,
-            child: MkCircleAvatar(
-              imageUrl: imageUrl,
-            ),
-          ),
+          Hero(tag: tag, child: MkCircleAvatar(imageUrl: imageUrl)),
         ],
       ),
       onPressed: () => Navigator.maybePop(context),
