@@ -172,8 +172,8 @@ class _ContentState extends State<_Content> {
   }
 
   Future<void> _onLogin() async {
-    setState(() => isLoading = true);
     try {
+      setState(() => isLoading = true);
       await Accounts.di().signInWithGoogle();
     } catch (e) {
       // TODO disabled

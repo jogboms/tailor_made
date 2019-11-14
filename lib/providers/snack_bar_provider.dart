@@ -20,7 +20,7 @@ class SnackBarProvider {
     assert(value != null);
     show(
       value,
-      leading: Icon(Icons.check, color: Colors.white, size: sf(24)),
+      leading: Icon(Icons.check, color: Colors.white, size: 24),
       backgroundColor: MkColors.success,
     );
   }
@@ -30,7 +30,7 @@ class SnackBarProvider {
     assert(value != null);
     show(
       value,
-      leading: Icon(Icons.info, color: MkColors.primary, size: sf(24)),
+      leading: Icon(Icons.info, color: MkColors.primary, size: 24),
       backgroundColor: Colors.white,
       color: Colors.black,
     );
@@ -41,7 +41,7 @@ class SnackBarProvider {
     assert(value != null);
     show(
       value,
-      leading: Icon(Icons.cancel, color: Colors.white, size: sf(24)),
+      leading: Icon(Icons.cancel, color: Colors.white, size: 24),
       backgroundColor: MkColors.danger,
     );
   }

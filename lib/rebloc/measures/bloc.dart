@@ -25,9 +25,8 @@ class MeasuresBloc extends SimpleBloc<AppState> {
         return UpdateMeasureAction(payload: createDefaultMeasures());
       }
 
-      return OnDataMeasureAction(
-        payload: measures,
-        grouped: groupModelBy<MeasureModel>(measures, (measure) => measure.group),
+      return OnDataAction<_Union>(
+        payload: _Union(measures, groupModelBy<MeasureModel>(measures, (measure) => measure.group)),
       );
     }).map((action) => context.copyWith(action));
   }
@@ -52,15 +51,15 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final _measures = state.measures;
 
-    if (action is OnDataMeasureAction) {
+    if (action is OnDataAction<_Union>) {
       return state.rebuild(
         (b) => b
           ..measures = _measures
               .rebuild(
                 (b) => b
-                  ..measures =
-                      BuiltList<MeasureModel>(action.payload..sort((a, b) => a.group.compareTo(b.group))).toBuilder()
-                  ..grouped = action.grouped
+                  ..measures = BuiltList<MeasureModel>(action.payload.first..sort((a, b) => a.group.compareTo(b.group)))
+                      .toBuilder()
+                  ..grouped = action.payload.second
                   ..status = StateStatus.success,
               )
               .toBuilder(),
@@ -75,4 +74,11 @@ class MeasuresBloc extends SimpleBloc<AppState> {
 
     return state;
   }
+}
+
+class _Union {
+  const _Union(this.first, this.second);
+
+  final List<MeasureModel> first;
+  final Map<String, List<MeasureModel>> second;
 }

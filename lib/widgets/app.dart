@@ -30,8 +30,6 @@ class _AppState extends State<App> {
   final BootstrapModel _bs;
   final Store<AppState> store;
 
-  final MkScreenUtilConfig screenConfig = const MkScreenUtilConfig(width: 412, height: 732, allowFontScaling: true);
-
   @override
   void dispose() {
     store.dispatch(const OnDisposeAction());
@@ -54,7 +52,7 @@ class _AppState extends State<App> {
               navigatorKey: _bs.navigatorKey,
               theme: ThemeProvider.of(context).themeData(Theme.of(context)),
               builder: (context, child) => Builder(builder: (BuildContext context) {
-                MkScreenUtil.initialize(context: context, config: screenConfig);
+                MkScreenUtil.initialize(context: context, size: Size(1080, 1920));
                 return child;
               }),
               onGenerateRoute: (RouteSettings settings) => _PageRoute(
@@ -65,7 +63,7 @@ class _AppState extends State<App> {
 
                   return SplashPage(isColdStart: true);
                 },
-                settings: settings.copyWith(name: MkRoutes.start, isInitialRoute: true),
+                settings: settings.copyWith(name: MkRoutes.start),
               ),
             ),
           ),
@@ -80,10 +78,6 @@ class _PageRoute<T extends Object> extends MaterialPageRoute<T> {
 
   @override
   Widget buildTransitions(_, Animation<double> animation, __, Widget child) {
-    if (settings.isInitialRoute) {
-      return child;
-    }
-
     return FadeTransition(
       opacity: animation,
       child: SlideTransition(

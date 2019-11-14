@@ -4,16 +4,11 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/services/session.dart';
 
-/// Logs each incoming action.
 class LoggerBloc extends SimpleBloc<AppState> {
   @override
-  Future<Action> afterware(DispatchFunction dispatcher, AppState state, Action action) async {
-    // if (state != lastState) {
-    //   print('State just became: $state');
-    //   lastState = state;
-    // }
+  Future<Action> afterware(dispatcher, state, action) async {
     if (!Session.di().isTesting) {
-      print("{\n$state\n}");
+      print(state);
     }
     return action;
   }

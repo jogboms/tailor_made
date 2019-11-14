@@ -6,18 +6,15 @@ class InitAccountAction extends Action {
   const InitAccountAction();
 }
 
-class OnDataAccountAction extends Action {
-  const OnDataAccountAction({@required this.payload});
-  final AccountModel payload;
-}
-
 class OnPremiumSignUp extends Action {
   const OnPremiumSignUp({@required this.payload});
+
   final AccountModel payload;
 }
 
 class OnReadNotice extends Action {
   const OnReadNotice({@required this.payload});
+
   final AccountModel payload;
 }
 

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/rebloc/accounts/actions.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
@@ -30,7 +31,7 @@ class AccountBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _getAccount(WareContext<AppState> context) {
     return Accounts.di()
         .getAccount()
-        .map((account) => OnDataAccountAction(payload: account))
+        .map((account) => OnDataAction<AccountModel>(payload: account))
         .map((action) => context.copyWith(action));
   }
 
@@ -52,7 +53,7 @@ class AccountBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final _account = state.account;
 
-    if (action is OnDataAccountAction) {
+    if (action is OnDataAction<AccountModel>) {
       return state.rebuild(
         (b) => b
           ..account = _account

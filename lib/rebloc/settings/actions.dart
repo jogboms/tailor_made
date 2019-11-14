@@ -1,6 +1,4 @@
-import 'package:meta/meta.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/models/settings.dart';
 
 class InitSettingsAction extends Action {
   const InitSettingsAction();
@@ -8,10 +6,4 @@ class InitSettingsAction extends Action {
 
 class OnErrorSettingsAction extends Action {
   const OnErrorSettingsAction();
-}
-
-class OnDataSettingAction extends Action {
-  const OnDataSettingAction({@required this.payload}) : assert(payload != null);
-
-  final SettingsModel payload;
 }

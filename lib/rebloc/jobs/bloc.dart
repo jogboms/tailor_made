@@ -63,7 +63,10 @@ class JobsBloc extends SimpleBloc<AppState> {
   }
 
   Stream<WareContext<AppState>> _onAfterLogin(WareContext<AppState> context) {
-    return Jobs.di().fetchAll().map((jobs) => OnDataJobAction(payload: jobs)).map((action) => context.copyWith(action));
+    return Jobs.di()
+        .fetchAll()
+        .map((jobs) => OnDataAction<List<JobModel>>(payload: jobs))
+        .map((action) => context.copyWith(action));
   }
 
   @override
@@ -86,7 +89,7 @@ class JobsBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final _jobs = state.jobs;
 
-    if (action is OnDataJobAction) {
+    if (action is OnDataAction<List<JobModel>>) {
       return state.rebuild(
         (b) => b
           ..jobs = _jobs

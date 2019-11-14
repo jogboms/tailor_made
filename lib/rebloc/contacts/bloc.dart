@@ -42,7 +42,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _onAfterLogin(WareContext<AppState> context) {
     return Contacts.di()
         .fetchAll()
-        .map((contacts) => OnDataContactAction(payload: contacts))
+        .map((contacts) => OnDataAction<List<ContactModel>>(payload: contacts))
         .map((action) => context.copyWith(action));
   }
 
@@ -82,7 +82,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final _contacts = state.contacts;
 
-    if (action is OnDataContactAction) {
+    if (action is OnDataAction<List<ContactModel>>) {
       return state.rebuild(
         (b) => b
           ..contacts = _contacts
