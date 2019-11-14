@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/coordinator/payments_coordinator.dart';
 import 'package:tailor_made/models/payment.dart';
-import 'package:tailor_made/screens/payments/payment.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 const _kGridWidth = 120.0;
 
@@ -31,12 +30,7 @@ class PaymentGridItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(5.0),
         color: kPrimaryColor,
         child: InkWell(
-          onTap: () {
-            Navigator.of(context).push<void>(MkNavigate.slideIn(
-              PaymentPage(payment: payment),
-              fullscreenDialog: true,
-            ));
-          },
+          onTap: () => PaymentsCoordinator.di().toPayment(payment),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
             child: Column(

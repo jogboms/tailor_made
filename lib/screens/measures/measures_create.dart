@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/coordinator/measures_coordinator.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/providers/dispatch_provider.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/measures/actions.dart';
 import 'package:tailor_made/rebloc/measures/view_model.dart';
-import 'package:tailor_made/screens/measures/_views/measure_dialog.dart';
 import 'package:tailor_made/services/measures/measures.dart';
 import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/form_section_header.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class MeasuresCreate extends StatefulWidget {
   const MeasuresCreate({
@@ -60,11 +59,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, MeasuresViewModel>(
       converter: (store) => MeasuresViewModel(store),
-      builder: (
-        BuildContext context,
-        DispatchFunction dispatch,
-        MeasuresViewModel vm,
-      ) {
+      builder: (BuildContext context, _, MeasuresViewModel vm) {
         final List<Widget> children = [];
 
         children.add(const FormSectionHeader(title: "Group Name"));
@@ -163,10 +158,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
   }
 
   void _onTapDeleteItem(MeasuresViewModel vm, MeasureModel measure) async {
-    final choice = await mkChoiceDialog(
-      context: context,
-      message: "Are you sure?",
-    );
+    final choice = await mkChoiceDialog(context: context, message: "Are you sure?");
     if (choice == null || choice == false) {
       return;
     }
@@ -185,31 +177,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
 
   void _handleAddItem() async {
     if (_isOkForm()) {
-      final _measure = await Navigator.push<MeasureModel>(
-        context,
-        MkNavigate.fadeIn<MeasureModel>(
-          Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0.0,
-              automaticallyImplyLeading: false,
-              leading: IconButton(
-                icon: const Icon(Icons.close, color: Colors.white),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ),
-            backgroundColor: Colors.black38,
-            body: MeasureDialog(
-              measure: MeasureModel(
-                (b) => b
-                  ..name = ""
-                  ..group = groupName
-                  ..unit = unitValue,
-              ),
-            ),
-          ),
-        ),
-      );
+      final _measure = await MeasuresCoordinator.di().toCreateMeasureItem(groupName, unitValue);
 
       if (_measure == null) {
         return;
@@ -227,11 +195,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
 
       try {
         dispatchAction(const ToggleMeasuresLoading());
-        await Measures.di().create(
-          measures,
-          groupName: groupName,
-          unitValue: unitValue,
-        );
+        await Measures.di().create(measures, groupName: groupName, unitValue: unitValue);
         closeLoadingSnackBar();
         Navigator.pop(context);
       } catch (e) {
@@ -246,45 +210,37 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
     if (form == null) {
       return false;
     }
+
     if (!form.validate()) {
       _autovalidate = true;
       return false;
-    } else {
-      form.save();
-      return true;
     }
+
+    form.save();
+    return true;
   }
 }
 
 class _GroupItems extends StatelessWidget {
-  const _GroupItems({
-    Key key,
-    @required this.measures,
-    @required this.onPressed,
-  }) : super(key: key);
+  const _GroupItems({Key key, @required this.measures, @required this.onPressed}) : super(key: key);
 
   final List<MeasureModel> measures;
   final ValueSetter<MeasureModel> onPressed;
 
   @override
   Widget build(BuildContext context) {
-    final items = List.generate(measures.length, (index) {
-      final measure = measures[index];
-      return ListTile(
-        dense: true,
-        title: Text(measure.name),
-        subtitle: Text(measure.unit),
-        trailing: IconButton(
-          icon: Icon(
-            measure?.reference != null ? Icons.delete : Icons.remove_circle_outline,
+    return Column(children: [
+      for (var measure in measures)
+        ListTile(
+          dense: true,
+          title: Text(measure.name),
+          subtitle: Text(measure.unit),
+          trailing: IconButton(
+            icon: Icon(measure?.reference != null ? Icons.delete : Icons.remove_circle_outline),
+            iconSize: 20.0,
+            onPressed: () => onPressed(measure),
           ),
-          iconSize: 20.0,
-          onPressed: () => onPressed(measure),
-        ),
-      );
-    });
-    return Column(
-      children: items.toList(),
-    );
+        )
+    ]);
   }
 }

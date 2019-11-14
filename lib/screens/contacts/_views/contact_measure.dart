@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/coordinator/measures_coordinator.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/screens/measures/_partials/measure_create_items.dart';
-import 'package:tailor_made/screens/measures/measures.dart';
 import 'package:tailor_made/widgets/_partials/form_section_header.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class ContactMeasure extends StatefulWidget {
   const ContactMeasure({Key key, @required this.grouped, @required this.contact}) : super(key: key);
@@ -49,12 +48,7 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMi
         actions: [
           IconButton(
             icon: const Icon(Icons.remove_red_eye, color: kTitleBaseColor),
-            onPressed: () {
-              Navigator.of(context).push<void>(MkNavigate.slideIn<void>(
-                MeasuresPage(measurements: contact.measurements.toMap()),
-                fullscreenDialog: true,
-              ));
-            },
+            onPressed: () => MeasuresCoordinator.di().toMeasures(contact.measurements.toMap()),
           )
         ],
       ),

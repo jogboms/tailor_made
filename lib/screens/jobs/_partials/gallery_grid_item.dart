@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/coordinator/gallery_coordinator.dart';
 import 'package:tailor_made/models/image.dart';
-import 'package:tailor_made/screens/gallery/_views/gallery_view.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 const _kGridWidth = 70.0;
 
@@ -30,7 +29,7 @@ class GalleryGridItem extends StatelessWidget {
             image: NetworkImage(image.src),
             fit: BoxFit.cover,
             child: InkWell(
-              onTap: () => Navigator.of(context).push<dynamic>(MkNavigate.fadeIn(GalleryView(image: image))),
+              onTap: () => GalleryCoordinator.di().toImage(image),
               child: onTapDelete != null
                   ? Align(
                       alignment: Alignment.topRight,

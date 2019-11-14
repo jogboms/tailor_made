@@ -3,23 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/coordinator/contacts_coordinator.dart';
+import 'package:tailor_made/coordinator/measures_coordinator.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/jobs/view_model.dart';
-import 'package:tailor_made/screens/contacts/contact.dart';
 import 'package:tailor_made/screens/jobs/_partials/avatar_app_bar.dart';
 import 'package:tailor_made/screens/jobs/_partials/gallery_grids.dart';
 import 'package:tailor_made/screens/jobs/_partials/payment_grids.dart';
-import 'package:tailor_made/screens/measures/measures.dart';
 import 'package:tailor_made/utils/mk_dates.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class JobPage extends StatefulWidget {
   const JobPage({Key key, @required this.job}) : super(key: key);
@@ -238,9 +237,7 @@ class _AvatarAppBar extends StatelessWidget {
       tag: contact.createdAt.toString(),
       imageUrl: contact.imageUrl,
       title: GestureDetector(
-        onTap: () {
-          Navigator.of(context).push<void>(MkNavigate.slideIn<void>(ContactPage(contact: contact)));
-        },
+        onTap: () => ContactsCoordinator.di().toContact(contact),
         child: Text(
           contact.fullname,
           maxLines: 1,
@@ -256,12 +253,7 @@ class _AvatarAppBar extends StatelessWidget {
       actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.content_cut),
-          onPressed: () {
-            Navigator.of(context).push<void>(MkNavigate.slideIn(
-              MeasuresPage(measurements: job.measurements.toMap()),
-              fullscreenDialog: true,
-            ));
-          },
+          onPressed: () => MeasuresCoordinator.di().toMeasures(job.measurements.toMap()),
         ),
         IconButton(
           icon: Icon(Icons.check, color: job.isComplete ? kPrimaryColor : kTextBaseColor),
