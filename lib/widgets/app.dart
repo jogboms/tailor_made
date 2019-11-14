@@ -51,23 +51,22 @@ class _AppState extends State<App> {
               debugShowCheckedModeBanner: false,
               title: MkStrings.appName,
               color: Colors.white,
+              navigatorKey: _bs.navigatorKey,
               theme: ThemeProvider.of(context).themeData(Theme.of(context)),
               builder: (context, child) => Builder(builder: (BuildContext context) {
                 MkScreenUtil.initialize(context: context, config: screenConfig);
                 return child;
               }),
-              onGenerateRoute: (RouteSettings settings) {
-                return _PageRoute(
-                  builder: (_) {
-                    if (_bs.isTestMode) {
-                      return const SizedBox();
-                    }
+              onGenerateRoute: (RouteSettings settings) => _PageRoute(
+                builder: (_) {
+                  if (_bs.isTestMode) {
+                    return const SizedBox();
+                  }
 
-                    return SplashPage(isColdStart: true);
-                  },
-                  settings: settings.copyWith(name: MkRoutes.start, isInitialRoute: true),
-                );
-              },
+                  return SplashPage(isColdStart: true);
+                },
+                settings: settings.copyWith(name: MkRoutes.start, isInitialRoute: true),
+              ),
             ),
           ),
         ),

@@ -6,12 +6,12 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/coordinator/shared_coordinator.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/auth/actions.dart';
 import 'package:tailor_made/rebloc/settings/actions.dart';
 import 'package:tailor_made/rebloc/settings/view_model.dart';
-import 'package:tailor_made/screens/homepage/homepage.dart';
 import 'package:tailor_made/services/accounts/accounts.dart';
 import 'package:tailor_made/services/session.dart';
 import 'package:tailor_made/utils/ui/app_version_builder.dart';
@@ -19,7 +19,6 @@ import 'package:tailor_made/utils/ui/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_raised_button.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({Key key, @required this.isColdStart}) : super(key: key);
@@ -95,10 +94,7 @@ class _ContentState extends State<_Content> {
     Accounts.di().onAuthStateChanged.then((user) => WidgetsBinding.instance.addPostFrameCallback(
           (_) async {
             StoreProvider.of<AppState>(context).dispatch(OnLoginAction(user));
-            await Navigator.of(context).pushAndRemoveUntil<void>(
-              MkNavigate.fadeIn<void>(const HomePage()),
-              (Route<void> route) => false,
-            );
+            SharedCoordinator.di().toHome();
           },
         ));
   }

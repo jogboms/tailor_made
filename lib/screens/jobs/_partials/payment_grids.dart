@@ -1,15 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/coordinator/payments_coordinator.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/screens/jobs/_partials/payment_grid_item.dart';
-import 'package:tailor_made/screens/payments/payments.dart';
-import 'package:tailor_made/screens/payments/payments_create.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class PaymentGrids extends StatefulWidget {
   PaymentGrids({Key key, double gridSize, @required this.job})
@@ -60,12 +58,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
             ),
             MkClearButton(
               child: Text("SHOW ALL", style: theme.smallBtn),
-              onPressed: () {
-                Navigator.of(context).push<void>(MkNavigate.slideIn(
-                  PaymentsPage(payments: widget.job.payments.toList()),
-                  fullscreenDialog: true,
-                ));
-              },
+              onPressed: () => PaymentsCoordinator.di().toPayments(widget.job.payments.toList()),
             ),
             const SizedBox(width: 16.0),
           ],
@@ -87,14 +80,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
   }
 
   void _onCreateNew() async {
-    final result = await Navigator.push<Map<String, dynamic>>(
-      context,
-      MkNavigate.fadeIn<Map<String, dynamic>>(
-        PaymentsCreatePage(
-          limit: widget.job.pendingPayment,
-        ),
-      ),
-    );
+    final result = await PaymentsCoordinator.di().toCreatePayment(widget.job.pendingPayment);
     if (result != null) {
       setState(() {
         _firePayments.add(_FirePayment());

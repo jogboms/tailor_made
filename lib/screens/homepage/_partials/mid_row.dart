@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/coordinator/gallery_coordinator.dart';
+import 'package:tailor_made/coordinator/payments_coordinator.dart';
 import 'package:tailor_made/models/stats/stats.dart';
-import 'package:tailor_made/screens/gallery/gallery.dart';
 import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
-import 'package:tailor_made/screens/payments/payments.dart';
 import 'package:tailor_made/utils/mk_money.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class MidRowWidget extends StatelessWidget {
   const MidRowWidget({Key key, @required this.stats}) : super(key: key);
@@ -26,7 +25,7 @@ class MidRowWidget extends StatelessWidget {
                 icon: Icons.attach_money,
                 title: "Payments",
                 subTitle: "${MkMoney(stats.payments.total).formatted} Total",
-                onPressed: () => Navigator.of(context).push<void>(MkNavigate.slideIn<void>(const PaymentsPage())),
+                onPressed: () => PaymentsCoordinator.di().toPayments(),
               ),
             ),
           ),
@@ -37,7 +36,7 @@ class MidRowWidget extends StatelessWidget {
                 icon: Icons.image,
                 title: "Gallery",
                 subTitle: "${stats.gallery.total} Photos",
-                onPressed: () => Navigator.of(context).push<void>(MkNavigate.slideIn<void>(const GalleryPage())),
+                onPressed: () => GalleryCoordinator.di().toGallery(),
               ),
             ),
           ),

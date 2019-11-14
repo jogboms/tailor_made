@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/account.dart';
+import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class StoreNameDialog extends StatelessWidget {
-  StoreNameDialog({Key key, @required this.account})
+  const StoreNameDialog({Key key, @required this.account}) : super(key: key);
+
+  final AccountModel account;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        automaticallyImplyLeading: false,
+        leading: const MkCloseButton(color: Colors.white),
+      ),
+      backgroundColor: Colors.black38,
+      body: _Content(account: account),
+    );
+  }
+}
+
+class _Content extends StatelessWidget {
+  _Content({Key key, @required this.account})
       : controller = TextEditingController(text: account.storeName),
         super(key: key);
 
