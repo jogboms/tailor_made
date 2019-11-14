@@ -12,7 +12,6 @@ import 'package:tailor_made/services/session.dart';
 import 'package:tailor_made/services/settings/main.dart';
 import 'package:tailor_made/services/stats/main.dart';
 import 'package:tailor_made/utils/mk_first_time_login_check.dart';
-import 'package:tailor_made/utils/mk_version_check.dart';
 
 Future<BootstrapModel> bootstrap(Environment env, [bool isTestMode = false]) async {
   final _settings = Session(environment: env, isTestMode: isTestMode);
@@ -33,12 +32,6 @@ Future<BootstrapModel> bootstrap(Environment env, [bool isTestMode = false]) asy
   }
 
   final isFirstTime = await MkFirstTimeLoginCheck.check(_settings.environment);
-
-  try {
-    await MkVersionCheck.init(_settings.environment);
-  } catch (e) {
-    //
-  }
 
   return BootstrapModel(isFirstTime: isFirstTime, isTestMode: isTestMode);
 }

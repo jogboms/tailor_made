@@ -13,7 +13,8 @@ import 'package:tailor_made/rebloc/settings/actions.dart';
 import 'package:tailor_made/rebloc/settings/view_model.dart';
 import 'package:tailor_made/screens/homepage/homepage.dart';
 import 'package:tailor_made/services/accounts/accounts.dart';
-import 'package:tailor_made/utils/mk_version_check.dart';
+import 'package:tailor_made/services/session.dart';
+import 'package:tailor_made/utils/ui/app_version_builder.dart';
 import 'package:tailor_made/utils/ui/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_raised_button.dart';
@@ -54,12 +55,14 @@ class SplashPage extends StatelessWidget {
                     style: theme.display2Semi.copyWith(color: kTextBaseColor.withOpacity(.6)),
                     textAlign: TextAlign.center,
                   ),
-                  if (MkVersionCheck.get() != null)
-                    Text(
-                      "v" + MkVersionCheck.get(),
+                  AppVersionBuilder(
+                    valueBuilder: () => AppVersion.retrieve(Session.di().isMock),
+                    builder: (_, version, __) => Text(
+                      "v$version",
                       style: theme.small.copyWith(color: kTextBaseColor.withOpacity(.4), height: 1.5),
                       textAlign: TextAlign.center,
-                    )
+                    ),
+                  ),
                 ],
               ),
             ),

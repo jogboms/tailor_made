@@ -6,8 +6,6 @@ import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/models/settings.dart';
 import 'package:tailor_made/models/stats/stats.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
-import 'package:tailor_made/utils/mk_version_check.dart';
-import 'package:version/version.dart';
 
 class HomeViewModel extends Equatable {
   HomeViewModel(AppState state)
@@ -44,13 +42,6 @@ class HomeViewModel extends Equatable {
 
   bool get shouldSendRating =>
       account != null && !account.hasSendRating && (((contacts?.length ?? 0) >= 10) || ((jobs?.length ?? 0) >= 10));
-
-  bool get isOutdated {
-    final currentVersion = Version.parse(MkVersionCheck.get());
-    final latestVersion = Version.parse(settings?.versionName ?? "1.0.0");
-
-    return latestVersion > currentVersion;
-  }
 
   @override
   List<Object> get props => [stats, settings, hasSkipedPremium, isLoading, account, contacts, jobs];

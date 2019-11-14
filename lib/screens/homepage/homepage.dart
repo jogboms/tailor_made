@@ -20,17 +20,21 @@ import 'package:tailor_made/screens/homepage/_views/out_dated.dart';
 import 'package:tailor_made/screens/homepage/_views/rate_limit.dart';
 import 'package:tailor_made/screens/splash/splash.dart';
 import 'package:tailor_made/services/accounts/accounts.dart';
+import 'package:tailor_made/services/session.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
+import 'package:tailor_made/utils/ui/app_version_builder.dart';
 import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/ui/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
+import 'package:version/version.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final store = StoreProvider.of<AppState>(context);
     return WillPopScope(
       onWillPop: () => mkChoiceDialog(context: context, message: "Continue with Exit?"),
       child: MkStatusBar(
@@ -48,39 +52,22 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              ViewModelSubscriber<AppState, HomeViewModel>(
-                converter: (store) => HomeViewModel(store),
-                builder: (BuildContext context, DispatchFunction dispatch, HomeViewModel vm) {
-                  if (vm.isLoading) {
-                    return const MkLoadingSpinner();
-                  }
+              AppVersionBuilder(
+                valueBuilder: () => AppVersion.retrieve(Session.di().isMock),
+                builder: (context, appVersion, child) {
+                  final currentVersion = Version.parse(appVersion);
+                  final latestVersion = Version.parse(store.states.value?.settings?.settings?.versionName ?? "1.0.0");
 
-                  if (vm.isOutdated) {
+                  if (latestVersion > currentVersion) {
                     return OutDatedPage(onUpdate: () {
-                      open(
-                        'https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade',
-                      );
+                      // TODO: take note for apple if that ever happens
+                      open('https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade');
                     });
                   }
 
-                  if (vm.isDisabled) {
-                    return AccessDeniedPage(onSendMail: () {
-                      email(
-                        "jeremiahogbomo@gmail.com",
-                        '${MkStrings.appName} - Unwarranted%20Account%20Suspension%20%23${vm.account.uid}',
-                      );
-                    });
-                  }
-
-                  if (vm.isWarning && vm.hasSkipedPremium == false) {
-                    return RateLimitPage(
-                      onSignUp: () => dispatch(OnPremiumSignUp(payload: vm.account)),
-                      onSkipedPremium: () => dispatch(const OnSkipedPremium()),
-                    );
-                  }
-
-                  return _Body(vm: vm);
+                  return child;
                 },
+                child: _Body(viewModel: HomeViewModel(store.states.value), dispatch: store.dispatch),
               ),
             ],
           ),
@@ -91,33 +78,54 @@ class HomePage extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({Key key, @required this.vm}) : super(key: key);
+  const _Body({Key key, @required this.dispatch, @required this.viewModel}) : super(key: key);
 
-  final HomeViewModel vm;
+  final HomeViewModel viewModel;
+  final DispatchFunction dispatch;
 
   @override
   Widget build(BuildContext context) {
+    if (viewModel.isLoading) {
+      return const MkLoadingSpinner();
+    }
+
+    if (viewModel.isDisabled) {
+      return AccessDeniedPage(onSendMail: () {
+        email(
+          "jeremiahogbomo@gmail.com",
+          '${MkStrings.appName} - Unwarranted%20Account%20Suspension%20%23${viewModel.account.uid}',
+        );
+      });
+    }
+
+    if (viewModel.isWarning && viewModel.hasSkipedPremium == false) {
+      return RateLimitPage(
+        onSignUp: () => dispatch(OnPremiumSignUp(payload: viewModel.account)),
+        onSkipedPremium: () => dispatch(const OnSkipedPremium()),
+      );
+    }
+
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Expanded(flex: 12, child: HeaderWidget(account: vm.account)),
-            StatsWidget(stats: vm.stats),
-            Expanded(flex: 2, child: TopRowWidget(stats: vm.stats)),
-            Expanded(flex: 2, child: MidRowWidget(stats: vm.stats)),
-            Expanded(flex: 2, child: BottomRowWidget(stats: vm.stats, account: vm.account)),
+            Expanded(flex: 12, child: HeaderWidget(account: viewModel.account)),
+            StatsWidget(stats: viewModel.stats),
+            Expanded(flex: 2, child: TopRowWidget(stats: viewModel.stats)),
+            Expanded(flex: 2, child: MidRowWidget(stats: viewModel.stats)),
+            Expanded(flex: 2, child: BottomRowWidget(stats: viewModel.stats, account: viewModel.account)),
             SizedBox(height: kButtonHeight + MediaQuery.of(context).padding.bottom),
           ],
         ),
-        CreateButton(contacts: vm.contacts),
+        CreateButton(contacts: viewModel.contacts),
         TopButtonBar(
-          account: vm.account,
-          shouldSendRating: vm.shouldSendRating,
+          account: viewModel.account,
+          shouldSendRating: viewModel.shouldSendRating,
           onLogout: () async {
             await Accounts.di().signout();
-            StoreProvider.of<AppState>(context).dispatch(const OnLogoutAction());
+            dispatch(const OnLogoutAction());
             await Navigator.of(context).pushAndRemoveUntil<void>(
               MkNavigate.fadeIn<void>(const SplashPage(isColdStart: false), name: MkRoutes.start),
               (Route<void> route) => false,
