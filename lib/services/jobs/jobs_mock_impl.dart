@@ -1,10 +1,11 @@
 import 'dart:io';
 
-import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/job.dart';
+import 'package:tailor_made/repository/mock/main.dart';
+import 'package:tailor_made/repository/models.dart';
 import 'package:tailor_made/services/jobs/jobs.dart';
 
-class JobsMockImpl extends Jobs {
+class JobsMockImpl extends Jobs<MockRepository> {
   @override
   Stream<List<JobModel>> fetchAll() async* {
     // TODO

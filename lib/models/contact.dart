@@ -1,10 +1,10 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/models/serializers.dart';
-import 'package:tailor_made/services/accounts/accounts.dart';
+import 'package:tailor_made/repository/models.dart';
+import 'package:tailor_made/services/session.dart';
 import 'package:uuid/uuid.dart';
 
 part 'contact.g.dart';
@@ -19,7 +19,7 @@ abstract class ContactModel with ModelInterface implements Built<ContactModel, C
 
   static void _initializeBuilder(ContactModelBuilder b) => b
     ..id = Uuid().v1()
-    ..userID = Accounts.di().getUser.uid
+    ..userID = Session.di().getUserId()
     ..fullname = ""
     ..createdAt = DateTime.now()
     ..totalJobs = 0

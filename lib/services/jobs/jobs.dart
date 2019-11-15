@@ -1,10 +1,15 @@
 import 'dart:io';
 
 import 'package:injector/injector.dart';
-import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/job.dart';
+import 'package:tailor_made/repository/main.dart';
+import 'package:tailor_made/repository/models.dart';
 
-abstract class Jobs {
+abstract class Jobs<T extends Repository> {
+  Jobs() : repository = Injector.appInstance.getDependency<Repository>();
+
+  final T repository;
+
   static Jobs di() => Injector.appInstance.getDependency<Jobs>();
 
   Stream<List<JobModel>> fetchAll();

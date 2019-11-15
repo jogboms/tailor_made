@@ -1,12 +1,16 @@
 import 'dart:async';
 
-import 'package:tailor_made/firebase/cloud_db.dart';
 import 'package:tailor_made/models/stats/stats.dart';
+import 'package:tailor_made/repository/firebase/main.dart';
+import 'package:tailor_made/services/session.dart';
 import 'package:tailor_made/services/stats/stats.dart';
 
-class StatsImpl extends Stats {
+class StatsImpl extends Stats<FirebaseRepository> {
   @override
   Stream<StatsModel> fetch() {
-    return CloudDb.stats.snapshots().map((snapshot) => StatsModel.fromJson(snapshot.data));
+    return repository.db
+        .stats(Session.di().getUserId())
+        .snapshots()
+        .map((snapshot) => StatsModel.fromJson(snapshot.data));
   }
 }

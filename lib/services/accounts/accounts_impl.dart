@@ -1,23 +1,18 @@
-import 'package:tailor_made/firebase/auth.dart';
-import 'package:tailor_made/firebase/cloud_db.dart';
-import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/account.dart';
+import 'package:tailor_made/repository/firebase/main.dart';
+import 'package:tailor_made/repository/firebase/models.dart';
 import 'package:tailor_made/services/accounts/accounts.dart';
 import 'package:tailor_made/services/session.dart';
 
-class AccountsImpl extends Accounts {
+class AccountsImpl extends Accounts<FirebaseRepository> {
   @override
-  User get getUser => Auth.getUser;
+  Future<FireUser> signInWithGoogle() => repository.auth.signInWithGoogle();
 
   @override
-  Future<User> signInWithGoogle() => Auth.signInWithGoogle();
+  Future<FireUser> get onAuthStateChanged => repository.auth.onAuthStateChanged.firstWhere((user) => user != null);
 
   @override
-  Future<User> get onAuthStateChanged =>
-      Auth.onAuthStateChanged.firstWhere((user) => user != null).then((user) => Auth.setUser(user));
-
-  @override
-  Future<void> signout() => Auth.signOutWithGoogle();
+  Future<void> signout() => repository.auth.signOutWithGoogle();
 
   @override
   Future<void> readNotice(AccountModel account) async {
@@ -41,11 +36,14 @@ class AccountsImpl extends Accounts {
       ..hasReadNotice = false
       ..hasPremiumEnabled = true);
     await account.reference.updateData(_account.toMap());
-    await CloudDb.premium.document(account.uid).setData(_account.toMap());
+    await repository.db.premium.document(account.uid).setData(_account.toMap());
   }
 
   @override
   Stream<AccountModel> getAccount() {
-    return CloudDb.account.snapshots().map((snapshot) => AccountModel.fromSnapshot(Snapshot(snapshot)));
+    return repository.db
+        .account(Session.di().getUserId())
+        .snapshots()
+        .map((snapshot) => AccountModel.fromSnapshot(FireSnapshot(snapshot)));
   }
 }

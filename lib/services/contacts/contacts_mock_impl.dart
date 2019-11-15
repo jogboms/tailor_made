@@ -1,10 +1,11 @@
 import 'dart:io';
 
-import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/repository/mock/main.dart';
+import 'package:tailor_made/repository/models.dart';
 import 'package:tailor_made/services/contacts/contacts.dart';
 
-class ContactsMockImpl extends Contacts {
+class ContactsMockImpl extends Contacts<MockRepository> {
   @override
   Stream<List<ContactModel>> fetchAll() async* {
     // TODO

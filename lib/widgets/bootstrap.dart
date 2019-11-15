@@ -10,6 +10,7 @@ import 'package:tailor_made/coordinator/shared_coordinator.dart';
 import 'package:tailor_made/coordinator/splash_coordinator.dart';
 import 'package:tailor_made/coordinator/tasks_coordinator.dart';
 import 'package:tailor_made/environments/environment.dart';
+import 'package:tailor_made/repository/main.dart';
 import 'package:tailor_made/services/accounts/main.dart';
 import 'package:tailor_made/services/contacts/main.dart';
 import 'package:tailor_made/services/gallery/main.dart';
@@ -21,11 +22,12 @@ import 'package:tailor_made/services/settings/main.dart';
 import 'package:tailor_made/services/stats/main.dart';
 import 'package:tailor_made/utils/mk_first_time_login_check.dart';
 
-Future<BootstrapModel> bootstrap(Environment env, [bool isTestMode = false]) async {
+Future<BootstrapModel> bootstrap(Repository repository, Environment env, [bool isTestMode = false]) async {
   final _settings = Session(environment: env, isTestMode: isTestMode);
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   Injector.appInstance
+    ..registerSingleton<Repository>((_) => repository)
     ..registerSingleton<Session>((_) => _settings)
     ..registerSingleton<Accounts>((_) => _settings.isMock ? AccountsMockImpl() : AccountsImpl())
     ..registerSingleton<Contacts>((_) => _settings.isMock ? ContactsMockImpl() : ContactsImpl())

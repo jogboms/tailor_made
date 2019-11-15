@@ -1,11 +1,13 @@
-import 'package:tailor_made/firebase/cloud_db.dart';
 import 'package:tailor_made/models/payment.dart';
+import 'package:tailor_made/repository/firebase/main.dart';
 import 'package:tailor_made/services/payments/payments.dart';
+import 'package:tailor_made/services/session.dart';
 
-class PaymentsImpl extends Payments {
+class PaymentsImpl extends Payments<FirebaseRepository> {
   @override
   Stream<List<PaymentModel>> fetchAll() {
-    return CloudDb.payments
+    return repository.db
+        .payments(Session.di().getUserId())
         .snapshots()
         .map((snap) => snap.documents.map((item) => PaymentModel.fromJson(item.data)).toList());
   }

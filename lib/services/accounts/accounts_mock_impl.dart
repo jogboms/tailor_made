@@ -1,14 +1,9 @@
-import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/account.dart';
+import 'package:tailor_made/repository/mock/main.dart';
+import 'package:tailor_made/repository/models.dart';
 import 'package:tailor_made/services/accounts/accounts.dart';
 
-class AccountsMockImpl extends Accounts {
-  @override
-  User get getUser {
-    // TODO
-    return null;
-  }
-
+class AccountsMockImpl extends Accounts<MockRepository> {
   @override
   Future<User> signInWithGoogle() async {
     // TODO

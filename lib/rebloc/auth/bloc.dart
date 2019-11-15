@@ -9,11 +9,13 @@ import 'package:tailor_made/rebloc/jobs/actions.dart';
 import 'package:tailor_made/rebloc/measures/actions.dart';
 import 'package:tailor_made/rebloc/settings/actions.dart';
 import 'package:tailor_made/rebloc/stats/actions.dart';
+import 'package:tailor_made/services/session.dart';
 
 class AuthBloc extends SimpleBloc<AppState> {
   @override
   Future<Action> middleware(DispatchFunction dispatcher, AppState state, Action action) async {
     if (action is OnLoginAction) {
+      Session.di().setUserId(action.user.uid);
       dispatcher(const InitAccountAction());
       dispatcher(const InitMeasuresAction());
       dispatcher(const InitStatsAction());

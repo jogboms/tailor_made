@@ -1,7 +1,8 @@
 import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/repository/mock/main.dart';
 import 'package:tailor_made/services/measures/measures.dart';
 
-class MeasuresMockImpl extends Measures {
+class MeasuresMockImpl extends Measures<MockRepository> {
   @override
   Future<void> create(List<MeasureModel> measures, {String groupName, String unitValue}) {
     // TODO: implement create

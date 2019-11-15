@@ -1,12 +1,12 @@
-import 'package:tailor_made/firebase/cloud_db.dart';
 import 'package:tailor_made/models/settings.dart';
+import 'package:tailor_made/repository/firebase/main.dart';
 import 'package:tailor_made/services/settings/settings.dart';
 import 'package:tailor_made/wrappers/mk_exceptions.dart';
 
-class SettingsImpl extends Settings {
+class SettingsImpl extends Settings<FirebaseRepository> {
   @override
   Stream<SettingsModel> fetch() {
-    return CloudDb.settings.snapshots().map((snapshot) {
+    return repository.db.settings.snapshots().map((snapshot) {
       if (snapshot.data == null) {
         throw NoInternetException();
       }

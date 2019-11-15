@@ -1,34 +1,34 @@
 import 'dart:io';
 
-import 'package:tailor_made/firebase/cloud_db.dart';
-import 'package:tailor_made/firebase/cloud_storage.dart';
-import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/repository/firebase/main.dart';
+import 'package:tailor_made/repository/firebase/models.dart';
 import 'package:tailor_made/services/contacts/contacts.dart';
+import 'package:tailor_made/services/session.dart';
 
-class ContactsImpl extends Contacts {
+class ContactsImpl extends Contacts<FirebaseRepository> {
   @override
   Stream<List<ContactModel>> fetchAll() {
-    return CloudDb.contacts.snapshots().map((snapshot) => snapshot.documents
+    return repository.db.contacts(Session.di().getUserId()).snapshots().map((snapshot) => snapshot.documents
         .where((doc) => doc.data.containsKey('fullname'))
-        .map((item) => ContactModel.fromSnapshot(Snapshot(item)))
+        .map((item) => ContactModel.fromSnapshot(FireSnapshot(item)))
         .toList());
   }
 
   @override
-  Storage createFile(File file) {
-    return Storage(CloudStorage.createContactImage()..putFile(file));
+  FireStorage createFile(File file) {
+    return FireStorage(repository.storage.createContactImage(Session.di().getUserId())..putFile(file));
   }
 
   @override
-  Reference fetch(ContactModel contact) {
-    return Reference(CloudDb.contacts.reference().document(contact.id));
+  FireReference fetch(ContactModel contact) {
+    return FireReference(repository.db.contacts(Session.di().getUserId()).reference().document(contact.id));
   }
 
   @override
   Stream<ContactModel> update(ContactModel contact) {
-    final ref = CloudDb.contacts.reference().document(contact.id);
+    final ref = repository.db.contacts(Session.di().getUserId()).reference().document(contact.id);
     ref.setData(contact.toMap()).then((r) {});
-    return ref.snapshots().map((doc) => ContactModel.fromSnapshot(Snapshot(doc)));
+    return ref.snapshots().map((doc) => ContactModel.fromSnapshot(FireSnapshot(doc)));
   }
 }

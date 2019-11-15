@@ -1,11 +1,14 @@
 import 'package:injector/injector.dart';
-import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/account.dart';
+import 'package:tailor_made/repository/main.dart';
+import 'package:tailor_made/repository/models.dart';
 
-abstract class Accounts {
+abstract class Accounts<T extends Repository> {
+  Accounts() : repository = Injector.appInstance.getDependency<Repository>();
+
+  final T repository;
+
   static Accounts di() => Injector.appInstance.getDependency<Accounts>();
-
-  User get getUser;
 
   Future<User> signInWithGoogle();
 

@@ -1,46 +1,57 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:tailor_made/repository/models.dart';
 
-class Snapshot {
-  Snapshot(DocumentSnapshot doc)
+class FireSnapshot implements Snapshot<DocumentSnapshot> {
+  FireSnapshot(DocumentSnapshot doc)
       : data = doc.data,
-        reference = Reference(doc.reference);
+        reference = FireReference(doc.reference);
 
+  @override
   final Map<String, dynamic> data;
-  final Reference reference;
+  @override
+  final FireReference reference;
 }
 
-class User {
-  User(this._reference);
+class FireUser implements User {
+  FireUser(this._reference);
 
   final FirebaseUser _reference;
 
+  @override
   String get uid => _reference.uid;
 }
 
-class Storage {
-  Storage(this._reference);
+class FireStorage implements Storage {
+  FireStorage(this._reference);
 
   final StorageReference _reference;
 
+  @override
   Future<void> delete() => _reference.delete();
 
+  @override
   Future getDownloadURL() => _reference.getDownloadURL();
 
+  @override
   String get path => _reference.path;
 }
 
-class Reference {
-  Reference(this._reference);
+class FireReference implements Reference<DocumentReference> {
+  FireReference(this._reference);
 
   final DocumentReference _reference;
 
+  @override
   DocumentReference get source => _reference;
 
+  @override
   Future<void> delete() => _reference.delete();
 
+  @override
   Future<void> setData(Map<String, dynamic> data, {bool merge = false}) => _reference.setData(data, merge: merge);
 
+  @override
   Future<void> updateData(Map<String, dynamic> data) => _reference.updateData(data);
 }

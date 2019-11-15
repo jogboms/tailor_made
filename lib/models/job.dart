@@ -1,12 +1,12 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/models/serializers.dart';
-import 'package:tailor_made/services/accounts/accounts.dart';
+import 'package:tailor_made/repository/models.dart';
+import 'package:tailor_made/services/session.dart';
 import 'package:uuid/uuid.dart';
 
 part 'job.g.dart';
@@ -20,7 +20,7 @@ abstract class JobModel with ModelInterface implements Built<JobModel, JobModelB
 
   static void _initializeBuilder(JobModelBuilder b) => b
     ..id = Uuid().v1()
-    ..userID = Accounts.di().getUser.uid
+    ..userID = Session.di().getUserId()
     ..name = ""
     ..createdAt = DateTime.now()
     ..completedPayment = 0.0

@@ -1,8 +1,8 @@
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/models/serializers.dart';
+import 'package:tailor_made/repository/models.dart';
 
 part 'account.g.dart';
 

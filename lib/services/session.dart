@@ -18,11 +18,11 @@ class Session {
 
   bool get isTesting => isTestMode;
 
-  int _userId;
+  String _userId;
 
-  void setUserId(int id) => _userId = id;
+  void setUserId(String id) => _userId = id;
 
-  int getUserId() => _userId;
+  String getUserId() => _userId;
 
   SettingsModel _settings;
 

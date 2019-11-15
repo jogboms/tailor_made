@@ -148,7 +148,7 @@ class _ContentState extends State<_Content> {
                 }
 
                 if (widget.isColdStart && !canRestartSignin) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) async => _onLogin());
+                  WidgetsBinding.instance.addPostFrameCallback((_) => _onLogin());
                 }
 
                 if (isLoading) {

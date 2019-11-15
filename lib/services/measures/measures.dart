@@ -1,8 +1,13 @@
 import 'package:injector/injector.dart';
 import 'package:meta/meta.dart';
 import 'package:tailor_made/models/measure.dart';
+import 'package:tailor_made/repository/main.dart';
 
-abstract class Measures {
+abstract class Measures<T extends Repository> {
+  Measures() : repository = Injector.appInstance.getDependency<Repository>();
+
+  final T repository;
+
   static Measures di() => Injector.appInstance.getDependency<Measures>();
 
   Stream<List<MeasureModel>> fetchAll();
