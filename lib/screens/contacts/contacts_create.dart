@@ -30,7 +30,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
   @override
   void initState() {
     super.initState();
-    contact = ContactModel();
+    contact = ContactModel((b) => b..userID = Dependencies.di().session.getUserId());
   }
 
   @override

@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/screens/jobs/_partials/payment_grid_item.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class PaymentGrids extends StatefulWidget {
@@ -90,6 +90,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
         setState(() {
           _firePayments.last.payment = PaymentModel(
             (b) => b
+              ..userID = Dependencies.di().session.getUserId()
               ..contactID = widget.job.contactID
               ..jobID = widget.job.id
               ..price = result["price"]

@@ -74,6 +74,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
     contact = widget.contact;
     job = JobModel(
       (b) => b
+        ..userID = Dependencies.di().session.getUserId()
         ..contactID = contact?.id
         ..measurements = contact?.measurements?.toBuilder(),
     ).toBuilder();
@@ -343,6 +344,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
           ..isSucess = true
           ..image = ImageModel(
             (b) => b
+              ..userID = Dependencies.di().session.getUserId()
               ..contactID = contact.id
               ..jobID = job.id
               ..src = imageUrl

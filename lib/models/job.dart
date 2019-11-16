@@ -1,7 +1,6 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/models/payment.dart';
@@ -20,7 +19,6 @@ abstract class JobModel with ModelInterface implements Built<JobModel, JobModelB
 
   static void _initializeBuilder(JobModelBuilder b) => b
     ..id = Uuid().v1()
-    ..userID = Dependencies.di().session.getUserId()
     ..name = ""
     ..createdAt = DateTime.now()
     ..completedPayment = 0.0
@@ -33,7 +31,6 @@ abstract class JobModel with ModelInterface implements Built<JobModel, JobModelB
   @nullable
   String get id;
 
-  @nullable
   String get userID;
 
   @nullable

@@ -114,6 +114,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
       setState(() {
         _fireImages.last.image = ImageModel(
           (b) => b
+            ..userID = Dependencies.di().session.getUserId()
             ..contactID = widget.job.contactID
             ..jobID = widget.job.id
             ..src = imageUrl

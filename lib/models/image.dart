@@ -1,6 +1,5 @@
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/models/serializers.dart';
 import 'package:uuid/uuid.dart';
@@ -14,7 +13,6 @@ abstract class ImageModel with ModelInterface implements Built<ImageModel, Image
 
   static void _initializeBuilder(ImageModelBuilder b) => b
     ..id = Uuid().v1()
-    ..userID = Dependencies.di().session.getUserId()
     ..createdAt = DateTime.now();
 
   String get id;

@@ -1,6 +1,5 @@
 import 'dart:async' show TimeoutException;
 
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/wrappers/mk_exceptions.dart';
 
 class MkStrings {
@@ -39,10 +38,10 @@ class MkStrings {
     "December",
   ];
 
-  static String genericError(dynamic error) {
+  static String genericError(dynamic error, bool isDev) {
     if (error is TimeoutException) {
       return "This action took too long. Please Retry.";
     }
-    return Dependencies.di().session.isDev || error is MkResponseException ? "$error" : errorMessage;
+    return isDev || error is MkResponseException ? "$error" : errorMessage;
   }
 }

@@ -21,13 +21,13 @@ class App extends StatefulWidget {
   final BootstrapModel bootstrap;
 
   @override
-  _AppState createState() => _AppState(bootstrap);
+  _AppState createState() => _AppState(bootstrap, storeFactory(bootstrap.isTestMode));
 }
 
 class _AppState extends State<App> {
-  _AppState(this._bs) : store = storeFactory();
+  _AppState(this.bootstrap, this.store);
 
-  final BootstrapModel _bs;
+  final BootstrapModel bootstrap;
   final Store<AppState> store;
 
   @override
@@ -49,7 +49,7 @@ class _AppState extends State<App> {
               debugShowCheckedModeBanner: false,
               title: MkStrings.appName,
               color: Colors.white,
-              navigatorKey: _bs.navigatorKey,
+              navigatorKey: bootstrap.navigatorKey,
               theme: ThemeProvider.of(context).themeData(Theme.of(context)),
               builder: (context, child) => Builder(builder: (BuildContext context) {
                 MkScreenUtil.initialize(context: context, size: Size(1080, 1920));
@@ -57,7 +57,7 @@ class _AppState extends State<App> {
               }),
               onGenerateRoute: (RouteSettings settings) => _PageRoute(
                 builder: (_) {
-                  if (_bs.isTestMode) {
+                  if (bootstrap.isTestMode) {
                     return const SizedBox();
                   }
 
