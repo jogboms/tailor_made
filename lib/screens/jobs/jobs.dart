@@ -7,12 +7,11 @@ import 'package:tailor_made/rebloc/jobs/sort_type.dart';
 import 'package:tailor_made/rebloc/jobs/view_model.dart';
 import 'package:tailor_made/screens/jobs/_partials/jobs_filter_button.dart';
 import 'package:tailor_made/screens/jobs/_partials/jobs_list.dart';
-import 'package:tailor_made/screens/jobs/jobs_create.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class JobsPage extends StatelessWidget {
   const JobsPage({Key key}) : super(key: key);
@@ -39,11 +38,7 @@ class JobsPage extends StatelessWidget {
             }),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.library_add),
-              onPressed: () {
-                Navigator.of(context).push<void>(MkNavigate.slideIn(
-                  JobsCreatePage(contacts: vm.contacts),
-                ));
-              },
+              onPressed: () => Dependencies.di().jobsCoordinator.toCreateJob(vm.contacts),
             ),
           ),
           onWillPop: () async {

@@ -4,16 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/measures/view_model.dart';
 import 'package:tailor_made/screens/contacts/_partials/contact_form.dart';
-import 'package:tailor_made/screens/contacts/_views/contact_measure.dart';
-import 'package:tailor_made/screens/contacts/contact.dart';
-import 'package:tailor_made/services/contacts/contacts.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class ContactsCreatePage extends StatefulWidget {
   const ContactsCreatePage({Key key}) : super(key: key);
@@ -33,7 +30,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
   @override
   void initState() {
     super.initState();
-    contact = ContactModel();
+    contact = ContactModel((b) => b..userID = Dependencies.di().session.getUserId());
   }
 
   @override
@@ -90,13 +87,11 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
           ..location = _contact.location,
       );
 
-      Contacts.di().update(contact).listen((snap) async {
+      Dependencies.di().contacts.update(contact, Dependencies.di().session.getUserId()).listen((snap) async {
         closeLoadingSnackBar();
         showInSnackBar("Successfully Added");
 
-        await Navigator.of(context).pushReplacement<dynamic, dynamic>(
-          MkNavigate.slideIn<String>(ContactPage(contact: snap)),
-        );
+        Dependencies.di().contactsCoordinator.toContact(snap);
       });
     } catch (e) {
       closeLoadingSnackBar();
@@ -105,9 +100,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
   }
 
   void _handleSelectMeasure(MeasuresViewModel vm) async {
-    final _contact = await Navigator.of(context).push<ContactModel>(MkNavigate.fadeIn(
-      ContactMeasure(contact: contact, grouped: vm.grouped),
-    ));
+    final _contact = await Dependencies.di().contactsCoordinator.toContactMeasure(contact, vm.grouped);
 
     setState(() {
       contact = contact.rebuild((b) => b..measurements = _contact.measurements.toBuilder());

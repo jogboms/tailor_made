@@ -7,12 +7,10 @@ import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/contact_job_view_model.dart';
-import 'package:tailor_made/screens/contacts/contact.dart';
-import 'package:tailor_made/screens/jobs/job.dart';
 import 'package:tailor_made/utils/ui/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
+import 'package:tailor_made/dependencies.dart';
 
 class GalleryView extends StatelessWidget {
   const GalleryView({Key key, this.image}) : super(key: key);
@@ -61,16 +59,12 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               if (job != null)
                 IconButton(
                   icon: const Icon(Icons.work, color: Colors.white),
-                  onPressed: () {
-                    Navigator.of(context).push<void>(MkNavigate.slideIn<void>(JobPage(job: job)));
-                  },
+                  onPressed: () => Dependencies.di().jobsCoordinator.toJob(job),
                 ),
               if (contact != null)
                 IconButton(
                   icon: const Icon(Icons.person, color: Colors.white),
-                  onPressed: () {
-                    Navigator.of(context).push<void>(MkNavigate.slideIn<void>(ContactPage(contact: contact)));
-                  },
+                  onPressed: () => Dependencies.di().contactsCoordinator.toContact(contact),
                 ),
               if (account.hasPremiumEnabled)
                 IconButton(

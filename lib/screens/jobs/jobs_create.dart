@@ -8,20 +8,18 @@ import 'package:intl/intl.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/firebase/models.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/measures/view_model.dart';
+import 'package:tailor_made/repository/models.dart';
 import 'package:tailor_made/screens/jobs/_partials/avatar_app_bar.dart';
-import 'package:tailor_made/screens/jobs/_partials/contact_lists.dart';
 import 'package:tailor_made/screens/jobs/_partials/gallery_grid_item.dart';
 import 'package:tailor_made/screens/jobs/_partials/input_dropdown.dart';
-import 'package:tailor_made/screens/jobs/job.dart';
 import 'package:tailor_made/screens/measures/_partials/measure_create_items.dart';
-import 'package:tailor_made/services/jobs/jobs.dart';
 import 'package:tailor_made/utils/ui/mk_image_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/form_section_header.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
@@ -29,7 +27,6 @@ import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 const _kGridWidth = 85.0;
 
@@ -77,6 +74,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
     contact = widget.contact;
     job = JobModel(
       (b) => b
+        ..userID = Dependencies.di().session.getUserId()
         ..contactID = contact?.id
         ..measurements = contact?.measurements?.toBuilder(),
     ).toBuilder();
@@ -218,10 +216,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
   }
 
   void onSelectContact() async {
-    final selectedContact = await Navigator.push<ContactModel>(
-      context,
-      MkNavigate.fadeIn<ContactModel>(ContactLists(contacts: widget.contacts)),
-    );
+    final selectedContact = await Dependencies.di().contactsCoordinator.toContactsList(widget.contacts);
     if (selectedContact != null) {
       setState(() {
         contact = selectedContact;
@@ -254,12 +249,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
         ..contactID = contact.id;
 
       try {
-        Jobs.di().update(job.build()).listen((snap) {
+        Dependencies.di().jobs.update(job.build(), Dependencies.di().session.getUserId()).listen((snap) {
           closeLoadingSnackBar();
-          Navigator.pushReplacement<dynamic, dynamic>(
-            context,
-            MkNavigate.slideIn<String>(JobPage(job: snap)),
-          );
+          Dependencies.di().jobsCoordinator.toJob(snap);
         });
       } catch (e) {
         closeLoadingSnackBar();
@@ -339,7 +331,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
       return;
     }
     // TODO: remove firebase coupling
-    final ref = Jobs.di().createFile(imageFile);
+    final ref = Dependencies.di().jobs.createFile(imageFile, Dependencies.di().session.getUserId());
 
     setState(() {
       fireImages.add(FireImage()..ref = ref);
@@ -352,6 +344,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
           ..isSucess = true
           ..image = ImageModel(
             (b) => b
+              ..userID = Dependencies.di().session.getUserId()
               ..contactID = contact.id
               ..jobID = job.id
               ..src = imageUrl

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MkNavigate {
-  static CupertinoPageRoute<T> slideIn<T extends Object>(
+  static PageRoute<T> slideIn<T extends Object>(
     Widget widget, {
     String name,
     RouteSettings settings,
@@ -18,7 +18,7 @@ class MkNavigate {
     );
   }
 
-  static Route<T> fadeIn<T extends Object>(
+  static PageRoute<T> fadeIn<T extends Object>(
     Widget widget, {
     String name,
     RouteSettings settings,
@@ -27,8 +27,7 @@ class MkNavigate {
     return PageRouteBuilder<T>(
       opaque: false,
       pageBuilder: (_, __, ___) => widget,
-      transitionsBuilder: (_, Animation<double> animation, __, Widget child) =>
-          FadeTransition(opacity: animation, child: child),
+      transitionsBuilder: (_, animation, __, child) => FadeTransition(opacity: animation, child: child),
       settings: name != null ? RouteSettings(name: name) : settings,
       maintainState: maintainState,
     );

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/job.dart';
-import 'package:tailor_made/screens/jobs/job.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class JobListItem extends StatelessWidget {
   const JobListItem({Key key, @required this.job}) : super(key: key);
@@ -22,9 +21,7 @@ class JobListItem extends StatelessWidget {
 
     return Material(
       child: InkWell(
-        onTap: () {
-          Navigator.of(context).push<void>(MkNavigate.slideIn<void>(JobPage(job: job)));
-        },
+        onTap: () => Dependencies.di().jobsCoordinator.toJob(job),
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Row(

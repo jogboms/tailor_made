@@ -1,14 +1,8 @@
-import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/account.dart';
+import 'package:tailor_made/repository/models.dart';
 import 'package:tailor_made/services/accounts/accounts.dart';
 
 class AccountsMockImpl extends Accounts {
-  @override
-  User get getUser {
-    // TODO
-    return null;
-  }
-
   @override
   Future<User> signInWithGoogle() async {
     // TODO
@@ -40,13 +34,13 @@ class AccountsMockImpl extends Accounts {
   }
 
   @override
-  Future<void> signUp(AccountModel account) async {
+  Future<void> signUp(AccountModel account, String notice) async {
     // TODO
     return null;
   }
 
   @override
-  Stream<AccountModel> getAccount() async* {
+  Stream<AccountModel> getAccount(String userId) async* {
     // TODO
     yield null;
   }

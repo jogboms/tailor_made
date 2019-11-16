@@ -7,11 +7,10 @@ import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/measures/view_model.dart';
 import 'package:tailor_made/screens/measures/_partials/measures_slide_block.dart';
-import 'package:tailor_made/screens/measures/measures_create.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
+import 'package:tailor_made/dependencies.dart';
 
 class MeasuresManagePage extends StatefulWidget {
   const MeasuresManagePage({Key key}) : super(key: key);
@@ -46,12 +45,7 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> with SnackBarPr
         backgroundColor: kAccentColor,
         foregroundColor: Colors.white,
         label: const Text("Add Group"),
-        onPressed: () {
-          Navigator.of(context).push<void>(MkNavigate.slideIn(
-            const MeasuresCreate(),
-            fullscreenDialog: true,
-          ));
-        },
+        onPressed: () => Dependencies.di().measuresCoordinator.toCreateMeasures(),
       ),
     );
   }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:tailor_made/firebase/models.dart';
+import 'package:tailor_made/repository/models.dart';
 
 abstract class ModelInterface {
   Reference reference;

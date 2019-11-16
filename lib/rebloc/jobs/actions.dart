@@ -38,9 +38,3 @@ class SearchJobAction extends Action {
 
   final String payload;
 }
-
-class OnDataJobAction extends Action {
-  const OnDataJobAction({@required this.payload});
-
-  final List<JobModel> payload;
-}

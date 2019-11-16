@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/bootstrap.dart';
 import 'package:tailor_made/constants/mk_routes.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
@@ -9,7 +10,6 @@ import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/store_factory.dart';
 import 'package:tailor_made/screens/splash/splash.dart';
 import 'package:tailor_made/utils/mk_screen_util.dart';
-import 'package:tailor_made/widgets/bootstrap.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class App extends StatefulWidget {
@@ -21,16 +21,14 @@ class App extends StatefulWidget {
   final BootstrapModel bootstrap;
 
   @override
-  _AppState createState() => _AppState(bootstrap);
+  _AppState createState() => _AppState(bootstrap, storeFactory(bootstrap.isTestMode));
 }
 
 class _AppState extends State<App> {
-  _AppState(this._bs) : store = storeFactory();
+  _AppState(this.bootstrap, this.store);
 
-  final BootstrapModel _bs;
+  final BootstrapModel bootstrap;
   final Store<AppState> store;
-
-  final MkScreenUtilConfig screenConfig = const MkScreenUtilConfig(width: 412, height: 732, allowFontScaling: true);
 
   @override
   void dispose() {
@@ -51,23 +49,22 @@ class _AppState extends State<App> {
               debugShowCheckedModeBanner: false,
               title: MkStrings.appName,
               color: Colors.white,
+              navigatorKey: bootstrap.navigatorKey,
               theme: ThemeProvider.of(context).themeData(Theme.of(context)),
               builder: (context, child) => Builder(builder: (BuildContext context) {
-                MkScreenUtil.initialize(context: context, config: screenConfig);
+                MkScreenUtil.initialize(context: context, size: Size(1080, 1920));
                 return child;
               }),
-              onGenerateRoute: (RouteSettings settings) {
-                return _PageRoute(
-                  builder: (_) {
-                    if (_bs.isTestMode) {
-                      return const SizedBox();
-                    }
+              onGenerateRoute: (RouteSettings settings) => _PageRoute(
+                builder: (_) {
+                  if (bootstrap.isTestMode) {
+                    return const SizedBox();
+                  }
 
-                    return SplashPage(isColdStart: true);
-                  },
-                  settings: settings.copyWith(name: MkRoutes.start, isInitialRoute: true),
-                );
-              },
+                  return SplashPage(isColdStart: true);
+                },
+                settings: settings.copyWith(name: MkRoutes.start),
+              ),
             ),
           ),
         ),
@@ -81,10 +78,6 @@ class _PageRoute<T extends Object> extends MaterialPageRoute<T> {
 
   @override
   Widget buildTransitions(_, Animation<double> animation, __, Widget child) {
-    if (settings.isInitialRoute) {
-      return child;
-    }
-
     return FadeTransition(
       opacity: animation,
       child: SlideTransition(

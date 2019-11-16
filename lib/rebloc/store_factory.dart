@@ -10,7 +10,7 @@ import 'package:tailor_made/rebloc/measures/bloc.dart';
 import 'package:tailor_made/rebloc/settings/bloc.dart';
 import 'package:tailor_made/rebloc/stats/bloc.dart';
 
-Store<AppState> storeFactory() {
+Store<AppState> storeFactory(bool isTesting) {
   return Store<AppState>(
     initialState: AppState.initialState(),
     blocs: [
@@ -22,7 +22,7 @@ Store<AppState> storeFactory() {
       SettingsBloc(),
       StatsBloc(),
       JobsBloc(),
-      LoggerBloc(),
+      LoggerBloc(isTesting),
     ],
   );
 }

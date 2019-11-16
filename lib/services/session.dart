@@ -1,12 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'package:injector/injector.dart';
 import 'package:tailor_made/environments/environment.dart';
 import 'package:tailor_made/models/settings.dart';
 
 class Session {
   Session({@required this.environment, @required this.isTestMode});
-
-  static Session di() => Injector.appInstance.getDependency<Session>();
 
   final Environment environment;
 
@@ -18,11 +15,11 @@ class Session {
 
   bool get isTesting => isTestMode;
 
-  int _userId;
+  String _userId;
 
-  void setUserId(int id) => _userId = id;
+  void setUserId(String id) => _userId = id;
 
-  int getUserId() => _userId;
+  String getUserId() => _userId;
 
   SettingsModel _settings;
 

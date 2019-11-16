@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/stats/stats.dart';
 import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
-import 'package:tailor_made/screens/measures/measures_manage.dart';
-import 'package:tailor_made/screens/tasks/tasks.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class BottomRowWidget extends StatelessWidget {
   const BottomRowWidget({Key key, @required this.stats, @required this.account}) : super(key: key);
@@ -27,7 +25,7 @@ class BottomRowWidget extends StatelessWidget {
                 icon: Icons.content_cut,
                 title: "Measures",
                 subTitle: "Custom",
-                onPressed: () => Navigator.of(context).push<void>(MkNavigate.slideIn(const MeasuresManagePage())),
+                onPressed: () => Dependencies.di().measuresCoordinator.toManageMeasures(),
               ),
             ),
           ),
@@ -38,7 +36,7 @@ class BottomRowWidget extends StatelessWidget {
                 icon: Icons.event,
                 title: "Tasks",
                 subTitle: "${stats.jobs.pending} Pending",
-                onPressed: () => Navigator.of(context).push<void>(MkNavigate.slideIn<void>(const TasksPage())),
+                onPressed: () => Dependencies.di().tasksCoordinator.toTasks(),
               ),
             ),
           ),

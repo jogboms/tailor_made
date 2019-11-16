@@ -1,13 +1,13 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/jobs/actions.dart';
 import 'package:tailor_made/rebloc/jobs/sort_type.dart';
-import 'package:tailor_made/services/jobs/jobs.dart';
 
 final _foldPrice = (double acc, PaymentModel model) => acc + model.price;
 
@@ -63,7 +63,11 @@ class JobsBloc extends SimpleBloc<AppState> {
   }
 
   Stream<WareContext<AppState>> _onAfterLogin(WareContext<AppState> context) {
-    return Jobs.di().fetchAll().map((jobs) => OnDataJobAction(payload: jobs)).map((action) => context.copyWith(action));
+    return Dependencies.di()
+        .jobs
+        .fetchAll(Dependencies.di().session.getUserId())
+        .map((jobs) => OnDataAction<List<JobModel>>(payload: jobs))
+        .map((action) => context.copyWith(action));
   }
 
   @override
@@ -86,7 +90,7 @@ class JobsBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final _jobs = state.jobs;
 
-    if (action is OnDataJobAction) {
+    if (action is OnDataAction<List<JobModel>>) {
       return state.rebuild(
         (b) => b
           ..jobs = _jobs

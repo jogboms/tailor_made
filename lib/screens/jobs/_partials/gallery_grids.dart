@@ -2,17 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/firebase/models.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
-import 'package:tailor_made/screens/gallery/gallery.dart';
+import 'package:tailor_made/repository/models.dart';
 import 'package:tailor_made/screens/jobs/_partials/gallery_grid_item.dart';
-import 'package:tailor_made/services/gallery/gallery.dart';
 import 'package:tailor_made/utils/ui/mk_image_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class GalleryGrids extends StatefulWidget {
   GalleryGrids({Key key, double gridSize, @required this.job})
@@ -75,12 +73,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
             ),
             MkClearButton(
               child: Text("SHOW ALL", style: theme.smallBtn),
-              onPressed: () {
-                Navigator.of(context).push<void>(MkNavigate.slideIn(
-                  GalleryPage(images: widget.job.images.toList()),
-                  fullscreenDialog: true,
-                ));
-              },
+              onPressed: () => Dependencies.di().galleryCoordinator.toGallery(widget.job.images.toList()),
             ),
             const SizedBox(width: 16.0),
           ],
@@ -110,7 +103,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
     if (imageFile == null) {
       return;
     }
-    final ref = Gallery.di().createFile(imageFile);
+    final ref = Dependencies.di().gallery.createFile(imageFile, Dependencies.di().session.getUserId());
 
     setState(() {
       _fireImages.add(_FireImage()..ref = ref);
@@ -121,6 +114,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
       setState(() {
         _fireImages.last.image = ImageModel(
           (b) => b
+            ..userID = Dependencies.di().session.getUserId()
             ..contactID = widget.job.contactID
             ..jobID = widget.job.id
             ..src = imageUrl

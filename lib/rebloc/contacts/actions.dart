@@ -32,9 +32,3 @@ class CancelSearchContactAction extends Action {
 class StartSearchContactAction extends Action {
   const StartSearchContactAction();
 }
-
-class OnDataContactAction extends Action {
-  const OnDataContactAction({@required this.payload});
-
-  final List<ContactModel> payload;
-}

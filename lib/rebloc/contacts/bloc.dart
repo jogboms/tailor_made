@@ -1,12 +1,12 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/contacts/actions.dart';
 import 'package:tailor_made/rebloc/contacts/sort_type.dart';
-import 'package:tailor_made/services/contacts/contacts.dart';
 
 Comparator<ContactModel> _sort(SortType sortType) {
   switch (sortType) {
@@ -40,9 +40,10 @@ Comparator<ContactModel> _sort(SortType sortType) {
 
 class ContactsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _onAfterLogin(WareContext<AppState> context) {
-    return Contacts.di()
-        .fetchAll()
-        .map((contacts) => OnDataContactAction(payload: contacts))
+    return Dependencies.di()
+        .contacts
+        .fetchAll(Dependencies.di().session.getUserId())
+        .map((contacts) => OnDataAction<List<ContactModel>>(payload: contacts))
         .map((action) => context.copyWith(action));
   }
 
@@ -82,7 +83,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final _contacts = state.contacts;
 
-    if (action is OnDataContactAction) {
+    if (action is OnDataAction<List<ContactModel>>) {
       return state.rebuild(
         (b) => b
           ..contacts = _contacts

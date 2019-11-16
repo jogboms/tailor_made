@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:rebloc/rebloc.dart';
 
 class OnInitAction extends Action {
@@ -10,4 +11,10 @@ class OnDisposeAction extends Action {
 
 class VoidAction extends Action {
   const VoidAction();
+}
+
+class OnDataAction<T> extends Action {
+  const OnDataAction({@required this.payload}) : assert(payload != null);
+
+  final T payload;
 }

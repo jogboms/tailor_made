@@ -1,15 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/screens/measures/_partials/measures_slide_block_item.dart';
 import 'package:tailor_made/screens/measures/_views/slide_down.dart';
-import 'package:tailor_made/screens/measures/measures_create.dart';
-import 'package:tailor_made/services/measures/measures.dart';
 import 'package:tailor_made/utils/ui/mk_child_dialog.dart';
 import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 enum _ActionChoice { edit, delete }
 
@@ -39,9 +37,9 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
         }
 
         if (choice == _ActionChoice.edit) {
-          onTapEditBlock();
+          _onTapEditBlock();
         } else if (choice == _ActionChoice.delete) {
-          onTapDeleteBlock();
+          _onTapDeleteBlock();
         }
       },
     );
@@ -53,18 +51,14 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
       child: SimpleDialog(
         children: <Widget>[
           SimpleDialogOption(
-            onPressed: () {
-              Navigator.pop(context, _ActionChoice.edit);
-            },
+            onPressed: () => Navigator.pop(context, _ActionChoice.edit),
             child: Padding(
               child: const Text("Edit"),
               padding: const EdgeInsets.all(8.0),
             ),
           ),
           SimpleDialogOption(
-            onPressed: () {
-              Navigator.pop(context, _ActionChoice.delete);
-            },
+            onPressed: () => Navigator.pop(context, _ActionChoice.delete),
             child: Padding(
               child: const Text("Delete"),
               padding: const EdgeInsets.all(8.0),
@@ -75,30 +69,19 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
     );
   }
 
-  void onTapEditBlock() {
-    Navigator.of(context).push<void>(MkNavigate.slideIn(
-      MeasuresCreate(
-        groupName: widget.title,
-        unitValue: widget.measures.first.unit,
-        measures: widget.measures,
-      ),
-      fullscreenDialog: true,
-    ));
+  void _onTapEditBlock() {
+    Dependencies.di().measuresCoordinator.toCreateMeasures(widget.title, widget.measures.first.unit, widget.measures);
   }
 
-  void onTapDeleteBlock() async {
-    final choice = await mkChoiceDialog(
-      context: context,
-      title: "",
-      message: "Are you sure?",
-    );
+  void _onTapDeleteBlock() async {
+    final choice = await mkChoiceDialog(context: context, title: "", message: "Are you sure?");
     if (choice == null || choice == false) {
       return;
     }
 
     SnackBarProvider.of(context).loading();
     try {
-      await Measures.di().delete(widget.measures);
+      await Dependencies.di().measures.delete(widget.measures, Dependencies.di().session.getUserId());
 
       SnackBarProvider.of(context).hide();
     } catch (e) {

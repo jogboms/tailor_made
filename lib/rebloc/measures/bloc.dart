@@ -1,17 +1,19 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/measures/actions.dart';
-import 'package:tailor_made/services/measures/measures.dart';
 import 'package:tailor_made/utils/mk_group_model_by.dart';
 
 class MeasuresBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _onUpdateMeasure(WareContext<AppState> context) async* {
     try {
-      await Measures.di().update((context.action as UpdateMeasureAction).payload);
+      await Dependencies.di()
+          .measures
+          .update((context.action as UpdateMeasureAction).payload, Dependencies.di().session.getUserId());
       yield context.copyWith(const InitMeasuresAction());
     } catch (e) {
       print(e);
@@ -20,14 +22,13 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   }
 
   Stream<WareContext<AppState>> _onInitMeasure(WareContext<AppState> context) {
-    return Measures.di().fetchAll().map((measures) {
+    return Dependencies.di().measures.fetchAll(Dependencies.di().session.getUserId()).map((measures) {
       if (measures.isEmpty) {
         return UpdateMeasureAction(payload: createDefaultMeasures());
       }
 
-      return OnDataMeasureAction(
-        payload: measures,
-        grouped: groupModelBy<MeasureModel>(measures, (measure) => measure.group),
+      return OnDataAction<_Union>(
+        payload: _Union(measures, groupModelBy<MeasureModel>(measures, (measure) => measure.group)),
       );
     }).map((action) => context.copyWith(action));
   }
@@ -52,15 +53,15 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final _measures = state.measures;
 
-    if (action is OnDataMeasureAction) {
+    if (action is OnDataAction<_Union>) {
       return state.rebuild(
         (b) => b
           ..measures = _measures
               .rebuild(
                 (b) => b
-                  ..measures =
-                      BuiltList<MeasureModel>(action.payload..sort((a, b) => a.group.compareTo(b.group))).toBuilder()
-                  ..grouped = action.grouped
+                  ..measures = BuiltList<MeasureModel>(action.payload.first..sort((a, b) => a.group.compareTo(b.group)))
+                      .toBuilder()
+                  ..grouped = action.payload.second
                   ..status = StateStatus.success,
               )
               .toBuilder(),
@@ -75,4 +76,11 @@ class MeasuresBloc extends SimpleBloc<AppState> {
 
     return state;
   }
+}
+
+class _Union {
+  const _Union(this.first, this.second);
+
+  final List<MeasureModel> first;
+  final Map<String, List<MeasureModel>> second;
 }

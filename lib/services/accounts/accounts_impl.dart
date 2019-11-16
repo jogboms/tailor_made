@@ -1,23 +1,21 @@
-import 'package:tailor_made/firebase/auth.dart';
-import 'package:tailor_made/firebase/cloud_db.dart';
-import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/account.dart';
+import 'package:tailor_made/repository/firebase/main.dart';
+import 'package:tailor_made/repository/firebase/models.dart';
 import 'package:tailor_made/services/accounts/accounts.dart';
-import 'package:tailor_made/services/session.dart';
 
 class AccountsImpl extends Accounts {
-  @override
-  User get getUser => Auth.getUser;
+  AccountsImpl(this.repository);
+
+  final FirebaseRepository repository;
 
   @override
-  Future<User> signInWithGoogle() => Auth.signInWithGoogle();
+  Future<FireUser> signInWithGoogle() => repository.auth.signInWithGoogle();
 
   @override
-  Future<User> get onAuthStateChanged =>
-      Auth.onAuthStateChanged.firstWhere((user) => user != null).then((user) => Auth.setUser(user));
+  Future<FireUser> get onAuthStateChanged => repository.auth.onAuthStateChanged.firstWhere((user) => user != null);
 
   @override
-  Future<void> signout() => Auth.signOutWithGoogle();
+  Future<void> signout() => repository.auth.signOutWithGoogle();
 
   @override
   Future<void> readNotice(AccountModel account) async {
@@ -34,18 +32,21 @@ class AccountsImpl extends Accounts {
   }
 
   @override
-  Future<void> signUp(AccountModel account) async {
+  Future<void> signUp(AccountModel account, String notice) async {
     final _account = account.rebuild((b) => b
       ..status = AccountModelStatus.pending
-      ..notice = Session.di().getSettings().premiumNotice
+      ..notice = notice
       ..hasReadNotice = false
       ..hasPremiumEnabled = true);
     await account.reference.updateData(_account.toMap());
-    await CloudDb.premium.document(account.uid).setData(_account.toMap());
+    await repository.db.premium.document(account.uid).setData(_account.toMap());
   }
 
   @override
-  Stream<AccountModel> getAccount() {
-    return CloudDb.account.snapshots().map((snapshot) => AccountModel.fromSnapshot(Snapshot(snapshot)));
+  Stream<AccountModel> getAccount(String userId) {
+    return repository.db
+        .account(userId)
+        .snapshots()
+        .map((snapshot) => AccountModel.fromSnapshot(FireSnapshot(snapshot)));
   }
 }

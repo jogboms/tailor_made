@@ -1,9 +1,10 @@
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:tailor_made/dependencies.dart';
+import 'package:tailor_made/models/stats/stats.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/stats/actions.dart';
-import 'package:tailor_made/services/stats/stats.dart';
 
 class StatsBloc extends SimpleBloc<AppState> {
   @override
@@ -11,9 +12,10 @@ class StatsBloc extends SimpleBloc<AppState> {
     Observable(input)
         .where((WareContext<AppState> context) => context.action is InitStatsAction)
         .switchMap(
-          (context) => Stats.di()
-              .fetch()
-              .map((stats) => OnDataStatAction(payload: stats))
+          (context) => Dependencies.di()
+              .stats
+              .fetch(Dependencies.di().session.getUserId())
+              .map((stats) => OnDataAction<StatsModel>(payload: stats))
               .map((action) => context.copyWith(action)),
         )
         .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)
@@ -26,7 +28,7 @@ class StatsBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final _stats = state.stats;
 
-    if (action is OnDataStatAction) {
+    if (action is OnDataAction<StatsModel>) {
       return state.rebuild(
         (b) => b
           ..stats = _stats

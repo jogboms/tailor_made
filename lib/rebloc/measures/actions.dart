@@ -6,13 +6,6 @@ class InitMeasuresAction extends Action {
   const InitMeasuresAction();
 }
 
-class OnDataMeasureAction extends Action {
-  const OnDataMeasureAction({@required this.payload, @required this.grouped});
-
-  final List<MeasureModel> payload;
-  final Map<String, List<MeasureModel>> grouped;
-}
-
 class UpdateMeasureAction extends Action {
   const UpdateMeasureAction({@required this.payload});
 

@@ -3,21 +3,20 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:tailor_made/firebase/models.dart';
-
-final GoogleSignIn _googleSignIn = GoogleSignIn();
-final FirebaseAuth _auth = FirebaseAuth.instance;
+import 'package:tailor_made/repository/firebase/models.dart';
+import 'package:tailor_made/repository/models.dart';
 
 class Auth {
-  static User _user;
+  Auth(this._auth, this._googleSignIn);
 
-  static User setUser(User user) => _user = user;
+  final FirebaseAuth _auth;
+  final GoogleSignIn _googleSignIn;
 
-  static User get getUser => _user;
+  Future<User> get getUser => _auth.currentUser().then(_mapFirebaseUserToUser);
 
-  static Stream<User> get onAuthStateChanged => _auth.onAuthStateChanged.map((_user) => User(_user));
+  Stream<User> get onAuthStateChanged => _auth.onAuthStateChanged.map(_mapFirebaseUserToUser);
 
-  static Future<User> signInWithGoogle() async {
+  Future<User> signInWithGoogle() async {
     GoogleSignInAccount currentUser = _googleSignIn.currentUser;
     currentUser ??= await _googleSignIn.signInSilently();
     currentUser ??= await _googleSignIn.signIn();
@@ -36,15 +35,13 @@ class Auth {
     assert(user != null);
     assert(!user.isAnonymous);
 
-    final _user = User(user);
-
-    setUser(_user);
-    return _user;
+    return _mapFirebaseUserToUser(user);
   }
 
-  static Future<void> signOutWithGoogle() async {
+  Future<void> signOutWithGoogle() async {
     await _auth.signOut();
     await _googleSignIn.signOut();
-    _user = null;
   }
+
+  User _mapFirebaseUserToUser(FirebaseUser _user) => FireUser(_user);
 }

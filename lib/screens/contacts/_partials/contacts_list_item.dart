@@ -2,11 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
-import 'package:tailor_made/screens/contacts/contact.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
 import 'package:tailor_made/widgets/_partials/mk_dots.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class ContactsListItem extends StatelessWidget {
   const ContactsListItem({Key key, this.contact, this.onTapContact, this.showActions = true}) : super(key: key);
@@ -24,10 +23,7 @@ class ContactsListItem extends StatelessWidget {
     return ListTile(
       dense: true,
       contentPadding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-      onTap: onTapContact ??
-          () => Navigator.of(context).push<void>(
-                MkNavigate.slideIn<void>(ContactPage(contact: contact)),
-              ),
+      onTap: onTapContact ?? () => Dependencies.di().contactsCoordinator.toContact(contact),
       leading: _Avatar(contact: contact),
       title: Text(
         contact.fullname,

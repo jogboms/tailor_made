@@ -1,12 +1,7 @@
-import 'package:injector/injector.dart';
-import 'package:tailor_made/firebase/models.dart';
 import 'package:tailor_made/models/account.dart';
+import 'package:tailor_made/repository/models.dart';
 
 abstract class Accounts {
-  static Accounts di() => Injector.appInstance.getDependency<Accounts>();
-
-  User get getUser;
-
   Future<User> signInWithGoogle();
 
   Future<User> get onAuthStateChanged;
@@ -17,7 +12,7 @@ abstract class Accounts {
 
   Future<void> sendRating(AccountModel account, int rating);
 
-  Future<void> signUp(AccountModel account);
+  Future<void> signUp(AccountModel account, String notice);
 
-  Stream<AccountModel> getAccount();
+  Stream<AccountModel> getAccount(String userId);
 }

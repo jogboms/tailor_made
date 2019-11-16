@@ -6,10 +6,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/constants/mk_colors.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/firebase/models.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
-import 'package:tailor_made/services/contacts/contacts.dart';
+import 'package:tailor_made/repository/models.dart';
 import 'package:tailor_made/utils/mk_validators.dart';
 import 'package:tailor_made/utils/ui/mk_image_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
@@ -133,7 +133,7 @@ class ContactFormState extends State<ContactForm> {
     if (imageFile == null) {
       return;
     }
-    final ref = Contacts.di().createFile(imageFile);
+    final ref = Dependencies.di().contacts.createFile(imageFile, Dependencies.di().session.getUserId());
 
     setState(() => isLoading = true);
     try {

@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/measure.dart';
-import 'package:tailor_made/screens/contacts/_views/contact_measure.dart';
-import 'package:tailor_made/screens/contacts/contacts_edit.dart';
-import 'package:tailor_made/screens/jobs/jobs_create.dart';
-import 'package:tailor_made/screens/measures/measures.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
 import 'package:tailor_made/widgets/_partials/mk_circle_avatar.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
-import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 enum Choice { CreateJob, EditMeasure, EditAccount, SendText }
 
@@ -26,21 +22,13 @@ class _ContactAppBarState extends State<ContactAppBar> {
   void _selectChoice(Choice choice) {
     switch (choice) {
       case Choice.CreateJob:
-        Navigator.of(context).push<void>(MkNavigate.slideIn<void>(JobsCreatePage(
-          contact: widget.contact,
-          contacts: [],
-        )));
+        Dependencies.di().jobsCoordinator.toCreateJob([], widget.contact);
         break;
       case Choice.EditMeasure:
-        Navigator.of(context).push<void>(MkNavigate.slideIn<void>(ContactMeasure(
-          contact: widget.contact,
-          grouped: widget.grouped,
-        )));
+        Dependencies.di().contactsCoordinator.toContactMeasure(widget.contact, widget.grouped);
         break;
       case Choice.EditAccount:
-        Navigator.of(context).push<void>(MkNavigate.slideIn<void>(ContactsEditPage(
-          contact: widget.contact,
-        )));
+        Dependencies.di().contactsCoordinator.toContactEdit(widget.contact);
         break;
       case Choice.SendText:
         sms(widget.contact.phone);
@@ -63,12 +51,7 @@ class _ContactAppBarState extends State<ContactAppBar> {
             Expanded(child: _Title(contact: widget.contact)),
             _Icon(
               icon: Icons.content_cut,
-              onTap: () {
-                Navigator.of(context).push<void>(MkNavigate.slideIn<void>(
-                  MeasuresPage(measurements: widget.contact.measurements.toMap()),
-                  fullscreenDialog: true,
-                ));
-              },
+              onTap: () => Dependencies.di().measuresCoordinator.toMeasures(widget.contact.measurements.toMap()),
             ),
             _Icon(icon: Icons.call, onTap: () => call(widget.contact.phone)),
             PopupMenuButton<Choice>(
