@@ -7,7 +7,5 @@ abstract class Stats<T extends Repository> {
 
   final T repository;
 
-  static Stats di() => Injector.appInstance.getDependency<Stats>();
-
   Stream<StatsModel> fetch();
 }

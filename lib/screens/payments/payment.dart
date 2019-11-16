@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/coordinator/contacts_coordinator.dart';
-import 'package:tailor_made/coordinator/jobs_coordinator.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/contact_job_view_model.dart';
 import 'package:tailor_made/utils/mk_dates.dart';
 import 'package:tailor_made/utils/mk_money.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class PaymentPage extends StatelessWidget {
@@ -35,11 +34,11 @@ class PaymentPage extends StatelessWidget {
             actions: <Widget>[
               IconButton(
                 icon: const Icon(Icons.work, color: kTitleBaseColor),
-                onPressed: () => JobsCoordinator.di().toJob(vm.selectedJob),
+                onPressed: () => Dependencies.di().jobsCoordinator.toJob(vm.selectedJob),
               ),
               IconButton(
                 icon: Icon(Icons.person, color: kTitleBaseColor),
-                onPressed: () => ContactsCoordinator.di().toContact(vm.selectedContact),
+                onPressed: () => Dependencies.di().contactsCoordinator.toContact(vm.selectedContact),
               ),
               if (vm.account.hasPremiumEnabled)
                 IconButton(

@@ -4,18 +4,20 @@ import 'package:tailor_made/models/settings.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/settings/actions.dart';
-import 'package:tailor_made/services/session.dart';
-import 'package:tailor_made/services/settings/settings.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 
 class SettingsBloc extends SimpleBloc<AppState> {
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     Observable(input)
         .where((WareContext<AppState> context) => context.action is InitSettingsAction)
-        .switchMap((context) =>
-            Settings.di().fetch().handleError(() => context.dispatcher(const OnErrorSettingsAction())).map((settings) {
+        .switchMap((context) => Dependencies.di()
+                .settings
+                .fetch()
+                .handleError(() => context.dispatcher(const OnErrorSettingsAction()))
+                .map((settings) {
               // Keep Static copy
-              Session.di().setSettings(settings);
+              Dependencies.di().session.setSettings(settings);
               return OnDataAction<SettingsModel>(payload: settings);
             }).map((action) => context.copyWith(action)))
         .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)

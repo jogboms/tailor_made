@@ -6,7 +6,7 @@ import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/contacts/actions.dart';
 import 'package:tailor_made/rebloc/contacts/sort_type.dart';
-import 'package:tailor_made/services/contacts/contacts.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 
 Comparator<ContactModel> _sort(SortType sortType) {
   switch (sortType) {
@@ -40,7 +40,8 @@ Comparator<ContactModel> _sort(SortType sortType) {
 
 class ContactsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _onAfterLogin(WareContext<AppState> context) {
-    return Contacts.di()
+    return Dependencies.di()
+        .contacts
         .fetchAll()
         .map((contacts) => OnDataAction<List<ContactModel>>(payload: contacts))
         .map((action) => context.copyWith(action));

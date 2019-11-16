@@ -7,7 +7,5 @@ abstract class Payments<T extends Repository> {
 
   final T repository;
 
-  static Payments di() => Injector.appInstance.getDependency<Payments>();
-
   Stream<List<PaymentModel>> fetchAll();
 }

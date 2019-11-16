@@ -1,12 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'package:injector/injector.dart';
 import 'package:tailor_made/environments/environment.dart';
 import 'package:tailor_made/models/settings.dart';
 
 class Session {
   Session({@required this.environment, @required this.isTestMode});
-
-  static Session di() => Injector.appInstance.getDependency<Session>();
 
   final Environment environment;
 

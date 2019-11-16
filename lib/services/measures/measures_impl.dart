@@ -3,13 +3,13 @@ import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/repository/firebase/main.dart';
 import 'package:tailor_made/repository/firebase/models.dart';
 import 'package:tailor_made/services/measures/measures.dart';
-import 'package:tailor_made/services/session.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 
 class MeasuresImpl extends Measures<FirebaseRepository> {
   @override
   Stream<List<MeasureModel>> fetchAll() {
     return repository.db
-        .measurements(Session.di().getUserId())
+        .measurements(Dependencies.di().session.getUserId())
         .snapshots()
         .map((snapshot) => snapshot.documents.map((item) => MeasureModel.fromSnapshot(FireSnapshot(item))).toList());
   }
@@ -22,7 +22,7 @@ class MeasuresImpl extends Measures<FirebaseRepository> {
           batch.updateData(measure.reference.source, <String, String>{"group": groupName, "unit": unitValue});
         } else {
           batch.setData(
-            repository.db.measurements(Session.di().getUserId()).document(measure.id),
+            repository.db.measurements(Dependencies.di().session.getUserId()).document(measure.id),
             measure.toMap(),
             merge: true,
           );
@@ -35,7 +35,8 @@ class MeasuresImpl extends Measures<FirebaseRepository> {
   Future<void> delete(List<MeasureModel> measures) async {
     await repository.db.batchAction((batch) {
       measures.forEach(
-        (measure) => batch.delete(repository.db.measurements(Session.di().getUserId()).document(measure.id)),
+        (measure) =>
+            batch.delete(repository.db.measurements(Dependencies.di().session.getUserId()).document(measure.id)),
       );
     });
   }
@@ -46,7 +47,7 @@ class MeasuresImpl extends Measures<FirebaseRepository> {
       try {
         measures.forEach(
           (measure) => batch.setData(
-            repository.db.measurements(Session.di().getUserId()).document(measure.id),
+            repository.db.measurements(Dependencies.di().session.getUserId()).document(measure.id),
             measure.toMap(),
             merge: true,
           ),

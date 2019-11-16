@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/screens/gallery/_partials/gallery_grid.dart';
-import 'package:tailor_made/services/gallery/gallery.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class GalleryPage extends StatelessWidget {
@@ -41,7 +41,7 @@ class GalleryPage extends StatelessWidget {
           Builder(builder: (context) {
             if (images == null) {
               return StreamBuilder(
-                stream: Gallery.di().fetchAll(),
+                stream: Dependencies.di().gallery.fetchAll(),
                 builder: (_, AsyncSnapshot<List<ImageModel>> snapshot) {
                   if (!snapshot.hasData) {
                     return const SliverFillRemaining(child: MkLoadingSpinner());

@@ -1,14 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:tailor_made/coordinator/measures_coordinator.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/screens/measures/_partials/measures_slide_block_item.dart';
 import 'package:tailor_made/screens/measures/_views/slide_down.dart';
-import 'package:tailor_made/services/measures/measures.dart';
 import 'package:tailor_made/utils/ui/mk_child_dialog.dart';
 import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 
 enum _ActionChoice { edit, delete }
 
@@ -71,7 +70,7 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
   }
 
   void _onTapEditBlock() {
-    MeasuresCoordinator.di().toCreateMeasures(widget.title, widget.measures.first.unit, widget.measures);
+    Dependencies.di().measuresCoordinator.toCreateMeasures(widget.title, widget.measures.first.unit, widget.measures);
   }
 
   void _onTapDeleteBlock() async {
@@ -82,7 +81,7 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
 
     SnackBarProvider.of(context).loading();
     try {
-      await Measures.di().delete(widget.measures);
+      await Dependencies.di().measures.delete(widget.measures);
 
       SnackBarProvider.of(context).hide();
     } catch (e) {

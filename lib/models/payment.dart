@@ -2,7 +2,7 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:tailor_made/models/main.dart';
 import 'package:tailor_made/models/serializers.dart';
-import 'package:tailor_made/services/session.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:uuid/uuid.dart';
 
 part 'payment.g.dart';
@@ -14,7 +14,7 @@ abstract class PaymentModel with ModelInterface implements Built<PaymentModel, P
 
   static void _initializeBuilder(PaymentModelBuilder b) => b
     ..id = Uuid().v1()
-    ..userID = Session.di().getUserId()
+    ..userID = Dependencies.di().session.getUserId()
     ..createdAt = DateTime.now();
 
   String get id;

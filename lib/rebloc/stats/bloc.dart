@@ -4,7 +4,7 @@ import 'package:tailor_made/models/stats/stats.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/stats/actions.dart';
-import 'package:tailor_made/services/stats/stats.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 
 class StatsBloc extends SimpleBloc<AppState> {
   @override
@@ -12,7 +12,8 @@ class StatsBloc extends SimpleBloc<AppState> {
     Observable(input)
         .where((WareContext<AppState> context) => context.action is InitStatsAction)
         .switchMap(
-          (context) => Stats.di()
+          (context) => Dependencies.di()
+              .stats
               .fetch()
               .map((stats) => OnDataAction<StatsModel>(payload: stats))
               .map((action) => context.copyWith(action)),

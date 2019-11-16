@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/coordinator/jobs_coordinator.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/utils/mk_money.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class JobListItem extends StatelessWidget {
@@ -21,7 +21,7 @@ class JobListItem extends StatelessWidget {
 
     return Material(
       child: InkWell(
-        onTap: () => JobsCoordinator.di().toJob(job),
+        onTap: () => Dependencies.di().jobsCoordinator.toJob(job),
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Row(

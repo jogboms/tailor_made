@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:injector/injector.dart';
 import 'package:tailor_made/constants/mk_routes.dart';
 import 'package:tailor_made/coordinator/coordinator_base.dart';
 import 'package:tailor_made/models/account.dart';
@@ -11,8 +10,6 @@ import 'package:tailor_made/wrappers/mk_navigate.dart';
 @immutable
 class SharedCoordinator extends CoordinatorBase {
   const SharedCoordinator(GlobalKey<NavigatorState> navigatorKey) : super(navigatorKey);
-
-  static SharedCoordinator di() => Injector.appInstance.getDependency<SharedCoordinator>();
 
   void toHome() {
     navigator?.pushAndRemoveUntil<void>(MkNavigate.fadeIn(const HomePage()), (Route<void> route) => false);

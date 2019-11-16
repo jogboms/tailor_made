@@ -2,7 +2,7 @@ import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/repository/firebase/main.dart';
 import 'package:tailor_made/repository/firebase/models.dart';
 import 'package:tailor_made/services/accounts/accounts.dart';
-import 'package:tailor_made/services/session.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 
 class AccountsImpl extends Accounts<FirebaseRepository> {
   @override
@@ -32,7 +32,7 @@ class AccountsImpl extends Accounts<FirebaseRepository> {
   Future<void> signUp(AccountModel account) async {
     final _account = account.rebuild((b) => b
       ..status = AccountModelStatus.pending
-      ..notice = Session.di().getSettings().premiumNotice
+      ..notice = Dependencies.di().session.getSettings().premiumNotice
       ..hasReadNotice = false
       ..hasPremiumEnabled = true);
     await account.reference.updateData(_account.toMap());
@@ -42,7 +42,7 @@ class AccountsImpl extends Accounts<FirebaseRepository> {
   @override
   Stream<AccountModel> getAccount() {
     return repository.db
-        .account(Session.di().getUserId())
+        .account(Dependencies.di().session.getUserId())
         .snapshots()
         .map((snapshot) => AccountModel.fromSnapshot(FireSnapshot(snapshot)));
   }

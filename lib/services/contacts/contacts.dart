@@ -10,8 +10,6 @@ abstract class Contacts<T extends Repository> {
 
   final T repository;
 
-  static Contacts di() => Injector.appInstance.getDependency<Contacts>();
-
   Stream<List<ContactModel>> fetchAll();
 
   Storage createFile(File file);

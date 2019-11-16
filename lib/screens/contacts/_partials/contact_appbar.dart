@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/coordinator/contacts_coordinator.dart';
-import 'package:tailor_made/coordinator/jobs_coordinator.dart';
-import 'package:tailor_made/coordinator/measures_coordinator.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
 import 'package:tailor_made/widgets/_partials/mk_circle_avatar.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 enum Choice { CreateJob, EditMeasure, EditAccount, SendText }
@@ -24,13 +22,13 @@ class _ContactAppBarState extends State<ContactAppBar> {
   void _selectChoice(Choice choice) {
     switch (choice) {
       case Choice.CreateJob:
-        JobsCoordinator.di().toCreateJob([], widget.contact);
+        Dependencies.di().jobsCoordinator.toCreateJob([], widget.contact);
         break;
       case Choice.EditMeasure:
-        ContactsCoordinator.di().toContactMeasure(widget.contact, widget.grouped);
+        Dependencies.di().contactsCoordinator.toContactMeasure(widget.contact, widget.grouped);
         break;
       case Choice.EditAccount:
-        ContactsCoordinator.di().toContactEdit(widget.contact);
+        Dependencies.di().contactsCoordinator.toContactEdit(widget.contact);
         break;
       case Choice.SendText:
         sms(widget.contact.phone);
@@ -53,7 +51,7 @@ class _ContactAppBarState extends State<ContactAppBar> {
             Expanded(child: _Title(contact: widget.contact)),
             _Icon(
               icon: Icons.content_cut,
-              onTap: () => MeasuresCoordinator.di().toMeasures(widget.contact.measurements.toMap()),
+              onTap: () => Dependencies.di().measuresCoordinator.toMeasures(widget.contact.measurements.toMap()),
             ),
             _Icon(icon: Icons.call, onTap: () => call(widget.contact.phone)),
             PopupMenuButton<Choice>(

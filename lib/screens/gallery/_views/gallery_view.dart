@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/coordinator/contacts_coordinator.dart';
-import 'package:tailor_made/coordinator/jobs_coordinator.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/image.dart';
@@ -12,6 +10,7 @@ import 'package:tailor_made/rebloc/common/contact_job_view_model.dart';
 import 'package:tailor_made/utils/ui/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 
 class GalleryView extends StatelessWidget {
   const GalleryView({Key key, this.image}) : super(key: key);
@@ -60,12 +59,12 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               if (job != null)
                 IconButton(
                   icon: const Icon(Icons.work, color: Colors.white),
-                  onPressed: () => JobsCoordinator.di().toJob(job),
+                  onPressed: () => Dependencies.di().jobsCoordinator.toJob(job),
                 ),
               if (contact != null)
                 IconButton(
                   icon: const Icon(Icons.person, color: Colors.white),
-                  onPressed: () => ContactsCoordinator.di().toContact(contact),
+                  onPressed: () => Dependencies.di().contactsCoordinator.toContact(contact),
                 ),
               if (account.hasPremiumEnabled)
                 IconButton(

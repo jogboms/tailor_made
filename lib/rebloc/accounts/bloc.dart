@@ -6,30 +6,31 @@ import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/rebloc/accounts/actions.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
-import 'package:tailor_made/services/accounts/accounts.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 
 class AccountBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _readNotice(WareContext<AppState> context) async* {
-    await Accounts.di().readNotice((context.action as OnReadNotice).payload);
+    await Dependencies.di().accounts.readNotice((context.action as OnReadNotice).payload);
 
     yield context;
   }
 
   Stream<WareContext<AppState>> _sendRating(WareContext<AppState> context) async* {
     final _action = context.action as OnSendRating;
-    await Accounts.di().sendRating(_action.payload, _action.rating);
+    await Dependencies.di().accounts.sendRating(_action.payload, _action.rating);
 
     yield context;
   }
 
   Stream<WareContext<AppState>> _signUp(WareContext<AppState> context) async* {
-    await Accounts.di().signUp((context.action as OnPremiumSignUp).payload);
+    await Dependencies.di().accounts.signUp((context.action as OnPremiumSignUp).payload);
 
     yield context;
   }
 
   Stream<WareContext<AppState>> _getAccount(WareContext<AppState> context) {
-    return Accounts.di()
+    return Dependencies.di()
+        .accounts
         .getAccount()
         .map((account) => OnDataAction<AccountModel>(payload: account))
         .map((action) => context.copyWith(action));

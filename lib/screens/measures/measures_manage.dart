@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/coordinator/measures_coordinator.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/measures/view_model.dart';
@@ -11,6 +10,7 @@ import 'package:tailor_made/screens/measures/_partials/measures_slide_block.dart
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 
 class MeasuresManagePage extends StatefulWidget {
   const MeasuresManagePage({Key key}) : super(key: key);
@@ -45,7 +45,7 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> with SnackBarPr
         backgroundColor: kAccentColor,
         foregroundColor: Colors.white,
         label: const Text("Add Group"),
-        onPressed: () => MeasuresCoordinator.di().toCreateMeasures(),
+        onPressed: () => Dependencies.di().measuresCoordinator.toCreateMeasures(),
       ),
     );
   }

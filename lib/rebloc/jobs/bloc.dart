@@ -7,7 +7,7 @@ import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/jobs/actions.dart';
 import 'package:tailor_made/rebloc/jobs/sort_type.dart';
-import 'package:tailor_made/services/jobs/jobs.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 
 final _foldPrice = (double acc, PaymentModel model) => acc + model.price;
 
@@ -63,7 +63,8 @@ class JobsBloc extends SimpleBloc<AppState> {
   }
 
   Stream<WareContext<AppState>> _onAfterLogin(WareContext<AppState> context) {
-    return Jobs.di()
+    return Dependencies.di()
+        .jobs
         .fetchAll()
         .map((jobs) => OnDataAction<List<JobModel>>(payload: jobs))
         .map((action) => context.copyWith(action));

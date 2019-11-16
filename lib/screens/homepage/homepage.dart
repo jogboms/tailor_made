@@ -3,7 +3,6 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/coordinator/shared_coordinator.dart';
 import 'package:tailor_made/rebloc/accounts/actions.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/auth/actions.dart';
@@ -18,13 +17,12 @@ import 'package:tailor_made/screens/homepage/_partials/top_row.dart';
 import 'package:tailor_made/screens/homepage/_views/access_denied.dart';
 import 'package:tailor_made/screens/homepage/_views/out_dated.dart';
 import 'package:tailor_made/screens/homepage/_views/rate_limit.dart';
-import 'package:tailor_made/services/accounts/accounts.dart';
-import 'package:tailor_made/services/session.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
 import 'package:tailor_made/utils/ui/app_version_builder.dart';
 import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/ui/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:version/version.dart';
 
 class HomePage extends StatelessWidget {
@@ -51,7 +49,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               AppVersionBuilder(
-                valueBuilder: () => AppVersion.retrieve(Session.di().isMock),
+                valueBuilder: () => AppVersion.retrieve(Dependencies.di().session.isMock),
                 builder: (context, appVersion, child) {
                   final currentVersion = Version.parse(appVersion);
                   final latestVersion = Version.parse(store.states.value?.settings?.settings?.versionName ?? "1.0.0");
@@ -122,9 +120,9 @@ class _Body extends StatelessWidget {
           account: viewModel.account,
           shouldSendRating: viewModel.shouldSendRating,
           onLogout: () async {
-            await Accounts.di().signout();
+            await Dependencies.di().accounts.signout();
             dispatch(const OnLogoutAction());
-            SharedCoordinator.di().toSplash();
+            Dependencies.di().sharedCoordinator.toSplash();
           },
         ),
       ],

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:injector/injector.dart';
 import 'package:tailor_made/coordinator/coordinator_base.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
@@ -11,8 +10,6 @@ import 'package:tailor_made/wrappers/mk_navigate.dart';
 @immutable
 class JobsCoordinator extends CoordinatorBase {
   const JobsCoordinator(GlobalKey<NavigatorState> navigatorKey) : super(navigatorKey);
-
-  static JobsCoordinator di() => Injector.appInstance.getDependency<JobsCoordinator>();
 
   void toJob(JobModel job, {bool replace = false}) {
     replace

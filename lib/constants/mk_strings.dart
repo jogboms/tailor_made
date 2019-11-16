@@ -1,6 +1,6 @@
 import 'dart:async' show TimeoutException;
 
-import 'package:tailor_made/services/session.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/wrappers/mk_exceptions.dart';
 
 class MkStrings {
@@ -43,6 +43,6 @@ class MkStrings {
     if (error is TimeoutException) {
       return "This action took too long. Please Retry.";
     }
-    return Session.di().isDev || error is MkResponseException ? "$error" : errorMessage;
+    return Dependencies.di().session.isDev || error is MkResponseException ? "$error" : errorMessage;
   }
 }

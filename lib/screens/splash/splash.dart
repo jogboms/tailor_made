@@ -6,18 +6,16 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/coordinator/shared_coordinator.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/auth/actions.dart';
 import 'package:tailor_made/rebloc/settings/actions.dart';
 import 'package:tailor_made/rebloc/settings/view_model.dart';
-import 'package:tailor_made/services/accounts/accounts.dart';
-import 'package:tailor_made/services/session.dart';
 import 'package:tailor_made/utils/ui/app_version_builder.dart';
 import 'package:tailor_made/utils/ui/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_raised_button.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class SplashPage extends StatelessWidget {
@@ -55,7 +53,7 @@ class SplashPage extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   AppVersionBuilder(
-                    valueBuilder: () => AppVersion.retrieve(Session.di().isMock),
+                    valueBuilder: () => AppVersion.retrieve(Dependencies.di().session.isMock),
                     builder: (_, version, __) => Text(
                       "v$version",
                       style: theme.small.copyWith(color: kTextBaseColor.withOpacity(.4), height: 1.5),
@@ -91,10 +89,10 @@ class _ContentState extends State<_Content> {
     super.initState();
     isLoading = widget.isColdStart;
 
-    Accounts.di().onAuthStateChanged.then((user) => WidgetsBinding.instance.addPostFrameCallback(
+    Dependencies.di().accounts.onAuthStateChanged.then((user) => WidgetsBinding.instance.addPostFrameCallback(
           (_) async {
             StoreProvider.of<AppState>(context).dispatch(OnLoginAction(user));
-            SharedCoordinator.di().toHome();
+            Dependencies.di().sharedCoordinator.toHome();
           },
         ));
   }
@@ -174,7 +172,7 @@ class _ContentState extends State<_Content> {
   Future<void> _onLogin() async {
     try {
       setState(() => isLoading = true);
-      await Accounts.di().signInWithGoogle();
+      await Dependencies.di().accounts.signInWithGoogle();
     } catch (e) {
       // TODO disabled
       String message = "";
@@ -213,7 +211,7 @@ class _ContentState extends State<_Content> {
         );
       }
 
-      await Accounts.di().signout();
+      await Dependencies.di().accounts.signout();
 
       if (!mounted) {
         return;

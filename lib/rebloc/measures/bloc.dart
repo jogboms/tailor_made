@@ -5,13 +5,13 @@ import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/measures/actions.dart';
-import 'package:tailor_made/services/measures/measures.dart';
 import 'package:tailor_made/utils/mk_group_model_by.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 
 class MeasuresBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _onUpdateMeasure(WareContext<AppState> context) async* {
     try {
-      await Measures.di().update((context.action as UpdateMeasureAction).payload);
+      await Dependencies.di().measures.update((context.action as UpdateMeasureAction).payload);
       yield context.copyWith(const InitMeasuresAction());
     } catch (e) {
       print(e);
@@ -20,7 +20,7 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   }
 
   Stream<WareContext<AppState>> _onInitMeasure(WareContext<AppState> context) {
-    return Measures.di().fetchAll().map((measures) {
+    return Dependencies.di().measures.fetchAll().map((measures) {
       if (measures.isEmpty) {
         return UpdateMeasureAction(payload: createDefaultMeasures());
       }

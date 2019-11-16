@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/coordinator/contacts_coordinator.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
 import 'package:tailor_made/widgets/_partials/mk_dots.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class ContactsListItem extends StatelessWidget {
@@ -23,7 +23,7 @@ class ContactsListItem extends StatelessWidget {
     return ListTile(
       dense: true,
       contentPadding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-      onTap: onTapContact ?? () => ContactsCoordinator.di().toContact(contact),
+      onTap: onTapContact ?? () => Dependencies.di().contactsCoordinator.toContact(contact),
       leading: _Avatar(contact: contact),
       title: Text(
         contact.fullname,

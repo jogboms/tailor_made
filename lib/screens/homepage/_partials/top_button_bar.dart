@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/coordinator/shared_coordinator.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/rebloc/accounts/actions.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
@@ -13,6 +12,7 @@ import 'package:tailor_made/screens/homepage/_views/review_modal.dart';
 import 'package:tailor_made/utils/ui/mk_child_dialog.dart';
 import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_dots.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 enum AccountOptions { logout, storename }
@@ -120,7 +120,7 @@ class TopButtonBar extends StatelessWidget {
 
       switch (result) {
         case AccountOptions.storename:
-          final _storeName = await SharedCoordinator.di().toStoreNameDialog(account);
+          final _storeName = await Dependencies.di().sharedCoordinator.toStoreNameDialog(account);
 
           if (_storeName != null && _storeName != account.storeName) {
             await account.reference.updateData(<String, String>{"storeName": _storeName});

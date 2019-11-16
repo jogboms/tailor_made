@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/coordinator/jobs_coordinator.dart';
 import 'package:tailor_made/providers/dispatch_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/jobs/actions.dart';
@@ -11,6 +10,7 @@ import 'package:tailor_made/screens/jobs/_partials/jobs_list.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class JobsPage extends StatelessWidget {
@@ -38,7 +38,7 @@ class JobsPage extends StatelessWidget {
             }),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.library_add),
-              onPressed: () => JobsCoordinator.di().toCreateJob(vm.contacts),
+              onPressed: () => Dependencies.di().jobsCoordinator.toCreateJob(vm.contacts),
             ),
           ),
           onWillPop: () async {

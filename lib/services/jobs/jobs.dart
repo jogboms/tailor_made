@@ -10,8 +10,6 @@ abstract class Jobs<T extends Repository> {
 
   final T repository;
 
-  static Jobs di() => Injector.appInstance.getDependency<Jobs>();
-
   Stream<List<JobModel>> fetchAll();
 
   Storage createFile(File file);

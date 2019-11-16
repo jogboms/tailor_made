@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:injector/injector.dart';
 import 'package:tailor_made/coordinator/coordinator_base.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/screens/measures/_partials/measure_create_item.dart';
@@ -11,8 +10,6 @@ import 'package:tailor_made/wrappers/mk_navigate.dart';
 @immutable
 class MeasuresCoordinator extends CoordinatorBase {
   const MeasuresCoordinator(GlobalKey<NavigatorState> navigatorKey) : super(navigatorKey);
-
-  static MeasuresCoordinator di() => Injector.appInstance.getDependency<MeasuresCoordinator>();
 
   void toMeasures(Map<String, double> measures) {
     navigator?.push<void>(MkNavigate.slideIn(MeasuresPage(measurements: measures), fullscreenDialog: true));

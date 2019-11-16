@@ -10,8 +10,6 @@ abstract class Gallery<T extends Repository> {
 
   final T repository;
 
-  static Gallery di() => Injector.appInstance.getDependency<Gallery>();
-
   Stream<List<ImageModel>> fetchAll();
 
   Storage createFile(File file);

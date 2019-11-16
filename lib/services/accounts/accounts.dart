@@ -8,8 +8,6 @@ abstract class Accounts<T extends Repository> {
 
   final T repository;
 
-  static Accounts di() => Injector.appInstance.getDependency<Accounts>();
-
   Future<User> signInWithGoogle();
 
   Future<User> get onAuthStateChanged;

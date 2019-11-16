@@ -7,7 +7,5 @@ abstract class Settings<T extends Repository> {
 
   final T repository;
 
-  static Settings di() => Injector.appInstance.getDependency<Settings>();
-
   Stream<SettingsModel> fetch();
 }

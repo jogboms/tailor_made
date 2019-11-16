@@ -8,8 +8,6 @@ abstract class Measures<T extends Repository> {
 
   final T repository;
 
-  static Measures di() => Injector.appInstance.getDependency<Measures>();
-
   Stream<List<MeasureModel>> fetchAll();
 
   Future<void> create(List<MeasureModel> measures, {@required String groupName, @required String unitValue});

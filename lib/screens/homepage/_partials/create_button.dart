@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/coordinator/contacts_coordinator.dart';
-import 'package:tailor_made/coordinator/jobs_coordinator.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 enum _CreateOptions { contacts, jobs }
@@ -77,10 +76,10 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
       );
       switch (result) {
         case _CreateOptions.contacts:
-          ContactsCoordinator.di().toCreateContact();
+          Dependencies.di().contactsCoordinator.toCreateContact();
           break;
         case _CreateOptions.jobs:
-          JobsCoordinator.di().toCreateJob(contacts);
+          Dependencies.di().jobsCoordinator.toCreateJob(contacts);
           break;
       }
     };

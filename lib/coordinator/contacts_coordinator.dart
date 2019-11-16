@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:injector/injector.dart';
 import 'package:tailor_made/coordinator/coordinator_base.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/measure.dart';
@@ -14,8 +13,6 @@ import 'package:tailor_made/wrappers/mk_navigate.dart';
 @immutable
 class ContactsCoordinator extends CoordinatorBase {
   const ContactsCoordinator(GlobalKey<NavigatorState> navigatorKey) : super(navigatorKey);
-
-  static ContactsCoordinator di() => Injector.appInstance.getDependency<ContactsCoordinator>();
 
   void toContact(ContactModel contact, {bool replace = false}) {
     replace

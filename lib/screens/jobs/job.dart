@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/coordinator/contacts_coordinator.dart';
-import 'package:tailor_made/coordinator/measures_coordinator.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
@@ -18,6 +16,7 @@ import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class JobPage extends StatefulWidget {
@@ -237,7 +236,7 @@ class _AvatarAppBar extends StatelessWidget {
       tag: contact.createdAt.toString(),
       imageUrl: contact.imageUrl,
       title: GestureDetector(
-        onTap: () => ContactsCoordinator.di().toContact(contact),
+        onTap: () => Dependencies.di().contactsCoordinator.toContact(contact),
         child: Text(
           contact.fullname,
           maxLines: 1,
@@ -253,7 +252,7 @@ class _AvatarAppBar extends StatelessWidget {
       actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.content_cut),
-          onPressed: () => MeasuresCoordinator.di().toMeasures(job.measurements.toMap()),
+          onPressed: () => Dependencies.di().measuresCoordinator.toMeasures(job.measurements.toMap()),
         ),
         IconButton(
           icon: Icon(Icons.check, color: job.isComplete ? kPrimaryColor : kTextBaseColor),

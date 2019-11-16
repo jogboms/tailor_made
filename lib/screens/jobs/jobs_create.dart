@@ -8,8 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/coordinator/contacts_coordinator.dart';
-import 'package:tailor_made/coordinator/jobs_coordinator.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
@@ -21,13 +19,13 @@ import 'package:tailor_made/screens/jobs/_partials/avatar_app_bar.dart';
 import 'package:tailor_made/screens/jobs/_partials/gallery_grid_item.dart';
 import 'package:tailor_made/screens/jobs/_partials/input_dropdown.dart';
 import 'package:tailor_made/screens/measures/_partials/measure_create_items.dart';
-import 'package:tailor_made/services/jobs/jobs.dart';
 import 'package:tailor_made/utils/ui/mk_image_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/form_section_header.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 const _kGridWidth = 85.0;
@@ -217,7 +215,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
   }
 
   void onSelectContact() async {
-    final selectedContact = await ContactsCoordinator.di().toContactsList(widget.contacts);
+    final selectedContact = await Dependencies.di().contactsCoordinator.toContactsList(widget.contacts);
     if (selectedContact != null) {
       setState(() {
         contact = selectedContact;
@@ -250,9 +248,9 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
         ..contactID = contact.id;
 
       try {
-        Jobs.di().update(job.build()).listen((snap) {
+        Dependencies.di().jobs.update(job.build()).listen((snap) {
           closeLoadingSnackBar();
-          JobsCoordinator.di().toJob(snap);
+          Dependencies.di().jobsCoordinator.toJob(snap);
         });
       } catch (e) {
         closeLoadingSnackBar();
@@ -332,7 +330,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
       return;
     }
     // TODO: remove firebase coupling
-    final ref = Jobs.di().createFile(imageFile);
+    final ref = Dependencies.di().jobs.createFile(imageFile);
 
     setState(() {
       fireImages.add(FireImage()..ref = ref);

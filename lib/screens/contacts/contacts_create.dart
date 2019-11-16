@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/coordinator/contacts_coordinator.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/measures/view_model.dart';
 import 'package:tailor_made/screens/contacts/_partials/contact_form.dart';
-import 'package:tailor_made/services/contacts/contacts.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
+import 'package:tailor_made/widgets/dependencies.dart';
 
 class ContactsCreatePage extends StatefulWidget {
   const ContactsCreatePage({Key key}) : super(key: key);
@@ -88,11 +87,11 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
           ..location = _contact.location,
       );
 
-      Contacts.di().update(contact).listen((snap) async {
+      Dependencies.di().contacts.update(contact).listen((snap) async {
         closeLoadingSnackBar();
         showInSnackBar("Successfully Added");
 
-        ContactsCoordinator.di().toContact(snap);
+        Dependencies.di().contactsCoordinator.toContact(snap);
       });
     } catch (e) {
       closeLoadingSnackBar();
@@ -101,7 +100,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
   }
 
   void _handleSelectMeasure(MeasuresViewModel vm) async {
-    final _contact = await ContactsCoordinator.di().toContactMeasure(contact, vm.grouped);
+    final _contact = await Dependencies.di().contactsCoordinator.toContactMeasure(contact, vm.grouped);
 
     setState(() {
       contact = contact.rebuild((b) => b..measurements = _contact.measurements.toBuilder());
