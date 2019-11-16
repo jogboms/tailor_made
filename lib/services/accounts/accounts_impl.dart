@@ -2,9 +2,12 @@ import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/repository/firebase/main.dart';
 import 'package:tailor_made/repository/firebase/models.dart';
 import 'package:tailor_made/services/accounts/accounts.dart';
-import 'package:tailor_made/dependencies.dart';
 
-class AccountsImpl extends Accounts<FirebaseRepository> {
+class AccountsImpl extends Accounts {
+  AccountsImpl(this.repository);
+
+  final FirebaseRepository repository;
+
   @override
   Future<FireUser> signInWithGoogle() => repository.auth.signInWithGoogle();
 
@@ -29,10 +32,10 @@ class AccountsImpl extends Accounts<FirebaseRepository> {
   }
 
   @override
-  Future<void> signUp(AccountModel account) async {
+  Future<void> signUp(AccountModel account, String notice) async {
     final _account = account.rebuild((b) => b
       ..status = AccountModelStatus.pending
-      ..notice = Dependencies.di().session.getSettings().premiumNotice
+      ..notice = notice
       ..hasReadNotice = false
       ..hasPremiumEnabled = true);
     await account.reference.updateData(_account.toMap());
@@ -40,9 +43,9 @@ class AccountsImpl extends Accounts<FirebaseRepository> {
   }
 
   @override
-  Stream<AccountModel> getAccount() {
+  Stream<AccountModel> getAccount(String userId) {
     return repository.db
-        .account(Dependencies.di().session.getUserId())
+        .account(userId)
         .snapshots()
         .map((snapshot) => AccountModel.fromSnapshot(FireSnapshot(snapshot)));
   }

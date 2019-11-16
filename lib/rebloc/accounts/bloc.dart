@@ -23,7 +23,9 @@ class AccountBloc extends SimpleBloc<AppState> {
   }
 
   Stream<WareContext<AppState>> _signUp(WareContext<AppState> context) async* {
-    await Dependencies.di().accounts.signUp((context.action as OnPremiumSignUp).payload);
+    await Dependencies.di()
+        .accounts
+        .signUp((context.action as OnPremiumSignUp).payload, Dependencies.di().session.getUserId());
 
     yield context;
   }
@@ -31,7 +33,7 @@ class AccountBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _getAccount(WareContext<AppState> context) {
     return Dependencies.di()
         .accounts
-        .getAccount()
+        .getAccount(Dependencies.di().session.getUserId())
         .map((account) => OnDataAction<AccountModel>(payload: account))
         .map((action) => context.copyWith(action));
   }

@@ -103,7 +103,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
     if (imageFile == null) {
       return;
     }
-    final ref = Dependencies.di().gallery.createFile(imageFile);
+    final ref = Dependencies.di().gallery.createFile(imageFile, Dependencies.di().session.getUserId());
 
     setState(() {
       _fireImages.add(_FireImage()..ref = ref);

@@ -42,7 +42,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _onAfterLogin(WareContext<AppState> context) {
     return Dependencies.di()
         .contacts
-        .fetchAll()
+        .fetchAll(Dependencies.di().session.getUserId())
         .map((contacts) => OnDataAction<List<ContactModel>>(payload: contacts))
         .map((action) => context.copyWith(action));
   }

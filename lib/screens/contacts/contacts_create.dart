@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/measures/view_model.dart';
 import 'package:tailor_made/screens/contacts/_partials/contact_form.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
-import 'package:tailor_made/dependencies.dart';
 
 class ContactsCreatePage extends StatefulWidget {
   const ContactsCreatePage({Key key}) : super(key: key);
@@ -87,7 +87,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
           ..location = _contact.location,
       );
 
-      Dependencies.di().contacts.update(contact).listen((snap) async {
+      Dependencies.di().contacts.update(contact, Dependencies.di().session.getUserId()).listen((snap) async {
         closeLoadingSnackBar();
         showInSnackBar("Successfully Added");
 

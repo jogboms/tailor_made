@@ -11,7 +11,9 @@ import 'package:tailor_made/utils/mk_group_model_by.dart';
 class MeasuresBloc extends SimpleBloc<AppState> {
   Stream<WareContext<AppState>> _onUpdateMeasure(WareContext<AppState> context) async* {
     try {
-      await Dependencies.di().measures.update((context.action as UpdateMeasureAction).payload);
+      await Dependencies.di()
+          .measures
+          .update((context.action as UpdateMeasureAction).payload, Dependencies.di().session.getUserId());
       yield context.copyWith(const InitMeasuresAction());
     } catch (e) {
       print(e);
@@ -20,7 +22,7 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   }
 
   Stream<WareContext<AppState>> _onInitMeasure(WareContext<AppState> context) {
-    return Dependencies.di().measures.fetchAll().map((measures) {
+    return Dependencies.di().measures.fetchAll(Dependencies.di().session.getUserId()).map((measures) {
       if (measures.isEmpty) {
         return UpdateMeasureAction(payload: createDefaultMeasures());
       }

@@ -1,11 +1,10 @@
 import 'package:tailor_made/models/mock.dart';
 import 'package:tailor_made/models/stats/stats.dart';
-import 'package:tailor_made/repository/mock/main.dart';
 import 'package:tailor_made/services/stats/stats.dart';
 
-class StatsMockImpl extends Stats<MockRepository> {
+class StatsMockImpl extends Stats {
   @override
-  Stream<StatsModel> fetch() async* {
+  Stream<StatsModel> fetch(String userId) async* {
     yield MockModel.stats;
   }
 }

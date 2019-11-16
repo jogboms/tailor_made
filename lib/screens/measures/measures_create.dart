@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/providers/dispatch_provider.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
@@ -13,7 +14,6 @@ import 'package:tailor_made/widgets/_partials/form_section_header.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
-import 'package:tailor_made/dependencies.dart';
 
 class MeasuresCreate extends StatefulWidget {
   const MeasuresCreate({
@@ -194,7 +194,9 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
 
       try {
         dispatchAction(const ToggleMeasuresLoading());
-        await Dependencies.di().measures.create(measures, groupName: groupName, unitValue: unitValue);
+        await Dependencies.di()
+            .measures
+            .create(measures, Dependencies.di().session.getUserId(), groupName: groupName, unitValue: unitValue);
         closeLoadingSnackBar();
         Navigator.pop(context);
       } catch (e) {

@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
@@ -25,7 +26,6 @@ import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 const _kGridWidth = 85.0;
@@ -248,7 +248,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
         ..contactID = contact.id;
 
       try {
-        Dependencies.di().jobs.update(job.build()).listen((snap) {
+        Dependencies.di().jobs.update(job.build(), Dependencies.di().session.getUserId()).listen((snap) {
           closeLoadingSnackBar();
           Dependencies.di().jobsCoordinator.toJob(snap);
         });
@@ -330,7 +330,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
       return;
     }
     // TODO: remove firebase coupling
-    final ref = Dependencies.di().jobs.createFile(imageFile);
+    final ref = Dependencies.di().jobs.createFile(imageFile, Dependencies.di().session.getUserId());
 
     setState(() {
       fireImages.add(FireImage()..ref = ref);

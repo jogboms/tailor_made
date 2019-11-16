@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/screens/measures/_partials/measures_slide_block_item.dart';
 import 'package:tailor_made/screens/measures/_views/slide_down.dart';
 import 'package:tailor_made/utils/ui/mk_child_dialog.dart';
 import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
-import 'package:tailor_made/dependencies.dart';
 
 enum _ActionChoice { edit, delete }
 
@@ -81,7 +81,7 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
 
     SnackBarProvider.of(context).loading();
     try {
-      await Dependencies.di().measures.delete(widget.measures);
+      await Dependencies.di().measures.delete(widget.measures, Dependencies.di().session.getUserId());
 
       SnackBarProvider.of(context).hide();
     } catch (e) {

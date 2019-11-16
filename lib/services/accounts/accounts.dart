@@ -1,13 +1,7 @@
-import 'package:injector/injector.dart';
 import 'package:tailor_made/models/account.dart';
-import 'package:tailor_made/repository/main.dart';
 import 'package:tailor_made/repository/models.dart';
 
-abstract class Accounts<T extends Repository> {
-  Accounts() : repository = Injector.appInstance.getDependency<Repository>();
-
-  final T repository;
-
+abstract class Accounts {
   Future<User> signInWithGoogle();
 
   Future<User> get onAuthStateChanged;
@@ -18,7 +12,7 @@ abstract class Accounts<T extends Repository> {
 
   Future<void> sendRating(AccountModel account, int rating);
 
-  Future<void> signUp(AccountModel account);
+  Future<void> signUp(AccountModel account, String notice);
 
-  Stream<AccountModel> getAccount();
+  Stream<AccountModel> getAccount(String userId);
 }

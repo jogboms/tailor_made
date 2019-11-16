@@ -1,9 +1,8 @@
 import 'package:tailor_made/models/account.dart';
-import 'package:tailor_made/repository/mock/main.dart';
 import 'package:tailor_made/repository/models.dart';
 import 'package:tailor_made/services/accounts/accounts.dart';
 
-class AccountsMockImpl extends Accounts<MockRepository> {
+class AccountsMockImpl extends Accounts {
   @override
   Future<User> signInWithGoogle() async {
     // TODO
@@ -35,13 +34,13 @@ class AccountsMockImpl extends Accounts<MockRepository> {
   }
 
   @override
-  Future<void> signUp(AccountModel account) async {
+  Future<void> signUp(AccountModel account, String notice) async {
     // TODO
     return null;
   }
 
   @override
-  Stream<AccountModel> getAccount() async* {
+  Stream<AccountModel> getAccount(String userId) async* {
     // TODO
     yield null;
   }

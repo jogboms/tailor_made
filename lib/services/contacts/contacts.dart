@@ -1,20 +1,14 @@
 import 'dart:io';
 
-import 'package:injector/injector.dart';
 import 'package:tailor_made/models/contact.dart';
-import 'package:tailor_made/repository/main.dart';
 import 'package:tailor_made/repository/models.dart';
 
-abstract class Contacts<T extends Repository> {
-  Contacts() : repository = Injector.appInstance.getDependency<Repository>();
+abstract class Contacts {
+  Stream<List<ContactModel>> fetchAll(String userId);
 
-  final T repository;
+  Storage createFile(File file, String userId);
 
-  Stream<List<ContactModel>> fetchAll();
+  Reference fetch(ContactModel contact, String userId);
 
-  Storage createFile(File file);
-
-  Reference fetch(ContactModel contact);
-
-  Stream<ContactModel> update(ContactModel contact);
+  Stream<ContactModel> update(ContactModel contact, String userId);
 }

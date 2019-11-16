@@ -1,18 +1,12 @@
 import 'dart:io';
 
-import 'package:injector/injector.dart';
 import 'package:tailor_made/models/job.dart';
-import 'package:tailor_made/repository/main.dart';
 import 'package:tailor_made/repository/models.dart';
 
-abstract class Jobs<T extends Repository> {
-  Jobs() : repository = Injector.appInstance.getDependency<Repository>();
+abstract class Jobs {
+  Stream<List<JobModel>> fetchAll(String userId);
 
-  final T repository;
+  Storage createFile(File file, String userId);
 
-  Stream<List<JobModel>> fetchAll();
-
-  Storage createFile(File file);
-
-  Stream<JobModel> update(JobModel job);
+  Stream<JobModel> update(JobModel job, String userId);
 }

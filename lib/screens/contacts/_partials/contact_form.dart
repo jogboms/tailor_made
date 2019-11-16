@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/constants/mk_colors.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/repository/models.dart';
@@ -14,7 +15,6 @@ import 'package:tailor_made/utils/ui/mk_image_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
-import 'package:tailor_made/dependencies.dart';
 
 class ContactForm extends StatefulWidget {
   const ContactForm({Key key, @required this.contact, @required this.onHandleSubmit}) : super(key: key);
@@ -133,7 +133,7 @@ class ContactFormState extends State<ContactForm> {
     if (imageFile == null) {
       return;
     }
-    final ref = Dependencies.di().contacts.createFile(imageFile);
+    final ref = Dependencies.di().contacts.createFile(imageFile, Dependencies.di().session.getUserId());
 
     setState(() => isLoading = true);
     try {
