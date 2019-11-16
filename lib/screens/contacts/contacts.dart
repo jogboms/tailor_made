@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/providers/dispatch_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/contacts/actions.dart';
@@ -11,7 +12,6 @@ import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class ContactsPage extends StatefulWidget {

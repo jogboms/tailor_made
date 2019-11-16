@@ -4,7 +4,7 @@ import 'package:tailor_made/models/settings.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/settings/actions.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
+import 'package:tailor_made/dependencies.dart';
 
 class SettingsBloc extends SimpleBloc<AppState> {
   @override

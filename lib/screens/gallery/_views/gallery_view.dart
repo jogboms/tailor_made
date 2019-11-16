@@ -10,7 +10,7 @@ import 'package:tailor_made/rebloc/common/contact_job_view_model.dart';
 import 'package:tailor_made/utils/ui/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
+import 'package:tailor_made/dependencies.dart';
 
 class GalleryView extends StatelessWidget {
   const GalleryView({Key key, this.image}) : super(key: key);

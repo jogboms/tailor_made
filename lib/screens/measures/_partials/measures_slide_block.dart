@@ -7,7 +7,7 @@ import 'package:tailor_made/screens/measures/_partials/measures_slide_block_item
 import 'package:tailor_made/screens/measures/_views/slide_down.dart';
 import 'package:tailor_made/utils/ui/mk_child_dialog.dart';
 import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
+import 'package:tailor_made/dependencies.dart';
 
 enum _ActionChoice { edit, delete }
 

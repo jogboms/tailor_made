@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
@@ -9,7 +10,6 @@ import 'package:tailor_made/widgets/_partials/form_section_header.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
 
 class ContactMeasure extends StatefulWidget {
   const ContactMeasure({Key key, @required this.grouped, @required this.contact}) : super(key: key);

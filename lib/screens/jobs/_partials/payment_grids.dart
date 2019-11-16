@@ -6,7 +6,7 @@ import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/screens/jobs/_partials/payment_grid_item.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class PaymentGrids extends StatefulWidget {

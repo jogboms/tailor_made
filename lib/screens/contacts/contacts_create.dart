@@ -10,7 +10,7 @@ import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/measures/view_model.dart';
 import 'package:tailor_made/screens/contacts/_partials/contact_form.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
+import 'package:tailor_made/dependencies.dart';
 
 class ContactsCreatePage extends StatefulWidget {
   const ContactsCreatePage({Key key}) : super(key: key);

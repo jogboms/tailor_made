@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/repository/models.dart';
@@ -9,7 +10,6 @@ import 'package:tailor_made/screens/jobs/_partials/gallery_grid_item.dart';
 import 'package:tailor_made/utils/ui/mk_image_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class GalleryGrids extends StatefulWidget {

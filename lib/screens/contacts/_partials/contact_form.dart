@@ -14,7 +14,7 @@ import 'package:tailor_made/utils/ui/mk_image_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
+import 'package:tailor_made/dependencies.dart';
 
 class ContactForm extends StatefulWidget {
   const ContactForm({Key key, @required this.contact, @required this.onHandleSubmit}) : super(key: key);

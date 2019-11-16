@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 enum _CreateOptions { contacts, jobs }

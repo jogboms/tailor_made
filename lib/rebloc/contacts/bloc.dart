@@ -1,12 +1,12 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/contacts/actions.dart';
 import 'package:tailor_made/rebloc/contacts/sort_type.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
 
 Comparator<ContactModel> _sort(SortType sortType) {
   switch (sortType) {

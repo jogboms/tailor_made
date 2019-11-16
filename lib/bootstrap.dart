@@ -4,7 +4,7 @@ import 'package:tailor_made/environments/environment.dart';
 import 'package:tailor_made/repository/main.dart';
 import 'package:tailor_made/services/session.dart';
 import 'package:tailor_made/utils/mk_first_time_login_check.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
+import 'package:tailor_made/dependencies.dart';
 
 Future<BootstrapModel> bootstrap(Repository repository, Environment env, [bool isTestMode = false]) async {
   final _session = Session(environment: env, isTestMode: isTestMode);

@@ -10,7 +10,7 @@ import 'package:tailor_made/screens/measures/_partials/measures_slide_block.dart
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
+import 'package:tailor_made/dependencies.dart';
 
 class MeasuresManagePage extends StatefulWidget {
   const MeasuresManagePage({Key key}) : super(key: key);

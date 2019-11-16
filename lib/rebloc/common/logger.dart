@@ -1,8 +1,8 @@
 import 'dart:async' show Future;
 
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
 
 class LoggerBloc extends SimpleBloc<AppState> {
   @override

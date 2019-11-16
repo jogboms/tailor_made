@@ -13,7 +13,7 @@ import 'package:tailor_made/widgets/_partials/form_section_header.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
+import 'package:tailor_made/dependencies.dart';
 
 class MeasuresCreate extends StatefulWidget {
   const MeasuresCreate({

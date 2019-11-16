@@ -4,7 +4,7 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
 import 'package:tailor_made/widgets/_partials/mk_dots.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class ContactsListItem extends StatelessWidget {

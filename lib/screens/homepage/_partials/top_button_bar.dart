@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/rebloc/accounts/actions.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
@@ -12,7 +13,6 @@ import 'package:tailor_made/screens/homepage/_views/review_modal.dart';
 import 'package:tailor_made/utils/ui/mk_child_dialog.dart';
 import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_dots.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 enum AccountOptions { logout, storename }

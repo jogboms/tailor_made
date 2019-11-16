@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
 import 'package:tailor_made/widgets/_partials/mk_circle_avatar.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 enum Choice { CreateJob, EditMeasure, EditAccount, SendText }

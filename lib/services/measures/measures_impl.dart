@@ -1,9 +1,9 @@
 import 'package:meta/meta.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/repository/firebase/main.dart';
 import 'package:tailor_made/repository/firebase/models.dart';
 import 'package:tailor_made/services/measures/measures.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
 
 class MeasuresImpl extends Measures<FirebaseRepository> {
   @override

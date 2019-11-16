@@ -1,10 +1,10 @@
 import 'dart:io';
 
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/repository/firebase/main.dart';
 import 'package:tailor_made/repository/firebase/models.dart';
 import 'package:tailor_made/services/jobs/jobs.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
 
 class JobsImpl extends Jobs<FirebaseRepository> {
   @override

@@ -6,6 +6,7 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/auth/actions.dart';
@@ -15,7 +16,6 @@ import 'package:tailor_made/utils/ui/app_version_builder.dart';
 import 'package:tailor_made/utils/ui/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_raised_button.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class SplashPage extends StatelessWidget {

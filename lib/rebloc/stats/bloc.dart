@@ -1,10 +1,10 @@
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/stats/stats.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/stats/actions.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
 
 class StatsBloc extends SimpleBloc<AppState> {
   @override

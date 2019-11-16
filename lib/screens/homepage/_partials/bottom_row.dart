@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/stats/stats.dart';
 import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
 
 class BottomRowWidget extends StatelessWidget {
   const BottomRowWidget({Key key, @required this.stats, @required this.account}) : super(key: key);

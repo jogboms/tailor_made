@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/image.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
+import 'package:tailor_made/dependencies.dart';
 
 const _kGridWidth = 70.0;
 

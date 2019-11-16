@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/stats/stats.dart';
 import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
+import 'package:tailor_made/dependencies.dart';
 
 class TopRowWidget extends StatelessWidget {
   const TopRowWidget({Key key, @required this.stats}) : super(key: key);

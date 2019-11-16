@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/image.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
 
 class GalleryGridItem extends StatelessWidget {
   const GalleryGridItem({Key key, this.image}) : super(key: key);

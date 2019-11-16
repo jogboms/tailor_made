@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/bootstrap.dart';
 import 'package:tailor_made/constants/mk_routes.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
@@ -9,7 +10,6 @@ import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/store_factory.dart';
 import 'package:tailor_made/screens/splash/splash.dart';
 import 'package:tailor_made/utils/mk_screen_util.dart';
-import 'package:tailor_made/widgets/bootstrap.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class App extends StatefulWidget {

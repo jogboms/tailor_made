@@ -1,6 +1,6 @@
 import 'dart:async' show TimeoutException;
 
-import 'package:tailor_made/widgets/dependencies.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/wrappers/mk_exceptions.dart';
 
 class MkStrings {

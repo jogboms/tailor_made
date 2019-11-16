@@ -2,7 +2,7 @@ import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/repository/firebase/main.dart';
 import 'package:tailor_made/repository/firebase/models.dart';
 import 'package:tailor_made/services/accounts/accounts.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
+import 'package:tailor_made/dependencies.dart';
 
 class AccountsImpl extends Accounts<FirebaseRepository> {
   @override

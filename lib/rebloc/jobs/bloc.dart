@@ -1,13 +1,13 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/jobs/actions.dart';
 import 'package:tailor_made/rebloc/jobs/sort_type.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
 
 final _foldPrice = (double acc, PaymentModel model) => acc + model.price;
 

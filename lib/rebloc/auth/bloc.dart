@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/rebloc/accounts/actions.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/auth/actions.dart';
@@ -9,7 +10,6 @@ import 'package:tailor_made/rebloc/jobs/actions.dart';
 import 'package:tailor_made/rebloc/measures/actions.dart';
 import 'package:tailor_made/rebloc/settings/actions.dart';
 import 'package:tailor_made/rebloc/stats/actions.dart';
-import 'package:tailor_made/widgets/dependencies.dart';
 
 class AuthBloc extends SimpleBloc<AppState> {
   @override
