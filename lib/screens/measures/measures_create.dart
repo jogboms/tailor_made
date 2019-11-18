@@ -196,7 +196,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
         dispatchAction(const ToggleMeasuresLoading());
         await Dependencies.di()
             .measures
-            .create(measures, Dependencies.di().session.getUserId(), groupName: groupName, unitValue: unitValue);
+            .create(measures, Dependencies.di().session.user.getId(), groupName: groupName, unitValue: unitValue);
         closeLoadingSnackBar();
         Navigator.pop(context);
       } catch (e) {

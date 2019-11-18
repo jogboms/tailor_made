@@ -1,19 +1,13 @@
 import 'package:tailor_made/models/account.dart';
-import 'package:tailor_made/repository/models.dart';
+import 'package:tailor_made/repository/mock/models.dart';
 import 'package:tailor_made/services/accounts/accounts.dart';
 
 class AccountsMockImpl extends Accounts {
   @override
-  Future<User> signInWithGoogle() async {
-    // TODO
-    return null;
-  }
+  Future<MockUser> signInWithGoogle() async => const MockUser();
 
   @override
-  Future<User> get onAuthStateChanged async {
-    // TODO
-    return null;
-  }
+  Future<MockUser> get onAuthStateChanged async => const MockUser();
 
   @override
   Future<void> signout() {
@@ -28,13 +22,13 @@ class AccountsMockImpl extends Accounts {
   }
 
   @override
-  Future<void> sendRating(AccountModel account, int rating) async {
+  Future<void> sendRating(AccountModel account) async {
     // TODO
     return null;
   }
 
   @override
-  Future<void> signUp(AccountModel account, String notice) async {
+  Future<void> signUp(AccountModel account) async {
     // TODO
     return null;
   }

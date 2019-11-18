@@ -10,9 +10,9 @@ abstract class Accounts {
 
   Future<void> readNotice(AccountModel account);
 
-  Future<void> sendRating(AccountModel account, int rating);
+  Future<void> sendRating(AccountModel account);
 
-  Future<void> signUp(AccountModel account, String notice);
+  Future<void> signUp(AccountModel account);
 
   Stream<AccountModel> getAccount(String userId);
 }

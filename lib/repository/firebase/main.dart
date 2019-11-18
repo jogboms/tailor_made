@@ -17,7 +17,7 @@ class FirebaseRepository extends Repository {
   final Auth auth;
 }
 
-FirebaseRepository factory() {
+FirebaseRepository repositoryFactory() {
   return FirebaseRepository(
     db: CloudDb(Firestore.instance),
     storage: CloudStorage(FirebaseStorage.instance),

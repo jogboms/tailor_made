@@ -18,28 +18,15 @@ class AccountsImpl extends Accounts {
   Future<void> signout() => repository.auth.signOutWithGoogle();
 
   @override
-  Future<void> readNotice(AccountModel account) async {
-    await account.reference.updateData(account.rebuild((b) => b..hasReadNotice = true).toMap());
-  }
+  Future<void> readNotice(AccountModel account) => account.reference.updateData(account.toMap());
 
   @override
-  Future<void> sendRating(AccountModel account, int rating) async {
-    await account.reference.updateData(account
-        .rebuild((b) => b
-          ..hasSendRating = true
-          ..rating = rating)
-        .toMap());
-  }
+  Future<void> sendRating(AccountModel account) => account.reference.updateData(account.toMap());
 
   @override
-  Future<void> signUp(AccountModel account, String notice) async {
-    final _account = account.rebuild((b) => b
-      ..status = AccountModelStatus.pending
-      ..notice = notice
-      ..hasReadNotice = false
-      ..hasPremiumEnabled = true);
-    await account.reference.updateData(_account.toMap());
-    await repository.db.premium.document(account.uid).setData(_account.toMap());
+  Future<void> signUp(AccountModel account) async {
+    await account.reference.updateData(account.toMap());
+    await repository.db.premium.document(account.uid).setData(account.toMap());
   }
 
   @override

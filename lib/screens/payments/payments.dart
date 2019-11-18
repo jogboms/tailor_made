@@ -41,7 +41,7 @@ class PaymentsPage extends StatelessWidget {
           Builder(builder: (context) {
             if (payments == null) {
               return StreamBuilder(
-                stream: Dependencies.di().payments.fetchAll(Dependencies.di().session.getUserId()),
+                stream: Dependencies.di().payments.fetchAll(Dependencies.di().session.user.getId()),
                 builder: (_, AsyncSnapshot<List<PaymentModel>> snapshot) {
                   if (!snapshot.hasData) {
                     return const SliverFillRemaining(child: MkLoadingSpinner());

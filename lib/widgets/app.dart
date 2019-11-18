@@ -9,7 +9,7 @@ import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/store_factory.dart';
 import 'package:tailor_made/screens/splash/splash.dart';
-import 'package:tailor_made/utils/mk_screen_util.dart';
+import 'package:tailor_made/utils/mk_scale_util.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class App extends StatefulWidget {
@@ -51,18 +51,12 @@ class _AppState extends State<App> {
               color: Colors.white,
               navigatorKey: bootstrap.navigatorKey,
               theme: ThemeProvider.of(context).themeData(Theme.of(context)),
-              builder: (context, child) => Builder(builder: (BuildContext context) {
-                MkScreenUtil.initialize(context: context, size: Size(1080, 1920));
+              builder: (_, child) => Builder(builder: (BuildContext context) {
+                MkScaleUtil.initialize(context: context, size: Size(1080, 1920));
                 return child;
               }),
               onGenerateRoute: (RouteSettings settings) => _PageRoute(
-                builder: (_) {
-                  if (bootstrap.isTestMode) {
-                    return const SizedBox();
-                  }
-
-                  return SplashPage(isColdStart: true);
-                },
+                builder: (_) => SplashPage(isColdStart: true),
                 settings: settings.copyWith(name: MkRoutes.start),
               ),
             ),

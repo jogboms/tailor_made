@@ -103,7 +103,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
     if (imageFile == null) {
       return;
     }
-    final ref = Dependencies.di().gallery.createFile(imageFile, Dependencies.di().session.getUserId());
+    final ref = Dependencies.di().gallery.createFile(imageFile, Dependencies.di().session.user.getId());
 
     setState(() {
       _fireImages.add(_FireImage()..ref = ref);
@@ -114,7 +114,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
       setState(() {
         _fireImages.last.image = ImageModel(
           (b) => b
-            ..userID = Dependencies.di().session.getUserId()
+            ..userID = Dependencies.di().session.user.getId()
             ..contactID = widget.job.contactID
             ..jobID = widget.job.id
             ..src = imageUrl

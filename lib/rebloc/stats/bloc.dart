@@ -10,15 +10,15 @@ class StatsBloc extends SimpleBloc<AppState> {
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     Observable(input)
-        .where((WareContext<AppState> context) => context.action is InitStatsAction)
+        .where((context) => context.action is InitStatsAction)
         .switchMap(
           (context) => Dependencies.di()
               .stats
-              .fetch(Dependencies.di().session.getUserId())
+              .fetch(Dependencies.di().session.user.getId())
               .map((stats) => OnDataAction<StatsModel>(payload: stats))
               .map((action) => context.copyWith(action)),
         )
-        .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)
+        .takeWhile((context) => context.action is! OnDisposeAction)
         .listen((context) => context.dispatcher(context.action));
 
     return input;

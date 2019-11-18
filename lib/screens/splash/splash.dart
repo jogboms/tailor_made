@@ -12,10 +12,10 @@ import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/auth/actions.dart';
 import 'package:tailor_made/rebloc/settings/actions.dart';
 import 'package:tailor_made/rebloc/settings/view_model.dart';
+import 'package:tailor_made/repository/models.dart';
 import 'package:tailor_made/utils/ui/app_version_builder.dart';
 import 'package:tailor_made/utils/ui/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
-import 'package:tailor_made/widgets/_partials/mk_raised_button.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class SplashPage extends StatelessWidget {
@@ -63,7 +63,22 @@ class SplashPage extends StatelessWidget {
                 ],
               ),
             ),
-            _Content(isColdStart: isColdStart),
+            FutureBuilder<User>(
+              future: Dependencies.di().accounts.onAuthStateChanged,
+              builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+                if (snapshot.hasData && snapshot.data != null) {
+                  WidgetsBinding.instance.addPostFrameCallback(
+                    (_) async {
+                      Dependencies.di().session.user.setId(snapshot.data.uid);
+                      StoreProvider.of<AppState>(context).dispatch(OnLoginAction(snapshot.data));
+                      Dependencies.di().sharedCoordinator.toHome();
+                    },
+                  );
+                }
+
+                return _Content(isColdStart: isColdStart);
+              },
+            ),
           ],
         ),
       ),
@@ -88,13 +103,6 @@ class _ContentState extends State<_Content> {
   void initState() {
     super.initState();
     isLoading = widget.isColdStart;
-
-    Dependencies.di().accounts.onAuthStateChanged.then((user) => WidgetsBinding.instance.addPostFrameCallback(
-          (_) async {
-            StoreProvider.of<AppState>(context).dispatch(OnLoginAction(user));
-            Dependencies.di().sharedCoordinator.toHome();
-          },
-        ));
   }
 
   @override
@@ -133,11 +141,13 @@ class _ContentState extends State<_Content> {
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 8.0),
-                          MkRaisedButton(
-                            backgroundColor: Colors.white,
-                            color: kTextBaseColor,
+                          RaisedButton(
+                            color: Colors.white,
+                            child: Text(
+                              "RETRY",
+                              style: ThemeProvider.of(context).button.copyWith(color: kTextBaseColor),
+                            ),
                             onPressed: () => dispatch(const InitSettingsAction()),
-                            child: const Text("RETRY"),
                           ),
                         ],
                       ),

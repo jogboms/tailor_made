@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/rebloc/accounts/actions.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/auth/actions.dart';
@@ -15,7 +14,6 @@ class AuthBloc extends SimpleBloc<AppState> {
   @override
   Future<Action> middleware(DispatchFunction dispatcher, AppState state, Action action) async {
     if (action is OnLoginAction) {
-      Dependencies.di().session.setUserId(action.user.uid);
       dispatcher(const InitAccountAction());
       dispatcher(const InitMeasuresAction());
       dispatcher(const InitStatsAction());

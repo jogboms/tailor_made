@@ -1,14 +1,11 @@
 import 'dart:async' show Future;
 import 'dart:io' show File;
 
-import 'package:flutter/widgets.dart' show BuildContext;
 import 'package:flutter_native_image/flutter_native_image.dart';
-import 'package:meta/meta.dart';
 
 class MkImageUtils {
-  MkImageUtils({@required this.context, @required this.file});
+  MkImageUtils(this.file);
 
-  final BuildContext context;
   final File file;
 
   Future<File> compress({int quality = 90, int percentage = 75}) {
