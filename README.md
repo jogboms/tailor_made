@@ -2,6 +2,8 @@
 
 # TailorMade: Managing a Fashion designer's daily routine.
 
+[![Build Status - Travis](https://travis-ci.org/jogboms/tailor_made.svg?branch=master)](https://travis-ci.org/jogboms/tailor_made)
+
 TailorMade is what actually started out as an experiment with [Flutter](https://flutter.io/), [~flutter_redux~](https://github.com/brianegan/flutter_redux) [ReBLoC](https://github.com/redbrogdon/rebloc) and [Firebase Cloud Functions](https://github.com/flutter/plugins/tree/master/packages/cloud_functions) but instead turned out to be a valuable tool for managing a Fashion designer's daily routine. It is clean, easy on the eyes and overall has a very smooth feel. It also handles offline use cases with Firebase Cloud. Logo, Design & Concept by Me.
 
 <div>
