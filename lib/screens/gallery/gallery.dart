@@ -41,7 +41,7 @@ class GalleryPage extends StatelessWidget {
           Builder(builder: (context) {
             if (images == null) {
               return StreamBuilder(
-                stream: Dependencies.di().gallery.fetchAll(Dependencies.di().session.getUserId()),
+                stream: Dependencies.di().gallery.fetchAll(Dependencies.di().session.user.getId()),
                 builder: (_, AsyncSnapshot<List<ImageModel>> snapshot) {
                   if (!snapshot.hasData) {
                     return const SliverFillRemaining(child: MkLoadingSpinner());

@@ -81,7 +81,7 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
 
     SnackBarProvider.of(context).loading();
     try {
-      await Dependencies.di().measures.delete(widget.measures, Dependencies.di().session.getUserId());
+      await Dependencies.di().measures.delete(widget.measures, Dependencies.di().session.user.getId());
 
       SnackBarProvider.of(context).hide();
     } catch (e) {

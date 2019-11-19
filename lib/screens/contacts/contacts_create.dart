@@ -30,7 +30,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
   @override
   void initState() {
     super.initState();
-    contact = ContactModel((b) => b..userID = Dependencies.di().session.getUserId());
+    contact = ContactModel((b) => b..userID = Dependencies.di().session.user.getId());
   }
 
   @override
@@ -87,7 +87,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
           ..location = _contact.location,
       );
 
-      Dependencies.di().contacts.update(contact, Dependencies.di().session.getUserId()).listen((snap) async {
+      Dependencies.di().contacts.update(contact, Dependencies.di().session.user.getId()).listen((snap) async {
         closeLoadingSnackBar();
         showInSnackBar("Successfully Added");
 

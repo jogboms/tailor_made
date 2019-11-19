@@ -4,9 +4,13 @@ import 'package:tailor_made/environments/environment.dart';
 import 'package:tailor_made/repository/main.dart';
 import 'package:tailor_made/widgets/app.dart';
 
-void main(Repository repository, {Environment environment = Environment.MOCK, int delay = 0}) async {
+void main(
+  Repository Function() repositoryFactory, {
+  Environment environment = Environment.MOCK,
+  int delay = 0,
+}) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Future<dynamic>.delayed(Duration(seconds: delay));
 
-  runApp(App(bootstrap: await bootstrap(repository, environment)));
+  runApp(App(bootstrap: await bootstrap(repositoryFactory(), environment)));
 }

@@ -7,74 +7,15 @@ import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/contacts/actions.dart';
 import 'package:tailor_made/rebloc/contacts/sort_type.dart';
-
-Comparator<ContactModel> _sort(SortType sortType) {
-  switch (sortType) {
-    case SortType.jobs:
-      {
-        return (a, b) => b.totalJobs.compareTo(a.totalJobs);
-      }
-    case SortType.names:
-      {
-        return (a, b) => a.fullname.compareTo(b.fullname);
-      }
-    case SortType.completed:
-      {
-        return (a, b) => (b.totalJobs - b.pendingJobs).compareTo(a.totalJobs - a.pendingJobs);
-      }
-    case SortType.pending:
-      {
-        return (a, b) => b.pendingJobs.compareTo(a.pendingJobs);
-      }
-    case SortType.recent:
-      {
-        return (a, b) => b.createdAt.compareTo(a.createdAt);
-      }
-    case SortType.reset:
-    default:
-      {
-        return (a, b) => a.id.compareTo(b.id);
-      }
-  }
-}
+import 'package:tailor_made/rebloc/extensions.dart';
 
 class ContactsBloc extends SimpleBloc<AppState> {
-  Stream<WareContext<AppState>> _onAfterLogin(WareContext<AppState> context) {
-    return Dependencies.di()
-        .contacts
-        .fetchAll(Dependencies.di().session.getUserId())
-        .map((contacts) => OnDataAction<List<ContactModel>>(payload: contacts))
-        .map((action) => context.copyWith(action));
-  }
-
-  Stream<WareContext<AppState>> _makeSearch(WareContext<AppState> context) {
-    return Observable<String>.just((context.action as SearchContactAction).payload)
-        .doOnData((_) => context.dispatcher(const StartSearchContactAction()))
-        .map<String>((String text) => text.trim())
-        .distinct()
-        .where((text) => text.length > 1)
-        .debounceTime(const Duration(milliseconds: 750))
-        .map((text) => SearchSuccessContactAction(
-              payload: context.state.contacts.contacts
-                  .where((contact) => contact.fullname.contains(RegExp(r'' + text + '', caseSensitive: false)))
-                  .toList(),
-            ))
-        .takeWhile((action) => action is! CancelSearchContactAction)
-        .map((action) => context.copyWith(action));
-  }
-
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     MergeStream([
-      Observable(input)
-          .where((WareContext<AppState> context) => context.action is SearchContactAction)
-          .switchMap(_makeSearch),
-      Observable(input)
-          .where((WareContext<AppState> context) => context.action is InitContactsAction)
-          .switchMap(_onAfterLogin),
-    ])
-        .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)
-        .listen((context) => context.dispatcher(context.action));
+      Observable(input).whereAction<SearchContactAction>().switchMap(_makeSearch),
+      Observable(input).whereAction<InitContactsAction>().switchMap(_onAfterLogin),
+    ]).untilAction<OnDisposeAction>().listen((context) => context.dispatcher(context.action));
 
     return input;
   }
@@ -151,4 +92,46 @@ class ContactsBloc extends SimpleBloc<AppState> {
 
     return state;
   }
+}
+
+Comparator<ContactModel> _sort(SortType sortType) {
+  switch (sortType) {
+    case SortType.jobs:
+      return (a, b) => b.totalJobs.compareTo(a.totalJobs);
+    case SortType.names:
+      return (a, b) => a.fullname.compareTo(b.fullname);
+    case SortType.completed:
+      return (a, b) => (b.totalJobs - b.pendingJobs).compareTo(a.totalJobs - a.pendingJobs);
+    case SortType.pending:
+      return (a, b) => b.pendingJobs.compareTo(a.pendingJobs);
+    case SortType.recent:
+      return (a, b) => b.createdAt.compareTo(a.createdAt);
+    case SortType.reset:
+    default:
+      return (a, b) => a.id.compareTo(b.id);
+  }
+}
+
+Stream<WareContext<AppState>> _onAfterLogin(WareContext<AppState> context) {
+  return Dependencies.di()
+      .contacts
+      .fetchAll(Dependencies.di().session.user.getId())
+      .map((contacts) => OnDataAction<List<ContactModel>>(contacts))
+      .map((action) => context.copyWith(action));
+}
+
+Stream<WareContext<AppState>> _makeSearch(WareContext<AppState> context) {
+  return Observable<String>.just((context.action as SearchContactAction).payload)
+      .doOnData((_) => context.dispatcher(const StartSearchContactAction()))
+      .map<String>((String text) => text.trim())
+      .distinct()
+      .where((text) => text.length > 1)
+      .debounceTime(const Duration(milliseconds: 750))
+      .map((text) => SearchSuccessContactAction(
+            context.state.contacts.contacts
+                .where((contact) => contact.fullname.contains(RegExp(r'' + text + '', caseSensitive: false)))
+                .toList(),
+          ))
+      .takeWhile((action) => action is! CancelSearchContactAction)
+      .map((action) => context.copyWith(action));
 }

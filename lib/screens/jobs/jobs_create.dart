@@ -74,7 +74,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
     contact = widget.contact;
     job = JobModel(
       (b) => b
-        ..userID = Dependencies.di().session.getUserId()
+        ..userID = Dependencies.di().session.user.getId()
         ..contactID = contact?.id
         ..measurements = contact?.measurements?.toBuilder(),
     ).toBuilder();
@@ -249,7 +249,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
         ..contactID = contact.id;
 
       try {
-        Dependencies.di().jobs.update(job.build(), Dependencies.di().session.getUserId()).listen((snap) {
+        Dependencies.di().jobs.update(job.build(), Dependencies.di().session.user.getId()).listen((snap) {
           closeLoadingSnackBar();
           Dependencies.di().jobsCoordinator.toJob(snap);
         });
@@ -331,7 +331,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
       return;
     }
     // TODO: remove firebase coupling
-    final ref = Dependencies.di().jobs.createFile(imageFile, Dependencies.di().session.getUserId());
+    final ref = Dependencies.di().jobs.createFile(imageFile, Dependencies.di().session.user.getId());
 
     setState(() {
       fireImages.add(FireImage()..ref = ref);
@@ -344,7 +344,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
           ..isSucess = true
           ..image = ImageModel(
             (b) => b
-              ..userID = Dependencies.di().session.getUserId()
+              ..userID = Dependencies.di().session.user.getId()
               ..contactID = contact.id
               ..jobID = job.id
               ..src = imageUrl

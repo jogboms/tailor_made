@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tailor_made/constants/mk_colors.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/utils/mk_screen_util.dart';
+import 'package:tailor_made/utils/mk_scale_util.dart';
 
 class SnackBarProvider {
   SnackBarProvider.of(BuildContext context)
@@ -60,7 +60,7 @@ class SnackBarProvider {
         backgroundColor: backgroundColor,
         content: Row(
           children: <Widget>[
-            if (leading != null) ...[leading, SizedBox(width: sw(16))],
+            if (leading != null) ...[leading, SizedBox(width: sx(16))],
             Expanded(child: Text(value, style: mkFontMedium(14.0, color))),
           ],
         ),

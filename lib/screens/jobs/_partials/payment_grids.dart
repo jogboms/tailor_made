@@ -90,7 +90,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
         setState(() {
           _firePayments.last.payment = PaymentModel(
             (b) => b
-              ..userID = Dependencies.di().session.getUserId()
+              ..userID = Dependencies.di().session.user.getId()
               ..contactID = widget.job.contactID
               ..jobID = widget.job.id
               ..price = result["price"]

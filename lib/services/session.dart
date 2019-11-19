@@ -1,29 +1,27 @@
 import 'package:flutter/foundation.dart';
 import 'package:tailor_made/environments/environment.dart';
-import 'package:tailor_made/models/settings.dart';
 
 class Session {
-  Session({@required this.environment, @required this.isTestMode});
+  Session({@required Environment environment})
+      : assert(environment != null),
+        isMock = environment == Environment.MOCK,
+        isDev = environment == Environment.DEVELOPMENT,
+        user = _User();
 
-  final Environment environment;
+  final bool isMock;
+  final bool isDev;
+  final _User user;
+}
 
-  final bool isTestMode;
+class _User {
+  String _id;
 
-  bool get isDev => environment == Environment.DEVELOPMENT;
+  void setId(String id) {
+    assert(id != null);
+    _id = id;
+  }
 
-  bool get isMock => environment == Environment.MOCK;
+  String getId() => _id;
 
-  bool get isTesting => isTestMode;
-
-  String _userId;
-
-  void setUserId(String id) => _userId = id;
-
-  String getUserId() => _userId;
-
-  SettingsModel _settings;
-
-  void setSettings(SettingsModel data) => _settings = data;
-
-  SettingsModel getSettings() => _settings;
+  void dispose() => _id = null;
 }

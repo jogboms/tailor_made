@@ -30,7 +30,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final store = StoreProvider.of<AppState>(context);
     return WillPopScope(
       onWillPop: () => mkChoiceDialog(context: context, message: "Continue with Exit?"),
       child: MkStatusBar(
@@ -52,7 +51,8 @@ class HomePage extends StatelessWidget {
                 valueBuilder: () => AppVersion.retrieve(Dependencies.di().session.isMock),
                 builder: (context, appVersion, child) {
                   final currentVersion = Version.parse(appVersion);
-                  final latestVersion = Version.parse(store.states.value?.settings?.settings?.versionName ?? "1.0.0");
+                  final state = StoreProvider.of<AppState>(context).states.value;
+                  final latestVersion = Version.parse(state?.settings?.settings?.versionName ?? "1.0.0");
 
                   if (latestVersion > currentVersion) {
                     return OutDatedPage(onUpdate: () {
@@ -63,7 +63,11 @@ class HomePage extends StatelessWidget {
 
                   return child;
                 },
-                child: _Body(viewModel: HomeViewModel(store.states.value), dispatch: store.dispatch),
+                child: ViewModelSubscriber<AppState, HomeViewModel>(
+                  converter: (store) => HomeViewModel(store),
+                  builder: (_, dispatch, vm) => _Body(viewModel: vm, dispatch: dispatch),
+                ),
+//                child: _Body(viewModel: HomeViewModel(store.states.value), dispatch: store.dispatch),
               ),
             ],
           ),
@@ -96,7 +100,7 @@ class _Body extends StatelessWidget {
 
     if (viewModel.isWarning && viewModel.hasSkipedPremium == false) {
       return RateLimitPage(
-        onSignUp: () => dispatch(OnPremiumSignUp(payload: viewModel.account)),
+        onSignUp: () => dispatch(OnPremiumSignUp(viewModel.account)),
         onSkipedPremium: () => dispatch(const OnSkipedPremium()),
       );
     }

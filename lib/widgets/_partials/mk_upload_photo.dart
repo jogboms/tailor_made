@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io' show File;
 
 import 'package:flutter/material.dart';
@@ -50,24 +49,22 @@ class MkUploadPhoto extends StatelessWidget {
     );
   }
 
-  Future<void> _handlePressed(BuildContext context) async {
+  void _handlePressed(BuildContext context) async {
     final source = await mkImageChoiceDialog(context: context);
     if (source == null) {
       return;
     }
-    File file;
     try {
-      file = await ImagePicker.pickImage(source: source);
+      final file = await ImagePicker.pickImage(source: source);
       print("File path: " + file.path);
+      if (onPickImage != null) {
+        final _file = await MkImageUtils(file).resize(width: 1500);
+        onPickImage(_file);
+      }
     } on PlatformException catch (e) {
       print("Error while picking the file: " + e.toString());
-    }
-    if (file == null) {
-      return;
-    }
-    if (onPickImage != null) {
-      final _file = await MkImageUtils(context: context, file: file).resize(width: 1500);
-      onPickImage(_file);
+    } catch (e) {
+      print(e.toString());
     }
   }
 }

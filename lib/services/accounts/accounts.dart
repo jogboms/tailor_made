@@ -2,17 +2,17 @@ import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/repository/models.dart';
 
 abstract class Accounts {
-  Future<User> signInWithGoogle();
+  Future<void> signInWithGoogle();
 
-  Future<User> get onAuthStateChanged;
+  Stream<User> get onAuthStateChanged;
 
   Future<void> signout();
 
   Future<void> readNotice(AccountModel account);
 
-  Future<void> sendRating(AccountModel account, int rating);
+  Future<void> sendRating(AccountModel account);
 
-  Future<void> signUp(AccountModel account, String notice);
+  Future<void> signUp(AccountModel account);
 
   Stream<AccountModel> getAccount(String userId);
 }

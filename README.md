@@ -1,28 +1,33 @@
-<img src="./assets/images/logo.png" style="margin: auto" width="90" />
+<div align="center">
+  <img src="./assets/images/logo.png" style="margin: auto;display: block;width: 22.5%" />
+  <br />
+  <h1>TailorMade</h1>
+  <strong>Managing a Fashion designer's daily routine</strong>
+  <br />
+  <sub>Built with ❤︎ by <a href="https://twitter.com/jogboms">jogboms</a></sub>
+  <br /><br />
+  <a href='https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade'><img alt='Get it on Google Play' src='./screenshots/google_play.png' height='36px'/></a>
+  <br />
 
-# TailorMade: Managing a Fashion designer's daily routine.
+[![Build Status - Travis](https://travis-ci.org/jogboms/tailor_made.svg?branch=master)](https://travis-ci.org/jogboms/tailor_made)
+</div>
+
+---
 
 TailorMade is what actually started out as an experiment with [Flutter](https://flutter.io/), [~flutter_redux~](https://github.com/brianegan/flutter_redux) [ReBLoC](https://github.com/redbrogdon/rebloc) and [Firebase Cloud Functions](https://github.com/flutter/plugins/tree/master/packages/cloud_functions) but instead turned out to be a valuable tool for managing a Fashion designer's daily routine. It is clean, easy on the eyes and overall has a very smooth feel. It also handles offline use cases with Firebase Cloud. Logo, Design & Concept by Me.
 
-<div>
-<a href='https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade'><img alt='Get it on Google Play' src='./screenshots/google_play.png' height='40px'/></a>
-</div>
-
 ## Tools
 
-1.  Firebase Auth
-2.  Firebase Cloud Firestore
-3.  Firebase Cloud Functions
-4.  Firebase Storage
-5.  Google SignIn
-6.  RxDart
-7.  ReBLoC
-8.  Image Picker
-9.  Photo View
-10. Cached Network Image
-11. Flutter SpinKit
-12. Flutter Get Version
-13. Flutter Masked Text
+- Firebase Auth
+- Firebase Cloud Firestore
+- Firebase Cloud Functions
+- Firebase Storage
+- Google SignIn
+- RxDart
+- ReBLoC
+- Built Value & Collection
+- Equatable
+- Injector
 
 For a full description of OSS used, see pubspec.yaml
 

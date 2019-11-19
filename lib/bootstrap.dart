@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/environments/environment.dart';
 import 'package:tailor_made/repository/main.dart';
 import 'package:tailor_made/services/session.dart';
 import 'package:tailor_made/utils/mk_first_time_login_check.dart';
-import 'package:tailor_made/dependencies.dart';
 
 Future<BootstrapModel> bootstrap(Repository repository, Environment env, [bool isTestMode = false]) async {
-  final _session = Session(environment: env, isTestMode: isTestMode);
+  final _session = Session(environment: env);
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   Dependencies(_session, _navigatorKey, repository);
@@ -16,7 +16,7 @@ Future<BootstrapModel> bootstrap(Repository repository, Environment env, [bool i
     return BootstrapModel(navigatorKey: _navigatorKey, isFirstTime: true, isTestMode: isTestMode);
   }
 
-  final isFirstTime = await MkFirstTimeLoginCheck.check(_session.environment);
+  final isFirstTime = await MkFirstTimeLoginCheck.check(env);
   return BootstrapModel(navigatorKey: _navigatorKey, isFirstTime: isFirstTime, isTestMode: isTestMode);
 }
 

@@ -15,7 +15,7 @@ class AuthBloc extends SimpleBloc<AppState> {
   @override
   Future<Action> middleware(DispatchFunction dispatcher, AppState state, Action action) async {
     if (action is OnLoginAction) {
-      Dependencies.di().session.setUserId(action.user.uid);
+      Dependencies.di().session.user.setId(action.user.uid);
       dispatcher(const InitAccountAction());
       dispatcher(const InitMeasuresAction());
       dispatcher(const InitStatsAction());
@@ -37,6 +37,7 @@ class AuthBloc extends SimpleBloc<AppState> {
   @override
   Future<Action> afterware(DispatchFunction dispatcher, AppState state, Action action) async {
     if (action is OnLogoutAction) {
+      Dependencies.di().session.user.dispose();
       dispatcher(const InitSettingsAction());
     }
     return action;

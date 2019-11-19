@@ -20,7 +20,7 @@ class FireUser implements User {
   final FirebaseUser _reference;
 
   @override
-  String get uid => _reference.uid;
+  String get uid => _reference?.uid;
 }
 
 class FireStorage implements Storage {

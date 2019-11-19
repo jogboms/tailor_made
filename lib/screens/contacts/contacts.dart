@@ -96,7 +96,7 @@ class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
           ),
           ContactsFilterButton(
             vm: widget.vm,
-            onTapSort: (SortType type) => dispatchAction(SortContacts(payload: type)),
+            onTapSort: (SortType type) => dispatchAction(SortContacts(type)),
           ),
         ],
       );
@@ -112,7 +112,7 @@ class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
         autofocus: true,
         decoration: InputDecoration(hintText: 'Search...', hintStyle: _textStyle.copyWith(color: Colors.white)),
         style: _textStyle.copyWith(color: Colors.white),
-        onChanged: (term) => dispatchAction(SearchContactAction(payload: term)),
+        onChanged: (term) => dispatchAction(SearchContactAction(term)),
       ),
       bottom: PreferredSize(
         child: SizedBox(

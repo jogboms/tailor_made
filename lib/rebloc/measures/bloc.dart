@@ -5,46 +5,17 @@ import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
+import 'package:tailor_made/rebloc/extensions.dart';
 import 'package:tailor_made/rebloc/measures/actions.dart';
 import 'package:tailor_made/utils/mk_group_model_by.dart';
 
 class MeasuresBloc extends SimpleBloc<AppState> {
-  Stream<WareContext<AppState>> _onUpdateMeasure(WareContext<AppState> context) async* {
-    try {
-      await Dependencies.di()
-          .measures
-          .update((context.action as UpdateMeasureAction).payload, Dependencies.di().session.getUserId());
-      yield context.copyWith(const InitMeasuresAction());
-    } catch (e) {
-      print(e);
-      yield context;
-    }
-  }
-
-  Stream<WareContext<AppState>> _onInitMeasure(WareContext<AppState> context) {
-    return Dependencies.di().measures.fetchAll(Dependencies.di().session.getUserId()).map((measures) {
-      if (measures.isEmpty) {
-        return UpdateMeasureAction(payload: createDefaultMeasures());
-      }
-
-      return OnDataAction<_Union>(
-        payload: _Union(measures, groupModelBy<MeasureModel>(measures, (measure) => measure.group)),
-      );
-    }).map((action) => context.copyWith(action));
-  }
-
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     MergeStream([
-      Observable(input)
-          .where((WareContext<AppState> context) => context.action is UpdateMeasureAction)
-          .switchMap(_onUpdateMeasure),
-      Observable(input)
-          .where((WareContext<AppState> context) => context.action is InitMeasuresAction)
-          .switchMap(_onInitMeasure),
-    ])
-        .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)
-        .listen((context) => context.dispatcher(context.action));
+      Observable(input).whereAction<UpdateMeasureAction>().switchMap(_onUpdateMeasure),
+      Observable(input).whereAction<InitMeasuresAction>().switchMap(_onInitMeasure),
+    ]).untilAction<OnDisposeAction>().listen((context) => context.dispatcher(context.action));
 
     return input;
   }
@@ -78,9 +49,34 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   }
 }
 
-class _Union {
+class _Union<T extends MeasureModel> {
   const _Union(this.first, this.second);
 
-  final List<MeasureModel> first;
-  final Map<String, List<MeasureModel>> second;
+  final List<T> first;
+  final Map<String, List<T>> second;
+
+  @override
+  String toString() => '_Union($first, $second)';
+}
+
+Stream<WareContext<AppState>> _onUpdateMeasure(WareContext<AppState> context) async* {
+  try {
+    await Dependencies.di()
+        .measures
+        .update((context.action as UpdateMeasureAction).payload, Dependencies.di().session.user.getId());
+    yield context.copyWith(const InitMeasuresAction());
+  } catch (e) {
+    print(e);
+    yield context;
+  }
+}
+
+Stream<WareContext<AppState>> _onInitMeasure(WareContext<AppState> context) {
+  return Dependencies.di().measures.fetchAll(Dependencies.di().session.user.getId()).map((measures) {
+    if (measures.isEmpty) {
+      return UpdateMeasureAction(createDefaultMeasures());
+    }
+
+    return OnDataAction<_Union>(_Union(measures, groupModelBy<MeasureModel>(measures, (measure) => measure.group)));
+  }).map((action) => context.copyWith(action));
 }

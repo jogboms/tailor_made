@@ -133,7 +133,7 @@ class ContactFormState extends State<ContactForm> {
     if (imageFile == null) {
       return;
     }
-    final ref = Dependencies.di().contacts.createFile(imageFile, Dependencies.di().session.getUserId());
+    final ref = Dependencies.di().contacts.createFile(imageFile, Dependencies.di().session.user.getId());
 
     setState(() => isLoading = true);
     try {
