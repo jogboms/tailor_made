@@ -4,21 +4,22 @@ import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/stats/stats.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
+import 'package:tailor_made/rebloc/extensions.dart';
 import 'package:tailor_made/rebloc/stats/actions.dart';
 
 class StatsBloc extends SimpleBloc<AppState> {
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     Observable(input)
-        .where((context) => context.action is InitStatsAction)
+        .whereAction<InitStatsAction>()
         .switchMap(
           (context) => Dependencies.di()
               .stats
               .fetch(Dependencies.di().session.user.getId())
-              .map((stats) => OnDataAction<StatsModel>(payload: stats))
+              .map((stats) => OnDataAction<StatsModel>(stats))
               .map((action) => context.copyWith(action)),
         )
-        .takeWhile((context) => context.action is! OnDisposeAction)
+        .untilAction<OnDisposeAction>()
         .listen((context) => context.dispatcher(context.action));
 
     return input;

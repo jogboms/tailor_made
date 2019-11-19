@@ -81,17 +81,17 @@ class TopButtonBar extends StatelessWidget {
   VoidCallback _onTapAccount(BuildContext context) {
     return () async {
       if (shouldSendRating) {
-        final _res = await mkShowChildDialog<int>(context: context, child: const ReviewModal());
+        final rating = await mkShowChildDialog<int>(context: context, child: const ReviewModal());
 
-        if (_res != null) {
-          StoreProvider.of<AppState>(context).dispatch(OnSendRating(payload: account, rating: _res));
+        if (rating != null) {
+          StoreProvider.of<AppState>(context).dispatch(OnSendRating(account, rating));
         }
         return;
       }
 
       if (_shouldShowIndicator) {
         await mkShowChildDialog<dynamic>(context: context, child: NoticeDialog(account: account));
-        StoreProvider.of<AppState>(context).dispatch(OnReadNotice(payload: account));
+        StoreProvider.of<AppState>(context).dispatch(OnReadNotice(account));
         return;
       }
 

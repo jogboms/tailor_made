@@ -7,18 +7,17 @@ import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/rebloc/accounts/actions.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
+import 'package:tailor_made/rebloc/extensions.dart';
 
 class AccountBloc extends SimpleBloc<AppState> {
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     MergeStream([
-      Observable(input).where((context) => context.action is InitAccountAction).switchMap(_getAccount),
-      Observable(input).where((context) => context.action is OnReadNotice).switchMap(_readNotice),
-      Observable(input).where((context) => context.action is OnSendRating).switchMap(_sendRating),
-      Observable(input).where((context) => context.action is OnPremiumSignUp).switchMap(_signUp),
-    ])
-        .takeWhile((WareContext<AppState> context) => context.action is! OnDisposeAction)
-        .listen((context) => context.dispatcher(context.action));
+      Observable(input).whereAction<InitAccountAction>().switchMap(_getAccount),
+      Observable(input).whereAction<OnReadNotice>().switchMap(_readNotice),
+      Observable(input).whereAction<OnSendRating>().switchMap(_sendRating),
+      Observable(input).whereAction<OnPremiumSignUp>().switchMap(_signUp),
+    ]).untilAction<OnDisposeAction>().listen((context) => context.dispatcher(context.action));
 
     return input;
   }
@@ -58,7 +57,7 @@ Stream<WareContext<AppState>> _readNotice(WareContext<AppState> context) async* 
 
 Stream<WareContext<AppState>> _sendRating(WareContext<AppState> context) async* {
   final _action = context.action as OnSendRating;
-  final _account = _action.payload.rebuild((b) => b
+  final _account = _action.account.rebuild((b) => b
     ..hasSendRating = true
     ..rating = _action.rating);
   await Dependencies.di().accounts.sendRating(_account);
@@ -81,6 +80,6 @@ Stream<WareContext<AppState>> _getAccount(WareContext<AppState> context) {
   return Dependencies.di()
       .accounts
       .getAccount(Dependencies.di().session.user.getId())
-      .map((account) => OnDataAction<AccountModel>(payload: account))
+      .map((account) => OnDataAction<AccountModel>(account))
       .map((action) => context.copyWith(action));
 }

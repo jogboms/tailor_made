@@ -42,6 +42,6 @@ class MkStrings {
     if (error is TimeoutException) {
       return "This action took too long. Please Retry.";
     }
-    return isDev || error is MkResponseException ? "$error" : errorMessage;
+    return isDev ? (error is MkException ? error.message : "$error") : errorMessage;
   }
 }

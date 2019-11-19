@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/rebloc/jobs/sort_type.dart';
@@ -8,19 +7,19 @@ class InitJobsAction extends Action {
 }
 
 class ToggleCompleteJob extends Action {
-  const ToggleCompleteJob({@required this.payload});
+  const ToggleCompleteJob(this.payload);
 
   final JobModel payload;
 }
 
 class SortJobs extends Action {
-  const SortJobs({@required this.payload});
+  const SortJobs(this.payload);
 
   final SortType payload;
 }
 
 class SearchSuccessJobAction extends Action {
-  const SearchSuccessJobAction({@required this.payload});
+  const SearchSuccessJobAction(this.payload);
 
   final List<JobModel> payload;
 }
@@ -34,7 +33,7 @@ class StartSearchJobAction extends Action {
 }
 
 class SearchJobAction extends Action {
-  const SearchJobAction({@required this.payload});
+  const SearchJobAction(this.payload);
 
   final String payload;
 }

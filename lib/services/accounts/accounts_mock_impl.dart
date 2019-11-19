@@ -4,10 +4,15 @@ import 'package:tailor_made/services/accounts/accounts.dart';
 
 class AccountsMockImpl extends Accounts {
   @override
-  Future<MockUser> signInWithGoogle() async => const MockUser();
+  Future<void> signInWithGoogle() async {
+    // TODO
+    return null;
+  }
 
   @override
-  Future<MockUser> get onAuthStateChanged async => const MockUser();
+  Stream<MockUser> get onAuthStateChanged async* {
+    yield const MockUser();
+  }
 
   @override
   Future<void> signout() {

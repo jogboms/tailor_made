@@ -5,9 +5,11 @@ class Session {
   Session({@required Environment environment})
       : assert(environment != null),
         isMock = environment == Environment.MOCK,
+        isDev = environment == Environment.DEVELOPMENT,
         user = _User();
 
   final bool isMock;
+  final bool isDev;
   final _User user;
 }
 
@@ -20,4 +22,6 @@ class _User {
   }
 
   String getId() => _id;
+
+  void dispose() => _id = null;
 }

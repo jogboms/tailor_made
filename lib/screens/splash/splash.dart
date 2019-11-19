@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
@@ -63,17 +61,18 @@ class SplashPage extends StatelessWidget {
                 ],
               ),
             ),
-            FutureBuilder<User>(
-              future: Dependencies.di().accounts.onAuthStateChanged,
+            StreamBuilder<User>(
+              stream: Dependencies.di().accounts.onAuthStateChanged,
               builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-                if (snapshot.hasData && snapshot.data != null) {
+                if (snapshot.hasData && snapshot.data != null && snapshot.data?.uid != null) {
                   WidgetsBinding.instance.addPostFrameCallback(
                     (_) async {
-                      Dependencies.di().session.user.setId(snapshot.data.uid);
                       StoreProvider.of<AppState>(context).dispatch(OnLoginAction(snapshot.data));
                       Dependencies.di().sharedCoordinator.toHome();
                     },
                   );
+
+                  return const SizedBox();
                 }
 
                 return _Content(isColdStart: isColdStart);
@@ -97,12 +96,14 @@ class _Content extends StatefulWidget {
 
 class _ContentState extends State<_Content> {
   bool isLoading;
-  bool canRestartSignin = false;
 
   @override
   void initState() {
     super.initState();
     isLoading = widget.isColdStart;
+    if (widget.isColdStart) {
+      _onLogin();
+    }
   }
 
   @override
@@ -112,7 +113,7 @@ class _ContentState extends State<_Content> {
       builder: (BuildContext context, DispatchFunction dispatch, SettingsViewModel vm) {
         return Stack(
           children: [
-            if (!(isLoading && (widget.isColdStart || canRestartSignin) && !vm.hasError))
+            if (!isLoading || !widget.isColdStart || vm.hasError)
               const Center(
                 child: Image(
                   image: MkImages.logo,
@@ -125,7 +126,7 @@ class _ContentState extends State<_Content> {
               top: null,
               bottom: 124.0,
               child: Builder(builder: (_) {
-                if (vm.isLoading && widget.isColdStart) {
+                if ((vm.isLoading && widget.isColdStart) || isLoading) {
                   return const MkLoadingSpinner();
                 }
 
@@ -134,12 +135,8 @@ class _ContentState extends State<_Content> {
                     padding: const EdgeInsets.symmetric(horizontal: 48.0, vertical: 16.0),
                     child: Center(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          const Text(
-                            "You need a stable internet connection to proceed.",
-                            textAlign: TextAlign.center,
-                          ),
+                          Text(vm.error.toString(), textAlign: TextAlign.center),
                           const SizedBox(height: 8.0),
                           RaisedButton(
                             color: Colors.white,
@@ -153,14 +150,6 @@ class _ContentState extends State<_Content> {
                       ),
                     ),
                   );
-                }
-
-                if (widget.isColdStart && !canRestartSignin) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) => _onLogin());
-                }
-
-                if (isLoading) {
-                  return const MkLoadingSpinner();
                 }
 
                 return Center(
@@ -179,46 +168,15 @@ class _ContentState extends State<_Content> {
     );
   }
 
-  Future<void> _onLogin() async {
+  void _onLogin() async {
     try {
       setState(() => isLoading = true);
       await Dependencies.di().accounts.signInWithGoogle();
     } catch (e) {
-      // TODO disabled
-      String message = "";
-
-      switch (e?.code) {
-        case "exception":
-        case "sign_in_failed":
-          if (e?.message?.contains("administrator") ?? false) {
-            message = "It seems this account has been disabled. Contact an Admin.";
-            break;
-          }
-          if (e?.message?.contains("NETWORK_ERROR") ?? false) {
-            message = "Please check if you have your internet switched on.";
-            break;
-          }
-          if (e?.message?.contains("network") ?? false) {
-            message = "A stable internet connection is required.";
-            break;
-          }
-          continue fallthrough;
-
-        // ignore: no_duplicate_case_values
-        fallthrough:
-        case "sign_in_failed":
-          message = "Sorry, We could not connect. Try again.";
-          break;
-
-        case "canceled":
-        default:
-      }
+      final message = MkStrings.genericError(e, Dependencies.di().session.isDev);
 
       if (message.isNotEmpty) {
-        SnackBarProvider.of(context).show(
-          message,
-          duration: const Duration(milliseconds: 3500),
-        );
+        SnackBarProvider.of(context).show(message, duration: const Duration(milliseconds: 3500));
       }
 
       await Dependencies.di().accounts.signout();
@@ -227,10 +185,7 @@ class _ContentState extends State<_Content> {
         return;
       }
 
-      setState(() {
-        isLoading = false;
-        canRestartSignin = true;
-      });
+      setState(() => isLoading = false);
 
       SnackBarProvider.of(context).show(e.toString());
     }

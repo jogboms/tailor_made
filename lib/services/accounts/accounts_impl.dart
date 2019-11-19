@@ -9,10 +9,10 @@ class AccountsImpl extends Accounts {
   final FirebaseRepository repository;
 
   @override
-  Future<FireUser> signInWithGoogle() => repository.auth.signInWithGoogle();
+  Future<void> signInWithGoogle() => repository.auth.signInWithGoogle();
 
   @override
-  Future<FireUser> get onAuthStateChanged => repository.auth.onAuthStateChanged.firstWhere((user) => user != null);
+  Stream<FireUser> get onAuthStateChanged => repository.auth.onAuthStateChanged;
 
   @override
   Future<void> signout() => repository.auth.signOutWithGoogle();

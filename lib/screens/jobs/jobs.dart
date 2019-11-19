@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/providers/dispatch_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/jobs/actions.dart';
@@ -10,7 +11,6 @@ import 'package:tailor_made/screens/jobs/_partials/jobs_list.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class JobsPage extends StatelessWidget {
@@ -84,7 +84,7 @@ class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
           ),
           JobsFilterButton(
             vm: widget.vm,
-            onTapSort: (SortType type) => dispatchAction(SortJobs(payload: type)),
+            onTapSort: (SortType type) => dispatchAction(SortJobs(type)),
           ),
         ],
       );
@@ -100,7 +100,7 @@ class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
         autofocus: true,
         decoration: InputDecoration(hintText: 'Search...', hintStyle: _textStyle.copyWith(color: Colors.white)),
         style: _textStyle.copyWith(color: Colors.white),
-        onChanged: (term) => dispatchAction(SearchJobAction(payload: term)),
+        onChanged: (term) => dispatchAction(SearchJobAction(term)),
       ),
       bottom: PreferredSize(
         child: SizedBox(

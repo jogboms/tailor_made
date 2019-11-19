@@ -5,6 +5,7 @@ import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
+import 'package:tailor_made/rebloc/extensions.dart';
 import 'package:tailor_made/rebloc/measures/actions.dart';
 import 'package:tailor_made/utils/mk_group_model_by.dart';
 
@@ -12,11 +13,9 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     MergeStream([
-      Observable(input).where((context) => context.action is UpdateMeasureAction).switchMap(_onUpdateMeasure),
-      Observable(input).where((context) => context.action is InitMeasuresAction).switchMap(_onInitMeasure),
-    ])
-        .takeWhile((context) => context.action is! OnDisposeAction)
-        .listen((context) => context.dispatcher(context.action));
+      Observable(input).whereAction<UpdateMeasureAction>().switchMap(_onUpdateMeasure),
+      Observable(input).whereAction<InitMeasuresAction>().switchMap(_onInitMeasure),
+    ]).untilAction<OnDisposeAction>().listen((context) => context.dispatcher(context.action));
 
     return input;
   }
@@ -75,11 +74,9 @@ Stream<WareContext<AppState>> _onUpdateMeasure(WareContext<AppState> context) as
 Stream<WareContext<AppState>> _onInitMeasure(WareContext<AppState> context) {
   return Dependencies.di().measures.fetchAll(Dependencies.di().session.user.getId()).map((measures) {
     if (measures.isEmpty) {
-      return UpdateMeasureAction(payload: createDefaultMeasures());
+      return UpdateMeasureAction(createDefaultMeasures());
     }
 
-    return OnDataAction<_Union>(
-      payload: _Union(measures, groupModelBy<MeasureModel>(measures, (measure) => measure.group)),
-    );
+    return OnDataAction<_Union>(_Union(measures, groupModelBy<MeasureModel>(measures, (measure) => measure.group)));
   }).map((action) => context.copyWith(action));
 }

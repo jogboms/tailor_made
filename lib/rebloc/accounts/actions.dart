@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/models/account.dart';
 
@@ -7,21 +6,21 @@ class InitAccountAction extends Action {
 }
 
 class OnPremiumSignUp extends Action {
-  const OnPremiumSignUp({@required this.payload});
+  const OnPremiumSignUp(this.payload);
 
   final AccountModel payload;
 }
 
 class OnReadNotice extends Action {
-  const OnReadNotice({@required this.payload});
+  const OnReadNotice(this.payload);
 
   final AccountModel payload;
 }
 
 class OnSendRating extends Action {
-  const OnSendRating({@required this.payload, @required this.rating});
+  const OnSendRating(this.account, this.rating);
 
-  final AccountModel payload;
+  final AccountModel account;
   final int rating;
 }
 

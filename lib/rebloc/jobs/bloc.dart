@@ -6,6 +6,7 @@ import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
+import 'package:tailor_made/rebloc/extensions.dart';
 import 'package:tailor_made/rebloc/jobs/actions.dart';
 import 'package:tailor_made/rebloc/jobs/sort_type.dart';
 
@@ -13,11 +14,9 @@ class JobsBloc extends SimpleBloc<AppState> {
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     MergeStream([
-      Observable(input).where((context) => context.action is SearchJobAction).switchMap(_makeSearch),
-      Observable(input).where((context) => context.action is InitJobsAction).switchMap(_onAfterLogin),
-    ])
-        .takeWhile((context) => context.action is! OnDisposeAction)
-        .listen((context) => context.dispatcher(context.action));
+      Observable(input).whereAction<SearchJobAction>().switchMap(_makeSearch),
+      Observable(input).whereAction<InitJobsAction>().switchMap(_onAfterLogin),
+    ]).untilAction<OnDisposeAction>().listen((context) => context.dispatcher(context.action));
 
     return input;
   }
@@ -90,39 +89,24 @@ class JobsBloc extends SimpleBloc<AppState> {
   }
 }
 
-final _foldPrice = (double acc, PaymentModel model) => acc + model.price;
-
 Comparator<JobModel> _sort(SortType sortType) {
   switch (sortType) {
     case SortType.active:
-      {
-        return (a, b) => (a.isComplete == b.isComplete) ? 0 : a.isComplete ? 1 : -1;
-      }
+      return (a, b) => (a.isComplete == b.isComplete) ? 0 : a.isComplete ? 1 : -1;
     case SortType.names:
-      {
-        return (a, b) => a.name.compareTo(b.name);
-      }
+      return (a, b) => a.name.compareTo(b.name);
     case SortType.payments:
-      {
-        return (a, b) => b.payments.fold<double>(0.0, _foldPrice).compareTo(a.payments.fold<double>(0.0, _foldPrice));
-      }
+      final _foldPrice = (double acc, PaymentModel model) => acc + model.price;
+      return (a, b) => b.payments.fold<double>(0.0, _foldPrice).compareTo(a.payments.fold<double>(0.0, _foldPrice));
     case SortType.owed:
-      {
-        return (a, b) => b.pendingPayment.compareTo(a.pendingPayment);
-      }
+      return (a, b) => b.pendingPayment.compareTo(a.pendingPayment);
     case SortType.price:
-      {
-        return (a, b) => b.price.compareTo(a.price);
-      }
+      return (a, b) => b.price.compareTo(a.price);
     case SortType.recent:
-      {
-        return (a, b) => b.createdAt.compareTo(a.createdAt);
-      }
+      return (a, b) => b.createdAt.compareTo(a.createdAt);
     case SortType.reset:
     default:
-      {
-        return (a, b) => a.id.compareTo(b.id);
-      }
+      return (a, b) => a.id.compareTo(b.id);
   }
 }
 
@@ -134,7 +118,7 @@ Stream<WareContext<AppState>> _makeSearch(WareContext<AppState> context) {
       .where((text) => text.length > 1)
       .debounceTime(const Duration(milliseconds: 750))
       .map((text) => SearchSuccessJobAction(
-            payload: context.state.jobs.jobs
+            context.state.jobs.jobs
                 .where((job) => job.name.contains(RegExp(r'' + text + '', caseSensitive: false)))
                 .toList(),
           ))
@@ -146,6 +130,6 @@ Stream<WareContext<AppState>> _onAfterLogin(WareContext<AppState> context) {
   return Dependencies.di()
       .jobs
       .fetchAll(Dependencies.di().session.user.getId())
-      .map((jobs) => OnDataAction<List<JobModel>>(payload: jobs))
+      .map((jobs) => OnDataAction<List<JobModel>>(jobs))
       .map((action) => context.copyWith(action));
 }

@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/models/measure.dart';
 
@@ -7,7 +6,7 @@ class InitMeasuresAction extends Action {
 }
 
 class UpdateMeasureAction extends Action {
-  const UpdateMeasureAction({@required this.payload});
+  const UpdateMeasureAction(this.payload);
 
   final List<MeasureModel> payload;
 }
