@@ -17,10 +17,16 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 
 class ContactForm extends StatefulWidget {
-  const ContactForm({Key key, @required this.contact, @required this.onHandleSubmit}) : super(key: key);
+  const ContactForm({
+    Key key,
+    @required this.contact,
+    @required this.onHandleSubmit,
+    @required this.userId,
+  }) : super(key: key);
 
   final ValueSetter<ContactModel> onHandleSubmit;
   final ContactModel contact;
+  final String userId;
 
   @override
   ContactFormState createState() => ContactFormState();
@@ -133,7 +139,7 @@ class ContactFormState extends State<ContactForm> {
     if (imageFile == null) {
       return;
     }
-    final ref = Dependencies.di().contacts.createFile(imageFile, Dependencies.di().session.user.getId());
+    final ref = Dependencies.di().contacts.createFile(imageFile, widget.userId);
 
     setState(() => isLoading = true);
     try {

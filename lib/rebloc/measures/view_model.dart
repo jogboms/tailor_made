@@ -7,6 +7,7 @@ class MeasuresViewModel extends Equatable {
   MeasuresViewModel(AppState state)
       : _model = state.measures.measures,
         grouped = state.measures.grouped,
+        userId = state.account.account.uid,
         isLoading = state.measures.status == StateStatus.loading,
         hasError = state.measures.status == StateStatus.failure,
         error = state.measures.error;
@@ -17,10 +18,11 @@ class MeasuresViewModel extends Equatable {
 
   List<MeasureModel> get model => _model?.toList();
 
+  final String userId;
   final bool isLoading;
   final bool hasError;
   final dynamic error;
 
   @override
-  List<Object> get props => [model, isLoading, hasError, error];
+  List<Object> get props => [model, userId, isLoading, hasError, error];
 }

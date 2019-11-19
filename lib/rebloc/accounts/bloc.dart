@@ -79,7 +79,7 @@ Stream<WareContext<AppState>> _signUp(WareContext<AppState> context) async* {
 Stream<WareContext<AppState>> _getAccount(WareContext<AppState> context) {
   return Dependencies.di()
       .accounts
-      .getAccount(Dependencies.di().session.user.getId())
+      .getAccount((context.action as InitAccountAction).userId)
       .map((account) => OnDataAction<AccountModel>(account))
       .map((action) => context.copyWith(action));
 }

@@ -115,7 +115,7 @@ Comparator<ContactModel> _sort(SortType sortType) {
 Stream<WareContext<AppState>> _onAfterLogin(WareContext<AppState> context) {
   return Dependencies.di()
       .contacts
-      .fetchAll(Dependencies.di().session.user.getId())
+      .fetchAll((context.action as InitContactsAction).userId)
       .map((contacts) => OnDataAction<List<ContactModel>>(contacts))
       .map((action) => context.copyWith(action));
 }

@@ -51,7 +51,7 @@ class _AppState extends State<App> {
               title: MkStrings.appName,
               color: Colors.white,
               navigatorKey: bootstrap.navigatorKey,
-              navigatorObservers: widget.navigatorObservers,
+              navigatorObservers: widget.navigatorObservers ?? [],
               theme: ThemeProvider.of(context).themeData(Theme.of(context)),
               builder: (_, child) => Builder(builder: (BuildContext context) {
                 MkScaleUtil.initialize(context: context, size: Size(1080, 1920));

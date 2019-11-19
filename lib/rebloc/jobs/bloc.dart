@@ -129,7 +129,7 @@ Stream<WareContext<AppState>> _makeSearch(WareContext<AppState> context) {
 Stream<WareContext<AppState>> _onAfterLogin(WareContext<AppState> context) {
   return Dependencies.di()
       .jobs
-      .fetchAll(Dependencies.di().session.user.getId())
+      .fetchAll((context.action as InitJobsAction).userId)
       .map((jobs) => OnDataAction<List<JobModel>>(jobs))
       .map((action) => context.copyWith(action));
 }

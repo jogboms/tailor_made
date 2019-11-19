@@ -14,6 +14,7 @@ class ContactsViewModel extends Equatable {
         isSearching = state.contacts.isSearching,
         hasSortFn = state.contacts.hasSortFn,
         measures = state.measures.grouped,
+        userId = state.account.account.uid,
         _jobs = state.jobs.jobs,
         sortFn = state.contacts.sortFn,
         isLoading = state.contacts.status == StateStatus.loading,
@@ -48,6 +49,8 @@ class ContactsViewModel extends Equatable {
 
   String contactID;
 
+  final String userId;
+
   final BuiltList _searchResults;
 
   List<ContactModel> get searchResults => _searchResults?.toList();
@@ -71,5 +74,5 @@ class ContactsViewModel extends Equatable {
 
   @override
   List<Object> get props =>
-      [model, hasSortFn, sortFn, isSearching, jobs, contacts, searchResults, isLoading, hasError, error];
+      [model, hasSortFn, sortFn, userId, isSearching, jobs, contacts, searchResults, isLoading, hasError, error];
 }

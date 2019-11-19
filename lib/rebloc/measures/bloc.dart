@@ -61,10 +61,9 @@ class _Union<T extends MeasureModel> {
 
 Stream<WareContext<AppState>> _onUpdateMeasure(WareContext<AppState> context) async* {
   try {
-    await Dependencies.di()
-        .measures
-        .update((context.action as UpdateMeasureAction).payload, Dependencies.di().session.user.getId());
-    yield context.copyWith(const InitMeasuresAction());
+    final action = context.action as UpdateMeasureAction;
+    await Dependencies.di().measures.update(action.payload, action.userId);
+    yield context.copyWith(InitMeasuresAction(action.userId));
   } catch (e) {
     print(e);
     yield context;
@@ -72,9 +71,10 @@ Stream<WareContext<AppState>> _onUpdateMeasure(WareContext<AppState> context) as
 }
 
 Stream<WareContext<AppState>> _onInitMeasure(WareContext<AppState> context) {
-  return Dependencies.di().measures.fetchAll(Dependencies.di().session.user.getId()).map((measures) {
+  final userId = (context.action as InitMeasuresAction).userId;
+  return Dependencies.di().measures.fetchAll(userId).map((measures) {
     if (measures.isEmpty) {
-      return UpdateMeasureAction(createDefaultMeasures());
+      return UpdateMeasureAction(createDefaultMeasures(), userId);
     }
 
     return OnDataAction<_Union>(_Union(measures, groupModelBy<MeasureModel>(measures, (measure) => measure.group)));

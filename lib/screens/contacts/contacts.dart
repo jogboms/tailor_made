@@ -51,7 +51,7 @@ class _ContactsPageState extends State<ContactsPage> with DispatchProvider<AppSt
             }),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.person_add),
-              onPressed: () => Dependencies.di().contactsCoordinator.toCreateContact(),
+              onPressed: () => Dependencies.di().contactsCoordinator.toCreateContact(vm.userId),
             ),
           ),
           onWillPop: () async {

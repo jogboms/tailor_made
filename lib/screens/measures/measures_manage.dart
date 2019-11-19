@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/measures/view_model.dart';
@@ -10,10 +11,11 @@ import 'package:tailor_made/screens/measures/_partials/measures_slide_block.dart
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
-import 'package:tailor_made/dependencies.dart';
 
 class MeasuresManagePage extends StatefulWidget {
-  const MeasuresManagePage({Key key}) : super(key: key);
+  const MeasuresManagePage({Key key, @required this.userId}) : super(key: key);
+
+  final String userId;
 
   @override
   _MeasuresManagePageState createState() => _MeasuresManagePageState();
@@ -45,7 +47,7 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> with SnackBarPr
         backgroundColor: kAccentColor,
         foregroundColor: Colors.white,
         label: const Text("Add Group"),
-        onPressed: () => Dependencies.di().measuresCoordinator.toCreateMeasures(),
+        onPressed: () => Dependencies.di().measuresCoordinator.toCreateMeasures(widget.userId),
       ),
     );
   }
@@ -71,6 +73,7 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> with SnackBarPr
                   MeasureSlideBlock(
                     title: vm.grouped.keys.elementAt(i),
                     measures: vm.grouped.values.elementAt(i),
+                    userId: vm.userId,
                   ),
                 const SizedBox(height: 72.0)
               ],

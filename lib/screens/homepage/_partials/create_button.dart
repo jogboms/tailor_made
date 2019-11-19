@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 enum _CreateOptions { contacts, jobs }
 
 class CreateButton extends StatefulWidget {
-  const CreateButton({Key key, @required this.contacts}) : super(key: key);
+  const CreateButton({Key key, @required this.userId, @required this.contacts}) : super(key: key);
 
   final List<ContactModel> contacts;
+  final String userId;
 
   @override
   _CreateButtonState createState() => _CreateButtonState();
@@ -76,10 +77,10 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
       );
       switch (result) {
         case _CreateOptions.contacts:
-          Dependencies.di().contactsCoordinator.toCreateContact();
+          Dependencies.di().contactsCoordinator.toCreateContact(widget.userId);
           break;
         case _CreateOptions.jobs:
-          Dependencies.di().jobsCoordinator.toCreateJob(contacts);
+          Dependencies.di().jobsCoordinator.toCreateJob(widget.userId, contacts);
           break;
       }
     };

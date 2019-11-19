@@ -15,8 +15,8 @@ class MeasuresCoordinator extends CoordinatorBase {
     navigator?.push<void>(MkNavigate.slideIn(MeasuresPage(measurements: measures), fullscreenDialog: true));
   }
 
-  void toManageMeasures() {
-    navigator?.push<void>(MkNavigate.slideIn(const MeasuresManagePage()));
+  void toManageMeasures(String userId) {
+    navigator?.push<void>(MkNavigate.slideIn(MeasuresManagePage(userId: userId)));
   }
 
   void toCreateMeasures([String groupName, String unitValue, List<MeasureModel> measures]) {

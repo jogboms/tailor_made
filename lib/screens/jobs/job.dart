@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
@@ -16,7 +17,6 @@ import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class JobPage extends StatefulWidget {
@@ -99,9 +99,9 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
                       ),
                     ),
                     const SizedBox(height: 4.0),
-                    GalleryGrids(job: job),
+                    GalleryGrids(job: job, userId: vm.userId),
                     const SizedBox(height: 4.0),
-                    PaymentGrids(job: job),
+                    PaymentGrids(job: job, userId: vm.userId),
                     const SizedBox(height: 32.0),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),

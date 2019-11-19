@@ -3,7 +3,9 @@ import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/rebloc/jobs/sort_type.dart';
 
 class InitJobsAction extends Action {
-  const InitJobsAction();
+  const InitJobsAction(this.userId);
+
+  final String userId;
 }
 
 class ToggleCompleteJob extends Action {

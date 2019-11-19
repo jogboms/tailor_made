@@ -13,7 +13,9 @@ import 'package:tailor_made/screens/contacts/_partials/contact_form.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 
 class ContactsCreatePage extends StatefulWidget {
-  const ContactsCreatePage({Key key}) : super(key: key);
+  const ContactsCreatePage({Key key, @required this.userId}) : super(key: key);
+
+  final String userId;
 
   @override
   _ContactsCreatePageState createState() => _ContactsCreatePageState();
@@ -30,7 +32,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
   @override
   void initState() {
     super.initState();
-    contact = ContactModel((b) => b..userID = Dependencies.di().session.user.getId());
+    contact = ContactModel((b) => b..userID = widget.userId);
   }
 
   @override
@@ -52,7 +54,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
           ),
         ],
       ),
-      body: ContactForm(key: _formKey, contact: contact, onHandleSubmit: _handleSubmit),
+      body: ContactForm(key: _formKey, contact: contact, onHandleSubmit: _handleSubmit, userId: widget.userId),
     );
   }
 
@@ -87,7 +89,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
           ..location = _contact.location,
       );
 
-      Dependencies.di().contacts.update(contact, Dependencies.di().session.user.getId()).listen((snap) async {
+      Dependencies.di().contacts.update(contact, widget.userId).listen((snap) async {
         closeLoadingSnackBar();
         showInSnackBar("Successfully Added");
 

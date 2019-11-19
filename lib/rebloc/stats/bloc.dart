@@ -15,7 +15,7 @@ class StatsBloc extends SimpleBloc<AppState> {
         .switchMap(
           (context) => Dependencies.di()
               .stats
-              .fetch(Dependencies.di().session.user.getId())
+              .fetch((context.action as InitStatsAction).userId)
               .map((stats) => OnDataAction<StatsModel>(stats))
               .map((action) => context.copyWith(action)),
         )

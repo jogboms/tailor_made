@@ -31,7 +31,7 @@ class ContactPage extends StatelessWidget {
             appBar: AppBar(
               backgroundColor: kAccentColor,
               automaticallyImplyLeading: false,
-              title: ContactAppBar(contact: _contact, grouped: viewModel.measuresGrouped),
+              title: ContactAppBar(userId: viewModel.userId, contact: _contact, grouped: viewModel.measuresGrouped),
               titleSpacing: 0.0,
               centerTitle: false,
               brightness: Brightness.dark,

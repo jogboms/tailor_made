@@ -6,7 +6,6 @@ import 'package:tailor_made/coordinator/jobs_coordinator.dart';
 import 'package:tailor_made/coordinator/measures_coordinator.dart';
 import 'package:tailor_made/coordinator/payments_coordinator.dart';
 import 'package:tailor_made/coordinator/shared_coordinator.dart';
-import 'package:tailor_made/coordinator/splash_coordinator.dart';
 import 'package:tailor_made/coordinator/tasks_coordinator.dart';
 import 'package:tailor_made/repository/main.dart';
 import 'package:tailor_made/services/accounts/main.dart';
@@ -40,7 +39,6 @@ class Dependencies {
       ..registerSingleton<JobsCoordinator>((_) => JobsCoordinator(navigatorKey))
       ..registerSingleton<MeasuresCoordinator>((_) => MeasuresCoordinator(navigatorKey))
       ..registerSingleton<PaymentsCoordinator>((_) => PaymentsCoordinator(navigatorKey))
-      ..registerSingleton<SplashCoordinator>((_) => SplashCoordinator(navigatorKey))
       ..registerSingleton<TasksCoordinator>((_) => TasksCoordinator(navigatorKey));
   }
 
@@ -77,8 +75,6 @@ class Dependencies {
   MeasuresCoordinator get measuresCoordinator => Injector.appInstance.getDependency<MeasuresCoordinator>();
 
   PaymentsCoordinator get paymentsCoordinator => Injector.appInstance.getDependency<PaymentsCoordinator>();
-
-  SplashCoordinator get splashCoordinator => Injector.appInstance.getDependency<SplashCoordinator>();
 
   TasksCoordinator get tasksCoordinator => Injector.appInstance.getDependency<TasksCoordinator>();
 }

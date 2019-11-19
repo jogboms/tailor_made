@@ -1,26 +1,18 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/contact.dart';
-import 'package:tailor_made/models/image.dart';
-import 'package:tailor_made/models/job.dart';
-import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/measures/view_model.dart';
-import 'package:tailor_made/repository/models.dart';
 import 'package:tailor_made/screens/jobs/_partials/avatar_app_bar.dart';
 import 'package:tailor_made/screens/jobs/_partials/gallery_grid_item.dart';
 import 'package:tailor_made/screens/jobs/_partials/input_dropdown.dart';
+import 'package:tailor_made/screens/jobs/jobs_create_view_model.dart';
 import 'package:tailor_made/screens/measures/_partials/measure_create_items.dart';
-import 'package:tailor_made/utils/ui/mk_image_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/form_section_header.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
@@ -28,57 +20,29 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
-const _kGridWidth = 85.0;
-
-class FireImage {
-  Storage ref;
-  ImageModel image;
-  bool isLoading = true;
-  bool isSucess = false;
-}
-
 class JobsCreatePage extends StatefulWidget {
   const JobsCreatePage({
     Key key,
     this.contact,
     @required this.contacts,
+    @required this.userId,
   }) : super(key: key);
 
   final ContactModel contact;
   final List<ContactModel> contacts;
+  final String userId;
 
   @override
   _JobsCreatePageState createState() => _JobsCreatePageState();
 }
 
-class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMixin {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  List<FireImage> fireImages = [];
-  JobModelBuilder job;
-  ContactModel contact;
+class _JobsCreatePageState extends JobsCreateViewModel {
   MoneyMaskedTextController controller = MoneyMaskedTextController(
     decimalSeparator: '.',
     thousandSeparator: ',',
   );
   final FocusNode _amountFocusNode = FocusNode();
   final FocusNode _additionFocusNode = FocusNode();
-
-  bool _autovalidate = false;
-
-  @override
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    super.initState();
-    contact = widget.contact;
-    job = JobModel(
-      (b) => b
-        ..userID = Dependencies.di().session.user.getId()
-        ..contactID = contact?.id
-        ..measurements = contact?.measurements?.toBuilder(),
-    ).toBuilder();
-  }
 
   @override
   void dispose() {
@@ -91,52 +55,6 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
   Widget build(BuildContext context) {
     final ThemeProvider theme = ThemeProvider.of(context);
 
-    final List<Widget> children = [];
-
-    if (contact != null) {
-      children.add(
-        const FormSectionHeader(title: "Style Name"),
-      );
-      children.add(buildEnterName());
-
-      children.add(
-        const FormSectionHeader(title: "Payment", trailing: "Naira (₦)"),
-      );
-      children.add(buildEnterAmount());
-
-      children.add(
-        const FormSectionHeader(title: "Due Date"),
-      );
-      children.add(buildDueDate());
-
-      children.add(
-        const FormSectionHeader(title: "References"),
-      );
-      children.add(buildImageGrid());
-
-      children.add(
-        const FormSectionHeader(title: "Measurements", trailing: "Inches (In)"),
-      );
-      children.add(buildCreateMeasure());
-
-      children.add(
-        const FormSectionHeader(title: "Additional Notes"),
-      );
-      children.add(buildAdditional());
-
-      children.add(
-        Padding(
-          child: MkPrimaryButton(
-            child: const Text("FINISH"),
-            onPressed: _handleSubmit,
-          ),
-          padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
-        ),
-      );
-
-      children.add(const SizedBox(height: 32.0));
-    }
-
     return Scaffold(
       key: scaffoldKey,
       appBar: contact != null
@@ -145,58 +63,18 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
               imageUrl: contact.imageUrl,
               elevation: 1.0,
               backgroundColor: Colors.white,
-              title: Text(
-                contact.fullname,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.title,
-              ),
+              title: Text(contact.fullname, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.title),
               subtitle: Text("${contact.totalJobs} Jobs", style: theme.small),
               actions: widget.contacts.isNotEmpty
                   ? <Widget>[
-                      IconButton(
-                        icon: const Icon(Icons.people),
-                        onPressed: onSelectContact,
-                      )
+                      IconButton(icon: const Icon(Icons.people), onPressed: onSelectContact),
                     ]
                   : null,
             )
-          : const MkAppBar(
-              title: Text(""),
-            ),
-      body: buildBody(theme, children),
-    );
-  }
-
-  Widget buildCreateMeasure() {
-    return ViewModelSubscriber<AppState, MeasuresViewModel>(
-      converter: (store) => MeasuresViewModel(store),
-      builder: (BuildContext context, DispatchFunction dispatch, MeasuresViewModel vm) {
-        return MeasureCreateItems(
-          grouped: vm.grouped,
-          measurements: job.measurements.build().toMap(),
-        );
-      },
-    );
-  }
-
-  Widget buildBody(ThemeProvider theme, List<Widget> children) {
-    return contact != null
-        ? SafeArea(
-            top: false,
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                autovalidate: _autovalidate,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: children,
-                ),
-              ),
-            ),
-          )
-        : Center(
+          : const MkAppBar(title: Text("")),
+      body: Builder(builder: (BuildContext context) {
+        if (contact == null) {
+          return Center(
             child: MkClearButton(
               onPressed: onSelectContact,
               child: Column(
@@ -213,54 +91,58 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
               ),
             ),
           );
+        }
+
+        return SafeArea(
+          top: false,
+          child: SingleChildScrollView(
+            child: Form(
+              key: formKey,
+              autovalidate: autovalidate,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const FormSectionHeader(title: "Style Name"),
+                  _buildEnterName(),
+                  const FormSectionHeader(title: "Payment", trailing: "Naira (₦)"),
+                  _buildEnterAmount(),
+                  const FormSectionHeader(title: "Due Date"),
+                  _buildDueDate(),
+                  const FormSectionHeader(title: "References"),
+                  _buildImageGrid(),
+                  const FormSectionHeader(title: "Measurements", trailing: "Inches (In)"),
+                  _buildMeasures(),
+                  const FormSectionHeader(title: "Additional Notes"),
+                  _buildAdditional(),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 82.0),
+                    child: MkPrimaryButton(
+                      child: const Text("FINISH"),
+                      onPressed: handleSubmit,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }),
+    );
   }
 
-  void onSelectContact() async {
-    final selectedContact = await Dependencies.di().contactsCoordinator.toContactsList(widget.contacts);
-    if (selectedContact != null) {
-      setState(() {
-        contact = selectedContact;
-        job
-          ..contactID = contact?.id
-          ..measurements = (contact?.measurements ?? BuiltMap.from(<String, double>{})).toBuilder();
-      });
-    }
+  Widget _buildMeasures() {
+    return ViewModelSubscriber<AppState, MeasuresViewModel>(
+      converter: (store) => MeasuresViewModel(store),
+      builder: (_, __, MeasuresViewModel vm) {
+        return MeasureCreateItems(
+          grouped: vm.grouped,
+          measurements: job.measurements.build().toMap(),
+        );
+      },
+    );
   }
 
-  void _handleSubmit() async {
-    final FormState form = _formKey.currentState;
-    if (form == null) {
-      return;
-    }
-
-    if (!form.validate()) {
-      _autovalidate = true;
-      showInSnackBar(MkStrings.fixErrors);
-    } else {
-      form.save();
-
-      showLoadingSnackBar();
-
-      job
-        ..pendingPayment = job.price
-        ..images =
-            BuiltList<ImageModel>(fireImages.where((img) => img.image != null).map<ImageModel>((img) => img.image))
-                .toBuilder()
-        ..contactID = contact.id;
-
-      try {
-        Dependencies.di().jobs.update(job.build(), Dependencies.di().session.user.getId()).listen((snap) {
-          closeLoadingSnackBar();
-          Dependencies.di().jobsCoordinator.toJob(snap);
-        });
-      } catch (e) {
-        closeLoadingSnackBar();
-        showInSnackBar(e.toString());
-      }
-    }
-  }
-
-  Widget buildAdditional() {
+  Widget _buildAdditional() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: TextFormField(
@@ -273,12 +155,12 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
           hintText: "Fabric color, size, special requirements...",
         ),
         onSaved: (value) => job.notes = value.trim(),
-        onFieldSubmitted: (value) => _handleSubmit(),
+        onFieldSubmitted: (value) => handleSubmit(),
       ),
     );
   }
 
-  Container buildImageGrid() {
+  Widget _buildImageGrid() {
     final List<Widget> imagesList = List<Widget>.generate(
       fireImages.length,
       (int index) {
@@ -286,25 +168,20 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
         final image = fireImage.image;
 
         if (image == null) {
-          return const Center(
-            widthFactor: 2.5,
-            child: MkLoadingSpinner(),
-          );
+          return const Center(widthFactor: 2.5, child: MkLoadingSpinner());
         }
 
         return GalleryGridItem(
           image: image,
           tag: "$image-$index",
           size: _kGridWidth,
-          onTapDelete: (image) {
-            setState(() {
-              fireImage.ref.delete();
-              fireImages.removeAt(index);
-            });
-          },
+          onTapDelete: (image) => setState(() {
+            fireImage.ref.delete();
+            fireImages.removeAt(index);
+          }),
         );
       },
-    ).toList();
+    ).reversed.toList();
 
     return Container(
       height: _kGridWidth + 8,
@@ -313,53 +190,14 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         scrollDirection: Axis.horizontal,
         children: [
-          _NewGrid(
-            onPressed: _handlePhotoButtonPressed,
-          )
-        ]..addAll(imagesList.reversed.toList()),
+          _NewGrid(onPressed: handlePhotoButtonPressed),
+          ...imagesList,
+        ],
       ),
     );
   }
 
-  void _handlePhotoButtonPressed() async {
-    final source = await mkImageChoiceDialog(context: context);
-    if (source == null) {
-      return;
-    }
-    final imageFile = await ImagePicker.pickImage(source: source);
-    if (imageFile == null) {
-      return;
-    }
-    // TODO: remove firebase coupling
-    final ref = Dependencies.di().jobs.createFile(imageFile, Dependencies.di().session.user.getId());
-
-    setState(() {
-      fireImages.add(FireImage()..ref = ref);
-    });
-    try {
-      final imageUrl = (await ref.getDownloadURL()).downloadUrl?.toString();
-      setState(() {
-        fireImages.last
-          ..isLoading = false
-          ..isSucess = true
-          ..image = ImageModel(
-            (b) => b
-              ..userID = Dependencies.di().session.user.getId()
-              ..contactID = contact.id
-              ..jobID = job.id
-              ..src = imageUrl
-              ..path = ref.path,
-          );
-        //
-      });
-    } catch (e) {
-      setState(() {
-        fireImages.last.isLoading = false;
-      });
-    }
-  }
-
-  Widget buildDueDate() {
+  Widget _buildDueDate() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: InputDropdown(
@@ -382,7 +220,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
     );
   }
 
-  Widget buildEnterName() {
+  Widget _buildEnterName() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: TextFormField(
@@ -390,10 +228,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
         keyboardType: TextInputType.text,
         textCapitalization: TextCapitalization.words,
         style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
-        decoration: const InputDecoration(
-          isDense: true,
-          hintText: "Enter Style Name",
-        ),
+        decoration: const InputDecoration(isDense: true, hintText: "Enter Style Name"),
         validator: (value) => (value.isNotEmpty) ? null : "Please input a name",
         onSaved: (value) => job.name = value.trim(),
         onEditingComplete: () => FocusScope.of(context).requestFocus(_amountFocusNode),
@@ -401,7 +236,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
     );
   }
 
-  Widget buildEnterAmount() {
+  Widget _buildEnterAmount() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: TextFormField(
@@ -410,10 +245,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
         textInputAction: TextInputAction.next,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
-        decoration: const InputDecoration(
-          isDense: true,
-          hintText: "Enter Amount",
-        ),
+        decoration: const InputDecoration(isDense: true, hintText: "Enter Amount"),
         validator: (value) => (controller.numberValue > 0) ? null : "Please input a price",
         onSaved: (value) => job.price = controller.numberValue,
         onEditingComplete: () => FocusScope.of(context).requestFocus(_additionFocusNode),
@@ -423,10 +255,7 @@ class _JobsCreatePageState extends State<JobsCreatePage> with SnackBarProviderMi
 }
 
 class _NewGrid extends StatelessWidget {
-  const _NewGrid({
-    Key key,
-    @required this.onPressed,
-  }) : super(key: key);
+  const _NewGrid({Key key, @required this.onPressed}) : super(key: key);
 
   final VoidCallback onPressed;
 
@@ -440,13 +269,11 @@ class _NewGrid extends StatelessWidget {
         color: Colors.grey[100],
         child: InkWell(
           onTap: onPressed,
-          child: Icon(
-            Icons.add_a_photo,
-            size: 24.0,
-            color: kTextBaseColor.withOpacity(.35),
-          ),
+          child: Icon(Icons.add_a_photo, size: 24.0, color: kTextBaseColor.withOpacity(.35)),
         ),
       ),
     );
   }
 }
+
+const _kGridWidth = 85.0;
