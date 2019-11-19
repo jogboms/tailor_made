@@ -7,8 +7,7 @@ import 'package:tailor_made/services/contacts/contacts.dart';
 class ContactsMockImpl extends Contacts {
   @override
   Stream<List<ContactModel>> fetchAll(String userId) async* {
-    // TODO
-    yield null;
+    yield [ContactModel((b) => b..userID = "1")];
   }
 
   @override

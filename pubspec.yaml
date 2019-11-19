@@ -41,6 +41,7 @@ dev_dependencies:
   mfsao: ^0.1.3
   build_runner: ^1.7.2
   built_value_generator: ^6.8.2
+  mockito: ^4.1.1
 
 flutter:
   uses-material-design: true

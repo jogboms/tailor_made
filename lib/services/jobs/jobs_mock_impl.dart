@@ -7,8 +7,7 @@ import 'package:tailor_made/services/jobs/jobs.dart';
 class JobsMockImpl extends Jobs {
   @override
   Stream<List<JobModel>> fetchAll(String userId) async* {
-    // TODO
-    yield null;
+    yield [JobModel((b) => b..userID = "1")];
   }
 
   @override

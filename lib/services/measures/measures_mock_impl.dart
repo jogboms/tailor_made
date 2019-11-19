@@ -16,8 +16,16 @@ class MeasuresMockImpl extends Measures {
 
   @override
   Stream<List<MeasureModel>> fetchAll(String userId) async* {
-    // TODO: implement fetchAll
-    yield [];
+    yield [
+      MeasureModel((b) => b
+        ..name = 'Arm Hole'
+        ..value = 10
+        ..group = MeasureModelType.blouse),
+      MeasureModel((b) => b
+        ..name = 'Shoulder'
+        ..value = 10
+        ..group = MeasureModelType.blouse),
+    ];
   }
 
   @override
