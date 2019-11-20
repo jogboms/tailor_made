@@ -11,18 +11,17 @@ import 'package:tailor_made/rebloc/auth/actions.dart';
 import 'package:tailor_made/rebloc/settings/actions.dart';
 import 'package:tailor_made/rebloc/settings/view_model.dart';
 import 'package:tailor_made/repository/models.dart';
-import 'package:tailor_made/utils/ui/app_version_builder.dart';
 import 'package:tailor_made/utils/ui/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class SplashPage extends StatelessWidget {
-  const SplashPage({Key key, @required this.isColdStart, @required this.isMock})
-      : assert(isMock != null),
+  const SplashPage({Key key, @required this.isColdStart, @required this.version})
+      : assert(version != null),
         super(key: key);
 
   final bool isColdStart;
-  final bool isMock;
+  final String version;
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +52,10 @@ class SplashPage extends StatelessWidget {
                     style: theme.display2Semi.copyWith(color: kTextBaseColor.withOpacity(.6)),
                     textAlign: TextAlign.center,
                   ),
-                  AppVersionBuilder(
-                    valueBuilder: () => AppVersion.retrieve(isMock),
-                    builder: (_, version, __) => Text(
-                      "v$version",
-                      style: theme.small.copyWith(color: kTextBaseColor.withOpacity(.4), height: 1.5),
-                      textAlign: TextAlign.center,
-                    ),
+                  Text(
+                    "v$version",
+                    style: theme.small.copyWith(color: kTextBaseColor.withOpacity(.4), height: 1.5),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
@@ -72,7 +68,7 @@ class SplashPage extends StatelessWidget {
                   WidgetsBinding.instance.addPostFrameCallback(
                     (_) async {
                       StoreProvider.of<AppState>(context).dispatch(OnLoginAction(snapshot.data));
-                      Dependencies.di().sharedCoordinator.toHome(isMock);
+                      Dependencies.di().sharedCoordinator.toHome(version);
                     },
                   );
 

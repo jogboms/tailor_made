@@ -26,8 +26,8 @@ void main() {
       dependencies.initialize(session, navigatorKey, repositoryFactory());
 
       await tester.pumpWidget(App(
+        version: "1.0.0",
         navigatorKey: navigatorKey,
-        isMock: false,
         store: storeFactory(dependencies, true),
         navigatorObservers: [mockObserver],
       ));

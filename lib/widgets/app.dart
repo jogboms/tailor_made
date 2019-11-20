@@ -14,7 +14,7 @@ class App extends StatefulWidget {
   App({
     @required this.store,
     @required this.navigatorKey,
-    @required this.isMock,
+    @required this.version,
     this.navigatorObservers,
   }) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
@@ -24,7 +24,7 @@ class App extends StatefulWidget {
   final Store<AppState> store;
   final List<NavigatorObserver> navigatorObservers;
   final GlobalKey<NavigatorState> navigatorKey;
-  final bool isMock;
+  final String version;
 
   @override
   _AppState createState() => _AppState();
@@ -59,7 +59,7 @@ class _AppState extends State<App> {
                 return child;
               }),
               onGenerateRoute: (RouteSettings settings) => _PageRoute(
-                builder: (_) => SplashPage(isColdStart: true, isMock: widget.isMock),
+                builder: (_) => SplashPage(isColdStart: true, version: widget.version),
                 settings: settings.copyWith(name: MkRoutes.start),
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:get_version/get_version.dart';
 import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/environments/environment.dart';
 import 'package:tailor_made/rebloc/store_factory.dart';
@@ -21,8 +22,8 @@ void main(
   dependencies.initialize(session, navigatorKey, repository);
 
   runApp(App(
+    version: await GetVersion.projectVersion,
     navigatorKey: navigatorKey,
-    isMock: session.isMock,
     store: storeFactory(dependencies, false),
   ));
 }

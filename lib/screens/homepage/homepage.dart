@@ -19,18 +19,17 @@ import 'package:tailor_made/screens/homepage/_views/access_denied.dart';
 import 'package:tailor_made/screens/homepage/_views/out_dated.dart';
 import 'package:tailor_made/screens/homepage/_views/rate_limit.dart';
 import 'package:tailor_made/utils/mk_phone.dart';
-import 'package:tailor_made/utils/ui/app_version_builder.dart';
 import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
 import 'package:tailor_made/utils/ui/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:version/version.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key key, @required this.isMock})
-      : assert(isMock != null),
+  const HomePage({Key key, @required this.version})
+      : assert(version != null),
         super(key: key);
 
-  final bool isMock;
+  final String version;
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +50,9 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              AppVersionBuilder(
-                valueBuilder: () => AppVersion.retrieve(isMock),
-                builder: (context, appVersion, child) {
-                  final currentVersion = Version.parse(appVersion);
+              Builder(
+                builder: (context) {
+                  final currentVersion = Version.parse(version);
                   final state = StoreProvider.of<AppState>(context).states.value;
                   final latestVersion = Version.parse(state?.settings?.settings?.versionName ?? "1.0.0");
 
@@ -65,12 +63,11 @@ class HomePage extends StatelessWidget {
                     });
                   }
 
-                  return child;
+                  return ViewModelSubscriber<AppState, HomeViewModel>(
+                    converter: (store) => HomeViewModel(store),
+                    builder: (_, dispatch, vm) => _Body(viewModel: vm, dispatch: dispatch, version: version),
+                  );
                 },
-                child: ViewModelSubscriber<AppState, HomeViewModel>(
-                  converter: (store) => HomeViewModel(store),
-                  builder: (_, dispatch, vm) => _Body(viewModel: vm, dispatch: dispatch, isMock: isMock),
-                ),
               ),
             ],
           ),
@@ -81,13 +78,13 @@ class HomePage extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({Key key, @required this.dispatch, @required this.viewModel, @required this.isMock})
-      : assert(isMock != null),
+  const _Body({Key key, @required this.dispatch, @required this.viewModel, @required this.version})
+      : assert(version != null),
         super(key: key);
 
   final HomeViewModel viewModel;
   final DispatchFunction dispatch;
-  final bool isMock;
+  final String version;
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +128,7 @@ class _Body extends StatelessWidget {
           shouldSendRating: viewModel.shouldSendRating,
           onLogout: () async {
             dispatch(const OnLogoutAction());
-            Dependencies.di().sharedCoordinator.toSplash(isMock);
+            Dependencies.di().sharedCoordinator.toSplash(version);
           },
         ),
       ],
