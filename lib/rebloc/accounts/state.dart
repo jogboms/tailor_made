@@ -6,14 +6,13 @@ import 'package:tailor_made/rebloc/app_state.dart';
 part 'state.g.dart';
 
 abstract class AccountState implements Built<AccountState, AccountStateBuilder> {
-  factory AccountState([AccountState updates(AccountStateBuilder b)]) = _$AccountState;
+  factory AccountState([void updates(AccountStateBuilder b)]) = _$AccountState;
 
   factory AccountState.initialState() => _$AccountState(
         (AccountStateBuilder b) => b
           ..account = null
           ..status = StateStatus.loading
           ..hasSkipedPremium = false
-          ..message = ""
           ..error = null,
       );
 
@@ -25,8 +24,6 @@ abstract class AccountState implements Built<AccountState, AccountStateBuilder> 
   StateStatus get status;
 
   bool get hasSkipedPremium;
-
-  String get message;
 
   @nullable
   String get error;

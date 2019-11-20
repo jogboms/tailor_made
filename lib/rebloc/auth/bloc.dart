@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/rebloc/accounts/actions.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/auth/actions.dart';
@@ -10,8 +9,13 @@ import 'package:tailor_made/rebloc/jobs/actions.dart';
 import 'package:tailor_made/rebloc/measures/actions.dart';
 import 'package:tailor_made/rebloc/settings/actions.dart';
 import 'package:tailor_made/rebloc/stats/actions.dart';
+import 'package:tailor_made/services/accounts/main.dart';
 
 class AuthBloc extends SimpleBloc<AppState> {
+  AuthBloc(this.accounts) : assert(accounts != null);
+
+  final Accounts accounts;
+
   @override
   Future<Action> middleware(DispatchFunction dispatcher, AppState state, Action action) async {
     if (action is OnLoginAction) {
@@ -36,7 +40,7 @@ class AuthBloc extends SimpleBloc<AppState> {
   @override
   Future<Action> afterware(DispatchFunction dispatcher, AppState state, Action action) async {
     if (action is OnLogoutAction) {
-      await Dependencies.di().accounts.signout();
+      await accounts.signout();
       dispatcher(const InitSettingsAction());
     }
     return action;

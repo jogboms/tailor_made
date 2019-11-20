@@ -6,13 +6,12 @@ import 'package:tailor_made/rebloc/app_state.dart';
 part 'state.g.dart';
 
 abstract class SettingsState implements Built<SettingsState, SettingsStateBuilder> {
-  factory SettingsState([SettingsState updates(SettingsStateBuilder b)]) = _$SettingsState;
+  factory SettingsState([void updates(SettingsStateBuilder b)]) = _$SettingsState;
 
   factory SettingsState.initialState() => _$SettingsState(
         (SettingsStateBuilder b) => b
           ..settings = null
           ..status = StateStatus.loading
-          ..message = ""
           ..error = null,
       );
 
@@ -22,8 +21,6 @@ abstract class SettingsState implements Built<SettingsState, SettingsStateBuilde
   SettingsModel get settings;
 
   StateStatus get status;
-
-  String get message;
 
   @nullable
   String get error;

@@ -1,20 +1,25 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
+import 'package:tailor_made/rebloc/common/middleware.dart';
 import 'package:tailor_made/rebloc/contacts/actions.dart';
 import 'package:tailor_made/rebloc/contacts/sort_type.dart';
 import 'package:tailor_made/rebloc/extensions.dart';
+import 'package:tailor_made/services/contacts/main.dart';
 
 class ContactsBloc extends SimpleBloc<AppState> {
+  ContactsBloc(this.contacts) : assert(contacts != null);
+
+  final Contacts contacts;
+
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     MergeStream([
       Observable(input).whereAction<SearchContactAction>().switchMap(_makeSearch),
-      Observable(input).whereAction<InitContactsAction>().switchMap(_onAfterLogin),
+      Observable(input).whereAction<InitContactsAction>().switchMap(_onAfterLogin(contacts)),
     ]).untilAction<OnDisposeAction>().listen((context) => context.dispatcher(context.action));
 
     return input;
@@ -112,12 +117,13 @@ Comparator<ContactModel> _sort(SortType sortType) {
   }
 }
 
-Stream<WareContext<AppState>> _onAfterLogin(WareContext<AppState> context) {
-  return Dependencies.di()
-      .contacts
-      .fetchAll((context.action as InitContactsAction).userId)
-      .map((contacts) => OnDataAction<List<ContactModel>>(contacts))
-      .map((action) => context.copyWith(action));
+Middleware _onAfterLogin(Contacts contacts) {
+  return (WareContext<AppState> context) {
+    return contacts
+        .fetchAll((context.action as InitContactsAction).userId)
+        .map((contacts) => OnDataAction<List<ContactModel>>(contacts))
+        .map((action) => context.copyWith(action));
+  };
 }
 
 Stream<WareContext<AppState>> _makeSearch(WareContext<AppState> context) {

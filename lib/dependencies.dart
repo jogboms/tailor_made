@@ -19,8 +19,10 @@ import 'package:tailor_made/services/settings/main.dart';
 import 'package:tailor_made/services/stats/main.dart';
 
 class Dependencies {
-  Dependencies(Session session, GlobalKey<NavigatorState> navigatorKey, Repository repository)
-      : assert(session != null && navigatorKey != null && repository != null) {
+  const Dependencies();
+
+  void initialize(Session session, GlobalKey<NavigatorState> navigatorKey, Repository repository) {
+    assert(session != null && navigatorKey != null && repository != null);
     Injector.appInstance
       ..registerSingleton<Dependencies>((_) => this)
       ..registerSingleton<Repository>((_) => repository)
@@ -40,6 +42,11 @@ class Dependencies {
       ..registerSingleton<MeasuresCoordinator>((_) => MeasuresCoordinator(navigatorKey))
       ..registerSingleton<PaymentsCoordinator>((_) => PaymentsCoordinator(navigatorKey))
       ..registerSingleton<TasksCoordinator>((_) => TasksCoordinator(navigatorKey));
+  }
+
+  @visibleForTesting
+  void dispose() {
+    Injector.appInstance.clearAll();
   }
 
   static Dependencies di() => Injector.appInstance.getDependency<Dependencies>();

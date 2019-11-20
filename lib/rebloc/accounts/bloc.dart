@@ -2,21 +2,26 @@ import 'dart:async';
 
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/rebloc/accounts/actions.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
+import 'package:tailor_made/rebloc/common/middleware.dart';
 import 'package:tailor_made/rebloc/extensions.dart';
+import 'package:tailor_made/services/accounts/main.dart';
 
 class AccountBloc extends SimpleBloc<AppState> {
+  AccountBloc(this.accounts) : assert(accounts != null);
+
+  final Accounts accounts;
+
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     MergeStream([
-      Observable(input).whereAction<InitAccountAction>().switchMap(_getAccount),
-      Observable(input).whereAction<OnReadNotice>().switchMap(_readNotice),
-      Observable(input).whereAction<OnSendRating>().switchMap(_sendRating),
-      Observable(input).whereAction<OnPremiumSignUp>().switchMap(_signUp),
+      Observable(input).whereAction<InitAccountAction>().switchMap(_getAccount(accounts)),
+      Observable(input).whereAction<OnReadNotice>().switchMap(_readNotice(accounts)),
+      Observable(input).whereAction<OnSendRating>().switchMap(_sendRating(accounts)),
+      Observable(input).whereAction<OnPremiumSignUp>().switchMap(_signUp(accounts)),
     ]).untilAction<OnDisposeAction>().listen((context) => context.dispatcher(context.action));
 
     return input;
@@ -47,39 +52,44 @@ class AccountBloc extends SimpleBloc<AppState> {
   }
 }
 
-Stream<WareContext<AppState>> _readNotice(WareContext<AppState> context) async* {
-  await Dependencies.di()
-      .accounts
-      .readNotice((context.action as OnReadNotice).payload.rebuild((b) => b..hasReadNotice = true));
+Middleware _readNotice(Accounts accounts) {
+  return (WareContext<AppState> context) async* {
+    await accounts.readNotice((context.action as OnReadNotice).payload.rebuild((b) => b..hasReadNotice = true));
 
-  yield context;
+    yield context;
+  };
 }
 
-Stream<WareContext<AppState>> _sendRating(WareContext<AppState> context) async* {
-  final _action = context.action as OnSendRating;
-  final _account = _action.account.rebuild((b) => b
-    ..hasSendRating = true
-    ..rating = _action.rating);
-  await Dependencies.di().accounts.sendRating(_account);
+Middleware _sendRating(Accounts accounts) {
+  return (WareContext<AppState> context) async* {
+    final _action = context.action as OnSendRating;
+    final _account = _action.account.rebuild((b) => b
+      ..hasSendRating = true
+      ..rating = _action.rating);
+    await accounts.sendRating(_account);
 
-  yield context;
+    yield context;
+  };
 }
 
-Stream<WareContext<AppState>> _signUp(WareContext<AppState> context) async* {
-  final _account = (context.action as OnPremiumSignUp).payload.rebuild((b) => b
-    ..status = AccountModelStatus.pending
-    ..notice = context.state.settings.settings.premiumNotice
-    ..hasReadNotice = false
-    ..hasPremiumEnabled = true);
-  await Dependencies.di().accounts.signUp(_account);
+Middleware _signUp(Accounts accounts) {
+  return (WareContext<AppState> context) async* {
+    final _account = (context.action as OnPremiumSignUp).payload.rebuild((b) => b
+      ..status = AccountModelStatus.pending
+      ..notice = context.state.settings.settings.premiumNotice
+      ..hasReadNotice = false
+      ..hasPremiumEnabled = true);
+    await accounts.signUp(_account);
 
-  yield context;
+    yield context;
+  };
 }
 
-Stream<WareContext<AppState>> _getAccount(WareContext<AppState> context) {
-  return Dependencies.di()
-      .accounts
-      .getAccount((context.action as InitAccountAction).userId)
-      .map((account) => OnDataAction<AccountModel>(account))
-      .map((action) => context.copyWith(action));
+Middleware _getAccount(Accounts accounts) {
+  return (WareContext<AppState> context) {
+    return accounts
+        .getAccount((context.action as InitAccountAction).userId)
+        .map((account) => OnDataAction<AccountModel>(account))
+        .map((action) => context.copyWith(action));
+  };
 }
