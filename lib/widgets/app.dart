@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/bootstrap.dart';
 import 'package:tailor_made/constants/mk_routes.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
@@ -12,14 +11,20 @@ import 'package:tailor_made/utils/mk_scale_util.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class App extends StatefulWidget {
-  App({@required this.bootstrap, @required this.store, this.navigatorObservers}) {
+  App({
+    @required this.store,
+    @required this.navigatorKey,
+    @required this.isMock,
+    this.navigatorObservers,
+  }) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
-  final BootstrapModel bootstrap;
   final Store<AppState> store;
   final List<NavigatorObserver> navigatorObservers;
+  final GlobalKey<NavigatorState> navigatorKey;
+  final bool isMock;
 
   @override
   _AppState createState() => _AppState();
@@ -46,7 +51,7 @@ class _AppState extends State<App> {
               debugShowCheckedModeBanner: false,
               title: MkStrings.appName,
               color: Colors.white,
-              navigatorKey: widget.bootstrap.navigatorKey,
+              navigatorKey: widget.navigatorKey,
               navigatorObservers: widget.navigatorObservers ?? [],
               theme: ThemeProvider.of(context).themeData(Theme.of(context)),
               builder: (_, child) => Builder(builder: (BuildContext context) {
@@ -54,7 +59,7 @@ class _AppState extends State<App> {
                 return child;
               }),
               onGenerateRoute: (RouteSettings settings) => _PageRoute(
-                builder: (_) => SplashPage(isColdStart: true, isMock: widget.bootstrap.isMock),
+                builder: (_) => SplashPage(isColdStart: true, isMock: widget.isMock),
                 settings: settings.copyWith(name: MkRoutes.start),
               ),
             ),
