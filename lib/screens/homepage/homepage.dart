@@ -26,7 +26,11 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:version/version.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key key, @required this.isMock})
+      : assert(isMock != null),
+        super(key: key);
+
+  final bool isMock;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +52,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               AppVersionBuilder(
-                valueBuilder: () => AppVersion.retrieve(Dependencies.di().session.isMock),
+                valueBuilder: () => AppVersion.retrieve(isMock),
                 builder: (context, appVersion, child) {
                   final currentVersion = Version.parse(appVersion);
                   final state = StoreProvider.of<AppState>(context).states.value;
@@ -65,9 +69,8 @@ class HomePage extends StatelessWidget {
                 },
                 child: ViewModelSubscriber<AppState, HomeViewModel>(
                   converter: (store) => HomeViewModel(store),
-                  builder: (_, dispatch, vm) => _Body(viewModel: vm, dispatch: dispatch),
+                  builder: (_, dispatch, vm) => _Body(viewModel: vm, dispatch: dispatch, isMock: isMock),
                 ),
-//                child: _Body(viewModel: HomeViewModel(store.states.value), dispatch: store.dispatch),
               ),
             ],
           ),
@@ -78,10 +81,13 @@ class HomePage extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({Key key, @required this.dispatch, @required this.viewModel}) : super(key: key);
+  const _Body({Key key, @required this.dispatch, @required this.viewModel, @required this.isMock})
+      : assert(isMock != null),
+        super(key: key);
 
   final HomeViewModel viewModel;
   final DispatchFunction dispatch;
+  final bool isMock;
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +132,7 @@ class _Body extends StatelessWidget {
           onLogout: () async {
             await Dependencies.di().accounts.signout();
             dispatch(const OnLogoutAction());
-            Dependencies.di().sharedCoordinator.toSplash();
+            Dependencies.di().sharedCoordinator.toSplash(isMock);
           },
         ),
       ],

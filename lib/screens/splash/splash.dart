@@ -17,9 +17,12 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class SplashPage extends StatelessWidget {
-  const SplashPage({Key key, @required this.isColdStart}) : super(key: key);
+  const SplashPage({Key key, @required this.isColdStart, @required this.isMock})
+      : assert(isMock != null),
+        super(key: key);
 
   final bool isColdStart;
+  final bool isMock;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +54,7 @@ class SplashPage extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   AppVersionBuilder(
-                    valueBuilder: () => AppVersion.retrieve(Dependencies.di().session.isMock),
+                    valueBuilder: () => AppVersion.retrieve(isMock),
                     builder: (_, version, __) => Text(
                       "v$version",
                       style: theme.small.copyWith(color: kTextBaseColor.withOpacity(.4), height: 1.5),
@@ -68,7 +71,7 @@ class SplashPage extends StatelessWidget {
                   WidgetsBinding.instance.addPostFrameCallback(
                     (_) async {
                       StoreProvider.of<AppState>(context).dispatch(OnLoginAction(snapshot.data));
-                      Dependencies.di().sharedCoordinator.toHome();
+                      Dependencies.di().sharedCoordinator.toHome(isMock);
                     },
                   );
 

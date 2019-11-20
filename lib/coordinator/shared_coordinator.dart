@@ -11,17 +11,17 @@ import 'package:tailor_made/wrappers/mk_navigate.dart';
 class SharedCoordinator extends CoordinatorBase {
   const SharedCoordinator(GlobalKey<NavigatorState> navigatorKey) : super(navigatorKey);
 
-  void toHome() {
-    navigator?.pushAndRemoveUntil<void>(MkNavigate.fadeIn(const HomePage()), (Route<void> route) => false);
+  void toHome(bool isMock) {
+    navigator?.pushAndRemoveUntil<void>(MkNavigate.fadeIn(HomePage(isMock: isMock)), (Route<void> route) => false);
   }
 
   Future<String> toStoreNameDialog(AccountModel account) {
     return navigator?.push<String>(MkNavigate.fadeIn(StoreNameDialog(account: account)));
   }
 
-  void toSplash() {
+  void toSplash(bool isMock) {
     navigator?.pushAndRemoveUntil<void>(
-      MkNavigate.fadeIn<void>(const SplashPage(isColdStart: false), name: MkRoutes.start),
+      MkNavigate.fadeIn<void>(SplashPage(isColdStart: false, isMock: isMock), name: MkRoutes.start),
       (Route<void> route) => false,
     );
   }

@@ -58,7 +58,7 @@ class _AppState extends State<App> {
                 return child;
               }),
               onGenerateRoute: (RouteSettings settings) => _PageRoute(
-                builder: (_) => SplashPage(isColdStart: true),
+                builder: (_) => SplashPage(isColdStart: true, isMock: bootstrap.isMock),
                 settings: settings.copyWith(name: MkRoutes.start),
               ),
             ),
