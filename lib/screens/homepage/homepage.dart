@@ -130,7 +130,6 @@ class _Body extends StatelessWidget {
           account: viewModel.account,
           shouldSendRating: viewModel.shouldSendRating,
           onLogout: () async {
-            await Dependencies.di().accounts.signout();
             dispatch(const OnLogoutAction());
             Dependencies.di().sharedCoordinator.toSplash(isMock);
           },

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/rebloc/accounts/actions.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/auth/actions.dart';
@@ -35,6 +36,7 @@ class AuthBloc extends SimpleBloc<AppState> {
   @override
   Future<Action> afterware(DispatchFunction dispatcher, AppState state, Action action) async {
     if (action is OnLogoutAction) {
+      await Dependencies.di().accounts.signout();
       dispatcher(const InitSettingsAction());
     }
     return action;
