@@ -2,7 +2,9 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/models/account.dart';
 
 class InitAccountAction extends Action {
-  const InitAccountAction();
+  const InitAccountAction(this.userId);
+
+  final String userId;
 }
 
 class OnPremiumSignUp extends Action {

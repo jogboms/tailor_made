@@ -14,11 +14,11 @@ class PaymentsCoordinator extends CoordinatorBase {
     navigator?.push<void>(MkNavigate.slideIn(PaymentPage(payment: payment), fullscreenDialog: true));
   }
 
-  void toPayments([List<PaymentModel> payments]) {
+  void toPayments(String userId, [List<PaymentModel> payments]) {
     navigator?.push<void>(
       payments == null
-          ? MkNavigate.slideIn(PaymentsPage(payments: payments))
-          : MkNavigate.slideIn(PaymentsPage(payments: payments), fullscreenDialog: true),
+          ? MkNavigate.slideIn(PaymentsPage(payments: payments, userId: userId))
+          : MkNavigate.slideIn(PaymentsPage(payments: payments, userId: userId), fullscreenDialog: true),
     );
   }
 

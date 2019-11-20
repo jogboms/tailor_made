@@ -12,10 +12,16 @@ import 'package:tailor_made/utils/ui/mk_choice_dialog.dart';
 enum _ActionChoice { edit, delete }
 
 class MeasureSlideBlock extends StatefulWidget {
-  const MeasureSlideBlock({Key key, @required this.measures, @required this.title}) : super(key: key);
+  const MeasureSlideBlock({
+    Key key,
+    @required this.measures,
+    @required this.title,
+    @required this.userId,
+  }) : super(key: key);
 
   final List<MeasureModel> measures;
   final String title;
+  final String userId;
 
   @override
   _MeasureSlideBlockState createState() => _MeasureSlideBlockState();
@@ -81,7 +87,8 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
 
     SnackBarProvider.of(context).loading();
     try {
-      await Dependencies.di().measures.delete(widget.measures, Dependencies.di().session.user.getId());
+      // TODO: move this out of here
+      await Dependencies.di().measures.delete(widget.measures, widget.userId);
 
       SnackBarProvider.of(context).hide();
     } catch (e) {

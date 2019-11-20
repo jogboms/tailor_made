@@ -9,10 +9,11 @@ import 'package:tailor_made/widgets/theme_provider.dart';
 enum Choice { CreateJob, EditMeasure, EditAccount, SendText }
 
 class ContactAppBar extends StatefulWidget {
-  const ContactAppBar({Key key, @required this.grouped, this.contact}) : super(key: key);
+  const ContactAppBar({Key key, @required this.userId, @required this.grouped, this.contact}) : super(key: key);
 
   final Map<String, List<MeasureModel>> grouped;
   final ContactModel contact;
+  final String userId;
 
   @override
   _ContactAppBarState createState() => _ContactAppBarState();
@@ -22,13 +23,13 @@ class _ContactAppBarState extends State<ContactAppBar> {
   void _selectChoice(Choice choice) {
     switch (choice) {
       case Choice.CreateJob:
-        Dependencies.di().jobsCoordinator.toCreateJob([], widget.contact);
+        Dependencies.di().jobsCoordinator.toCreateJob(widget.userId, [], widget.contact);
         break;
       case Choice.EditMeasure:
         Dependencies.di().contactsCoordinator.toContactMeasure(widget.contact, widget.grouped);
         break;
       case Choice.EditAccount:
-        Dependencies.di().contactsCoordinator.toContactEdit(widget.contact);
+        Dependencies.di().contactsCoordinator.toContactEdit(widget.userId, widget.contact);
         break;
       case Choice.SendText:
         sms(widget.contact.phone);

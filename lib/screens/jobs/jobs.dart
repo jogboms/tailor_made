@@ -38,7 +38,7 @@ class JobsPage extends StatelessWidget {
             }),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.library_add),
-              onPressed: () => Dependencies.di().jobsCoordinator.toCreateJob(vm.contacts),
+              onPressed: () => Dependencies.di().jobsCoordinator.toCreateJob(vm.userId, vm.contacts),
             ),
           ),
           onWillPop: () async {

@@ -1,21 +1,26 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
+import 'package:tailor_made/rebloc/common/middleware.dart';
 import 'package:tailor_made/rebloc/extensions.dart';
 import 'package:tailor_made/rebloc/jobs/actions.dart';
 import 'package:tailor_made/rebloc/jobs/sort_type.dart';
+import 'package:tailor_made/services/jobs/main.dart';
 
 class JobsBloc extends SimpleBloc<AppState> {
+  JobsBloc(this.jobs) : assert(jobs != null);
+
+  final Jobs jobs;
+
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     MergeStream([
       Observable(input).whereAction<SearchJobAction>().switchMap(_makeSearch),
-      Observable(input).whereAction<InitJobsAction>().switchMap(_onAfterLogin),
+      Observable(input).whereAction<InitJobsAction>().switchMap(_onAfterLogin(jobs)),
     ]).untilAction<OnDisposeAction>().listen((context) => context.dispatcher(context.action));
 
     return input;
@@ -126,10 +131,11 @@ Stream<WareContext<AppState>> _makeSearch(WareContext<AppState> context) {
       .map((action) => context.copyWith(action));
 }
 
-Stream<WareContext<AppState>> _onAfterLogin(WareContext<AppState> context) {
-  return Dependencies.di()
-      .jobs
-      .fetchAll(Dependencies.di().session.user.getId())
-      .map((jobs) => OnDataAction<List<JobModel>>(jobs))
-      .map((action) => context.copyWith(action));
+Middleware _onAfterLogin(Jobs jobs) {
+  return (WareContext<AppState> context) {
+    return jobs
+        .fetchAll((context.action as InitJobsAction).userId)
+        .map((jobs) => OnDataAction<List<JobModel>>(jobs))
+        .map((action) => context.copyWith(action));
+  };
 }

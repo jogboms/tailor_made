@@ -13,12 +13,13 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class GalleryGrids extends StatefulWidget {
-  GalleryGrids({Key key, double gridSize, @required this.job})
+  GalleryGrids({Key key, double gridSize, @required this.job, @required this.userId})
       : gridSize = Size.square(gridSize ?? _kGridWidth),
         super(key: key);
 
   final Size gridSize;
   final JobModel job;
+  final String userId;
 
   @override
   _GalleryGridsState createState() => _GalleryGridsState();
@@ -73,7 +74,9 @@ class _GalleryGridsState extends State<GalleryGrids> {
             ),
             MkClearButton(
               child: Text("SHOW ALL", style: theme.smallBtn),
-              onPressed: () => Dependencies.di().galleryCoordinator.toGallery(widget.job.images.toList()),
+              onPressed: () {
+                Dependencies.di().galleryCoordinator.toGallery(widget.userId, widget.job.images.toList());
+              },
             ),
             const SizedBox(width: 16.0),
           ],
@@ -103,18 +106,17 @@ class _GalleryGridsState extends State<GalleryGrids> {
     if (imageFile == null) {
       return;
     }
-    final ref = Dependencies.di().gallery.createFile(imageFile, Dependencies.di().session.user.getId());
+    // TODO: move this out of here
+    final ref = Dependencies.di().gallery.createFile(imageFile, widget.userId);
 
-    setState(() {
-      _fireImages.add(_FireImage()..ref = ref);
-    });
+    setState(() => _fireImages.add(_FireImage()..ref = ref));
     try {
       final imageUrl = (await ref.getDownloadURL()).downloadUrl?.toString();
 
       setState(() {
         _fireImages.last.image = ImageModel(
           (b) => b
-            ..userID = Dependencies.di().session.user.getId()
+            ..userID = widget.userId
             ..contactID = widget.job.contactID
             ..jobID = widget.job.id
             ..src = imageUrl
@@ -134,9 +136,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
           ..isSucess = true;
       });
     } catch (e) {
-      setState(() {
-        _fireImages.last.isLoading = false;
-      });
+      setState(() => _fireImages.last.isLoading = false);
     }
   }
 }

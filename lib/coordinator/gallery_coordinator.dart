@@ -13,11 +13,11 @@ class GalleryCoordinator extends CoordinatorBase {
     navigator?.push<void>(MkNavigate.fadeIn(GalleryView(image: image)));
   }
 
-  void toGallery([List<ImageModel> images]) {
+  void toGallery(String userId, [List<ImageModel> images]) {
     navigator?.push<void>(
       images == null
-          ? MkNavigate.slideIn(GalleryPage())
-          : MkNavigate.slideIn(GalleryPage(images: images), fullscreenDialog: true),
+          ? MkNavigate.slideIn(GalleryPage(userId: userId))
+          : MkNavigate.slideIn(GalleryPage(userId: userId, images: images), fullscreenDialog: true),
     );
   }
 }

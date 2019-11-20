@@ -7,33 +7,29 @@ import 'package:tailor_made/constants/mk_routes.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
-import 'package:tailor_made/rebloc/store_factory.dart';
 import 'package:tailor_made/screens/splash/splash.dart';
 import 'package:tailor_made/utils/mk_scale_util.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class App extends StatefulWidget {
-  App({@required this.bootstrap, this.navigatorObservers}) {
+  App({@required this.bootstrap, @required this.store, this.navigatorObservers}) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
   final BootstrapModel bootstrap;
+  final Store<AppState> store;
   final List<NavigatorObserver> navigatorObservers;
 
   @override
-  _AppState createState() => _AppState(bootstrap, storeFactory(bootstrap.isTestMode));
+  _AppState createState() => _AppState();
 }
 
 class _AppState extends State<App> {
-  _AppState(this.bootstrap, this.store);
-
-  final BootstrapModel bootstrap;
-  final Store<AppState> store;
-
   @override
   void dispose() {
-    store.dispatch(const OnDisposeAction());
+    widget.store.dispatch(const OnDisposeAction());
+    widget.store.dispose();
     super.dispose();
   }
 
@@ -41,7 +37,7 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return ThemeProvider(
       child: StoreProvider<AppState>(
-        store: store,
+        store: widget.store,
         child: FirstBuildDispatcher<AppState>(
           // Initialize action
           action: const OnInitAction(),
@@ -50,15 +46,15 @@ class _AppState extends State<App> {
               debugShowCheckedModeBanner: false,
               title: MkStrings.appName,
               color: Colors.white,
-              navigatorKey: bootstrap.navigatorKey,
-              navigatorObservers: widget.navigatorObservers,
+              navigatorKey: widget.bootstrap.navigatorKey,
+              navigatorObservers: widget.navigatorObservers ?? [],
               theme: ThemeProvider.of(context).themeData(Theme.of(context)),
               builder: (_, child) => Builder(builder: (BuildContext context) {
                 MkScaleUtil.initialize(context: context, size: Size(1080, 1920));
                 return child;
               }),
               onGenerateRoute: (RouteSettings settings) => _PageRoute(
-                builder: (_) => SplashPage(isColdStart: true),
+                builder: (_) => SplashPage(isColdStart: true, isMock: widget.bootstrap.isMock),
                 settings: settings.copyWith(name: MkRoutes.start),
               ),
             ),

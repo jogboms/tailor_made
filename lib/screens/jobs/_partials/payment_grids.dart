@@ -10,12 +10,13 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class PaymentGrids extends StatefulWidget {
-  PaymentGrids({Key key, double gridSize, @required this.job})
+  PaymentGrids({Key key, double gridSize, @required this.job, @required this.userId})
       : gridSize = Size.square(gridSize ?? _kGridWidth),
         super(key: key);
 
   final Size gridSize;
   final JobModel job;
+  final String userId;
 
   @override
   _PaymentGridsState createState() => _PaymentGridsState();
@@ -58,7 +59,9 @@ class _PaymentGridsState extends State<PaymentGrids> {
             ),
             MkClearButton(
               child: Text("SHOW ALL", style: theme.smallBtn),
-              onPressed: () => Dependencies.di().paymentsCoordinator.toPayments(widget.job.payments.toList()),
+              onPressed: () {
+                Dependencies.di().paymentsCoordinator.toPayments(widget.userId, widget.job.payments.toList());
+              },
             ),
             const SizedBox(width: 16.0),
           ],
@@ -90,7 +93,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
         setState(() {
           _firePayments.last.payment = PaymentModel(
             (b) => b
-              ..userID = Dependencies.di().session.user.getId()
+              ..userID = widget.userId
               ..contactID = widget.job.contactID
               ..jobID = widget.job.id
               ..price = result["price"]

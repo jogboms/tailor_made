@@ -6,7 +6,11 @@ import 'package:tailor_made/models/stats/stats.dart';
 import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
 
 class BottomRowWidget extends StatelessWidget {
-  const BottomRowWidget({Key key, @required this.stats, @required this.account}) : super(key: key);
+  const BottomRowWidget({
+    Key key,
+    @required this.stats,
+    @required this.account,
+  }) : super(key: key);
 
   final StatsModel stats;
   final AccountModel account;
@@ -25,7 +29,7 @@ class BottomRowWidget extends StatelessWidget {
                 icon: Icons.content_cut,
                 title: "Measures",
                 subTitle: "Custom",
-                onPressed: () => Dependencies.di().measuresCoordinator.toManageMeasures(),
+                onPressed: () => Dependencies.di().measuresCoordinator.toManageMeasures(account.uid),
               ),
             ),
           ),

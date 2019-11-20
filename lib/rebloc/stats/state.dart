@@ -6,13 +6,12 @@ import 'package:tailor_made/rebloc/app_state.dart';
 part 'state.g.dart';
 
 abstract class StatsState implements Built<StatsState, StatsStateBuilder> {
-  factory StatsState([StatsState updates(StatsStateBuilder b)]) = _$StatsState;
+  factory StatsState([void updates(StatsStateBuilder b)]) = _$StatsState;
 
   factory StatsState.initialState() => _$StatsState(
         (StatsStateBuilder b) => b
           ..stats = null
           ..status = StateStatus.loading
-          ..message = ""
           ..error = null,
       );
 
@@ -22,8 +21,6 @@ abstract class StatsState implements Built<StatsState, StatsStateBuilder> {
   StatsModel get stats;
 
   StateStatus get status;
-
-  String get message;
 
   @nullable
   String get error;

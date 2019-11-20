@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/models/image.dart';
@@ -10,7 +11,6 @@ import 'package:tailor_made/rebloc/common/contact_job_view_model.dart';
 import 'package:tailor_made/utils/ui/mk_status_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
-import 'package:tailor_made/dependencies.dart';
 
 class GalleryView extends StatelessWidget {
   const GalleryView({Key key, this.image}) : super(key: key);

@@ -6,7 +6,6 @@ import 'package:tailor_made/coordinator/jobs_coordinator.dart';
 import 'package:tailor_made/coordinator/measures_coordinator.dart';
 import 'package:tailor_made/coordinator/payments_coordinator.dart';
 import 'package:tailor_made/coordinator/shared_coordinator.dart';
-import 'package:tailor_made/coordinator/splash_coordinator.dart';
 import 'package:tailor_made/coordinator/tasks_coordinator.dart';
 import 'package:tailor_made/repository/main.dart';
 import 'package:tailor_made/services/accounts/main.dart';
@@ -20,8 +19,10 @@ import 'package:tailor_made/services/settings/main.dart';
 import 'package:tailor_made/services/stats/main.dart';
 
 class Dependencies {
-  Dependencies(Session session, GlobalKey<NavigatorState> navigatorKey, Repository repository)
-      : assert(session != null && navigatorKey != null && repository != null) {
+  const Dependencies();
+
+  void initialize(Session session, GlobalKey<NavigatorState> navigatorKey, Repository repository) {
+    assert(session != null && navigatorKey != null && repository != null);
     Injector.appInstance
       ..registerSingleton<Dependencies>((_) => this)
       ..registerSingleton<Repository>((_) => repository)
@@ -40,8 +41,12 @@ class Dependencies {
       ..registerSingleton<JobsCoordinator>((_) => JobsCoordinator(navigatorKey))
       ..registerSingleton<MeasuresCoordinator>((_) => MeasuresCoordinator(navigatorKey))
       ..registerSingleton<PaymentsCoordinator>((_) => PaymentsCoordinator(navigatorKey))
-      ..registerSingleton<SplashCoordinator>((_) => SplashCoordinator(navigatorKey))
       ..registerSingleton<TasksCoordinator>((_) => TasksCoordinator(navigatorKey));
+  }
+
+  @visibleForTesting
+  void dispose() {
+    Injector.appInstance.clearAll();
   }
 
   static Dependencies di() => Injector.appInstance.getDependency<Dependencies>();
@@ -77,8 +82,6 @@ class Dependencies {
   MeasuresCoordinator get measuresCoordinator => Injector.appInstance.getDependency<MeasuresCoordinator>();
 
   PaymentsCoordinator get paymentsCoordinator => Injector.appInstance.getDependency<PaymentsCoordinator>();
-
-  SplashCoordinator get splashCoordinator => Injector.appInstance.getDependency<SplashCoordinator>();
 
   TasksCoordinator get tasksCoordinator => Injector.appInstance.getDependency<TasksCoordinator>();
 }

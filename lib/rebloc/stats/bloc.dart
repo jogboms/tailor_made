@@ -1,21 +1,24 @@
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/stats/stats.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/extensions.dart';
 import 'package:tailor_made/rebloc/stats/actions.dart';
+import 'package:tailor_made/services/stats/main.dart';
 
 class StatsBloc extends SimpleBloc<AppState> {
+  StatsBloc(this.stats) : assert(stats != null);
+
+  final Stats stats;
+
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     Observable(input)
         .whereAction<InitStatsAction>()
         .switchMap(
-          (context) => Dependencies.di()
-              .stats
-              .fetch(Dependencies.di().session.user.getId())
+          (context) => stats
+              .fetch((context.action as InitStatsAction).userId)
               .map((stats) => OnDataAction<StatsModel>(stats))
               .map((action) => context.copyWith(action)),
         )

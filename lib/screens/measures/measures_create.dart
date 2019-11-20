@@ -16,12 +16,7 @@ import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_close_button.dart';
 
 class MeasuresCreate extends StatefulWidget {
-  const MeasuresCreate({
-    Key key,
-    this.measures,
-    this.groupName,
-    this.unitValue,
-  }) : super(key: key);
+  const MeasuresCreate({Key key, this.measures, this.groupName, this.unitValue}) : super(key: key);
 
   final List<MeasureModel> measures;
   final String groupName, unitValue;
@@ -194,9 +189,8 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
 
       try {
         dispatchAction(const ToggleMeasuresLoading());
-        await Dependencies.di()
-            .measures
-            .create(measures, Dependencies.di().session.user.getId(), groupName: groupName, unitValue: unitValue);
+        // TODO: move this out of here
+        await Dependencies.di().measures.create(measures, vm.userId, groupName: groupName, unitValue: unitValue);
         closeLoadingSnackBar();
         Navigator.pop(context);
       } catch (e) {

@@ -20,8 +20,8 @@ class ContactsCoordinator extends CoordinatorBase {
         : navigator?.push<void>(MkNavigate.slideIn(ContactPage(contact: contact)));
   }
 
-  void toContactEdit(ContactModel contact) {
-    navigator?.push<void>(MkNavigate.slideIn(ContactsEditPage(contact: contact)));
+  void toContactEdit(String userId, ContactModel contact) {
+    navigator?.push<void>(MkNavigate.slideIn(ContactsEditPage(userId: userId, contact: contact)));
   }
 
   Future<ContactModel> toContactMeasure(ContactModel contact, Map<String, List<MeasureModel>> grouped) {
@@ -36,7 +36,7 @@ class ContactsCoordinator extends CoordinatorBase {
     return navigator?.push<ContactModel>(MkNavigate.fadeIn(ContactLists(contacts: contacts)));
   }
 
-  void toCreateContact() {
-    navigator?.push<void>(MkNavigate.slideIn(const ContactsCreatePage()));
+  void toCreateContact(String userId) {
+    navigator?.push<void>(MkNavigate.slideIn(ContactsCreatePage(userId: userId)));
   }
 }

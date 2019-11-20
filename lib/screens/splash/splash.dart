@@ -17,9 +17,12 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class SplashPage extends StatelessWidget {
-  const SplashPage({Key key, @required this.isColdStart}) : super(key: key);
+  const SplashPage({Key key, @required this.isColdStart, @required this.isMock})
+      : assert(isMock != null),
+        super(key: key);
 
   final bool isColdStart;
+  final bool isMock;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +54,7 @@ class SplashPage extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   AppVersionBuilder(
-                    valueBuilder: () => AppVersion.retrieve(Dependencies.di().session.isMock),
+                    valueBuilder: () => AppVersion.retrieve(isMock),
                     builder: (_, version, __) => Text(
                       "v$version",
                       style: theme.small.copyWith(color: kTextBaseColor.withOpacity(.4), height: 1.5),
@@ -62,13 +65,14 @@ class SplashPage extends StatelessWidget {
               ),
             ),
             StreamBuilder<User>(
+              // TODO: move this out of here
               stream: Dependencies.di().accounts.onAuthStateChanged,
               builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
                 if (snapshot.hasData && snapshot.data != null && snapshot.data?.uid != null) {
                   WidgetsBinding.instance.addPostFrameCallback(
                     (_) async {
                       StoreProvider.of<AppState>(context).dispatch(OnLoginAction(snapshot.data));
-                      Dependencies.di().sharedCoordinator.toHome();
+                      Dependencies.di().sharedCoordinator.toHome(isMock);
                     },
                   );
 
@@ -171,14 +175,17 @@ class _ContentState extends State<_Content> {
   void _onLogin() async {
     try {
       setState(() => isLoading = true);
+      // TODO: move this out of here
       await Dependencies.di().accounts.signInWithGoogle();
     } catch (e) {
+      // TODO: move this out of here
       final message = MkStrings.genericError(e, Dependencies.di().session.isDev);
 
       if (message.isNotEmpty) {
         SnackBarProvider.of(context).show(message, duration: const Duration(milliseconds: 3500));
       }
 
+      // TODO: move this out of here
       await Dependencies.di().accounts.signout();
 
       if (!mounted) {

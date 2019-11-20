@@ -9,9 +9,10 @@ import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class PaymentsPage extends StatelessWidget {
-  const PaymentsPage({Key key, this.payments}) : super(key: key);
+  const PaymentsPage({Key key, this.payments, @required this.userId}) : super(key: key);
 
   final List<PaymentModel> payments;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,8 @@ class PaymentsPage extends StatelessWidget {
           Builder(builder: (context) {
             if (payments == null) {
               return StreamBuilder(
-                stream: Dependencies.di().payments.fetchAll(Dependencies.di().session.user.getId()),
+                // TODO: move this out of here
+                stream: Dependencies.di().payments.fetchAll(userId),
                 builder: (_, AsyncSnapshot<List<PaymentModel>> snapshot) {
                   if (!snapshot.hasData) {
                     return const SliverFillRemaining(child: MkLoadingSpinner());

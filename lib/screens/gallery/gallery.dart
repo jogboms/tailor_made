@@ -9,9 +9,10 @@ import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class GalleryPage extends StatelessWidget {
-  const GalleryPage({Key key, this.images}) : super(key: key);
+  const GalleryPage({Key key, this.images, @required this.userId}) : super(key: key);
 
   final List<ImageModel> images;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,8 @@ class GalleryPage extends StatelessWidget {
           Builder(builder: (context) {
             if (images == null) {
               return StreamBuilder(
-                stream: Dependencies.di().gallery.fetchAll(Dependencies.di().session.user.getId()),
+                // TODO: move this out of here
+                stream: Dependencies.di().gallery.fetchAll(userId),
                 builder: (_, AsyncSnapshot<List<ImageModel>> snapshot) {
                   if (!snapshot.hasData) {
                     return const SliverFillRemaining(child: MkLoadingSpinner());
