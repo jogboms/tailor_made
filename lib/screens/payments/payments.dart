@@ -42,6 +42,7 @@ class PaymentsPage extends StatelessWidget {
           Builder(builder: (context) {
             if (payments == null) {
               return StreamBuilder(
+                // TODO: move this out of here
                 stream: Dependencies.di().payments.fetchAll(userId),
                 builder: (_, AsyncSnapshot<List<PaymentModel>> snapshot) {
                   if (!snapshot.hasData) {

@@ -42,6 +42,7 @@ class GalleryPage extends StatelessWidget {
           Builder(builder: (context) {
             if (images == null) {
               return StreamBuilder(
+                // TODO: move this out of here
                 stream: Dependencies.di().gallery.fetchAll(userId),
                 builder: (_, AsyncSnapshot<List<ImageModel>> snapshot) {
                   if (!snapshot.hasData) {

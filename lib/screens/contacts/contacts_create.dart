@@ -89,6 +89,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
           ..location = _contact.location,
       );
 
+      // TODO: move this out of here
       Dependencies.di().contacts.update(contact, widget.userId).listen((snap) async {
         closeLoadingSnackBar();
         showInSnackBar("Successfully Added");

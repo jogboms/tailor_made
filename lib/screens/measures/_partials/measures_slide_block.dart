@@ -87,6 +87,7 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
 
     SnackBarProvider.of(context).loading();
     try {
+      // TODO: move this out of here
       await Dependencies.di().measures.delete(widget.measures, widget.userId);
 
       SnackBarProvider.of(context).hide();

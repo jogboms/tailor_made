@@ -106,6 +106,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
     if (imageFile == null) {
       return;
     }
+    // TODO: move this out of here
     final ref = Dependencies.di().gallery.createFile(imageFile, widget.userId);
 
     setState(() => _fireImages.add(_FireImage()..ref = ref));

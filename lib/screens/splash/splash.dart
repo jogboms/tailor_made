@@ -65,6 +65,7 @@ class SplashPage extends StatelessWidget {
               ),
             ),
             StreamBuilder<User>(
+              // TODO: move this out of here
               stream: Dependencies.di().accounts.onAuthStateChanged,
               builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
                 if (snapshot.hasData && snapshot.data != null && snapshot.data?.uid != null) {
@@ -174,14 +175,17 @@ class _ContentState extends State<_Content> {
   void _onLogin() async {
     try {
       setState(() => isLoading = true);
+      // TODO: move this out of here
       await Dependencies.di().accounts.signInWithGoogle();
     } catch (e) {
+      // TODO: move this out of here
       final message = MkStrings.genericError(e, Dependencies.di().session.isDev);
 
       if (message.isNotEmpty) {
         SnackBarProvider.of(context).show(message, duration: const Duration(milliseconds: 3500));
       }
 
+      // TODO: move this out of here
       await Dependencies.di().accounts.signout();
 
       if (!mounted) {

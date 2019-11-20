@@ -43,6 +43,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> with SnackBarPr
     if (imageFile == null) {
       return;
     }
+    // TODO: move this out of here
     final ref = Dependencies.di().jobs.createFile(imageFile, widget.userId);
 
     setState(() => fireImages.add(_FireImage()..ref = ref));
@@ -100,6 +101,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> with SnackBarPr
         ..contactID = contact.id;
 
       try {
+        // TODO: move this out of here
         Dependencies.di().jobs.update(job.build(), widget.userId).listen((snap) {
           closeLoadingSnackBar();
           Dependencies.di().jobsCoordinator.toJob(snap);

@@ -139,6 +139,7 @@ class ContactFormState extends State<ContactForm> {
     if (imageFile == null) {
       return;
     }
+    // TODO: move this out of here
     final ref = Dependencies.di().contacts.createFile(imageFile, widget.userId);
 
     setState(() => isLoading = true);
