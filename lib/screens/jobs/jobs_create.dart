@@ -135,7 +135,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
       builder: (_, __, MeasuresViewModel vm) {
         return MeasureCreateItems(
           grouped: vm.grouped,
-          measurements: job.measurements.build().toMap(),
+          measurements: job.measurements,
         );
       },
     );

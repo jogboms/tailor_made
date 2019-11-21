@@ -25,7 +25,7 @@ class ContactForm extends StatefulWidget {
   }) : super(key: key);
 
   final ValueSetter<ContactModel> onHandleSubmit;
-  final ContactModel contact;
+  final ContactModelBuilder contact;
   final String userId;
 
   @override
@@ -45,7 +45,7 @@ class ContactFormState extends State<ContactForm> {
   void initState() {
     super.initState();
     // TODO: look into this
-    contact = widget.contact.toBuilder();
+    contact = widget.contact;
     _fNController = TextEditingController(text: contact.fullname);
     _pNController = TextEditingController(text: contact.phone);
     _lNController = TextEditingController(text: contact.location);

@@ -252,7 +252,7 @@ class _AvatarAppBar extends StatelessWidget {
       actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.content_cut),
-          onPressed: () => Dependencies.di().measuresCoordinator.toMeasures(job.measurements.toMap()),
+          onPressed: () => Dependencies.di().measuresCoordinator.toMeasures(job.measurements),
         ),
         IconButton(
           icon: Icon(Icons.check, color: job.isComplete ? kPrimaryColor : kTextBaseColor),

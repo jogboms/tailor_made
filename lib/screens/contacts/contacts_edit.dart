@@ -33,7 +33,12 @@ class _ContactsEditPageState extends State<ContactsEditPage> with SnackBarProvid
           IconButton(icon: const Icon(Icons.contacts), onPressed: _handleSelectContact),
         ],
       ),
-      body: ContactForm(key: _formKey, contact: widget.contact, onHandleSubmit: _handleSubmit, userId: widget.userId),
+      body: ContactForm(
+        key: _formKey,
+        contact: widget.contact.toBuilder(),
+        onHandleSubmit: _handleSubmit,
+        userId: widget.userId,
+      ),
     );
   }
 

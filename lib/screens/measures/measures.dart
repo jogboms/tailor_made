@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
@@ -8,7 +9,7 @@ import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 class MeasuresPage extends StatelessWidget {
   const MeasuresPage({Key key, this.measurements}) : super(key: key);
 
-  final Map<String, double> measurements;
+  final BuiltMap<String, double> measurements;
 
   @override
   Widget build(BuildContext context) {

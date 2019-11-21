@@ -26,7 +26,7 @@ class _ContactAppBarState extends State<ContactAppBar> {
         Dependencies.di().jobsCoordinator.toCreateJob(widget.userId, [], widget.contact);
         break;
       case Choice.EditMeasure:
-        Dependencies.di().contactsCoordinator.toContactMeasure(widget.contact, widget.grouped);
+        Dependencies.di().contactsCoordinator.toContactMeasure(widget.contact.toBuilder(), widget.grouped);
         break;
       case Choice.EditAccount:
         Dependencies.di().contactsCoordinator.toContactEdit(widget.userId, widget.contact);
@@ -52,7 +52,7 @@ class _ContactAppBarState extends State<ContactAppBar> {
             Expanded(child: _Title(contact: widget.contact)),
             _Icon(
               icon: Icons.content_cut,
-              onTap: () => Dependencies.di().measuresCoordinator.toMeasures(widget.contact.measurements.toMap()),
+              onTap: () => Dependencies.di().measuresCoordinator.toMeasures(widget.contact.measurements),
             ),
             _Icon(icon: Icons.call, onTap: () => call(widget.contact.phone)),
             PopupMenuButton<Choice>(

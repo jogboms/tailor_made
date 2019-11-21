@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/coordinator/coordinator_base.dart';
 import 'package:tailor_made/models/measure.dart';
@@ -11,7 +12,7 @@ import 'package:tailor_made/wrappers/mk_navigate.dart';
 class MeasuresCoordinator extends CoordinatorBase {
   const MeasuresCoordinator(GlobalKey<NavigatorState> navigatorKey) : super(navigatorKey);
 
-  void toMeasures(Map<String, double> measures) {
+  void toMeasures(BuiltMap<String, double> measures) {
     navigator?.push<void>(MkNavigate.slideIn(MeasuresPage(measurements: measures), fullscreenDialog: true));
   }
 

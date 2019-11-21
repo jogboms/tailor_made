@@ -23,7 +23,7 @@ class ContactsCreatePage extends StatefulWidget {
 
 class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarProviderMixin {
   final GlobalKey<ContactFormState> _formKey = GlobalKey<ContactFormState>();
-  ContactModel contact;
+  ContactModelBuilder contact;
   final ContactPicker _contactPicker = ContactPicker();
 
   @override
@@ -32,7 +32,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
   @override
   void initState() {
     super.initState();
-    contact = ContactModel((b) => b..userID = widget.userId);
+    contact = ContactModel((b) => b..userID = widget.userId).toBuilder();
   }
 
   @override
@@ -65,11 +65,12 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
       return;
     }
 
-    _formKey.currentState.updateContact(
-      contact.rebuild((b) => b
+    // TODO: investigate this
+    final _contact = contact
+      ..update((b) => b
         ..fullname = _selectedContact.fullName
-        ..phone = _selectedContact.phoneNumber?.number),
-    );
+        ..phone = _selectedContact.phoneNumber?.number);
+    _formKey.currentState.updateContact(_contact.build());
   }
 
   void _handleSubmit(ContactModel _contact) async {
@@ -81,16 +82,17 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
     showLoadingSnackBar();
 
     try {
-      contact = contact.rebuild(
-        (b) => b
-          ..fullname = _contact.fullname
-          ..phone = _contact.phone
-          ..imageUrl = _contact.imageUrl
-          ..location = _contact.location,
-      );
+      contact = contact
+        ..update(
+          (b) => b
+            ..fullname = _contact.fullname
+            ..phone = _contact.phone
+            ..imageUrl = _contact.imageUrl
+            ..location = _contact.location,
+        );
 
       // TODO: move this out of here
-      Dependencies.di().contacts.update(contact, widget.userId).listen((snap) async {
+      Dependencies.di().contacts.update(contact.build(), widget.userId).listen((snap) async {
         closeLoadingSnackBar();
         showInSnackBar("Successfully Added");
 
@@ -106,7 +108,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
     final _contact = await Dependencies.di().contactsCoordinator.toContactMeasure(contact, vm.grouped);
 
     setState(() {
-      contact = contact.rebuild((b) => b..measurements = _contact.measurements.toBuilder());
+      contact = contact..update((b) => b..measurements = _contact.measurements.toBuilder());
     });
   }
 }

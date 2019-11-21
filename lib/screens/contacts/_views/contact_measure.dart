@@ -15,7 +15,7 @@ class ContactMeasure extends StatefulWidget {
   const ContactMeasure({Key key, @required this.grouped, @required this.contact}) : super(key: key);
 
   final Map<String, List<MeasureModel>> grouped;
-  final ContactModel contact;
+  final ContactModelBuilder contact;
 
   @override
   _ContactMeasureState createState() => _ContactMeasureState();
@@ -24,7 +24,7 @@ class ContactMeasure extends StatefulWidget {
 class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
-  ContactModel contact;
+//  ContactModelBuilder contact;
 
   @override
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -33,7 +33,7 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMi
   void initState() {
     super.initState();
     // TODO: look into this
-    contact = widget.contact.rebuild((b) => b);
+//    contact = widget.contact;
   }
 
   @override
@@ -43,12 +43,15 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMi
       appBar: MkAppBar(
         title: const Text("Measurements"),
         leading: MkBackButton(
-          onPop: contact?.reference != null ? null : () => Navigator.pop<ContactModel>(context, contact),
+          // TODO: investigate this
+          onPop: widget.contact?.build()?.reference != null
+              ? null
+              : () => Navigator.pop<ContactModel>(context, widget.contact.build()),
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.remove_red_eye, color: kTitleBaseColor),
-            onPressed: () => Dependencies.di().measuresCoordinator.toMeasures(contact.measurements.toMap()),
+            onPressed: () => Dependencies.di().measuresCoordinator.toMeasures(widget.contact.measurements.build()),
           )
         ],
       ),
@@ -64,7 +67,7 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMi
                 const FormSectionHeader(title: "Measurements", trailing: "Inches (In)"),
                 MeasureCreateItems(
                   grouped: widget.grouped,
-                  measurements: contact.measurements.toMap(),
+                  measurements: widget.contact.measurements,
                 ),
                 Padding(
                   child: MkPrimaryButton(child: const Text("FINISH"), onPressed: _handleSubmit),
@@ -95,9 +98,10 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMi
 
     try {
       // TODO: find a way to remove this from here
+      final _contact = widget.contact.build();
       // During contact creation
-      if (contact.reference != null) {
-        await contact.reference.updateData(contact.toMap());
+      if (_contact.reference != null) {
+        await _contact.reference.updateData(_contact.toMap());
       }
       closeLoadingSnackBar();
       showInSnackBar("Successfully Updated");

@@ -24,7 +24,7 @@ class ContactsCoordinator extends CoordinatorBase {
     navigator?.push<void>(MkNavigate.slideIn(ContactsEditPage(userId: userId, contact: contact)));
   }
 
-  Future<ContactModel> toContactMeasure(ContactModel contact, Map<String, List<MeasureModel>> grouped) {
+  Future<ContactModel> toContactMeasure(ContactModelBuilder contact, Map<String, List<MeasureModel>> grouped) {
     return navigator?.push<ContactModel>(MkNavigate.slideIn(ContactMeasure(contact: contact, grouped: grouped)));
   }
 
