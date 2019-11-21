@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tailor_made/repository/firebase/models.dart';
+import 'package:tailor_made/repository/models.dart';
 
 class CloudDb {
   CloudDb(this._instance);
@@ -23,10 +25,10 @@ class CloudDb {
 
   Query jobs(String userId) => _instance.collection('jobs').where('userID', isEqualTo: userId);
 
-  Future<void> batchAction(void Function(WriteBatch batch) action) {
+  Future<void> batchAction(void Function(BatchWriter batch) action) {
     final WriteBatch batch = _instance.batch();
 
-    action(batch);
+    action(FireBatchWriter(batch));
 
     return batch.commit();
   }

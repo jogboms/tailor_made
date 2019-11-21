@@ -9,7 +9,6 @@ import 'package:tailor_made/repository/models.dart';
 import 'package:tailor_made/screens/jobs/_partials/gallery_grid_item.dart';
 import 'package:tailor_made/utils/ui/mk_image_choice_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
-import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class GalleryGrids extends StatefulWidget {
@@ -38,31 +37,6 @@ class _GalleryGridsState extends State<GalleryGrids> {
   Widget build(BuildContext context) {
     final theme = ThemeProvider.of(context);
 
-    final List<Widget> imagesList = List<Widget>.generate(
-      _fireImages.length,
-      (int index) {
-        final fireImage = _fireImages[index];
-        final image = fireImage.image;
-
-        if (image == null) {
-          return const Center(widthFactor: 2.5, child: MkLoadingSpinner());
-        }
-
-        return GalleryGridItem(
-          image: image,
-          tag: "$image-$index",
-          size: _kGridWidth,
-          // Remove images from storage using path
-          onTapDelete: fireImage.ref != null
-              ? (image) => setState(() {
-                    fireImage.ref.delete();
-                    _fireImages.removeAt(index);
-                  })
-              : null,
-        );
-      },
-    ).reversed.toList();
-
     return Column(
       children: <Widget>[
         Row(
@@ -89,7 +63,17 @@ class _GalleryGridsState extends State<GalleryGrids> {
             scrollDirection: Axis.horizontal,
             children: [
               _NewGrid(gridSize: widget.gridSize, onPressed: _handlePhotoButtonPressed),
-              ...imagesList,
+              for (var index = _fireImages.length - 1; index >= 0; index--)
+                GalleryGridItem(
+                  image: _fireImages[index].image,
+                  size: _kGridWidth,
+                  onTapDelete: _fireImages[index].ref != null
+                      ? (image) => setState(() {
+                            _fireImages[index].ref.delete();
+                            _fireImages.removeAt(index);
+                          })
+                      : null,
+                ),
             ],
           ),
         ),

@@ -6,7 +6,6 @@ import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/screens/jobs/_partials/payment_grid_item.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
-import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class PaymentGrids extends StatefulWidget {
@@ -34,20 +33,6 @@ class _PaymentGridsState extends State<PaymentGrids> {
   @override
   Widget build(BuildContext context) {
     final theme = ThemeProvider.of(context);
-    final List<Widget> paymentsList = List<Widget>.generate(
-      _firePayments.length,
-      (int index) {
-        final fireImage = _firePayments[index];
-        final payment = fireImage.payment;
-
-        if (payment == null) {
-          return const Center(widthFactor: 2.5, child: MkLoadingSpinner());
-        }
-
-        return PaymentGridItem(payment: payment);
-      },
-    ).reversed.toList();
-
     return Column(
       children: <Widget>[
         Row(
@@ -74,7 +59,8 @@ class _PaymentGridsState extends State<PaymentGrids> {
             scrollDirection: Axis.horizontal,
             children: [
               _NewGrid(gridSize: widget.gridSize, onPressed: _onCreateNew),
-              ...paymentsList,
+              for (var index = _firePayments.length - 1; index >= 0; index--)
+                PaymentGridItem(payment: _firePayments[index].payment),
             ],
           ),
         ),

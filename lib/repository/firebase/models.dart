@@ -55,3 +55,19 @@ class FireReference implements Reference<DocumentReference> {
   @override
   Future<void> updateData(Map<String, dynamic> data) => _reference.updateData(data);
 }
+
+class FireBatchWriter implements BatchWriter {
+  FireBatchWriter(this._reference);
+
+  final WriteBatch _reference;
+
+  @override
+  void delete(Reference reference) => _reference.delete(reference.source);
+
+  @override
+  void setData(Reference reference, Map<String, dynamic> data, {bool merge = false}) =>
+      _reference.setData(reference.source, data, merge: merge);
+
+  @override
+  void updateData(Reference reference, Map<String, dynamic> data) => _reference.updateData(reference.source, data);
+}

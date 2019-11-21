@@ -3,6 +3,14 @@ abstract class Snapshot<T> {
   Reference get reference;
 }
 
+abstract class BatchWriter {
+  void delete(Reference reference);
+
+  void setData(Reference reference, Map<String, dynamic> data, {bool merge = false});
+
+  void updateData(Reference reference, Map<String, dynamic> data);
+}
+
 abstract class User {
   String get uid;
 }

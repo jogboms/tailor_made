@@ -23,10 +23,10 @@ class MeasuresImpl extends Measures {
     await repository.db.batchAction((batch) {
       measures.forEach((measure) {
         if (measure?.reference != null) {
-          batch.updateData(measure.reference.source, <String, String>{"group": groupName, "unit": unitValue});
+          batch.updateData(measure.reference, <String, String>{"group": groupName, "unit": unitValue});
         } else {
           batch.setData(
-            repository.db.measurements(userId).document(measure.id),
+            FireReference(repository.db.measurements(userId).document(measure.id)),
             measure.toMap(),
             merge: true,
           );
@@ -39,7 +39,7 @@ class MeasuresImpl extends Measures {
   Future<void> delete(List<MeasureModel> measures, String userId) async {
     await repository.db.batchAction((batch) {
       measures.forEach(
-        (measure) => batch.delete(repository.db.measurements(userId).document(measure.id)),
+        (measure) => batch.delete(FireReference(repository.db.measurements(userId).document(measure.id))),
       );
     });
   }
@@ -50,7 +50,7 @@ class MeasuresImpl extends Measures {
       try {
         measures.forEach(
           (measure) => batch.setData(
-            repository.db.measurements(userId).document(measure.id),
+            FireReference(repository.db.measurements(userId).document(measure.id)),
             measure.toMap(),
             merge: true,
           ),

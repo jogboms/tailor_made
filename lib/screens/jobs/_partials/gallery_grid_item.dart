@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/dependencies.dart';
-
-const _kGridWidth = 70.0;
+import 'package:tailor_made/models/image.dart';
+import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 
 class GalleryGridItem extends StatelessWidget {
-  GalleryGridItem({Key key, @required this.tag, @required this.image, this.onTapDelete, double size})
+  GalleryGridItem({Key key, @required this.image, this.onTapDelete, double size})
       : size = Size.square(size ?? _kGridWidth),
         super(key: key);
 
-  final String tag;
   final ImageModel image;
   final Size size;
   final ValueSetter<ImageModel> onTapDelete;
 
   @override
   Widget build(BuildContext context) {
+    if (image == null) {
+      return const Center(widthFactor: 2.5, child: MkLoadingSpinner());
+    }
+
     return Hero(
-      tag: tag,
+      tag: image.src,
       child: Container(
         width: size.width,
         margin: const EdgeInsets.only(right: 8.0),
@@ -49,3 +51,5 @@ class GalleryGridItem extends StatelessWidget {
     );
   }
 }
+
+const _kGridWidth = 70.0;

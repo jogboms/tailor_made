@@ -26,6 +26,7 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = ThemeProvider.of(context);
+    final content = _Content(isColdStart: isColdStart);
 
     return MkStatusBar(
       brightness: Brightness.dark,
@@ -75,7 +76,7 @@ class SplashPage extends StatelessWidget {
                   return const SizedBox();
                 }
 
-                return _Content(isColdStart: isColdStart);
+                return content;
               },
             ),
           ],
@@ -174,8 +175,7 @@ class _ContentState extends State<_Content> {
       // TODO: move this out of here
       await Dependencies.di().accounts.signInWithGoogle();
     } catch (e) {
-      // TODO: move this out of here
-      final message = MkStrings.genericError(e, Dependencies.di().session.isDev);
+      final message = MkStrings.genericError(e);
 
       if (message.isNotEmpty) {
         SnackBarProvider.of(context).show(message, duration: const Duration(milliseconds: 3500));

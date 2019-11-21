@@ -16,7 +16,6 @@ import 'package:tailor_made/screens/measures/_partials/measure_create_items.dart
 import 'package:tailor_made/widgets/_partials/form_section_header.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
-import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
@@ -161,28 +160,6 @@ class _JobsCreatePageState extends JobsCreateViewModel {
   }
 
   Widget _buildImageGrid() {
-    final List<Widget> imagesList = List<Widget>.generate(
-      fireImages.length,
-      (int index) {
-        final fireImage = fireImages[index];
-        final image = fireImage.image;
-
-        if (image == null) {
-          return const Center(widthFactor: 2.5, child: MkLoadingSpinner());
-        }
-
-        return GalleryGridItem(
-          image: image,
-          tag: "$image-$index",
-          size: _kGridWidth,
-          onTapDelete: (image) => setState(() {
-            fireImage.ref.delete();
-            fireImages.removeAt(index);
-          }),
-        );
-      },
-    ).reversed.toList();
-
     return Container(
       height: _kGridWidth + 8,
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -191,7 +168,15 @@ class _JobsCreatePageState extends JobsCreateViewModel {
         scrollDirection: Axis.horizontal,
         children: [
           _NewGrid(onPressed: handlePhotoButtonPressed),
-          ...imagesList,
+          for (var index = fireImages.length - 1; index >= 0; index--)
+            GalleryGridItem(
+              image: fireImages[index].image,
+              size: _kGridWidth,
+              onTapDelete: (image) => setState(() {
+                fireImages[index].ref.delete();
+                fireImages.removeAt(index);
+              }),
+            ),
         ],
       ),
     );

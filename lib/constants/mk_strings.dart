@@ -38,10 +38,10 @@ class MkStrings {
     "December",
   ];
 
-  static String genericError(dynamic error, bool isDev) {
+  static String genericError(dynamic error) {
     if (error is TimeoutException) {
       return "This action took too long. Please Retry.";
     }
-    return isDev ? (error is MkException ? error.message : "$error") : errorMessage;
+    return error is MkException ? error.message : "$error";
   }
 }

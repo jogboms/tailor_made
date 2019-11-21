@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/utils/mk_money.dart';
-import 'package:tailor_made/dependencies.dart';
+import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
-const _kGridWidth = 120.0;
-
 class PaymentGridItem extends StatelessWidget {
-  PaymentGridItem({Key key, this.payment, double size})
-      : size = Size.square(size ?? _kGridWidth),
+  PaymentGridItem({Key key, this.payment})
+      : size = Size.square(_kGridWidth),
         super(key: key);
 
   final PaymentModel payment;
@@ -18,6 +17,10 @@ class PaymentGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (payment == null) {
+      return const Center(widthFactor: 2.5, child: MkLoadingSpinner());
+    }
+
     final _date = payment.createdAt;
     final _price = MkMoney(payment.price).formatted;
     final theme = ThemeProvider.of(context);
@@ -65,3 +68,5 @@ class PaymentGridItem extends StatelessWidget {
     );
   }
 }
+
+const _kGridWidth = 120.0;
