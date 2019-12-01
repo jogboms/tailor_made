@@ -9,7 +9,7 @@
   <a href='https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade'><img alt='Get it on Google Play' src='./screenshots/google_play.png' height='36px'/></a>
   <br />
 
-[![Build Status - Travis](https://travis-ci.org/jogboms/tailor_made.svg?branch=master)](https://travis-ci.org/jogboms/tailor_made)
+[![Build Status - Travis](https://travis-ci.org/jogboms/tailor_made.svg?branch=master)](https://travis-ci.org/jogboms/tailor_made) [![codecov](https://codecov.io/gh/jogboms/tailor_made/branch/master/graph/badge.svg)](https://codecov.io/gh/jogboms/tailor_made)
 </div>
 
 ---
