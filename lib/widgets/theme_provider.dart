@@ -88,7 +88,7 @@ class ThemeProvider extends InheritedWidget {
   TextStyle get _text24Style => mkFontRegular(24.0);
   TextStyle get _text32Style => mkFontRegular(32.0);
 
-  static ThemeProvider of(BuildContext context) => context.inheritFromWidgetOfExactType(ThemeProvider);
+  static ThemeProvider of(BuildContext context) => context.dependOnInheritedWidgetOfExactType<ThemeProvider>();
 
   ThemeData themeData(ThemeData theme) {
     return ThemeData(
