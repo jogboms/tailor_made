@@ -3,24 +3,24 @@ description: Tailor-Made with love.
 version: 1.2.0
 
 environment:
-  sdk: ">=2.6.0-dev <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences: ^0.5.4+3
+  shared_preferences: ^0.5.4+6
   cloud_firestore: 0.8.2+3
   firebase_storage: 1.1.0+1
   firebase_auth: 0.7.0
-  image_picker: ^0.6.1+11
+  image_picker: ^0.6.2+1
   intl: ^0.16.0
-  url_launcher: ^5.2.5
+  url_launcher: ^5.2.7
   rxdart: ^0.22.6
   flutter_masked_text: ^0.8.0
-  photo_view: ^0.8.0
+  photo_view: ^0.9.0
   cached_network_image: ^2.0.0-rc.1
-  flutter_spinkit: ^4.0.0
-  google_sign_in: ^4.0.11
+  flutter_spinkit: ^4.1.0
+  google_sign_in: ^4.0.14
   get_version: ^0.2.0+1
   contact_picker: ^0.0.2
   version: ^1.0.0
@@ -28,10 +28,10 @@ dependencies:
   flutter_native_image:
     git:
       url: https://github.com/btastic/flutter_native_image.git
-  equatable: ^0.6.1
+  equatable: ^1.0.1
   rebloc: ^0.3.0+1
   injector: ^1.0.8
-  uuid: ^2.0.2
+  uuid: ^2.0.4
   built_value: ^6.8.2
   built_collection: ^4.2.2
 
