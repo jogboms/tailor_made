@@ -2,8 +2,8 @@ import 'package:flutter/material.dart' show MaterialColor;
 import 'package:flutter/widgets.dart';
 
 class MkColors {
-  static const _baseBlue = 0xFF9168ed;
-  static const _basePink = 0xFFe00092;
+  static const int _baseBlue = 0xFF9168ed;
+  static const int _basePink = 0xFFe00092;
   static const MaterialColor dark = MaterialColor(
     0xFF444444,
     <int, Color>{
@@ -34,7 +34,7 @@ class MkColors {
       900: Color(0xFF3c3c3c),
     },
   );
-  static const MaterialColor biro_blue = MaterialColor(
+  static const MaterialColor biroBlue = MaterialColor(
     _baseBlue,
     <int, Color>{
       50: Color(0xFFeee5fc),
@@ -49,7 +49,7 @@ class MkColors {
       900: Color(0xFF0000ca),
     },
   );
-  static const MaterialColor slate_pink = MaterialColor(
+  static const MaterialColor slatePink = MaterialColor(
     _basePink,
     <int, Color>{
       50: Color(0xFFf8e1f0),
@@ -66,7 +66,7 @@ class MkColors {
   );
   static const Color accent = Color(_basePink);
   static const Color primary = Color(_baseBlue);
-  static const Color light_grey = Color(0xFF9B9B9B);
+  static const Color lightGrey = Color(0xFF9B9B9B);
   static const Color success = Color(0xFF7ED321);
   static const Color danger = Color(0xFFEB5757);
   static const Color info = Color(0xFF2D9CDB);

@@ -6,75 +6,72 @@ import 'package:tailor_made/utils/mk_phone.dart';
 import 'package:tailor_made/widgets/_partials/mk_circle_avatar.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
-enum Choice { CreateJob, EditMeasure, EditAccount, SendText }
+enum Choice { createJob, editMeasure, editAccount, sendText }
 
 class ContactAppBar extends StatefulWidget {
-  const ContactAppBar({Key key, @required this.userId, @required this.grouped, this.contact}) : super(key: key);
+  const ContactAppBar({super.key, required this.userId, required this.grouped, this.contact});
 
-  final Map<String, List<MeasureModel>> grouped;
-  final ContactModel contact;
+  final Map<String, List<MeasureModel>>? grouped;
+  final ContactModel? contact;
   final String userId;
 
   @override
-  _ContactAppBarState createState() => _ContactAppBarState();
+  State<ContactAppBar> createState() => _ContactAppBarState();
 }
 
 class _ContactAppBarState extends State<ContactAppBar> {
   void _selectChoice(Choice choice) {
     switch (choice) {
-      case Choice.CreateJob:
-        Dependencies.di().jobsCoordinator.toCreateJob(widget.userId, [], widget.contact);
+      case Choice.createJob:
+        Dependencies.di().jobsCoordinator.toCreateJob(widget.userId, <ContactModel>[], widget.contact);
         break;
-      case Choice.EditMeasure:
+      case Choice.editMeasure:
         Dependencies.di().contactsCoordinator.toContactMeasure(widget.contact, widget.grouped);
         break;
-      case Choice.EditAccount:
+      case Choice.editAccount:
         Dependencies.di().contactsCoordinator.toContactEdit(widget.userId, widget.contact);
         break;
-      case Choice.SendText:
-        sms(widget.contact.phone);
-        break;
-      default:
+      case Choice.sendText:
+        sms(widget.contact!.phone);
         break;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final _popTextStyle = ThemeProvider.of(context).body1;
+    final TextStyle popTextStyle = ThemeProvider.of(context)!.body1;
     return PreferredSize(
       preferredSize: const Size.fromHeight(kToolbarHeight),
       child: SafeArea(
-        top: true,
         child: Row(
           children: <Widget>[
             _Leading(contact: widget.contact),
             Expanded(child: _Title(contact: widget.contact)),
             _Icon(
               icon: Icons.content_cut,
-              onTap: () => Dependencies.di().measuresCoordinator.toMeasures(widget.contact.measurements.toMap()),
+              onTap: () => Dependencies.di().measuresCoordinator.toMeasures(widget.contact!.measurements!.toMap()),
             ),
-            _Icon(icon: Icons.call, onTap: () => call(widget.contact.phone)),
+            _Icon(icon: Icons.call, onTap: () => call(widget.contact!.phone)),
             PopupMenuButton<Choice>(
               icon: const Icon(Icons.more_vert, color: Colors.white),
               onSelected: _selectChoice,
               itemBuilder: (_) {
-                return [
+                return <PopupMenuItem<Choice>>[
                   PopupMenuItem<Choice>(
-                    value: Choice.CreateJob,
-                    child: Text('New Job', style: _popTextStyle),
+                    value: Choice.createJob,
+                    child: Text('New Job', style: popTextStyle),
                   ),
                   PopupMenuItem<Choice>(
-                    value: Choice.SendText,
-                    child: Text('Text Message', style: _popTextStyle),
+                    value: Choice.sendText,
+                    child: Text('Text Message', style: popTextStyle),
                   ),
                   PopupMenuItem<Choice>(
-                    value: Choice.EditMeasure,
-                    child: Text('Edit Measurements', style: _popTextStyle),
+                    value: Choice.editMeasure,
+                    child: Text('Edit Measurements', style: popTextStyle),
                   ),
                   PopupMenuItem<Choice>(
-                    value: Choice.EditAccount,
-                    child: Text('Edit Account', style: _popTextStyle),
+                    value: Choice.editAccount,
+                    child: Text('Edit Account', style: popTextStyle),
                   ),
                 ];
               },
@@ -87,7 +84,7 @@ class _ContactAppBarState extends State<ContactAppBar> {
 }
 
 class _Icon extends StatelessWidget {
-  const _Icon({Key key, @required this.icon, @required this.onTap}) : super(key: key);
+  const _Icon({required this.icon, required this.onTap});
 
   final IconData icon;
   final VoidCallback onTap;
@@ -96,31 +93,31 @@ class _Icon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
-      child: InkResponse(child: Icon(icon, color: Colors.white), onTap: onTap, radius: 20.0),
+      child: InkResponse(onTap: onTap, radius: 20.0, child: Icon(icon, color: Colors.white)),
     );
   }
 }
 
 class _Title extends StatelessWidget {
-  const _Title({Key key, @required this.contact}) : super(key: key);
+  const _Title({required this.contact});
 
-  final ContactModel contact;
+  final ContactModel? contact;
 
   @override
   Widget build(BuildContext context) {
-    final theme = ThemeProvider.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context)!;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          contact.fullname,
+          contact!.fullname!,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: theme.title.copyWith(color: Colors.white),
         ),
         Text(
-          contact.location,
+          contact!.location!,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: theme.body1.copyWith(color: Colors.white),
@@ -131,14 +128,16 @@ class _Title extends StatelessWidget {
 }
 
 class _Leading extends StatelessWidget {
-  const _Leading({Key key, @required this.contact}) : super(key: key);
+  const _Leading({required this.contact});
 
-  final ContactModel contact;
+  final ContactModel? contact;
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
+    return TextButton(
+      style: TextButton.styleFrom(
+        padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.min,
@@ -146,8 +145,8 @@ class _Leading extends StatelessWidget {
           const Icon(Icons.arrow_back, color: Colors.white),
           const SizedBox(width: 4.0),
           Hero(
-            tag: contact.id,
-            child: MkCircleAvatar(radius: null, imageUrl: contact.imageUrl, useAlt: true),
+            tag: contact!.id!,
+            child: MkCircleAvatar(imageUrl: contact!.imageUrl, useAlt: true),
           ),
         ],
       ),

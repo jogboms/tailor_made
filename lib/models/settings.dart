@@ -6,7 +6,7 @@ import 'package:tailor_made/models/serializers.dart';
 part 'settings.g.dart';
 
 abstract class SettingsModel with ModelInterface implements Built<SettingsModel, SettingsModelBuilder> {
-  factory SettingsModel([void updates(SettingsModelBuilder b)]) = _$SettingsModel;
+  factory SettingsModel([void Function(SettingsModelBuilder b) updates]) = _$SettingsModel;
 
   SettingsModel._();
 
@@ -15,9 +15,10 @@ abstract class SettingsModel with ModelInterface implements Built<SettingsModel,
   String get versionName;
 
   @override
-  Map<String, dynamic> toMap() => serializers.serializeWith(SettingsModel.serializer, this);
+  Map<String, dynamic>? toMap() => serializers.serializeWith(SettingsModel.serializer, this) as Map<String, dynamic>?;
 
-  static SettingsModel fromJson(Map<String, dynamic> map) => serializers.deserializeWith(SettingsModel.serializer, map);
+  static SettingsModel? fromJson(Map<String, dynamic>? map) =>
+      serializers.deserializeWith(SettingsModel.serializer, map);
 
   static Serializer<SettingsModel> get serializer => _$settingsModelSerializer;
 }

@@ -3,13 +3,13 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class EmptyResultView extends StatelessWidget {
-  const EmptyResultView({Key key, this.message = "No results"}) : super(key: key);
+  const EmptyResultView({super.key, this.message = 'No results'});
 
   final String message;
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context)!;
     return Opacity(
       opacity: .5,
       child: Column(

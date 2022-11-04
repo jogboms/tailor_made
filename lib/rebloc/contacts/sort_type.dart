@@ -5,7 +5,7 @@ import 'package:built_value/serializer.dart';
 part 'sort_type.g.dart';
 
 class SortType extends EnumClass {
-  const SortType._(String name) : super(name);
+  const SortType._(super.name);
 
   static const SortType recent = _$recent;
   static const SortType jobs = _$jobs;

@@ -5,8 +5,8 @@ import 'package:tailor_made/constants/mk_fonts.dart';
 const Color kAccentColor = MkColors.accent;
 const Color kPrimaryColor = MkColors.primary;
 
-const MaterialColor kAccentSwatch = MkColors.slate_pink;
-const MaterialColor kPrimarySwatch = MkColors.biro_blue;
+const MaterialColor kAccentSwatch = MkColors.slatePink;
+const MaterialColor kPrimarySwatch = MkColors.biroBlue;
 
 const Color kHintColor = Color(0xFFAAAAAA);
 const Color kDividerColor = Color(0xFFBDBDBD);
@@ -26,7 +26,7 @@ const double kButtonMinWidth = 200.0;
 const BorderRadius kBorderRadius = BorderRadius.all(Radius.circular(4.0));
 
 class MkBorderSide extends BorderSide {
-  const MkBorderSide({Color color, BorderStyle style, double width})
+  const MkBorderSide({Color? color, BorderStyle? style, double? width})
       : super(
           color: color ?? kBorderSideColor,
           style: style ?? BorderStyle.solid,
@@ -35,12 +35,11 @@ class MkBorderSide extends BorderSide {
 }
 
 class MkStyle extends TextStyle {
-  const MkStyle.mkFont({double fontSize, FontWeight fontWeight, Color color})
+  const MkStyle.mkFont({super.fontSize, FontWeight? fontWeight, Color? color})
       : super(
           inherit: false,
           color: color ?? kTextBaseColor,
           fontFamily: MkFonts.base,
-          fontSize: fontSize,
           fontWeight: fontWeight ?? MkStyle.regular,
           // wordSpacing: -2.5,
           // letterSpacing: -0.5,
@@ -60,17 +59,17 @@ TextStyle mkFontSize(double fontSize) => MkStyle.mkFont(fontSize: fontSize);
 
 TextStyle mkFontColor(Color color) => MkStyle.mkFont(color: color);
 
-TextStyle mkFontLight(double fontSize, [Color color]) =>
+TextStyle mkFontLight(double fontSize, [Color? color]) =>
     MkStyle.mkFont(fontSize: fontSize, fontWeight: MkStyle.light, color: color ?? kTextBaseColor);
 
-TextStyle mkFontRegular(double fontSize, [Color color]) =>
+TextStyle mkFontRegular(double fontSize, [Color? color]) =>
     MkStyle.mkFont(fontSize: fontSize, fontWeight: MkStyle.regular, color: color ?? kTextBaseColor);
 
-TextStyle mkFontMedium(double fontSize, [Color color]) =>
+TextStyle mkFontMedium(double fontSize, [Color? color]) =>
     MkStyle.mkFont(fontSize: fontSize, fontWeight: MkStyle.medium, color: color ?? kTextBaseColor);
 
-TextStyle mkFontSemi(double fontSize, [Color color]) =>
+TextStyle mkFontSemi(double fontSize, [Color? color]) =>
     MkStyle.mkFont(fontSize: fontSize, fontWeight: MkStyle.semibold, color: color ?? kTextBaseColor);
 
-TextStyle mkFontBold(double fontSize, [Color color]) =>
+TextStyle mkFontBold(double fontSize, [Color? color]) =>
     MkStyle.mkFont(fontSize: fontSize, fontWeight: MkStyle.bold, color: color ?? kTextBaseColor);

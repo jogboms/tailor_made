@@ -1,3 +1,3 @@
 class MkFonts {
-  static const String base = "Raleway";
+  static const String base = 'Raleway';
 }

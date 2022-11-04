@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/constants/mk_style.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/payment.dart';
 import 'package:tailor_made/utils/mk_money.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
-const _kGridWidth = 120.0;
+const double _kGridWidth = 120.0;
 
 class PaymentGridItem extends StatelessWidget {
-  PaymentGridItem({Key key, this.payment, double size})
-      : size = Size.square(size ?? _kGridWidth),
-        super(key: key);
+  PaymentGridItem({super.key, this.payment, double? size}) : size = Size.square(size ?? _kGridWidth);
 
-  final PaymentModel payment;
+  final PaymentModel? payment;
   final Size size;
 
   @override
   Widget build(BuildContext context) {
-    final _date = payment.createdAt;
-    final _price = MkMoney(payment.price).formatted;
-    final theme = ThemeProvider.of(context);
+    final DateTime date = payment!.createdAt;
+    final String price = MkMoney(payment!.price).formatted;
+    final ThemeProvider theme = ThemeProvider.of(context)!;
 
     return Container(
       width: size.width,
@@ -36,19 +34,19 @@ class PaymentGridItem extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 Align(
                   alignment: Alignment.topRight,
                   child: Text.rich(
                     TextSpan(
-                      children: [
+                      children: <TextSpan>[
                         TextSpan(
-                          text: _date.day.toString(),
+                          text: date.day.toString(),
                           style: theme.subhead3.copyWith(fontWeight: MkStyle.medium, color: Colors.white),
                         ),
-                        const TextSpan(text: "\n"),
+                        const TextSpan(text: '\n'),
                         TextSpan(
-                          text: "${MkStrings.monthsShort[_date.month - 1].toUpperCase()}, ${_date.year}",
+                          text: '${MkStrings.monthsShort[date.month - 1].toUpperCase()}, ${date.year}',
                           style: theme.xxsmall.copyWith(fontWeight: MkStyle.medium, color: Colors.white),
                         ),
                       ],
@@ -56,7 +54,7 @@ class PaymentGridItem extends StatelessWidget {
                     textAlign: TextAlign.right,
                   ),
                 ),
-                Text(_price, style: theme.title.copyWith(color: Colors.white))
+                Text(price, style: theme.title.copyWith(color: Colors.white))
               ],
             ),
           ),

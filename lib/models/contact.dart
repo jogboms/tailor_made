@@ -9,61 +9,51 @@ import 'package:uuid/uuid.dart';
 part 'contact.g.dart';
 
 abstract class ContactModel with ModelInterface implements Built<ContactModel, ContactModelBuilder> {
-  factory ContactModel([void updates(ContactModelBuilder b)]) = _$ContactModel;
+  factory ContactModel([void Function(ContactModelBuilder b) updates]) = _$ContactModel;
 
   ContactModel._();
 
   factory ContactModel.fromSnapshot(Snapshot snapshot) =>
-      ContactModel.fromJson(snapshot.data)..reference = snapshot.reference;
+      ContactModel.fromJson(snapshot.data!)!..reference = snapshot.reference;
 
   static void _initializeBuilder(ContactModelBuilder b) => b
-    ..id = Uuid().v1()
-    ..fullname = ""
+    ..id = const Uuid().v1()
+    ..fullname = ''
     ..createdAt = DateTime.now()
     ..totalJobs = 0
     ..pendingJobs = 0
     ..measurements = BuiltMap<String, double>(<String, double>{}).toBuilder();
 
-  @nullable
-  String get id;
+  String? get id;
 
   String get userID;
 
-  @nullable
-  String get fullname;
+  String? get fullname;
 
-  @nullable
-  String get phone;
+  String? get phone;
 
-  @nullable
-  String get location;
+  String? get location;
 
-  @nullable
-  String get imageUrl;
+  String? get imageUrl;
 
-  @nullable
-  DateTime get createdAt;
+  DateTime? get createdAt;
 
-  @nullable
-  BuiltMap<String, double> get measurements;
+  BuiltMap<String, double>? get measurements;
 
-  @nullable
-  int get totalJobs;
+  int? get totalJobs;
 
-  @nullable
-  int get pendingJobs;
+  int? get pendingJobs;
 
   @override
-  Map<String, dynamic> toMap() => serializers.serializeWith(ContactModel.serializer, this);
+  Map<String, dynamic> toMap() => serializers.serializeWith(ContactModel.serializer, this)! as Map<String, dynamic>;
 
-  static ContactModel fromJson(Map<String, dynamic> map) {
-    // TODO: investigate this
-    Map<String, double> newMeasurements =
-        map["measurements"] != null ? map["measurements"].cast<String, double>() : <String, double>{};
+  static ContactModel? fromJson(Map<String, dynamic> map) {
+    // TODO(Jogboms): investigate this.
+    Map<String, double?> newMeasurements = map['measurements'] as Map<String, double?>? ?? <String, double>{};
     if (newMeasurements.isNotEmpty) {
-      newMeasurements = newMeasurements..removeWhere((key, value) => value == null);
+      newMeasurements = newMeasurements..removeWhere((String key, double? value) => value == null);
     }
-    map["measurements"] = newMeasurements;
+    map['measurements'] = newMeasurements;
     return serializers.deserializeWith(ContactModel.serializer, map);
   }
 

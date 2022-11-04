@@ -5,45 +5,44 @@ import 'package:tailor_made/widgets/theme_provider.dart';
 
 class MkClearButton extends StatelessWidget {
   const MkClearButton({
-    Key key,
-    @required this.child,
-    @required this.onPressed,
+    super.key,
+    required this.child,
+    required this.onPressed,
     this.color = MkColors.primary,
     this.backgroundColor,
     this.borderRadius,
     this.padding,
     this.height,
     this.useSafeArea = false,
-  }) : super(key: key);
+  });
 
   final Widget child;
-  final VoidCallback onPressed;
-  final EdgeInsets padding;
+  final VoidCallback? onPressed;
+  final EdgeInsets? padding;
   final Color color;
-  final Color backgroundColor;
+  final Color? backgroundColor;
   final bool useSafeArea;
-  final BorderRadius borderRadius;
-  final double height;
+  final BorderRadius? borderRadius;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
-    final num _safeAreaBottom = MediaQuery.of(context).padding.bottom;
-    final _padding = EdgeInsets.only(
+    final num safeAreaBottom = MediaQuery.of(context).padding.bottom;
+    final EdgeInsets localPadding = EdgeInsets.only(
       top: padding?.top ?? 16.0,
-      bottom: (padding?.bottom ?? 16.0) + (useSafeArea ? _safeAreaBottom : 0.0),
+      bottom: (padding?.bottom ?? 16.0) + (useSafeArea ? safeAreaBottom : 0.0),
       left: padding?.left ?? 0.0,
       right: padding?.right ?? 0.0,
     );
-    final _h = height ?? kButtonHeight;
-    final _height = useSafeArea ? _h + _safeAreaBottom : _h;
+    final double height = (this.height ?? kButtonHeight) + (useSafeArea ? safeAreaBottom : 0);
 
     return CupertinoButton(
-      padding: _padding,
-      minSize: _height ?? kButtonHeight,
+      padding: localPadding,
+      minSize: height,
       color: backgroundColor,
       borderRadius: borderRadius ?? BorderRadius.zero,
-      child: DefaultTextStyle(style: ThemeProvider.of(context).button.copyWith(color: color), child: child),
       onPressed: onPressed,
+      child: DefaultTextStyle(style: ThemeProvider.of(context)!.button.copyWith(color: color), child: child),
     );
   }
 }

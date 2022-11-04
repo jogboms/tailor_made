@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/models/job.dart';
 import 'package:tailor_made/repository/firebase/main.dart';
 import 'package:tailor_made/repository/firebase/models.dart';
@@ -11,11 +12,12 @@ class JobsImpl extends Jobs {
   final FirebaseRepository repository;
 
   @override
-  Stream<List<JobModel>> fetchAll(String userId) {
-    return repository.db
-        .jobs(userId)
-        .snapshots()
-        .map((snapshot) => snapshot.documents.map((item) => JobModel.fromSnapshot(FireSnapshot(item))).toList());
+  Stream<List<JobModel>> fetchAll(String? userId) {
+    return repository.db.jobs(userId).snapshots().map(
+          (QuerySnapshot<Map<String, dynamic>> snapshot) => snapshot.docs
+              .map((QueryDocumentSnapshot<Map<String, dynamic>> item) => JobModel.fromSnapshot(FireSnapshot(item)))
+              .toList(),
+        );
   }
 
   @override
@@ -25,8 +27,10 @@ class JobsImpl extends Jobs {
 
   @override
   Stream<JobModel> update(JobModel job, String userId) {
-    final ref = repository.db.jobs(userId).reference().document(job.id);
-    ref.setData(job.toMap()).then((r) {});
-    return ref.snapshots().map((doc) => JobModel.fromSnapshot(FireSnapshot(doc)));
+    final DocumentReference<Map<String, dynamic>> ref = repository.db.jobs(userId).firestore.doc(job.id!);
+    ref.set(job.toMap()).then((_) {});
+    return ref
+        .snapshots()
+        .map((DocumentSnapshot<Map<String, dynamic>> doc) => JobModel.fromSnapshot(FireSnapshot(doc)));
   }
 }

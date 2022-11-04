@@ -4,13 +4,13 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class OutDatedPage extends StatelessWidget {
-  const OutDatedPage({Key key, @required this.onUpdate}) : super(key: key);
+  const OutDatedPage({super.key, required this.onUpdate});
 
   final VoidCallback onUpdate;
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = ThemeProvider.of(context).subhead1;
+    final TextStyle textTheme = ThemeProvider.of(context)!.subhead1;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -19,7 +19,7 @@ class OutDatedPage extends StatelessWidget {
           SpinKitFadingCube(color: Colors.grey.shade300),
           const SizedBox(height: 48.0),
           Text(
-            "OUT OF DATE",
+            'OUT OF DATE',
             style: textTheme.copyWith(color: Colors.black87, fontWeight: MkStyle.bold),
             textAlign: TextAlign.center,
           ),
@@ -27,19 +27,20 @@ class OutDatedPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 64.0),
             child: Text(
-              "It appears you are running an outdated version of the app.\n If this is not the case, please contact an Administrator.",
+              'It appears you are running an outdated version of the app.\n If this is not the case, please contact an Administrator.',
               style: textTheme.copyWith(color: Colors.grey.shade700),
               textAlign: TextAlign.center,
             ),
           ),
           const SizedBox(height: 32.0),
-          RaisedButton.icon(
-            color: kAccentColor,
-            shape: const StadiumBorder(),
-            colorBrightness: Brightness.dark,
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: kAccentColor,
+              shape: const StadiumBorder(),
+            ),
             onPressed: onUpdate,
             icon: const Icon(Icons.get_app),
-            label: const Text("Get Update"),
+            label: const Text('Get Update'),
           ),
         ],
       ),

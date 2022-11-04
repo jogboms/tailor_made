@@ -6,7 +6,7 @@ import 'package:tailor_made/rebloc/app_state.dart';
 part 'state.g.dart';
 
 abstract class StatsState implements Built<StatsState, StatsStateBuilder> {
-  factory StatsState([void updates(StatsStateBuilder b)]) = _$StatsState;
+  factory StatsState([void Function(StatsStateBuilder b) updates]) = _$StatsState;
 
   factory StatsState.initialState() => _$StatsState(
         (StatsStateBuilder b) => b
@@ -17,13 +17,11 @@ abstract class StatsState implements Built<StatsState, StatsStateBuilder> {
 
   StatsState._();
 
-  @nullable
-  StatsModel get stats;
+  StatsModel? get stats;
 
   StateStatus get status;
 
-  @nullable
-  String get error;
+  String? get error;
 
   static Serializer<StatsState> get serializer => _$statsStateSerializer;
 }

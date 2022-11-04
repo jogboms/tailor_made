@@ -14,35 +14,37 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class JobsPage extends StatelessWidget {
-  const JobsPage({Key key}) : super(key: key);
+  const JobsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, JobsViewModel>(
-      converter: (store) => JobsViewModel(store),
+      converter: JobsViewModel.new,
       builder: (BuildContext context, _, JobsViewModel vm) {
         return WillPopScope(
           child: Scaffold(
             appBar: _AppBar(vm: vm),
-            body: Builder(builder: (context) {
-              if (vm.isLoading && !vm.isSearching) {
-                return const MkLoadingSpinner();
-              }
+            body: Builder(
+              builder: (BuildContext context) {
+                if (vm.isLoading && !vm.isSearching) {
+                  return const MkLoadingSpinner();
+                }
 
-              return SafeArea(
-                top: false,
-                child: CustomScrollView(
-                  slivers: <Widget>[JobList(jobs: vm.jobs)],
-                ),
-              );
-            }),
+                return SafeArea(
+                  top: false,
+                  child: CustomScrollView(
+                    slivers: <Widget>[JobList(jobs: vm.jobs)],
+                  ),
+                );
+              },
+            ),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.library_add),
               onPressed: () => Dependencies.di().jobsCoordinator.toCreateJob(vm.userId, vm.contacts),
             ),
           ),
           onWillPop: () async {
-            // TODO
+            // TODO(Jogboms): handle
             // if (_isSearching) {
             //   _handleSearchEnd(vm)();
             //   return false;
@@ -56,15 +58,15 @@ class JobsPage extends StatelessWidget {
 }
 
 class _AppBar extends StatefulWidget implements PreferredSizeWidget {
-  const _AppBar({Key key, @required this.vm}) : super(key: key);
+  const _AppBar({required this.vm});
 
   final JobsViewModel vm;
 
   @override
-  _AppBarState createState() => _AppBarState();
+  State<_AppBar> createState() => _AppBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
@@ -72,14 +74,14 @@ class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeProvider? theme = ThemeProvider.of(context);
 
     if (!_isSearching) {
       return MkAppBar(
-        title: Text("Jobs"),
+        title: const Text('Jobs'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search, color: theme.appBarTitle.color),
+            icon: Icon(Icons.search, color: theme!.appBarTitle.color),
             onPressed: _onTapSearch,
           ),
           JobsFilterButton(
@@ -90,7 +92,7 @@ class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
       );
     }
 
-    final _textStyle = theme.subhead1Bold;
+    final TextStyle textStyle = theme!.subhead1Bold;
 
     return AppBar(
       centerTitle: false,
@@ -98,16 +100,16 @@ class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
       leading: MkCloseButton(color: Colors.white, onPop: _handleSearchEnd),
       title: TextField(
         autofocus: true,
-        decoration: InputDecoration(hintText: 'Search...', hintStyle: _textStyle.copyWith(color: Colors.white)),
-        style: _textStyle.copyWith(color: Colors.white),
-        onChanged: (term) => dispatchAction(SearchJobAction(term)),
+        decoration: InputDecoration(hintText: 'Search...', hintStyle: textStyle.copyWith(color: Colors.white)),
+        style: textStyle.copyWith(color: Colors.white),
+        onChanged: (String term) => dispatchAction(SearchJobAction(term)),
       ),
       bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(1.0),
         child: SizedBox(
           height: 1.0,
           child: widget.vm.isLoading ? const LinearProgressIndicator(backgroundColor: Colors.white) : null,
         ),
-        preferredSize: const Size.fromHeight(1.0),
       ),
     );
   }

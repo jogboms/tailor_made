@@ -1,13 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_colors.dart';
 import 'package:tailor_made/constants/mk_fonts.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 
 class ThemeProvider extends InheritedWidget {
-  const ThemeProvider({Key key, @required Widget child})
-      : assert(child != null),
-        super(key: key, child: child);
+  const ThemeProvider({super.key, required super.child});
 
   TextStyle get xxsmall => _text10Style;
   TextStyle get xxsmallHint => xxsmall.copyWith(color: Colors.grey);
@@ -55,12 +52,12 @@ class ThemeProvider extends InheritedWidget {
   TextStyle get display4Light => display4.copyWith(fontWeight: MkStyle.light);
   TextStyle get display4Bold => _header32Style;
 
-  TextStyle get textfield => _text15MediumStyle.copyWith(fontWeight: MkStyle.semibold, color: MkColors.biro_blue);
+  TextStyle get textfield => _text15MediumStyle.copyWith(fontWeight: MkStyle.semibold, color: MkColors.biroBlue);
 
   TextStyle get textfieldLabel => body3.copyWith(
         fontWeight: MkStyle.medium,
         height: 0.25,
-        color: MkColors.light_grey.withOpacity(.8),
+        color: MkColors.lightGrey.withOpacity(.8),
       );
   // TextStyle get errorStyle => small.copyWith(color: Colors.red[700]);
   TextStyle get errorStyle => small.copyWith(color: kBorderSideErrorColor);
@@ -88,34 +85,32 @@ class ThemeProvider extends InheritedWidget {
   TextStyle get _text24Style => mkFontRegular(24.0);
   TextStyle get _text32Style => mkFontRegular(32.0);
 
-  static ThemeProvider of(BuildContext context) => context.dependOnInheritedWidgetOfExactType<ThemeProvider>();
+  static ThemeProvider? of(BuildContext context) => context.dependOnInheritedWidgetOfExactType<ThemeProvider>();
 
   ThemeData themeData(ThemeData theme) {
     return ThemeData(
-      accentColor: kAccentColor,
-      primarySwatch: kPrimarySwatch,
       primaryColor: kPrimaryColor,
       primaryIconTheme: theme.primaryIconTheme.copyWith(color: kPrimarySwatch),
       textTheme: theme.textTheme.copyWith(
-        body1: theme.textTheme.body1.merge(body1),
-        button: theme.textTheme.button.merge(button),
+        bodyText2: theme.textTheme.bodyText2!.merge(body1),
+        button: theme.textTheme.button!.merge(button),
       ),
       canvasColor: Colors.white,
       buttonTheme: theme.buttonTheme.copyWith(height: kButtonHeight),
       inputDecorationTheme: InputDecorationTheme(
-        isDense: false,
-        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: kPrimarySwatch, width: 2.0)),
-        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: kBorderSideColor)),
+        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: kPrimarySwatch, width: 2.0)),
+        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: kBorderSideColor)),
         errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: kBorderSideErrorColor)),
-        contentPadding: EdgeInsets.only(top: 13.0, bottom: 12.0),
+        contentPadding: const EdgeInsets.only(top: 13.0, bottom: 12.0),
         hintStyle: textfieldLabel,
         labelStyle: textfieldLabel,
         errorStyle: errorStyle,
       ),
-      cursorColor: kPrimaryColor,
       fontFamily: MkFonts.base,
       hintColor: kHintColor,
       dividerColor: kBorderSideColor,
+      textSelectionTheme: const TextSelectionThemeData(cursorColor: kPrimaryColor),
+      colorScheme: ColorScheme.fromSwatch(primarySwatch: kPrimarySwatch).copyWith(secondary: kAccentColor),
     );
   }
 

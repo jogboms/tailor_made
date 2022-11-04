@@ -12,13 +12,13 @@ class Auth {
   final FirebaseAuth _auth;
   final GoogleSignIn _googleSignIn;
 
-  Future<FireUser> get getUser => _auth.currentUser().then(_mapFirebaseUserToUser);
+  FireUser get getUser => _mapFirebaseUserToUser(_auth.currentUser);
 
-  Stream<FireUser> get onAuthStateChanged => _auth.onAuthStateChanged.map(_mapFirebaseUserToUser);
+  Stream<FireUser> get onAuthStateChanged => _auth.authStateChanges().map(_mapFirebaseUserToUser);
 
   Future<void> signInWithGoogle() async {
     try {
-      GoogleSignInAccount currentUser = _googleSignIn.currentUser;
+      GoogleSignInAccount? currentUser = _googleSignIn.currentUser;
       currentUser ??= await _googleSignIn.signInSilently();
       currentUser ??= await _googleSignIn.signIn();
 
@@ -28,24 +28,22 @@ class Auth {
 
       final GoogleSignInAuthentication auth = await currentUser.authentication;
 
-      final AuthCredential credential = GoogleAuthProvider.getCredential(
+      final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: auth.accessToken,
         idToken: auth.idToken,
       );
-      final user = await _auth.signInWithCredential(credential);
-      assert(user != null);
-      assert(!user.isAnonymous);
+      await _auth.signInWithCredential(credential);
     } on PlatformException catch (e) {
       if (e.code == GoogleSignIn.kSignInCanceledError) {
         return;
       }
-      if (e.message?.contains("administrator") ?? false) {
-        throw Exception("It seems this account has been disabled. Contact an Admin.");
+      if (e.message?.contains('administrator') ?? false) {
+        throw Exception('It seems this account has been disabled. Contact an Admin.');
       }
-      if (_containsAny(e.message, ["NETWORK_ERROR", "network"])) {
+      if (_containsAny(e.message, <String>['NETWORK_ERROR', 'network'])) {
         throw NoInternetException();
       }
-      throw Exception("Sorry, We could not connect. Try again.");
+      throw Exception('Sorry, We could not connect. Try again.');
     } catch (e) {
       rethrow;
     }
@@ -56,10 +54,11 @@ class Auth {
     await _googleSignIn.signOut();
   }
 
-  FireUser _mapFirebaseUserToUser(FirebaseUser _user) {
-    assert(_user != null);
-    return FireUser(_user);
+  FireUser _mapFirebaseUserToUser(User? user) {
+    assert(user != null);
+    return FireUser(user);
   }
 }
 
-bool _containsAny(String value, List<String> find) => find.fold(false, (acc, cur) => value?.contains(cur) ?? false);
+bool _containsAny(String? value, List<String> find) =>
+    find.fold(false, (bool acc, String cur) => value?.contains(cur) ?? false);

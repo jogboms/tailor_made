@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 // NumberFormat.compactSimpleCurrency(name: "NGN", decimalDigits: 2);
 // NumberFormat.compactCurrency(name: "", decimalDigits: 2);
 
-const String _symbol = "₦";
+const String _symbol = '₦';
 
 class MkMoney {
   MkMoney(this.money, {bool isLong = false})
@@ -15,14 +15,14 @@ class MkMoney {
             ? NumberFormat.simpleCurrency(name: _symbol, decimalDigits: 2)
             : NumberFormat.compactSimpleCurrency(name: _symbol, decimalDigits: 2);
 
-  num money;
+  num? money;
   final NumberFormat _format;
 
   String get formatted {
     try {
       return _format.format(money ?? 0);
     } catch (e) {
-      return "₦0.0";
+      return '₦0.0';
     }
   }
 }

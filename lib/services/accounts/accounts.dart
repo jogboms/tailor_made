@@ -6,7 +6,7 @@ abstract class Accounts {
 
   Stream<User> get onAuthStateChanged;
 
-  Future<void> signout();
+  Future<void>? signout();
 
   Future<void> readNotice(AccountModel account);
 
@@ -14,5 +14,5 @@ abstract class Accounts {
 
   Future<void> signUp(AccountModel account);
 
-  Stream<AccountModel> getAccount(String userId);
+  Stream<AccountModel> getAccount(String? userId);
 }

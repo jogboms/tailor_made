@@ -6,7 +6,7 @@ import 'package:tailor_made/rebloc/app_state.dart';
 part 'state.g.dart';
 
 abstract class AccountState implements Built<AccountState, AccountStateBuilder> {
-  factory AccountState([void updates(AccountStateBuilder b)]) = _$AccountState;
+  factory AccountState([void Function(AccountStateBuilder b) updates]) = _$AccountState;
 
   factory AccountState.initialState() => _$AccountState(
         (AccountStateBuilder b) => b
@@ -18,15 +18,13 @@ abstract class AccountState implements Built<AccountState, AccountStateBuilder> 
 
   AccountState._();
 
-  @nullable
-  AccountModel get account;
+  AccountModel? get account;
 
   StateStatus get status;
 
   bool get hasSkipedPremium;
 
-  @nullable
-  String get error;
+  String? get error;
 
   static Serializer<AccountState> get serializer => _$accountStateSerializer;
 }

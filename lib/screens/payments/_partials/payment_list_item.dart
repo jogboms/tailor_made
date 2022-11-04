@@ -9,34 +9,36 @@ import 'package:tailor_made/widgets/theme_provider.dart';
 import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 class PaymentListItem extends StatelessWidget {
-  const PaymentListItem({Key key, this.payment}) : super(key: key);
+  const PaymentListItem({super.key, this.payment});
 
-  final PaymentModel payment;
+  final PaymentModel? payment;
 
   @override
   Widget build(BuildContext context) {
-    final _date = payment.createdAt;
-    final theme = ThemeProvider.of(context);
+    final DateTime date = payment!.createdAt;
+    final ThemeProvider theme = ThemeProvider.of(context)!;
 
     return Material(
       child: InkWell(
         onTap: () {
-          Navigator.of(context).push<void>(MkNavigate.slideIn(
-            PaymentPage(payment: payment),
-            fullscreenDialog: true,
-          ));
+          Navigator.of(context).push<void>(
+            MkNavigate.slideIn(
+              PaymentPage(payment: payment),
+              fullscreenDialog: true,
+            ),
+          );
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
-            children: [
+            children: <Widget>[
               Expanded(
                 child: Row(
                   children: <Widget>[
                     const MkDots(color: kAccentColor, size: 12),
                     const SizedBox(width: 8.0),
                     Text(
-                      MkMoney(payment.price).formatted,
+                      MkMoney(payment!.price).formatted,
                       style: theme.title.copyWith(letterSpacing: 1.5),
                     ),
                   ],
@@ -44,11 +46,11 @@ class PaymentListItem extends StatelessWidget {
               ),
               Text.rich(
                 TextSpan(
-                  children: [
-                    TextSpan(text: _date.day.toString(), style: theme.subhead3Semi.copyWith(color: kAccentColor)),
-                    const TextSpan(text: "\n"),
+                  children: <TextSpan>[
+                    TextSpan(text: date.day.toString(), style: theme.subhead3Semi.copyWith(color: kAccentColor)),
+                    const TextSpan(text: '\n'),
                     TextSpan(
-                      text: "${MkStrings.monthsShort[_date.month - 1].toUpperCase()}, ${_date.year}",
+                      text: '${MkStrings.monthsShort[date.month - 1].toUpperCase()}, ${date.year}',
                       style: theme.smallMedium.copyWith(color: Colors.black54),
                     ),
                   ],

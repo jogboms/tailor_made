@@ -7,21 +7,21 @@ import 'package:tailor_made/services/session.dart';
 import 'package:tailor_made/utils/mk_first_time_login_check.dart';
 
 Future<BootstrapModel> bootstrap(Dependencies dependencies, Repository repository, Environment env) async {
-  final _session = Session(environment: env);
-  final _navigatorKey = GlobalKey<NavigatorState>();
+  final Session session = Session(environment: env);
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  dependencies.initialize(_session, _navigatorKey, repository);
+  dependencies.initialize(session, navigatorKey, repository);
 
-  if (_session.isMock) {
-    return BootstrapModel(navigatorKey: _navigatorKey, isFirstTime: true, isMock: true);
+  if (session.isMock) {
+    return BootstrapModel(navigatorKey: navigatorKey, isFirstTime: true, isMock: true);
   }
 
-  final isFirstTime = await MkFirstTimeLoginCheck.check(env);
-  return BootstrapModel(navigatorKey: _navigatorKey, isFirstTime: isFirstTime, isMock: false);
+  final bool isFirstTime = await MkFirstTimeLoginCheck.check(env);
+  return BootstrapModel(navigatorKey: navigatorKey, isFirstTime: isFirstTime, isMock: false);
 }
 
 class BootstrapModel {
-  const BootstrapModel({@required this.navigatorKey, @required this.isFirstTime, @required this.isMock});
+  const BootstrapModel({required this.navigatorKey, required this.isFirstTime, required this.isMock});
 
   final GlobalKey<NavigatorState> navigatorKey;
   final bool isFirstTime;

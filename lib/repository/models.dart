@@ -1,22 +1,24 @@
-abstract class Snapshot<T> {
-  Map<String, dynamic> get data;
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+abstract class Snapshot {
+  Map<String, dynamic>? get data;
   Reference get reference;
 }
 
 abstract class User {
-  String get uid;
+  String? get uid;
 }
 
 abstract class Storage {
   Future<void> delete();
 
-  Future getDownloadURL();
+  Future<String> getDownloadURL();
 
   String get path;
 }
 
-abstract class Reference<T> {
-  T get source;
+abstract class Reference {
+  DocumentReference<Map<String, dynamic>> get source;
 
   Future<void> delete();
 

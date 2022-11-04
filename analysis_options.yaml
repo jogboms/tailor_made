@@ -1,1 +1,118 @@
 include: package:mfsao/analysis_options.yaml
+
+analyzer:
+  exclude:
+    - "**/generated/**"
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/firebase_options*.dart"
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+  errors:
+    missing_required_param: error
+    missing_return: error
+    unused_import: error
+    unused_local_variable: error
+    dead_code: error
+    unused_catch_clause: error
+    unused_catch_stack: error
+    unused_element: error
+    unused_field: error
+    unused_label: error
+    unused_result: error
+    unused_shown_name: error
+
+linter:
+  rules:
+    # All rules from pedantic, already enabled rules are left out
+    # https://github.com/google/pedantic/blob/master/lib/analysis_options.1.11.0.yaml
+    - always_declare_return_types
+    - prefer_single_quotes
+    - sort_child_properties_last
+    - unawaited_futures
+    - unsafe_html
+
+    # Additional rules from https://github.com/flutter/flutter/blob/master/analysis_options.yaml
+    # Not all rules are included
+    - always_put_control_body_on_new_line
+    - always_specify_types # also used by Flutter itself, makes it more readable
+    - avoid_private_typedef_functions
+    - avoid_redundant_argument_values
+    - avoid_returning_null_for_future
+    - avoid_returning_null_for_void
+    - avoid_returning_this
+    - avoid_setters_without_getters
+    - avoid_shadowing_type_parameters
+    - avoid_single_cascade_in_expression_statements
+    - avoid_slow_async_io
+    - cast_nullable_to_non_nullable
+    - control_flow_in_finally
+    - directives_ordering
+    - empty_catches
+    - empty_constructor_bodies
+    - empty_statements
+    - eol_at_end_of_file
+    - exhaustive_cases
+    - file_names
+    - flutter_style_todos
+    - hash_and_equals
+    - library_prefixes
+    - literal_only_boolean_expressions
+    - no_default_cases
+    - no_logic_in_create_state
+    - missing_whitespace_between_adjacent_strings
+    - sort_pub_dependencies
+    - prefer_final_in_for_each
+    - prefer_final_locals
+    - prefer_foreach
+    - prefer_function_declarations_over_variables
+    - prefer_generic_function_type_aliases
+    - prefer_if_elements_to_conditional_expressions
+    - prefer_if_null_operators
+    - prefer_initializing_formals
+    - prefer_inlined_adds
+    - prefer_null_aware_method_calls
+    - prefer_null_aware_operators
+    - prefer_spread_collections
+    - prefer_void_to_null
+    - provide_deprecation_message
+    - recursive_getters
+    - require_trailing_commas
+    - slash_for_doc_comments
+    - sort_constructors_first
+    - sort_unnamed_constructors_first
+    - test_types_in_equals
+    - tighten_type_of_initializing_formals
+    - unnecessary_await_in_return
+    - unnecessary_brace_in_string_interps
+    - unnecessary_const
+    - unnecessary_constructor_name
+    - unnecessary_getters_setters
+    - unnecessary_lambdas
+    - unnecessary_late
+    - unnecessary_new
+    - unnecessary_null_aware_assignments
+    - unnecessary_null_checks
+    - unnecessary_null_in_if_null_operators
+    - unnecessary_nullable_for_final_variable_declarations
+    - unnecessary_overrides
+    - unnecessary_parenthesis
+    - unnecessary_raw_strings
+    - unnecessary_statements
+    - unnecessary_string_escapes
+    - unnecessary_string_interpolations
+    - unnecessary_this
+    - use_build_context_synchronously
+    - use_full_hex_values_for_flutter_colors
+    - use_function_type_syntax_for_parameters
+    - use_is_even_rather_than_modulo
+    - use_key_in_widget_constructors
+    - use_late_for_private_fields_and_variables
+    - use_named_constants
+    - use_raw_strings
+    - use_rethrow_when_possible
+    - use_setters_to_change_properties
+    - use_string_buffers
+    - use_to_and_as_if_applicable
+    - use_super_parameters

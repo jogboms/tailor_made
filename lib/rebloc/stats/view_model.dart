@@ -9,11 +9,11 @@ class StatsViewModel extends Equatable {
         hasError = state.stats.status == StateStatus.failure,
         error = state.stats.error;
 
-  final StatsModel model;
+  final StatsModel? model;
   final bool isLoading;
   final bool hasError;
   final dynamic error;
 
   @override
-  List<Object> get props => [model, isLoading, hasError, error];
+  List<Object?> get props => <Object?>[model, isLoading, hasError, error];
 }

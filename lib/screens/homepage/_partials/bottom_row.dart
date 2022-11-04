@@ -7,13 +7,13 @@ import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
 
 class BottomRowWidget extends StatelessWidget {
   const BottomRowWidget({
-    Key key,
-    @required this.stats,
-    @required this.account,
-  }) : super(key: key);
+    super.key,
+    required this.stats,
+    required this.account,
+  });
 
-  final StatsModel stats;
-  final AccountModel account;
+  final StatsModel? stats;
+  final AccountModel? account;
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +27,9 @@ class BottomRowWidget extends StatelessWidget {
               child: TMGridTile(
                 color: kPrimaryColor,
                 icon: Icons.content_cut,
-                title: "Measures",
-                subTitle: "Custom",
-                onPressed: () => Dependencies.di().measuresCoordinator.toManageMeasures(account.uid),
+                title: 'Measures',
+                subTitle: 'Custom',
+                onPressed: () => Dependencies.di().measuresCoordinator.toManageMeasures(account!.uid),
               ),
             ),
           ),
@@ -38,8 +38,8 @@ class BottomRowWidget extends StatelessWidget {
               child: TMGridTile(
                 color: Colors.grey,
                 icon: Icons.event,
-                title: "Tasks",
-                subTitle: "${stats.jobs.pending} Pending",
+                title: 'Tasks',
+                subTitle: '${stats!.jobs.pending} Pending',
                 onPressed: () => Dependencies.di().tasksCoordinator.toTasks(),
               ),
             ),

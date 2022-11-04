@@ -8,7 +8,7 @@ import 'package:tailor_made/rebloc/contacts/sort_type.dart';
 part 'state.g.dart';
 
 abstract class ContactsState implements Built<ContactsState, ContactsStateBuilder> {
-  factory ContactsState([void updates(ContactsStateBuilder b)]) = _$ContactsState;
+  factory ContactsState([void Function(ContactsStateBuilder b) updates]) = _$ContactsState;
 
   factory ContactsState.initialState() => _$ContactsState(
         (ContactsStateBuilder b) => b
@@ -23,8 +23,7 @@ abstract class ContactsState implements Built<ContactsState, ContactsStateBuilde
 
   ContactsState._();
 
-  @nullable
-  BuiltList<ContactModel> get contacts;
+  BuiltList<ContactModel>? get contacts;
 
   StateStatus get status;
 
@@ -32,13 +31,11 @@ abstract class ContactsState implements Built<ContactsState, ContactsStateBuilde
 
   SortType get sortFn;
 
-  @nullable
-  BuiltList<ContactModel> get searchResults;
+  BuiltList<ContactModel>? get searchResults;
 
   bool get isSearching;
 
-  @nullable
-  String get error;
+  String? get error;
 
   static Serializer<ContactsState> get serializer => _$contactsStateSerializer;
 }

@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:intl/intl.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/contact.dart';
+import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/measures/view_model.dart';
 import 'package:tailor_made/screens/jobs/_partials/avatar_app_bar.dart';
@@ -22,18 +21,18 @@ import 'package:tailor_made/widgets/theme_provider.dart';
 
 class JobsCreatePage extends StatefulWidget {
   const JobsCreatePage({
-    Key key,
+    super.key,
     this.contact,
-    @required this.contacts,
-    @required this.userId,
-  }) : super(key: key);
+    required this.contacts,
+    required this.userId,
+  });
 
-  final ContactModel contact;
-  final List<ContactModel> contacts;
+  final ContactModel? contact;
+  final List<ContactModel>? contacts;
   final String userId;
 
   @override
-  _JobsCreatePageState createState() => _JobsCreatePageState();
+  State<JobsCreatePage> createState() => _JobsCreatePageState();
 }
 
 class _JobsCreatePageState extends JobsCreateViewModel {
@@ -53,86 +52,87 @@ class _JobsCreatePageState extends JobsCreateViewModel {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeProvider? theme = ThemeProvider.of(context);
 
     return Scaffold(
       key: scaffoldKey,
-      appBar: contact != null
+      appBar: (contact != null
           ? AvatarAppBar(
-              tag: contact.createdAt.toString(),
-              imageUrl: contact.imageUrl,
+              tag: contact!.createdAt.toString(),
+              imageUrl: contact!.imageUrl,
               elevation: 1.0,
-              backgroundColor: Colors.white,
-              title: Text(contact.fullname, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.title),
-              subtitle: Text("${contact.totalJobs} Jobs", style: theme.small),
-              actions: widget.contacts.isNotEmpty
+              title: Text(contact!.fullname!, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme!.title),
+              subtitle: Text('${contact!.totalJobs} Jobs', style: theme.small),
+              actions: widget.contacts!.isNotEmpty
                   ? <Widget>[
                       IconButton(icon: const Icon(Icons.people), onPressed: onSelectContact),
                     ]
                   : null,
             )
-          : const MkAppBar(title: Text("")),
-      body: Builder(builder: (BuildContext context) {
-        if (contact == null) {
-          return Center(
-            child: MkClearButton(
-              onPressed: onSelectContact,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  CircleAvatar(
-                    backgroundColor: Colors.grey.withOpacity(.2),
-                    radius: 50.0,
-                    child: const Icon(Icons.person_add, color: kTextBaseColor),
-                  ),
-                  const SizedBox(height: 16.0),
-                  Text("SELECT A CLIENT", style: theme.small),
-                ],
+          : const MkAppBar(title: Text(''))) as PreferredSizeWidget?,
+      body: Builder(
+        builder: (BuildContext context) {
+          if (contact == null) {
+            return Center(
+              child: MkClearButton(
+                onPressed: onSelectContact,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    CircleAvatar(
+                      backgroundColor: Colors.grey.withOpacity(.2),
+                      radius: 50.0,
+                      child: const Icon(Icons.person_add, color: kTextBaseColor),
+                    ),
+                    const SizedBox(height: 16.0),
+                    Text('SELECT A CLIENT', style: theme!.small),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          return SafeArea(
+            top: false,
+            child: SingleChildScrollView(
+              child: Form(
+                key: formKey,
+                autovalidateMode: AutovalidateMode.always,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    const FormSectionHeader(title: 'Style Name'),
+                    _buildEnterName(),
+                    const FormSectionHeader(title: 'Payment', trailing: 'Naira (₦)'),
+                    _buildEnterAmount(),
+                    const FormSectionHeader(title: 'Due Date'),
+                    _buildDueDate(),
+                    const FormSectionHeader(title: 'References'),
+                    _buildImageGrid(),
+                    const FormSectionHeader(title: 'Measurements', trailing: 'Inches (In)'),
+                    _buildMeasures(),
+                    const FormSectionHeader(title: 'Additional Notes'),
+                    _buildAdditional(),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 82.0),
+                      child: MkPrimaryButton(
+                        onPressed: handleSubmit,
+                        child: const Text('FINISH'),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
-        }
-
-        return SafeArea(
-          top: false,
-          child: SingleChildScrollView(
-            child: Form(
-              key: formKey,
-              autovalidate: autovalidate,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const FormSectionHeader(title: "Style Name"),
-                  _buildEnterName(),
-                  const FormSectionHeader(title: "Payment", trailing: "Naira (₦)"),
-                  _buildEnterAmount(),
-                  const FormSectionHeader(title: "Due Date"),
-                  _buildDueDate(),
-                  const FormSectionHeader(title: "References"),
-                  _buildImageGrid(),
-                  const FormSectionHeader(title: "Measurements", trailing: "Inches (In)"),
-                  _buildMeasures(),
-                  const FormSectionHeader(title: "Additional Notes"),
-                  _buildAdditional(),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 82.0),
-                    child: MkPrimaryButton(
-                      child: const Text("FINISH"),
-                      onPressed: handleSubmit,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      }),
+        },
+      ),
     );
   }
 
   Widget _buildMeasures() {
     return ViewModelSubscriber<AppState, MeasuresViewModel>(
-      converter: (store) => MeasuresViewModel(store),
+      converter: MeasuresViewModel.new,
       builder: (_, __, MeasuresViewModel vm) {
         return MeasureCreateItems(
           grouped: vm.grouped,
@@ -148,14 +148,14 @@ class _JobsCreatePageState extends JobsCreateViewModel {
       child: TextFormField(
         focusNode: _additionFocusNode,
         keyboardType: TextInputType.text,
-        style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
+        style: ThemeProvider.of(context)!.title.copyWith(color: Colors.black),
         maxLines: 6,
         decoration: const InputDecoration(
           isDense: true,
-          hintText: "Fabric color, size, special requirements...",
+          hintText: 'Fabric color, size, special requirements...',
         ),
-        onSaved: (value) => job.notes = value.trim(),
-        onFieldSubmitted: (value) => handleSubmit(),
+        onSaved: (String? value) => job.notes = value!.trim(),
+        onFieldSubmitted: (String value) => handleSubmit(),
       ),
     );
   }
@@ -164,8 +164,8 @@ class _JobsCreatePageState extends JobsCreateViewModel {
     final List<Widget> imagesList = List<Widget>.generate(
       fireImages.length,
       (int index) {
-        final fireImage = fireImages[index];
-        final image = fireImage.image;
+        final FireImage fireImage = fireImages[index];
+        final ImageModel? image = fireImage.image;
 
         if (image == null) {
           return const Center(widthFactor: 2.5, child: MkLoadingSpinner());
@@ -173,9 +173,9 @@ class _JobsCreatePageState extends JobsCreateViewModel {
 
         return GalleryGridItem(
           image: image,
-          tag: "$image-$index",
+          tag: '$image-$index',
           size: _kGridWidth,
-          onTapDelete: (image) => setState(() {
+          onTapDelete: (ImageModel image) => setState(() {
             fireImage.ref.delete();
             fireImages.removeAt(index);
           }),
@@ -189,7 +189,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
       child: ListView(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         scrollDirection: Axis.horizontal,
-        children: [
+        children: <Widget>[
           _NewGrid(onPressed: handlePhotoButtonPressed),
           ...imagesList,
         ],
@@ -201,12 +201,12 @@ class _JobsCreatePageState extends JobsCreateViewModel {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: InputDropdown(
-        valueText: DateFormat.yMMMd().format(job.dueAt),
-        valueStyle: ThemeProvider.of(context).title.copyWith(color: Colors.black),
+        valueText: DateFormat.yMMMd().format(job.dueAt!),
+        valueStyle: ThemeProvider.of(context)!.title.copyWith(color: Colors.black),
         onPressed: () async {
-          final DateTime picked = await showDatePicker(
+          final DateTime? picked = await showDatePicker(
             context: context,
-            initialDate: job.dueAt,
+            initialDate: job.dueAt!,
             firstDate: DateTime.now(),
             lastDate: DateTime(2101),
           );
@@ -227,10 +227,10 @@ class _JobsCreatePageState extends JobsCreateViewModel {
         textInputAction: TextInputAction.next,
         keyboardType: TextInputType.text,
         textCapitalization: TextCapitalization.words,
-        style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
-        decoration: const InputDecoration(isDense: true, hintText: "Enter Style Name"),
-        validator: (value) => (value.isNotEmpty) ? null : "Please input a name",
-        onSaved: (value) => job.name = value.trim(),
+        style: ThemeProvider.of(context)!.title.copyWith(color: Colors.black),
+        decoration: const InputDecoration(isDense: true, hintText: 'Enter Style Name'),
+        validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a name',
+        onSaved: (String? value) => job.name = value!.trim(),
         onEditingComplete: () => FocusScope.of(context).requestFocus(_amountFocusNode),
       ),
     );
@@ -244,10 +244,10 @@ class _JobsCreatePageState extends JobsCreateViewModel {
         controller: controller,
         textInputAction: TextInputAction.next,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
-        decoration: const InputDecoration(isDense: true, hintText: "Enter Amount"),
-        validator: (value) => (controller.numberValue > 0) ? null : "Please input a price",
-        onSaved: (value) => job.price = controller.numberValue,
+        style: ThemeProvider.of(context)!.title.copyWith(color: Colors.black),
+        decoration: const InputDecoration(isDense: true, hintText: 'Enter Amount'),
+        validator: (String? value) => (controller.numberValue > 0) ? null : 'Please input a price',
+        onSaved: (String? value) => job.price = controller.numberValue,
         onEditingComplete: () => FocusScope.of(context).requestFocus(_additionFocusNode),
       ),
     );
@@ -255,7 +255,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
 }
 
 class _NewGrid extends StatelessWidget {
-  const _NewGrid({Key key, @required this.onPressed}) : super(key: key);
+  const _NewGrid({required this.onPressed});
 
   final VoidCallback onPressed;
 
@@ -276,4 +276,4 @@ class _NewGrid extends StatelessWidget {
   }
 }
 
-const _kGridWidth = 85.0;
+const double _kGridWidth = 85.0;

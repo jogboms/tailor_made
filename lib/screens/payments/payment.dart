@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/dependencies.dart';
@@ -10,42 +11,42 @@ import 'package:tailor_made/utils/mk_money.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class PaymentPage extends StatelessWidget {
-  const PaymentPage({Key key, @required this.payment}) : super(key: key);
+  const PaymentPage({super.key, required this.payment});
 
-  final PaymentModel payment;
+  final PaymentModel? payment;
 
   @override
   Widget build(BuildContext context) {
-    final _price = MkMoney(payment.price).formatted;
+    final String price = MkMoney(payment!.price).formatted;
 
-    final date = MkDates(payment.createdAt, day: "EEEE", month: "MMMM").formatted;
+    final String? date = MkDates(payment!.createdAt, day: 'EEEE', month: 'MMMM').formatted;
 
     return ViewModelSubscriber<AppState, ContactJobViewModel>(
-      converter: (store) => ContactJobViewModel(store)
-        ..contactID = payment.contactID
-        ..jobID = payment.jobID,
+      converter: (AppState store) => ContactJobViewModel(store)
+        ..contactID = payment!.contactID
+        ..jobID = payment!.jobID,
       builder: (BuildContext context, __, ContactJobViewModel vm) {
         return Scaffold(
           appBar: AppBar(
-            iconTheme: IconThemeData(color: Colors.black87),
+            iconTheme: const IconThemeData(color: Colors.black87),
             backgroundColor: Colors.transparent,
             elevation: 0.0,
-            brightness: Brightness.light,
             actions: <Widget>[
               IconButton(
                 icon: const Icon(Icons.work, color: kTitleBaseColor),
                 onPressed: () => Dependencies.di().jobsCoordinator.toJob(vm.selectedJob),
               ),
               IconButton(
-                icon: Icon(Icons.person, color: kTitleBaseColor),
+                icon: const Icon(Icons.person, color: kTitleBaseColor),
                 onPressed: () => Dependencies.di().contactsCoordinator.toContact(vm.selectedContact),
               ),
-              if (vm.account.hasPremiumEnabled)
-                IconButton(
-                  icon: const Icon(Icons.share, color: kTitleBaseColor),
+              if (vm.account!.hasPremiumEnabled)
+                const IconButton(
+                  icon: Icon(Icons.share, color: kTitleBaseColor),
                   onPressed: null,
                 ),
             ],
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
           ),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -53,15 +54,15 @@ class PaymentPage extends StatelessWidget {
               SizedBox(
                 height: 180.0,
                 width: double.infinity,
-                child: Center(child: Text(_price, style: mkFontLight(50.0, Colors.black87))),
+                child: Center(child: Text(price, style: mkFontLight(50.0, Colors.black87))),
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Text(date, style: ThemeProvider.of(context).body3Light, textAlign: TextAlign.justify),
+                child: Text(date!, style: ThemeProvider.of(context)!.body3Light, textAlign: TextAlign.justify),
               ),
               Padding(
                 padding: const EdgeInsets.all(24.0),
-                child: Text(payment.notes, style: ThemeProvider.of(context).body3Light, textAlign: TextAlign.justify),
+                child: Text(payment!.notes, style: ThemeProvider.of(context)!.body3Light, textAlign: TextAlign.justify),
               ),
             ],
           ),

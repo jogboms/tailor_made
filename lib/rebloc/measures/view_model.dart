@@ -7,16 +7,16 @@ class MeasuresViewModel extends Equatable {
   MeasuresViewModel(AppState state)
       : _model = state.measures.measures,
         grouped = state.measures.grouped,
-        userId = state.account.account.uid,
+        userId = state.account.account!.uid,
         isLoading = state.measures.status == StateStatus.loading,
         hasError = state.measures.status == StateStatus.failure,
         error = state.measures.error;
 
-  final Map<String, List<MeasureModel>> grouped;
+  final Map<String, List<MeasureModel>>? grouped;
 
-  final BuiltList _model;
+  final BuiltList<MeasureModel>? _model;
 
-  List<MeasureModel> get model => _model?.toList();
+  List<MeasureModel>? get model => _model?.toList();
 
   final String userId;
   final bool isLoading;
@@ -24,5 +24,5 @@ class MeasuresViewModel extends Equatable {
   final dynamic error;
 
   @override
-  List<Object> get props => [model, userId, isLoading, hasError, error];
+  List<Object?> get props => <Object?>[model, userId, isLoading, hasError, error];
 }

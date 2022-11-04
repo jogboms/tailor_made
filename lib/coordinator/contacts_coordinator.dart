@@ -12,19 +12,19 @@ import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 @immutable
 class ContactsCoordinator extends CoordinatorBase {
-  const ContactsCoordinator(GlobalKey<NavigatorState> navigatorKey) : super(navigatorKey);
+  const ContactsCoordinator(super.navigatorKey);
 
-  void toContact(ContactModel contact, {bool replace = false}) {
+  void toContact(ContactModel? contact, {bool replace = false}) {
     replace
         ? navigator?.pushReplacement<dynamic, dynamic>(MkNavigate.slideIn(ContactPage(contact: contact)))
         : navigator?.push<void>(MkNavigate.slideIn(ContactPage(contact: contact)));
   }
 
-  void toContactEdit(String userId, ContactModel contact) {
+  void toContactEdit(String userId, ContactModel? contact) {
     navigator?.push<void>(MkNavigate.slideIn(ContactsEditPage(userId: userId, contact: contact)));
   }
 
-  Future<ContactModel> toContactMeasure(ContactModel contact, Map<String, List<MeasureModel>> grouped) {
+  Future<ContactModel?>? toContactMeasure(ContactModel? contact, Map<String, List<MeasureModel>>? grouped) {
     return navigator?.push<ContactModel>(MkNavigate.slideIn(ContactMeasure(contact: contact, grouped: grouped)));
   }
 
@@ -32,7 +32,7 @@ class ContactsCoordinator extends CoordinatorBase {
     navigator?.push<void>(MkNavigate.slideIn(const ContactsPage()));
   }
 
-  Future<ContactModel> toContactsList(List<ContactModel> contacts) {
+  Future<ContactModel?>? toContactsList(List<ContactModel>? contacts) {
     return navigator?.push<ContactModel>(MkNavigate.fadeIn(ContactLists(contacts: contacts)));
   }
 

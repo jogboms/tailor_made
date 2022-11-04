@@ -3,31 +3,31 @@ import 'dart:convert';
 import 'package:tailor_made/repository/models.dart';
 
 abstract class ModelInterface {
-  Reference reference;
+  Reference? reference;
 
-  Model clone() => null;
+  Model? clone() => null;
 
-  Map<String, dynamic> toMap();
+  Map<String, dynamic>? toMap();
 
-  Map<String, dynamic> toJson() => toMap();
+  Map<String, dynamic>? toJson() => toMap();
 
   @override
   String toString() => Model.mapToString(toMap());
 
-  dynamic operator [](String key) => toMap()[key];
+  dynamic operator [](String key) => toMap()![key];
 }
 
 abstract class Model with ModelInterface {
-  static String mapToString(Map<String, dynamic> map) {
+  static String mapToString(Map<String, dynamic>? map) {
     return json.encode(map);
   }
 
-  static Map<String, dynamic> stringToMap(String string) {
-    if (string == null || string.isEmpty) {
+  static Map<String, dynamic>? stringToMap(String string) {
+    if (string.isEmpty) {
       return null;
     }
     try {
-      return json.decode(string);
+      return json.decode(string) as Map<String, dynamic>?;
     } catch (e) {
       return null;
     }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:tailor_made/constants/mk_strings.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/utils/mk_money.dart';
@@ -9,21 +9,21 @@ import 'package:tailor_made/widgets/theme_provider.dart';
 
 class PaymentsCreatePage extends StatefulWidget {
   const PaymentsCreatePage({
-    Key key,
-    @required this.limit,
-  }) : super(key: key);
+    super.key,
+    required this.limit,
+  });
 
-  final double limit;
+  final double? limit;
 
   @override
-  _PaymentsCreatePageState createState() => _PaymentsCreatePageState();
+  State<PaymentsCreatePage> createState() => _PaymentsCreatePageState();
 }
 
 class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarProviderMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
   double price = 0.0;
-  String notes = "";
+  String notes = '';
   MoneyMaskedTextController controller = MoneyMaskedTextController(
     decimalSeparator: '.',
     thousandSeparator: ',',
@@ -32,7 +32,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
   final FocusNode _additionFocusNode = FocusNode();
 
   @override
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   void dispose() {
@@ -43,21 +43,21 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> children = [];
+    final List<Widget> children = <Widget>[];
 
-    children.add(const _Header(title: "Payment", trailing: "Naira (₦)"));
+    children.add(const _Header(title: 'Payment', trailing: 'Naira (₦)'));
     children.add(_buildEnterAmount());
 
-    children.add(const _Header(title: "Additional Notes"));
+    children.add(const _Header(title: 'Additional Notes'));
     children.add(_buildAdditional());
 
     children.add(
       Padding(
-        child: MkPrimaryButton(
-          child: const Text("FINISH"),
-          onPressed: _handleSubmit,
-        ),
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 50),
+        child: MkPrimaryButton(
+          onPressed: _handleSubmit,
+          child: const Text('FINISH'),
+        ),
       ),
     );
 
@@ -66,16 +66,15 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
     return Scaffold(
       key: scaffoldKey,
       appBar: const MkAppBar(
-        title: Text("Create Payment"),
+        title: Text('Create Payment'),
       ),
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
-            autovalidate: _autovalidate,
+            autovalidateMode: _autovalidate ? AutovalidateMode.always : AutovalidateMode.disabled,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: children,
             ),
@@ -95,15 +94,15 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         decoration: const InputDecoration(
           isDense: true,
-          hintText: "Enter Amount",
+          hintText: 'Enter Amount',
         ),
-        validator: (value) {
-          if (controller.numberValue > widget.limit) {
-            return MkMoney(widget.limit).formatted + " is the remainder on this job.";
+        validator: (String? value) {
+          if (controller.numberValue > widget.limit!) {
+            return '${MkMoney(widget.limit).formatted} is the remainder on this job.';
           }
-          return (controller.numberValue > 0) ? null : "Please input a price";
+          return (controller.numberValue > 0) ? null : 'Please input a price';
         },
-        onSaved: (value) => price = controller.numberValue,
+        onSaved: (String? value) => price = controller.numberValue,
         onEditingComplete: () => FocusScope.of(context).requestFocus(_additionFocusNode),
       ),
     );
@@ -118,16 +117,16 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
         maxLines: 6,
         decoration: const InputDecoration(
           isDense: true,
-          hintText: "Anything else to remember this payment by?",
+          hintText: 'Anything else to remember this payment by?',
         ),
-        onSaved: (value) => notes = value.trim(),
-        onFieldSubmitted: (value) => _handleSubmit(),
+        onSaved: (String? value) => notes = value!.trim(),
+        onFieldSubmitted: (String value) => _handleSubmit(),
       ),
     );
   }
 
   void _handleSubmit() async {
-    final FormState form = _formKey.currentState;
+    final FormState? form = _formKey.currentState;
     if (form == null) {
       return;
     }
@@ -139,7 +138,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
 
       Navigator.pop(
         context,
-        {"price": price, "notes": notes},
+        <String, Object>{'price': price, 'notes': notes},
       );
     }
   }
@@ -147,10 +146,9 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
 
 class _Header extends StatelessWidget {
   const _Header({
-    Key key,
-    @required this.title,
-    this.trailing = "",
-  }) : super(key: key);
+    required this.title,
+    this.trailing = '',
+  });
 
   final String title;
   final String trailing;
@@ -158,7 +156,7 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[100].withOpacity(.4),
+      color: Colors.grey[100]!.withOpacity(.4),
       margin: const EdgeInsets.only(top: 8.0),
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       alignment: AlignmentDirectional.centerStart,
@@ -167,11 +165,11 @@ class _Header extends StatelessWidget {
         children: <Widget>[
           Text(
             title.toUpperCase(),
-            style: ThemeProvider.of(context).smallLight,
+            style: ThemeProvider.of(context)!.smallLight,
           ),
           Text(
             trailing,
-            style: ThemeProvider.of(context).smallLight,
+            style: ThemeProvider.of(context)!.smallLight,
           ),
         ],
       ),

@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/constants/mk_style.dart';
@@ -13,36 +14,35 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class GalleryGrids extends StatefulWidget {
-  GalleryGrids({Key key, double gridSize, @required this.job, @required this.userId})
-      : gridSize = Size.square(gridSize ?? _kGridWidth),
-        super(key: key);
+  GalleryGrids({super.key, double? gridSize, required this.job, required this.userId})
+      : gridSize = Size.square(gridSize ?? _kGridWidth);
 
   final Size gridSize;
-  final JobModel job;
+  final JobModel? job;
   final String userId;
 
   @override
-  _GalleryGridsState createState() => _GalleryGridsState();
+  State<GalleryGrids> createState() => _GalleryGridsState();
 }
 
 class _GalleryGridsState extends State<GalleryGrids> {
-  List<_FireImage> _fireImages = [];
+  List<_FireImage> _fireImages = <_FireImage>[];
 
   @override
   void initState() {
     super.initState();
-    _fireImages = widget.job.images.map((img) => _FireImage()..image = img).toList();
+    _fireImages = widget.job!.images!.map((ImageModel img) => _FireImage()..image = img).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = ThemeProvider.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context)!;
 
     final List<Widget> imagesList = List<Widget>.generate(
       _fireImages.length,
       (int index) {
-        final fireImage = _fireImages[index];
-        final image = fireImage.image;
+        final _FireImage fireImage = _fireImages[index];
+        final ImageModel? image = fireImage.image;
 
         if (image == null) {
           return const Center(widthFactor: 2.5, child: MkLoadingSpinner());
@@ -50,12 +50,12 @@ class _GalleryGridsState extends State<GalleryGrids> {
 
         return GalleryGridItem(
           image: image,
-          tag: "$image-$index",
+          tag: '$image-$index',
           size: _kGridWidth,
           // Remove images from storage using path
           onTapDelete: fireImage.ref != null
-              ? (image) => setState(() {
-                    fireImage.ref.delete();
+              ? (ImageModel image) => setState(() {
+                    fireImage.ref!.delete();
                     _fireImages.removeAt(index);
                   })
               : null,
@@ -70,12 +70,12 @@ class _GalleryGridsState extends State<GalleryGrids> {
           children: <Widget>[
             const SizedBox(width: 16.0),
             Expanded(
-              child: Text("GALLERY", style: theme.small.copyWith(color: Colors.black87)),
+              child: Text('GALLERY', style: theme.small.copyWith(color: Colors.black87)),
             ),
             MkClearButton(
-              child: Text("SHOW ALL", style: theme.smallBtn),
+              child: Text('SHOW ALL', style: theme.smallBtn),
               onPressed: () {
-                Dependencies.di().galleryCoordinator.toGallery(widget.userId, widget.job.images.toList());
+                Dependencies.di().galleryCoordinator.toGallery(widget.userId, widget.job!.images!.toList());
               },
             ),
             const SizedBox(width: 16.0),
@@ -87,7 +87,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
           child: ListView(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             scrollDirection: Axis.horizontal,
-            children: [
+            children: <Widget>[
               _NewGrid(gridSize: widget.gridSize, onPressed: _handlePhotoButtonPressed),
               ...imagesList,
             ],
@@ -98,35 +98,38 @@ class _GalleryGridsState extends State<GalleryGrids> {
   }
 
   void _handlePhotoButtonPressed() async {
-    final source = await mkImageChoiceDialog(context: context);
+    final ImageSource? source = await mkImageChoiceDialog(context: context);
     if (source == null) {
       return;
     }
-    final imageFile = await ImagePicker.pickImage(source: source);
+    final XFile? imageFile = await ImagePicker().pickImage(source: source);
     if (imageFile == null) {
       return;
     }
-    // TODO: move this out of here
-    final ref = Dependencies.di().gallery.createFile(imageFile, widget.userId);
+    // TODO(Jogboms): move this out of here
+    final Storage ref = Dependencies.di().gallery.createFile(File(imageFile.path), widget.userId)!;
 
     setState(() => _fireImages.add(_FireImage()..ref = ref));
     try {
-      final imageUrl = (await ref.getDownloadURL()).downloadUrl?.toString();
+      final String imageUrl = await ref.getDownloadURL();
 
       setState(() {
         _fireImages.last.image = ImageModel(
-          (b) => b
+          (ImageModelBuilder b) => b
             ..userID = widget.userId
-            ..contactID = widget.job.contactID
-            ..jobID = widget.job.id
+            ..contactID = widget.job!.contactID
+            ..jobID = widget.job!.id
             ..src = imageUrl
             ..path = ref.path,
         );
       });
 
-      await widget.job.reference.updateData(
-        <String, List<Map<String, dynamic>>>{
-          "images": _fireImages.where((img) => img.image != null).map((img) => img.image.toMap()).toList(),
+      await widget.job!.reference!.updateData(
+        <String, List<Map<String, dynamic>?>>{
+          'images': _fireImages
+              .where((_FireImage img) => img.image != null)
+              .map((_FireImage img) => img.image!.toMap())
+              .toList(),
         },
       );
 
@@ -142,7 +145,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
 }
 
 class _NewGrid extends StatelessWidget {
-  const _NewGrid({Key key, @required this.gridSize, @required this.onPressed}) : super(key: key);
+  const _NewGrid({required this.gridSize, required this.onPressed});
 
   final Size gridSize;
   final VoidCallback onPressed;
@@ -164,11 +167,11 @@ class _NewGrid extends StatelessWidget {
   }
 }
 
-const _kGridWidth = 70.0;
+const double _kGridWidth = 70.0;
 
 class _FireImage {
-  Storage ref;
-  ImageModel image;
+  Storage? ref;
+  ImageModel? image;
   bool isLoading = true;
   bool isSucess = false;
 }

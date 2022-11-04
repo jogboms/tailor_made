@@ -10,14 +10,14 @@ import 'package:tailor_made/widgets/_partials/mk_touchable_opacity.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class MkUploadPhoto extends StatelessWidget {
-  const MkUploadPhoto({Key key, this.size = const Size.square(86.0), @required this.onPickImage}) : super(key: key);
+  const MkUploadPhoto({super.key, this.size = const Size.square(86.0), required this.onPickImage});
 
   final ValueSetter<File> onPickImage;
   final Size size;
 
   @override
   Widget build(BuildContext context) {
-    const _color = MkColors.primary;
+    const Color color = MkColors.primary;
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
@@ -33,12 +33,12 @@ class MkUploadPhoto extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Icon(Icons.add_circle, color: _color),
+            children: <Widget>[
+              const Icon(Icons.add_circle, color: color),
               const SizedBox(height: 2.0),
               Text(
-                "Add\nPhoto",
-                style: ThemeProvider.of(context).button.copyWith(color: _color),
+                'Add\nPhoto',
+                style: ThemeProvider.of(context)!.button.copyWith(color: color),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -50,21 +50,19 @@ class MkUploadPhoto extends StatelessWidget {
   }
 
   void _handlePressed(BuildContext context) async {
-    final source = await mkImageChoiceDialog(context: context);
+    final ImageSource? source = await mkImageChoiceDialog(context: context);
     if (source == null) {
       return;
     }
     try {
-      final file = await ImagePicker.pickImage(source: source);
-      print("File path: " + file.path);
-      if (onPickImage != null) {
-        final _file = await MkImageUtils(file).resize(width: 1500);
-        onPickImage(_file);
+      final XFile? pickedFile = await ImagePicker().pickImage(source: source);
+      if (pickedFile == null) {
+        return;
       }
+      final File file = await MkImageUtils(pickedFile.path).resize(width: 1500);
+      onPickImage(file);
     } on PlatformException catch (e) {
-      print("Error while picking the file: " + e.toString());
-    } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 }

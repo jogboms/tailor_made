@@ -19,19 +19,19 @@ enum AccountOptions { logout, storename }
 
 class TopButtonBar extends StatelessWidget {
   const TopButtonBar({
-    Key key,
-    @required this.account,
-    @required this.shouldSendRating,
-    @required this.onLogout,
-  }) : super(key: key);
+    super.key,
+    required this.account,
+    required this.shouldSendRating,
+    required this.onLogout,
+  });
 
-  final AccountModel account;
+  final AccountModel? account;
   final bool shouldSendRating;
   final VoidCallback onLogout;
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeProvider? theme = ThemeProvider.of(context);
     return Align(
       alignment: Alignment.topRight,
       child: SafeArea(
@@ -50,20 +50,21 @@ class TopButtonBar extends StatelessWidget {
                 onTap: _onTapAccount(context),
                 child: Stack(
                   fit: StackFit.expand,
-                  children: [
-                    account?.photoURL != null
-                        ? CircleAvatar(
-                            backgroundColor: Colors.white,
-                            backgroundImage: CachedNetworkImageProvider(account.photoURL),
-                          )
-                        : Icon(Icons.person, color: theme.appBarTitle.color),
+                  children: <Widget>[
+                    if (account?.photoURL != null)
+                      CircleAvatar(
+                        backgroundColor: Colors.white,
+                        backgroundImage: CachedNetworkImageProvider(account!.photoURL),
+                      )
+                    else
+                      Icon(Icons.person, color: theme!.appBarTitle.color),
                     Align(
                       alignment: const Alignment(0.0, 2.25),
                       child:
-                          account.hasPremiumEnabled ? const ImageIcon(MkImages.verified, color: kPrimaryColor) : null,
+                          account!.hasPremiumEnabled ? const ImageIcon(MkImages.verified, color: kPrimaryColor) : null,
                     ),
                     Align(
-                      alignment: Alignment(1.25, account.hasPremiumEnabled ? -1.25 : 1.25),
+                      alignment: Alignment(1.25, account!.hasPremiumEnabled ? -1.25 : 1.25),
                       child: _shouldShowIndicator ? const MkDots(color: kAccentColor) : null,
                     ),
                   ],
@@ -80,56 +81,61 @@ class TopButtonBar extends StatelessWidget {
 
   VoidCallback _onTapAccount(BuildContext context) {
     return () async {
+      final Store<AppState> store = StoreProvider.of<AppState>(context);
       if (shouldSendRating) {
-        final rating = await mkShowChildDialog<int>(context: context, child: const ReviewModal());
+        final int? rating = await mkShowChildDialog<int>(context: context, child: const ReviewModal());
 
         if (rating != null) {
-          StoreProvider.of<AppState>(context).dispatch(OnSendRating(account, rating));
+          store.dispatch(OnSendRating(account, rating));
         }
         return;
       }
 
       if (_shouldShowIndicator) {
         await mkShowChildDialog<dynamic>(context: context, child: NoticeDialog(account: account));
-        StoreProvider.of<AppState>(context).dispatch(OnReadNotice(account));
+        store.dispatch(OnReadNotice(account));
         return;
       }
 
-      final AccountOptions result = await showDialog<AccountOptions>(
+      final AccountOptions? result = await showDialog<AccountOptions>(
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Text('Select action', style: ThemeProvider.of(context).body3),
+            title: Text('Select action', style: ThemeProvider.of(context)!.body3),
             children: <Widget>[
               SimpleDialogOption(
                 onPressed: () {
                   Navigator.pop(context, AccountOptions.storename);
                 },
-                child: const TMListTile(color: kAccentColor, icon: Icons.store, title: "Store"),
+                child: const TMListTile(color: kAccentColor, icon: Icons.store, title: 'Store'),
               ),
               SimpleDialogOption(
                 onPressed: () {
                   Navigator.pop(context, AccountOptions.logout);
                 },
-                child: TMListTile(color: Colors.grey.shade400, icon: Icons.power_settings_new, title: "Logout"),
+                child: TMListTile(color: Colors.grey.shade400, icon: Icons.power_settings_new, title: 'Logout'),
               ),
             ],
           );
         },
       );
 
+      if (result == null) {
+        return;
+      }
+
       switch (result) {
         case AccountOptions.storename:
-          final _storeName = await Dependencies.di().sharedCoordinator.toStoreNameDialog(account);
+          final String? storeName = await Dependencies.di().sharedCoordinator.toStoreNameDialog(account);
 
-          if (_storeName != null && _storeName != account.storeName) {
-            await account.reference.updateData(<String, String>{"storeName": _storeName});
+          if (storeName != null && storeName != account!.storeName) {
+            await account!.reference!.updateData(<String, String>{'storeName': storeName});
           }
 
           break;
 
         case AccountOptions.logout:
-          final response = await mkChoiceDialog(context: context, message: "You are about to logout.");
+          final bool? response = await mkChoiceDialog(context: context, message: 'You are about to logout.');
 
           if (response == true) {
             onLogout();

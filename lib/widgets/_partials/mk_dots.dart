@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 
 class MkDots extends StatelessWidget {
-  const MkDots({Key key, @required this.color, this.size = 16.0, this.shape}) : super(key: key);
+  const MkDots({super.key, required this.color, this.size = 16.0, this.shape});
 
   final double size;
   final Color color;
-  final ShapeBorder shape;
+  final ShapeBorder? shape;
 
   @override
   Widget build(BuildContext context) {

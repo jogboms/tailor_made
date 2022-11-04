@@ -11,75 +11,62 @@ import 'package:uuid/uuid.dart';
 part 'job.g.dart';
 
 abstract class JobModel with ModelInterface implements Built<JobModel, JobModelBuilder> {
-  factory JobModel([void updates(JobModelBuilder b)]) = _$JobModel;
+  factory JobModel([void Function(JobModelBuilder b) updates]) = _$JobModel;
 
   JobModel._();
 
-  factory JobModel.fromSnapshot(Snapshot snapshot) => JobModel.fromJson(snapshot.data)..reference = snapshot.reference;
+  factory JobModel.fromSnapshot(Snapshot snapshot) =>
+      JobModel.fromJson(snapshot.data!)!..reference = snapshot.reference;
 
   static void _initializeBuilder(JobModelBuilder b) => b
-    ..id = Uuid().v1()
-    ..name = ""
+    ..id = const Uuid().v1()
+    ..name = ''
     ..createdAt = DateTime.now()
     ..completedPayment = 0.0
     ..pendingPayment = 0.0
     ..payments = BuiltList<PaymentModel>(<PaymentModel>[]).toBuilder()
     ..isComplete = false
-    ..dueAt = DateTime.now().add(Duration(days: 7))
+    ..dueAt = DateTime.now().add(const Duration(days: 7))
     ..measurements = BuiltMap<String, double>(<String, double>{}).toBuilder();
 
-  @nullable
-  String get id;
+  String? get id;
 
   String get userID;
 
-  @nullable
-  String get contactID;
+  String? get contactID;
 
-  @nullable
-  String get name;
+  String? get name;
 
-  @nullable
-  double get price;
+  double? get price;
 
-  @nullable
-  double get completedPayment;
+  double? get completedPayment;
 
-  @nullable
-  double get pendingPayment;
+  double? get pendingPayment;
 
-  @nullable
-  String get notes;
+  String? get notes;
 
-  @nullable
-  BuiltList<ImageModel> get images;
+  BuiltList<ImageModel>? get images;
 
-  @nullable
-  BuiltMap<String, double> get measurements;
+  BuiltMap<String, double>? get measurements;
 
-  @nullable
-  BuiltList<PaymentModel> get payments;
+  BuiltList<PaymentModel>? get payments;
 
-  @nullable
-  bool get isComplete;
+  bool? get isComplete;
 
-  @nullable
-  DateTime get createdAt;
+  DateTime? get createdAt;
 
-  @nullable
-  DateTime get dueAt;
+  DateTime? get dueAt;
 
   @override
-  Map<String, dynamic> toMap() => serializers.serializeWith(JobModel.serializer, this);
+  Map<String, dynamic> toMap() => serializers.serializeWith(JobModel.serializer, this)! as Map<String, dynamic>;
 
-  static JobModel fromJson(Map<String, dynamic> map) {
-    // TODO: investigate this
-    Map<String, double> newMeasurements =
-        map["measurements"] != null ? map["measurements"].cast<String, double>() : <String, double>{};
+  static JobModel? fromJson(Map<String, dynamic> map) {
+    // TODO(Jogboms): investigate this
+    Map<String, double?> newMeasurements = map['measurements'] as Map<String, double?>? ?? <String, double>{};
     if (newMeasurements.isNotEmpty) {
-      newMeasurements = newMeasurements..removeWhere((key, value) => value == null);
+      newMeasurements = newMeasurements..removeWhere((String key, double? value) => value == null);
     }
-    map["measurements"] = newMeasurements;
+    map['measurements'] = newMeasurements;
     return serializers.deserializeWith(JobModel.serializer, map);
   }
 

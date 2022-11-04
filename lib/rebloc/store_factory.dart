@@ -14,7 +14,7 @@ import 'package:tailor_made/rebloc/stats/bloc.dart';
 Store<AppState> storeFactory(Dependencies dependencies, bool isTesting) {
   return Store<AppState>(
     initialState: AppState.initialState(),
-    blocs: [
+    blocs: <Bloc<AppState>>[
       InitializeBloc(),
       AuthBloc(dependencies.accounts),
       AccountBloc(dependencies.accounts),

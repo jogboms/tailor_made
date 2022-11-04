@@ -12,28 +12,28 @@ import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_primary_button.dart';
 
 class ContactMeasure extends StatefulWidget {
-  const ContactMeasure({Key key, @required this.grouped, @required this.contact}) : super(key: key);
+  const ContactMeasure({super.key, required this.grouped, required this.contact});
 
-  final Map<String, List<MeasureModel>> grouped;
-  final ContactModel contact;
+  final Map<String, List<MeasureModel>>? grouped;
+  final ContactModel? contact;
 
   @override
-  _ContactMeasureState createState() => _ContactMeasureState();
+  State<ContactMeasure> createState() => _ContactMeasureState();
 }
 
 class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
-  ContactModel contact;
+  ContactModel? contact;
 
   @override
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   void initState() {
     super.initState();
-    // TODO: look into this
-    contact = widget.contact.rebuild((b) => b);
+    // TODO(Jogboms): look into this
+    contact = widget.contact!.rebuild((ContactModelBuilder b) => b);
   }
 
   @override
@@ -41,14 +41,14 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMi
     return Scaffold(
       key: scaffoldKey,
       appBar: MkAppBar(
-        title: const Text("Measurements"),
+        title: const Text('Measurements'),
         leading: MkBackButton(
           onPop: contact?.reference != null ? null : () => Navigator.pop<ContactModel>(context, contact),
         ),
-        actions: [
+        actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.remove_red_eye, color: kTitleBaseColor),
-            onPressed: () => Dependencies.di().measuresCoordinator.toMeasures(contact.measurements.toMap()),
+            onPressed: () => Dependencies.di().measuresCoordinator.toMeasures(contact!.measurements!.toMap()),
           )
         ],
       ),
@@ -57,18 +57,18 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMi
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
-            autovalidate: _autovalidate,
+            autovalidateMode: _autovalidate ? AutovalidateMode.always : AutovalidateMode.disabled,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const FormSectionHeader(title: "Measurements", trailing: "Inches (In)"),
+              children: <Widget>[
+                const FormSectionHeader(title: 'Measurements', trailing: 'Inches (In)'),
                 MeasureCreateItems(
                   grouped: widget.grouped,
-                  measurements: contact.measurements.toMap(),
+                  measurements: contact!.measurements!.toMap(),
                 ),
                 Padding(
-                  child: MkPrimaryButton(child: const Text("FINISH"), onPressed: _handleSubmit),
                   padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
+                  child: MkPrimaryButton(onPressed: _handleSubmit, child: const Text('FINISH')),
                 ),
                 const SizedBox(height: 32.0),
               ],
@@ -80,7 +80,7 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMi
   }
 
   void _handleSubmit() async {
-    final FormState form = _formKey.currentState;
+    final FormState? form = _formKey.currentState;
     if (form == null) {
       return;
     }
@@ -94,13 +94,13 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMi
     showLoadingSnackBar();
 
     try {
-      // TODO: find a way to remove this from here
+      // TODO(Jogboms): find a way to remove this from here
       // During contact creation
-      if (contact.reference != null) {
-        await contact.reference.updateData(contact.toMap());
+      if (contact!.reference != null) {
+        await contact!.reference!.updateData(contact!.toMap());
       }
       closeLoadingSnackBar();
-      showInSnackBar("Successfully Updated");
+      showInSnackBar('Successfully Updated');
     } catch (e) {
       closeLoadingSnackBar();
       showInSnackBar(e.toString());

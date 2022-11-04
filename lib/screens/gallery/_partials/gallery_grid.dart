@@ -3,9 +3,9 @@ import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/screens/gallery/_partials/gallery_grid_item.dart';
 
 class GalleryGrid extends StatelessWidget {
-  const GalleryGrid({Key key, this.images}) : super(key: key);
+  const GalleryGrid({super.key, this.images});
 
-  final List<ImageModel> images;
+  final List<ImageModel?>? images;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class GalleryGrid extends StatelessWidget {
       crossAxisCount: 3,
       crossAxisSpacing: 1.5,
       mainAxisSpacing: 1.5,
-      children: images.map((image) => GalleryGridItem(image: image)).toList(),
+      children: images!.map((ImageModel? image) => GalleryGridItem(image: image)).toList(),
     );
   }
 }

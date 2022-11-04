@@ -5,62 +5,54 @@ import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/utils/mk_scale_util.dart';
 
 class SnackBarProvider {
-  SnackBarProvider.of(BuildContext context)
-      : assert(context != null),
-        state = Scaffold.of(context);
+  SnackBarProvider.of(BuildContext context) : state = ScaffoldMessenger.of(context);
 
-  SnackBarProvider.ofKey(GlobalKey<ScaffoldState> key)
-      : assert(key != null),
-        state = key.currentState;
+  SnackBarProvider.ofKey(GlobalKey<ScaffoldMessengerState> key) : state = key.currentState;
 
-  final ScaffoldState state;
+  final ScaffoldMessengerState? state;
 
-  void success(String value, {Duration duration}) {
+  void success(String value, {Duration? duration}) {
     hide();
-    assert(value != null);
     show(
       value,
-      leading: Icon(Icons.check, color: Colors.white, size: 24),
+      leading: const Icon(Icons.check, color: Colors.white, size: 24),
       backgroundColor: MkColors.success,
     );
   }
 
-  void info(String value, {Duration duration}) {
+  void info(String value, {Duration? duration}) {
     hide();
-    assert(value != null);
     show(
       value,
-      leading: Icon(Icons.info, color: MkColors.primary, size: 24),
+      leading: const Icon(Icons.info, color: MkColors.primary, size: 24),
       backgroundColor: Colors.white,
       color: Colors.black,
     );
   }
 
-  void error(String value, {Duration duration}) {
+  void error(String value, {Duration? duration}) {
     hide();
-    assert(value != null);
     show(
       value,
-      leading: Icon(Icons.cancel, color: Colors.white, size: 24),
+      leading: const Icon(Icons.cancel, color: Colors.white, size: 24),
       backgroundColor: MkColors.danger,
     );
   }
 
   void show(
     String value, {
-    Widget leading,
-    Duration duration,
+    Widget? leading,
+    Duration? duration,
     Color backgroundColor = kAccentColor,
     Color color = Colors.white,
   }) {
     hide();
-    assert(value != null);
     state?.showSnackBar(
       SnackBar(
         backgroundColor: backgroundColor,
         content: Row(
           children: <Widget>[
-            if (leading != null) ...[leading, SizedBox(width: sx(16))],
+            if (leading != null) ...<Widget>[leading, SizedBox(width: sx(16))],
             Expanded(child: Text(value, style: mkFontMedium(14.0, color))),
           ],
         ),
@@ -71,27 +63,26 @@ class SnackBarProvider {
 
   void hide() => state?.hideCurrentSnackBar();
 
-  void loading({Widget content, Color backgroundColor, Color color}) {
+  void loading({Widget? content, Color? backgroundColor, Color? color}) {
     hide();
     state?.showSnackBar(_LoadingSnackBar(content: content, backgroundColor: backgroundColor, color: color));
   }
 }
 
 abstract class SnackBarProviderMixin {
-  GlobalKey<ScaffoldState> get scaffoldKey;
+  GlobalKey<ScaffoldMessengerState> get scaffoldKey;
 
-  void showInSnackBar(String value, [Duration duration]) =>
+  void showInSnackBar(String value, [Duration? duration]) =>
       SnackBarProvider.ofKey(scaffoldKey).show(value, duration: duration);
 
   void closeLoadingSnackBar() => SnackBarProvider.ofKey(scaffoldKey).hide();
 
-  void showLoadingSnackBar([Widget content]) => SnackBarProvider.ofKey(scaffoldKey).loading(content: content);
+  void showLoadingSnackBar([Widget? content]) => SnackBarProvider.ofKey(scaffoldKey).loading(content: content);
 }
 
 class _LoadingSnackBar extends SnackBar {
-  _LoadingSnackBar({Key key, Widget content, Color backgroundColor, Color color})
+  _LoadingSnackBar({Widget? content, Color? backgroundColor, Color? color})
       : super(
-          key: key,
           backgroundColor: content == null ? Colors.white : (backgroundColor ?? kPrimaryColor),
           content: _RowBar(content: content, color: color),
           duration: const Duration(days: 1),
@@ -99,16 +90,16 @@ class _LoadingSnackBar extends SnackBar {
 }
 
 class _RowBar extends StatelessWidget {
-  const _RowBar({Key key, this.content, this.color}) : super(key: key);
+  const _RowBar({this.content, this.color});
 
-  final Widget content;
-  final Color color;
+  final Widget? content;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: content == null ? MainAxisAlignment.center : MainAxisAlignment.start,
-      children: [
+      children: <Widget>[
         SizedBox.fromSize(
           size: const Size(48.0, 24.0),
           child: SpinKitThreeBounce(color: content == null ? (color ?? kPrimaryColor) : Colors.white, size: 24.0),
@@ -116,7 +107,7 @@ class _RowBar extends StatelessWidget {
         SizedBox(width: content == null ? 0.0 : 16.0),
         if (content != null)
           Expanded(
-            child: DefaultTextStyle(style: mkFontColor(Colors.white), child: content),
+            child: DefaultTextStyle(style: mkFontColor(Colors.white), child: content!),
           ),
       ],
     );

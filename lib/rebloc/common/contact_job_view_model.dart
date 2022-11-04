@@ -12,10 +12,10 @@ class ContactJobViewModel extends Equatable {
         _jobs = state.jobs.jobs,
         account = state.account.account;
 
-  ContactModel get selectedContact {
+  ContactModel? get selectedContact {
     if (contactID != null) {
       try {
-        return contacts.firstWhere((_) => _.id == contactID);
+        return contacts!.firstWhere((_) => _.id == contactID);
       } catch (e) {
         //
       }
@@ -23,10 +23,10 @@ class ContactJobViewModel extends Equatable {
     return null;
   }
 
-  JobModel get selectedJob {
+  JobModel? get selectedJob {
     if (jobID != null) {
       try {
-        return jobs.firstWhere((_) => _.id == jobID);
+        return jobs!.firstWhere((_) => _.id == jobID);
       } catch (e) {
         //
       }
@@ -34,18 +34,18 @@ class ContactJobViewModel extends Equatable {
     return null;
   }
 
-  String contactID;
-  String jobID;
-  final AccountModel account;
+  String? contactID;
+  String? jobID;
+  final AccountModel? account;
 
-  final BuiltList _jobs;
+  final BuiltList<JobModel>? _jobs;
 
-  List<JobModel> get jobs => _jobs?.toList();
+  List<JobModel>? get jobs => _jobs?.toList();
 
-  final BuiltList _contacts;
+  final BuiltList<ContactModel>? _contacts;
 
-  List<ContactModel> get contacts => _contacts?.toList();
+  List<ContactModel>? get contacts => _contacts?.toList();
 
   @override
-  List<Object> get props => [account, jobs, contacts];
+  List<Object?> get props => <Object?>[account, jobs, contacts];
 }

@@ -5,7 +5,7 @@ class MkStringCase {
 
     for (int i = 0; i < text.length; i++) {
       final String char = String.fromCharCode(text.codeUnitAt(i));
-      final String nextChar = i + 1 == text.length ? null : String.fromCharCode(text.codeUnitAt(i + 1));
+      final String? nextChar = i + 1 == text.length ? null : String.fromCharCode(text.codeUnitAt(i + 1));
 
       if (_symbolRegex.hasMatch(char)) {
         continue;
@@ -16,17 +16,17 @@ class MkStringCase {
       if (nextChar == null ||
           (_lowerAlphaRegex.hasMatch(char) && _upperAlphaRegex.hasMatch(nextChar)) ||
           _symbolRegex.hasMatch(nextChar)) {
-        this._words.add(sb.toString());
+        _words.add(sb.toString());
         sb.clear();
       }
     }
   }
 
-  final RegExp _lowerAlphaRegex = RegExp(r'[a-z]');
-  final RegExp _upperAlphaRegex = RegExp(r'[A-Z]');
+  final RegExp _lowerAlphaRegex = RegExp('[a-z]');
+  final RegExp _upperAlphaRegex = RegExp('[A-Z]');
   final RegExp _symbolRegex = RegExp(r'[ ./_\-]');
 
-  final List<String> _words = [];
+  final List<String> _words = <String>[];
 
   String _upperCaseFirstLetter(String word) {
     return '${word.substring(0, 1).toUpperCase()}${word.substring(1).toLowerCase()}';
@@ -34,28 +34,28 @@ class MkStringCase {
 
   // snake_case
   String _getSnakeCase({String separator = '_'}) {
-    final List<String> words = this._words.map((word) => word.toLowerCase()).toList();
+    final List<String> words = _words.map((String word) => word.toLowerCase()).toList();
 
     return words.join(separator);
   }
 
   // PascalCase
   String _getPascalCase({String separator = ''}) {
-    final List<String> words = this._words.map(_upperCaseFirstLetter).toList();
+    final List<String> words = _words.map(_upperCaseFirstLetter).toList();
 
     return words.join(separator);
   }
 
   // CONSTANT_CASE
   String _getConstantCase({String separator = '_'}) {
-    final List<String> words = this._words.map((word) => word.toUpperCase()).toList();
+    final List<String> words = _words.map((String word) => word.toUpperCase()).toList();
 
     return words.join(separator);
   }
 
   // camelCase
   String _getCamelCase({String separator = ''}) {
-    final List<String> words = this._words.map(_upperCaseFirstLetter).toList();
+    final List<String> words = _words.map(_upperCaseFirstLetter).toList();
     if (words.isNotEmpty) {
       words[0] = words[0].toLowerCase();
     }
@@ -65,7 +65,7 @@ class MkStringCase {
 
   // Sentence case
   String _getSentenceCase({String separator = ' '}) {
-    final List<String> words = this._words.map((word) => word.toLowerCase()).toList();
+    final List<String> words = _words.map((String word) => word.toLowerCase()).toList();
     if (words.isNotEmpty) {
       words[0] = _upperCaseFirstLetter(words[0]);
     }

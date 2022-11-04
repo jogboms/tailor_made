@@ -8,7 +8,7 @@ import 'package:tailor_made/rebloc/jobs/sort_type.dart';
 part 'state.g.dart';
 
 abstract class JobsState implements Built<JobsState, JobsStateBuilder> {
-  factory JobsState([void updates(JobsStateBuilder b)]) = _$JobsState;
+  factory JobsState([void Function(JobsStateBuilder b) updates]) = _$JobsState;
 
   factory JobsState.initialState() => _$JobsState(
         (JobsStateBuilder b) => b
@@ -23,22 +23,19 @@ abstract class JobsState implements Built<JobsState, JobsStateBuilder> {
 
   JobsState._();
 
-  @nullable
-  BuiltList<JobModel> get jobs;
+  BuiltList<JobModel>? get jobs;
 
   bool get hasSortFn;
 
   SortType get sortFn;
 
-  @nullable
-  BuiltList<JobModel> get searchResults;
+  BuiltList<JobModel>? get searchResults;
 
   bool get isSearching;
 
   StateStatus get status;
 
-  @nullable
-  String get error;
+  String? get error;
 
   static Serializer<JobsState> get serializer => _$jobsStateSerializer;
 }

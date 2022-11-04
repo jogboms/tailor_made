@@ -2,4 +2,4 @@ import 'package:tailor_made/repository/main.dart';
 
 class MockRepository extends Repository {}
 
-MockRepository repositoryFactory() => MockRepository();
+Future<MockRepository> repositoryFactory() async => MockRepository();

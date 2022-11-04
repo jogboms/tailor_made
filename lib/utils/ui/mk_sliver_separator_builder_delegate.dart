@@ -4,9 +4,9 @@ import 'package:flutter/widgets.dart';
 
 class MkSliverSeparatorBuilderDelegate extends SliverChildBuilderDelegate {
   MkSliverSeparatorBuilderDelegate({
-    @required IndexedWidgetBuilder builder,
-    @required IndexedWidgetBuilder separatorBuilder,
-    int childCount,
+    required IndexedWidgetBuilder builder,
+    required IndexedWidgetBuilder separatorBuilder,
+    int? childCount,
   }) : super(
           (BuildContext context, int index) {
             final int itemIndex = index ~/ 2;

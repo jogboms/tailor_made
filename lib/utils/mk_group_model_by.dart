@@ -2,8 +2,8 @@
 import 'package:tailor_made/models/main.dart';
 
 Map<String, List<T>> groupModelBy<T extends ModelInterface>(List<T> list, String Function(T) fn) {
-  return list.fold(<String, List<T>>{}, (rv, T x) {
-    final key = fn(x);
+  return list.fold(<String, List<T>>{}, (Map<String, List<T>> rv, T x) {
+    final String key = fn(x);
     (rv[key] = rv[key] ?? <T>[]).add(x);
     return rv;
   });

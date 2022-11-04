@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/bootstrap.dart';
 import 'package:tailor_made/constants/mk_routes.dart';
@@ -12,17 +11,17 @@ import 'package:tailor_made/utils/mk_scale_util.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class App extends StatefulWidget {
-  App({@required this.bootstrap, @required this.store, this.navigatorObservers}) {
+  App({super.key, required this.bootstrap, required this.store, this.navigatorObservers}) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.portraitUp]);
   }
 
   final BootstrapModel bootstrap;
   final Store<AppState> store;
-  final List<NavigatorObserver> navigatorObservers;
+  final List<NavigatorObserver>? navigatorObservers;
 
   @override
-  _AppState createState() => _AppState();
+  State<App> createState() => _AppState();
 }
 
 class _AppState extends State<App> {
@@ -47,13 +46,15 @@ class _AppState extends State<App> {
               title: MkStrings.appName,
               color: Colors.white,
               navigatorKey: widget.bootstrap.navigatorKey,
-              navigatorObservers: widget.navigatorObservers ?? [],
-              theme: ThemeProvider.of(context).themeData(Theme.of(context)),
-              builder: (_, child) => Builder(builder: (BuildContext context) {
-                MkScaleUtil.initialize(context: context, size: Size(1080, 1920));
-                return child;
-              }),
-              onGenerateRoute: (RouteSettings settings) => _PageRoute(
+              navigatorObservers: widget.navigatorObservers ?? <NavigatorObserver>[],
+              theme: ThemeProvider.of(context)!.themeData(Theme.of(context)),
+              builder: (_, Widget? child) => Builder(
+                builder: (BuildContext context) {
+                  MkScaleUtil.initialize(context: context, size: const Size(1080, 1920));
+                  return child!;
+                },
+              ),
+              onGenerateRoute: (RouteSettings settings) => _PageRoute<Object>(
                 builder: (_) => SplashPage(isColdStart: true, isMock: widget.bootstrap.isMock),
                 settings: settings.copyWith(name: MkRoutes.start),
               ),
@@ -66,7 +67,7 @@ class _AppState extends State<App> {
 }
 
 class _PageRoute<T extends Object> extends MaterialPageRoute<T> {
-  _PageRoute({WidgetBuilder builder, RouteSettings settings}) : super(builder: builder, settings: settings);
+  _PageRoute({required super.builder, super.settings});
 
   @override
   Widget buildTransitions(_, Animation<double> animation, __, Widget child) {

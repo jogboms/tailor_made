@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/dependencies.dart';
+import 'package:tailor_made/models/image.dart';
 
-const _kGridWidth = 70.0;
+const double _kGridWidth = 70.0;
 
 class GalleryGridItem extends StatelessWidget {
-  GalleryGridItem({Key key, @required this.tag, @required this.image, this.onTapDelete, double size})
-      : size = Size.square(size ?? _kGridWidth),
-        super(key: key);
+  GalleryGridItem({super.key, required this.tag, required this.image, this.onTapDelete, double? size})
+      : size = Size.square(size ?? _kGridWidth);
 
   final String tag;
   final ImageModel image;
   final Size size;
-  final ValueSetter<ImageModel> onTapDelete;
+  final ValueSetter<ImageModel>? onTapDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +33,10 @@ class GalleryGridItem extends StatelessWidget {
                   ? Align(
                       alignment: Alignment.topRight,
                       child: GestureDetector(
-                        onTap: () => onTapDelete(image),
-                        child: Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: const Icon(Icons.cancel, color: Colors.red),
+                        onTap: () => onTapDelete!(image),
+                        child: const Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Icon(Icons.cancel, color: Colors.red),
                         ),
                       ),
                     )

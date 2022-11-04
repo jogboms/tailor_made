@@ -13,24 +13,24 @@ import 'package:tailor_made/widgets/_partials/mk_back_button.dart';
 import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 
 class GalleryView extends StatelessWidget {
-  const GalleryView({Key key, this.image}) : super(key: key);
+  const GalleryView({super.key, this.image});
 
-  final ImageModel image;
+  final ImageModel? image;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, ContactJobViewModel>(
-      converter: (store) => ContactJobViewModel(store)
-        ..contactID = image.contactID
-        ..jobID = image.jobID,
+      converter: (AppState store) => ContactJobViewModel(store)
+        ..contactID = image!.contactID
+        ..jobID = image!.jobID,
       builder: (_, __, ContactJobViewModel vm) {
         return Scaffold(
           backgroundColor: Colors.black87,
           appBar: _MyAppBar(contact: vm.selectedContact, job: vm.selectedJob, account: vm.account),
           body: PhotoView(
-            imageProvider: NetworkImage(image.src),
-            loadingChild: const MkLoadingSpinner(),
-            heroAttributes: PhotoViewHeroAttributes(tag: image.src),
+            imageProvider: NetworkImage(image!.src),
+            loadingBuilder: (_, __) => const MkLoadingSpinner(),
+            heroAttributes: PhotoViewHeroAttributes(tag: image!.src),
           ),
         );
       },
@@ -39,11 +39,11 @@ class GalleryView extends StatelessWidget {
 }
 
 class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const _MyAppBar({Key key, this.contact, this.job, @required this.account}) : super(key: key);
+  const _MyAppBar({this.contact, this.job, required this.account});
 
-  final ContactModel contact;
-  final JobModel job;
-  final AccountModel account;
+  final ContactModel? contact;
+  final JobModel? job;
+  final AccountModel? account;
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +66,10 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                   icon: const Icon(Icons.person, color: Colors.white),
                   onPressed: () => Dependencies.di().contactsCoordinator.toContact(contact),
                 ),
-              if (account.hasPremiumEnabled)
-                IconButton(
-                  icon: const Icon(Icons.share, color: Colors.white),
-                  // TODO
+              if (account!.hasPremiumEnabled)
+                const IconButton(
+                  icon: Icon(Icons.share, color: Colors.white),
+                  // TODO(Jogboms): Handle
                   onPressed: null,
                 ),
             ],
@@ -80,5 +80,5 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

@@ -7,7 +7,7 @@ import 'package:tailor_made/rebloc/app_state.dart';
 part 'state.g.dart';
 
 abstract class MeasuresState implements Built<MeasuresState, MeasuresStateBuilder> {
-  factory MeasuresState([void updates(MeasuresStateBuilder b)]) = _$MeasuresState;
+  factory MeasuresState([void Function(MeasuresStateBuilder b) updates]) = _$MeasuresState;
 
   factory MeasuresState.initialState() => _$MeasuresState(
         (MeasuresStateBuilder b) => b
@@ -20,18 +20,15 @@ abstract class MeasuresState implements Built<MeasuresState, MeasuresStateBuilde
 
   MeasuresState._();
 
-  @nullable
-  BuiltList<MeasureModel> get measures;
+  BuiltList<MeasureModel>? get measures;
 
-  @nullable
-  Map<String, List<MeasureModel>> get grouped;
+  Map<String, List<MeasureModel>>? get grouped;
 
   bool get hasSkipedPremium;
 
   StateStatus get status;
 
-  @nullable
-  String get error;
+  String? get error;
 
   static Serializer<MeasuresState> get serializer => _$measuresStateSerializer;
 }

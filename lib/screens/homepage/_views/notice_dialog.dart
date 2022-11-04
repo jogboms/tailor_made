@@ -4,13 +4,13 @@ import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class NoticeDialog extends StatelessWidget {
-  const NoticeDialog({Key key, @required this.account}) : super(key: key);
+  const NoticeDialog({super.key, required this.account});
 
-  final AccountModel account;
+  final AccountModel? account;
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = ThemeProvider.of(context).subhead1;
+    final TextStyle textTheme = ThemeProvider.of(context)!.subhead1;
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -23,17 +23,17 @@ class NoticeDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const SizedBox(height: 32.0),
-              CircleAvatar(
+              const CircleAvatar(
                 backgroundColor: kAccentColor,
                 foregroundColor: Colors.white,
-                child: const Icon(Icons.notifications_none, size: 36.0),
                 radius: 24.0,
+                child: Icon(Icons.notifications_none, size: 36.0),
               ),
               const SizedBox(height: 32.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
                 child: Text(
-                  account.notice,
+                  account!.notice,
                   style: textTheme.copyWith(color: Colors.grey.shade700),
                   textAlign: TextAlign.center,
                 ),

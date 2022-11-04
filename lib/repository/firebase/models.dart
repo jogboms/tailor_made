@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:tailor_made/repository/models.dart';
 
-class FireSnapshot implements Snapshot<DocumentSnapshot> {
-  FireSnapshot(DocumentSnapshot doc)
-      : data = doc.data,
+class FireSnapshot implements Snapshot {
+  FireSnapshot(DocumentSnapshot<Map<String, dynamic>> doc)
+      : data = doc.data(),
         reference = FireReference(doc.reference);
 
   @override
-  final Map<String, dynamic> data;
+  final Map<String, dynamic>? data;
   @override
   final FireReference reference;
 }
@@ -17,41 +17,42 @@ class FireSnapshot implements Snapshot<DocumentSnapshot> {
 class FireUser implements User {
   FireUser(this._reference);
 
-  final FirebaseUser _reference;
+  final auth.User? _reference;
 
   @override
-  String get uid => _reference?.uid;
+  String? get uid => _reference?.uid;
 }
 
 class FireStorage implements Storage {
   FireStorage(this._reference);
 
-  final StorageReference _reference;
+  final storage.Reference _reference;
 
   @override
   Future<void> delete() => _reference.delete();
 
   @override
-  Future getDownloadURL() => _reference.getDownloadURL();
+  Future<String> getDownloadURL() => _reference.getDownloadURL();
 
   @override
-  String get path => _reference.path;
+  String get path => _reference.fullPath;
 }
 
-class FireReference implements Reference<DocumentReference> {
+class FireReference implements Reference {
   FireReference(this._reference);
 
-  final DocumentReference _reference;
+  final DocumentReference<Map<String, dynamic>> _reference;
 
   @override
-  DocumentReference get source => _reference;
+  DocumentReference<Map<String, dynamic>> get source => _reference;
 
   @override
   Future<void> delete() => _reference.delete();
 
   @override
-  Future<void> setData(Map<String, dynamic> data, {bool merge = false}) => _reference.setData(data, merge: merge);
+  Future<void> setData(Map<String, dynamic> data, {bool merge = false}) =>
+      _reference.set(data, SetOptions(merge: true));
 
   @override
-  Future<void> updateData(Map<String, dynamic> data) => _reference.updateData(data);
+  Future<void> updateData(Map<String, dynamic> data) => _reference.update(data);
 }

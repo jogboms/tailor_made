@@ -14,7 +14,7 @@ import 'package:tailor_made/models/stats/stats_item.dart';
 
 part 'serializers.g.dart';
 
-@SerializersFor([
+@SerializersFor(<Type>[
   AccountModelStatus,
   AccountModel,
   ContactModel,
@@ -32,7 +32,7 @@ final Serializers serializers = (_$serializers.toBuilder()
       ..addPlugin(StandardJsonPlugin()))
     .build();
 
-class _DateTimeSerializer implements PrimitiveSerializer<DateTime> {
+class _DateTimeSerializer implements PrimitiveSerializer<DateTime?> {
   final bool structured = false;
   @override
   final Iterable<Type> types = BuiltList<Type>(<Type>[DateTime]);
@@ -40,12 +40,12 @@ class _DateTimeSerializer implements PrimitiveSerializer<DateTime> {
   final String wireName = 'DateTime';
 
   @override
-  Object serialize(Serializers serializers, DateTime dateTime, {FullType specifiedType = FullType.unspecified}) {
+  Object serialize(Serializers serializers, DateTime? dateTime, {FullType specifiedType = FullType.unspecified}) {
     return dateTime.toString();
   }
 
   @override
-  DateTime deserialize(Serializers serializers, Object serialized, {FullType specifiedType = FullType.unspecified}) {
+  DateTime? deserialize(Serializers serializers, Object serialized, {FullType specifiedType = FullType.unspecified}) {
     try {
       return DateTime.tryParse(serialized as String);
     } catch (e) {
@@ -62,12 +62,18 @@ class _AccountModelStatusSerializer implements PrimitiveSerializer<AccountModelS
   final String wireName = 'AccountModelStatus';
 
   @override
-  Object serialize(Serializers serializers, AccountModelStatus object,
-          {FullType specifiedType = FullType.unspecified}) =>
+  Object serialize(
+    Serializers serializers,
+    AccountModelStatus object, {
+    FullType specifiedType = FullType.unspecified,
+  }) =>
       object.index;
 
   @override
-  AccountModelStatus deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      AccountModelStatus.values[int.tryParse(serialized.toString())];
+  AccountModelStatus deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) =>
+      AccountModelStatus.values[int.tryParse(serialized.toString())!];
 }

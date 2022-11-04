@@ -9,7 +9,7 @@ import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 @immutable
 class MeasuresCoordinator extends CoordinatorBase {
-  const MeasuresCoordinator(GlobalKey<NavigatorState> navigatorKey) : super(navigatorKey);
+  const MeasuresCoordinator(super.navigatorKey);
 
   void toMeasures(Map<String, double> measures) {
     navigator?.push<void>(MkNavigate.slideIn(MeasuresPage(measurements: measures), fullscreenDialog: true));
@@ -19,14 +19,16 @@ class MeasuresCoordinator extends CoordinatorBase {
     navigator?.push<void>(MkNavigate.slideIn(MeasuresManagePage(userId: userId)));
   }
 
-  void toCreateMeasures([String groupName, String unitValue, List<MeasureModel> measures]) {
-    navigator?.push<void>(MkNavigate.slideIn(
-      MeasuresCreate(groupName: groupName, unitValue: unitValue, measures: measures),
-      fullscreenDialog: true,
-    ));
+  void toCreateMeasures([String? groupName, String? unitValue, List<MeasureModel>? measures]) {
+    navigator?.push<void>(
+      MkNavigate.slideIn(
+        MeasuresCreate(groupName: groupName, unitValue: unitValue, measures: measures),
+        fullscreenDialog: true,
+      ),
+    );
   }
 
-  Future<MeasureModel> toCreateMeasureItem([String groupName, String unitValue, List<MeasureModel> measures]) {
+  Future<MeasureModel?>? toCreateMeasureItem([String? groupName, String? unitValue, List<MeasureModel>? measures]) {
     return navigator?.push<MeasureModel>(
       MkNavigate.fadeIn(MeasureCreateItem(groupName: groupName, unitValue: unitValue)),
     );

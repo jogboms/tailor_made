@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MkPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
-  const MkPersistentHeaderDelegate({@required this.builder, double height, double minExtent, double maxExtent})
+  const MkPersistentHeaderDelegate({required this.builder, double? height, double? minExtent, double? maxExtent})
       : minExtent = height ?? minExtent ?? kTextTabBarHeight,
         maxExtent = height ?? maxExtent ?? kTextTabBarHeight;
 
