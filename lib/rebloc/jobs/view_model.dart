@@ -15,23 +15,23 @@ class JobsViewModel extends Equatable {
         isSearching = state.jobs.isSearching,
         hasSortFn = state.jobs.hasSortFn,
         measures = state.measures.grouped,
-        userId = state.account.account.uid,
+        userId = state.account.account!.uid,
         sortFn = state.jobs.sortFn,
         isLoading = state.jobs.status == StateStatus.loading,
         hasError = state.jobs.status == StateStatus.failure,
         error = state.jobs.error;
 
-  List<JobModel> get jobs => isSearching ? searchResults : model;
+  List<JobModel>? get jobs => isSearching ? searchResults : model;
 
   List<JobModel> get tasks {
-    final tasks = model.where((job) => !job.isComplete).toList();
-    return tasks..sort((a, b) => a.dueAt.compareTo(b.dueAt));
+    final List<JobModel> tasks = model!.where((JobModel job) => !job.isComplete!).toList();
+    return tasks..sort((JobModel a, JobModel b) => a.dueAt!.compareTo(b.dueAt!));
   }
 
-  JobModel get selected {
+  JobModel? get selected {
     if (jobID != null) {
       try {
-        return model.firstWhere((_) => _.id == jobID);
+        return model!.firstWhere((_) => _.id == jobID);
       } catch (e) {
         //
       }
@@ -39,10 +39,10 @@ class JobsViewModel extends Equatable {
     return null;
   }
 
-  ContactModel get selectedContact {
+  ContactModel? get selectedContact {
     if (selected != null) {
       try {
-        return contacts.firstWhere((_) => _.id == selected.contactID);
+        return contacts!.firstWhere((_) => _.id == selected!.contactID);
       } catch (e) {
         //
       }
@@ -53,31 +53,31 @@ class JobsViewModel extends Equatable {
   List<JobModel> get selectedJobs {
     if (selected != null) {
       try {
-        return jobs.where((job) => job.contactID == selected.id).toList();
+        return jobs!.where((JobModel job) => job.contactID == selected!.id).toList();
       } catch (e) {
         //
       }
     }
-    return [];
+    return <JobModel>[];
   }
 
-  String jobID;
+  String? jobID;
 
   final String userId;
 
-  final BuiltList _contacts;
+  final BuiltList<ContactModel>? _contacts;
 
-  List<ContactModel> get contacts => _contacts?.toList();
+  List<ContactModel>? get contacts => _contacts?.toList();
 
-  final BuiltList _searchResults;
+  final BuiltList<JobModel>? _searchResults;
 
-  List<JobModel> get searchResults => _searchResults?.toList();
+  List<JobModel>? get searchResults => _searchResults?.toList();
 
-  final Map<String, List<MeasureModel>> measures;
+  final Map<String, List<MeasureModel>>? measures;
 
-  final BuiltList _model;
+  final BuiltList<JobModel>? _model;
 
-  List<JobModel> get model => _model?.toList();
+  List<JobModel>? get model => _model?.toList();
 
   final bool hasSortFn;
   final SortType sortFn;
@@ -86,17 +86,7 @@ class JobsViewModel extends Equatable {
   final bool hasError;
   final dynamic error;
 
-// void toggleCompleteJob(JobModel job) {
-//   return store.dispatch(ToggleCompleteJob(payload: job));
-// }
-
-// void setSortFn(SortType type) => store.dispatch(SortJobs(payload: type));
-
-// void search(String term) => store.dispatch(SearchJobAction(payload: term));
-
-// void cancelSearch() => store.dispatch(CancelSearchJobAction());
-
   @override
-  List<Object> get props =>
-      [model, hasSortFn, sortFn, userId, isSearching, searchResults, contacts, isLoading, hasError, error];
+  List<Object?> get props =>
+      <Object?>[model, hasSortFn, sortFn, userId, isSearching, searchResults, contacts, isLoading, hasError, error];
 }

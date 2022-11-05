@@ -27,7 +27,7 @@ part 'stats.g.dart';
 // }
 
 abstract class StatsModel with ModelInterface implements Built<StatsModel, StatsModelBuilder> {
-  factory StatsModel([void updates(StatsModelBuilder b)]) = _$StatsModel;
+  factory StatsModel([void Function(StatsModelBuilder b) updates]) = _$StatsModel;
 
   StatsModel._();
 
@@ -40,9 +40,9 @@ abstract class StatsModel with ModelInterface implements Built<StatsModel, Stats
   StatsItemModel<double> get payments;
 
   @override
-  Map<String, dynamic> toMap() => serializers.serializeWith(StatsModel.serializer, this);
+  Map<String, dynamic>? toMap() => serializers.serializeWith(StatsModel.serializer, this) as Map<String, dynamic>?;
 
-  static StatsModel fromJson(Map<String, dynamic> map) => serializers.deserializeWith(StatsModel.serializer, map);
+  static StatsModel? fromJson(Map<String, dynamic>? map) => serializers.deserializeWith(StatsModel.serializer, map);
 
   static Serializer<StatsModel> get serializer => _$statsModelSerializer;
 }

@@ -4,24 +4,24 @@ import 'dart:convert' show json;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MkPrefs {
-  static Future<SharedPreferences> _prefs;
+  static Future<SharedPreferences>? _prefs;
 
-  static Future<SharedPreferences> _getInstance() {
+  static Future<SharedPreferences>? _getInstance() {
     _prefs ??= SharedPreferences.getInstance();
     return _prefs;
   }
 
-  static Future<String> getString(String key) async => (await _getInstance()).getString(key) ?? '';
+  static Future<String> getString(String key) async => (await _getInstance())!.getString(key) ?? '';
 
   static Future<String> setString(String key, String value) async {
-    await (await _getInstance()).setString(key, value);
+    await (await _getInstance())!.setString(key, value);
     return value;
   }
 
-  static Future<Map<String, dynamic>> getMap(String key) async {
+  static Future<Map<String, dynamic>?> getMap(String key) async {
     try {
-      final _map = await getString(key);
-      return _map.isEmpty ? null : json.decode(_map);
+      final String map = await getString(key);
+      return map.isEmpty ? null : (json.decode(map) as Map<String, dynamic>);
     } catch (e) {
       return null;
     }
@@ -32,21 +32,21 @@ class MkPrefs {
     return value;
   }
 
-  static Future<int> getInt(String key) async => (await _getInstance()).getInt(key);
+  static Future<int?> getInt(String key) async => (await _getInstance())!.getInt(key);
 
   static Future<int> setInt(String key, int value) async {
-    await (await _getInstance()).setInt(key, value);
+    await (await _getInstance())!.setInt(key, value);
     return value;
   }
 
-  static Future<bool> getBool(String key) async => (await _getInstance()).getBool(key);
+  static Future<bool?> getBool(String key) async => (await _getInstance())!.getBool(key);
 
   static Future<bool> setBool(String key, bool value) async {
-    await (await _getInstance()).setBool(key, value);
+    await (await _getInstance())!.setBool(key, value);
     return value;
   }
 
-  static Future<bool> contains(String key) async => (await _getInstance()).containsKey(key);
+  static Future<bool> contains(String key) async => (await _getInstance())!.containsKey(key);
 
-  static Future<bool> remove(String key) async => (await _getInstance()).remove(key);
+  static Future<bool> remove(String key) async => (await _getInstance())!.remove(key);
 }

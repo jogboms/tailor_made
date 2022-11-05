@@ -9,11 +9,11 @@ class AccountViewModel extends Equatable {
         hasError = state.account.status == StateStatus.failure,
         error = state.account.error;
 
-  final AccountModel model;
+  final AccountModel? model;
   final bool isLoading;
   final bool hasError;
   final dynamic error;
 
   @override
-  List<Object> get props => [model, isLoading, hasError, error];
+  List<Object?> get props => <Object?>[model, isLoading, hasError, error];
 }

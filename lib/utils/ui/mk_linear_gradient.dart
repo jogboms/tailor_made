@@ -5,6 +5,7 @@ LinearGradient mkLinearGradient([bool inverse = false]) {
   return LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: inverse ? const [MkColors.primary, MkColors.accent] : const [MkColors.accent, MkColors.primary],
+    colors:
+        inverse ? const <Color>[MkColors.primary, MkColors.accent] : const <Color>[MkColors.accent, MkColors.primary],
   );
 }

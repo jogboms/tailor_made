@@ -1,0 +1,56 @@
+name: Format, Analyze and Test
+
+on:
+  push:
+    branches:
+      - master
+      - release/**
+  pull_request:
+    branches:
+      - master
+      - release/**
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+env:
+  java_version: "12.x"
+
+jobs:
+  default_run:
+    name: Format, Analyze and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v1
+        with:
+          java-version: ${{ env.java_version }}
+      - name: Initialize environment variables from FVM config
+        uses: kuhnroyal/flutter-fvm-config-action@v1
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v2
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: ${{ runner.os }}-flutter-install-cache-${{ env.flutter_version }}
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+      - run: flutter doctor
+      - run: flutter pub get
+      - run: flutter format --set-exit-if-changed -l 120 lib
+      - run: flutter packages pub run build_runner build --delete-conflicting-outputs
+      - run: flutter analyze lib
+      - run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
+
+      - name: Clean-up lcov
+        run: |
+          dart pub global activate clean_coverage
+          clean_coverage clean --exclusions '**/*_mock_impl.dart' coverage/lcov.info
+
+      - name: Upload coverage to codecov
+        uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true

@@ -8,13 +8,13 @@ import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 @immutable
 class PaymentsCoordinator extends CoordinatorBase {
-  const PaymentsCoordinator(GlobalKey<NavigatorState> navigatorKey) : super(navigatorKey);
+  const PaymentsCoordinator(super.navigatorKey);
 
-  void toPayment(PaymentModel payment) {
+  void toPayment(PaymentModel? payment) {
     navigator?.push<void>(MkNavigate.slideIn(PaymentPage(payment: payment), fullscreenDialog: true));
   }
 
-  void toPayments(String userId, [List<PaymentModel> payments]) {
+  void toPayments(String userId, [List<PaymentModel>? payments]) {
     navigator?.push<void>(
       payments == null
           ? MkNavigate.slideIn(PaymentsPage(payments: payments, userId: userId))
@@ -22,7 +22,7 @@ class PaymentsCoordinator extends CoordinatorBase {
     );
   }
 
-  Future<Map<String, dynamic>> toCreatePayment(double payment) {
+  Future<Map<String, dynamic>?>? toCreatePayment(double? payment) {
     return navigator?.push<Map<String, dynamic>>(MkNavigate.fadeIn(PaymentsCreatePage(limit: payment)));
   }
 }

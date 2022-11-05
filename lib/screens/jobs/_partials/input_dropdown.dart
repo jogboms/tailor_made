@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
 class InputDropdown extends StatelessWidget {
-  const InputDropdown({Key key, this.child, this.labelText, this.valueText, this.valueStyle, this.onPressed})
-      : super(key: key);
+  const InputDropdown({super.key, this.child, this.labelText, this.valueText, this.valueStyle, this.onPressed});
 
-  final String labelText;
-  final String valueText;
-  final TextStyle valueStyle;
-  final VoidCallback onPressed;
-  final Widget child;
+  final String? labelText;
+  final String? valueText;
+  final TextStyle? valueStyle;
+  final VoidCallback? onPressed;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class InputDropdown extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(valueText, style: valueStyle),
+            Text(valueText!, style: valueStyle),
             Icon(
               Icons.arrow_drop_down,
               color: Theme.of(context).brightness == Brightness.light ? Colors.grey.shade700 : Colors.white70,

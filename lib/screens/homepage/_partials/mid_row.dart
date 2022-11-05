@@ -6,9 +6,9 @@ import 'package:tailor_made/screens/homepage/_partials/helpers.dart';
 import 'package:tailor_made/utils/mk_money.dart';
 
 class MidRowWidget extends StatelessWidget {
-  const MidRowWidget({Key key, @required this.userId, @required this.stats}) : super(key: key);
+  const MidRowWidget({super.key, required this.userId, required this.stats});
 
-  final StatsModel stats;
+  final StatsModel? stats;
   final String userId;
 
   @override
@@ -23,8 +23,8 @@ class MidRowWidget extends StatelessWidget {
               child: TMGridTile(
                 color: Colors.redAccent,
                 icon: Icons.attach_money,
-                title: "Payments",
-                subTitle: "${MkMoney(stats.payments.total).formatted} Total",
+                title: 'Payments',
+                subTitle: '${MkMoney(stats!.payments.total).formatted} Total',
                 onPressed: () => Dependencies.di().paymentsCoordinator.toPayments(userId),
               ),
             ),
@@ -34,8 +34,8 @@ class MidRowWidget extends StatelessWidget {
               child: TMGridTile(
                 color: Colors.blueAccent,
                 icon: Icons.image,
-                title: "Gallery",
-                subTitle: "${stats.gallery.total} Photos",
+                title: 'Gallery',
+                subTitle: '${stats!.gallery.total} Photos',
                 onPressed: () => Dependencies.di().galleryCoordinator.toGallery(userId),
               ),
             ),

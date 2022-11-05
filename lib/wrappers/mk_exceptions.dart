@@ -7,8 +7,8 @@ class NoInternetException extends MkException {
 class MkException implements Exception {
   MkException([this.message]);
 
-  final String message;
+  final String? message;
 
   @override
-  String toString() => message == null ? "$runtimeType" : "$runtimeType($message)";
+  String toString() => message == null ? '$runtimeType' : '$runtimeType($message)';
 }

@@ -1,1 +1,1 @@
-enum Environment { MOCK, DEVELOPMENT, PRODUCTION }
+enum Environment { mock, development, production }

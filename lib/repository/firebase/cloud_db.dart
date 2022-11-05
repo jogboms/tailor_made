@@ -3,25 +3,29 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class CloudDb {
   CloudDb(this._instance);
 
-  final Firestore _instance;
+  final FirebaseFirestore _instance;
 
-  DocumentReference account(String userId) => _instance.document('accounts/$userId');
+  DocumentReference<Map<String, dynamic>> account(String? userId) => _instance.doc('accounts/$userId');
 
-  DocumentReference stats(String userId) => _instance.document('stats/$userId');
+  DocumentReference<Map<String, dynamic>> stats(String? userId) => _instance.doc('stats/$userId');
 
-  DocumentReference get settings => _instance.document('settings/common');
+  DocumentReference<Map<String, dynamic>> get settings => _instance.doc('settings/common');
 
-  CollectionReference measurements(String userId) => _instance.collection('measurements/$userId/common');
+  CollectionReference<Map<String, dynamic>> measurements(String? userId) =>
+      _instance.collection('measurements/$userId/common');
 
-  CollectionReference get premium => _instance.collection('premium');
+  CollectionReference<Map<String, dynamic>?> get premium => _instance.collection('premium');
 
-  Query gallery(String userId) => _instance.collection('gallery').where('userID', isEqualTo: userId);
+  Query<Map<String, dynamic>> gallery(String userId) =>
+      _instance.collection('gallery').where('userID', isEqualTo: userId);
 
-  Query payments(String userId) => _instance.collection('payments').where('userID', isEqualTo: userId);
+  Query<Map<String, dynamic>> payments(String userId) =>
+      _instance.collection('payments').where('userID', isEqualTo: userId);
 
-  Query contacts(String userId) => _instance.collection('contacts').where('userID', isEqualTo: userId);
+  Query<Map<String, dynamic>> contacts(String? userId) =>
+      _instance.collection('contacts').where('userID', isEqualTo: userId);
 
-  Query jobs(String userId) => _instance.collection('jobs').where('userID', isEqualTo: userId);
+  Query<Map<String, dynamic>> jobs(String? userId) => _instance.collection('jobs').where('userID', isEqualTo: userId);
 
   Future<void> batchAction(void Function(WriteBatch batch) action) {
     final WriteBatch batch = _instance.batch();

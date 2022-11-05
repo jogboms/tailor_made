@@ -8,28 +8,26 @@ part 'stats_item.g.dart';
 abstract class StatsItemModel<T extends num>
     with ModelInterface
     implements Built<StatsItemModel<T>, StatsItemModelBuilder<T>> {
-  factory StatsItemModel([void updates(StatsItemModelBuilder<T> b)]) = _$StatsItemModel<T>;
+  factory StatsItemModel([void Function(StatsItemModelBuilder<T> b) updates]) = _$StatsItemModel<T>;
 
   StatsItemModel._();
 
   static void _initializeBuilder<U extends num>(StatsItemModelBuilder<U> b) => b
-    ..total = U == int ? 0 : 0.0
-    ..pending = U == int ? 0 : 0.0
-    ..completed = U == int ? 0 : 0.0;
+    ..total = U == int ? 0 as U? : 0.0 as U?
+    ..pending = U == int ? 0 as U? : 0.0 as U?
+    ..completed = U == int ? 0 as U? : 0.0 as U?;
 
   T get total;
 
-  @nullable
-  T get pending;
+  T? get pending;
 
-  @nullable
-  T get completed;
+  T? get completed;
 
   @override
-  Map<String, dynamic> toMap() => serializers.serializeWith(StatsItemModel.serializer, this);
+  Map<String, dynamic>? toMap() => serializers.serializeWith(StatsItemModel.serializer, this) as Map<String, dynamic>?;
 
-  static StatsItemModel fromJson(Map<String, dynamic> map) =>
+  static StatsItemModel<num>? fromJson(Map<String, dynamic> map) =>
       serializers.deserializeWith(StatsItemModel.serializer, map);
 
-  static Serializer<StatsItemModel> get serializer => _$statsItemModelSerializer;
+  static Serializer<StatsItemModel<num>> get serializer => _$statsItemModelSerializer;
 }

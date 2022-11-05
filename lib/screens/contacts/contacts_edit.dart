@@ -1,5 +1,4 @@
-import 'package:contact_picker/contact_picker.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:contact_picker/contact_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/models/contact.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
@@ -7,28 +6,29 @@ import 'package:tailor_made/screens/contacts/_partials/contact_form.dart';
 import 'package:tailor_made/widgets/_partials/mk_app_bar.dart';
 
 class ContactsEditPage extends StatefulWidget {
-  const ContactsEditPage({Key key, this.contact, @required this.userId}) : super(key: key);
+  const ContactsEditPage({super.key, this.contact, required this.userId});
 
-  final ContactModel contact;
+  final ContactModel? contact;
   final String userId;
 
   @override
-  _ContactsEditPageState createState() => _ContactsEditPageState();
+  State<ContactsEditPage> createState() => _ContactsEditPageState();
 }
 
 class _ContactsEditPageState extends State<ContactsEditPage> with SnackBarProviderMixin {
-  final ContactPicker _contactPicker = ContactPicker();
+  // TODO(Jogboms): Handle
+  // final ContactPicker _contactPicker = ContactPicker();
   final GlobalKey<ContactFormState> _formKey = GlobalKey<ContactFormState>();
 
   @override
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
       appBar: MkAppBar(
-        title: const Text("Edit Contact"),
+        title: const Text('Edit Contact'),
         actions: <Widget>[
           IconButton(icon: const Icon(Icons.contacts), onPressed: _handleSelectContact),
         ],
@@ -38,23 +38,24 @@ class _ContactsEditPageState extends State<ContactsEditPage> with SnackBarProvid
   }
 
   void _handleSelectContact() async {
-    final _selectedContact = await _contactPicker.selectContact();
-    _formKey.currentState.updateContact(
-      widget.contact.rebuild(
-        (b) => b
-          ..fullname = _selectedContact.fullName
-          ..phone = _selectedContact.phoneNumber.number,
-      ),
-    );
+    // TODO(Jogboms): Handle
+    // final selectedContact = await _contactPicker.selectContact();
+    // _formKey.currentState.updateContact(
+    //   widget.contact.rebuild(
+    //     (b) => b
+    //       ..fullname = selectedContact.fullName
+    //       ..phone = selectedContact.phoneNumber.number,
+    //   ),
+    // );
   }
 
   void _handleSubmit(ContactModel contact) async {
     showLoadingSnackBar();
 
     try {
-      await contact.reference.setData(contact.toMap());
+      await contact.reference!.setData(contact.toMap());
       closeLoadingSnackBar();
-      showInSnackBar("Successfully Updated");
+      showInSnackBar('Successfully Updated');
     } catch (e) {
       closeLoadingSnackBar();
       showInSnackBar(e.toString());

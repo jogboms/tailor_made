@@ -6,9 +6,9 @@ class CloudStorage {
 
   final FirebaseStorage _instance;
 
-  StorageReference createContactImage(String userId) =>
-      _instance.ref().child('$userId/contacts').child('${Uuid().v1()}.jpg');
+  Reference createContactImage(String userId) =>
+      _instance.ref().child('$userId/contacts').child('${const Uuid().v1()}.jpg');
 
-  StorageReference createReferenceImage(String userId) =>
-      _instance.ref().child('$userId/references').child('${Uuid().v1()}.jpg');
+  Reference createReferenceImage(String userId) =>
+      _instance.ref().child('$userId/references').child('${const Uuid().v1()}.jpg');
 }

@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/repository/firebase/main.dart';
 import 'package:tailor_made/repository/firebase/models.dart';
@@ -10,54 +10,57 @@ class MeasuresImpl extends Measures {
   final FirebaseRepository repository;
 
   @override
-  Stream<List<MeasureModel>> fetchAll(String userId) {
-    return repository.db
-        .measurements(userId)
-        .snapshots()
-        .map((snapshot) => snapshot.documents.map((item) => MeasureModel.fromSnapshot(FireSnapshot(item))).toList());
+  Stream<List<MeasureModel>> fetchAll(String? userId) {
+    return repository.db.measurements(userId).snapshots().map(
+          (QuerySnapshot<Map<String, dynamic>> snapshot) => snapshot.docs
+              .map((QueryDocumentSnapshot<Map<String, dynamic>> item) => MeasureModel.fromSnapshot(FireSnapshot(item)))
+              .toList(),
+        );
   }
 
   @override
-  Future<void> create(List<MeasureModel> measures, String userId,
-      {@required String groupName, @required String unitValue}) async {
-    await repository.db.batchAction((batch) {
-      measures.forEach((measure) {
-        if (measure?.reference != null) {
-          batch.updateData(measure.reference.source, <String, String>{"group": groupName, "unit": unitValue});
+  Future<void> create(
+    List<MeasureModel>? measures,
+    String userId, {
+    required String? groupName,
+    required String? unitValue,
+  }) async {
+    await repository.db.batchAction((WriteBatch batch) {
+      for (final MeasureModel measure in measures!) {
+        if (measure.reference != null) {
+          batch.update(measure.reference!.source, <String, String?>{'group': groupName, 'unit': unitValue});
         } else {
-          batch.setData(
-            repository.db.measurements(userId).document(measure.id),
+          batch.set(
+            repository.db.measurements(userId).doc(measure.id),
             measure.toMap(),
-            merge: true,
+            SetOptions(merge: true),
           );
         }
-      });
+      }
     });
   }
 
   @override
   Future<void> delete(List<MeasureModel> measures, String userId) async {
-    await repository.db.batchAction((batch) {
-      measures.forEach(
-        (measure) => batch.delete(repository.db.measurements(userId).document(measure.id)),
-      );
+    await repository.db.batchAction((WriteBatch batch) {
+      for (final MeasureModel measure in measures) {
+        batch.delete(repository.db.measurements(userId).doc(measure.id));
+      }
     });
   }
 
   @override
-  Future<void> update(List<MeasureModel> measures, String userId) async {
-    await repository.db.batchAction((batch) {
+  Future<void> update(List<MeasureModel> measures, String? userId) async {
+    await repository.db.batchAction((WriteBatch batch) {
       try {
-        measures.forEach(
-          (measure) => batch.setData(
-            repository.db.measurements(userId).document(measure.id),
+        for (final MeasureModel measure in measures) {
+          batch.set(
+            repository.db.measurements(userId).doc(measure.id),
             measure.toMap(),
-            merge: true,
-          ),
-        );
-      } catch (e) {
-        print(e);
-      }
+            SetOptions(merge: true),
+          );
+        }
+      } catch (_) {}
     });
   }
 }

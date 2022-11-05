@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/models/image.dart';
 import 'package:tailor_made/repository/firebase/main.dart';
 import 'package:tailor_made/repository/firebase/models.dart';
@@ -11,11 +12,12 @@ class GalleryImpl extends Gallery {
   final FirebaseRepository repository;
 
   @override
-  Stream<List<ImageModel>> fetchAll(String userId) {
-    return repository.db
-        .gallery(userId)
-        .snapshots()
-        .map((snap) => snap.documents.map((item) => ImageModel.fromJson(item.data)).toList());
+  Stream<List<ImageModel?>> fetchAll(String userId) {
+    return repository.db.gallery(userId).snapshots().map(
+          (QuerySnapshot<Map<String, dynamic>> snap) => snap.docs
+              .map((QueryDocumentSnapshot<Map<String, dynamic>> item) => ImageModel.fromJson(item.data()))
+              .toList(),
+        );
   }
 
   @override

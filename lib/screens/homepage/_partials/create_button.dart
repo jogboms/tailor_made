@@ -8,17 +8,17 @@ import 'package:tailor_made/widgets/theme_provider.dart';
 enum _CreateOptions { contacts, jobs }
 
 class CreateButton extends StatefulWidget {
-  const CreateButton({Key key, @required this.userId, @required this.contacts}) : super(key: key);
+  const CreateButton({super.key, required this.userId, required this.contacts});
 
-  final List<ContactModel> contacts;
+  final List<ContactModel>? contacts;
   final String userId;
 
   @override
-  _CreateButtonState createState() => _CreateButtonState();
+  State<CreateButton> createState() => _CreateButtonState();
 }
 
 class _CreateButtonState extends State<CreateButton> with SingleTickerProviderStateMixin {
-  AnimationController controller;
+  late AnimationController controller;
 
   @override
   void initState() {
@@ -43,11 +43,11 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
           onPressed: _onTapCreate(widget.contacts),
           shape: const RoundedRectangleBorder(),
           child: ScaleTransition(
-            scale: Tween(begin: 0.95, end: 1.025).animate(controller),
+            scale: Tween<double>(begin: 0.95, end: 1.025).animate(controller),
             alignment: FractionalOffset.center,
             child: Text(
-              "TAP TO CREATE",
-              style: ThemeProvider.of(context).body3Medium.copyWith(color: Colors.white, letterSpacing: 1.25),
+              'TAP TO CREATE',
+              style: ThemeProvider.of(context)!.body3Medium.copyWith(color: Colors.white, letterSpacing: 1.25),
             ),
           ),
         ),
@@ -55,26 +55,31 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
     );
   }
 
-  VoidCallback _onTapCreate(List<ContactModel> contacts) {
+  VoidCallback _onTapCreate(List<ContactModel>? contacts) {
     return () async {
-      final _CreateOptions result = await showDialog<_CreateOptions>(
+      final _CreateOptions? result = await showDialog<_CreateOptions>(
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Text('Select action', style: ThemeProvider.of(context).body3),
+            title: Text('Select action', style: ThemeProvider.of(context)!.body3),
             children: <Widget>[
               SimpleDialogOption(
                 onPressed: () => Navigator.pop(context, _CreateOptions.contacts),
-                child: TMListTile(color: Colors.orangeAccent, icon: Icons.supervisor_account, title: "Contact"),
+                child: const TMListTile(color: Colors.orangeAccent, icon: Icons.supervisor_account, title: 'Contact'),
               ),
               SimpleDialogOption(
                 onPressed: () => Navigator.pop(context, _CreateOptions.jobs),
-                child: TMListTile(color: Colors.greenAccent.shade400, icon: Icons.attach_money, title: "Job"),
+                child: TMListTile(color: Colors.greenAccent.shade400, icon: Icons.attach_money, title: 'Job'),
               ),
             ],
           );
         },
       );
+
+      if (result == null) {
+        return;
+      }
+
       switch (result) {
         case _CreateOptions.contacts:
           Dependencies.di().contactsCoordinator.toCreateContact(widget.userId);

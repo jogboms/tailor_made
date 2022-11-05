@@ -1,5 +1,6 @@
 import 'dart:async' show Future;
 
+import 'package:flutter/foundation.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 
@@ -9,16 +10,16 @@ class LoggerBloc extends SimpleBloc<AppState> {
   final bool isTesting;
 
   @override
-  Future<Action> afterware(dispatcher, state, action) async {
+  Future<Action> afterware(DispatchFunction dispatcher, AppState state, Action action) async {
     if (!isTesting) {
-      print(state);
+      debugPrint(state.toString());
     }
     return action;
   }
 
   @override
-  Future<Action> middleware(dispatcher, state, action) async {
-    print("[ReBLoC]: ${action.runtimeType}");
+  Future<Action> middleware(DispatchFunction dispatcher, AppState state, Action action) async {
+    debugPrint('[ReBLoC]: ${action.runtimeType}');
 
     return action;
   }

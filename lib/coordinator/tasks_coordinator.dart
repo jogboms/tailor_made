@@ -5,7 +5,7 @@ import 'package:tailor_made/wrappers/mk_navigate.dart';
 
 @immutable
 class TasksCoordinator extends CoordinatorBase {
-  const TasksCoordinator(GlobalKey<NavigatorState> navigatorKey) : super(navigatorKey);
+  const TasksCoordinator(super.navigatorKey);
 
   void toTasks() {
     navigator?.push<void>(MkNavigate.slideIn(const TasksPage()));

@@ -7,12 +7,12 @@ import 'package:uuid/uuid.dart';
 part 'image.g.dart';
 
 abstract class ImageModel with ModelInterface implements Built<ImageModel, ImageModelBuilder> {
-  factory ImageModel([void updates(ImageModelBuilder b)]) = _$ImageModel;
+  factory ImageModel([void Function(ImageModelBuilder b) updates]) = _$ImageModel;
 
   ImageModel._();
 
   static void _initializeBuilder(ImageModelBuilder b) => b
-    ..id = Uuid().v1()
+    ..id = const Uuid().v1()
     ..createdAt = DateTime.now();
 
   String get id;
@@ -30,9 +30,9 @@ abstract class ImageModel with ModelInterface implements Built<ImageModel, Image
   DateTime get createdAt;
 
   @override
-  Map<String, dynamic> toMap() => serializers.serializeWith(ImageModel.serializer, this);
+  Map<String, dynamic>? toMap() => serializers.serializeWith(ImageModel.serializer, this) as Map<String, dynamic>?;
 
-  static ImageModel fromJson(Map<String, dynamic> map) => serializers.deserializeWith(ImageModel.serializer, map);
+  static ImageModel? fromJson(Map<String, dynamic> map) => serializers.deserializeWith(ImageModel.serializer, map);
 
   static Serializer<ImageModel> get serializer => _$imageModelSerializer;
 }

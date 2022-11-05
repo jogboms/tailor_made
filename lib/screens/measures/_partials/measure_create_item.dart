@@ -3,10 +3,10 @@ import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/screens/measures/_views/measure_dialog.dart';
 
 class MeasureCreateItem extends StatelessWidget {
-  const MeasureCreateItem({Key key, @required this.groupName, @required this.unitValue}) : super(key: key);
+  const MeasureCreateItem({super.key, required this.groupName, required this.unitValue});
 
-  final String groupName;
-  final String unitValue;
+  final String? groupName;
+  final String? unitValue;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +23,8 @@ class MeasureCreateItem extends StatelessWidget {
       backgroundColor: Colors.black38,
       body: MeasureDialog(
         measure: MeasureModel(
-          (b) => b
-            ..name = ""
+          (MeasureModelBuilder b) => b
+            ..name = ''
             ..group = groupName
             ..unit = unitValue,
         ),

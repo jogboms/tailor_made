@@ -9,10 +9,10 @@ part 'account.g.dart';
 enum AccountModelStatus { enabled, disabled, warning, pending }
 
 abstract class AccountModel with ModelInterface implements Built<AccountModel, AccountModelBuilder> {
-  factory AccountModel([void updates(AccountModelBuilder b)]) = _$AccountModel;
+  factory AccountModel([void Function(AccountModelBuilder b) updates]) = _$AccountModel;
 
   factory AccountModel.fromSnapshot(Snapshot snapshot) =>
-      AccountModel.fromJson(snapshot.data)..reference = snapshot.reference;
+      AccountModel.fromJson(snapshot.data)!..reference = snapshot.reference;
 
   AccountModel._();
 
@@ -24,8 +24,7 @@ abstract class AccountModel with ModelInterface implements Built<AccountModel, A
 
   String get displayName;
 
-  @nullable
-  int get phoneNumber;
+  int? get phoneNumber;
 
   String get photoURL;
 
@@ -42,9 +41,9 @@ abstract class AccountModel with ModelInterface implements Built<AccountModel, A
   bool get hasReadNotice;
 
   @override
-  Map<String, dynamic> toMap() => serializers.serializeWith(AccountModel.serializer, this);
+  Map<String, dynamic> toMap() => serializers.serializeWith(AccountModel.serializer, this)! as Map<String, dynamic>;
 
-  static AccountModel fromJson(Map<String, dynamic> map) => serializers.deserializeWith(AccountModel.serializer, map);
+  static AccountModel? fromJson(Map<String, dynamic>? map) => serializers.deserializeWith(AccountModel.serializer, map);
 
   static Serializer<AccountModel> get serializer => _$accountModelSerializer;
 }

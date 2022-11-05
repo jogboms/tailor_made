@@ -1,39 +1,28 @@
 buildscript {
-    repositories {
-        google()
-        jcenter()
-    }
+  ext.kotlin_version = '1.6.10'
+  repositories {
+    google()
+    mavenCentral()
+  }
 
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
-        classpath 'com.google.gms:google-services:4.2.0'
-    }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:7.1.2'
+    classpath 'com.google.gms:google-services:4.3.10'
+    classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+  }
 }
 
 allprojects {
-    repositories {
-        google()
-        jcenter()
-    }
+  repositories {
+    google()
+    mavenCentral()
+  }
 }
 
 rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-
-    project.configurations.all {
-     resolutionStrategy.eachDependency { details ->
-         if (details.requested.group == 'com.android.support'
-                && !details.requested.name.contains('multidex') ) {
-            details.useVersion "27.1.1"
-         }
-
-        if (details.requested.group == 'androidx.core'
-              && !details.requested.name.contains('androidx') ) {
-           details.useVersion "1.0.1"
-        }
-     }
-  }
 }
 subprojects {
     project.evaluationDependsOn(':app')

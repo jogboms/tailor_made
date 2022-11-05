@@ -11,55 +11,52 @@ if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0.0'
+}
+
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
-def keystorePropertiesFile = rootProject.file("key.properties")
 def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
 
-ext.versionMajor = 1
-ext.versionMinor = 2
-ext.versionPatch = 0
-ext.versionClassifier = null
-ext.isSnapshot = false
-ext.minimumSdkVersion = 17
+ext.minimumSdkVersion = 21
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 33
+    ndkVersion flutter.ndkVersion
 
-    lintOptions {
-        disable 'InvalidPackage'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
     }
 
     defaultConfig {
         applicationId "io.github.jogboms.tailormade"
-        minSdkVersion 17
-        targetSdkVersion 28
+        minSdkVersion project.ext.minimumSdkVersion
+        targetSdkVersion 31
         multiDexEnabled true
-        versionCode generateVersionCode()
-        versionName generateVersionName()
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    signingConfigs {
-        release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-        }
-    }
-
-    buildTypes {
-        release {
-            signingConfig signingConfigs.release
-
-            // minifyEnabled true
-            // useProguard true
-
-            // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+        versionCode generateVersionCode(flutterVersionName, project.ext.minimumSdkVersion) + flutterVersionCode.toInteger()
+        versionName flutterVersionName
     }
 
     flavorDimensions "flavor-type"
@@ -74,24 +71,26 @@ android {
             dimension "flavor-type"
         }
     }
+
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig keystoreProperties.isEmpty() ? signingConfigs.debug : signingConfigs.release
+        }
+    }
 }
 
-private Integer generateVersionCode() {
-	return ext.minimumSdkVersion * 10000000 + ext.versionMajor * 10000 + ext.versionMinor * 100 + ext.versionPatch
-}
-
-private String generateVersionName() {
-	String versionName = "${ext.versionMajor}.${ext.versionMinor}.${ext.versionPatch}"
-	if (ext.versionClassifier == null) {
-		if (ext.isSnapshot) {
-			ext.versionClassifier = "SNAPSHOT"
-		}
-	}
-
-	if (ext.versionClassifier != null) {
-		versionName += "-" + ext.versionClassifier
-	}
-	return versionName;
+private static Integer generateVersionCode(String versionName, Integer minimumSdkVersion) {
+    def (major, minor, patch) = versionName.split('\\.').collect { it.toInteger() }
+    return minimumSdkVersion * 10000000 + major * 10000 + minor * 100 + patch
 }
 
 flutter {
@@ -99,9 +98,7 @@ flutter {
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 apply plugin: 'com.google.gms.google-services'

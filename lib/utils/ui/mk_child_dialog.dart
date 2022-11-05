@@ -1,10 +1,10 @@
 import 'dart:async' show Future;
 
-import 'package:flutter/material.dart' show required, BuildContext, Widget, showDialog;
+import 'package:flutter/material.dart' show BuildContext, Widget, showDialog;
 
-Future<T> mkShowChildDialog<T>({
-  @required BuildContext context,
-  @required Widget child,
+Future<T?> mkShowChildDialog<T>({
+  required BuildContext context,
+  required Widget child,
   bool barrierDismissible = true,
 }) {
   return showDialog<T>(

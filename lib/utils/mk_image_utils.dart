@@ -4,24 +4,24 @@ import 'dart:io' show File;
 import 'package:flutter_native_image/flutter_native_image.dart';
 
 class MkImageUtils {
-  MkImageUtils(this.file);
+  MkImageUtils(this.path);
 
-  final File file;
+  final String path;
 
   Future<File> compress({int quality = 90, int percentage = 75}) {
     return FlutterNativeImage.compressImage(
-      file.path,
+      path,
       quality: quality,
       percentage: percentage,
     );
   }
 
   Future<File> resize({int width = 120}) async {
-    final ImageProperties props = await FlutterNativeImage.getImageProperties(file.path);
+    final ImageProperties props = await FlutterNativeImage.getImageProperties(path);
     return FlutterNativeImage.compressImage(
-      file.path,
+      path,
       targetWidth: width,
-      targetHeight: (props.height * width / props.width).round(),
+      targetHeight: (props.height! * width / props.width!).round(),
     );
   }
 }

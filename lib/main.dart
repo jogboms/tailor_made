@@ -7,16 +7,19 @@ import 'package:tailor_made/repository/main.dart';
 import 'package:tailor_made/widgets/app.dart';
 
 void main(
-  Repository Function() repositoryFactory, {
-  Environment environment = Environment.MOCK,
+  List<String> args,
+  Future<Repository> Function() repositoryFactory, {
+  Environment environment = Environment.mock,
   int delay = 0,
 }) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Future<dynamic>.delayed(Duration(seconds: delay));
 
-  const dependencies = Dependencies();
-  runApp(App(
-    bootstrap: await bootstrap(dependencies, repositoryFactory(), environment),
-    store: storeFactory(dependencies, false),
-  ));
+  const Dependencies dependencies = Dependencies();
+  runApp(
+    App(
+      bootstrap: await bootstrap(dependencies, await repositoryFactory(), environment),
+      store: storeFactory(dependencies, false),
+    ),
+  );
 }

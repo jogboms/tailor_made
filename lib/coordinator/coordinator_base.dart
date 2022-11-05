@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 @immutable
 class CoordinatorBase {
-  const CoordinatorBase(this.navigatorKey) : assert(navigatorKey != null);
+  const CoordinatorBase(this.navigatorKey);
 
   final GlobalKey<NavigatorState> navigatorKey;
 
-  NavigatorState get navigator => navigatorKey?.currentState;
+  NavigatorState? get navigator => navigatorKey.currentState;
 }

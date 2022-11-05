@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/providers/snack_bar_provider.dart';
 import 'package:tailor_made/screens/measures/_views/measure_edit_dialog.dart';
 
 class MeasuresSlideBlockItem extends StatefulWidget {
-  const MeasuresSlideBlockItem({Key key, @required this.measure}) : super(key: key);
+  const MeasuresSlideBlockItem({super.key, required this.measure});
 
   final MeasureModel measure;
 
   @override
-  _MeasuresSlideBlockItemState createState() => _MeasuresSlideBlockItemState();
+  State<MeasuresSlideBlockItem> createState() => _MeasuresSlideBlockItemState();
 }
 
 class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
@@ -34,26 +33,27 @@ class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
   }
 
   void _onSave(String value) {
-    final _value = value.trim();
-    if (_value.length > 1) {
-      Navigator.pop(context, _value);
+    final String newValue = value.trim();
+    if (newValue.length > 1) {
+      Navigator.pop(context, newValue);
     }
   }
 
   void _onTapEditItem(MeasureModel measure) async {
-    final _controller = TextEditingController(text: measure.name);
+    final TextEditingController controller = TextEditingController(text: measure.name);
+    final SnackBarProvider snackBar = SnackBarProvider.of(context);
 
-    final itemName = await showEditDialog(
+    final String? itemName = await showEditDialog(
       context: context,
-      title: "ITEM NAME",
+      title: 'ITEM NAME',
       children: <Widget>[
         TextField(
           textCapitalization: TextCapitalization.words,
-          controller: _controller,
-          onSubmitted: (value) => _onSave(value),
+          controller: controller,
+          onSubmitted: _onSave,
         )
       ],
-      onDone: () => _onSave(_controller.text),
+      onDone: () => _onSave(controller.text),
       onCancel: () => Navigator.pop(context),
     );
 
@@ -61,13 +61,13 @@ class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
       return;
     }
 
-    SnackBarProvider.of(context).loading();
+    snackBar.loading();
 
     try {
-      await measure.reference.updateData(<String, String>{"name": itemName});
-      SnackBarProvider.of(context).hide();
+      await measure.reference!.updateData(<String, String>{'name': itemName});
+      snackBar.hide();
     } catch (e) {
-      SnackBarProvider.of(context).show(e.toString());
+      snackBar.show(e.toString());
     }
   }
 }

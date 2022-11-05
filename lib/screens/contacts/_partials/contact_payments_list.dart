@@ -6,17 +6,20 @@ import 'package:tailor_made/screens/payments/_partials/payments_list.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 
 class PaymentsListWidget extends StatelessWidget {
-  const PaymentsListWidget({Key key, @required this.contact, @required this.jobs}) : super(key: key);
+  const PaymentsListWidget({super.key, required this.contact, required this.jobs});
 
-  final ContactModel contact;
+  final ContactModel? contact;
   final List<JobModel> jobs;
 
   @override
   Widget build(BuildContext context) {
-    final payments = jobs.fold<List<PaymentModel>>([], (acc, item) => acc..addAll(item.payments));
+    final List<PaymentModel> payments = jobs.fold<List<PaymentModel>>(
+      <PaymentModel>[],
+      (List<PaymentModel> acc, JobModel item) => acc..addAll(item.payments!),
+    );
 
     if (payments.isEmpty) {
-      return SliverFillRemaining(child: const EmptyResultView(message: "No payments available"));
+      return const SliverFillRemaining(child: EmptyResultView(message: 'No payments available'));
     }
 
     return SliverPadding(

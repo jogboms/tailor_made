@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/dependencies.dart';
@@ -20,19 +19,19 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class JobPage extends StatefulWidget {
-  const JobPage({Key key, @required this.job}) : super(key: key);
+  const JobPage({super.key, required this.job});
 
-  final JobModel job;
+  final JobModel? job;
 
   @override
-  _JobPageState createState() => _JobPageState();
+  State<JobPage> createState() => _JobPageState();
 }
 
 class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
-  JobModel job;
+  JobModel? job;
 
   @override
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   void initState() {
@@ -42,15 +41,15 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeProvider? theme = ThemeProvider.of(context);
 
     return ViewModelSubscriber<AppState, JobsViewModel>(
-      converter: (store) => JobsViewModel(store)..jobID = widget.job.id,
+      converter: (AppState store) => JobsViewModel(store)..jobID = widget.job!.id,
       builder: (BuildContext context, _, JobsViewModel vm) {
         // in the case of newly created jobs
         job = vm.selected ?? widget.job;
         if (vm.isLoading) {
-          return Center(child: const MkLoadingSpinner());
+          return const Center(child: MkLoadingSpinner());
         }
         return Scaffold(
           key: scaffoldKey,
@@ -62,12 +61,12 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
                   flexibleSpace: FlexibleSpaceBar(background: _Header(job: job)),
                   pinned: true,
                   titleSpacing: 0.0,
-                  brightness: Brightness.light,
                   elevation: 1.0,
                   automaticallyImplyLeading: false,
                   centerTitle: false,
                   backgroundColor: Colors.white,
                   title: _AvatarAppBar(job: job, contact: vm.selectedContact),
+                  systemOverlayStyle: SystemUiOverlayStyle.dark,
                 ),
               ];
             },
@@ -82,11 +81,11 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
                       children: <Widget>[
                         const SizedBox(width: 16.0),
                         Expanded(
-                          child: Text("DUE DATE", style: theme.small.copyWith(color: Colors.black87)),
+                          child: Text('DUE DATE', style: theme!.small.copyWith(color: Colors.black87)),
                         ),
                         MkClearButton(
-                          child: Text("EXTEND DATE", style: theme.smallBtn),
-                          onPressed: job.isComplete ? null : _onSaveDate,
+                          onPressed: job!.isComplete! ? null : _onSaveDate,
+                          child: Text('EXTEND DATE', style: theme.smallBtn),
                         ),
                         const SizedBox(width: 16.0),
                       ],
@@ -94,7 +93,7 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
                     Padding(
                       padding: const EdgeInsets.only(left: 16.0),
                       child: Text(
-                        MkDates(job.dueAt, day: "EEEE", month: "MMMM", year: "yyyy").formatted,
+                        MkDates(job!.dueAt, day: 'EEEE', month: 'MMMM', year: 'yyyy').formatted!,
                         style: theme.body3Medium,
                       ),
                     ),
@@ -105,7 +104,7 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
                     const SizedBox(height: 32.0),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(job.notes, style: theme.body3Light, textAlign: TextAlign.justify),
+                      child: Text(job!.notes!, style: theme.body3Light, textAlign: TextAlign.justify),
                     ),
                     const SizedBox(height: 48.0),
                   ],
@@ -115,10 +114,10 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: FloatingActionButton.extended(
-            icon: Icon(job.isComplete ? Icons.undo : Icons.check),
-            backgroundColor: job.isComplete ? Colors.white : kAccentColor,
-            foregroundColor: job.isComplete ? kAccentColor : Colors.white,
-            label: Text(job.isComplete ? "Undo Completed" : "Mark Completed"),
+            icon: Icon(job!.isComplete! ? Icons.undo : Icons.check),
+            backgroundColor: job!.isComplete! ? Colors.white : kAccentColor,
+            foregroundColor: job!.isComplete! ? kAccentColor : Colors.white,
+            label: Text(job!.isComplete! ? 'Undo Completed' : 'Mark Completed'),
             onPressed: onTapComplete,
           ),
         );
@@ -127,7 +126,7 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
   }
 
   void onTapComplete() async {
-    final choice = await mkChoiceDialog(context: context, message: "Are you sure?");
+    final bool? choice = await mkChoiceDialog(context: context, message: 'Are you sure?');
     if (choice == null || choice == false) {
       return;
     }
@@ -135,7 +134,7 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
     showLoadingSnackBar();
 
     try {
-      await job.reference.updateData(<String, bool>{"isComplete": !job.isComplete});
+      await job!.reference!.updateData(<String, bool>{'isComplete': !job!.isComplete!});
       closeLoadingSnackBar();
     } catch (e) {
       closeLoadingSnackBar();
@@ -144,16 +143,16 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
   }
 
   void _onSaveDate() async {
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: job.dueAt,
-      firstDate: job.dueAt.isAfter(DateTime.now()) ? DateTime.now() : job.dueAt,
+      initialDate: job!.dueAt!,
+      firstDate: job!.dueAt!.isAfter(DateTime.now()) ? DateTime.now() : job!.dueAt!,
       lastDate: DateTime(2101),
     );
-    if (picked == null || picked == job.dueAt) {
+    if (picked == null || picked == job!.dueAt) {
       return;
     }
-    final choice = await mkChoiceDialog(context: context, message: "Are you sure?");
+    final bool? choice = await mkChoiceDialog(context: context, message: 'Are you sure?');
     if (choice == null || choice == false) {
       return;
     }
@@ -161,7 +160,7 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
     showLoadingSnackBar();
 
     try {
-      await job.reference.updateData(<String, String>{"dueAt": picked.toString()});
+      await job!.reference!.updateData(<String, String>{'dueAt': picked.toString()});
       closeLoadingSnackBar();
     } catch (e) {
       closeLoadingSnackBar();
@@ -171,14 +170,14 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({Key key, @required this.job}) : super(key: key);
+  const _Header({required this.job});
 
-  final JobModel job;
+  final JobModel? job;
 
   @override
   Widget build(BuildContext context) {
-    final textColor = Colors.grey.shade800;
-    final theme = ThemeProvider.of(context);
+    final Color textColor = Colors.grey.shade800;
+    final ThemeProvider theme = ThemeProvider.of(context)!;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -186,7 +185,7 @@ class _Header extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Text(
-            job.name,
+            job!.name!,
             style: theme.title.copyWith(color: textColor),
             textAlign: TextAlign.center,
             maxLines: 2,
@@ -195,7 +194,7 @@ class _Header extends StatelessWidget {
         ),
         const SizedBox(height: 12.0),
         Text(
-          MkMoney(job.price).formatted,
+          MkMoney(job!.price).formatted,
           style: theme.display2Semi.copyWith(color: textColor, letterSpacing: 1.5),
           textAlign: TextAlign.center,
         ),
@@ -208,7 +207,7 @@ class _Header extends StatelessWidget {
           padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <Widget>[
               _PaidBox(job: job),
               _UnpaidBox(job: job),
             ],
@@ -220,25 +219,25 @@ class _Header extends StatelessWidget {
 }
 
 class _AvatarAppBar extends StatelessWidget {
-  const _AvatarAppBar({Key key, @required this.job, @required this.contact}) : super(key: key);
+  const _AvatarAppBar({required this.job, required this.contact});
 
-  final JobModel job;
-  final ContactModel contact;
+  final JobModel? job;
+  final ContactModel? contact;
 
   @override
   Widget build(BuildContext context) {
-    final textColor = Colors.grey.shade800;
+    final Color textColor = Colors.grey.shade800;
 
-    final date = MkDates(job.createdAt).formatted;
-    final theme = ThemeProvider.of(context);
+    final String date = MkDates(job!.createdAt).formatted!;
+    final ThemeProvider theme = ThemeProvider.of(context)!;
 
     return AvatarAppBar(
-      tag: contact.createdAt.toString(),
-      imageUrl: contact.imageUrl,
+      tag: contact!.createdAt.toString(),
+      imageUrl: contact!.imageUrl,
       title: GestureDetector(
         onTap: () => Dependencies.di().contactsCoordinator.toContact(contact),
         child: Text(
-          contact.fullname,
+          contact!.fullname!,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: theme.title,
@@ -252,10 +251,10 @@ class _AvatarAppBar extends StatelessWidget {
       actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.content_cut),
-          onPressed: () => Dependencies.di().measuresCoordinator.toMeasures(job.measurements.toMap()),
+          onPressed: () => Dependencies.di().measuresCoordinator.toMeasures(job!.measurements!.toMap()),
         ),
         IconButton(
-          icon: Icon(Icons.check, color: job.isComplete ? kPrimaryColor : kTextBaseColor),
+          icon: Icon(Icons.check, color: job!.isComplete! ? kPrimaryColor : kTextBaseColor),
           onPressed: null,
         ),
       ],
@@ -264,27 +263,27 @@ class _AvatarAppBar extends StatelessWidget {
 }
 
 class _PaidBox extends StatelessWidget {
-  const _PaidBox({Key key, @required this.job}) : super(key: key);
+  const _PaidBox({required this.job});
 
-  final JobModel job;
+  final JobModel? job;
 
   @override
   Widget build(BuildContext context) {
-    final theme = ThemeProvider.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context)!;
 
     return Expanded(
       child: Container(
         decoration: const BoxDecoration(border: Border(right: MkBorderSide())),
         child: Column(
           children: <Widget>[
-            Text("PAID", style: theme.xxsmall, textAlign: TextAlign.center),
+            Text('PAID', style: theme.xxsmall, textAlign: TextAlign.center),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(Icons.arrow_drop_up, color: Colors.green.shade600, size: 16.0),
                 const SizedBox(width: 4.0),
                 Text(
-                  MkMoney(job.completedPayment).formatted,
+                  MkMoney(job!.completedPayment).formatted,
                   style: theme.title.copyWith(letterSpacing: 1.25),
                   textAlign: TextAlign.center,
                 ),
@@ -298,24 +297,24 @@ class _PaidBox extends StatelessWidget {
 }
 
 class _UnpaidBox extends StatelessWidget {
-  const _UnpaidBox({Key key, @required this.job}) : super(key: key);
+  const _UnpaidBox({required this.job});
 
-  final JobModel job;
+  final JobModel? job;
 
   @override
   Widget build(BuildContext context) {
-    final theme = ThemeProvider.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context)!;
     return Expanded(
       child: Column(
         children: <Widget>[
-          Text("UNPAID", style: theme.xxsmall, textAlign: TextAlign.center),
+          Text('UNPAID', style: theme.xxsmall, textAlign: TextAlign.center),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(Icons.arrow_drop_down, color: Colors.red.shade600, size: 16.0),
               const SizedBox(width: 4.0),
               Text(
-                MkMoney(job.pendingPayment).formatted,
+                MkMoney(job!.pendingPayment).formatted,
                 style: theme.title.copyWith(letterSpacing: 1.25),
                 textAlign: TextAlign.center,
               ),

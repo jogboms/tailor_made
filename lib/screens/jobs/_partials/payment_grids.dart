@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/dependencies.dart';
@@ -10,35 +9,34 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class PaymentGrids extends StatefulWidget {
-  PaymentGrids({Key key, double gridSize, @required this.job, @required this.userId})
-      : gridSize = Size.square(gridSize ?? _kGridWidth),
-        super(key: key);
+  PaymentGrids({super.key, double? gridSize, required this.job, required this.userId})
+      : gridSize = Size.square(gridSize ?? _kGridWidth);
 
   final Size gridSize;
-  final JobModel job;
+  final JobModel? job;
   final String userId;
 
   @override
-  _PaymentGridsState createState() => _PaymentGridsState();
+  State<PaymentGrids> createState() => _PaymentGridsState();
 }
 
 class _PaymentGridsState extends State<PaymentGrids> {
-  List<_FirePayment> _firePayments = [];
+  List<_FirePayment> _firePayments = <_FirePayment>[];
 
   @override
   void initState() {
     super.initState();
-    _firePayments = widget.job.payments.map((payment) => _FirePayment()..payment = payment).toList();
+    _firePayments = widget.job!.payments!.map((PaymentModel payment) => _FirePayment()..payment = payment).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = ThemeProvider.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context)!;
     final List<Widget> paymentsList = List<Widget>.generate(
       _firePayments.length,
       (int index) {
-        final fireImage = _firePayments[index];
-        final payment = fireImage.payment;
+        final _FirePayment fireImage = _firePayments[index];
+        final PaymentModel? payment = fireImage.payment;
 
         if (payment == null) {
           return const Center(widthFactor: 2.5, child: MkLoadingSpinner());
@@ -55,12 +53,12 @@ class _PaymentGridsState extends State<PaymentGrids> {
           children: <Widget>[
             const SizedBox(width: 16.0),
             Expanded(
-              child: Text("PAYMENTS", style: theme.small.copyWith(color: Colors.black87)),
+              child: Text('PAYMENTS', style: theme.small.copyWith(color: Colors.black87)),
             ),
             MkClearButton(
-              child: Text("SHOW ALL", style: theme.smallBtn),
+              child: Text('SHOW ALL', style: theme.smallBtn),
               onPressed: () {
-                Dependencies.di().paymentsCoordinator.toPayments(widget.userId, widget.job.payments.toList());
+                Dependencies.di().paymentsCoordinator.toPayments(widget.userId, widget.job!.payments!.toList());
               },
             ),
             const SizedBox(width: 16.0),
@@ -72,7 +70,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
           child: ListView(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             scrollDirection: Axis.horizontal,
-            children: [
+            children: <Widget>[
               _NewGrid(gridSize: widget.gridSize, onPressed: _onCreateNew),
               ...paymentsList,
             ],
@@ -83,7 +81,8 @@ class _PaymentGridsState extends State<PaymentGrids> {
   }
 
   void _onCreateNew() async {
-    final result = await Dependencies.di().paymentsCoordinator.toCreatePayment(widget.job.pendingPayment);
+    final Map<String, dynamic>? result =
+        await Dependencies.di().paymentsCoordinator.toCreatePayment(widget.job!.pendingPayment);
     if (result != null) {
       setState(() {
         _firePayments.add(_FirePayment());
@@ -92,17 +91,17 @@ class _PaymentGridsState extends State<PaymentGrids> {
       try {
         setState(() {
           _firePayments.last.payment = PaymentModel(
-            (b) => b
+            (PaymentModelBuilder b) => b
               ..userID = widget.userId
-              ..contactID = widget.job.contactID
-              ..jobID = widget.job.id
-              ..price = result["price"]
-              ..notes = result["notes"],
+              ..contactID = widget.job!.contactID
+              ..jobID = widget.job!.id
+              ..price = result['price'] as double?
+              ..notes = result['notes'] as String?,
           );
         });
 
-        await widget.job.reference.updateData(<String, List<Map<String, dynamic>>>{
-          "payments": _firePayments.map((payment) => payment.payment.toMap()).toList(),
+        await widget.job!.reference!.updateData(<String, List<Map<String, dynamic>?>>{
+          'payments': _firePayments.map((_FirePayment payment) => payment.payment!.toMap()).toList(),
         });
 
         setState(() {
@@ -121,10 +120,9 @@ class _PaymentGridsState extends State<PaymentGrids> {
 
 class _NewGrid extends StatelessWidget {
   const _NewGrid({
-    Key key,
-    @required this.gridSize,
-    @required this.onPressed,
-  }) : super(key: key);
+    required this.gridSize,
+    required this.onPressed,
+  });
 
   final Size gridSize;
   final VoidCallback onPressed;
@@ -150,10 +148,10 @@ class _NewGrid extends StatelessWidget {
   }
 }
 
-const _kGridWidth = 120.0;
+const double _kGridWidth = 120.0;
 
 class _FirePayment {
-  PaymentModel payment;
+  PaymentModel? payment;
   bool isLoading = true;
   bool isSucess = false;
 }

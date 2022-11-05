@@ -3,27 +3,26 @@ import 'package:flutter/widgets.dart';
 
 class MkTouchableOpacity extends StatefulWidget {
   const MkTouchableOpacity({
-    Key key,
-    @required this.child,
+    super.key,
+    required this.child,
     this.padding,
     this.disabledColor,
     this.pressedOpacity = 0.1,
-    @required this.onPressed,
-  })  : assert(pressedOpacity == null || (pressedOpacity >= 0.0 && pressedOpacity <= 1.0)),
-        super(key: key);
+    required this.onPressed,
+  }) : assert(pressedOpacity >= 0.0 && pressedOpacity <= 1.0);
 
   final Widget child;
-  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry? padding;
 
-  final Color disabledColor;
-  final VoidCallback onPressed;
+  final Color? disabledColor;
+  final VoidCallback? onPressed;
 
   final double pressedOpacity;
 
   bool get enabled => onPressed != null;
 
   @override
-  _MkTouchableOpacityState createState() => _MkTouchableOpacityState();
+  State<MkTouchableOpacity> createState() => _MkTouchableOpacityState();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -37,12 +36,12 @@ class MkTouchableOpacity extends StatefulWidget {
 class _MkTouchableOpacityState extends State<MkTouchableOpacity> with SingleTickerProviderStateMixin {
   static const Duration kFadeOutDuration = Duration(milliseconds: 10);
   static const Duration kFadeInDuration = Duration(milliseconds: 100);
-  Tween<double> _opacityTween;
+  late Tween<double> _opacityTween;
 
-  AnimationController _animationController;
+  AnimationController? _animationController;
 
   void _setTween() {
-    _opacityTween = Tween<double>(begin: 1.0, end: widget.pressedOpacity ?? 1.0);
+    _opacityTween = Tween<double>(begin: 1.0, end: widget.pressedOpacity);
   }
 
   @override
@@ -54,7 +53,7 @@ class _MkTouchableOpacityState extends State<MkTouchableOpacity> with SingleTick
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _animationController!.dispose();
     _animationController = null;
     super.dispose();
   }
@@ -89,14 +88,14 @@ class _MkTouchableOpacityState extends State<MkTouchableOpacity> with SingleTick
   }
 
   void _animate() {
-    if (_animationController.isAnimating) {
+    if (_animationController!.isAnimating) {
       return;
     }
     final bool wasHeldDown = _buttonHeldDown;
     final TickerFuture ticker = _buttonHeldDown
-        ? _animationController.animateTo(1.0, duration: kFadeOutDuration)
-        : _animationController.animateTo(0.0, duration: kFadeInDuration);
-    ticker.then<void>((value) {
+        ? _animationController!.animateTo(1.0, duration: kFadeOutDuration)
+        : _animationController!.animateTo(0.0, duration: kFadeInDuration);
+    ticker.then<void>((_) {
       if (mounted && wasHeldDown != _buttonHeldDown) {
         _animate();
       }
@@ -116,7 +115,7 @@ class _MkTouchableOpacityState extends State<MkTouchableOpacity> with SingleTick
       child: Semantics(
         button: true,
         child: FadeTransition(
-          opacity: _opacityTween.animate(CurvedAnimation(parent: _animationController, curve: Curves.decelerate)),
+          opacity: _opacityTween.animate(CurvedAnimation(parent: _animationController!, curve: Curves.decelerate)),
           child: Padding(
             padding: widget.padding ?? EdgeInsets.zero,
             child: Center(widthFactor: 1.0, heightFactor: 1.0, child: widget.child),

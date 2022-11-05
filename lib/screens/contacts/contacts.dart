@@ -15,40 +15,42 @@ import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class ContactsPage extends StatefulWidget {
-  const ContactsPage({Key key}) : super(key: key);
+  const ContactsPage({super.key});
 
   @override
-  _ContactsPageState createState() => _ContactsPageState();
+  State<ContactsPage> createState() => _ContactsPageState();
 }
 
 class _ContactsPageState extends State<ContactsPage> with DispatchProvider<AppState> {
   @override
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, ContactsViewModel>(
-      converter: (store) => ContactsViewModel(store),
+      converter: ContactsViewModel.new,
       builder: (BuildContext context, DispatchFunction dispatch, ContactsViewModel vm) {
         return WillPopScope(
           child: Scaffold(
             appBar: _AppBar(vm: vm),
-            body: Builder(builder: (context) {
-              if (vm.isLoading && !vm.isSearching) {
-                return const MkLoadingSpinner();
-              }
+            body: Builder(
+              builder: (BuildContext context) {
+                if (vm.isLoading && !vm.isSearching) {
+                  return const MkLoadingSpinner();
+                }
 
-              if (vm.contacts == null || vm.contacts.isEmpty) {
-                return Center(
-                  child: const EmptyResultView(message: "No contacts available"),
+                if (vm.contacts == null || vm.contacts!.isEmpty) {
+                  return const Center(
+                    child: EmptyResultView(message: 'No contacts available'),
+                  );
+                }
+
+                return ListView.separated(
+                  itemCount: vm.contacts!.length,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(bottom: 96.0),
+                  itemBuilder: (_, int index) => ContactsListItem(contact: vm.contacts![index]),
+                  separatorBuilder: (_, __) => const Divider(height: 0),
                 );
-              }
-
-              return ListView.separated(
-                itemCount: vm.contacts.length,
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(bottom: 96.0),
-                itemBuilder: (_, index) => ContactsListItem(contact: vm.contacts[index]),
-                separatorBuilder: (_, __) => const Divider(height: 0),
-              );
-            }),
+              },
+            ),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.person_add),
               onPressed: () => Dependencies.di().contactsCoordinator.toCreateContact(vm.userId),
@@ -68,15 +70,15 @@ class _ContactsPageState extends State<ContactsPage> with DispatchProvider<AppSt
 }
 
 class _AppBar extends StatefulWidget implements PreferredSizeWidget {
-  const _AppBar({Key key, @required this.vm}) : super(key: key);
+  const _AppBar({required this.vm});
 
   final ContactsViewModel vm;
 
   @override
-  _AppBarState createState() => _AppBarState();
+  State<_AppBar> createState() => _AppBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
@@ -84,14 +86,14 @@ class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeProvider? theme = ThemeProvider.of(context);
 
     if (!_isSearching) {
       return MkAppBar(
-        title: const Text("Contacts"),
+        title: const Text('Contacts'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search, color: theme.appBarTitle.color),
+            icon: Icon(Icons.search, color: theme!.appBarTitle.color),
             onPressed: _onTapSearch,
           ),
           ContactsFilterButton(
@@ -102,7 +104,7 @@ class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
       );
     }
 
-    final _textStyle = theme.subhead1Bold;
+    final TextStyle textStyle = theme!.subhead1Bold;
 
     return AppBar(
       centerTitle: false,
@@ -110,16 +112,16 @@ class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
       leading: MkCloseButton(color: Colors.white, onPop: _handleSearchEnd),
       title: TextField(
         autofocus: true,
-        decoration: InputDecoration(hintText: 'Search...', hintStyle: _textStyle.copyWith(color: Colors.white)),
-        style: _textStyle.copyWith(color: Colors.white),
-        onChanged: (term) => dispatchAction(SearchContactAction(term)),
+        decoration: InputDecoration(hintText: 'Search...', hintStyle: textStyle.copyWith(color: Colors.white)),
+        style: textStyle.copyWith(color: Colors.white),
+        onChanged: (String term) => dispatchAction(SearchContactAction(term)),
       ),
       bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(1.0),
         child: SizedBox(
           height: 1.0,
           child: widget.vm.isLoading ? const LinearProgressIndicator(backgroundColor: Colors.white) : null,
         ),
-        preferredSize: const Size.fromHeight(1.0),
       ),
     );
   }

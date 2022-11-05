@@ -4,6 +4,7 @@ import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/models/account.dart';
 import 'package:tailor_made/rebloc/accounts/actions.dart';
+import 'package:tailor_made/rebloc/accounts/state.dart';
 import 'package:tailor_made/rebloc/app_state.dart';
 import 'package:tailor_made/rebloc/common/actions.dart';
 import 'package:tailor_made/rebloc/common/middleware.dart';
@@ -11,40 +12,43 @@ import 'package:tailor_made/rebloc/extensions.dart';
 import 'package:tailor_made/services/accounts/main.dart';
 
 class AccountBloc extends SimpleBloc<AppState> {
-  AccountBloc(this.accounts) : assert(accounts != null);
+  AccountBloc(this.accounts);
 
   final Accounts accounts;
 
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
-    MergeStream([
-      Observable(input).whereAction<InitAccountAction>().switchMap(_getAccount(accounts)),
-      Observable(input).whereAction<OnReadNotice>().switchMap(_readNotice(accounts)),
-      Observable(input).whereAction<OnSendRating>().switchMap(_sendRating(accounts)),
-      Observable(input).whereAction<OnPremiumSignUp>().switchMap(_signUp(accounts)),
-    ]).untilAction<OnDisposeAction>().listen((context) => context.dispatcher(context.action));
+    MergeStream<WareContext<AppState>>(<Stream<WareContext<AppState>>>[
+      input.whereAction<InitAccountAction>().switchMap(_getAccount(accounts)),
+      input.whereAction<OnReadNotice>().switchMap(_readNotice(accounts)),
+      input.whereAction<OnSendRating>().switchMap(_sendRating(accounts)),
+      input.whereAction<OnPremiumSignUp>().switchMap(_signUp(accounts)),
+    ]).untilAction<OnDisposeAction>().listen((WareContext<AppState> context) => context.dispatcher(context.action));
 
     return input;
   }
 
   @override
   AppState reducer(AppState state, Action action) {
-    final _account = state.account;
+    final AccountState account = state.account;
 
     if (action is OnDataAction<AccountModel>) {
       return state.rebuild(
-        (b) => b
-          ..account = _account
-              .rebuild((b) => b
-                ..account = action.payload.toBuilder()
-                ..status = StateStatus.success)
+        (AppStateBuilder b) => b
+          ..account = account
+              .rebuild(
+                (AccountStateBuilder b) => b
+                  ..account = action.payload.toBuilder()
+                  ..status = StateStatus.success,
+              )
               .toBuilder(),
       );
     }
 
     if (action is OnSkipedPremium) {
       return state.rebuild(
-        (b) => b..account = _account.rebuild((b) => b..hasSkipedPremium = true).toBuilder(),
+        (AppStateBuilder b) =>
+            b..account = account.rebuild((AccountStateBuilder b) => b..hasSkipedPremium = true).toBuilder(),
       );
     }
 
@@ -54,7 +58,9 @@ class AccountBloc extends SimpleBloc<AppState> {
 
 Middleware _readNotice(Accounts accounts) {
   return (WareContext<AppState> context) async* {
-    await accounts.readNotice((context.action as OnReadNotice).payload.rebuild((b) => b..hasReadNotice = true));
+    await accounts.readNotice(
+      (context.action as OnReadNotice).payload!.rebuild((AccountModelBuilder b) => b..hasReadNotice = true),
+    );
 
     yield context;
   };
@@ -62,11 +68,13 @@ Middleware _readNotice(Accounts accounts) {
 
 Middleware _sendRating(Accounts accounts) {
   return (WareContext<AppState> context) async* {
-    final _action = context.action as OnSendRating;
-    final _account = _action.account.rebuild((b) => b
-      ..hasSendRating = true
-      ..rating = _action.rating);
-    await accounts.sendRating(_account);
+    final OnSendRating action = context.action as OnSendRating;
+    final AccountModel account = action.account!.rebuild(
+      (AccountModelBuilder b) => b
+        ..hasSendRating = true
+        ..rating = action.rating,
+    );
+    await accounts.sendRating(account);
 
     yield context;
   };
@@ -74,12 +82,14 @@ Middleware _sendRating(Accounts accounts) {
 
 Middleware _signUp(Accounts accounts) {
   return (WareContext<AppState> context) async* {
-    final _account = (context.action as OnPremiumSignUp).payload.rebuild((b) => b
-      ..status = AccountModelStatus.pending
-      ..notice = context.state.settings.settings.premiumNotice
-      ..hasReadNotice = false
-      ..hasPremiumEnabled = true);
-    await accounts.signUp(_account);
+    final AccountModel account = (context.action as OnPremiumSignUp).payload!.rebuild(
+          (AccountModelBuilder b) => b
+            ..status = AccountModelStatus.pending
+            ..notice = context.state.settings.settings!.premiumNotice
+            ..hasReadNotice = false
+            ..hasPremiumEnabled = true,
+        );
+    await accounts.signUp(account);
 
     yield context;
   };
@@ -89,7 +99,7 @@ Middleware _getAccount(Accounts accounts) {
   return (WareContext<AppState> context) {
     return accounts
         .getAccount((context.action as InitAccountAction).userId)
-        .map((account) => OnDataAction<AccountModel>(account))
-        .map((action) => context.copyWith(action));
+        .map(OnDataAction<AccountModel>.new)
+        .map((OnDataAction<AccountModel> action) => context.copyWith(action));
   };
 }

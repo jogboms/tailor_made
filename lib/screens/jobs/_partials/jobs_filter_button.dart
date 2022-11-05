@@ -6,15 +6,15 @@ import 'package:tailor_made/widgets/_partials/mk_dots.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class JobsFilterButton extends StatelessWidget {
-  const JobsFilterButton({Key key, @required this.vm, @required this.onTapSort}) : super(key: key);
+  const JobsFilterButton({super.key, required this.vm, required this.onTapSort});
 
   final JobsViewModel vm;
   final ValueSetter<SortType> onTapSort;
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
-    final _optionTheme = theme.body1;
+    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final TextStyle optionTheme = theme.body1;
     return SizedBox.fromSize(
       size: const Size.square(48.0),
       child: Stack(
@@ -24,48 +24,48 @@ class JobsFilterButton extends StatelessWidget {
               icon: Icon(Icons.filter_list, color: theme.appBarTitle.color),
               onSelected: onTapSort,
               itemBuilder: (BuildContext context) {
-                return [
+                return <_Option>[
                   _Option(
-                    text: "Sort by Active",
+                    text: 'Sort by Active',
                     type: SortType.active,
                     enabled: vm.sortFn != SortType.active,
-                    style: _optionTheme.copyWith(color: _colorTestFn(SortType.active)),
+                    style: optionTheme.copyWith(color: _colorTestFn(SortType.active)),
                   ),
                   _Option(
-                    text: "Sort by Name",
+                    text: 'Sort by Name',
                     type: SortType.names,
                     enabled: vm.sortFn != SortType.names,
-                    style: _optionTheme.copyWith(color: _colorTestFn(SortType.names)),
+                    style: optionTheme.copyWith(color: _colorTestFn(SortType.names)),
                   ),
                   _Option(
-                    text: "Sort by Owed",
+                    text: 'Sort by Owed',
                     type: SortType.owed,
                     enabled: vm.sortFn != SortType.owed,
-                    style: _optionTheme.copyWith(color: _colorTestFn(SortType.owed)),
+                    style: optionTheme.copyWith(color: _colorTestFn(SortType.owed)),
                   ),
                   _Option(
-                    text: "Sort by Payments",
+                    text: 'Sort by Payments',
                     type: SortType.payments,
                     enabled: vm.sortFn != SortType.payments,
-                    style: _optionTheme.copyWith(color: _colorTestFn(SortType.payments)),
+                    style: optionTheme.copyWith(color: _colorTestFn(SortType.payments)),
                   ),
                   _Option(
-                    text: "Sort by Price",
+                    text: 'Sort by Price',
                     type: SortType.price,
                     enabled: vm.sortFn != SortType.price,
-                    style: _optionTheme.copyWith(color: _colorTestFn(SortType.price)),
+                    style: optionTheme.copyWith(color: _colorTestFn(SortType.price)),
                   ),
                   _Option(
-                    text: "Sort by Recent",
+                    text: 'Sort by Recent',
                     type: SortType.recent,
                     enabled: vm.sortFn != SortType.recent,
-                    style: _optionTheme.copyWith(color: _colorTestFn(SortType.recent)),
+                    style: optionTheme.copyWith(color: _colorTestFn(SortType.recent)),
                   ),
                   _Option(
-                    text: "No Sort",
+                    text: 'No Sort',
                     type: SortType.reset,
                     enabled: vm.sortFn != SortType.reset,
-                    style: _optionTheme.copyWith(color: _colorTestFn(SortType.reset)),
+                    style: optionTheme.copyWith(color: _colorTestFn(SortType.reset)),
                   ),
                 ];
               },
@@ -85,14 +85,11 @@ class JobsFilterButton extends StatelessWidget {
 
 class _Option extends PopupMenuItem<SortType> {
   _Option({
-    Key key,
-    @required bool enabled,
-    @required this.text,
-    @required this.type,
-    @required this.style,
+    required super.enabled,
+    required this.text,
+    required this.type,
+    required this.style,
   }) : super(
-          key: key,
-          enabled: enabled,
           value: type,
           child: Text(text, style: style),
         );

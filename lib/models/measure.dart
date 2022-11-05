@@ -8,73 +8,117 @@ import 'package:uuid/uuid.dart';
 part 'measure.g.dart';
 
 List<MeasureModel> createDefaultMeasures() {
-  return [
-    MeasureModel((b) => b
-      ..name = 'Arm Hole'
-      ..group = MeasureModelType.blouse),
-    MeasureModel((b) => b
-      ..name = 'Shoulder'
-      ..group = MeasureModelType.blouse),
-    MeasureModel((b) => b
-      ..name = 'Bust'
-      ..group = MeasureModelType.blouse),
-    MeasureModel((b) => b
-      ..name = 'Bust Point'
-      ..group = MeasureModelType.blouse),
-    MeasureModel((b) => b
-      ..name = 'Shoulder - Bust Point'
-      ..group = MeasureModelType.blouse),
-    MeasureModel((b) => b
-      ..name = 'Shoulder - Under Bust'
-      ..group = MeasureModelType.blouse),
-    MeasureModel((b) => b
-      ..name = 'Shoulder - Waist'
-      ..group = MeasureModelType.blouse),
-    MeasureModel((b) => b
-      ..name = 'Length'
-      ..group = MeasureModelType.trouser),
-    MeasureModel((b) => b
-      ..name = 'Waist'
-      ..group = MeasureModelType.trouser),
-    MeasureModel((b) => b
-      ..name = 'Crouch'
-      ..group = MeasureModelType.trouser),
-    MeasureModel((b) => b
-      ..name = 'Thigh'
-      ..group = MeasureModelType.trouser),
-    MeasureModel((b) => b
-      ..name = 'Body Rise'
-      ..group = MeasureModelType.trouser),
-    MeasureModel((b) => b
-      ..name = 'Width'
-      ..group = MeasureModelType.trouser),
-    MeasureModel((b) => b
-      ..name = 'Hip'
-      ..group = MeasureModelType.trouser),
-    MeasureModel((b) => b
-      ..name = 'Full Length'
-      ..group = MeasureModelType.skirts),
-    MeasureModel((b) => b
-      ..name = 'Short Length'
-      ..group = MeasureModelType.skirts),
-    MeasureModel((b) => b
-      ..name = 'Knee Length'
-      ..group = MeasureModelType.skirts),
-    MeasureModel((b) => b
-      ..name = 'Hip'
-      ..group = MeasureModelType.skirts),
-    MeasureModel((b) => b
-      ..name = 'Waist'
-      ..group = MeasureModelType.gown),
-    MeasureModel((b) => b
-      ..name = 'Long Length'
-      ..group = MeasureModelType.gown),
-    MeasureModel((b) => b
-      ..name = 'Short Length'
-      ..group = MeasureModelType.gown),
-    MeasureModel((b) => b
-      ..name = 'Knee Length'
-      ..group = MeasureModelType.gown),
+  return <MeasureModel>[
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Arm Hole'
+        ..group = MeasureModelType.blouse,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Shoulder'
+        ..group = MeasureModelType.blouse,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Bust'
+        ..group = MeasureModelType.blouse,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Bust Point'
+        ..group = MeasureModelType.blouse,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Shoulder - Bust Point'
+        ..group = MeasureModelType.blouse,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Shoulder - Under Bust'
+        ..group = MeasureModelType.blouse,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Shoulder - Waist'
+        ..group = MeasureModelType.blouse,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Length'
+        ..group = MeasureModelType.trouser,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Waist'
+        ..group = MeasureModelType.trouser,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Crouch'
+        ..group = MeasureModelType.trouser,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Thigh'
+        ..group = MeasureModelType.trouser,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Body Rise'
+        ..group = MeasureModelType.trouser,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Width'
+        ..group = MeasureModelType.trouser,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Hip'
+        ..group = MeasureModelType.trouser,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Full Length'
+        ..group = MeasureModelType.skirts,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Short Length'
+        ..group = MeasureModelType.skirts,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Knee Length'
+        ..group = MeasureModelType.skirts,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Hip'
+        ..group = MeasureModelType.skirts,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Waist'
+        ..group = MeasureModelType.gown,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Long Length'
+        ..group = MeasureModelType.gown,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Short Length'
+        ..group = MeasureModelType.gown,
+    ),
+    MeasureModel(
+      (MeasureModelBuilder b) => b
+        ..name = 'Knee Length'
+        ..group = MeasureModelType.gown,
+    ),
   ];
 }
 
@@ -86,25 +130,24 @@ class MeasureModelType {
 }
 
 abstract class MeasureModel with ModelInterface implements Built<MeasureModel, MeasureModelBuilder> {
-  factory MeasureModel([void updates(MeasureModelBuilder b)]) = _$MeasureModel;
+  factory MeasureModel([void Function(MeasureModelBuilder b) updates]) = _$MeasureModel;
 
   MeasureModel._();
 
   factory MeasureModel.fromSnapshot(Snapshot snapshot) =>
-      MeasureModel.fromJson(snapshot.data)..reference = snapshot.reference;
+      MeasureModel.fromJson(snapshot.data)!..reference = snapshot.reference;
 
   static void _initializeBuilder(MeasureModelBuilder b) => b
-    ..id = Uuid().v1()
+    ..id = const Uuid().v1()
     ..value = 0.0
-    ..unit = "In"
+    ..unit = 'In'
     ..createdAt = DateTime.now();
 
   String get id;
 
   String get name;
 
-  @nullable
-  double get value;
+  double? get value;
 
   String get unit;
 
@@ -113,9 +156,9 @@ abstract class MeasureModel with ModelInterface implements Built<MeasureModel, M
   DateTime get createdAt;
 
   @override
-  Map<String, dynamic> toMap() => serializers.serializeWith(MeasureModel.serializer, this);
+  Map<String, dynamic>? toMap() => serializers.serializeWith(MeasureModel.serializer, this) as Map<String, dynamic>?;
 
-  static MeasureModel fromJson(Map<String, dynamic> map) => serializers.deserializeWith(MeasureModel.serializer, map);
+  static MeasureModel? fromJson(Map<String, dynamic>? map) => serializers.deserializeWith(MeasureModel.serializer, map);
 
   static Serializer<MeasureModel> get serializer => _$measureModelSerializer;
 }

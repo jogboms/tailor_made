@@ -5,7 +5,7 @@ import 'package:tailor_made/rebloc/contacts/sort_type.dart';
 class InitContactsAction extends Action {
   const InitContactsAction(this.userId);
 
-  final String userId;
+  final String? userId;
 }
 
 class SortContacts extends Action {

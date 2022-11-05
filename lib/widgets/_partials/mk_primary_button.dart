@@ -5,44 +5,46 @@ import 'package:tailor_made/widgets/theme_provider.dart';
 
 class MkPrimaryButton extends StatelessWidget {
   const MkPrimaryButton({
-    Key key,
-    @required this.child,
-    @required this.onPressed,
+    super.key,
+    required this.child,
+    required this.onPressed,
     this.color = Colors.white,
     this.backgroundColor = MkColors.accent,
     this.padding,
     this.shape,
     this.useSafeArea = false,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final VoidCallback onPressed;
-  final EdgeInsets padding;
+  final EdgeInsets? padding;
   final Color color;
   final Color backgroundColor;
-  final ShapeBorder shape;
+  final ShapeBorder? shape;
   final bool useSafeArea;
 
   @override
   Widget build(BuildContext context) {
-    final num _safeAreaBottom = MediaQuery.of(context).padding.bottom;
-    final _padding = EdgeInsets.only(
+    final num safeAreaBottom = MediaQuery.of(context).padding.bottom;
+    final EdgeInsets localPadding = EdgeInsets.only(
       top: padding?.top ?? 16.0,
-      bottom: (padding?.bottom ?? 16.0) + (useSafeArea ? _safeAreaBottom : 0.0),
+      bottom: (padding?.bottom ?? 16.0) + (useSafeArea ? safeAreaBottom : 0.0),
       left: padding?.left ?? 0.0,
       right: padding?.right ?? 0.0,
     );
-    final _height = useSafeArea ? kButtonHeight + _safeAreaBottom : kButtonHeight;
+    final double height = useSafeArea ? kButtonHeight + safeAreaBottom : kButtonHeight;
 
     return Container(
-      height: _height ?? kButtonHeight,
-      constraints: BoxConstraints(minWidth: kButtonMinWidth),
-      child: FlatButton(
-        color: backgroundColor,
-        padding: _padding,
-        shape: shape ?? const StadiumBorder(),
-        child: DefaultTextStyle(style: ThemeProvider.of(context).button.copyWith(color: color), child: child),
+      height: height,
+      constraints: const BoxConstraints(minWidth: kButtonMinWidth),
+      child: TextButton(
+        style: TextButton.styleFrom(
+          backgroundColor: backgroundColor,
+          padding: localPadding,
+          shape: shape as OutlinedBorder? ?? const StadiumBorder(),
+        ),
         onPressed: onPressed,
+        child: DefaultTextStyle(style: ThemeProvider.of(context)!.button.copyWith(color: color), child: child),
       ),
     );
   }

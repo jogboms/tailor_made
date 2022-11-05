@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/payment.dart';
@@ -9,51 +10,53 @@ import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class PaymentsPage extends StatelessWidget {
-  const PaymentsPage({Key key, this.payments, @required this.userId}) : super(key: key);
+  const PaymentsPage({super.key, this.payments, required this.userId});
 
-  final List<PaymentModel> payments;
+  final List<PaymentModel>? payments;
   final String userId;
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context)!;
 
     return Scaffold(
       body: CustomScrollView(
-        slivers: [
+        slivers: <Widget>[
           SliverAppBar(
             title: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text("Payments", style: theme.appBarTitle),
-                if (payments != null) Text("${payments.length} Tickets", style: ThemeProvider.of(context).xsmall),
+                Text('Payments', style: theme.appBarTitle),
+                if (payments != null) Text('${payments!.length} Tickets', style: ThemeProvider.of(context)!.xsmall),
               ],
             ),
             backgroundColor: kAppBarBackgroundColor,
             automaticallyImplyLeading: false,
             leading: const MkBackButton(),
             forceElevated: true,
-            brightness: Brightness.light,
             elevation: 1.0,
             centerTitle: false,
             floating: true,
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
           ),
-          Builder(builder: (context) {
-            if (payments == null) {
-              return StreamBuilder(
-                // TODO: move this out of here
-                stream: Dependencies.di().payments.fetchAll(userId),
-                builder: (_, AsyncSnapshot<List<PaymentModel>> snapshot) {
-                  if (!snapshot.hasData) {
-                    return const SliverFillRemaining(child: MkLoadingSpinner());
-                  }
-                  return _Content(payments: snapshot.data);
-                },
-              );
-            }
-            return _Content(payments: payments);
-          })
+          Builder(
+            builder: (BuildContext context) {
+              if (payments == null) {
+                return StreamBuilder<List<PaymentModel>>(
+                  // TODO(Jogboms): move this out of here
+                  stream: Dependencies.di().payments.fetchAll(userId),
+                  builder: (_, AsyncSnapshot<List<PaymentModel?>> snapshot) {
+                    if (!snapshot.hasData) {
+                      return const SliverFillRemaining(child: MkLoadingSpinner());
+                    }
+                    return _Content(payments: snapshot.data);
+                  },
+                );
+              }
+              return _Content(payments: payments);
+            },
+          )
         ],
       ),
     );
@@ -61,15 +64,15 @@ class PaymentsPage extends StatelessWidget {
 }
 
 class _Content extends StatelessWidget {
-  const _Content({Key key, @required this.payments}) : super(key: key);
+  const _Content({required this.payments});
 
-  final List<PaymentModel> payments;
+  final List<PaymentModel?>? payments;
 
   @override
   Widget build(BuildContext context) {
-    if (payments.isEmpty) {
+    if (payments!.isEmpty) {
       return const SliverFillRemaining(
-        child: EmptyResultView(message: "No payments available"),
+        child: EmptyResultView(message: 'No payments available'),
       );
     }
 

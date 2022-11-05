@@ -13,18 +13,18 @@ enum _ActionChoice { edit, delete }
 
 class MeasureSlideBlock extends StatefulWidget {
   const MeasureSlideBlock({
-    Key key,
-    @required this.measures,
-    @required this.title,
-    @required this.userId,
-  }) : super(key: key);
+    super.key,
+    required this.measures,
+    required this.title,
+    required this.userId,
+  });
 
   final List<MeasureModel> measures;
   final String title;
   final String userId;
 
   @override
-  _MeasureSlideBlockState createState() => _MeasureSlideBlockState();
+  State<MeasureSlideBlock> createState() => _MeasureSlideBlockState();
 }
 
 class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
@@ -32,11 +32,13 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
   Widget build(BuildContext context) {
     return SlideDownItem(
       title: widget.title,
-      body: Column(children: [
-        for (var measure in widget.measures) MeasuresSlideBlockItem(measure: measure),
-      ]),
+      body: Column(
+        children: <Widget>[
+          for (MeasureModel measure in widget.measures) MeasuresSlideBlockItem(measure: measure),
+        ],
+      ),
       onLongPress: () async {
-        final choice = await _showOptionsDialog();
+        final _ActionChoice? choice = await _showOptionsDialog();
 
         if (choice == null) {
           return;
@@ -51,23 +53,23 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
     );
   }
 
-  Future<_ActionChoice> _showOptionsDialog() {
+  Future<_ActionChoice?> _showOptionsDialog() {
     return mkShowChildDialog<_ActionChoice>(
       context: context,
       child: SimpleDialog(
         children: <Widget>[
           SimpleDialogOption(
             onPressed: () => Navigator.pop(context, _ActionChoice.edit),
-            child: Padding(
-              child: const Text("Edit"),
-              padding: const EdgeInsets.all(8.0),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text('Edit'),
             ),
           ),
           SimpleDialogOption(
             onPressed: () => Navigator.pop(context, _ActionChoice.delete),
-            child: Padding(
-              child: const Text("Delete"),
-              padding: const EdgeInsets.all(8.0),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text('Delete'),
             ),
           ),
         ],
@@ -80,19 +82,20 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
   }
 
   void _onTapDeleteBlock() async {
-    final choice = await mkChoiceDialog(context: context, title: "", message: "Are you sure?");
+    final SnackBarProvider snackBar = SnackBarProvider.of(context);
+    final bool? choice = await mkChoiceDialog(context: context, title: '', message: 'Are you sure?');
     if (choice == null || choice == false) {
       return;
     }
 
-    SnackBarProvider.of(context).loading();
+    snackBar.loading();
     try {
-      // TODO: move this out of here
+      // TODO(Jogboms): move this out of here
       await Dependencies.di().measures.delete(widget.measures, widget.userId);
 
-      SnackBarProvider.of(context).hide();
+      snackBar.hide();
     } catch (e) {
-      SnackBarProvider.of(context).show(e.toString());
+      snackBar.show(e.toString());
     }
   }
 }

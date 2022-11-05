@@ -13,40 +13,40 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 
 class MeasuresManagePage extends StatefulWidget {
-  const MeasuresManagePage({Key key, @required this.userId}) : super(key: key);
+  const MeasuresManagePage({super.key, required this.userId});
 
   final String userId;
 
   @override
-  _MeasuresManagePageState createState() => _MeasuresManagePageState();
+  State<MeasuresManagePage> createState() => _MeasuresManagePageState();
 }
 
 class _MeasuresManagePageState extends State<MeasuresManagePage> with SnackBarProviderMixin {
   @override
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(
+    Future<void>.delayed(
       const Duration(seconds: 2),
-      () => showInSnackBar("Long-Press on any group to see more actions."),
+      () => showInSnackBar('Long-Press on any group to see more actions.'),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       key: scaffoldKey,
-      appBar: const MkAppBar(title: Text("Measurements")),
+      appBar: const MkAppBar(title: Text('Measurements')),
       body: _buildBody(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add),
         backgroundColor: kAccentColor,
         foregroundColor: Colors.white,
-        label: const Text("Add Group"),
+        label: const Text('Add Group'),
         onPressed: () => Dependencies.di().measuresCoordinator.toCreateMeasures(widget.userId),
       ),
     );
@@ -54,25 +54,25 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> with SnackBarPr
 
   Widget _buildBody() {
     return ViewModelSubscriber<AppState, MeasuresViewModel>(
-      converter: (store) => MeasuresViewModel(store),
+      converter: MeasuresViewModel.new,
       builder: (_, __, MeasuresViewModel vm) {
         if (vm.isLoading) {
-          return Center(child: const MkLoadingSpinner());
+          return const Center(child: MkLoadingSpinner());
         }
 
-        if (vm.model == null || vm.model.isEmpty) {
-          return Center(child: const EmptyResultView(message: "No measurements available"));
+        if (vm.model == null || vm.model!.isEmpty) {
+          return const Center(child: EmptyResultView(message: 'No measurements available'));
         }
 
         return SafeArea(
           top: false,
           child: SingleChildScrollView(
             child: Column(
-              children: [
-                for (var i = 0; i < vm.grouped.length; i++)
+              children: <Widget>[
+                for (int i = 0; i < vm.grouped!.length; i++)
                   MeasureSlideBlock(
-                    title: vm.grouped.keys.elementAt(i),
-                    measures: vm.grouped.values.elementAt(i),
+                    title: vm.grouped!.keys.elementAt(i),
+                    measures: vm.grouped!.values.elementAt(i),
                     userId: vm.userId,
                   ),
                 const SizedBox(height: 72.0)

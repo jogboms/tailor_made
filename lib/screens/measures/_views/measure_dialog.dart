@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/models/measure.dart';
 import 'package:tailor_made/utils/mk_validators.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 
 class MeasureDialog extends StatefulWidget {
-  const MeasureDialog({Key key, @required this.measure}) : super(key: key);
+  const MeasureDialog({super.key, required this.measure});
 
   final MeasureModel measure;
 
   @override
-  _MeasureDialogState createState() => _MeasureDialogState();
+  State<MeasureDialog> createState() => _MeasureDialogState();
 }
 
 class _MeasureDialogState extends State<MeasureDialog> {
   final FocusNode _unitNode = FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
-  MeasureModelBuilder measure;
+  late MeasureModelBuilder measure;
 
   @override
   void initState() {
@@ -43,17 +42,17 @@ class _MeasureDialogState extends State<MeasureDialog> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Form(
             key: _formKey,
-            autovalidate: _autovalidate,
+            autovalidateMode: _autovalidate ? AutovalidateMode.always : AutovalidateMode.disabled,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 const SizedBox(height: 32.0),
-                Center(
+                const Center(
                   child: CircleAvatar(
                     backgroundColor: kPrimaryColor,
                     foregroundColor: Colors.white,
-                    child: const Icon(Icons.content_cut, size: 50.0),
                     radius: 36.0,
+                    child: Icon(Icons.content_cut, size: 50.0),
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -61,8 +60,8 @@ class _MeasureDialogState extends State<MeasureDialog> {
                   textCapitalization: TextCapitalization.words,
                   textInputAction: TextInputAction.next,
                   onEditingComplete: () => FocusScope.of(context).requestFocus(_unitNode),
-                  onSaved: (value) => measure.name = value.trim(),
-                  decoration: const InputDecoration(labelText: "Name (eg. Length)"),
+                  onSaved: (String? value) => measure.name = value!.trim(),
+                  decoration: const InputDecoration(labelText: 'Name (eg. Length)'),
                   validator: MkValidate.tryAlpha(),
                 ),
                 const SizedBox(height: 4.0),
@@ -70,10 +69,10 @@ class _MeasureDialogState extends State<MeasureDialog> {
                   initialValue: widget.measure.unit,
                   focusNode: _unitNode,
                   textInputAction: TextInputAction.done,
-                  decoration: const InputDecoration(labelText: "Unit (eg. In, cm)"),
+                  decoration: const InputDecoration(labelText: 'Unit (eg. In, cm)'),
                   validator: MkValidate.tryAlpha(),
-                  onFieldSubmitted: (value) => _onSaved(),
-                  onSaved: (value) => measure.unit = value.trim(),
+                  onFieldSubmitted: (String value) => _onSaved(),
+                  onSaved: (String? value) => measure.unit = value!.trim(),
                 ),
                 const SizedBox(height: 16.0),
                 Row(
@@ -82,10 +81,10 @@ class _MeasureDialogState extends State<MeasureDialog> {
                     MkClearButton(
                       onPressed: () => Navigator.pop(context),
                       color: Colors.grey,
-                      child: const Text("CANCEL"),
+                      child: const Text('CANCEL'),
                     ),
                     const SizedBox(width: 16.0),
-                    MkClearButton(onPressed: _onSaved, child: const Text("DONE")),
+                    MkClearButton(onPressed: _onSaved, child: const Text('DONE')),
                     const SizedBox(width: 16.0),
                   ],
                 ),
@@ -99,7 +98,7 @@ class _MeasureDialogState extends State<MeasureDialog> {
   }
 
   void _onSaved() {
-    final FormState form = _formKey.currentState;
+    final FormState? form = _formKey.currentState;
     if (form == null) {
       return;
     }

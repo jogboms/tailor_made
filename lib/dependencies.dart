@@ -7,6 +7,7 @@ import 'package:tailor_made/coordinator/measures_coordinator.dart';
 import 'package:tailor_made/coordinator/payments_coordinator.dart';
 import 'package:tailor_made/coordinator/shared_coordinator.dart';
 import 'package:tailor_made/coordinator/tasks_coordinator.dart';
+import 'package:tailor_made/repository/firebase/main.dart';
 import 'package:tailor_made/repository/main.dart';
 import 'package:tailor_made/services/accounts/main.dart';
 import 'package:tailor_made/services/contacts/main.dart';
@@ -22,26 +23,37 @@ class Dependencies {
   const Dependencies();
 
   void initialize(Session session, GlobalKey<NavigatorState> navigatorKey, Repository repository) {
-    assert(session != null && navigatorKey != null && repository != null);
     Injector.appInstance
-      ..registerSingleton<Dependencies>((_) => this)
-      ..registerSingleton<Repository>((_) => repository)
-      ..registerSingleton<Session>((_) => session)
-      ..registerSingleton<Accounts>((_) => session.isMock ? AccountsMockImpl() : AccountsImpl(repository))
-      ..registerSingleton<Contacts>((_) => session.isMock ? ContactsMockImpl() : ContactsImpl(repository))
-      ..registerSingleton<Jobs>((_) => session.isMock ? JobsMockImpl() : JobsImpl(repository))
-      ..registerSingleton<Gallery>((_) => session.isMock ? GalleryMockImpl() : GalleryImpl(repository))
-      ..registerSingleton<Settings>((_) => session.isMock ? SettingsMockImpl() : SettingsImpl(repository))
-      ..registerSingleton<Payments>((_) => session.isMock ? PaymentsMockImpl() : PaymentsImpl(repository))
-      ..registerSingleton<Measures>((_) => session.isMock ? MeasuresMockImpl() : MeasuresImpl(repository))
-      ..registerSingleton<Stats>((_) => session.isMock ? StatsMockImpl() : StatsImpl(repository))
-      ..registerSingleton<ContactsCoordinator>((_) => ContactsCoordinator(navigatorKey))
-      ..registerSingleton<GalleryCoordinator>((_) => GalleryCoordinator(navigatorKey))
-      ..registerSingleton<SharedCoordinator>((_) => SharedCoordinator(navigatorKey))
-      ..registerSingleton<JobsCoordinator>((_) => JobsCoordinator(navigatorKey))
-      ..registerSingleton<MeasuresCoordinator>((_) => MeasuresCoordinator(navigatorKey))
-      ..registerSingleton<PaymentsCoordinator>((_) => PaymentsCoordinator(navigatorKey))
-      ..registerSingleton<TasksCoordinator>((_) => TasksCoordinator(navigatorKey));
+      ..registerSingleton<Dependencies>(() => this)
+      ..registerSingleton<Repository>(() => repository)
+      ..registerSingleton<Session>(() => session)
+      ..registerSingleton<Accounts>(
+        () => session.isMock ? AccountsMockImpl() : AccountsImpl(repository as FirebaseRepository),
+      )
+      ..registerSingleton<Contacts>(
+        () => session.isMock ? ContactsMockImpl() : ContactsImpl(repository as FirebaseRepository),
+      )
+      ..registerSingleton<Jobs>(() => session.isMock ? JobsMockImpl() : JobsImpl(repository as FirebaseRepository))
+      ..registerSingleton<Gallery>(
+        () => session.isMock ? GalleryMockImpl() : GalleryImpl(repository as FirebaseRepository),
+      )
+      ..registerSingleton<Settings>(
+        () => session.isMock ? SettingsMockImpl() : SettingsImpl(repository as FirebaseRepository),
+      )
+      ..registerSingleton<Payments>(
+        () => session.isMock ? PaymentsMockImpl() : PaymentsImpl(repository as FirebaseRepository),
+      )
+      ..registerSingleton<Measures>(
+        () => session.isMock ? MeasuresMockImpl() : MeasuresImpl(repository as FirebaseRepository),
+      )
+      ..registerSingleton<Stats>(() => session.isMock ? StatsMockImpl() : StatsImpl(repository as FirebaseRepository))
+      ..registerSingleton<ContactsCoordinator>(() => ContactsCoordinator(navigatorKey))
+      ..registerSingleton<GalleryCoordinator>(() => GalleryCoordinator(navigatorKey))
+      ..registerSingleton<SharedCoordinator>(() => SharedCoordinator(navigatorKey))
+      ..registerSingleton<JobsCoordinator>(() => JobsCoordinator(navigatorKey))
+      ..registerSingleton<MeasuresCoordinator>(() => MeasuresCoordinator(navigatorKey))
+      ..registerSingleton<PaymentsCoordinator>(() => PaymentsCoordinator(navigatorKey))
+      ..registerSingleton<TasksCoordinator>(() => TasksCoordinator(navigatorKey));
   }
 
   @visibleForTesting
@@ -49,39 +61,39 @@ class Dependencies {
     Injector.appInstance.clearAll();
   }
 
-  static Dependencies di() => Injector.appInstance.getDependency<Dependencies>();
+  static Dependencies di() => Injector.appInstance.get<Dependencies>();
 
-  Repository get repository => Injector.appInstance.getDependency<Repository>();
+  Repository get repository => Injector.appInstance.get<Repository>();
 
-  Session get session => Injector.appInstance.getDependency<Session>();
+  Session get session => Injector.appInstance.get<Session>();
 
-  Accounts get accounts => Injector.appInstance.getDependency<Accounts>();
+  Accounts get accounts => Injector.appInstance.get<Accounts>();
 
-  Contacts get contacts => Injector.appInstance.getDependency<Contacts>();
+  Contacts get contacts => Injector.appInstance.get<Contacts>();
 
-  Jobs get jobs => Injector.appInstance.getDependency<Jobs>();
+  Jobs get jobs => Injector.appInstance.get<Jobs>();
 
-  Gallery get gallery => Injector.appInstance.getDependency<Gallery>();
+  Gallery get gallery => Injector.appInstance.get<Gallery>();
 
-  Settings get settings => Injector.appInstance.getDependency<Settings>();
+  Settings get settings => Injector.appInstance.get<Settings>();
 
-  Payments get payments => Injector.appInstance.getDependency<Payments>();
+  Payments get payments => Injector.appInstance.get<Payments>();
 
-  Measures get measures => Injector.appInstance.getDependency<Measures>();
+  Measures get measures => Injector.appInstance.get<Measures>();
 
-  Stats get stats => Injector.appInstance.getDependency<Stats>();
+  Stats get stats => Injector.appInstance.get<Stats>();
 
-  ContactsCoordinator get contactsCoordinator => Injector.appInstance.getDependency<ContactsCoordinator>();
+  ContactsCoordinator get contactsCoordinator => Injector.appInstance.get<ContactsCoordinator>();
 
-  GalleryCoordinator get galleryCoordinator => Injector.appInstance.getDependency<GalleryCoordinator>();
+  GalleryCoordinator get galleryCoordinator => Injector.appInstance.get<GalleryCoordinator>();
 
-  SharedCoordinator get sharedCoordinator => Injector.appInstance.getDependency<SharedCoordinator>();
+  SharedCoordinator get sharedCoordinator => Injector.appInstance.get<SharedCoordinator>();
 
-  JobsCoordinator get jobsCoordinator => Injector.appInstance.getDependency<JobsCoordinator>();
+  JobsCoordinator get jobsCoordinator => Injector.appInstance.get<JobsCoordinator>();
 
-  MeasuresCoordinator get measuresCoordinator => Injector.appInstance.getDependency<MeasuresCoordinator>();
+  MeasuresCoordinator get measuresCoordinator => Injector.appInstance.get<MeasuresCoordinator>();
 
-  PaymentsCoordinator get paymentsCoordinator => Injector.appInstance.getDependency<PaymentsCoordinator>();
+  PaymentsCoordinator get paymentsCoordinator => Injector.appInstance.get<PaymentsCoordinator>();
 
-  TasksCoordinator get tasksCoordinator => Injector.appInstance.getDependency<TasksCoordinator>();
+  TasksCoordinator get tasksCoordinator => Injector.appInstance.get<TasksCoordinator>();
 }

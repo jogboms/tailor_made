@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ReviewModal extends StatelessWidget {
-  const ReviewModal({Key key}) : super(key: key);
+  const ReviewModal({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +13,8 @@ class ReviewModal extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text("Can you rate the experience so far?", textAlign: TextAlign.center),
+            children: <Widget>[
+              const Text('Can you rate the experience so far?', textAlign: TextAlign.center),
               const SizedBox(height: 24.0),
               Row(
                 mainAxisSize: MainAxisSize.min,

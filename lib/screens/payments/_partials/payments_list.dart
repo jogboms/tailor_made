@@ -5,22 +5,22 @@ import 'package:tailor_made/utils/ui/mk_sliver_separator_builder_delegate.dart';
 import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 
 class PaymentList extends StatelessWidget {
-  const PaymentList({Key key, @required this.payments}) : super(key: key);
+  const PaymentList({super.key, required this.payments});
 
-  final List<PaymentModel> payments;
+  final List<PaymentModel?>? payments;
 
   @override
   Widget build(BuildContext context) {
-    if (payments.isEmpty) {
-      return SliverFillRemaining(
-        child: const EmptyResultView(message: "No payments available"),
+    if (payments!.isEmpty) {
+      return const SliverFillRemaining(
+        child: EmptyResultView(message: 'No payments available'),
       );
     }
 
     return SliverList(
       delegate: MkSliverSeparatorBuilderDelegate(
-        childCount: payments.length,
-        builder: (_, int index) => PaymentListItem(payment: payments[index]),
+        childCount: payments!.length,
+        builder: (_, int index) => PaymentListItem(payment: payments![index]),
         separatorBuilder: (_, __) => const Divider(height: 0),
       ),
     );

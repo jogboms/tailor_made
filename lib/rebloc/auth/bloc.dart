@@ -12,18 +12,18 @@ import 'package:tailor_made/rebloc/stats/actions.dart';
 import 'package:tailor_made/services/accounts/main.dart';
 
 class AuthBloc extends SimpleBloc<AppState> {
-  AuthBloc(this.accounts) : assert(accounts != null);
+  AuthBloc(this.accounts);
 
   final Accounts accounts;
 
   @override
   Future<Action> middleware(DispatchFunction dispatcher, AppState state, Action action) async {
     if (action is OnLoginAction) {
-      dispatcher(InitAccountAction(action.user.uid));
-      dispatcher(InitMeasuresAction(action.user.uid));
-      dispatcher(InitStatsAction(action.user.uid));
-      dispatcher(InitJobsAction(action.user.uid));
-      dispatcher(InitContactsAction(action.user.uid));
+      dispatcher(InitAccountAction(action.user!.uid));
+      dispatcher(InitMeasuresAction(action.user!.uid));
+      dispatcher(InitStatsAction(action.user!.uid));
+      dispatcher(InitJobsAction(action.user!.uid));
+      dispatcher(InitContactsAction(action.user!.uid));
     }
     return action;
   }

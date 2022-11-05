@@ -5,7 +5,7 @@ import 'package:tailor_made/rebloc/jobs/sort_type.dart';
 class InitJobsAction extends Action {
   const InitJobsAction(this.userId);
 
-  final String userId;
+  final String? userId;
 }
 
 class ToggleCompleteJob extends Action {

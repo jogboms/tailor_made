@@ -11,7 +11,7 @@ import 'package:tailor_made/rebloc/stats/state.dart';
 part 'app_state.g.dart';
 
 abstract class AppState implements Built<AppState, AppStateBuilder> {
-  factory AppState([void updates(AppStateBuilder b)]) = _$AppState;
+  factory AppState([void Function(AppStateBuilder b) updates]) = _$AppState;
 
   factory AppState.initialState() => _$AppState(
         (AppStateBuilder b) => b
@@ -41,7 +41,7 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 }
 
 class StateStatus extends EnumClass {
-  const StateStatus._(String name) : super(name);
+  const StateStatus._(super.name);
 
   static const StateStatus loading = _$loading;
   static const StateStatus success = _$success;

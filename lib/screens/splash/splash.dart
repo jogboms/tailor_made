@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/constants/mk_images.dart';
@@ -17,19 +16,16 @@ import 'package:tailor_made/widgets/_partials/mk_loading_spinner.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class SplashPage extends StatelessWidget {
-  const SplashPage({Key key, @required this.isColdStart, @required this.isMock})
-      : assert(isMock != null),
-        super(key: key);
+  const SplashPage({super.key, required this.isColdStart, required this.isMock});
 
   final bool isColdStart;
   final bool isMock;
 
   @override
   Widget build(BuildContext context) {
-    final theme = ThemeProvider.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context)!;
 
     return MkStatusBar(
-      brightness: Brightness.dark,
       child: Scaffold(
         body: Stack(
           fit: StackFit.expand,
@@ -55,8 +51,8 @@ class SplashPage extends StatelessWidget {
                   ),
                   AppVersionBuilder(
                     valueBuilder: () => AppVersion.retrieve(isMock),
-                    builder: (_, version, __) => Text(
-                      "v$version",
+                    builder: (_, String? version, __) => Text(
+                      'v$version',
                       style: theme.small.copyWith(color: kTextBaseColor.withOpacity(.4), height: 1.5),
                       textAlign: TextAlign.center,
                     ),
@@ -65,7 +61,7 @@ class SplashPage extends StatelessWidget {
               ),
             ),
             StreamBuilder<User>(
-              // TODO: move this out of here
+              // TODO(Jogboms): move this out of here
               stream: Dependencies.di().accounts.onAuthStateChanged,
               builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
                 if (snapshot.hasData && snapshot.data != null && snapshot.data?.uid != null) {
@@ -90,16 +86,16 @@ class SplashPage extends StatelessWidget {
 }
 
 class _Content extends StatefulWidget {
-  const _Content({Key key, @required this.isColdStart}) : super(key: key);
+  const _Content({required this.isColdStart});
 
   final bool isColdStart;
 
   @override
-  _ContentState createState() => _ContentState();
+  State<_Content> createState() => _ContentState();
 }
 
 class _ContentState extends State<_Content> {
-  bool isLoading;
+  late bool isLoading;
 
   @override
   void initState() {
@@ -113,10 +109,10 @@ class _ContentState extends State<_Content> {
   @override
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, SettingsViewModel>(
-      converter: (store) => SettingsViewModel(store),
+      converter: SettingsViewModel.new,
       builder: (BuildContext context, DispatchFunction dispatch, SettingsViewModel vm) {
         return Stack(
-          children: [
+          children: <Widget>[
             if (!isLoading || !widget.isColdStart || vm.hasError)
               const Center(
                 child: Image(
@@ -129,42 +125,48 @@ class _ContentState extends State<_Content> {
             Positioned.fill(
               top: null,
               bottom: 124.0,
-              child: Builder(builder: (_) {
-                if ((vm.isLoading && widget.isColdStart) || isLoading) {
-                  return const MkLoadingSpinner();
-                }
+              child: Builder(
+                builder: (_) {
+                  if ((vm.isLoading && widget.isColdStart) || isLoading) {
+                    return const MkLoadingSpinner();
+                  }
 
-                if (vm.hasError) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 48.0, vertical: 16.0),
-                    child: Center(
-                      child: Column(
-                        children: <Widget>[
-                          Text(vm.error.toString(), textAlign: TextAlign.center),
-                          const SizedBox(height: 8.0),
-                          RaisedButton(
-                            color: Colors.white,
-                            child: Text(
-                              "RETRY",
-                              style: ThemeProvider.of(context).button.copyWith(color: kTextBaseColor),
+                  if (vm.hasError) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 48.0, vertical: 16.0),
+                      child: Center(
+                        child: Column(
+                          children: <Widget>[
+                            Text(vm.error.toString(), textAlign: TextAlign.center),
+                            const SizedBox(height: 8.0),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                              ),
+                              child: Text(
+                                'RETRY',
+                                style: ThemeProvider.of(context)!.button.copyWith(color: kTextBaseColor),
+                              ),
+                              onPressed: () => dispatch(const InitSettingsAction()),
                             ),
-                            onPressed: () => dispatch(const InitSettingsAction()),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
+                    );
+                  }
+
+                  return Center(
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                      ),
+                      icon: const Image(image: MkImages.googleLogo, width: 24.0),
+                      label: Text('Continue with Google', style: ThemeProvider.of(context)!.bodyBold),
+                      onPressed: _onLogin,
                     ),
                   );
-                }
-
-                return Center(
-                  child: RaisedButton.icon(
-                    color: Colors.white,
-                    icon: const Image(image: MkImages.google_logo, width: 24.0),
-                    label: Text("Continue with Google", style: ThemeProvider.of(context).bodyBold),
-                    onPressed: _onLogin,
-                  ),
-                );
-              }),
+                },
+              ),
             )
           ],
         );
@@ -175,17 +177,17 @@ class _ContentState extends State<_Content> {
   void _onLogin() async {
     try {
       setState(() => isLoading = true);
-      // TODO: move this out of here
+      // TODO(Jogboms): move this out of here
       await Dependencies.di().accounts.signInWithGoogle();
     } catch (e) {
-      // TODO: move this out of here
-      final message = MkStrings.genericError(e, Dependencies.di().session.isDev);
+      // TODO(Jogboms): move this out of here
+      final String message = MkStrings.genericError(e, Dependencies.di().session.isDev)!;
 
       if (message.isNotEmpty) {
         SnackBarProvider.of(context).show(message, duration: const Duration(milliseconds: 3500));
       }
 
-      // TODO: move this out of here
+      // TODO(Jogboms): move this out of here
       await Dependencies.di().accounts.signout();
 
       if (!mounted) {

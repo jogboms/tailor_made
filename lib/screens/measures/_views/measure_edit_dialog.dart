@@ -5,27 +5,27 @@ import 'package:tailor_made/utils/ui/mk_child_dialog.dart';
 import 'package:tailor_made/widgets/_partials/mk_clear_button.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
-Future<String> showEditDialog({
-  @required BuildContext context,
-  @required List<Widget> children,
-  @required String title,
-  @required VoidCallback onDone,
-  @required VoidCallback onCancel,
+Future<String?> showEditDialog({
+  required BuildContext context,
+  required List<Widget> children,
+  required String title,
+  required VoidCallback onDone,
+  required VoidCallback onCancel,
 }) {
   return mkShowChildDialog<String>(
     context: context,
-    child: MeasureEditDialog(title: title, children: children, onDone: onDone, onCancel: onCancel),
+    child: MeasureEditDialog(title: title, onDone: onDone, onCancel: onCancel, children: children),
   );
 }
 
 class MeasureEditDialog extends StatelessWidget {
   const MeasureEditDialog({
-    Key key,
-    @required this.title,
-    @required this.children,
-    @required this.onDone,
-    @required this.onCancel,
-  }) : super(key: key);
+    super.key,
+    required this.title,
+    required this.children,
+    required this.onDone,
+    required this.onCancel,
+  });
 
   final String title;
   final List<Widget> children;
@@ -44,7 +44,7 @@ class MeasureEditDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const SizedBox(height: 16.0),
-              Center(child: Text(title, style: ThemeProvider.of(context).smallLight)),
+              Center(child: Text(title, style: ThemeProvider.of(context)!.smallLight)),
               const SizedBox(height: 8.0),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
@@ -54,9 +54,9 @@ class MeasureEditDialog extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  MkClearButton(onPressed: onCancel, color: Colors.grey.shade300, child: const Text("CANCEL")),
+                  MkClearButton(onPressed: onCancel, color: Colors.grey.shade300, child: const Text('CANCEL')),
                   const SizedBox(width: 16.0),
-                  MkClearButton(onPressed: onDone, child: const Text("DONE")),
+                  MkClearButton(onPressed: onDone, child: const Text('DONE')),
                   const SizedBox(width: 16.0),
                 ],
               ),

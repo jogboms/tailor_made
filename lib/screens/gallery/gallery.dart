@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tailor_made/constants/mk_style.dart';
 import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/models/image.dart';
@@ -9,51 +10,53 @@ import 'package:tailor_made/widgets/_views/empty_result_view.dart';
 import 'package:tailor_made/widgets/theme_provider.dart';
 
 class GalleryPage extends StatelessWidget {
-  const GalleryPage({Key key, this.images, @required this.userId}) : super(key: key);
+  const GalleryPage({super.key, this.images, required this.userId});
 
-  final List<ImageModel> images;
+  final List<ImageModel>? images;
   final String userId;
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context)!;
 
     return Scaffold(
       body: CustomScrollView(
-        slivers: [
+        slivers: <Widget>[
           SliverAppBar(
             title: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text("Gallery", style: theme.appBarTitle),
-                if (images != null) Text("${images.length} Photos", style: theme.xsmall),
+                Text('Gallery', style: theme.appBarTitle),
+                if (images != null) Text('${images!.length} Photos', style: theme.xsmall),
               ],
             ),
             backgroundColor: kAppBarBackgroundColor,
             automaticallyImplyLeading: false,
             leading: const MkBackButton(),
-            brightness: Brightness.light,
             forceElevated: true,
             elevation: 1.0,
             centerTitle: false,
             floating: true,
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
           ),
-          Builder(builder: (context) {
-            if (images == null) {
-              return StreamBuilder(
-                // TODO: move this out of here
-                stream: Dependencies.di().gallery.fetchAll(userId),
-                builder: (_, AsyncSnapshot<List<ImageModel>> snapshot) {
-                  if (!snapshot.hasData) {
-                    return const SliverFillRemaining(child: MkLoadingSpinner());
-                  }
-                  return _Content(images: snapshot.data);
-                },
-              );
-            }
-            return _Content(images: images);
-          }),
+          Builder(
+            builder: (BuildContext context) {
+              if (images == null) {
+                return StreamBuilder<List<ImageModel?>>(
+                  // TODO(Jogboms): move this out of here
+                  stream: Dependencies.di().gallery.fetchAll(userId),
+                  builder: (_, AsyncSnapshot<List<ImageModel?>> snapshot) {
+                    if (!snapshot.hasData) {
+                      return const SliverFillRemaining(child: MkLoadingSpinner());
+                    }
+                    return _Content(images: snapshot.data);
+                  },
+                );
+              }
+              return _Content(images: images);
+            },
+          ),
         ],
       ),
     );
@@ -61,14 +64,14 @@ class GalleryPage extends StatelessWidget {
 }
 
 class _Content extends StatelessWidget {
-  const _Content({Key key, @required this.images}) : super(key: key);
+  const _Content({required this.images});
 
-  final List<ImageModel> images;
+  final List<ImageModel?>? images;
 
   @override
   Widget build(BuildContext context) {
-    if (images.isEmpty) {
-      return const SliverFillRemaining(child: EmptyResultView(message: "No images available"));
+    if (images!.isEmpty) {
+      return const SliverFillRemaining(child: EmptyResultView(message: 'No images available'));
     }
 
     return SliverPadding(

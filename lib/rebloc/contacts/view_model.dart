@@ -14,21 +14,21 @@ class ContactsViewModel extends Equatable {
         isSearching = state.contacts.isSearching,
         hasSortFn = state.contacts.hasSortFn,
         measures = state.measures.grouped,
-        userId = state.account.account.uid,
+        userId = state.account.account!.uid,
         _jobs = state.jobs.jobs,
         sortFn = state.contacts.sortFn,
         isLoading = state.contacts.status == StateStatus.loading,
         hasError = state.contacts.status == StateStatus.failure,
         error = state.contacts.error;
 
-  List<ContactModel> get contacts => isSearching ? searchResults : model;
+  List<ContactModel>? get contacts => isSearching ? searchResults : model;
 
-  Map<String, List<MeasureModel>> get measuresGrouped => measures;
+  Map<String, List<MeasureModel>>? get measuresGrouped => measures;
 
-  ContactModel get selected {
+  ContactModel? get selected {
     if (contactID != null) {
       try {
-        return model.firstWhere((_) => _.id == contactID);
+        return model!.firstWhere((_) => _.id == contactID);
       } catch (e) {
         //
       }
@@ -39,31 +39,31 @@ class ContactsViewModel extends Equatable {
   List<JobModel> get selectedJobs {
     if (selected != null) {
       try {
-        return jobs.where((job) => job.contactID == selected.id).toList();
+        return jobs!.where((JobModel job) => job.contactID == selected!.id).toList();
       } catch (e) {
         //
       }
     }
-    return [];
+    return <JobModel>[];
   }
 
-  String contactID;
+  String? contactID;
 
   final String userId;
 
-  final BuiltList _searchResults;
+  final BuiltList<ContactModel>? _searchResults;
 
-  List<ContactModel> get searchResults => _searchResults?.toList();
+  List<ContactModel>? get searchResults => _searchResults?.toList();
 
-  final Map<String, List<MeasureModel>> measures;
+  final Map<String, List<MeasureModel>>? measures;
 
-  final BuiltList _jobs;
+  final BuiltList<JobModel>? _jobs;
 
-  List<JobModel> get jobs => _jobs?.toList();
+  List<JobModel>? get jobs => _jobs?.toList();
 
-  final BuiltList _model;
+  final BuiltList<ContactModel>? _model;
 
-  List<ContactModel> get model => _model?.toList();
+  List<ContactModel>? get model => _model?.toList();
 
   final bool hasSortFn;
   final SortType sortFn;
@@ -73,6 +73,17 @@ class ContactsViewModel extends Equatable {
   final dynamic error;
 
   @override
-  List<Object> get props =>
-      [model, hasSortFn, sortFn, userId, isSearching, jobs, contacts, searchResults, isLoading, hasError, error];
+  List<Object?> get props => <Object?>[
+        model,
+        hasSortFn,
+        sortFn,
+        userId,
+        isSearching,
+        jobs,
+        contacts,
+        searchResults,
+        isLoading,
+        hasError,
+        error
+      ];
 }
