@@ -40,7 +40,7 @@ class TaskListItem extends StatelessWidget {
         children: <Widget>[
           const Icon(Icons.arrow_downward, color: Colors.red, size: 11.0),
           const SizedBox(width: 2.0),
-          Text(time_ago.format(task.dueAt!, allowFromNow: true)),
+          Text(time_ago.format(task.dueAt, allowFromNow: true)),
         ],
       ),
       onTap: () => Dependencies.di().jobsCoordinator.toJob(task),
@@ -49,11 +49,11 @@ class TaskListItem extends StatelessWidget {
 
   Color get _iconColor {
     final DateTime now = DateTime.now();
-    if (now.isAfter(task.dueAt!)) {
+    if (now.isAfter(task.dueAt)) {
       return Colors.redAccent.shade400;
     }
 
-    final int diff = task.dueAt!.difference(now).inDays;
+    final int diff = task.dueAt.difference(now).inDays;
     if (diff >= 0 && diff < _kDayLimit) {
       return Colors.orangeAccent.shade400;
     }

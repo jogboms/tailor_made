@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/domain.dart';
 
 import '../../network/firebase.dart';
@@ -12,7 +11,7 @@ class AccountsImpl extends Accounts {
   Future<void> signInWithGoogle() => repository.auth.signInWithGoogle();
 
   @override
-  Stream<FireUser> get onAuthStateChanged => repository.auth.onAuthStateChanged;
+  Stream<FireUser?> get onAuthStateChanged => repository.auth.onAuthStateChanged;
 
   @override
   Future<void> signOut() => repository.auth.signOutWithGoogle();
@@ -30,13 +29,11 @@ class AccountsImpl extends Accounts {
   }
 
   @override
-  Stream<AccountModel> getAccount(String? userId) {
-    return repository.db.account(userId).snapshots().map(_deriveAccountModel);
-  }
+  Stream<AccountModel> getAccount(String? userId) => repository.db.account(userId).snapshots().map(_deriveAccountModel);
 }
 
-AccountModel _deriveAccountModel(DocumentSnapshot<Map<String, dynamic>> snapshot) {
-  final Map<String, dynamic> data = snapshot.data()!;
+AccountModel _deriveAccountModel(MapDocumentSnapshot snapshot) {
+  final DynamicMap data = snapshot.data()!;
   return AccountModel(
     reference: FireReference(snapshot.reference),
     uid: data['uid'] as String,
@@ -45,7 +42,7 @@ AccountModel _deriveAccountModel(DocumentSnapshot<Map<String, dynamic>> snapshot
     displayName: data['displayName'] as String,
     phoneNumber: data['phoneNumber'] as int?,
     photoURL: data['photoURL'] as String,
-    status: AccountModelStatus.values.byName(data['status'] as String),
+    status: AccountModelStatus.values[data['status'] as int],
     hasPremiumEnabled: data['hasPremiumEnabled'] as bool,
     hasSendRating: data['hasSendRating'] as bool,
     rating: data['rating'] as int,

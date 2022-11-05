@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../data/network/firebase/models.dart';
 
 abstract class Snapshot {
   Map<String, dynamic>? get data;
@@ -18,7 +18,7 @@ abstract class Storage {
 }
 
 abstract class Reference {
-  DocumentReference<Map<String, dynamic>> get source;
+  MapDocumentReference get source;
 
   Future<void> delete();
 
@@ -38,7 +38,7 @@ class NoopReference implements Reference {
   Future<void> setData(Map<String, dynamic> data, {bool merge = false}) => throw UnimplementedError();
 
   @override
-  DocumentReference<Map<String, dynamic>> get source => throw UnimplementedError();
+  MapDocumentReference get source => throw UnimplementedError();
 
   @override
   Future<void> updateData(Map<String, dynamic> data) => throw UnimplementedError();

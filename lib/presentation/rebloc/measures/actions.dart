@@ -1,19 +1,8 @@
-import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/domain.dart';
+part of 'bloc.dart';
 
-class InitMeasuresAction extends Action {
-  const InitMeasuresAction(this.userId);
-
-  final String? userId;
-}
-
-class UpdateMeasureAction extends Action {
-  const UpdateMeasureAction(this.payload, this.userId);
-
-  final List<MeasureModel> payload;
-  final String? userId;
-}
-
-class ToggleMeasuresLoading extends Action {
-  const ToggleMeasuresLoading();
+@freezed
+class MeasuresAction with _$MeasuresAction, AppAction {
+  const factory MeasuresAction.init(String? userId) = InitMeasuresAction;
+  const factory MeasuresAction.update(List<MeasureModel> payload, String? userId) = UpdateMeasureAction;
+  const factory MeasuresAction.toggle() = ToggleMeasuresLoading;
 }

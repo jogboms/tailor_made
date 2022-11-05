@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 
@@ -10,9 +9,9 @@ class SettingsImpl extends Settings {
   final FirebaseRepository repository;
 
   @override
-  Stream<SettingsModel?> fetch() {
-    return repository.db.settings.snapshots().map((firestore.DocumentSnapshot<Map<String, dynamic>> snapshot) {
-      final Map<String, dynamic>? data = snapshot.data();
+  Stream<SettingsModel> fetch() {
+    return repository.db.settings.snapshots().map((MapDocumentSnapshot snapshot) {
+      final DynamicMap? data = snapshot.data();
       if (data == null) {
         throw const NoInternetException();
       }

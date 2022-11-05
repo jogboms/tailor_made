@@ -22,6 +22,7 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
@@ -64,11 +65,19 @@ android {
     productFlavors {
         dev {
             dimension "flavor-type"
+            resValue "string", "app_name", "(Dev) Tailor Made"
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
         }
+        mock {
+            dimension "flavor-type"
+            resValue "string", "app_name", "(Mock) Tailor Made"
+            applicationIdSuffix ".mock"
+            versionNameSuffix "-mock"
+        }
         prod {
             dimension "flavor-type"
+            resValue "string", "app_name", "Tailor Made"
         }
     }
 
@@ -88,11 +97,6 @@ android {
     }
 }
 
-private static Integer generateVersionCode(String versionName, Integer minimumSdkVersion) {
-    def (major, minor, patch) = versionName.split('\\.').collect { it.toInteger() }
-    return minimumSdkVersion * 10000000 + major * 10000 + minor * 100 + patch
-}
-
 flutter {
     source '../..'
 }
@@ -101,4 +105,15 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-apply plugin: 'com.google.gms.google-services'
+afterEvaluate {
+  android.productFlavors.each { flavor ->
+    tasks.matching {
+      (it.name.contains('GoogleServices') || it.name.contains('Crashlytics')) && it.name.contains("Mock")
+    }*.enabled = false
+  }
+}
+
+private static Integer generateVersionCode(String versionName, Integer minimumSdkVersion) {
+  def (major, minor, patch) = versionName.split('\\.').collect { it.toInteger() }
+  return minimumSdkVersion * 10000000 + major * 10000 + minor * 100 + patch
+}

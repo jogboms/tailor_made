@@ -1,9 +1,7 @@
-import 'package:rebloc/rebloc.dart';
+part of 'bloc.dart';
 
-class InitSettingsAction extends Action {
-  const InitSettingsAction();
-}
-
-class OnErrorSettingsAction extends Action {
-  const OnErrorSettingsAction();
+@freezed
+class SettingsAction with _$SettingsAction, AppAction {
+  const factory SettingsAction.init() = InitSettingsAction;
+  const factory SettingsAction.error() = OnErrorSettingsAction;
 }

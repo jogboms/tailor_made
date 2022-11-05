@@ -13,7 +13,7 @@ class MeasuresImpl extends Measures {
     return repository.db
         .measurements(userId)
         .snapshots()
-        .map((QuerySnapshot<Map<String, dynamic>> snapshot) => snapshot.docs.map(_deriveMeasureModel).toList());
+        .map((MapQuerySnapshot snapshot) => snapshot.docs.map(_deriveMeasureModel).toList());
   }
 
   @override
@@ -63,15 +63,15 @@ class MeasuresImpl extends Measures {
   }
 }
 
-MeasureModel _deriveMeasureModel(DocumentSnapshot<Map<String, dynamic>> snapshot) {
-  final Map<String, dynamic> data = snapshot.data()!;
+MeasureModel _deriveMeasureModel(MapDocumentSnapshot snapshot) {
+  final DynamicMap data = snapshot.data()!;
   return MeasureModel(
     reference: FireReference(snapshot.reference),
     id: data['id'] as String,
     name: data['name'] as String,
-    value: data['value'] as double,
+    value: data['value'] as double? ?? 0.0,
     unit: data['unit'] as String,
     group: data['group'] as String,
-    createdAt: data['createdAt'] as DateTime,
+    createdAt: DateTime.parse(data['createdAt'] as String),
   );
 }

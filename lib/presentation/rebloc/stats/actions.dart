@@ -1,7 +1,6 @@
-import 'package:rebloc/rebloc.dart';
+part of 'bloc.dart';
 
-class InitStatsAction extends Action {
-  const InitStatsAction(this.userId);
-
-  final String? userId;
+@freezed
+class StatsAction with _$StatsAction, AppAction {
+  const factory StatsAction.init(String? userId) = InitStatsAction;
 }

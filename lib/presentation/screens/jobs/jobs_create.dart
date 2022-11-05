@@ -195,12 +195,12 @@ class _JobsCreatePageState extends JobsCreateViewModel {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: InputDropdown(
-        valueText: DateFormat.yMMMd().format(job.dueAt!),
+        valueText: DateFormat.yMMMd().format(job.dueAt),
         valueStyle: ThemeProvider.of(context)!.title.copyWith(color: Colors.black),
         onPressed: () async {
           final DateTime? picked = await showDatePicker(
             context: context,
-            initialDate: job.dueAt!,
+            initialDate: job.dueAt,
             firstDate: DateTime.now(),
             lastDate: DateTime(2101),
           );

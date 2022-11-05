@@ -1,7 +1,12 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/rebloc.dart';
+
+part 'actions.dart';
+part 'bloc.freezed.dart';
+part 'state.dart';
 
 class ContactsBloc extends SimpleBloc<AppState> {
   ContactsBloc(this.contacts);
@@ -87,8 +92,6 @@ Comparator<ContactModel> _sort(ContactsSortType sortType) {
     case ContactsSortType.recent:
       return (ContactModel a, ContactModel b) => b.createdAt.compareTo(a.createdAt);
     case ContactsSortType.reset:
-    // ignore: no_default_cases
-    default:
       return (ContactModel a, ContactModel b) => a.id.compareTo(b.id);
   }
 }

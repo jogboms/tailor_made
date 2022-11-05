@@ -30,10 +30,10 @@ class FireStorage implements Storage {
 class FireReference implements Reference {
   FireReference(this._reference);
 
-  final DocumentReference<Map<String, dynamic>> _reference;
+  final MapDocumentReference _reference;
 
   @override
-  DocumentReference<Map<String, dynamic>> get source => _reference;
+  MapDocumentReference get source => _reference;
 
   @override
   Future<void> delete() => _reference.delete();
@@ -45,3 +45,14 @@ class FireReference implements Reference {
   @override
   Future<void> updateData(Map<String, dynamic> data) => _reference.update(data);
 }
+
+typedef DynamicMap = Map<String, dynamic>;
+typedef MapQuery = Query<DynamicMap>;
+typedef MapQuerySnapshot = QuerySnapshot<DynamicMap>;
+typedef MapQueryDocumentSnapshot = QueryDocumentSnapshot<DynamicMap>;
+typedef MapDocumentSnapshot = DocumentSnapshot<DynamicMap>;
+typedef MapDocumentReference = DocumentReference<DynamicMap>;
+typedef MapCollectionReference = CollectionReference<DynamicMap>;
+
+typedef CloudTimestamp = Timestamp;
+typedef CloudValue = FieldValue;

@@ -1,7 +1,12 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/rebloc.dart';
+
+part 'actions.dart';
+part 'bloc.freezed.dart';
+part 'state.dart';
 
 class StatsBloc extends SimpleBloc<AppState> {
   StatsBloc(this.stats);
@@ -15,8 +20,8 @@ class StatsBloc extends SimpleBloc<AppState> {
         .switchMap(
           (WareContext<AppState> context) => stats
               .fetch((context.action as InitStatsAction).userId)
-              .map(OnDataAction<StatsModel?>.new)
-              .map((OnDataAction<StatsModel?> action) => context.copyWith(action)),
+              .map(OnDataAction<StatsModel>.new)
+              .map((OnDataAction<StatsModel> action) => context.copyWith(action)),
         )
         .untilAction<OnDisposeAction>()
         .listen((WareContext<AppState> context) => context.dispatcher(context.action));

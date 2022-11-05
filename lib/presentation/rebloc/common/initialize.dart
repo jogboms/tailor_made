@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:rebloc/rebloc.dart';
 
 import '../app_state.dart';
-import '../settings/actions.dart';
+import '../settings/bloc.dart';
 import 'actions.dart';
 
 class InitializeBloc extends SimpleBloc<AppState> {

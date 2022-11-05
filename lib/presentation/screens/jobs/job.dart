@@ -140,8 +140,8 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
   void _onSaveDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: job!.dueAt!,
-      firstDate: job!.dueAt!.isAfter(DateTime.now()) ? DateTime.now() : job!.dueAt!,
+      initialDate: job!.dueAt,
+      firstDate: job!.dueAt.isAfter(DateTime.now()) ? DateTime.now() : job!.dueAt,
       lastDate: DateTime(2101),
     );
     if (picked == null || picked == job!.dueAt) {
