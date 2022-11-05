@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/domain.dart';
 
 import '../../network/firebase.dart';
+import '../derive_map_from_data.dart';
 
 class ContactsImpl extends Contacts {
   ContactsImpl(this.repository);
@@ -13,8 +13,8 @@ class ContactsImpl extends Contacts {
   @override
   Stream<List<ContactModel>> fetchAll(String? userId) {
     return repository.db.contacts(userId).snapshots().map(
-          (QuerySnapshot<Map<String, dynamic>> snapshot) => snapshot.docs
-              .where((QueryDocumentSnapshot<Map<String, dynamic>> doc) => doc.data().containsKey('fullname'))
+          (MapQuerySnapshot snapshot) => snapshot.docs
+              .where((MapQueryDocumentSnapshot doc) => doc.data().containsKey('fullname'))
               .map(_deriveContactModel)
               .toList(),
         );
@@ -27,20 +27,20 @@ class ContactsImpl extends Contacts {
 
   @override
   Future<FireReference> fetch(ContactModel contact, String userId) async {
-    final QuerySnapshot<Map<String, dynamic>> future = await repository.db.contacts(userId).get();
+    final MapQuerySnapshot future = await repository.db.contacts(userId).get();
     return FireReference(future.docs.first.reference);
   }
 
   @override
   Stream<ContactModel> update(ContactModel contact, String userId) {
-    final DocumentReference<Map<String, dynamic>> ref = repository.db.contacts(userId).firestore.doc(contact.id);
+    final MapDocumentReference ref = repository.db.contacts(userId).firestore.doc(contact.id);
     ref.set(contact.toJson()).then((_) {});
     return ref.snapshots().map(_deriveContactModel);
   }
 }
 
-ContactModel _deriveContactModel(DocumentSnapshot<Map<String, dynamic>> snapshot) {
-  final Map<String, dynamic> data = snapshot.data()!;
+ContactModel _deriveContactModel(MapDocumentSnapshot snapshot) {
+  final DynamicMap data = snapshot.data()!;
   return ContactModel(
     reference: FireReference(snapshot.reference),
     id: data['id'] as String,
@@ -49,8 +49,8 @@ ContactModel _deriveContactModel(DocumentSnapshot<Map<String, dynamic>> snapshot
     phone: data['phone'] as String?,
     location: data['location'] as String?,
     imageUrl: data['imageUrl'] as String?,
-    createdAt: data['createdAt'] as DateTime,
-    measurements: data['measurements'] as Map<String, double>? ?? <String, double>{},
+    createdAt: DateTime.parse(data['createdAt'] as String),
+    measurements: deriveMapFromMap(data['measurements'], (dynamic value) => value as double? ?? 0.0),
     totalJobs: data['totalJobs'] as int,
     pendingJobs: data['pendingJobs'] as int,
   );

@@ -9,7 +9,7 @@ class HomeViewModel extends Equatable {
         _jobs = state.jobs.jobs,
         stats = state.stats.stats,
         settings = state.settings.settings,
-        hasSkipedPremium = state.account.hasSkipedPremium == true,
+        hasSkippedPremium = state.account.hasSkipedPremium == true,
         isLoading = state.stats.status == StateStatus.loading ||
             state.contacts.status == StateStatus.loading ||
             state.account.status == StateStatus.loading;
@@ -27,7 +27,7 @@ class HomeViewModel extends Equatable {
   final StatsModel? stats;
   final SettingsModel? settings;
   final bool isLoading;
-  final bool hasSkipedPremium;
+  final bool hasSkippedPremium;
 
   bool get isDisabled => account != null && account!.status == AccountModelStatus.disabled;
 
@@ -39,5 +39,5 @@ class HomeViewModel extends Equatable {
       account != null && !account!.hasSendRating && (((contacts?.length ?? 0) >= 10) || ((jobs?.length ?? 0) >= 10));
 
   @override
-  List<Object?> get props => <Object?>[stats, settings, hasSkipedPremium, isLoading, account, contacts, jobs];
+  List<Object?> get props => <Object?>[stats, settings, hasSkippedPremium, isLoading, account, contacts, jobs];
 }

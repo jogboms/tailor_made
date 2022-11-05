@@ -1,35 +1,11 @@
-import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/rebloc.dart';
+part of 'bloc.dart';
 
-class InitContactsAction extends Action {
-  const InitContactsAction(this.userId);
-
-  final String? userId;
-}
-
-class SortContacts extends Action {
-  const SortContacts(this.payload);
-
-  final ContactsSortType payload;
-}
-
-class SearchContactAction extends Action {
-  const SearchContactAction(this.payload);
-
-  final String payload;
-}
-
-class SearchSuccessContactAction extends Action {
-  const SearchSuccessContactAction(this.payload);
-
-  final List<ContactModel> payload;
-}
-
-class CancelSearchContactAction extends Action {
-  const CancelSearchContactAction();
-}
-
-class StartSearchContactAction extends Action {
-  const StartSearchContactAction();
+@freezed
+class ContactsAction with _$ContactsAction, AppAction {
+  const factory ContactsAction.init(String? userId) = InitContactsAction;
+  const factory ContactsAction.sort(ContactsSortType payload) = SortContacts;
+  const factory ContactsAction.search(String payload) = SearchContactAction;
+  const factory ContactsAction.searchSuccess(List<ContactModel> payload) = SearchSuccessContactAction;
+  const factory ContactsAction.searchCancel() = CancelSearchContactAction;
+  const factory ContactsAction.searchStart() = StartSearchContactAction;
 }

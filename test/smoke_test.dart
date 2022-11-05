@@ -4,11 +4,13 @@ import 'package:mocktail/mocktail.dart';
 import 'package:tailor_made/bootstrap.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/dependencies.dart';
-import 'package:tailor_made/main_mock.dart';
+import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:tailor_made/presentation/screens/splash/splash.dart';
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
+
+class MockRepository extends Mock implements Repository {}
 
 class FakeRoute extends Fake implements Route<void> {}
 

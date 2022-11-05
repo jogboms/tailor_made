@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/rebloc.dart';
@@ -21,38 +22,26 @@ class JobsViewModel extends Equatable {
 
   List<JobModel> get tasks {
     final List<JobModel> tasks = model!.where((JobModel job) => !job.isComplete).toList();
-    return tasks..sort((JobModel a, JobModel b) => a.dueAt!.compareTo(b.dueAt!));
+    return tasks..sort((JobModel a, JobModel b) => a.dueAt.compareTo(b.dueAt));
   }
 
   JobModel? get selected {
     if (jobID != null) {
-      try {
-        return model!.firstWhere((_) => _.id == jobID);
-      } catch (e) {
-        //
-      }
+      return model!.firstWhereOrNull((_) => _.id == jobID);
     }
     return null;
   }
 
   ContactModel? get selectedContact {
     if (selected != null) {
-      try {
-        return contacts!.firstWhere((_) => _.id == selected!.contactID);
-      } catch (e) {
-        //
-      }
+      return contacts!.firstWhereOrNull((_) => _.id == selected!.contactID);
     }
     return null;
   }
 
   List<JobModel> get selectedJobs {
     if (selected != null) {
-      try {
-        return jobs!.where((JobModel job) => job.contactID == selected!.id).toList();
-      } catch (e) {
-        //
-      }
+      return jobs!.where((JobModel job) => job.contactID == selected!.id).toList();
     }
     return <JobModel>[];
   }

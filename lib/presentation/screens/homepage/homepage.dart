@@ -102,7 +102,7 @@ class _Body extends StatelessWidget {
       );
     }
 
-    if (viewModel.isWarning && viewModel.hasSkipedPremium == false) {
+    if (viewModel.isWarning && viewModel.hasSkippedPremium == false) {
       return RateLimitPage(
         onSignUp: () => dispatch(OnPremiumSignUp(viewModel.account)),
         onSkipedPremium: () => dispatch(const OnSkipedPremium()),

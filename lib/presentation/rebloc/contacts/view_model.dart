@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/rebloc.dart';
@@ -23,22 +24,14 @@ class ContactsViewModel extends Equatable {
 
   ContactModel? get selected {
     if (contactID != null) {
-      try {
-        return model!.firstWhere((_) => _.id == contactID);
-      } catch (e) {
-        //
-      }
+      return model!.firstWhereOrNull((_) => _.id == contactID);
     }
     return null;
   }
 
   List<JobModel> get selectedJobs {
     if (selected != null) {
-      try {
-        return jobs!.where((JobModel job) => job.contactID == selected!.id).toList();
-      } catch (e) {
-        //
-      }
+      return jobs!.where((JobModel job) => job.contactID == selected!.id).toList();
     }
     return <JobModel>[];
   }

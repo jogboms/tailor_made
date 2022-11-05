@@ -4,7 +4,7 @@ import '../models/account.dart';
 abstract class Accounts {
   Future<void> signInWithGoogle();
 
-  Stream<User> get onAuthStateChanged;
+  Stream<User?> get onAuthStateChanged;
 
   Future<void>? signOut();
 

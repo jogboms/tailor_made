@@ -25,7 +25,7 @@ class JobModel with _$JobModel {
     @Default(<PaymentModel>[]) List<PaymentModel> payments,
     @Default(false) bool isComplete,
     required DateTime createdAt,
-    required DateTime? dueAt,
+    required DateTime dueAt,
   }) = _JobModel;
 
   factory JobModel.fromDefaults({

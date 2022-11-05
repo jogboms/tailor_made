@@ -1,9 +1,10 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/domain.dart';
 
 import '../../network/firebase.dart';
+import '../derive_list_from_data.dart';
+import '../derive_map_from_data.dart';
 
 class JobsImpl extends Jobs {
   JobsImpl(this.repository);
@@ -15,7 +16,7 @@ class JobsImpl extends Jobs {
     return repository.db
         .jobs(userId)
         .snapshots()
-        .map((QuerySnapshot<Map<String, dynamic>> snapshot) => snapshot.docs.map(_deriveJobModel).toList());
+        .map((MapQuerySnapshot snapshot) => snapshot.docs.map(_deriveJobModel).toList());
   }
 
   @override
@@ -25,14 +26,14 @@ class JobsImpl extends Jobs {
 
   @override
   Stream<JobModel> update(JobModel job, String userId) {
-    final DocumentReference<Map<String, dynamic>> ref = repository.db.jobs(userId).firestore.doc(job.id);
+    final MapDocumentReference ref = repository.db.jobs(userId).firestore.doc(job.id);
     ref.set(job.toJson()).then((_) {});
     return ref.snapshots().map(_deriveJobModel);
   }
 }
 
-JobModel _deriveJobModel(DocumentSnapshot<Map<String, dynamic>> snapshot) {
-  final Map<String, dynamic> data = snapshot.data()!;
+JobModel _deriveJobModel(MapDocumentSnapshot snapshot) {
+  final DynamicMap data = snapshot.data()!;
   return JobModel(
     reference: FireReference(snapshot.reference),
     id: data['id'] as String,
@@ -40,14 +41,14 @@ JobModel _deriveJobModel(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     contactID: data['contactID'] as String?,
     name: data['name'] as String,
     price: data['price'] as double,
-    completedPayment: data['completedPayment'] as double,
-    pendingPayment: data['pendingPayment'] as double,
+    completedPayment: (data['completedPayment'] as num).toDouble(),
+    pendingPayment: (data['pendingPayment'] as num).toDouble(),
     notes: data['notes'] as String? ?? '',
-    images: data['images'] as List<ImageModel>? ?? const <ImageModel>[],
-    measurements: data['measurements'] as Map<String, double>? ?? <String, double>{},
-    payments: data['payments'] as List<PaymentModel>? ?? const <PaymentModel>[],
+    images: deriveListFromMap(data['images'], ImageModel.fromJson),
+    measurements: deriveMapFromMap(data['measurements'], (dynamic value) => value as double? ?? 0.0),
+    payments: deriveListFromMap(data['payments'], PaymentModel.fromJson),
     isComplete: data['isComplete'] as bool,
-    createdAt: data['createdAt'] as DateTime,
-    dueAt: data['dueAt'] as DateTime?,
+    createdAt: DateTime.parse(data['createdAt'] as String),
+    dueAt: DateTime.tryParse((data['dueAt'] as String?) ?? '') ?? DateTime.now(),
   );
 }

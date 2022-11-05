@@ -1,7 +1,12 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/rebloc.dart';
+
+part 'actions.dart';
+part 'bloc.freezed.dart';
+part 'state.dart';
 
 class JobsBloc extends SimpleBloc<AppState> {
   JobsBloc(this.jobs);
@@ -95,8 +100,6 @@ Comparator<JobModel> _sort(JobsSortType sortType) {
     case JobsSortType.recent:
       return (JobModel a, JobModel b) => b.createdAt.compareTo(a.createdAt);
     case JobsSortType.reset:
-    // ignore: no_default_cases
-    default:
       return (JobModel a, JobModel b) => a.id.compareTo(b.id);
   }
 }

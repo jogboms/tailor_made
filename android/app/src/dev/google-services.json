@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "825955979349-34l4hfqdl1cf2frd7sb65768ej32l04u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.github.jogboms.tailormade.dev",
+            "certificate_hash": "340c105bfb160160b65d584cf97fe4a554e34898"
+          }
+        },
+        {
+          "client_id": "825955979349-k10rr1gh02q8rvjab9ffu448vjg5050n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.github.jogboms.tailormade.dev",
+            "certificate_hash": "b0991302395ec95c09039172a3b86d0b7810524b"
+          }
+        },
+        {
           "client_id": "825955979349-7v0gurknfqj5q445uu90r9uuroe8kgn1.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -25,15 +41,20 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825955979349-7v0gurknfqj5q445uu90r9uuroe8kgn1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "825955979349-llfp7aheo7il83p3ltltncfmi60bsbeg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.github.jogboms.tailormade.dev"
+              }
+            }
+          ]
         }
       }
     }

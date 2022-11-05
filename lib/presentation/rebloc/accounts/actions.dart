@@ -1,31 +1,10 @@
-import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/domain.dart';
+part of 'bloc.dart';
 
-class InitAccountAction extends Action {
-  const InitAccountAction(this.userId);
-
-  final String? userId;
-}
-
-class OnPremiumSignUp extends Action {
-  const OnPremiumSignUp(this.payload);
-
-  final AccountModel? payload;
-}
-
-class OnReadNotice extends Action {
-  const OnReadNotice(this.payload);
-
-  final AccountModel? payload;
-}
-
-class OnSendRating extends Action {
-  const OnSendRating(this.account, this.rating);
-
-  final AccountModel? account;
-  final int rating;
-}
-
-class OnSkipedPremium extends Action {
-  const OnSkipedPremium();
+@freezed
+class AccountAction with _$AccountAction, AppAction {
+  const factory AccountAction.init(String? userId) = InitAccountAction;
+  const factory AccountAction.premiumSignUp(AccountModel? payload) = OnPremiumSignUp;
+  const factory AccountAction.readNotice(AccountModel? payload) = OnReadNotice;
+  const factory AccountAction.sendRating(AccountModel? account, int rating) = OnSendRating;
+  const factory AccountAction.skippedPremium() = OnSkipedPremium;
 }

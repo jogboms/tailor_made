@@ -1,7 +1,12 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/rebloc.dart';
+
+part 'actions.dart';
+part 'bloc.freezed.dart';
+part 'state.dart';
 
 class SettingsBloc extends SimpleBloc<AppState> {
   SettingsBloc(this.settings);
@@ -16,8 +21,8 @@ class SettingsBloc extends SimpleBloc<AppState> {
           (WareContext<AppState> context) => settings
               .fetch()
               .handleError((dynamic _) => context.dispatcher(const OnErrorSettingsAction()))
-              .map(OnDataAction<SettingsModel?>.new)
-              .map((OnDataAction<SettingsModel?> action) => context.copyWith(action)),
+              .map(OnDataAction<SettingsModel>.new)
+              .map((OnDataAction<SettingsModel> action) => context.copyWith(action)),
         )
         .untilAction<OnDisposeAction>()
         .listen((WareContext<AppState> context) => context.dispatcher(context.action));

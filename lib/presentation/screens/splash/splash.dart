@@ -54,10 +54,10 @@ class SplashPage extends StatelessWidget {
                 ],
               ),
             ),
-            StreamBuilder<User>(
+            StreamBuilder<User?>(
               // TODO(Jogboms): move this out of here
               stream: Dependencies.di().accounts.onAuthStateChanged,
-              builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
                 if (snapshot.hasData && snapshot.data != null && snapshot.data?.uid != null) {
                   WidgetsBinding.instance.addPostFrameCallback(
                     (_) async {

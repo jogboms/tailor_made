@@ -1,12 +1,7 @@
-import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/domain.dart';
+part of 'bloc.dart';
 
-class OnLoginAction extends Action {
-  const OnLoginAction(this.user);
-
-  final User? user;
-}
-
-class OnLogoutAction extends Action {
-  const OnLogoutAction();
+@freezed
+class AuthAction with _$AuthAction, AppAction {
+  const factory AuthAction.login(User? user) = OnLoginAction;
+  const factory AuthAction.logout() = OnLogoutAction;
 }

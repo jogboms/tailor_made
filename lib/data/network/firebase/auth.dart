@@ -1,10 +1,8 @@
-import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:tailor_made/core.dart';
 
+import 'exception.dart';
 import 'models.dart';
 
 class Auth {
@@ -13,11 +11,11 @@ class Auth {
   final FirebaseAuth _auth;
   final GoogleSignIn _googleSignIn;
 
-  FireUser get getUser => _mapFirebaseUserToUser(_auth.currentUser);
+  FireUser? get getUser => _mapFirebaseUserToUser(_auth.currentUser);
 
-  Stream<FireUser> get onAuthStateChanged => _auth.authStateChanges().map(_mapFirebaseUserToUser);
+  Stream<FireUser?> get onAuthStateChanged => _auth.authStateChanges().map(_mapFirebaseUserToUser);
 
-  Future<void> signInWithGoogle() async {
+  Future<String> signInWithGoogle() async {
     try {
       GoogleSignInAccount? currentUser = _googleSignIn.currentUser;
       currentUser ??= await _googleSignIn.signInSilently();
@@ -29,24 +27,61 @@ class Auth {
 
       final GoogleSignInAuthentication auth = await currentUser.authentication;
 
-      final AuthCredential credential = GoogleAuthProvider.credential(
+      final OAuthCredential credential = GoogleAuthProvider.credential(
         accessToken: auth.accessToken,
         idToken: auth.idToken,
       );
-      await _auth.signInWithCredential(credential);
-    } on PlatformException catch (e) {
-      if (e.code == GoogleSignIn.kSignInCanceledError) {
-        return;
+      final UserCredential response = await _auth.signInWithCredential(credential);
+
+      return response.user!.uid;
+    } on FirebaseAuthException catch (e, stackTrace) {
+      switch (e.code) {
+        case 'invalid-email':
+          Error.throwWithStackTrace(
+            AppFirebaseAuthException(AppFirebaseAuthExceptionType.invalidEmail, email: e.email),
+            stackTrace,
+          );
+        case 'user-disabled':
+          Error.throwWithStackTrace(
+            AppFirebaseAuthException(AppFirebaseAuthExceptionType.userDisabled, email: e.email),
+            stackTrace,
+          );
+        case 'user-not-found':
+          Error.throwWithStackTrace(
+            AppFirebaseAuthException(AppFirebaseAuthExceptionType.userNotFound, email: e.email),
+            stackTrace,
+          );
+        case 'too-many-requests':
+          Error.throwWithStackTrace(
+            AppFirebaseAuthException(AppFirebaseAuthExceptionType.tooManyRequests, email: e.email),
+            stackTrace,
+          );
       }
-      if (e.message?.contains('administrator') ?? false) {
-        throw Exception('It seems this account has been disabled. Contact an Admin.');
+      Error.throwWithStackTrace(Exception(e.toString()), stackTrace);
+    } on PlatformException catch (e, stackTrace) {
+      switch (e.code) {
+        case GoogleSignIn.kSignInCanceledError:
+          Error.throwWithStackTrace(
+            const AppFirebaseAuthException(AppFirebaseAuthExceptionType.canceled, email: null),
+            stackTrace,
+          );
+        case GoogleSignIn.kSignInFailedError:
+          Error.throwWithStackTrace(
+            const AppFirebaseAuthException(AppFirebaseAuthExceptionType.failed, email: null),
+            stackTrace,
+          );
+        case GoogleSignIn.kNetworkError:
+          Error.throwWithStackTrace(
+            const AppFirebaseAuthException(AppFirebaseAuthExceptionType.networkUnavailable, email: null),
+            stackTrace,
+          );
+        case 'popup_blocked_by_browser':
+          Error.throwWithStackTrace(
+            const AppFirebaseAuthException(AppFirebaseAuthExceptionType.popupBlockedByBrowser, email: null),
+            stackTrace,
+          );
       }
-      if (_containsAny(e.message, <String>['NETWORK_ERROR', 'network'])) {
-        throw const NoInternetException();
-      }
-      throw Exception('Sorry, We could not connect. Try again.');
-    } catch (e) {
-      rethrow;
+      Error.throwWithStackTrace(Exception(e.toString()), stackTrace);
     }
   }
 
@@ -55,11 +90,10 @@ class Auth {
     await _googleSignIn.signOut();
   }
 
-  FireUser _mapFirebaseUserToUser(User? user) {
-    assert(user != null);
+  FireUser? _mapFirebaseUserToUser(User? user) {
+    if (user == null) {
+      return null;
+    }
     return FireUser(user);
   }
 }
-
-bool _containsAny(String? value, List<String> find) =>
-    find.fold(false, (bool acc, String cur) => value?.contains(cur) ?? false);

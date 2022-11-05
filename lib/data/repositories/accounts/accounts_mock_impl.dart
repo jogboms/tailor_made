@@ -14,7 +14,7 @@ class AccountsMockImpl extends Accounts {
   }
 
   @override
-  Stream<User> get onAuthStateChanged async* {
+  Stream<User?> get onAuthStateChanged async* {
     yield const MockUser();
   }
 
@@ -52,7 +52,7 @@ class AccountsMockImpl extends Accounts {
       hasPremiumEnabled: true,
       hasReadNotice: false,
       hasSendRating: true,
-      photoURL: 'https://gravatar.com/jeremiahogbomo@gmail.com',
+      photoURL: 'https://secure.gravatar.com/avatar/96b338e14ff9d18b1b2d6e5dc279a710',
       storeName: 'Jogboms',
     );
   }

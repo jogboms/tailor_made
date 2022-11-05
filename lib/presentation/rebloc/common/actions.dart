@@ -1,19 +1,16 @@
-import 'package:rebloc/rebloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:tailor_made/presentation/rebloc.dart';
 
-class OnInitAction extends Action {
-  const OnInitAction();
+part 'actions.freezed.dart';
+
+@freezed
+class CommonAction with _$CommonAction, AppAction {
+  const factory CommonAction.init() = OnInitAction;
+  const factory CommonAction.dispose() = OnDisposeAction;
+  const factory CommonAction.noop() = VoidAction;
 }
 
-class OnDisposeAction extends Action {
-  const OnDisposeAction();
-}
-
-class VoidAction extends Action {
-  const VoidAction();
-}
-
-class OnDataAction<T> extends Action {
-  const OnDataAction(this.payload) : assert(payload != null);
-
-  final T payload;
+@freezed
+class CommonActionData<T> with _$CommonActionData<T>, AppAction {
+  const factory CommonActionData.data(T payload) = OnDataAction<T>;
 }
