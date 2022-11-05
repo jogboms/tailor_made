@@ -1,0 +1,49 @@
+import 'package:rebloc/rebloc.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:tailor_made/domain.dart';
+import 'package:tailor_made/presentation/rebloc.dart';
+
+class SettingsBloc extends SimpleBloc<AppState> {
+  SettingsBloc(this.settings);
+
+  final Settings settings;
+
+  @override
+  Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
+    input
+        .whereAction<InitSettingsAction>()
+        .switchMap(
+          (WareContext<AppState> context) => settings
+              .fetch()
+              .handleError((dynamic _) => context.dispatcher(const OnErrorSettingsAction()))
+              .map(OnDataAction<SettingsModel?>.new)
+              .map((OnDataAction<SettingsModel?> action) => context.copyWith(action)),
+        )
+        .untilAction<OnDisposeAction>()
+        .listen((WareContext<AppState> context) => context.dispatcher(context.action));
+
+    return input;
+  }
+
+  @override
+  AppState reducer(AppState state, Action action) {
+    final SettingsState settings = state.settings;
+
+    if (action is OnDataAction<SettingsModel>) {
+      return state.copyWith(
+        settings: settings.copyWith(
+          settings: action.payload,
+          status: StateStatus.success,
+        ),
+      );
+    }
+
+    if (action is OnErrorSettingsAction) {
+      return state.copyWith(
+        settings: settings.copyWith(status: StateStatus.failure),
+      );
+    }
+
+    return state;
+  }
+}

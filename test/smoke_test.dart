@@ -2,12 +2,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:tailor_made/bootstrap.dart';
+import 'package:tailor_made/core.dart';
 import 'package:tailor_made/dependencies.dart';
-import 'package:tailor_made/environments/environment.dart';
-import 'package:tailor_made/rebloc/store_factory.dart';
-import 'package:tailor_made/repository/mock/main.dart';
-import 'package:tailor_made/screens/splash/splash.dart';
-import 'package:tailor_made/widgets/app.dart';
+import 'package:tailor_made/main_mock.dart';
+import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/screens/splash/splash.dart';
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
@@ -26,7 +25,7 @@ void main() {
       const Dependencies dependencies = Dependencies();
       await tester.pumpWidget(
         App(
-          bootstrap: await bootstrap(dependencies, await repositoryFactory(), Environment.mock),
+          bootstrap: await bootstrap(dependencies, MockRepository(), Environment.mock),
           store: storeFactory(dependencies, true),
           navigatorObservers: <NavigatorObserver>[mockObserver],
         ),

@@ -50,5 +50,6 @@ app.*.map.json
 /coverage
 
 *.g.dart
+*.freezed.dart
 
 .fvm/flutter_sdk

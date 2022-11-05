@@ -22,6 +22,7 @@ analyzer:
     unused_label: error
     unused_result: error
     unused_shown_name: error
+    invalid_annotation_target: ignore
 
 linter:
   rules:
