@@ -1,52 +1,39 @@
 import 'package:flutter/widgets.dart';
 import 'package:injector/injector.dart';
-import 'package:tailor_made/coordinator/contacts_coordinator.dart';
-import 'package:tailor_made/coordinator/gallery_coordinator.dart';
-import 'package:tailor_made/coordinator/jobs_coordinator.dart';
-import 'package:tailor_made/coordinator/measures_coordinator.dart';
-import 'package:tailor_made/coordinator/payments_coordinator.dart';
-import 'package:tailor_made/coordinator/shared_coordinator.dart';
-import 'package:tailor_made/coordinator/tasks_coordinator.dart';
-import 'package:tailor_made/repository/firebase/main.dart';
-import 'package:tailor_made/repository/main.dart';
-import 'package:tailor_made/services/accounts/main.dart';
-import 'package:tailor_made/services/contacts/main.dart';
-import 'package:tailor_made/services/gallery/main.dart';
-import 'package:tailor_made/services/jobs/main.dart';
-import 'package:tailor_made/services/measures/main.dart';
-import 'package:tailor_made/services/payments/main.dart';
-import 'package:tailor_made/services/session.dart';
-import 'package:tailor_made/services/settings/main.dart';
-import 'package:tailor_made/services/stats/main.dart';
+
+import 'core.dart';
+import 'data.dart';
+import 'domain.dart';
+import 'presentation.dart';
 
 class Dependencies {
   const Dependencies();
 
-  void initialize(Session session, GlobalKey<NavigatorState> navigatorKey, Repository repository) {
+  void initialize(Environment env, GlobalKey<NavigatorState> navigatorKey, Repository repository) {
     Injector.appInstance
       ..registerSingleton<Dependencies>(() => this)
       ..registerSingleton<Repository>(() => repository)
-      ..registerSingleton<Session>(() => session)
+      ..registerSingleton<Environment>(() => env)
       ..registerSingleton<Accounts>(
-        () => session.isMock ? AccountsMockImpl() : AccountsImpl(repository as FirebaseRepository),
+        () => env.isMock ? AccountsMockImpl() : AccountsImpl(repository as FirebaseRepository),
       )
       ..registerSingleton<Contacts>(
-        () => session.isMock ? ContactsMockImpl() : ContactsImpl(repository as FirebaseRepository),
+        () => env.isMock ? ContactsMockImpl() : ContactsImpl(repository as FirebaseRepository),
       )
-      ..registerSingleton<Jobs>(() => session.isMock ? JobsMockImpl() : JobsImpl(repository as FirebaseRepository))
+      ..registerSingleton<Jobs>(() => env.isMock ? JobsMockImpl() : JobsImpl(repository as FirebaseRepository))
       ..registerSingleton<Gallery>(
-        () => session.isMock ? GalleryMockImpl() : GalleryImpl(repository as FirebaseRepository),
+        () => env.isMock ? GalleryMockImpl() : GalleryImpl(repository as FirebaseRepository),
       )
       ..registerSingleton<Settings>(
-        () => session.isMock ? SettingsMockImpl() : SettingsImpl(repository as FirebaseRepository),
+        () => env.isMock ? SettingsMockImpl() : SettingsImpl(repository as FirebaseRepository),
       )
       ..registerSingleton<Payments>(
-        () => session.isMock ? PaymentsMockImpl() : PaymentsImpl(repository as FirebaseRepository),
+        () => env.isMock ? PaymentsMockImpl() : PaymentsImpl(repository as FirebaseRepository),
       )
       ..registerSingleton<Measures>(
-        () => session.isMock ? MeasuresMockImpl() : MeasuresImpl(repository as FirebaseRepository),
+        () => env.isMock ? MeasuresMockImpl() : MeasuresImpl(repository as FirebaseRepository),
       )
-      ..registerSingleton<Stats>(() => session.isMock ? StatsMockImpl() : StatsImpl(repository as FirebaseRepository))
+      ..registerSingleton<Stats>(() => env.isMock ? StatsMockImpl() : StatsImpl(repository as FirebaseRepository))
       ..registerSingleton<ContactsCoordinator>(() => ContactsCoordinator(navigatorKey))
       ..registerSingleton<GalleryCoordinator>(() => GalleryCoordinator(navigatorKey))
       ..registerSingleton<SharedCoordinator>(() => SharedCoordinator(navigatorKey))
@@ -65,7 +52,7 @@ class Dependencies {
 
   Repository get repository => Injector.appInstance.get<Repository>();
 
-  Session get session => Injector.appInstance.get<Session>();
+  Environment get environment => Injector.appInstance.get<Environment>();
 
   Accounts get accounts => Injector.appInstance.get<Accounts>();
 

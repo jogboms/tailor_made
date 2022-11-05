@@ -1,4 +1,6 @@
-import 'package:tailor_made/main.dart' as def;
-import 'package:tailor_made/repository/mock/main.dart';
+import 'domain.dart';
+import 'main.dart' as def;
 
-void main(List<String> args) => def.main(args, repositoryFactory, delay: 2);
+void main(List<String> args) => def.main(args, () async => MockRepository(), delay: 2);
+
+class MockRepository extends Repository {}

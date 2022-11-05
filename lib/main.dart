@@ -1,10 +1,11 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:tailor_made/bootstrap.dart';
-import 'package:tailor_made/dependencies.dart';
-import 'package:tailor_made/environments/environment.dart';
-import 'package:tailor_made/rebloc/store_factory.dart';
-import 'package:tailor_made/repository/main.dart';
-import 'package:tailor_made/widgets/app.dart';
+
+import 'bootstrap.dart';
+import 'core.dart';
+import 'dependencies.dart';
+import 'domain.dart';
+import 'presentation.dart';
 
 void main(
   List<String> args,
@@ -14,6 +15,9 @@ void main(
 }) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Future<dynamic>.delayed(Duration(seconds: delay));
+
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+  await SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.portraitUp]);
 
   const Dependencies dependencies = Dependencies();
   runApp(
