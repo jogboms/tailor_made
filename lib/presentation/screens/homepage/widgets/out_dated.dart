@@ -19,7 +19,7 @@ class OutDatedPage extends StatelessWidget {
           const SizedBox(height: 48.0),
           Text(
             'OUT OF DATE',
-            style: textTheme.copyWith(color: Colors.black87, fontWeight: AppStyle.bold),
+            style: textTheme.copyWith(color: Colors.black87, fontWeight: AppFontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16.0),

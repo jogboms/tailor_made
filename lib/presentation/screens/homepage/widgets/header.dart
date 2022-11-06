@@ -21,7 +21,7 @@ class HeaderWidget extends StatelessWidget {
           Text('Hello', style: ThemeProvider.of(context)!.display4Light.copyWith(letterSpacing: 2.5)),
           Text(
             account!.storeName.split(' ').first,
-            style: const TextStyle(fontSize: 52.0, fontWeight: AppStyle.regular, height: 1.15),
+            style: const TextStyle(fontSize: 52.0, fontWeight: AppFontWeight.regular, height: 1.15),
             maxLines: 1,
             overflow: TextOverflow.fade,
             softWrap: false,

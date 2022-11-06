@@ -41,12 +41,12 @@ class PaymentGridItem extends StatelessWidget {
                       children: <TextSpan>[
                         TextSpan(
                           text: date.day.toString(),
-                          style: theme.subhead3.copyWith(fontWeight: AppStyle.medium, color: Colors.white),
+                          style: theme.subhead3.copyWith(fontWeight: AppFontWeight.medium, color: Colors.white),
                         ),
                         const TextSpan(text: '\n'),
                         TextSpan(
                           text: '${AppStrings.monthsShort[date.month - 1].toUpperCase()}, ${date.year}',
-                          style: theme.xxsmall.copyWith(fontWeight: AppStyle.medium, color: Colors.white),
+                          style: theme.xxsmall.copyWith(fontWeight: AppFontWeight.medium, color: Colors.white),
                         ),
                       ],
                     ),

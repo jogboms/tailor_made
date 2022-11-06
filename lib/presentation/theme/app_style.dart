@@ -39,32 +39,37 @@ class AppStyle extends TextStyle {
           inherit: false,
           color: color ?? kTextBaseColor,
           fontFamily: AppFonts.base,
-          fontWeight: fontWeight ?? AppStyle.regular,
+          fontWeight: fontWeight ?? AppFontWeight.regular,
           // wordSpacing: -2.5,
           // letterSpacing: -0.5,
           textBaseline: TextBaseline.alphabetic,
         );
+}
 
-  static const FontWeight light = FontWeight.w200;
+class AppFontWeight {
+  AppFontWeight._();
+
+  static const FontWeight thin = FontWeight.w100;
+  static const FontWeight light = FontWeight.w300;
   static const FontWeight regular = FontWeight.w400;
-  static const FontWeight medium = FontWeight.w600;
-  static const FontWeight semibold = FontWeight.w700;
-  static const FontWeight bold = FontWeight.w900;
+  static const FontWeight medium = FontWeight.w500;
+  static const FontWeight semibold = FontWeight.w600;
+  static const FontWeight bold = FontWeight.w700;
 }
 
 TextStyle appFontColor(Color color) => AppStyle.font(color: color);
 
 TextStyle appFontLight(double fontSize, [Color? color]) =>
-    AppStyle.font(fontSize: fontSize, fontWeight: AppStyle.light, color: color ?? kTextBaseColor);
+    AppStyle.font(fontSize: fontSize, fontWeight: AppFontWeight.light, color: color ?? kTextBaseColor);
 
 TextStyle appFontRegular(double fontSize, [Color? color]) =>
-    AppStyle.font(fontSize: fontSize, fontWeight: AppStyle.regular, color: color ?? kTextBaseColor);
+    AppStyle.font(fontSize: fontSize, fontWeight: AppFontWeight.regular, color: color ?? kTextBaseColor);
 
 TextStyle appFontMedium(double fontSize, [Color? color]) =>
-    AppStyle.font(fontSize: fontSize, fontWeight: AppStyle.medium, color: color ?? kTextBaseColor);
+    AppStyle.font(fontSize: fontSize, fontWeight: AppFontWeight.medium, color: color ?? kTextBaseColor);
 
 TextStyle appFontSemi(double fontSize, [Color? color]) =>
-    AppStyle.font(fontSize: fontSize, fontWeight: AppStyle.semibold, color: color ?? kTextBaseColor);
+    AppStyle.font(fontSize: fontSize, fontWeight: AppFontWeight.semibold, color: color ?? kTextBaseColor);
 
 TextStyle appFontBold(double fontSize, [Color? color]) =>
-    AppStyle.font(fontSize: fontSize, fontWeight: AppStyle.bold, color: color ?? kTextBaseColor);
+    AppStyle.font(fontSize: fontSize, fontWeight: AppFontWeight.bold, color: color ?? kTextBaseColor);
