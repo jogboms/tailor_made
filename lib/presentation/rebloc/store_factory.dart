@@ -1,4 +1,5 @@
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/core.dart';
 import 'package:tailor_made/dependencies.dart';
 
 import 'accounts/bloc.dart';
@@ -12,19 +13,19 @@ import 'measures/bloc.dart';
 import 'settings/bloc.dart';
 import 'stats/bloc.dart';
 
-Store<AppState> storeFactory(Dependencies dependencies, bool isTesting) {
+Store<AppState> storeFactory(Dependencies dependencies) {
   return Store<AppState>(
     initialState: AppState.initialState,
     blocs: <Bloc<AppState>>[
       InitializeBloc(),
-      AuthBloc(dependencies.accounts),
-      AccountBloc(dependencies.accounts),
-      ContactsBloc(dependencies.contacts),
-      MeasuresBloc(dependencies.measures),
-      SettingsBloc(dependencies.settings),
-      StatsBloc(dependencies.stats),
-      JobsBloc(dependencies.jobs),
-      LoggerBloc(isTesting),
+      AuthBloc(dependencies.get()),
+      AccountBloc(dependencies.get()),
+      ContactsBloc(dependencies.get()),
+      MeasuresBloc(dependencies.get()),
+      SettingsBloc(dependencies.get()),
+      StatsBloc(dependencies.get()),
+      JobsBloc(dependencies.get()),
+      LoggerBloc(dependencies.get<Environment>().isTesting),
     ],
   );
 }

@@ -2,9 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/utils.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+import 'package:tailor_made/presentation.dart';
 
 class ContactsListItem extends StatelessWidget {
   const ContactsListItem({super.key, this.contact, this.onTapContact, this.showActions = true});
@@ -22,7 +20,7 @@ class ContactsListItem extends StatelessWidget {
     return ListTile(
       dense: true,
       contentPadding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-      onTap: onTapContact ?? () => Dependencies.di().contactsCoordinator.toContact(contact),
+      onTap: onTapContact ?? () => Dependencies.di().get<ContactsCoordinator>().toContact(contact),
       leading: _Avatar(contact: contact),
       title: Text(
         contact!.fullname,

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/utils.dart';
-import 'package:tailor_made/presentation/utils/app_money.dart';
+import 'package:tailor_made/presentation.dart';
 
 import 'helpers.dart';
 
@@ -27,7 +25,7 @@ class MidRowWidget extends StatelessWidget {
                 icon: Icons.attach_money,
                 title: 'Payments',
                 subTitle: '${AppMoney(stats!.payments.total).formatted} Total',
-                onPressed: () => Dependencies.di().paymentsCoordinator.toPayments(userId),
+                onPressed: () => Dependencies.di().get<PaymentsCoordinator>().toPayments(userId),
               ),
             ),
           ),
@@ -38,7 +36,7 @@ class MidRowWidget extends StatelessWidget {
                 icon: Icons.image,
                 title: 'Gallery',
                 subTitle: '${stats!.gallery.total} Photos',
-                onPressed: () => Dependencies.di().galleryCoordinator.toGallery(userId),
+                onPressed: () => Dependencies.di().get<GalleryCoordinator>().toGallery(userId),
               ),
             ),
           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/theme.dart';
+import 'package:tailor_made/presentation.dart';
 
 import 'helpers.dart';
 
@@ -25,7 +25,7 @@ class TopRowWidget extends StatelessWidget {
                 color: Colors.orangeAccent,
                 title: 'Contacts',
                 subTitle: '${stats!.contacts.total} Contacts',
-                onPressed: () => Dependencies.di().contactsCoordinator.toContacts(),
+                onPressed: () => Dependencies.di().get<ContactsCoordinator>().toContacts(),
               ),
             ),
           ),
@@ -36,7 +36,7 @@ class TopRowWidget extends StatelessWidget {
                 color: Colors.greenAccent.shade400,
                 title: 'Jobs',
                 subTitle: '${stats!.jobs.total} Total',
-                onPressed: () => Dependencies.di().jobsCoordinator.toJobs(),
+                onPressed: () => Dependencies.di().get<JobsCoordinator>().toJobs(),
               ),
             ),
           ),

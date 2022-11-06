@@ -43,7 +43,7 @@ class GalleryPage extends StatelessWidget {
               if (images == null) {
                 return StreamBuilder<List<ImageModel?>>(
                   // TODO(Jogboms): move this out of here
-                  stream: Dependencies.di().gallery.fetchAll(userId),
+                  stream: Dependencies.di().get<Gallery>().fetchAll(userId),
                   builder: (_, AsyncSnapshot<List<ImageModel?>> snapshot) {
                     if (!snapshot.hasData) {
                       return const SliverFillRemaining(child: LoadingSpinner());

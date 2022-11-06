@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/bootstrap.dart';
+import 'package:tailor_made/core.dart';
+import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/presentation/utils/scale_util.dart';
 
 import 'constants/app_routes.dart';
@@ -11,9 +12,16 @@ import 'screens/splash/splash.dart';
 import 'theme/theme_provider.dart';
 
 class App extends StatefulWidget {
-  const App({super.key, required this.bootstrap, required this.store, this.navigatorObservers});
+  const App({
+    super.key,
+    required this.dependencies,
+    required this.navigatorKey,
+    required this.store,
+    this.navigatorObservers,
+  });
 
-  final BootstrapModel bootstrap;
+  final Dependencies dependencies;
+  final GlobalKey<NavigatorState> navigatorKey;
   final Store<AppState> store;
   final List<NavigatorObserver>? navigatorObservers;
 
@@ -22,6 +30,8 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  late final Environment environment = widget.dependencies.get();
+
   @override
   void dispose() {
     widget.store.dispatch(const OnDisposeAction());
@@ -42,7 +52,7 @@ class _AppState extends State<App> {
               debugShowCheckedModeBanner: false,
               title: AppStrings.appName,
               color: Colors.white,
-              navigatorKey: widget.bootstrap.navigatorKey,
+              navigatorKey: widget.navigatorKey,
               navigatorObservers: widget.navigatorObservers ?? <NavigatorObserver>[],
               theme: ThemeProvider.of(context)!.themeData(Theme.of(context)),
               builder: (_, Widget? child) => Builder(
@@ -52,7 +62,7 @@ class _AppState extends State<App> {
                 },
               ),
               onGenerateRoute: (RouteSettings settings) => _PageRoute<Object>(
-                builder: (_) => SplashPage(isColdStart: true, isMock: widget.bootstrap.isMock),
+                builder: (_) => SplashPage(isColdStart: true, isMock: environment.isMock),
                 settings: settings.copyWith(name: AppRoutes.start),
               ),
             ),

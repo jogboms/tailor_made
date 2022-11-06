@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/dependencies.dart';
-import 'package:tailor_made/presentation/constants.dart';
-import 'package:tailor_made/presentation/rebloc.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/utils.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+import 'package:tailor_made/presentation.dart';
 import 'package:version/version.dart';
 
 import 'widgets/access_denied.dart';
@@ -129,7 +125,7 @@ class _Body extends StatelessWidget {
           shouldSendRating: viewModel.shouldSendRating,
           onLogout: () async {
             dispatch(const OnLogoutAction());
-            Dependencies.di().sharedCoordinator.toSplash(isMock);
+            Dependencies.di().get<SharedCoordinator>().toSplash(isMock);
           },
         ),
       ],

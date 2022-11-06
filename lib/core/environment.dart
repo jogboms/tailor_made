@@ -30,10 +30,12 @@ enum Environment {
 
   bool get isDebugging {
     bool condition = false;
-    assert(() {
-      condition = true;
-      return condition;
-    }());
+    assert(
+      () {
+        condition = true;
+        return condition;
+      }(),
+    );
     return condition;
   }
 }

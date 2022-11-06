@@ -135,7 +135,8 @@ class ContactFormState extends State<ContactForm> {
       return;
     }
     // TODO(Jogboms): move this out of here
-    final Storage ref = Dependencies.di().contacts.createFile(File(imageFile.path), widget.userId)!;
+    final Contacts contacts = Dependencies.di().get();
+    final Storage ref = contacts.createFile(File(imageFile.path), widget.userId)!;
 
     setState(() => isLoading = true);
     try {

@@ -6,13 +6,17 @@ import '../../network/firebase.dart';
 import '../derive_map_from_data.dart';
 
 class ContactsImpl extends Contacts {
-  ContactsImpl(this.repository);
+  ContactsImpl({
+    required this.firebase,
+    required this.isDev,
+  });
 
-  final FirebaseRepository repository;
+  final Firebase firebase;
+  final bool isDev;
 
   @override
   Stream<List<ContactModel>> fetchAll(String? userId) {
-    return repository.db.contacts(userId).snapshots().map(
+    return firebase.db.contacts(userId).snapshots().map(
           (MapQuerySnapshot snapshot) => snapshot.docs
               .where((MapQueryDocumentSnapshot doc) => doc.data().containsKey('fullname'))
               .map(_deriveContactModel)
@@ -22,18 +26,18 @@ class ContactsImpl extends Contacts {
 
   @override
   FireStorage createFile(File file, String userId) {
-    return FireStorage(repository.storage.createContactImage(userId)..putFile(file));
+    return FireStorage(firebase.storage.createContactImage(userId)..putFile(file));
   }
 
   @override
   Future<FireReference> fetch(ContactModel contact, String userId) async {
-    final MapQuerySnapshot future = await repository.db.contacts(userId).get();
+    final MapQuerySnapshot future = await firebase.db.contacts(userId).get();
     return FireReference(future.docs.first.reference);
   }
 
   @override
   Stream<ContactModel> update(ContactModel contact, String userId) {
-    final MapDocumentReference ref = repository.db.contacts(userId).firestore.doc(contact.id);
+    final MapDocumentReference ref = firebase.db.contacts(userId).firestore.doc(contact.id);
     ref.set(contact.toJson()).then((_) {});
     return ref.snapshots().map(_deriveContactModel);
   }

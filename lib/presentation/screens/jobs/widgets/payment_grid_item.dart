@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/constants.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/utils.dart';
+import 'package:tailor_made/presentation.dart';
 
 const double _kGridWidth = 120.0;
 
@@ -27,7 +25,7 @@ class PaymentGridItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(5.0),
         color: kPrimaryColor,
         child: InkWell(
-          onTap: () => Dependencies.di().paymentsCoordinator.toPayment(payment),
+          onTap: () => Dependencies.di().get<PaymentsCoordinator>().toPayment(payment),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
             child: Column(

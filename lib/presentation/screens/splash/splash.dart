@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/core.dart';
 import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/constants.dart';
-import 'package:tailor_made/presentation/providers.dart';
-import 'package:tailor_made/presentation/rebloc.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/utils.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+import 'package:tailor_made/presentation.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key, required this.isColdStart, required this.isMock});
@@ -56,13 +52,13 @@ class SplashPage extends StatelessWidget {
             ),
             StreamBuilder<User?>(
               // TODO(Jogboms): move this out of here
-              stream: Dependencies.di().accounts.onAuthStateChanged,
+              stream: Dependencies.di().get<Accounts>().onAuthStateChanged,
               builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
                 if (snapshot.hasData && snapshot.data != null && snapshot.data?.uid != null) {
                   WidgetsBinding.instance.addPostFrameCallback(
                     (_) async {
                       StoreProvider.of<AppState>(context).dispatch(OnLoginAction(snapshot.data));
-                      Dependencies.di().sharedCoordinator.toHome(isMock);
+                      Dependencies.di().get<SharedCoordinator>().toHome(isMock);
                     },
                   );
 
@@ -169,20 +165,22 @@ class _ContentState extends State<_Content> {
   }
 
   void _onLogin() async {
+    final Accounts accounts = Dependencies.di().get();
     try {
       setState(() => isLoading = true);
       // TODO(Jogboms): move this out of here
-      await Dependencies.di().accounts.signInWithGoogle();
+      await accounts.signInWithGoogle();
     } catch (e) {
       // TODO(Jogboms): move this out of here
-      final String message = AppStrings.genericError(e, Dependencies.di().environment.isDev)!;
+      final Environment environment = Dependencies.di().get();
+      final String message = AppStrings.genericError(e, environment.isDev)!;
 
       if (message.isNotEmpty) {
         SnackBarProvider.of(context).show(message, duration: const Duration(milliseconds: 3500));
       }
 
       // TODO(Jogboms): move this out of here
-      await Dependencies.di().accounts.signOut();
+      await accounts.signOut();
 
       if (!mounted) {
         return;

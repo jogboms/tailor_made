@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/utils.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+import 'package:tailor_made/presentation.dart';
 import 'package:uuid/uuid.dart';
 
 import 'gallery_grid_item.dart';
@@ -73,7 +71,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
             AppClearButton(
               child: Text('SHOW ALL', style: theme.smallBtn),
               onPressed: () {
-                Dependencies.di().galleryCoordinator.toGallery(widget.userId, widget.job!.images.toList());
+                Dependencies.di().get<GalleryCoordinator>().toGallery(widget.userId, widget.job!.images.toList());
               },
             ),
             const SizedBox(width: 16.0),
@@ -105,7 +103,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
       return;
     }
     // TODO(Jogboms): move this out of here
-    final Storage ref = Dependencies.di().gallery.createFile(File(imageFile.path), widget.userId)!;
+    final Storage ref = Dependencies.di().get<Gallery>().createFile(File(imageFile.path), widget.userId)!;
 
     setState(() => _fireImages.add(_FireImage()..ref = ref));
     try {

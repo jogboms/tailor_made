@@ -3,11 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/constants.dart';
-import 'package:tailor_made/presentation/rebloc.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/utils.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+import 'package:tailor_made/presentation.dart';
 
 import '../widgets/notice_dialog.dart';
 import '../widgets/review_modal.dart';
@@ -124,7 +120,7 @@ class TopButtonBar extends StatelessWidget {
 
       switch (result) {
         case AccountOptions.storename:
-          final String? storeName = await Dependencies.di().sharedCoordinator.toStoreNameDialog(account);
+          final String? storeName = await Dependencies.di().get<SharedCoordinator>().toStoreNameDialog(account);
 
           if (storeName != null && storeName != account!.storeName) {
             await account!.reference?.updateData(<String, String>{'storeName': storeName});

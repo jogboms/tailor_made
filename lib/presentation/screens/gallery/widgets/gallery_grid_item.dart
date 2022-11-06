@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
+import 'package:tailor_made/presentation.dart';
 
 class GalleryGridItem extends StatelessWidget {
   const GalleryGridItem({super.key, this.image});
@@ -18,7 +19,7 @@ class GalleryGridItem extends StatelessWidget {
         ),
         child: Material(
           color: Colors.transparent,
-          child: InkWell(onTap: () => Dependencies.di().galleryCoordinator.toImage(image)),
+          child: InkWell(onTap: () => Dependencies.di().get<GalleryCoordinator>().toImage(image)),
         ),
       ),
     );

@@ -6,21 +6,12 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
-import 'package:tailor_made/domain.dart';
 
 import 'analytics.dart';
 import 'auth.dart';
 import 'cloud_db.dart';
 import 'cloud_storage.dart';
 import 'crashlytics.dart';
-
-class FirebaseRepository implements Repository {
-  const FirebaseRepository({required this.db, required this.auth, required this.storage});
-
-  final CloudDb db;
-  final Auth auth;
-  final CloudStorage storage;
-}
 
 class Firebase {
   const Firebase._({

@@ -19,8 +19,9 @@ class LoggerBloc extends SimpleBloc<AppState> {
 
   @override
   Future<Action> middleware(DispatchFunction dispatcher, AppState state, Action action) async {
-    debugPrint('[ReBLoC]: ${action.runtimeType}');
-
+    if (!isTesting) {
+      debugPrint('[ReBLoC]: ${action.runtimeType}');
+    }
     return action;
   }
 }
