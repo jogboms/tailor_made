@@ -3,7 +3,6 @@ import 'dart:async' show TimeoutException;
 import 'package:tailor_made/core.dart';
 
 class AppStrings {
-  static const String appName = 'TailorMade';
   static const String networkError =
       'Please check your network connection or contact your service provider if the problem persists.';
   static const String errorMessage = 'An error occurred. Please try again.';

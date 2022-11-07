@@ -20,6 +20,8 @@ dependencies:
   firebase_storage: ^11.0.4
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   flutter_masked_text2: ^0.9.1
   flutter_native_contact_picker: ^0.0.3
   flutter_native_image:

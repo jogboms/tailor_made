@@ -34,7 +34,7 @@ class SplashPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text(
-                    AppStrings.appName,
+                    context.l10n.appName,
                     style: theme.display2Semi.copyWith(color: kTextBaseColor.withOpacity(.6)),
                     textAlign: TextAlign.center,
                   ),

@@ -91,7 +91,7 @@ class _Body extends StatelessWidget {
         onSendMail: () {
           email(
             'jeremiahogbomo@gmail.com',
-            '${AppStrings.appName} - Unwarranted%20Account%20Suspension%20%23${viewModel.account!.uid}',
+            '${context.l10n.appName} - Unwarranted%20Account%20Suspension%20%23${viewModel.account!.uid}',
           );
         },
       );
