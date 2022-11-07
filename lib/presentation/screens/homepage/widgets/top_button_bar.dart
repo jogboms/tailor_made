@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -120,7 +119,7 @@ class TopButtonBar extends StatelessWidget {
 
       switch (result) {
         case AccountOptions.storename:
-          final String? storeName = await Dependencies.di().get<SharedCoordinator>().toStoreNameDialog(account);
+          final String? storeName = await context.registry.get<SharedCoordinator>().toStoreNameDialog(account);
 
           if (storeName != null && storeName != account!.storeName) {
             await account!.reference?.updateData(<String, String>{'storeName': storeName});

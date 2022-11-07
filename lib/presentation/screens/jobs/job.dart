@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -226,7 +225,7 @@ class _AvatarAppBar extends StatelessWidget {
       tag: contact!.createdAt.toString(),
       imageUrl: contact!.imageUrl,
       title: GestureDetector(
-        onTap: () => Dependencies.di().get<ContactsCoordinator>().toContact(contact),
+        onTap: () => context.registry.get<ContactsCoordinator>().toContact(contact),
         child: Text(
           contact!.fullname,
           maxLines: 1,
@@ -242,7 +241,7 @@ class _AvatarAppBar extends StatelessWidget {
       actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.content_cut),
-          onPressed: () => Dependencies.di().get<MeasuresCoordinator>().toMeasures(job!.measurements),
+          onPressed: () => context.registry.get<MeasuresCoordinator>().toMeasures(job!.measurements),
         ),
         IconButton(
           icon: Icon(Icons.check, color: job!.isComplete ? kPrimaryColor : kTextBaseColor),

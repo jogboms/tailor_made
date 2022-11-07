@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -42,7 +41,7 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMi
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.remove_red_eye, color: kTitleBaseColor),
-            onPressed: () => Dependencies.di().get<MeasuresCoordinator>().toMeasures(contact.measurements),
+            onPressed: () => context.registry.get<MeasuresCoordinator>().toMeasures(contact.measurements),
           )
         ],
       ),

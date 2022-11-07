@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -162,7 +161,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
   void _handleAddItem() async {
     if (_isOkForm()) {
       final MeasureModel? measure =
-          await Dependencies.di().get<MeasuresCoordinator>().toCreateMeasureItem(groupName, unitValue);
+          await context.registry.get<MeasuresCoordinator>().toCreateMeasureItem(groupName, unitValue);
 
       if (measure == null) {
         return;
@@ -182,7 +181,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
         final NavigatorState navigator = Navigator.of(context);
         dispatchAction(const ToggleMeasuresLoading());
         // TODO(Jogboms): move this out of here
-        await Dependencies.di().get<Measures>().create(measures, vm.userId, groupName: groupName, unitValue: unitValue);
+        await context.registry.get<Measures>().create(measures, vm.userId, groupName: groupName, unitValue: unitValue);
         closeLoadingSnackBar();
         navigator.pop();
       } catch (e) {

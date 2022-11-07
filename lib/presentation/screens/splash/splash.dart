@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/core.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -52,13 +51,13 @@ class SplashPage extends StatelessWidget {
             ),
             StreamBuilder<User?>(
               // TODO(Jogboms): move this out of here
-              stream: Dependencies.di().get<Accounts>().onAuthStateChanged,
+              stream: context.registry.get<Accounts>().onAuthStateChanged,
               builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
                 if (snapshot.hasData && snapshot.data != null && snapshot.data?.uid != null) {
                   WidgetsBinding.instance.addPostFrameCallback(
                     (_) async {
                       StoreProvider.of<AppState>(context).dispatch(OnLoginAction(snapshot.data));
-                      Dependencies.di().get<SharedCoordinator>().toHome(isMock);
+                      context.registry.get<SharedCoordinator>().toHome(isMock);
                     },
                   );
 
@@ -165,14 +164,14 @@ class _ContentState extends State<_Content> {
   }
 
   void _onLogin() async {
-    final Accounts accounts = Dependencies.di().get();
+    final Accounts accounts = context.registry.get();
     try {
       setState(() => isLoading = true);
       // TODO(Jogboms): move this out of here
       await accounts.signInWithGoogle();
     } catch (e) {
       // TODO(Jogboms): move this out of here
-      final Environment environment = Dependencies.di().get();
+      final Environment environment = context.registry.get();
       final String message = AppStrings.genericError(e, environment.isDev)!;
 
       if (message.isNotEmpty) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/presentation.dart';
 
 import 'widgets/contacts_filter_button.dart';
@@ -45,7 +44,7 @@ class _ContactsPageState extends State<ContactsPage> with DispatchProvider<AppSt
             ),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.person_add),
-              onPressed: () => Dependencies.di().get<ContactsCoordinator>().toCreateContact(vm.userId),
+              onPressed: () => context.registry.get<ContactsCoordinator>().toCreateContact(vm.userId),
             ),
           ),
           onWillPop: () async {

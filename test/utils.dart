@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:mocktail/mocktail.dart' as mt;
 import 'package:tailor_made/core.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/coordinator.dart';
+import 'package:tailor_made/presentation.dart';
 
 import 'mocks.dart';
 
@@ -31,12 +30,12 @@ class MockRepositories {
 
 final MockRepositories mockRepositories = MockRepositories();
 
-Dependencies createRegistry({
+Registry createRegistry({
   GlobalKey<NavigatorState>? navigatorKey,
   Environment environment = Environment.testing,
 }) {
   navigatorKey ??= GlobalKey<NavigatorState>();
-  return const Dependencies()
+  return Registry()
     ..set(mockRepositories.accounts)
     ..set(mockRepositories.contacts)
     ..set(mockRepositories.jobs)
@@ -52,6 +51,5 @@ Dependencies createRegistry({
     ..set(JobsCoordinator(navigatorKey))
     ..set(MeasuresCoordinator(navigatorKey))
     ..set(PaymentsCoordinator(navigatorKey))
-    ..set(TasksCoordinator(navigatorKey))
-    ..initialize();
+    ..set(TasksCoordinator(navigatorKey));
 }

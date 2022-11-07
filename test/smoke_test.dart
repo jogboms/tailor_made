@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:tailor_made/data.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:tailor_made/presentation/screens/splash/splash.dart';
@@ -21,7 +20,7 @@ void main() {
     });
 
     testWidgets('shows and navigates out of SplashPage', (WidgetTester tester) async {
-      final Dependencies dependencies = createRegistry(
+      final Registry registry = createRegistry(
         navigatorKey: navigatorKey,
       );
 
@@ -36,9 +35,9 @@ void main() {
 
       await tester.pumpWidget(
         App(
-          dependencies: dependencies,
+          registry: registry,
           navigatorKey: navigatorKey,
-          store: storeFactory(dependencies),
+          store: storeFactory(registry),
           navigatorObservers: <NavigatorObserver>[mockObserver],
         ),
       );

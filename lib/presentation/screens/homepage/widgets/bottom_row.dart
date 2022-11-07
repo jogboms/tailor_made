@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -29,7 +28,7 @@ class BottomRowWidget extends StatelessWidget {
                 icon: Icons.content_cut,
                 title: 'Measures',
                 subTitle: 'Custom',
-                onPressed: () => Dependencies.di().get<MeasuresCoordinator>().toManageMeasures(account!.uid),
+                onPressed: () => context.registry.get<MeasuresCoordinator>().toManageMeasures(account!.uid),
               ),
             ),
           ),
@@ -40,7 +39,7 @@ class BottomRowWidget extends StatelessWidget {
                 icon: Icons.event,
                 title: 'Tasks',
                 subTitle: '${stats!.jobs.pending} Pending',
-                onPressed: () => Dependencies.di().get<TasksCoordinator>().toTasks(),
+                onPressed: () => context.registry.get<TasksCoordinator>().toTasks(),
               ),
             ),
           ),

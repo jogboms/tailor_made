@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -52,12 +51,12 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               if (job != null)
                 IconButton(
                   icon: const Icon(Icons.work, color: Colors.white),
-                  onPressed: () => Dependencies.di().get<JobsCoordinator>().toJob(job),
+                  onPressed: () => context.registry.get<JobsCoordinator>().toJob(job),
                 ),
               if (contact != null)
                 IconButton(
                   icon: const Icon(Icons.person, color: Colors.white),
-                  onPressed: () => Dependencies.di().get<ContactsCoordinator>().toContact(contact),
+                  onPressed: () => context.registry.get<ContactsCoordinator>().toContact(contact),
                 ),
               if (account!.hasPremiumEnabled)
                 const IconButton(

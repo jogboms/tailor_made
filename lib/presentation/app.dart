@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/core.dart';
-import 'package:tailor_made/dependencies.dart';
-import 'package:tailor_made/presentation/utils/scale_util.dart';
 
-import 'constants/app_routes.dart';
-import 'constants/app_strings.dart';
-import 'rebloc/app_state.dart';
-import 'rebloc/common/actions.dart';
+import 'constants.dart';
+import 'rebloc.dart';
+import 'registry.dart';
 import 'screens/splash/splash.dart';
-import 'theme/theme_provider.dart';
+import 'theme.dart';
+import 'utils.dart';
 
 class App extends StatefulWidget {
   const App({
     super.key,
-    required this.dependencies,
+    required this.registry,
     required this.navigatorKey,
     required this.store,
     this.navigatorObservers,
   });
 
-  final Dependencies dependencies;
+  final Registry registry;
   final GlobalKey<NavigatorState> navigatorKey;
   final Store<AppState> store;
   final List<NavigatorObserver>? navigatorObservers;
@@ -30,7 +28,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  late final Environment environment = widget.dependencies.get();
+  late final Environment environment = widget.registry.get();
 
   @override
   void dispose() {
@@ -41,29 +39,32 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return ThemeProvider(
-      child: StoreProvider<AppState>(
-        store: widget.store,
-        child: FirstBuildDispatcher<AppState>(
-          // Initialize action
-          action: const OnInitAction(),
-          child: Builder(
-            builder: (BuildContext context) => MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: AppStrings.appName,
-              color: Colors.white,
-              navigatorKey: widget.navigatorKey,
-              navigatorObservers: widget.navigatorObservers ?? <NavigatorObserver>[],
-              theme: ThemeProvider.of(context)!.themeData(Theme.of(context)),
-              builder: (_, Widget? child) => Builder(
-                builder: (BuildContext context) {
-                  ScaleUtil.initialize(context: context, size: const Size(1080, 1920));
-                  return child!;
-                },
-              ),
-              onGenerateRoute: (RouteSettings settings) => _PageRoute<Object>(
-                builder: (_) => SplashPage(isColdStart: true, isMock: environment.isMock),
-                settings: settings.copyWith(name: AppRoutes.start),
+    return RegistryProvider(
+      registry: widget.registry,
+      child: ThemeProvider(
+        child: StoreProvider<AppState>(
+          store: widget.store,
+          child: FirstBuildDispatcher<AppState>(
+            // Initialize action
+            action: const OnInitAction(),
+            child: Builder(
+              builder: (BuildContext context) => MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: AppStrings.appName,
+                color: Colors.white,
+                navigatorKey: widget.navigatorKey,
+                navigatorObservers: widget.navigatorObservers ?? <NavigatorObserver>[],
+                theme: ThemeProvider.of(context)!.themeData(Theme.of(context)),
+                builder: (_, Widget? child) => Builder(
+                  builder: (BuildContext context) {
+                    ScaleUtil.initialize(context: context, size: const Size(1080, 1920));
+                    return child!;
+                  },
+                ),
+                onGenerateRoute: (RouteSettings settings) => _PageRoute<Object>(
+                  builder: (_) => SplashPage(isColdStart: true, isMock: environment.isMock),
+                  settings: settings.copyWith(name: AppRoutes.start),
+                ),
               ),
             ),
           ),

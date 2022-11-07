@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:version/version.dart';
 
@@ -125,7 +124,7 @@ class _Body extends StatelessWidget {
           shouldSendRating: viewModel.shouldSendRating,
           onLogout: () async {
             dispatch(const OnLogoutAction());
-            Dependencies.di().get<SharedCoordinator>().toSplash(isMock);
+            context.registry.get<SharedCoordinator>().toSplash(isMock);
           },
         ),
       ],

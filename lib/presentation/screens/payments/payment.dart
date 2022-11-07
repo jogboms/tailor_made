@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -29,11 +28,11 @@ class PaymentPage extends StatelessWidget {
             actions: <Widget>[
               IconButton(
                 icon: const Icon(Icons.work, color: kTitleBaseColor),
-                onPressed: () => Dependencies.di().get<JobsCoordinator>().toJob(vm.selectedJob),
+                onPressed: () => context.registry.get<JobsCoordinator>().toJob(vm.selectedJob),
               ),
               IconButton(
                 icon: const Icon(Icons.person, color: kTitleBaseColor),
-                onPressed: () => Dependencies.di().get<ContactsCoordinator>().toContact(vm.selectedContact),
+                onPressed: () => context.registry.get<ContactsCoordinator>().toContact(vm.selectedContact),
               ),
               if (vm.account!.hasPremiumEnabled)
                 const IconButton(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -25,7 +24,7 @@ class PaymentGridItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(5.0),
         color: kPrimaryColor,
         child: InkWell(
-          onTap: () => Dependencies.di().get<PaymentsCoordinator>().toPayment(payment),
+          onTap: () => context.registry.get<PaymentsCoordinator>().toPayment(payment),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
             child: Column(

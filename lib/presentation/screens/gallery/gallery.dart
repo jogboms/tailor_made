@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+import 'package:tailor_made/presentation.dart';
 
 import 'widgets/gallery_grid.dart';
 
@@ -43,7 +41,7 @@ class GalleryPage extends StatelessWidget {
               if (images == null) {
                 return StreamBuilder<List<ImageModel?>>(
                   // TODO(Jogboms): move this out of here
-                  stream: Dependencies.di().get<Gallery>().fetchAll(userId),
+                  stream: context.registry.get<Gallery>().fetchAll(userId),
                   builder: (_, AsyncSnapshot<List<ImageModel?>> snapshot) {
                     if (!snapshot.hasData) {
                       return const SliverFillRemaining(child: LoadingSpinner());

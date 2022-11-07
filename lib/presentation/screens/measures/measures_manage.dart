@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/presentation.dart';
 
 import 'widgets/measures_slide_block.dart';
@@ -42,7 +41,7 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> with SnackBarPr
         backgroundColor: kAccentColor,
         foregroundColor: Colors.white,
         label: const Text('Add Group'),
-        onPressed: () => Dependencies.di().get<MeasuresCoordinator>().toCreateMeasures(widget.userId),
+        onPressed: () => context.registry.get<MeasuresCoordinator>().toCreateMeasures(widget.userId),
       ),
     );
   }

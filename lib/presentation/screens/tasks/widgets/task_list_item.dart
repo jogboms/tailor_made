@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:timeago/timeago.dart' as time_ago;
@@ -42,7 +41,7 @@ class TaskListItem extends StatelessWidget {
           Text(time_ago.format(task.dueAt, allowFromNow: true)),
         ],
       ),
-      onTap: () => Dependencies.di().get<JobsCoordinator>().toJob(task),
+      onTap: () => context.registry.get<JobsCoordinator>().toJob(task),
     );
   }
 

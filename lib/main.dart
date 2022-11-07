@@ -7,7 +7,6 @@ import 'package:universal_io/io.dart' as io;
 
 import 'core.dart';
 import 'data.dart';
-import 'dependencies.dart';
 import 'domain.dart';
 import 'firebase_options.dev.dart' as dev;
 import 'firebase_options.prod.dart' as prod;
@@ -62,7 +61,7 @@ void main(List<String> args) async {
   );
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  final Dependencies dependencies = const Dependencies()
+  final Registry registry = Registry()
     ..set<Environment>(environment)
     ..set<Accounts>(repository.accounts)
     ..set<Contacts>(repository.contacts)
@@ -78,8 +77,7 @@ void main(List<String> args) async {
     ..set<JobsCoordinator>(JobsCoordinator(navigatorKey))
     ..set<MeasuresCoordinator>(MeasuresCoordinator(navigatorKey))
     ..set<PaymentsCoordinator>(PaymentsCoordinator(navigatorKey))
-    ..set<TasksCoordinator>(TasksCoordinator(navigatorKey))
-    ..initialize();
+    ..set<TasksCoordinator>(TasksCoordinator(navigatorKey));
 
   runApp(
     ErrorBoundary(
@@ -88,9 +86,9 @@ void main(List<String> args) async {
       onException: AppLog.e,
       onCrash: errorReporter.reportCrash,
       child: App(
-        dependencies: dependencies,
+        registry: registry,
         navigatorKey: navigatorKey,
-        store: storeFactory(dependencies),
+        store: storeFactory(registry),
         navigatorObservers: <NavigatorObserver>[navigationObserver],
       ),
     ),

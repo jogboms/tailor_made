@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -18,7 +17,7 @@ class JobListItem extends StatelessWidget {
 
     return Material(
       child: InkWell(
-        onTap: () => Dependencies.di().get<JobsCoordinator>().toJob(job),
+        onTap: () => context.registry.get<JobsCoordinator>().toJob(job),
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Row(

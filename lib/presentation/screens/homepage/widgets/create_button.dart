@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -82,10 +81,10 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
 
       switch (result) {
         case _CreateOptions.contacts:
-          Dependencies.di().get<ContactsCoordinator>().toCreateContact(widget.userId);
+          context.registry.get<ContactsCoordinator>().toCreateContact(widget.userId);
           break;
         case _CreateOptions.jobs:
-          Dependencies.di().get<JobsCoordinator>().toCreateJob(widget.userId, contacts);
+          context.registry.get<JobsCoordinator>().toCreateJob(widget.userId, contacts);
           break;
       }
     };

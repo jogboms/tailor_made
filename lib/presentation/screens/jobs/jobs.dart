@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/presentation.dart';
 
 import 'widgets/jobs_filter_button.dart';
@@ -33,7 +32,7 @@ class JobsPage extends StatelessWidget {
             ),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.library_add),
-              onPressed: () => Dependencies.di().get<JobsCoordinator>().toCreateJob(vm.userId, vm.contacts),
+              onPressed: () => context.registry.get<JobsCoordinator>().toCreateJob(vm.userId, vm.contacts),
             ),
           ),
           onWillPop: () async {
