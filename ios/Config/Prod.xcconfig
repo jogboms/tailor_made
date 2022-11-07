@@ -1,0 +1,3 @@
+#include "Defaults.xcconfig"
+
+GOOGLE_REVERSED_CLIENT_ID = com.googleusercontent.apps.411406804353-c9vnhao4j14ain2tltl5hf1qonndoeqr

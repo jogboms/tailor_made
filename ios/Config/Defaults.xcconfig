@@ -1,0 +1,10 @@
+#include "../Flutter/Generated.xcconfig"
+
+BUNDLE_NAME = Tailor Made
+BUNDLE_ID = io.github.jogboms.tailormade
+BUNDLE_ID_APPEND =
+PRODUCT_BUNDLE_IDENTIFIER = $(BUNDLE_ID)$(BUNDLE_ID_APPEND)
+
+VERSION_APPEND =
+
+GOOGLE_REVERSED_CLIENT_ID =

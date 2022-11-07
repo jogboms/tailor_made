@@ -1,5 +1,0 @@
-#include "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
-#include "Generated.xcconfig"
-
-APP_NAME = (Dev) Tailor Made
-APP_BUNDLE_ID = io.github.jogboms.tailormade.dev

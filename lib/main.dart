@@ -9,6 +9,8 @@ import 'core.dart';
 import 'data.dart';
 import 'dependencies.dart';
 import 'domain.dart';
+import 'firebase_options.dev.dart' as dev;
+import 'firebase_options.prod.dart' as prod;
 import 'presentation.dart';
 
 void main(List<String> args) async {
@@ -29,7 +31,7 @@ void main(List<String> args) async {
     case Environment.prod:
       final bool isDev = environment.isDev;
       final Firebase firebase = await Firebase.initialize(
-        options: null,
+        options: isDev ? dev.DefaultFirebaseOptions.currentPlatform : prod.DefaultFirebaseOptions.currentPlatform,
         isAnalyticsEnabled: environment.isProduction,
       );
       reporterClient = _ReporterClient(firebase.crashlytics);

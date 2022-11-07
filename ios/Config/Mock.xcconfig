@@ -1,0 +1,5 @@
+#include "Defaults.xcconfig"
+
+BUNDLE_NAME = Mock
+BUNDLE_ID_APPEND = .mock
+VERSION_APPEND = -mock
