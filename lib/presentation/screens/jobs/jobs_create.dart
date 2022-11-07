@@ -50,7 +50,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
 
     return Scaffold(
       key: scaffoldKey,
-      appBar: (contact != null
+      appBar: contact != null
           ? AvatarAppBar(
               tag: contact!.createdAt.toString(),
               imageUrl: contact!.imageUrl,
@@ -63,7 +63,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
                     ]
                   : null,
             )
-          : const CustomAppBar(title: Text(''))) as PreferredSizeWidget?,
+          : CustomAppBar.empty,
       body: Builder(
         builder: (BuildContext context) {
           if (contact == null) {

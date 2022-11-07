@@ -41,6 +41,7 @@ void main() {
           navigatorObservers: <NavigatorObserver>[mockObserver],
         ),
       );
+      await tester.pump();
 
       verify(() => mockObserver.didPush(any(), any()));
 
