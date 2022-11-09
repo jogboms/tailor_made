@@ -3,13 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/constants.dart';
-import 'package:tailor_made/presentation/providers.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/utils.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+import 'package:tailor_made/presentation.dart';
 
 class ContactForm extends StatefulWidget {
   const ContactForm({
@@ -135,7 +130,8 @@ class ContactFormState extends State<ContactForm> {
       return;
     }
     // TODO(Jogboms): move this out of here
-    final Storage ref = Dependencies.di().contacts.createFile(File(imageFile.path), widget.userId)!;
+    final Contacts contacts = context.registry.get();
+    final Storage ref = contacts.createFile(File(imageFile.path), widget.userId)!;
 
     setState(() => isLoading = true);
     try {

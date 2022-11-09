@@ -5,13 +5,17 @@ import 'package:tailor_made/domain.dart';
 import '../../network/firebase.dart';
 
 class StatsImpl extends Stats {
-  StatsImpl(this.repository);
+  StatsImpl({
+    required this.firebase,
+    required this.isDev,
+  });
 
-  final FirebaseRepository repository;
+  final Firebase firebase;
+  final bool isDev;
 
   @override
   Stream<StatsModel> fetch(String? userId) {
-    return repository.db
+    return firebase.db
         .stats(userId)
         .snapshots()
         .map((MapDocumentSnapshot snapshot) => StatsModel.fromJson(snapshot.data()!));

@@ -4,13 +4,17 @@ import 'package:tailor_made/domain.dart';
 import '../../network/firebase.dart';
 
 class SettingsImpl extends Settings {
-  const SettingsImpl(this.repository);
+  const SettingsImpl({
+    required this.firebase,
+    required this.isDev,
+  });
 
-  final FirebaseRepository repository;
+  final Firebase firebase;
+  final bool isDev;
 
   @override
   Stream<SettingsModel> fetch() {
-    return repository.db.settings.snapshots().map((MapDocumentSnapshot snapshot) {
+    return firebase.db.settings.snapshots().map((MapDocumentSnapshot snapshot) {
       final DynamicMap? data = snapshot.data();
       if (data == null) {
         throw const NoInternetException();

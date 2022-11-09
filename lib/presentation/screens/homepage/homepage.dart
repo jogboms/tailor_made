@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/dependencies.dart';
-import 'package:tailor_made/presentation/constants.dart';
-import 'package:tailor_made/presentation/rebloc.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/utils.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+import 'package:tailor_made/presentation.dart';
 import 'package:version/version.dart';
 
 import 'widgets/access_denied.dart';
@@ -96,7 +91,7 @@ class _Body extends StatelessWidget {
         onSendMail: () {
           email(
             'jeremiahogbomo@gmail.com',
-            '${AppStrings.appName} - Unwarranted%20Account%20Suspension%20%23${viewModel.account!.uid}',
+            '${context.l10n.appName} - Unwarranted%20Account%20Suspension%20%23${viewModel.account!.uid}',
           );
         },
       );
@@ -129,7 +124,7 @@ class _Body extends StatelessWidget {
           shouldSendRating: viewModel.shouldSendRating,
           onLogout: () async {
             dispatch(const OnLogoutAction());
-            Dependencies.di().sharedCoordinator.toSplash(isMock);
+            context.registry.get<SharedCoordinator>().toSplash(isMock);
           },
         ),
       ],

@@ -1,0 +1,15 @@
+{
+  "@@locale": "en",
+  "appName": "TailorMade",
+  "crashViewTitleMessage": "Oh :(",
+  "crashViewQuoteMessage": "\"Houston, we have a problem\"",
+  "crashViewQuoteAuthor": "R & D",
+  "crashViewBugMessage1": "You just found a bug, no need to panic, we have logged the issue and would provide a resolution as soon as possible",
+  "crashViewBugMessage2": "If there's more to it, you could also file a personal complaint with our customer service representative",
+  "successfulMessage": "Successful",
+  "genericErrorMessage": "An error occurred",
+  "failedSignInMessage": "Failed to sign in. Do try again",
+  "bannedUserMessage": "This account has been disabled by administration",
+  "tryAgainMessage": "Do try again after some time",
+  "popupBlockedByBrowserMessage": "The auto-login popup was blocked by your browser. Try the continue button"
+}

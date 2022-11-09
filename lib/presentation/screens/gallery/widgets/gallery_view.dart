@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/rebloc.dart';
-import 'package:tailor_made/presentation/utils.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+import 'package:tailor_made/presentation.dart';
 
 class GalleryView extends StatelessWidget {
   const GalleryView({super.key, this.image});
@@ -54,12 +51,12 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               if (job != null)
                 IconButton(
                   icon: const Icon(Icons.work, color: Colors.white),
-                  onPressed: () => Dependencies.di().jobsCoordinator.toJob(job),
+                  onPressed: () => context.registry.get<JobsCoordinator>().toJob(job),
                 ),
               if (contact != null)
                 IconButton(
                   icon: const Icon(Icons.person, color: Colors.white),
-                  onPressed: () => Dependencies.di().contactsCoordinator.toContact(contact),
+                  onPressed: () => context.registry.get<ContactsCoordinator>().toContact(contact),
                 ),
               if (account!.hasPremiumEnabled)
                 const IconButton(

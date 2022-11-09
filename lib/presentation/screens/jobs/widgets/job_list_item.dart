@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/constants.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/utils.dart';
-import 'package:tailor_made/presentation/utils/app_money.dart';
+import 'package:tailor_made/presentation.dart';
 
 class JobListItem extends StatelessWidget {
   const JobListItem({super.key, required this.job});
@@ -21,7 +17,7 @@ class JobListItem extends StatelessWidget {
 
     return Material(
       child: InkWell(
-        onTap: () => Dependencies.di().jobsCoordinator.toJob(job),
+        onTap: () => context.registry.get<JobsCoordinator>().toJob(job),
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Row(

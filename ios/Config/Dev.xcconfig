@@ -1,0 +1,7 @@
+#include "Defaults.xcconfig"
+
+BUNDLE_NAME = Dev
+BUNDLE_ID_APPEND = .dev
+VERSION_APPEND = -dev
+
+GOOGLE_REVERSED_CLIENT_ID = com.googleusercontent.apps.825955979349-llfp7aheo7il83p3ltltncfmi60bsbeg

@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/providers.dart';
-import 'package:tailor_made/presentation/utils.dart';
+import 'package:tailor_made/presentation.dart';
 
 import '../widgets/slide_down_item.dart';
 import 'measures_slide_block_item.dart';
@@ -78,7 +76,9 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
   }
 
   void _onTapEditBlock() {
-    Dependencies.di().measuresCoordinator.toCreateMeasures(widget.title, widget.measures.first.unit, widget.measures);
+    context.registry
+        .get<MeasuresCoordinator>()
+        .toCreateMeasures(widget.title, widget.measures.first.unit, widget.measures);
   }
 
   void _onTapDeleteBlock() async {
@@ -91,7 +91,7 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
     snackBar.loading();
     try {
       // TODO(Jogboms): move this out of here
-      await Dependencies.di().measures.delete(widget.measures, widget.userId);
+      await context.registry.get<Measures>().delete(widget.measures, widget.userId);
 
       snackBar.hide();
     } catch (e) {

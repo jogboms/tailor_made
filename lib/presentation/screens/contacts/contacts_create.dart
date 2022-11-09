@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/constants.dart';
-import 'package:tailor_made/presentation/providers.dart';
-import 'package:tailor_made/presentation/rebloc.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+import 'package:tailor_made/presentation.dart';
 
 import 'widgets/contact_form.dart';
 
@@ -81,6 +76,8 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
       return;
     }
 
+    final Contacts contacts = context.registry.get();
+    final ContactsCoordinator contactsCoordinator = context.registry.get();
     showLoadingSnackBar();
 
     try {
@@ -92,11 +89,11 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
       );
 
       // TODO(Jogboms): move this out of here
-      Dependencies.di().contacts.update(contact, widget.userId).listen((ContactModel snap) async {
+      contacts.update(contact, widget.userId).listen((ContactModel snap) async {
         closeLoadingSnackBar();
         showInSnackBar('Successfully Added');
 
-        Dependencies.di().contactsCoordinator.toContact(snap);
+        contactsCoordinator.toContact(snap);
       });
     } catch (e) {
       closeLoadingSnackBar();
@@ -106,7 +103,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> with SnackBarPr
 
   void _handleSelectMeasure(MeasuresViewModel vm) async {
     // TODO(Jogboms): Handle
-    // final contact = await Dependencies.di().contactsCoordinator.toContactMeasure(contact, vm.grouped);
+    // final contact = await context.registry.get<ContactsCoordinator>().toContactMeasure(contact, vm.grouped);
     //
     // setState(() {
     //   contact = contact.rebuild((b) => b..measurements = contact.measurements.toBuilder());

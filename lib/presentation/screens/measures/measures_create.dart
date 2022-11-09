@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/providers.dart';
-import 'package:tailor_made/presentation/rebloc.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/utils.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+import 'package:tailor_made/presentation.dart';
 
 class MeasuresCreate extends StatefulWidget {
   const MeasuresCreate({super.key, this.measures, this.groupName, this.unitValue});
@@ -166,7 +161,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
   void _handleAddItem() async {
     if (_isOkForm()) {
       final MeasureModel? measure =
-          await Dependencies.di().measuresCoordinator.toCreateMeasureItem(groupName, unitValue);
+          await context.registry.get<MeasuresCoordinator>().toCreateMeasureItem(groupName, unitValue);
 
       if (measure == null) {
         return;
@@ -186,7 +181,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
         final NavigatorState navigator = Navigator.of(context);
         dispatchAction(const ToggleMeasuresLoading());
         // TODO(Jogboms): move this out of here
-        await Dependencies.di().measures.create(measures, vm.userId, groupName: groupName, unitValue: unitValue);
+        await context.registry.get<Measures>().create(measures, vm.userId, groupName: groupName, unitValue: unitValue);
         closeLoadingSnackBar();
         navigator.pop();
       } catch (e) {

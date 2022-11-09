@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/providers.dart';
-import 'package:tailor_made/presentation/rebloc.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/utils.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+import 'package:tailor_made/presentation.dart';
 
 import 'widgets/avatar_app_bar.dart';
 import 'widgets/gallery_grids.dart';
@@ -230,7 +225,7 @@ class _AvatarAppBar extends StatelessWidget {
       tag: contact!.createdAt.toString(),
       imageUrl: contact!.imageUrl,
       title: GestureDetector(
-        onTap: () => Dependencies.di().contactsCoordinator.toContact(contact),
+        onTap: () => context.registry.get<ContactsCoordinator>().toContact(contact),
         child: Text(
           contact!.fullname,
           maxLines: 1,
@@ -246,7 +241,7 @@ class _AvatarAppBar extends StatelessWidget {
       actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.content_cut),
-          onPressed: () => Dependencies.di().measuresCoordinator.toMeasures(job!.measurements),
+          onPressed: () => context.registry.get<MeasuresCoordinator>().toMeasures(job!.measurements),
         ),
         IconButton(
           icon: Icon(Icons.check, color: job!.isComplete ? kPrimaryColor : kTextBaseColor),

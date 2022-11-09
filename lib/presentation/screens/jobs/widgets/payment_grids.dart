@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+import 'package:tailor_made/presentation.dart';
 import 'package:uuid/uuid.dart';
 
 import 'payment_grid_item.dart';
@@ -57,7 +55,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
             AppClearButton(
               child: Text('SHOW ALL', style: theme.smallBtn),
               onPressed: () {
-                Dependencies.di().paymentsCoordinator.toPayments(widget.userId, widget.job!.payments.toList());
+                context.registry.get<PaymentsCoordinator>().toPayments(widget.userId, widget.job!.payments.toList());
               },
             ),
             const SizedBox(width: 16.0),
@@ -81,7 +79,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
 
   void _onCreateNew() async {
     final Map<String, dynamic>? result =
-        await Dependencies.di().paymentsCoordinator.toCreatePayment(widget.job!.pendingPayment);
+        await context.registry.get<PaymentsCoordinator>().toCreatePayment(widget.job!.pendingPayment);
     if (result != null) {
       setState(() {
         _firePayments.add(_FirePayment());

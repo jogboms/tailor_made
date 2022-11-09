@@ -2,11 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/constants.dart';
-import 'package:tailor_made/presentation/providers.dart';
-import 'package:tailor_made/presentation/utils.dart';
+import 'package:tailor_made/presentation.dart';
 import 'package:uuid/uuid.dart';
 
 import 'jobs_create.dart';
@@ -43,7 +40,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> with SnackBarPr
       return;
     }
     // TODO(Jogboms): move this out of here
-    final Storage ref = Dependencies.di().jobs.createFile(File(imageFile.path), widget.userId)!;
+    final Storage ref = context.registry.get<Jobs>().createFile(File(imageFile.path), widget.userId)!;
 
     setState(() => fireImages.add(FireImage()..ref = ref));
     try {
@@ -68,7 +65,8 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> with SnackBarPr
   }
 
   void onSelectContact() async {
-    final ContactModel? selectedContact = await Dependencies.di().contactsCoordinator.toContactsList(widget.contacts);
+    final ContactModel? selectedContact =
+        await context.registry.get<ContactsCoordinator>().toContactsList(widget.contacts);
     if (selectedContact != null) {
       setState(() {
         contact = selectedContact;
@@ -104,9 +102,9 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> with SnackBarPr
 
       try {
         // TODO(Jogboms): move this out of here
-        Dependencies.di().jobs.update(job, widget.userId).listen((JobModel snap) {
+        context.registry.get<Jobs>().update(job, widget.userId).listen((JobModel snap) {
           closeLoadingSnackBar();
-          Dependencies.di().jobsCoordinator.toJob(snap);
+          context.registry.get<JobsCoordinator>().toJob(snap);
         });
       } catch (e) {
         closeLoadingSnackBar();

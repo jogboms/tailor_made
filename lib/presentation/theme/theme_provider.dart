@@ -12,21 +12,21 @@ class ThemeProvider extends InheritedWidget {
   TextStyle get xsmall => _text11Style;
   TextStyle get xsmallHint => xsmall.copyWith(color: Colors.grey);
   TextStyle get small => _text12Style;
-  TextStyle get smallMedium => small.copyWith(fontWeight: AppStyle.medium);
-  TextStyle get smallSemi => small.copyWith(fontWeight: AppStyle.semibold);
-  TextStyle get smallLight => small.copyWith(fontWeight: AppStyle.light);
+  TextStyle get smallMedium => small.copyWith(fontWeight: AppFontWeight.medium);
+  TextStyle get smallSemi => small.copyWith(fontWeight: AppFontWeight.semibold);
+  TextStyle get smallLight => small.copyWith(fontWeight: AppFontWeight.light);
   TextStyle get smallHint => small.copyWith(color: Colors.grey);
   TextStyle get smallBtn => smallMedium.copyWith(color: AppColors.accent);
   TextStyle get body1 => _text13Style;
   TextStyle get body2 => body1.copyWith(height: 1.5);
   TextStyle get body3 => _text14Style;
   TextStyle get body3Hint => body3.copyWith(color: Colors.grey);
-  TextStyle get body3Light => body3.copyWith(fontWeight: AppStyle.light);
+  TextStyle get body3Light => body3.copyWith(fontWeight: AppFontWeight.light);
   TextStyle get body3Medium => _text14MediumStyle;
   TextStyle get body3MediumHint => body3Medium.copyWith(color: Colors.grey);
-  TextStyle get bodyMedium => body1.copyWith(fontWeight: AppStyle.medium);
-  TextStyle get bodySemi => body1.copyWith(fontWeight: AppStyle.semibold);
-  TextStyle get bodyBold => body1.copyWith(fontWeight: AppStyle.bold);
+  TextStyle get bodyMedium => body1.copyWith(fontWeight: AppFontWeight.medium);
+  TextStyle get bodySemi => body1.copyWith(fontWeight: AppFontWeight.semibold);
+  TextStyle get bodyBold => body1.copyWith(fontWeight: AppFontWeight.bold);
   TextStyle get bodyHint => body1.copyWith(color: Colors.grey);
   TextStyle get button => body3Medium;
   TextStyle get title => _header18Style;
@@ -36,27 +36,27 @@ class ThemeProvider extends InheritedWidget {
   TextStyle get subhead1Light => _text15LightStyle;
   TextStyle get subhead2 => _text14Style;
   TextStyle get subhead3 => _text16Style;
-  TextStyle get subhead3Semi => _text16Style.copyWith(fontWeight: AppStyle.semibold);
-  TextStyle get subhead3Light => _text16Style.copyWith(fontWeight: AppStyle.light);
+  TextStyle get subhead3Semi => _text16Style.copyWith(fontWeight: AppFontWeight.semibold);
+  TextStyle get subhead3Light => _text16Style.copyWith(fontWeight: AppFontWeight.light);
   TextStyle get headline => _header20Style;
 
   TextStyle get appBarTitle => subhead1Bold.copyWith(letterSpacing: .35);
 
   TextStyle get display1 => _text20Style;
-  TextStyle get display1Light => display1.copyWith(fontWeight: AppStyle.light);
-  TextStyle get display1Semi => display1.copyWith(fontWeight: AppStyle.semibold);
+  TextStyle get display1Light => display1.copyWith(fontWeight: AppFontWeight.light);
+  TextStyle get display1Semi => display1.copyWith(fontWeight: AppFontWeight.semibold);
   TextStyle get display2 => _text24Style.copyWith(height: 1.05);
-  TextStyle get display2Semi => display2.copyWith(fontWeight: AppStyle.semibold);
-  TextStyle get display2Bold => display2.copyWith(fontWeight: AppStyle.bold);
+  TextStyle get display2Semi => display2.copyWith(fontWeight: AppFontWeight.semibold);
+  TextStyle get display2Bold => display2.copyWith(fontWeight: AppFontWeight.bold);
   TextStyle get display3 => _header28Style;
   TextStyle get display4 => _text32Style;
-  TextStyle get display4Light => display4.copyWith(fontWeight: AppStyle.light);
+  TextStyle get display4Light => display4.copyWith(fontWeight: AppFontWeight.light);
   TextStyle get display4Bold => _header32Style;
 
-  TextStyle get textfield => _text15MediumStyle.copyWith(fontWeight: AppStyle.semibold, color: AppColors.biroBlue);
+  TextStyle get textfield => _text15MediumStyle.copyWith(fontWeight: AppFontWeight.semibold, color: AppColors.biroBlue);
 
   TextStyle get textfieldLabel => body3.copyWith(
-        fontWeight: AppStyle.medium,
+        fontWeight: AppFontWeight.medium,
         height: 0.25,
         color: AppColors.lightGrey.withOpacity(.8),
       );
@@ -117,4 +117,8 @@ class ThemeProvider extends InheritedWidget {
 
   @override
   bool updateShouldNotify(ThemeProvider oldWidget) => false;
+}
+
+extension BuildContextThemeExtensions on BuildContext {
+  ThemeData get theme => Theme.of(this);
 }

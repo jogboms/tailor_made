@@ -7,13 +7,17 @@ import '../derive_list_from_data.dart';
 import '../derive_map_from_data.dart';
 
 class JobsImpl extends Jobs {
-  JobsImpl(this.repository);
+  JobsImpl({
+    required this.firebase,
+    required this.isDev,
+  });
 
-  final FirebaseRepository repository;
+  final Firebase firebase;
+  final bool isDev;
 
   @override
   Stream<List<JobModel>> fetchAll(String? userId) {
-    return repository.db
+    return firebase.db
         .jobs(userId)
         .snapshots()
         .map((MapQuerySnapshot snapshot) => snapshot.docs.map(_deriveJobModel).toList());
@@ -21,12 +25,12 @@ class JobsImpl extends Jobs {
 
   @override
   FireStorage createFile(File file, String userId) {
-    return FireStorage(repository.storage.createReferenceImage(userId)..putFile(file));
+    return FireStorage(firebase.storage.createReferenceImage(userId)..putFile(file));
   }
 
   @override
   Stream<JobModel> update(JobModel job, String userId) {
-    final MapDocumentReference ref = repository.db.jobs(userId).firestore.doc(job.id);
+    final MapDocumentReference ref = firebase.db.jobs(userId).firestore.doc(job.id);
     ref.set(job.toJson()).then((_) {});
     return ref.snapshots().map(_deriveJobModel);
   }

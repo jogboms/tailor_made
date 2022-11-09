@@ -3,18 +3,22 @@ import 'package:tailor_made/domain.dart';
 import '../../network/firebase.dart';
 
 class AccountsImpl extends Accounts {
-  AccountsImpl(this.repository);
+  AccountsImpl({
+    required this.firebase,
+    required this.isDev,
+  });
 
-  final FirebaseRepository repository;
-
-  @override
-  Future<void> signInWithGoogle() => repository.auth.signInWithGoogle();
-
-  @override
-  Stream<FireUser?> get onAuthStateChanged => repository.auth.onAuthStateChanged;
+  final Firebase firebase;
+  final bool isDev;
 
   @override
-  Future<void> signOut() => repository.auth.signOutWithGoogle();
+  Future<void> signInWithGoogle() => firebase.auth.signInWithGoogle();
+
+  @override
+  Stream<FireUser?> get onAuthStateChanged => firebase.auth.onAuthStateChanged;
+
+  @override
+  Future<void> signOut() => firebase.auth.signOutWithGoogle();
 
   @override
   Future<void> readNotice(AccountModel account) async => account.reference?.updateData(account.toJson());
@@ -25,11 +29,11 @@ class AccountsImpl extends Accounts {
   @override
   Future<void> signUp(AccountModel account) async {
     await account.reference?.updateData(account.toJson());
-    await repository.db.premium.doc(account.uid).set(account.toJson());
+    await firebase.db.premium.doc(account.uid).set(account.toJson());
   }
 
   @override
-  Stream<AccountModel> getAccount(String? userId) => repository.db.account(userId).snapshots().map(_deriveAccountModel);
+  Stream<AccountModel> getAccount(String? userId) => firebase.db.account(userId).snapshots().map(_deriveAccountModel);
 }
 
 AccountModel _deriveAccountModel(MapDocumentSnapshot snapshot) {

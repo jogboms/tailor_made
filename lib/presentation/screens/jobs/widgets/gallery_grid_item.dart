@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
+import 'package:tailor_made/presentation.dart';
 
 const double _kGridWidth = 70.0;
 
@@ -28,7 +28,7 @@ class GalleryGridItem extends StatelessWidget {
             image: NetworkImage(image.src),
             fit: BoxFit.cover,
             child: InkWell(
-              onTap: () => Dependencies.di().galleryCoordinator.toImage(image),
+              onTap: () => context.registry.get<GalleryCoordinator>().toImage(image),
               child: onTapDelete != null
                   ? Align(
                       alignment: Alignment.topRight,

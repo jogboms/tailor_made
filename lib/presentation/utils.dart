@@ -6,6 +6,7 @@ export 'utils/app_sliver_persistent_header_delegate.dart';
 export 'utils/app_sliver_separator_builder_delegate.dart';
 export 'utils/app_status_bar.dart';
 export 'utils/app_version_builder.dart';
+export 'utils/extensions.dart';
 export 'utils/image_utils.dart';
 export 'utils/input_validator.dart';
 export 'utils/route_transitions.dart';

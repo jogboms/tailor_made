@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tailor_made/dependencies.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+import 'package:tailor_made/presentation.dart';
 
 import 'widgets/payments_list.dart';
 
@@ -43,7 +41,7 @@ class PaymentsPage extends StatelessWidget {
               if (payments == null) {
                 return StreamBuilder<List<PaymentModel>>(
                   // TODO(Jogboms): move this out of here
-                  stream: Dependencies.di().payments.fetchAll(userId),
+                  stream: context.registry.get<Payments>().fetchAll(userId),
                   builder: (_, AsyncSnapshot<List<PaymentModel?>> snapshot) {
                     if (!snapshot.hasData) {
                       return const SliverFillRemaining(child: LoadingSpinner());

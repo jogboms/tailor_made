@@ -3,6 +3,8 @@ export 'widgets/app_back_button.dart';
 export 'widgets/app_circle_avatar.dart';
 export 'widgets/app_clear_button.dart';
 export 'widgets/app_close_button.dart';
+export 'widgets/app_crash_error_view.dart';
+export 'widgets/app_icon.dart';
 export 'widgets/custom_app_bar.dart';
 export 'widgets/dots.dart';
 export 'widgets/empty_result_view.dart';
