@@ -41,6 +41,7 @@ jobs:
       - run: flutter doctor
       - run: flutter pub get
       - run: flutter format --set-exit-if-changed -l 120 lib
+      - run: flutter packages pub run intl_utils:generate
       - run: flutter packages pub run build_runner build --delete-conflicting-outputs
       - run: flutter analyze lib
       - run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
@@ -48,6 +49,9 @@ jobs:
       - name: Clean-up lcov
         run: |
           dart pub global activate clean_coverage
+          clean_coverage clean --exclusions '**/generated/*' coverage/lcov.info
+          clean_coverage clean --exclusions '**/presentation/theme/*' coverage/lcov.info
+          clean_coverage clean --exclusions '**/presentation/constants/*' coverage/lcov.info
           clean_coverage clean --exclusions '**/*_mock_impl.dart' coverage/lcov.info
 
       - name: Upload coverage to codecov
