@@ -24,6 +24,11 @@ analyzer:
     strict-casts: true
     strict-raw-types: true
     strict-inference: true
+  enable-experiment:
+    - class-modifiers
+    - sealed-class
+    - patterns
+    - records
 
 linter:
   rules:

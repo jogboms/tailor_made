@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/presentation/utils.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
+import '../../../theme.dart';
+
 Future<String?> showEditDialog({
   required BuildContext context,
   required List<Widget> children,

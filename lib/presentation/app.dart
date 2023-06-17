@@ -9,6 +9,7 @@ import 'registry.dart';
 import 'screens/splash/splash.dart';
 import 'theme.dart';
 import 'utils.dart';
+import 'widgets.dart';
 
 class App extends StatefulWidget {
   const App({
@@ -63,7 +64,8 @@ class _AppState extends State<App> {
                 color: Colors.white,
                 navigatorKey: widget.navigatorKey,
                 navigatorObservers: widget.navigatorObservers ?? <NavigatorObserver>[],
-                theme: ThemeProvider.of(context)!.themeData(Theme.of(context)),
+                theme: themeBuilder(ThemeData.light()),
+                darkTheme: themeBuilder(ThemeData.dark()),
                 onGenerateTitle: (BuildContext context) => context.l10n.appName,
                 localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
                   L10n.delegate,
@@ -72,11 +74,14 @@ class _AppState extends State<App> {
                   GlobalCupertinoLocalizations.delegate,
                 ],
                 supportedLocales: L10n.supportedLocales,
-                builder: (_, Widget? child) => Builder(
-                  builder: (BuildContext context) {
-                    ScaleUtil.initialize(context: context, size: const Size(1080, 1920));
-                    return child!;
-                  },
+                builder: (_, Widget? child) => SnackBarProvider(
+                  navigatorKey: widget.navigatorKey,
+                  child: Builder(
+                    builder: (BuildContext context) {
+                      ScaleUtil.initialize(context: context, size: const Size(1080, 1920));
+                      return child!;
+                    },
+                  ),
                 ),
                 onGenerateRoute: (RouteSettings settings) => _PageRoute<Object>(
                   builder: (_) => SplashPage(isColdStart: true, isMock: environment.isMock),

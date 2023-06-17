@@ -4,7 +4,6 @@ import 'package:uuid/uuid.dart';
 import '../entities.dart';
 
 part 'contact.freezed.dart';
-
 part 'contact.g.dart';
 
 @freezed
@@ -14,7 +13,6 @@ class ContactModel with _$ContactModel {
       includeFromJson: false,
       includeToJson: false,
     )
-    @Default(NoopReference())
     Reference? reference,
     required String id,
     required String userID,
@@ -36,20 +34,20 @@ class ContactModel with _$ContactModel {
       userID: userID,
       phone: '',
       location: '',
-      imageUrl: '',
+      imageUrl: null,
       createdAt: DateTime.now(),
     );
   }
 
+  @Deprecated('Use ContactModel.fromModifiedJson instead')
   factory ContactModel.fromJson(Map<String, Object?> json) => _$ContactModelFromJson(json);
 
-// TODO(Jogboms): investigate this.
-// factory ContactModel.fromJson(Map<String, Object?> json) {
-//   Map<String, double?> newMeasurements = json['measurements'] as Map<String, double?>? ?? <String, double>{};
-//   if (newMeasurements.isNotEmpty) {
-//     newMeasurements = newMeasurements..removeWhere((String key, double? value) => value == null);
-//   }
-//   json['measurements'] = newMeasurements;
-//   return _$ContactModelFromJson(json);
-// }
+  factory ContactModel.fromModifiedJson(Map<String, Object?> json) {
+    Map<String, double?> newMeasurements = json['measurements'] as Map<String, double?>? ?? <String, double>{};
+    if (newMeasurements.isNotEmpty) {
+      newMeasurements = newMeasurements..removeWhere((String key, double? value) => value == null);
+    }
+    json['measurements'] = newMeasurements;
+    return _$ContactModelFromJson(json);
+  }
 }

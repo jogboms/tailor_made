@@ -37,7 +37,7 @@ class ContactsImpl extends Contacts {
 
   @override
   Stream<ContactModel> update(ContactModel contact, String userId) {
-    final MapDocumentReference ref = firebase.db.contacts(userId).firestore.doc(contact.id);
+    final MapDocumentReference ref = firebase.db.doc('contacts/${contact.id}');
     ref.set(contact.toJson()).then((_) {});
     return ref.snapshots().map(_deriveContactModel);
   }

@@ -17,17 +17,8 @@ class JobPage extends StatefulWidget {
   State<JobPage> createState() => _JobPageState();
 }
 
-class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
-  JobModel? job;
-
-  @override
-  final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
-
-  @override
-  void initState() {
-    job = widget.job;
-    super.initState();
-  }
+class _JobPageState extends State<JobPage> {
+  late JobModel? job = widget.job;
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +29,11 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
       builder: (BuildContext context, _, JobsViewModel vm) {
         // in the case of newly created jobs
         job = vm.selected ?? widget.job;
-        if (vm.isLoading) {
+        final ContactModel? contact = vm.selectedContact;
+        if (vm.isLoading || contact == null) {
           return const Center(child: LoadingSpinner());
         }
         return Scaffold(
-          key: scaffoldKey,
           body: NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
@@ -55,7 +46,7 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
                   automaticallyImplyLeading: false,
                   centerTitle: false,
                   backgroundColor: Colors.white,
-                  title: _AvatarAppBar(job: job, contact: vm.selectedContact),
+                  title: _AvatarAppBar(job: job, contact: contact),
                   systemOverlayStyle: SystemUiOverlayStyle.dark,
                 ),
               ];
@@ -116,19 +107,19 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
   }
 
   void onTapComplete() async {
+    final AppSnackBar snackBar = AppSnackBar.of(context);
     final bool? choice = await showChoiceDialog(context: context, message: 'Are you sure?');
     if (choice == null || choice == false) {
       return;
     }
 
-    showLoadingSnackBar();
+    snackBar.loading();
 
     try {
       await job!.reference?.updateData(<String, bool>{'isComplete': !job!.isComplete});
-      closeLoadingSnackBar();
+      snackBar.hide();
     } catch (e) {
-      closeLoadingSnackBar();
-      showInSnackBar(e.toString());
+      snackBar.error(e.toString());
     }
   }
 
@@ -143,19 +134,19 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
       return;
     }
     if (context.mounted) {
+      final AppSnackBar snackBar = AppSnackBar.of(context);
       final bool? choice = await showChoiceDialog(context: context, message: 'Are you sure?');
       if (choice == null || choice == false) {
         return;
       }
 
-      showLoadingSnackBar();
+      snackBar.loading();
 
       try {
         await job!.reference?.updateData(<String, String>{'dueAt': picked.toString()});
-        closeLoadingSnackBar();
+        snackBar.hide();
       } catch (e) {
-        closeLoadingSnackBar();
-        showInSnackBar(e.toString());
+        snackBar.error(e.toString());
       }
     }
   }
@@ -214,7 +205,7 @@ class _AvatarAppBar extends StatelessWidget {
   const _AvatarAppBar({required this.job, required this.contact});
 
   final JobModel? job;
-  final ContactModel? contact;
+  final ContactModel contact;
 
   @override
   Widget build(BuildContext context) {
@@ -224,12 +215,12 @@ class _AvatarAppBar extends StatelessWidget {
     final ThemeProvider theme = ThemeProvider.of(context)!;
 
     return AvatarAppBar(
-      tag: contact!.createdAt.toString(),
-      imageUrl: contact!.imageUrl,
+      tag: contact.createdAt.toString(),
+      imageUrl: contact.imageUrl,
       title: GestureDetector(
         onTap: () => context.registry.get<ContactsCoordinator>().toContact(contact),
         child: Text(
-          contact!.fullname,
+          contact.fullname,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: theme.title,

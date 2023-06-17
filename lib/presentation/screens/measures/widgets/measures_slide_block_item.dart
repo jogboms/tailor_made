@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/providers.dart';
 import 'package:tailor_made/presentation/theme.dart';
 
+import '../../../widgets.dart';
 import 'measure_edit_dialog.dart';
 
 class MeasuresSlideBlockItem extends StatefulWidget {
@@ -42,7 +42,7 @@ class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
 
   void _onTapEditItem(MeasureModel measure) async {
     final TextEditingController controller = TextEditingController(text: measure.name);
-    final SnackBarProvider snackBar = SnackBarProvider.of(context);
+    final AppSnackBar snackBar = AppSnackBar.of(context);
 
     final String? itemName = await showEditDialog(
       context: context,
@@ -68,7 +68,7 @@ class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
       await measure.reference?.updateData(<String, String>{'name': itemName});
       snackBar.hide();
     } catch (e) {
-      snackBar.show(e.toString());
+      snackBar.error(e.toString());
     }
   }
 }

@@ -56,7 +56,7 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               if (contact != null)
                 IconButton(
                   icon: const Icon(Icons.person, color: Colors.white),
-                  onPressed: () => context.registry.get<ContactsCoordinator>().toContact(contact),
+                  onPressed: () => context.registry.get<ContactsCoordinator>().toContact(contact!),
                 ),
               if (account!.hasPremiumEnabled)
                 const IconButton(

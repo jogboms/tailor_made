@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -13,12 +14,11 @@ class MeasuresCreate extends StatefulWidget {
   State<MeasuresCreate> createState() => _MeasuresCreateState();
 }
 
-class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMixin, DispatchProvider<AppState> {
+class _MeasuresCreateState extends State<MeasuresCreate> with DispatchProvider<AppState> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
   String? groupName, unitValue;
   late List<MeasureModel> measures;
-  final FocusNode _unitNode = FocusNode();
 
   @override
   void initState() {
@@ -27,15 +27,6 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
     groupName = widget.groupName ?? '';
     unitValue = widget.unitValue ?? '';
   }
-
-  @override
-  void dispose() {
-    _unitNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +43,6 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
               initialValue: groupName,
               textCapitalization: TextCapitalization.words,
               textInputAction: TextInputAction.next,
-              onEditingComplete: () => FocusScope.of(context).requestFocus(_unitNode),
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                 isDense: true,
@@ -69,7 +59,6 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
             child: TextFormField(
-              focusNode: _unitNode,
               initialValue: unitValue,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
@@ -87,13 +76,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
           children.add(
             _GroupItems(
               measures: measures,
-              onPressed: (MeasureModel measure) {
-                _onTapDeleteItem(vm, measure);
-                setState(() {
-                  // TODO(Jogboms): test this
-                  measures = measures..removeWhere((_) => _ == measure);
-                });
-              },
+              onPressed: (MeasureModel measure) => _onTapDeleteItem(vm, measure),
             ),
           );
 
@@ -102,7 +85,6 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
 
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          key: scaffoldKey,
           appBar: CustomAppBar(
             title: const Text(''),
             leading: const AppCloseButton(),
@@ -141,20 +123,26 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
   }
 
   void _onTapDeleteItem(MeasuresViewModel vm, MeasureModel measure) async {
+    final AppSnackBar snackBar = AppSnackBar.of(context);
     final bool? choice = await showChoiceDialog(context: context, message: 'Are you sure?');
     if (choice == null || choice == false) {
       return;
     }
+    final Reference? reference = measure.reference;
+    if (reference == null) {
+      _removeFromLocal(measure.id);
+      return;
+    }
 
-    showLoadingSnackBar();
-
+    snackBar.loading();
     try {
       dispatchAction(const ToggleMeasuresLoading());
-      await measure.reference?.delete();
-      closeLoadingSnackBar();
-    } catch (e) {
-      closeLoadingSnackBar();
-      showInSnackBar(e.toString());
+      await reference.delete();
+      _removeFromLocal(measure.id);
+      snackBar.hide();
+    } catch (error, stackTrace) {
+      AppLog.e(error, stackTrace);
+      snackBar.error(error.toString());
     }
   }
 
@@ -175,18 +163,17 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
 
   void _handleSubmit(MeasuresViewModel vm) async {
     if (_isOkForm()) {
-      showLoadingSnackBar();
+      final AppSnackBar snackBar = AppSnackBar.of(context)..loading();
 
       try {
         final NavigatorState navigator = Navigator.of(context);
         dispatchAction(const ToggleMeasuresLoading());
         // TODO(Jogboms): move this out of here
         await context.registry.get<Measures>().create(measures, vm.userId, groupName: groupName, unitValue: unitValue);
-        closeLoadingSnackBar();
+        snackBar.hide();
         navigator.pop();
       } catch (e) {
-        closeLoadingSnackBar();
-        showInSnackBar(e.toString());
+        snackBar.error(e.toString());
       }
     }
   }
@@ -204,6 +191,12 @@ class _MeasuresCreateState extends State<MeasuresCreate> with SnackBarProviderMi
 
     form.save();
     return true;
+  }
+
+  void _removeFromLocal(String id) {
+    setState(() {
+      measures = measures..removeWhere((_) => _.id == id);
+    });
   }
 }
 

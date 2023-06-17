@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+
+import '../../../theme.dart';
 
 class SlideDownItem extends StatefulWidget {
   const SlideDownItem({

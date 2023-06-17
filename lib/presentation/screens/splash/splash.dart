@@ -175,7 +175,7 @@ class _ContentState extends State<_Content> {
       final String message = AppStrings.genericError(e, environment.isDev)!;
 
       if (message.isNotEmpty) {
-        SnackBarProvider.of(context).show(message, duration: const Duration(milliseconds: 3500));
+        AppSnackBar.of(context).error(message, duration: const Duration(milliseconds: 3500));
       }
 
       // TODO(Jogboms): move this out of here
@@ -187,7 +187,7 @@ class _ContentState extends State<_Content> {
 
       setState(() => isLoading = false);
 
-      SnackBarProvider.of(context).show(e.toString());
+      AppSnackBar.of(context).error(e.toString());
     }
   }
 }

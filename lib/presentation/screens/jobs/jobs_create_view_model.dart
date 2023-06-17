@@ -8,16 +8,13 @@ import 'package:uuid/uuid.dart';
 
 import 'jobs_create.dart';
 
-abstract class JobsCreateViewModel extends State<JobsCreatePage> with SnackBarProviderMixin {
+abstract class JobsCreateViewModel extends State<JobsCreatePage> {
   List<FireImage> fireImages = <FireImage>[];
   late JobModel job;
   late ContactModel? contact;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   bool autovalidate = false;
-
-  @override
-  final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   void initState() {
@@ -85,13 +82,14 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> with SnackBarPr
       return;
     }
 
+    final AppSnackBar snackBar = AppSnackBar.of(context);
     if (!form.validate()) {
       autovalidate = true;
-      showInSnackBar(AppStrings.fixErrors);
+      snackBar.info(AppStrings.fixErrors);
     } else {
       form.save();
 
-      showLoadingSnackBar();
+      snackBar.loading();
 
       job = job.copyWith(
         pendingPayment: job.price,
@@ -104,12 +102,11 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> with SnackBarPr
       try {
         // TODO(Jogboms): move this out of here
         context.registry.get<Jobs>().update(job, widget.userId).listen((JobModel snap) {
-          closeLoadingSnackBar();
+          snackBar.hide();
           context.registry.get<JobsCoordinator>().toJob(snap);
         });
       } catch (e) {
-        closeLoadingSnackBar();
-        showInSnackBar(e.toString());
+        snackBar.error(e.toString());
       }
     }
   }

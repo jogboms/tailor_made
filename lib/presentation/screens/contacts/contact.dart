@@ -14,24 +14,28 @@ import 'widgets/contact_payments_list.dart';
 const List<String> _tabs = <String>['Jobs', 'Gallery', 'Payments'];
 
 class ContactPage extends StatelessWidget {
-  const ContactPage({super.key, this.contact});
+  const ContactPage({super.key, required this.contact});
 
-  final ContactModel? contact;
+  final ContactModel contact;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, ContactsViewModel>(
-      converter: (AppState state) => ContactsViewModel(state)..contactID = contact!.id,
+      converter: (AppState state) => ContactsViewModel(state)..contactID = contact.id,
       builder: (BuildContext context, DispatchFunction dispatch, ContactsViewModel viewModel) {
         // in the case of newly created contacts
-        final ContactModel? contact = viewModel.selected ?? this.contact;
+        final ContactModel contact = viewModel.selected ?? this.contact;
         return DefaultTabController(
           length: _tabs.length,
           child: Scaffold(
             appBar: AppBar(
               backgroundColor: kAccentColor,
               automaticallyImplyLeading: false,
-              title: ContactAppBar(userId: viewModel.userId, contact: contact, grouped: viewModel.measuresGrouped),
+              title: ContactAppBar(
+                userId: viewModel.userId,
+                contact: contact,
+                grouped: viewModel.measuresGrouped ?? <String, List<MeasureModel>>{},
+              ),
               titleSpacing: 0.0,
               centerTitle: false,
               bottom: TabBar(

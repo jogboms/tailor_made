@@ -25,6 +25,8 @@ class CloudDb {
 
   MapQuery jobs(String? userId) => _instance.collection('jobs').where('userID', isEqualTo: userId);
 
+  MapDocumentReference doc(String path) => _instance.doc(path);
+
   Future<void> batchAction(void Function(WriteBatch batch) action) {
     final WriteBatch batch = _instance.batch();
 

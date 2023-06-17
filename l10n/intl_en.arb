@@ -10,6 +10,7 @@
   "genericErrorMessage": "An error occurred",
   "failedSignInMessage": "Failed to sign in. Do try again",
   "bannedUserMessage": "This account has been disabled by administration",
+  "loadingMessage": "Loading...",
   "tryAgainMessage": "Do try again after some time",
   "popupBlockedByBrowserMessage": "The auto-login popup was blocked by your browser. Try the continue button"
 }
