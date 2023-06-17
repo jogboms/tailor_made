@@ -4,22 +4,21 @@ import 'package:mocktail/mocktail.dart';
 import 'package:tailor_made/data.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/screens/homepage/homepage.dart';
 import 'package:tailor_made/presentation/screens/splash/splash.dart';
 
-import 'mocks.dart';
-import 'utils.dart';
+import '../mocks.dart';
+import '../utils.dart';
 
 void main() {
-  group('Smoke test', () {
-    late NavigatorObserver mockObserver;
-    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
+  group('App', () {
     setUpAll(() {
       registerFallbackValue(FakeRoute());
-      mockObserver = MockNavigatorObserver();
     });
 
-    testWidgets('shows and navigates out of SplashPage', (WidgetTester tester) async {
+    testWidgets('shows SplashPage and navigates HomePage', (WidgetTester tester) async {
+      final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+      final NavigatorObserver mockObserver = MockNavigatorObserver();
       final Registry registry = createRegistry(
         navigatorKey: navigatorKey,
       );
@@ -43,13 +42,11 @@ void main() {
       );
       await tester.pump();
 
-      verify(() => mockObserver.didPush(any(), any()));
-
       expect(find.byType(SplashPage), findsOneWidget);
 
       await tester.pump();
 
-      verify(() => mockObserver.didPush(any(), any()));
+      await tester.verifyPushNavigation<HomePage>(mockObserver);
     });
   });
 }
