@@ -1,4 +1,3 @@
-export 'theme/theme_provider.dart';
 export 'widgets/app_back_button.dart';
 export 'widgets/app_circle_avatar.dart';
 export 'widgets/app_clear_button.dart';
@@ -11,5 +10,7 @@ export 'widgets/empty_result_view.dart';
 export 'widgets/form_section_header.dart';
 export 'widgets/loading_spinner.dart';
 export 'widgets/primary_button.dart';
+export 'widgets/snackbar/app_snack_bar.dart';
+export 'widgets/snackbar/snack_bar_provider.dart';
 export 'widgets/touchable_opacity.dart';
 export 'widgets/upload_photo.dart';

@@ -15,16 +15,13 @@ class MeasuresManagePage extends StatefulWidget {
   State<MeasuresManagePage> createState() => _MeasuresManagePageState();
 }
 
-class _MeasuresManagePageState extends State<MeasuresManagePage> with SnackBarProviderMixin {
-  @override
-  final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
-
+class _MeasuresManagePageState extends State<MeasuresManagePage> {
   @override
   void initState() {
     super.initState();
     Future<void>.delayed(
       const Duration(seconds: 2),
-      () => showInSnackBar('Long-Press on any group to see more actions.'),
+      () => AppSnackBar.of(context).info('Long-Press on any group to see more actions.'),
     );
   }
 
@@ -32,7 +29,6 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> with SnackBarPr
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      key: scaffoldKey,
       appBar: const CustomAppBar(title: Text('Measurements')),
       body: _buildBody(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

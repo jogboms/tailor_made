@@ -13,10 +13,12 @@ class LoadingSpinner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    final double size = this.size ?? 32.0;
+    return SizedBox.square(
+      dimension: size,
       child: SpinKitFadingCube(
         // color: color ?? kPrimaryColor,
-        size: size ?? 32.0,
+        size: size,
         itemBuilder: (_, int i) {
           if (color != null) {
             return _box(color);

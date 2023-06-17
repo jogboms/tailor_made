@@ -30,7 +30,7 @@ class JobsImpl extends Jobs {
 
   @override
   Stream<JobModel> update(JobModel job, String userId) {
-    final MapDocumentReference ref = firebase.db.jobs(userId).firestore.doc(job.id);
+    final MapDocumentReference ref = firebase.db.doc('jobs/${job.id}');
     ref.set(job.toJson()).then((_) {});
     return ref.snapshots().map(_deriveJobModel);
   }

@@ -26,20 +26,3 @@ abstract class Reference {
 
   Future<void> updateData(Map<String, dynamic> data);
 }
-
-// TODO(Jogboms): improve this
-class NoopReference implements Reference {
-  const NoopReference();
-
-  @override
-  Future<void> delete() => throw UnimplementedError();
-
-  @override
-  Future<void> setData(Map<String, dynamic> data, {bool merge = false}) => throw UnimplementedError();
-
-  @override
-  MapDocumentReference get source => throw UnimplementedError();
-
-  @override
-  Future<void> updateData(Map<String, dynamic> data) => throw UnimplementedError();
-}

@@ -48,15 +48,16 @@ class _JobsCreatePageState extends JobsCreateViewModel {
   Widget build(BuildContext context) {
     final ThemeProvider? theme = ThemeProvider.of(context);
 
+    final ContactModel? contact = this.contact;
+
     return Scaffold(
-      key: scaffoldKey,
       appBar: contact != null
           ? AvatarAppBar(
-              tag: contact!.createdAt.toString(),
-              imageUrl: contact!.imageUrl,
+              tag: contact.createdAt.toString(),
+              imageUrl: contact.imageUrl,
               elevation: 1.0,
-              title: Text(contact!.fullname, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme!.title),
-              subtitle: Text('${contact!.totalJobs} Jobs', style: theme.small),
+              title: Text(contact.fullname, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme!.title),
+              subtitle: Text('${contact.totalJobs} Jobs', style: theme.small),
               actions: widget.contacts!.isNotEmpty
                   ? <Widget>[
                       IconButton(icon: const Icon(Icons.people), onPressed: onSelectContact),
@@ -129,8 +130,13 @@ class _JobsCreatePageState extends JobsCreateViewModel {
       converter: MeasuresViewModel.new,
       builder: (_, __, MeasuresViewModel vm) {
         return MeasureCreateItems(
-          grouped: vm.grouped,
+          grouped: vm.grouped ?? <String, List<MeasureModel>>{},
           measurements: job.measurements,
+          onSaved: (Map<String, double>? value) {
+            if (value != null) {
+              job = job.copyWith(measurements: value);
+            }
+          },
         );
       },
     );

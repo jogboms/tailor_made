@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
-import 'app_fonts.dart';
 import 'app_style.dart';
 
 class ThemeProvider extends InheritedWidget {
@@ -88,37 +87,6 @@ class ThemeProvider extends InheritedWidget {
 
   static ThemeProvider? of(BuildContext context) => context.dependOnInheritedWidgetOfExactType<ThemeProvider>();
 
-  ThemeData themeData(ThemeData theme) {
-    return ThemeData(
-      primaryColor: kPrimaryColor,
-      primaryIconTheme: theme.primaryIconTheme.copyWith(color: kPrimarySwatch),
-      textTheme: theme.textTheme.copyWith(
-        bodyMedium: theme.textTheme.bodyMedium!.merge(body1),
-        labelLarge: theme.textTheme.labelLarge!.merge(button),
-      ),
-      canvasColor: Colors.white,
-      buttonTheme: theme.buttonTheme.copyWith(height: kButtonHeight),
-      inputDecorationTheme: InputDecorationTheme(
-        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: kPrimarySwatch, width: 2.0)),
-        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: kBorderSideColor)),
-        errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: kBorderSideErrorColor)),
-        contentPadding: const EdgeInsets.only(top: 13.0, bottom: 12.0),
-        hintStyle: textfieldLabel,
-        labelStyle: textfieldLabel,
-        errorStyle: errorStyle,
-      ),
-      fontFamily: AppFonts.base,
-      hintColor: kHintColor,
-      dividerColor: kBorderSideColor,
-      textSelectionTheme: const TextSelectionThemeData(cursorColor: kPrimaryColor),
-      colorScheme: ColorScheme.fromSwatch(primarySwatch: kPrimarySwatch).copyWith(secondary: kAccentColor),
-    );
-  }
-
   @override
   bool updateShouldNotify(ThemeProvider oldWidget) => false;
-}
-
-extension BuildContextThemeExtensions on BuildContext {
-  ThemeData get theme => Theme.of(this);
 }

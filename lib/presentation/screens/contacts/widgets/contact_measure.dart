@@ -7,32 +7,21 @@ import '../../measures/widgets/measure_create_items.dart';
 class ContactMeasure extends StatefulWidget {
   const ContactMeasure({super.key, required this.grouped, required this.contact});
 
-  final Map<String, List<MeasureModel>>? grouped;
-  final ContactModel? contact;
+  final Map<String, List<MeasureModel>> grouped;
+  final ContactModel contact;
 
   @override
   State<ContactMeasure> createState() => _ContactMeasureState();
 }
 
-class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMixin {
+class _ContactMeasureState extends State<ContactMeasure> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
-  late ContactModel contact;
-
-  @override
-  final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
-
-  @override
-  void initState() {
-    super.initState();
-    // TODO(Jogboms): look into this
-    contact = widget.contact!;
-  }
+  late ContactModel contact = widget.contact;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
       appBar: CustomAppBar(
         title: const Text('Measurements'),
         leading: AppBackButton(
@@ -58,6 +47,11 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMi
                 MeasureCreateItems(
                   grouped: widget.grouped,
                   measurements: contact.measurements,
+                  onSaved: (Map<String, double>? value) {
+                    if (value != null) {
+                      contact = contact.copyWith(measurements: value);
+                    }
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
@@ -77,24 +71,29 @@ class _ContactMeasureState extends State<ContactMeasure> with SnackBarProviderMi
     if (form == null) {
       return;
     }
+    final AppSnackBar snackBar = AppSnackBar.of(context);
     if (!form.validate()) {
       _autovalidate = true;
-      showInSnackBar(AppStrings.fixErrors);
+      snackBar.info(AppStrings.fixErrors);
       return;
     }
 
     form.save();
-    showLoadingSnackBar();
 
+    final Reference? reference = contact.reference;
+    if (reference == null) {
+      Navigator.of(context).pop<ContactModel>(contact);
+      return;
+    }
+
+    snackBar.loading();
     try {
       // TODO(Jogboms): find a way to remove this from here
       // During contact creation
-      await contact.reference?.updateData(contact.toJson());
-      closeLoadingSnackBar();
-      showInSnackBar('Successfully Updated');
+      await reference.updateData(contact.toJson());
+      snackBar.success('Successfully Updated');
     } catch (e) {
-      closeLoadingSnackBar();
-      showInSnackBar(e.toString());
+      snackBar.error(e.toString());
     }
   }
 }

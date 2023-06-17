@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/presentation/utils.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+
+import '../../../theme.dart';
+import '../../../utils.dart';
+import '../../../widgets.dart';
 
 class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
   const AvatarAppBar({
@@ -33,6 +35,7 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
         color: backgroundColor,
         elevation: elevation,
         child: SafeArea(
+          bottom: false,
           child: Row(
             children: <Widget>[
               _Leading(iconColor: iconColor, tag: tag, imageUrl: imageUrl),

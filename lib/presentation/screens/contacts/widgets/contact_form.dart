@@ -15,7 +15,7 @@ class ContactForm extends StatefulWidget {
   });
 
   final ValueSetter<ContactModel> onHandleSubmit;
-  final ContactModel? contact;
+  final ContactModel contact;
   final String userId;
 
   @override
@@ -25,26 +25,32 @@ class ContactForm extends StatefulWidget {
 class ContactFormState extends State<ContactForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isLoading = false;
-  late ContactModel contact;
+  late ContactModel contact = widget.contact;
   bool _autovalidate = false;
   Storage? _lastImgRef;
-  TextEditingController? _fNController, _pNController, _lNController;
-  final FocusNode _pNFocusNode = FocusNode(), _locFocusNode = FocusNode();
+  late final TextEditingController _fNController, _pNController, _lNController;
 
   @override
   void initState() {
     super.initState();
-    // TODO(Jogboms): look into this
-    contact = widget.contact!;
     _fNController = TextEditingController(text: contact.fullname);
     _pNController = TextEditingController(text: contact.phone);
     _lNController = TextEditingController(text: contact.location);
   }
 
   @override
+  void didUpdateWidget(covariant ContactForm oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.contact != widget.contact) {
+      contact = widget.contact;
+    }
+  }
+
+  @override
   void dispose() {
-    _pNFocusNode.dispose();
-    _locFocusNode.dispose();
+    _fNController.dispose();
+    _pNController.dispose();
+    _lNController.dispose();
     super.dispose();
   }
 
@@ -71,22 +77,18 @@ class ContactFormState extends State<ContactForm> {
                     decoration: const InputDecoration(prefixIcon: Icon(Icons.person), labelText: 'Fullname'),
                     validator: InputValidator.tryAlpha(),
                     onSaved: (String? fullname) => contact = contact.copyWith(fullname: fullname!.trim()),
-                    onEditingComplete: () => FocusScope.of(context).requestFocus(_pNFocusNode),
                   ),
                   const SizedBox(height: 4.0),
                   TextFormField(
-                    focusNode: _pNFocusNode,
                     controller: _pNController,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.phone,
                     decoration: const InputDecoration(prefixIcon: Icon(Icons.phone), labelText: 'Phone'),
                     validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a value',
                     onSaved: (String? phone) => contact = contact.copyWith(phone: phone!.trim()),
-                    onEditingComplete: () => FocusScope.of(context).requestFocus(_locFocusNode),
                   ),
                   const SizedBox(height: 4.0),
                   TextFormField(
-                    focusNode: _locFocusNode,
                     controller: _lNController,
                     textInputAction: TextInputAction.done,
                     decoration: const InputDecoration(prefixIcon: Icon(Icons.location_city), labelText: 'Location'),
@@ -113,7 +115,7 @@ class ContactFormState extends State<ContactForm> {
     }
     if (!form.validate()) {
       _autovalidate = true;
-      SnackBarProvider.of(context).show(AppStrings.fixErrors);
+      AppSnackBar.of(context).error(AppStrings.fixErrors);
     } else {
       form.save();
       widget.onHandleSubmit(contact);
@@ -138,7 +140,7 @@ class ContactFormState extends State<ContactForm> {
     try {
       contact = contact.copyWith(imageUrl: await ref.getDownloadURL());
       if (mounted) {
-        SnackBarProvider.of(context).show('Upload Successful');
+        AppSnackBar.of(context).success('Upload Successful');
         setState(() {
           if (_lastImgRef != null) {
             _lastImgRef!.delete();
@@ -149,7 +151,7 @@ class ContactFormState extends State<ContactForm> {
       }
     } catch (e) {
       if (mounted) {
-        SnackBarProvider.of(context).show('Please try again');
+        AppSnackBar.of(context).error('Please try again');
         setState(() => isLoading = false);
       }
     }
@@ -160,9 +162,9 @@ class ContactFormState extends State<ContactForm> {
   void updateContact(ContactModel contact) {
     setState(() {
       reset();
-      _fNController!.text = contact.fullname;
-      _pNController!.text = contact.phone ?? '';
-      _lNController!.text = contact.location ?? '';
+      _fNController.text = contact.fullname;
+      _pNController.text = contact.phone ?? '';
+      _lNController.text = contact.location ?? '';
     });
   }
 }

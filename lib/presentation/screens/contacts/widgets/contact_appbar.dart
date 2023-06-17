@@ -5,10 +5,15 @@ import 'package:tailor_made/presentation.dart';
 enum Choice { createJob, editMeasure, editAccount, sendText }
 
 class ContactAppBar extends StatefulWidget {
-  const ContactAppBar({super.key, required this.userId, required this.grouped, this.contact});
+  const ContactAppBar({
+    super.key,
+    required this.userId,
+    required this.grouped,
+    required this.contact,
+  });
 
-  final Map<String, List<MeasureModel>>? grouped;
-  final ContactModel? contact;
+  final Map<String, List<MeasureModel>> grouped;
+  final ContactModel contact;
   final String userId;
 
   @override
@@ -29,7 +34,7 @@ class _ContactAppBarState extends State<ContactAppBar> {
         registry.get<ContactsCoordinator>().toContactEdit(widget.userId, widget.contact);
         break;
       case Choice.sendText:
-        sms(widget.contact!.phone);
+        sms(widget.contact.phone);
         break;
     }
   }
@@ -39,42 +44,40 @@ class _ContactAppBarState extends State<ContactAppBar> {
     final TextStyle popTextStyle = ThemeProvider.of(context)!.body1;
     return PreferredSize(
       preferredSize: const Size.fromHeight(kToolbarHeight),
-      child: SafeArea(
-        child: Row(
-          children: <Widget>[
-            _Leading(contact: widget.contact),
-            Expanded(child: _Title(contact: widget.contact)),
-            _Icon(
-              icon: Icons.content_cut,
-              onTap: () => context.registry.get<MeasuresCoordinator>().toMeasures(widget.contact!.measurements),
-            ),
-            _Icon(icon: Icons.call, onTap: () => call(widget.contact!.phone)),
-            PopupMenuButton<Choice>(
-              icon: const Icon(Icons.more_vert, color: Colors.white),
-              onSelected: _selectChoice,
-              itemBuilder: (_) {
-                return <PopupMenuItem<Choice>>[
-                  PopupMenuItem<Choice>(
-                    value: Choice.createJob,
-                    child: Text('New Job', style: popTextStyle),
-                  ),
-                  PopupMenuItem<Choice>(
-                    value: Choice.sendText,
-                    child: Text('Text Message', style: popTextStyle),
-                  ),
-                  PopupMenuItem<Choice>(
-                    value: Choice.editMeasure,
-                    child: Text('Edit Measurements', style: popTextStyle),
-                  ),
-                  PopupMenuItem<Choice>(
-                    value: Choice.editAccount,
-                    child: Text('Edit Account', style: popTextStyle),
-                  ),
-                ];
-              },
-            ),
-          ],
-        ),
+      child: Row(
+        children: <Widget>[
+          _Leading(contact: widget.contact),
+          Expanded(child: _Title(contact: widget.contact)),
+          _Icon(
+            icon: Icons.content_cut,
+            onTap: () => context.registry.get<MeasuresCoordinator>().toMeasures(widget.contact.measurements),
+          ),
+          _Icon(icon: Icons.call, onTap: () => call(widget.contact.phone)),
+          PopupMenuButton<Choice>(
+            icon: const Icon(Icons.more_vert, color: Colors.white),
+            onSelected: _selectChoice,
+            itemBuilder: (_) {
+              return <PopupMenuItem<Choice>>[
+                PopupMenuItem<Choice>(
+                  value: Choice.createJob,
+                  child: Text('New Job', style: popTextStyle),
+                ),
+                PopupMenuItem<Choice>(
+                  value: Choice.sendText,
+                  child: Text('Text Message', style: popTextStyle),
+                ),
+                PopupMenuItem<Choice>(
+                  value: Choice.editMeasure,
+                  child: Text('Edit Measurements', style: popTextStyle),
+                ),
+                PopupMenuItem<Choice>(
+                  value: Choice.editAccount,
+                  child: Text('Edit Account', style: popTextStyle),
+                ),
+              ];
+            },
+          ),
+        ],
       ),
     );
   }

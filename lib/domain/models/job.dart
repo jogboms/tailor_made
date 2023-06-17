@@ -6,7 +6,6 @@ import 'image.dart';
 import 'payment.dart';
 
 part 'job.freezed.dart';
-
 part 'job.g.dart';
 
 @freezed
@@ -16,7 +15,6 @@ class JobModel with _$JobModel {
       includeFromJson: false,
       includeToJson: false,
     )
-    @Default(NoopReference())
     Reference? reference,
     required String id,
     required String userID,
@@ -50,15 +48,15 @@ class JobModel with _$JobModel {
     );
   }
 
+  @Deprecated('Use JobModel.fromModifiedJson instead')
   factory JobModel.fromJson(Map<String, Object?> json) => _$JobModelFromJson(json);
 
-// TODO(Jogboms): investigate this
-// factory JobModel.fromJson(Map<String, Object?> json) {
-//   Map<String, double?> newMeasurements = json['measurements'] as Map<String, double?>? ?? <String, double>{};
-//   if (newMeasurements.isNotEmpty) {
-//     newMeasurements = newMeasurements..removeWhere((String key, double? value) => value == null);
-//   }
-//   json['measurements'] = newMeasurements;
-//   return _$JobModelFromJson(json);
-// }
+  factory JobModel.fromModifiedJson(Map<String, Object?> json) {
+    Map<String, double?> newMeasurements = json['measurements'] as Map<String, double?>? ?? <String, double>{};
+    if (newMeasurements.isNotEmpty) {
+      newMeasurements = newMeasurements..removeWhere((String key, double? value) => value == null);
+    }
+    json['measurements'] = newMeasurements;
+    return _$JobModelFromJson(json);
+  }
 }

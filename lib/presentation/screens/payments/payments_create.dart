@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:tailor_made/presentation/constants.dart';
-import 'package:tailor_made/presentation/providers.dart';
 import 'package:tailor_made/presentation/utils.dart';
 import 'package:tailor_made/presentation/widgets.dart';
+
+import '../../theme.dart';
 
 class PaymentsCreatePage extends StatefulWidget {
   const PaymentsCreatePage({
@@ -17,7 +18,7 @@ class PaymentsCreatePage extends StatefulWidget {
   State<PaymentsCreatePage> createState() => _PaymentsCreatePageState();
 }
 
-class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarProviderMixin {
+class _PaymentsCreatePageState extends State<PaymentsCreatePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
   double price = 0.0;
@@ -28,9 +29,6 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
   );
   final FocusNode _amountFocusNode = FocusNode();
   final FocusNode _additionFocusNode = FocusNode();
-
-  @override
-  final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   void dispose() {
@@ -62,7 +60,6 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
     children.add(const SizedBox(height: 32.0));
 
     return Scaffold(
-      key: scaffoldKey,
       appBar: const CustomAppBar(
         title: Text('Create Payment'),
       ),
@@ -130,7 +127,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> with SnackBarPr
     }
     if (!form.validate()) {
       _autovalidate = true;
-      showInSnackBar(AppStrings.fixErrors);
+      AppSnackBar.of(context).info(AppStrings.fixErrors);
     } else {
       form.save();
 

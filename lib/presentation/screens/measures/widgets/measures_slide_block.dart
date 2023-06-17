@@ -83,7 +83,7 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
 
   void _onTapDeleteBlock() async {
     final Registry registry = context.registry;
-    final SnackBarProvider snackBar = SnackBarProvider.of(context);
+    final AppSnackBar snackBar = AppSnackBar.of(context);
     final bool? choice = await showChoiceDialog(context: context, title: '', message: 'Are you sure?');
     if (choice == null || choice == false) {
       return;
@@ -93,10 +93,9 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
     try {
       // TODO(Jogboms): move this out of here
       await registry.get<Measures>().delete(widget.measures, widget.userId);
-
       snackBar.hide();
     } catch (e) {
-      snackBar.show(e.toString());
+      snackBar.error(e.toString());
     }
   }
 }

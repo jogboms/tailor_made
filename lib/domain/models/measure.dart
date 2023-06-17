@@ -4,7 +4,6 @@ import 'package:uuid/uuid.dart';
 import '../entities.dart';
 
 part 'measure.freezed.dart';
-
 part 'measure.g.dart';
 
 List<MeasureModel> createDefaultMeasures() {
@@ -161,7 +160,6 @@ class MeasureModel with _$MeasureModel {
       includeFromJson: false,
       includeToJson: false,
     )
-    @Default(NoopReference())
     Reference? reference,
     required String id,
     required String name,

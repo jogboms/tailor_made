@@ -12,7 +12,7 @@ class JobsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, JobsViewModel>(
       converter: JobsViewModel.new,
-      builder: (BuildContext context, _, JobsViewModel vm) {
+      builder: (BuildContext context, DispatchFunction dispatcher, JobsViewModel vm) {
         return WillPopScope(
           child: Scaffold(
             appBar: _AppBar(vm: vm),
@@ -36,11 +36,10 @@ class JobsPage extends StatelessWidget {
             ),
           ),
           onWillPop: () async {
-            // TODO(Jogboms): handle
-            // if (_isSearching) {
-            //   _handleSearchEnd(vm)();
-            //   return false;
-            // }
+            if (vm.isSearching) {
+              dispatcher(const CancelSearchJobAction());
+              return false;
+            }
             return true;
           },
         );
