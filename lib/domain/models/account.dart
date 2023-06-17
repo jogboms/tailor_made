@@ -3,12 +3,18 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../entities.dart';
 
 part 'account.freezed.dart';
+
 part 'account.g.dart';
 
 @freezed
 class AccountModel with _$AccountModel {
   const factory AccountModel({
-    @JsonKey(ignore: true) @Default(NoopReference()) Reference? reference,
+    @JsonKey(
+      includeFromJson: false,
+      includeToJson: false,
+    )
+    @Default(NoopReference())
+    Reference? reference,
     required String uid,
     required String storeName,
     required String email,

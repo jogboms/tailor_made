@@ -71,7 +71,7 @@ class _AppState extends State<App> {
                   GlobalWidgetsLocalizations.delegate,
                   GlobalCupertinoLocalizations.delegate,
                 ],
-                supportedLocales: L10n.delegate.supportedLocales,
+                supportedLocales: L10n.supportedLocales,
                 builder: (_, Widget? child) => Builder(
                   builder: (BuildContext context) {
                     ScaleUtil.initialize(context: context, size: const Size(1080, 1920));
@@ -80,7 +80,7 @@ class _AppState extends State<App> {
                 ),
                 onGenerateRoute: (RouteSettings settings) => _PageRoute<Object>(
                   builder: (_) => SplashPage(isColdStart: true, isMock: environment.isMock),
-                  settings: settings.copyWith(name: AppRoutes.start),
+                  settings: RouteSettings(name: AppRoutes.start, arguments: settings.arguments),
                 ),
               ),
             ),

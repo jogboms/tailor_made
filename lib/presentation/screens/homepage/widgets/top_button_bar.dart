@@ -73,6 +73,8 @@ class TopButtonBar extends StatelessWidget {
   bool get _shouldShowIndicator => !(account?.hasReadNotice ?? false) || shouldSendRating;
 
   VoidCallback _onTapAccount(BuildContext context) {
+    final Registry registry = context.registry;
+
     return () async {
       final Store<AppState> store = StoreProvider.of<AppState>(context);
       if (shouldSendRating) {
@@ -119,7 +121,7 @@ class TopButtonBar extends StatelessWidget {
 
       switch (result) {
         case AccountOptions.storename:
-          final String? storeName = await context.registry.get<SharedCoordinator>().toStoreNameDialog(account);
+          final String? storeName = await registry.get<SharedCoordinator>().toStoreNameDialog(account);
 
           if (storeName != null && storeName != account!.storeName) {
             await account!.reference?.updateData(<String, String>{'storeName': storeName});
@@ -128,10 +130,12 @@ class TopButtonBar extends StatelessWidget {
           break;
 
         case AccountOptions.logout:
-          final bool? response = await showChoiceDialog(context: context, message: 'You are about to logout.');
+          if (context.mounted) {
+            final bool? response = await showChoiceDialog(context: context, message: 'You are about to logout.');
 
-          if (response == true) {
-            onLogout();
+            if (response == true) {
+              onLogout();
+            }
           }
           break;
       }

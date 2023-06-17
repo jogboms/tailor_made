@@ -15,7 +15,6 @@ class MeasuresMockImpl extends Measures {
   Stream<List<MeasureModel>> fetchAll(String? userId) async* {
     yield <MeasureModel>[
       MeasureModel(
-        reference: const NoopReference(),
         id: '',
         name: 'Arm Hole',
         group: MeasureModelType.blouse,
@@ -23,7 +22,6 @@ class MeasuresMockImpl extends Measures {
         createdAt: DateTime.now(),
       ),
       MeasureModel(
-        reference: const NoopReference(),
         id: '',
         name: 'Waist',
         group: MeasureModelType.blouse,

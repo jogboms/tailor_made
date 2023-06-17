@@ -8,7 +8,7 @@ ci:
 	make format && make analyze && make test_coverage
 
 format:
-	fvm flutter format --set-exit-if-changed -l 120 lib
+	fvm dart format --set-exit-if-changed -l 120 lib
 
 analyze:
 	fvm flutter analyze lib
@@ -24,9 +24,6 @@ build_coverage:
 
 open_coverage:
 	make build_coverage && open coverage/index.html
-
-generate_intl:
-	fvm flutter packages pub run intl_utils:generate
 
 build_runner_build:
 	fvm flutter packages pub run build_runner build --delete-conflicting-outputs

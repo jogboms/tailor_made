@@ -31,6 +31,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> with SnackBarPr
   }
 
   void handlePhotoButtonPressed() async {
+    final Registry registry = context.registry;
     final ImageSource? source = await showImageChoiceDialog(context: context);
     if (source == null) {
       return;
@@ -40,7 +41,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> with SnackBarPr
       return;
     }
     // TODO(Jogboms): move this out of here
-    final Storage ref = context.registry.get<Jobs>().createFile(File(imageFile.path), widget.userId)!;
+    final Storage ref = registry.get<Jobs>().createFile(File(imageFile.path), widget.userId)!;
 
     setState(() => fireImages.add(FireImage()..ref = ref));
     try {

@@ -6,12 +6,18 @@ import 'image.dart';
 import 'payment.dart';
 
 part 'job.freezed.dart';
+
 part 'job.g.dart';
 
 @freezed
 class JobModel with _$JobModel {
   const factory JobModel({
-    @JsonKey(ignore: true) @Default(NoopReference()) Reference? reference,
+    @JsonKey(
+      includeFromJson: false,
+      includeToJson: false,
+    )
+    @Default(NoopReference())
+    Reference? reference,
     required String id,
     required String userID,
     required String? contactID,
@@ -39,7 +45,6 @@ class JobModel with _$JobModel {
       contactID: contactID,
       price: 0.0,
       createdAt: DateTime.now(),
-      payments: const <PaymentModel>[],
       dueAt: DateTime.now().add(const Duration(days: 7)),
       measurements: measurements ?? const <String, double>{},
     );
@@ -47,7 +52,7 @@ class JobModel with _$JobModel {
 
   factory JobModel.fromJson(Map<String, Object?> json) => _$JobModelFromJson(json);
 
-  // TODO(Jogboms): investigate this
+// TODO(Jogboms): investigate this
 // factory JobModel.fromJson(Map<String, Object?> json) {
 //   Map<String, double?> newMeasurements = json['measurements'] as Map<String, double?>? ?? <String, double>{};
 //   if (newMeasurements.isNotEmpty) {

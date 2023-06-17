@@ -7,14 +7,12 @@ class ContactsMockImpl extends Contacts {
   Stream<List<ContactModel>> fetchAll(String? userId) async* {
     yield <ContactModel>[
       ContactModel(
-        reference: const NoopReference(),
         userID: '1',
         id: '',
         phone: '',
         location: '',
         imageUrl: '',
         createdAt: DateTime.now(),
-        measurements: const <String, double>{},
       ),
     ];
   }

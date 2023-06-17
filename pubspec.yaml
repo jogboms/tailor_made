@@ -5,10 +5,10 @@ version: 1.2.0
 publish_to: 'none'
 
 environment:
-  sdk: ">=2.17.3 <3.0.0"
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
-  cached_network_image: ^3.2.2
+  cached_network_image: ^3.2.3
   clock: ^1.1.1
   cloud_firestore: ^4.0.4
   collection: ^1.16.0
@@ -23,44 +23,44 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_masked_text2: ^0.9.1
-  flutter_native_contact_picker: ^0.0.3
+  flutter_native_contact_picker: ^0.0.4
   flutter_native_image:
     git:
       url: https://github.com/btastic/flutter_native_image.git
-  flutter_spinkit: ^5.1.0
+  flutter_spinkit: ^5.2.0
   freezed_annotation: ^2.2.0
   get_version:
     git:
       url: https://github.com/Creky/get_version.git
   google_sign_in: ^5.4.2
   image_picker: ^0.8.6
-  intl: ^0.17.0
-  intl_utils: ^2.7.0
-  json_annotation: ^4.7.0
-  logging: ^1.1.0
+  intl: ^0.18.0
+  json_annotation: ^4.8.1
+  logging: ^1.2.0
   meta: ^1.8.0
   photo_view: ^0.14.0
   platform: ^3.1.0
   rebloc: ^0.4.0
   rxdart: ^0.26.0
-  shared_preferences: ^2.0.15
-  timeago: ^3.3.0
-  universal_io: ^2.0.4
-  url_launcher: ^6.1.6
-  uuid: ^3.0.6
+  shared_preferences: ^2.1.2
+  timeago: ^3.4.0
+  universal_io: ^2.2.2
+  url_launcher: ^6.1.11
+  uuid: ^3.0.7
   version: ^3.0.2
 
 dev_dependencies:
   build_runner:
   flutter_test:
     sdk: flutter
-  freezed: ^2.2.0
-  json_serializable: ^6.5.4
+  freezed: ^2.3.5
+  json_serializable: ^6.7.0
   mfsao: ^3.0.0
   mocktail: ^0.3.0
 
 flutter:
   uses-material-design: true
+  generate: true
 
   assets:
     - assets/images/
@@ -78,9 +78,3 @@ flutter:
           weight: 500
         - asset: assets/fonts/Raleway-SemiBold.ttf
           weight: 600
-
-flutter_intl:
-  enabled: true
-  class_name: L10n
-  main_locale: en
-  arb_dir: l10n

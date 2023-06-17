@@ -68,7 +68,7 @@ class SnackBarProvider {
   }
 }
 
-abstract class SnackBarProviderMixin {
+abstract mixin class SnackBarProviderMixin {
   GlobalKey<ScaffoldMessengerState> get scaffoldKey;
 
   void showInSnackBar(String value, [Duration? duration]) =>

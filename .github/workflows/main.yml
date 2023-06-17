@@ -40,8 +40,7 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
       - run: flutter doctor
       - run: flutter pub get
-      - run: flutter format --set-exit-if-changed -l 120 lib
-      - run: flutter packages pub run intl_utils:generate
+      - run: dart format --set-exit-if-changed -l 120 lib
       - run: flutter packages pub run build_runner build --delete-conflicting-outputs
       - run: flutter analyze lib
       - run: flutter test --no-pub --coverage --test-randomize-ordering-seed random

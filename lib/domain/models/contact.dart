@@ -4,12 +4,18 @@ import 'package:uuid/uuid.dart';
 import '../entities.dart';
 
 part 'contact.freezed.dart';
+
 part 'contact.g.dart';
 
 @freezed
 class ContactModel with _$ContactModel {
   const factory ContactModel({
-    @JsonKey(ignore: true) @Default(NoopReference()) Reference? reference,
+    @JsonKey(
+      includeFromJson: false,
+      includeToJson: false,
+    )
+    @Default(NoopReference())
+    Reference? reference,
     required String id,
     required String userID,
     @Default('') String fullname,
@@ -32,7 +38,6 @@ class ContactModel with _$ContactModel {
       location: '',
       imageUrl: '',
       createdAt: DateTime.now(),
-      measurements: const <String, double>{},
     );
   }
 

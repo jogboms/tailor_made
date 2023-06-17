@@ -142,19 +142,21 @@ class _JobPageState extends State<JobPage> with SnackBarProviderMixin {
     if (picked == null || picked == job!.dueAt) {
       return;
     }
-    final bool? choice = await showChoiceDialog(context: context, message: 'Are you sure?');
-    if (choice == null || choice == false) {
-      return;
-    }
+    if (context.mounted) {
+      final bool? choice = await showChoiceDialog(context: context, message: 'Are you sure?');
+      if (choice == null || choice == false) {
+        return;
+      }
 
-    showLoadingSnackBar();
+      showLoadingSnackBar();
 
-    try {
-      await job!.reference?.updateData(<String, String>{'dueAt': picked.toString()});
-      closeLoadingSnackBar();
-    } catch (e) {
-      closeLoadingSnackBar();
-      showInSnackBar(e.toString());
+      try {
+        await job!.reference?.updateData(<String, String>{'dueAt': picked.toString()});
+        closeLoadingSnackBar();
+      } catch (e) {
+        closeLoadingSnackBar();
+        showInSnackBar(e.toString());
+      }
     }
   }
 }
