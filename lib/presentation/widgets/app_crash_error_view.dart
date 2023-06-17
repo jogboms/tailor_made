@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/core.dart';
 
 import '../theme.dart';
 import '../utils.dart';
@@ -26,7 +25,7 @@ class AppCrashErrorView extends StatelessWidget {
             const SizedBox(height: 38),
             Text(
               l10n.crashViewTitleMessage,
-              style: textTheme.headline3!.copyWith(
+              style: textTheme.displaySmall!.copyWith(
                 height: 1.08,
                 fontWeight: AppFontWeight.light,
                 color: theme.colorScheme.onBackground,
@@ -38,12 +37,12 @@ class AppCrashErrorView extends StatelessWidget {
                 children: <TextSpan>[
                   TextSpan(
                     text: l10n.crashViewQuoteMessage,
-                    style: textTheme.headline5!.copyWith(height: 1.5),
+                    style: textTheme.headlineSmall!.copyWith(height: 1.5),
                   ),
-                  TextSpan(text: '  —  ', style: textTheme.subtitle1),
+                  TextSpan(text: '  —  ', style: textTheme.titleMedium),
                   TextSpan(
                     text: l10n.crashViewQuoteAuthor,
-                    style: textTheme.subtitle1!.copyWith(fontStyle: FontStyle.italic),
+                    style: textTheme.titleMedium!.copyWith(fontStyle: FontStyle.italic),
                   ),
                 ],
               ),
@@ -51,12 +50,12 @@ class AppCrashErrorView extends StatelessWidget {
             const SizedBox(height: 24),
             Text(
               l10n.crashViewBugMessage1,
-              style: textTheme.subtitle1!.copyWith(height: 1.45),
+              style: textTheme.titleMedium!.copyWith(height: 1.45),
             ),
             const SizedBox(height: 24),
             Text(
               l10n.crashViewBugMessage2,
-              style: textTheme.subtitle1!.copyWith(height: 1.45),
+              style: textTheme.titleMedium!.copyWith(height: 1.45),
             ),
             const SizedBox(height: 24),
           ],

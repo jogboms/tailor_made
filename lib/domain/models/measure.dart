@@ -4,163 +4,141 @@ import 'package:uuid/uuid.dart';
 import '../entities.dart';
 
 part 'measure.freezed.dart';
+
 part 'measure.g.dart';
 
 List<MeasureModel> createDefaultMeasures() {
-  const Reference reference = NoopReference();
   const Uuid uuid = Uuid();
   final DateTime now = DateTime.now();
 
   return <MeasureModel>[
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Arm Hole',
       group: MeasureModelType.blouse,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Shoulder',
       group: MeasureModelType.blouse,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Bust',
       group: MeasureModelType.blouse,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Bust Point',
       group: MeasureModelType.blouse,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Shoulder - Bust Point',
       group: MeasureModelType.blouse,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Shoulder - Under Bust',
       group: MeasureModelType.blouse,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Shoulder - Waist',
       group: MeasureModelType.blouse,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Length',
       group: MeasureModelType.trouser,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Waist',
       group: MeasureModelType.trouser,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Crouch',
       group: MeasureModelType.trouser,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Thigh',
       group: MeasureModelType.trouser,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Body Rise',
       group: MeasureModelType.trouser,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Width',
       group: MeasureModelType.trouser,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Hip',
       group: MeasureModelType.trouser,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Full Length',
       group: MeasureModelType.skirts,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Short Length',
       group: MeasureModelType.skirts,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Knee Length',
       group: MeasureModelType.skirts,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Hip',
       group: MeasureModelType.skirts,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Waist',
       group: MeasureModelType.gown,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Long Length',
       group: MeasureModelType.gown,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Short Length',
       group: MeasureModelType.gown,
       createdAt: now,
     ),
     MeasureModel(
-      reference: reference,
       id: uuid.v4(),
       name: 'Knee Length',
       group: MeasureModelType.gown,
@@ -179,7 +157,12 @@ class MeasureModelType {
 @freezed
 class MeasureModel with _$MeasureModel {
   const factory MeasureModel({
-    @JsonKey(ignore: true) @Default(NoopReference()) Reference? reference,
+    @JsonKey(
+      includeFromJson: false,
+      includeToJson: false,
+    )
+    @Default(NoopReference())
+    Reference? reference,
     required String id,
     required String name,
     @Default(0.0) double value,

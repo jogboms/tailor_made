@@ -93,6 +93,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
   }
 
   void _handlePhotoButtonPressed() async {
+    final Registry registry = context.registry;
     final ImageSource? source = await showImageChoiceDialog(context: context);
     if (source == null) {
       return;
@@ -102,7 +103,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
       return;
     }
     // TODO(Jogboms): move this out of here
-    final Storage ref = context.registry.get<Gallery>().createFile(File(imageFile.path), widget.userId)!;
+    final Storage ref = registry.get<Gallery>().createFile(File(imageFile.path), widget.userId)!;
 
     setState(() => _fireImages.add(_FireImage()..ref = ref));
     try {

@@ -41,7 +41,6 @@ class AccountsMockImpl extends Accounts {
   @override
   Stream<AccountModel> getAccount(String? userId) async* {
     yield const AccountModel(
-      reference: NoopReference(),
       uid: '1',
       notice: 'Hello',
       phoneNumber: 123456789,

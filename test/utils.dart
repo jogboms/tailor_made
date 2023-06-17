@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart' as mt;
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
@@ -52,4 +53,23 @@ Registry createRegistry({
     ..set(MeasuresCoordinator(navigatorKey))
     ..set(PaymentsCoordinator(navigatorKey))
     ..set(TasksCoordinator(navigatorKey));
+}
+
+extension WidgetTesterExtensions on WidgetTester {
+  Future<void> verifyPushNavigation<U extends Widget>(NavigatorObserver observer) async {
+    // NOTE: This is done for pages that show any indefinite animated loaders, CircularProgress
+    await pump();
+    await pump();
+
+    mt.verify(() => observer.didPush(mt.any(), mt.any()));
+    expect(find.byType(U), findsOneWidget);
+  }
+
+  Future<void> verifyPopNavigation(NavigatorObserver observer) async {
+    // NOTE: This is done for pages that show any indefinite animated loaders, CircularProgress
+    await pump();
+    await pump();
+
+    mt.verify(() => observer.didPop(mt.any(), mt.any()));
+  }
 }

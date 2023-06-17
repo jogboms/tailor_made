@@ -56,6 +56,7 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
 
   VoidCallback _onTapCreate(List<ContactModel>? contacts) {
     return () async {
+      final Registry registry = context.registry;
       final _CreateOptions? result = await showDialog<_CreateOptions>(
         context: context,
         builder: (BuildContext context) {
@@ -81,10 +82,10 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
 
       switch (result) {
         case _CreateOptions.contacts:
-          context.registry.get<ContactsCoordinator>().toCreateContact(widget.userId);
+          registry.get<ContactsCoordinator>().toCreateContact(widget.userId);
           break;
         case _CreateOptions.jobs:
-          context.registry.get<JobsCoordinator>().toCreateJob(widget.userId, contacts);
+          registry.get<JobsCoordinator>().toCreateJob(widget.userId, contacts);
           break;
       }
     };

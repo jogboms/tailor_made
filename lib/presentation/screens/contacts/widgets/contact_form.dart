@@ -121,6 +121,7 @@ class ContactFormState extends State<ContactForm> {
   }
 
   Future<void> _handlePhotoButtonPressed() async {
+    final Registry registry = context.registry;
     final ImageSource? source = await showImageChoiceDialog(context: context);
     if (source == null) {
       return;
@@ -130,7 +131,7 @@ class ContactFormState extends State<ContactForm> {
       return;
     }
     // TODO(Jogboms): move this out of here
-    final Contacts contacts = context.registry.get();
+    final Contacts contacts = registry.get();
     final Storage ref = contacts.createFile(File(imageFile.path), widget.userId)!;
 
     setState(() => isLoading = true);

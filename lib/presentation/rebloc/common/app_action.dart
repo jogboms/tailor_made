@@ -1,3 +1,3 @@
 import 'package:rebloc/rebloc.dart';
 
-class AppAction implements Action {}
+mixin AppAction implements Action {}

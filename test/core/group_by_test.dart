@@ -41,7 +41,7 @@ void main() {
       ];
 
       final Map<String, List<MeasureModel>> grouped =
-          groupBy<MeasureModel>(measures, (MeasureModel measure) => measure.group);
+      groupBy<MeasureModel>(measures, (MeasureModel measure) => measure.group);
 
       expect(grouped.isNotEmpty, true);
       expect(grouped['Blouse']!.length, 3);

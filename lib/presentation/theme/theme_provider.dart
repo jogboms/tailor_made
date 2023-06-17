@@ -93,8 +93,8 @@ class ThemeProvider extends InheritedWidget {
       primaryColor: kPrimaryColor,
       primaryIconTheme: theme.primaryIconTheme.copyWith(color: kPrimarySwatch),
       textTheme: theme.textTheme.copyWith(
-        bodyText2: theme.textTheme.bodyText2!.merge(body1),
-        button: theme.textTheme.button!.merge(button),
+        bodyMedium: theme.textTheme.bodyMedium!.merge(body1),
+        labelLarge: theme.textTheme.labelLarge!.merge(button),
       ),
       canvasColor: Colors.white,
       buttonTheme: theme.buttonTheme.copyWith(height: kButtonHeight),
