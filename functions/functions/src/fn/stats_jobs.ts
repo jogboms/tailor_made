@@ -1,47 +1,48 @@
 import * as admin from "firebase-admin";
-import { Change, EventContext, firestore } from "firebase-functions";
-import { isArray } from "util";
-import { ChangeState } from "../utils";
+import {Change, firestore} from "firebase-functions";
+import {ChangeState} from "../utils";
 
 // TODO
 // Maybe not the best way to go about this
 async function _onStatsJobUpdate(
-  change: Change<firestore.DocumentSnapshot>,
-  context: EventContext
+    change: Change<firestore.DocumentSnapshot>,
 ) {
   const jobs = change.before.exists ? change.before : change.after;
 
-  return _onStatsJob(jobs, context);
+  return _onStatsJob(jobs);
 }
 
 async function _onStatsJob(
-  snapshot: firestore.DocumentSnapshot,
-  context: EventContext
+    snapshot: firestore.DocumentSnapshot,
 ) {
   const db = admin.firestore();
   const _data = snapshot.data();
 
+  if (!_data) {
+    return;
+  }
+
   // Get user ID from Job
-  const userID = isArray(_data) ? _data[0].userID : _data.userID;
+  const userID = Array.isArray(_data) ? _data[0].userID : _data.userID;
 
   const stats = db.doc(`stats/${userID}`);
 
   const jobsSnap = await db
-    .collection("jobs")
-    .where("userID", "==", userID)
-    .get();
+      .collection("jobs")
+      .where("userID", "==", userID)
+      .get();
 
-  let completedJob = 0,
-    pendingJob = 0,
-    completedPrice = 0,
-    totalPrice = 0,
-    totalImages = 0;
+  let completedJob = 0;
+  let pendingJob = 0;
+  let completedPrice = 0;
+  let totalPrice = 0;
+  let totalImages = 0;
 
-  jobsSnap.forEach(doc => {
+  jobsSnap.forEach((doc) => {
     const data = doc.data();
     totalPrice += data.price;
     totalImages += data.images.length;
-    completedPrice += data.payments.reduce((acc, cur) => acc + cur.price, 0);
+    completedPrice += data.payments.reduce((acc: number, cur: any) => acc + cur.price, 0);
 
     if (data.isComplete) {
       completedJob += 1;
@@ -52,18 +53,18 @@ async function _onStatsJob(
 
   return stats.update({
     gallery: {
-      total: totalImages
+      total: totalImages,
     },
     jobs: {
       total: jobsSnap.size,
       pending: pendingJob,
-      completed: completedJob
+      completed: completedJob,
     },
     payments: {
       total: totalPrice,
       pending: totalPrice - completedPrice,
-      completed: completedPrice
-    }
+      completed: completedPrice,
+    },
   });
 }
 

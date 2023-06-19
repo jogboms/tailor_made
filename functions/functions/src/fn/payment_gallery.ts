@@ -1,24 +1,26 @@
 import * as admin from "firebase-admin";
-import { Change, EventContext, firestore } from "firebase-functions";
+import {Change, firestore} from "firebase-functions";
 
 async function _onPaymentGallery(
-  change: Change<firestore.DocumentSnapshot>,
-  context: EventContext
+    change: Change<firestore.DocumentSnapshot>
 ) {
-  if (!change.after.data()) return null;
+  const data = change.after.data();
+  if (!data) {
+    return null;
+  }
 
-  const payments = change.after.data().payments;
-  const images = change.after.data().images;
+  const payments = data.payments;
+  const images = data.images;
   const db = admin.firestore();
 
   const batch = db.batch();
 
-  payments.forEach(payment => {
+  payments.forEach((payment: any) => {
     const ref = db.collection("payments").doc(payment.id);
     batch.set(ref, payment);
   });
 
-  images.forEach(image => {
+  images.forEach((image: any) => {
     const ref = db.collection("gallery").doc(image.id);
     batch.set(ref, image);
   });
@@ -28,5 +30,5 @@ async function _onPaymentGallery(
 }
 
 export const onPaymentGallery = firestore
-  .document("jobs/{jobId}")
-  .onWrite(_onPaymentGallery);
+    .document("jobs/{jobId}")
+    .onWrite(_onPaymentGallery);

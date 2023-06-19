@@ -41,6 +41,8 @@
 	<string>Save images of contact and jobs</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Save images of contact and jobs</string>
+  <key>NSContactsUsageDescription</key>
+  <string>Save contacts for jobs</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

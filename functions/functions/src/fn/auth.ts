@@ -1,10 +1,9 @@
-import { firestore as Firestore } from "firebase-admin";
-import { auth, EventContext } from "firebase-functions";
-import { ChangeState } from "../utils";
+import {firestore as cloudDb} from "firebase-admin";
+import {auth} from "firebase-functions";
 
-export function _onAuth(onCreate: ChangeState) {
-  return async (user: auth.UserRecord, context: EventContext) => {
-    const db = Firestore();
+export function _onAuth() {
+  return async (user: auth.UserRecord) => {
+    const db = cloudDb();
     const batch = db.batch();
 
     const account = db.collection("accounts").doc(user.uid);
@@ -24,21 +23,21 @@ export function _onAuth(onCreate: ChangeState) {
     const stats = db.collection("stats").doc(user.uid);
     batch.set(stats, {
       contacts: {
-        total: 0
+        total: 0,
       },
       gallery: {
-        total: 0
+        total: 0,
       },
       jobs: {
         total: 0,
         pending: 0,
-        completed: 0
+        completed: 0,
       },
       payments: {
         total: 0,
         pending: 0,
-        completed: 0
-      }
+        completed: 0,
+      },
     });
 
     // Commit the batch
@@ -46,11 +45,6 @@ export function _onAuth(onCreate: ChangeState) {
   };
 }
 
-export function onAuthCreate(onCreate: ChangeState) {
-  const store = auth.user();
-
-  // return onCreate == ChangeState.Create
-  //   ? store.onCreate(_onAuth(onCreate))
-  //   : store.onDelete(_onAuth(onCreate));
-  return store.onCreate(_onAuth(onCreate));
+export function onAuthCreate() {
+  return auth.user().onCreate(_onAuth());
 }

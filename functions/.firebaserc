@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "tailor-made-2018"
+    "default": "tailor-made-2018",
+    "dev": "tailormade-debug"
   }
 }
