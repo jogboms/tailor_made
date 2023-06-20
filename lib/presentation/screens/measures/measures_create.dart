@@ -14,7 +14,7 @@ class MeasuresCreate extends StatefulWidget {
   State<MeasuresCreate> createState() => _MeasuresCreateState();
 }
 
-class _MeasuresCreateState extends State<MeasuresCreate> with DispatchProvider<AppState> {
+class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin<AppState> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
   String? groupName, unitValue;

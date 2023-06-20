@@ -1,7 +1,7 @@
 export 'presentation/app.dart';
 export 'presentation/constants.dart';
 export 'presentation/coordinator.dart';
-export 'presentation/providers.dart';
+export 'presentation/mixins.dart';
 export 'presentation/rebloc.dart';
 export 'presentation/registry.dart';
 export 'presentation/theme.dart';

@@ -60,7 +60,7 @@ class _AppBar extends StatefulWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
+class _AppBarState extends State<_AppBar> with StoreDispatchMixin<AppState> {
   bool _isSearching = false;
 
   @override

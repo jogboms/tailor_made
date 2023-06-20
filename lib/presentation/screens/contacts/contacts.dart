@@ -12,7 +12,7 @@ class ContactsPage extends StatefulWidget {
   State<ContactsPage> createState() => _ContactsPageState();
 }
 
-class _ContactsPageState extends State<ContactsPage> with DispatchProvider<AppState> {
+class _ContactsPageState extends State<ContactsPage> with StoreDispatchMixin<AppState> {
   @override
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, ContactsViewModel>(
@@ -72,7 +72,7 @@ class _AppBar extends StatefulWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
+class _AppBarState extends State<_AppBar> with StoreDispatchMixin<AppState> {
   bool _isSearching = false;
 
   @override
