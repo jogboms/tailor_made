@@ -3,9 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/rebloc.dart';
 
-// ignore: must_be_immutable
 class ContactsViewModel extends Equatable {
-  ContactsViewModel(AppState state)
+  ContactsViewModel(AppState state, {this.contactID})
       : _model = state.contacts.contacts,
         _searchResults = state.contacts.searchResults,
         isSearching = state.contacts.isSearching,
@@ -22,21 +21,12 @@ class ContactsViewModel extends Equatable {
 
   Map<String, List<MeasureModel>>? get measuresGrouped => measures;
 
-  ContactModel? get selected {
-    if (contactID != null) {
-      return model!.firstWhereOrNull((_) => _.id == contactID);
-    }
-    return null;
-  }
+  ContactModel? get selected => model?.firstWhereOrNull((_) => _.id == contactID);
 
-  List<JobModel> get selectedJobs {
-    if (selected != null) {
-      return jobs!.where((JobModel job) => job.contactID == selected!.id).toList();
-    }
-    return <JobModel>[];
-  }
+  List<JobModel> get selectedJobs =>
+      jobs?.where((JobModel job) => job.contactID == selected?.id).toList() ?? <JobModel>[];
 
-  String? contactID;
+  final String? contactID;
 
   final String userId;
 

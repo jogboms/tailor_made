@@ -10,7 +10,7 @@ import 'coordinator_base.dart';
 class GalleryCoordinator extends CoordinatorBase {
   const GalleryCoordinator(super.navigatorKey);
 
-  void toImage(ImageModel? image) {
+  void toImage(ImageModel image) {
     navigator?.push<void>(RouteTransitions.fadeIn(GalleryView(image: image)));
   }
 

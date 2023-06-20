@@ -5,15 +5,15 @@ import 'package:tailor_made/presentation.dart';
 const double _kGridWidth = 120.0;
 
 class PaymentGridItem extends StatelessWidget {
-  PaymentGridItem({super.key, this.payment, double? size}) : size = Size.square(size ?? _kGridWidth);
+  PaymentGridItem({super.key, required this.payment, double? size}) : size = Size.square(size ?? _kGridWidth);
 
-  final PaymentModel? payment;
+  final PaymentModel payment;
   final Size size;
 
   @override
   Widget build(BuildContext context) {
-    final DateTime date = payment!.createdAt;
-    final String price = AppMoney(payment!.price).formatted;
+    final DateTime date = payment.createdAt;
+    final String price = AppMoney(payment.price).formatted;
     final ThemeProvider theme = ThemeProvider.of(context)!;
 
     return Container(

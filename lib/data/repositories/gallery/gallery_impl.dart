@@ -14,7 +14,7 @@ class GalleryImpl extends Gallery {
   final bool isDev;
 
   @override
-  Stream<List<ImageModel?>> fetchAll(String userId) {
+  Stream<List<ImageModel>> fetchAll(String userId) {
     return firebase.db.gallery(userId).snapshots().map(
           (MapQuerySnapshot snap) =>
               snap.docs.map((MapQueryDocumentSnapshot item) => ImageModel.fromJson(item.data())).toList(),

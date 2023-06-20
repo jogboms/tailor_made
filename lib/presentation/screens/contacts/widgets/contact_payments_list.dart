@@ -5,9 +5,8 @@ import 'package:tailor_made/presentation/widgets.dart';
 import '../../payments/widgets/payments_list.dart';
 
 class PaymentsListWidget extends StatelessWidget {
-  const PaymentsListWidget({super.key, required this.contact, required this.jobs});
+  const PaymentsListWidget({super.key, required this.jobs});
 
-  final ContactModel? contact;
   final List<JobModel> jobs;
 
   @override

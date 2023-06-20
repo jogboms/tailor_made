@@ -8,13 +8,13 @@ import 'package:tailor_made/presentation/widgets.dart';
 import '../payment.dart';
 
 class PaymentListItem extends StatelessWidget {
-  const PaymentListItem({super.key, this.payment});
+  const PaymentListItem({super.key, required this.payment});
 
-  final PaymentModel? payment;
+  final PaymentModel payment;
 
   @override
   Widget build(BuildContext context) {
-    final DateTime date = payment!.createdAt;
+    final DateTime date = payment.createdAt;
     final ThemeProvider theme = ThemeProvider.of(context)!;
 
     return Material(
@@ -37,7 +37,7 @@ class PaymentListItem extends StatelessWidget {
                     const Dots(color: kAccentColor, size: 12),
                     const SizedBox(width: 8.0),
                     Text(
-                      AppMoney(payment!.price).formatted,
+                      AppMoney(payment.price).formatted,
                       style: theme.title.copyWith(letterSpacing: 1.5),
                     ),
                   ],

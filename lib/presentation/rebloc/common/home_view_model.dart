@@ -22,8 +22,6 @@ class HomeViewModel extends Equatable {
 
   final List<JobModel>? _jobs;
 
-  List<JobModel>? get jobs => _jobs;
-
   final StatsModel? stats;
   final SettingsModel? settings;
   final bool isLoading;
@@ -36,8 +34,8 @@ class HomeViewModel extends Equatable {
   bool get isPending => account != null && account!.status == AccountStatus.pending;
 
   bool get shouldSendRating =>
-      account != null && !account!.hasSendRating && (((contacts?.length ?? 0) >= 10) || ((jobs?.length ?? 0) >= 10));
+      account != null && !account!.hasSendRating && (((contacts?.length ?? 0) >= 10) || ((_jobs?.length ?? 0) >= 10));
 
   @override
-  List<Object?> get props => <Object?>[stats, settings, hasSkippedPremium, isLoading, account, contacts, jobs];
+  List<Object?> get props => <Object?>[stats, settings, hasSkippedPremium, isLoading, account, contacts, _jobs];
 }

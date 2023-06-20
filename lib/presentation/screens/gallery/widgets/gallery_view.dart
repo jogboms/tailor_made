@@ -5,24 +5,26 @@ import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
 class GalleryView extends StatelessWidget {
-  const GalleryView({super.key, this.image});
+  const GalleryView({super.key, required this.image});
 
-  final ImageModel? image;
+  final ImageModel image;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, ContactJobViewModel>(
-      converter: (AppState store) => ContactJobViewModel(store)
-        ..contactID = image!.contactID
-        ..jobID = image!.jobID,
+      converter: (AppState store) => ContactJobViewModel(
+        store,
+        contactID: image.contactID,
+        jobID: image.jobID,
+      ),
       builder: (_, __, ContactJobViewModel vm) {
         return Scaffold(
           backgroundColor: Colors.black87,
           appBar: _MyAppBar(contact: vm.selectedContact, job: vm.selectedJob, account: vm.account),
           body: PhotoView(
-            imageProvider: NetworkImage(image!.src),
+            imageProvider: NetworkImage(image.src),
             loadingBuilder: (_, __) => const LoadingSpinner(),
-            heroAttributes: PhotoViewHeroAttributes(tag: image!.src),
+            heroAttributes: PhotoViewHeroAttributes(tag: image.src),
           ),
         );
       },

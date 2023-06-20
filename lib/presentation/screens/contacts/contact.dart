@@ -21,7 +21,7 @@ class ContactPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, ContactsViewModel>(
-      converter: (AppState state) => ContactsViewModel(state)..contactID = contact.id,
+      converter: (AppState state) => ContactsViewModel(state, contactID: contact.id),
       builder: (BuildContext context, DispatchFunction dispatch, ContactsViewModel viewModel) {
         // in the case of newly created contacts
         final ContactModel contact = viewModel.selected ?? this.contact;
@@ -58,11 +58,11 @@ class ContactPage extends StatelessWidget {
                     ),
                     _TabView(
                       name: _tabs[1].toLowerCase(),
-                      child: GalleryGridWidget(contact: contact, jobs: viewModel.selectedJobs),
+                      child: GalleryGridWidget(jobs: viewModel.selectedJobs),
                     ),
                     _TabView(
                       name: _tabs[2].toLowerCase(),
-                      child: PaymentsListWidget(contact: contact, jobs: viewModel.selectedJobs),
+                      child: PaymentsListWidget(jobs: viewModel.selectedJobs),
                     ),
                   ],
                 );

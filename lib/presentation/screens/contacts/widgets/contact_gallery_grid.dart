@@ -5,9 +5,8 @@ import 'package:tailor_made/presentation/widgets.dart';
 import '../../gallery/widgets/gallery_grid.dart';
 
 class GalleryGridWidget extends StatelessWidget {
-  const GalleryGridWidget({super.key, required this.contact, required this.jobs});
+  const GalleryGridWidget({super.key, required this.jobs});
 
-  final ContactModel? contact;
   final List<JobModel> jobs;
 
   @override

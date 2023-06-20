@@ -8,11 +8,11 @@ import 'payment_list_item.dart';
 class PaymentList extends StatelessWidget {
   const PaymentList({super.key, required this.payments});
 
-  final List<PaymentModel?>? payments;
+  final List<PaymentModel> payments;
 
   @override
   Widget build(BuildContext context) {
-    if (payments!.isEmpty) {
+    if (payments.isEmpty) {
       return const SliverFillRemaining(
         child: EmptyResultView(message: 'No payments available'),
       );
@@ -20,8 +20,8 @@ class PaymentList extends StatelessWidget {
 
     return SliverList(
       delegate: AppSliverSeparatorBuilderDelegate(
-        childCount: payments!.length,
-        builder: (_, int index) => PaymentListItem(payment: payments![index]),
+        childCount: payments.length,
+        builder: (_, int index) => PaymentListItem(payment: payments[index]),
         separatorBuilder: (_, __) => const Divider(height: 0),
       ),
     );

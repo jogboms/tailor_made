@@ -38,19 +38,21 @@ class PaymentsPage extends StatelessWidget {
           ),
           Builder(
             builder: (BuildContext context) {
-              if (payments == null) {
-                return StreamBuilder<List<PaymentModel>>(
-                  // TODO(Jogboms): move this out of here
-                  stream: context.registry.get<Payments>().fetchAll(userId),
-                  builder: (_, AsyncSnapshot<List<PaymentModel?>> snapshot) {
-                    if (!snapshot.hasData) {
-                      return const SliverFillRemaining(child: LoadingSpinner());
-                    }
-                    return _Content(payments: snapshot.data);
-                  },
-                );
+              if (payments case final List<PaymentModel> payments) {
+                return _Content(payments: payments);
               }
-              return _Content(payments: payments);
+
+              return StreamBuilder<List<PaymentModel>>(
+                // TODO(Jogboms): move this out of here
+                stream: context.registry.get<Payments>().fetchAll(userId),
+                builder: (_, AsyncSnapshot<List<PaymentModel>> snapshot) {
+                  final List<PaymentModel>? data = snapshot.data;
+                  if (data == null) {
+                    return const SliverFillRemaining(child: LoadingSpinner());
+                  }
+                  return _Content(payments: data);
+                },
+              );
             },
           )
         ],
@@ -62,11 +64,11 @@ class PaymentsPage extends StatelessWidget {
 class _Content extends StatelessWidget {
   const _Content({required this.payments});
 
-  final List<PaymentModel?>? payments;
+  final List<PaymentModel> payments;
 
   @override
   Widget build(BuildContext context) {
-    if (payments!.isEmpty) {
+    if (payments.isEmpty) {
       return const SliverFillRemaining(
         child: EmptyResultView(message: 'No payments available'),
       );
