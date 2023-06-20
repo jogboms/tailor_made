@@ -1,26 +1,39 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/domain.dart';
 
 import '../../network/firebase.dart';
 import '../derive_list_from_data.dart';
 import '../derive_map_from_data.dart';
+import '../payments/payments_impl.dart';
 
 class JobsImpl extends Jobs {
   JobsImpl({
     required this.firebase,
     required this.isDev,
-  });
+  }) : collection = CloudDbCollection(firebase.db, collectionName);
 
   final Firebase firebase;
   final bool isDev;
+  final CloudDbCollection collection;
+
+  static const String collectionName = 'jobs';
 
   @override
-  Stream<List<JobModel>> fetchAll(String? userId) {
-    return firebase.db
-        .jobs(userId)
-        .snapshots()
-        .map((MapQuerySnapshot snapshot) => snapshot.docs.map(_deriveJobModel).toList());
+  Stream<List<JobEntity>> fetchAll(String userId) {
+    return collection.fetchAll().where('userID', isEqualTo: userId).snapshots().map(
+          (MapQuerySnapshot snapshot) => snapshot.docs
+              .map(
+                (QueryDocumentSnapshot<DynamicMap> snapshot) => _deriveJobEntity(
+                  snapshot.id,
+                  snapshot.reference.path,
+                  snapshot.data(),
+                ),
+              )
+              .toList(),
+        );
   }
 
   @override
@@ -29,17 +42,75 @@ class JobsImpl extends Jobs {
   }
 
   @override
-  Stream<JobModel> update(JobModel job, String userId) {
-    final MapDocumentReference ref = firebase.db.doc('jobs/${job.id}');
-    ref.set(job.toJson()).then((_) {});
-    return ref.snapshots().map(_deriveJobModel);
+  Future<JobEntity> create(String userId, CreateJobData data) async {
+    final Completer<JobEntity> completer = Completer<JobEntity>();
+    final MapDocumentReference ref = collection.db.doc('jobs/${data.id}');
+    unawaited(
+      ref.set(<String, Object>{
+        'id': data.id,
+        'userID': data.userID,
+        if (data.contactID != null) 'contactID': data.contactID!,
+        'name': data.name,
+        'price': data.price,
+        'completedPayment': data.completedPayment,
+        'pendingPayment': data.pendingPayment,
+        'notes': data.notes,
+        'images': data.images.map((_) => _.toJson()).toList(growable: false),
+        'measurements': data.measurements,
+        'payments': data.payments.map((_) => _.toJson()).toList(growable: false),
+        'isComplete': data.isComplete,
+        'createdAt': data.createdAt.toUtc().toString(),
+        'dueAt': data.dueAt.toUtc().toString(),
+      }),
+    );
+
+    StreamSubscription<JobEntity>? sub;
+    void listener(JobEntity job) {
+      completer.complete(job);
+      sub?.cancel();
+    }
+
+    sub = ref
+        .snapshots()
+        .map(
+          (DocumentSnapshot<DynamicMap> snapshot) => _deriveJobEntity(
+            snapshot.id,
+            snapshot.reference.path,
+            snapshot.data()!,
+          ),
+        )
+        .listen(listener);
+
+    return completer.future;
+  }
+
+  @override
+  Future<bool> update(
+    String userId, {
+    required ReferenceEntity reference,
+    List<ImageModel>? images,
+    List<PaymentEntity>? payments,
+    bool? isComplete,
+    DateTime? dueAt,
+  }) async {
+    await collection.fetchOne(reference.id).update(<String, Object?>{
+      if (images != null) 'images': images.map((_) => _.toJson()).toList(growable: false),
+      if (payments != null) 'payments': payments.map((_) => _.toJson()).toList(growable: false),
+      if (isComplete != null) 'isComplete': isComplete,
+      if (dueAt != null) 'dueAt': dueAt.toUtc().toString(),
+    });
+    return true;
   }
 }
 
-JobModel _deriveJobModel(MapDocumentSnapshot snapshot) {
-  final DynamicMap data = snapshot.data()!;
-  return JobModel(
-    reference: FireReference(snapshot.reference),
+JobEntity _deriveJobEntity(String id, String path, DynamicMap data) {
+  Map<String, dynamic> measurements = data['measurements'] as Map<String, dynamic>? ?? <String, dynamic>{};
+  if (measurements.isNotEmpty) {
+    measurements = measurements..removeWhere((String key, dynamic value) => value == null);
+  }
+
+  return JobEntity(
+    reference: ReferenceEntity(id: id, path: path),
     id: data['id'] as String,
     userID: data['userID'] as String,
     contactID: data['contactID'] as String?,
@@ -49,8 +120,15 @@ JobModel _deriveJobModel(MapDocumentSnapshot snapshot) {
     pendingPayment: (data['pendingPayment'] as num).toDouble(),
     notes: data['notes'] as String? ?? '',
     images: deriveListFromMap(data['images'], ImageModel.fromJson),
-    measurements: deriveMapFromMap(data['measurements'], (dynamic value) => value as double? ?? 0.0),
-    payments: deriveListFromMap(data['payments'], PaymentModel.fromJson),
+    measurements: deriveMapFromMap(measurements, (dynamic value) => value as double? ?? 0.0),
+    payments: deriveListFromMap(
+      data['payments'],
+      (Map<String, dynamic> data) => derivePaymentEntity(
+        data['id'] as String,
+        null,
+        data,
+      ),
+    ),
     isComplete: data['isComplete'] as bool,
     createdAt: DateTime.parse(data['createdAt'] as String),
     dueAt: DateTime.tryParse((data['dueAt'] as String?) ?? '') ?? DateTime.now(),

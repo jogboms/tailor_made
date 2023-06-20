@@ -3,7 +3,7 @@ import '../entities.dart';
 abstract class Accounts {
   Future<void> signInWithGoogle();
 
-  Stream<User?> get onAuthStateChanged;
+  Stream<String?> get onAuthStateChanged;
 
   Future<void>? signOut();
 

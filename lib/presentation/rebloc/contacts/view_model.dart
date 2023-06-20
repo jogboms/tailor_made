@@ -11,7 +11,7 @@ class ContactsViewModel extends Equatable {
         hasSortFn = state.contacts.hasSortFn,
         measuresGrouped = state.measures.grouped ?? <String, List<MeasureModel>>{},
         userId = state.account.account!.uid,
-        _jobs = state.jobs.jobs ?? <JobModel>[],
+        _jobs = state.jobs.jobs ?? <JobEntity>[],
         sortFn = state.contacts.sortFn,
         isLoading = state.contacts.status == StateStatus.loading,
         hasError = state.contacts.status == StateStatus.failure,
@@ -23,7 +23,7 @@ class ContactsViewModel extends Equatable {
 
   ContactModel? get selected => model.firstWhereOrNull((_) => _.id == contactID);
 
-  List<JobModel> get selectedJobs => jobs.where((JobModel job) => job.contactID == selected?.id).toList();
+  List<JobEntity> get selectedJobs => jobs.where((JobEntity job) => job.contactID == selected?.id).toList();
 
   final String? contactID;
 
@@ -33,9 +33,9 @@ class ContactsViewModel extends Equatable {
 
   List<ContactModel> get searchResults => _searchResults;
 
-  final List<JobModel> _jobs;
+  final List<JobEntity> _jobs;
 
-  List<JobModel> get jobs => _jobs;
+  List<JobEntity> get jobs => _jobs;
 
   final List<ContactModel> _model;
 

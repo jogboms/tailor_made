@@ -19,11 +19,7 @@ class CloudDb {
 
   MapQuery gallery(String userId) => collection('gallery').where('userID', isEqualTo: userId);
 
-  MapQuery payments(String userId) => collection('payments').where('userID', isEqualTo: userId);
-
   MapQuery contacts(String? userId) => collection('contacts').where('userID', isEqualTo: userId);
-
-  MapQuery jobs(String? userId) => collection('jobs').where('userID', isEqualTo: userId);
 
   Future<void> batchAction(void Function(WriteBatch batch) action) {
     final WriteBatch batch = _instance.batch();

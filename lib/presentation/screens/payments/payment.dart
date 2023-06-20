@@ -7,7 +7,7 @@ import 'package:tailor_made/presentation.dart';
 class PaymentPage extends StatelessWidget {
   const PaymentPage({super.key, required this.payment});
 
-  final PaymentModel payment;
+  final PaymentEntity payment;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class PaymentPage extends StatelessWidget {
             backgroundColor: Colors.transparent,
             elevation: 0.0,
             actions: <Widget>[
-              if (vm.selectedJob case final JobModel job)
+              if (vm.selectedJob case final JobEntity job)
                 IconButton(
                   icon: const Icon(Icons.work, color: kTitleBaseColor),
                   onPressed: () => context.registry.get<JobsCoordinator>().toJob(job),

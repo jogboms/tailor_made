@@ -7,13 +7,13 @@ import '../../gallery/widgets/gallery_grid.dart';
 class GalleryGridWidget extends StatelessWidget {
   const GalleryGridWidget({super.key, required this.jobs});
 
-  final List<JobModel> jobs;
+  final List<JobEntity> jobs;
 
   @override
   Widget build(BuildContext context) {
     final List<ImageModel> images = jobs.fold<List<ImageModel>>(
       <ImageModel>[],
-      (List<ImageModel> acc, JobModel item) => acc..addAll(item.images),
+      (List<ImageModel> acc, JobEntity item) => acc..addAll(item.images),
     );
 
     if (images.isEmpty) {

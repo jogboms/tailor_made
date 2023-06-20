@@ -8,7 +8,7 @@ import 'payment_list_item.dart';
 class PaymentList extends StatelessWidget {
   const PaymentList({super.key, required this.payments});
 
-  final List<PaymentModel> payments;
+  final List<PaymentEntity> payments;
 
   @override
   Widget build(BuildContext context) {

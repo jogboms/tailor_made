@@ -5,9 +5,9 @@ import 'package:tailor_made/presentation/rebloc.dart';
 
 class JobsViewModel extends Equatable {
   JobsViewModel(AppState state, {this.jobID})
-      : _model = state.jobs.jobs ?? <JobModel>[],
+      : _model = state.jobs.jobs ?? <JobEntity>[],
         _contacts = state.contacts.contacts ?? <ContactModel>[],
-        _searchResults = state.jobs.searchResults ?? <JobModel>[],
+        _searchResults = state.jobs.searchResults ?? <JobEntity>[],
         isSearching = state.jobs.isSearching,
         hasSortFn = state.jobs.hasSortFn,
         measures = state.measures.grouped ?? <String, List<MeasureModel>>{},
@@ -17,18 +17,18 @@ class JobsViewModel extends Equatable {
         hasError = state.jobs.status == StateStatus.failure,
         error = state.jobs.error;
 
-  List<JobModel> get jobs => isSearching ? searchResults : model;
+  List<JobEntity> get jobs => isSearching ? searchResults : model;
 
-  List<JobModel> get tasks {
-    final List<JobModel> tasks = model.where((JobModel job) => !job.isComplete).toList();
-    return tasks..sort((JobModel a, JobModel b) => a.dueAt.compareTo(b.dueAt));
+  List<JobEntity> get tasks {
+    final List<JobEntity> tasks = model.where((JobEntity job) => !job.isComplete).toList();
+    return tasks..sort((JobEntity a, JobEntity b) => a.dueAt.compareTo(b.dueAt));
   }
 
-  JobModel? get selected => model.firstWhereOrNull((_) => _.id == jobID);
+  JobEntity? get selected => model.firstWhereOrNull((_) => _.id == jobID);
 
   ContactModel? get selectedContact => contacts.firstWhereOrNull((_) => _.id == selected?.contactID);
 
-  List<JobModel> get selectedJobs => jobs.where((JobModel job) => job.contactID == selected?.id).toList();
+  List<JobEntity> get selectedJobs => jobs.where((JobEntity job) => job.contactID == selected?.id).toList();
 
   final String? jobID;
 
@@ -38,15 +38,15 @@ class JobsViewModel extends Equatable {
 
   List<ContactModel> get contacts => _contacts;
 
-  final List<JobModel> _searchResults;
+  final List<JobEntity> _searchResults;
 
-  List<JobModel> get searchResults => _searchResults;
+  List<JobEntity> get searchResults => _searchResults;
 
   final Map<String, List<MeasureModel>> measures;
 
-  final List<JobModel> _model;
+  final List<JobEntity> _model;
 
-  List<JobModel> get model => _model;
+  List<JobEntity> get model => _model;
 
   final bool hasSortFn;
   final JobsSortType sortFn;

@@ -10,7 +10,7 @@ class PaymentGrids extends StatefulWidget {
       : gridSize = Size.square(gridSize ?? _kGridWidth);
 
   final Size gridSize;
-  final JobModel job;
+  final JobEntity job;
   final String userId;
 
   @override
@@ -23,7 +23,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
   @override
   void initState() {
     super.initState();
-    _firePayments = widget.job.payments.map((PaymentModel payment) => _FirePayment()..payment = payment).toList();
+    _firePayments = widget.job.payments.map((PaymentEntity payment) => _FirePayment()..payment = payment).toList();
   }
 
   @override
@@ -33,7 +33,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
       _firePayments.length,
       (int index) {
         final _FirePayment fireImage = _firePayments[index];
-        final PaymentModel? payment = fireImage.payment;
+        final PaymentEntity? payment = fireImage.payment;
 
         if (payment == null) {
           return const Center(widthFactor: 2.5, child: LoadingSpinner());
@@ -78,8 +78,9 @@ class _PaymentGridsState extends State<PaymentGrids> {
   }
 
   void _onCreateNew() async {
+    final Registry registry = context.registry;
     final Map<String, dynamic>? result =
-        await context.registry.get<PaymentsCoordinator>().toCreatePayment(widget.job.pendingPayment);
+        await registry.get<PaymentsCoordinator>().toCreatePayment(widget.job.pendingPayment);
     if (result != null) {
       setState(() {
         _firePayments.add(_FirePayment());
@@ -87,8 +88,13 @@ class _PaymentGridsState extends State<PaymentGrids> {
 
       try {
         setState(() {
-          _firePayments.last.payment = PaymentModel(
-            id: const Uuid().v4(),
+          final String id = const Uuid().v4();
+          _firePayments.last.payment = PaymentEntity(
+            reference: ReferenceEntity(
+              id: id,
+              path: id, // TODO
+            ),
+            id: id,
             userID: widget.userId,
             contactID: widget.job.contactID!,
             jobID: widget.job.id,
@@ -98,9 +104,14 @@ class _PaymentGridsState extends State<PaymentGrids> {
           );
         });
 
-        await widget.job.reference?.updateData(<String, List<Map<String, dynamic>?>>{
-          'payments': _firePayments.map((_FirePayment payment) => payment.payment!.toJson()).toList(),
-        });
+        await registry.get<Jobs>().update(
+              widget.job.userID,
+              reference: widget.job.reference,
+              payments: _firePayments
+                  .map((_FirePayment payment) => payment.payment)
+                  .whereType<PaymentEntity>()
+                  .toList(growable: false),
+            );
 
         setState(() {
           _firePayments.last
@@ -149,7 +160,7 @@ class _NewGrid extends StatelessWidget {
 const double _kGridWidth = 120.0;
 
 class _FirePayment {
-  PaymentModel? payment;
+  PaymentEntity? payment;
   bool isLoading = true;
   bool isSucess = false;
 }

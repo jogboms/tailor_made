@@ -11,7 +11,7 @@ import 'coordinator_base.dart';
 class JobsCoordinator extends CoordinatorBase {
   const JobsCoordinator(super.navigatorKey);
 
-  void toJob(JobModel job, {bool replace = false}) {
+  void toJob(JobEntity job, {bool replace = false}) {
     replace
         ? navigator?.pushReplacement<dynamic, dynamic>(RouteTransitions.slideIn(JobPage(job: job)))
         : navigator?.push<void>(RouteTransitions.slideIn(JobPage(job: job)));

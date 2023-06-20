@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:tailor_made/data.dart';
-import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:tailor_made/presentation/screens/homepage/homepage.dart';
 import 'package:tailor_made/presentation/screens/splash/splash.dart';
@@ -24,7 +23,7 @@ void main() {
       );
 
       when(mockRepositories.accounts.signInWithGoogle).thenAnswer((_) async {});
-      when(() => mockRepositories.accounts.onAuthStateChanged).thenAnswer((_) => Stream<User?>.value(const MockUser()));
+      when(() => mockRepositories.accounts.onAuthStateChanged).thenAnswer((_) => Stream<String?>.value('1'));
       when(() => mockRepositories.accounts.getAccount(any())).thenAnswer((_) => AccountsMockImpl().getAccount('1'));
       when(mockRepositories.settings.fetch).thenAnswer((_) => SettingsMockImpl().fetch());
       when(() => mockRepositories.measures.fetchAll(any())).thenAnswer((_) => MeasuresMockImpl().fetchAll('1'));

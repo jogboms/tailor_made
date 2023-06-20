@@ -1,6 +1,9 @@
 import '../data/network/firebase/models.dart';
 
 export 'entities/account_entity.dart';
+export 'entities/create_job_data.dart';
+export 'entities/job_entity.dart';
+export 'entities/payment_entity.dart';
 export 'entities/reference_entity.dart';
 export 'entities/setting_entity.dart';
 

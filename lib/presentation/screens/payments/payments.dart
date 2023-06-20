@@ -6,9 +6,9 @@ import 'package:tailor_made/presentation.dart';
 import 'widgets/payments_list.dart';
 
 class PaymentsPage extends StatelessWidget {
-  const PaymentsPage({super.key, this.payments = const <PaymentModel>[], required this.userId});
+  const PaymentsPage({super.key, this.payments = const <PaymentEntity>[], required this.userId});
 
-  final List<PaymentModel> payments;
+  final List<PaymentEntity> payments;
   final String userId;
 
   @override
@@ -42,11 +42,11 @@ class PaymentsPage extends StatelessWidget {
                 return _Content(payments: payments);
               }
 
-              return StreamBuilder<List<PaymentModel>>(
+              return StreamBuilder<List<PaymentEntity>>(
                 // TODO(Jogboms): move this out of here
                 stream: context.registry.get<Payments>().fetchAll(userId),
-                builder: (_, AsyncSnapshot<List<PaymentModel>> snapshot) {
-                  final List<PaymentModel>? data = snapshot.data;
+                builder: (_, AsyncSnapshot<List<PaymentEntity>> snapshot) {
+                  final List<PaymentEntity>? data = snapshot.data;
                   if (data == null) {
                     return const SliverFillRemaining(child: LoadingSpinner());
                   }
@@ -64,7 +64,7 @@ class PaymentsPage extends StatelessWidget {
 class _Content extends StatelessWidget {
   const _Content({required this.payments});
 
-  final List<PaymentModel> payments;
+  final List<PaymentEntity> payments;
 
   @override
   Widget build(BuildContext context) {

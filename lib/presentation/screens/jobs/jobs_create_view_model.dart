@@ -12,7 +12,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
   @protected
   List<FireImage> fireImages = <FireImage>[];
   @protected
-  late JobModel job;
+  late CreateJobData job;
   @protected
   late ContactModel? contact;
   @protected
@@ -25,10 +25,14 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
   void initState() {
     super.initState();
     contact = widget.contact;
-    job = JobModel.fromDefaults(
+    job = CreateJobData(
+      id: const Uuid().v4(),
       userID: widget.userId,
       contactID: contact?.id,
       measurements: contact?.measurements ?? <String, double>{},
+      price: 0.0,
+      createdAt: DateTime.now(),
+      dueAt: DateTime.now().add(const Duration(days: 7)),
     );
   }
 
@@ -106,10 +110,10 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
 
       try {
         // TODO(Jogboms): move this out of here
-        context.registry.get<Jobs>().update(job, widget.userId).listen((JobModel snap) {
-          snackBar.hide();
-          context.registry.get<JobsCoordinator>().toJob(snap);
-        });
+        final Registry registry = context.registry;
+        final JobEntity result = await registry.get<Jobs>().create(widget.userId, job);
+        snackBar.hide();
+        registry.get<JobsCoordinator>().toJob(result);
       } catch (e) {
         snackBar.error(e.toString());
       }

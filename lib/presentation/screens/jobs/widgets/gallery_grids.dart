@@ -13,7 +13,7 @@ class GalleryGrids extends StatefulWidget {
       : gridSize = Size.square(gridSize ?? _kGridWidth);
 
   final Size gridSize;
-  final JobModel job;
+  final JobEntity job;
   final String userId;
 
   @override
@@ -120,16 +120,11 @@ class _GalleryGridsState extends State<GalleryGrids> {
           createdAt: DateTime.now(),
         );
       });
-
-      await widget.job.reference?.updateData(
-        <String, List<Map<String, dynamic>?>>{
-          'images': _fireImages
-              .where((_FireImage img) => img.image != null)
-              .map((_FireImage img) => img.image!.toJson())
-              .toList(),
-        },
-      );
-
+      await registry.get<Jobs>().update(
+            widget.job.userID,
+            reference: widget.job.reference,
+            images: _fireImages.map((_FireImage img) => img.image).whereType<ImageModel>().toList(growable: false),
+          );
       setState(() {
         _fireImages.last
           ..isLoading = false

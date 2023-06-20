@@ -36,7 +36,7 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const _MyAppBar({this.contact, this.job, required this.account});
 
   final ContactModel? contact;
-  final JobModel? job;
+  final JobEntity? job;
   final AccountEntity? account;
 
   @override
@@ -50,7 +50,7 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             children: <Widget>[
               const AppBackButton(color: Colors.white),
               const Expanded(child: SizedBox()),
-              if (job case final JobModel job)
+              if (job case final JobEntity job)
                 IconButton(
                   icon: const Icon(Icons.work, color: Colors.white),
                   onPressed: () => context.registry.get<JobsCoordinator>().toJob(job),

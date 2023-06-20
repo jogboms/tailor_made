@@ -6,7 +6,7 @@ class HomeViewModel extends Equatable {
   HomeViewModel(AppState state)
       : account = state.account.account,
         _contacts = state.contacts.contacts ?? <ContactModel>[],
-        _jobs = state.jobs.jobs ?? <JobModel>[],
+        _jobs = state.jobs.jobs ?? <JobEntity>[],
         stats = state.stats.stats,
         settings = state.settings.settings,
         hasSkippedPremium = state.account.hasSkipedPremium == true,
@@ -20,7 +20,7 @@ class HomeViewModel extends Equatable {
 
   List<ContactModel> get contacts => _contacts;
 
-  final List<JobModel> _jobs;
+  final List<JobEntity> _jobs;
 
   final StatsModel? stats;
   final SettingEntity? settings;

@@ -9,18 +9,18 @@ class ContactJobViewModel extends Equatable {
     required this.contactID,
     required this.jobID,
   })  : _contacts = state.contacts.contacts ?? <ContactModel>[],
-        _jobs = state.jobs.jobs ?? <JobModel>[],
+        _jobs = state.jobs.jobs ?? <JobEntity>[],
         account = state.account.account;
 
   ContactModel? get selectedContact => _contacts.firstWhereOrNull((_) => _.id == contactID);
 
-  JobModel? get selectedJob => _jobs.firstWhereOrNull((_) => _.id == jobID);
+  JobEntity? get selectedJob => _jobs.firstWhereOrNull((_) => _.id == jobID);
 
   final String contactID;
   final String jobID;
   final AccountEntity? account;
 
-  final List<JobModel> _jobs;
+  final List<JobEntity> _jobs;
 
   final List<ContactModel> _contacts;
 

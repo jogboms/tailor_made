@@ -7,7 +7,7 @@ const double _kGridWidth = 120.0;
 class PaymentGridItem extends StatelessWidget {
   PaymentGridItem({super.key, required this.payment, double? size}) : size = Size.square(size ?? _kGridWidth);
 
-  final PaymentModel payment;
+  final PaymentEntity payment;
   final Size size;
 
   @override

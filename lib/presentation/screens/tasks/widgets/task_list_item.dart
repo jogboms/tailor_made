@@ -6,7 +6,7 @@ import 'package:timeago/timeago.dart' as time_ago;
 class TaskListItem extends StatelessWidget {
   const TaskListItem({super.key, required this.task});
 
-  final JobModel task;
+  final JobEntity task;
 
   @override
   Widget build(BuildContext context) {

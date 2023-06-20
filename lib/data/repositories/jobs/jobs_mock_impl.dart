@@ -4,9 +4,10 @@ import 'package:tailor_made/domain.dart';
 
 class JobsMockImpl extends Jobs {
   @override
-  Stream<List<JobModel>> fetchAll(String? userId) async* {
-    yield <JobModel>[
-      JobModel(
+  Stream<List<JobEntity>> fetchAll(String userId) async* {
+    yield <JobEntity>[
+      JobEntity(
+        reference: const ReferenceEntity(id: 'id', path: 'path'),
         userID: '1',
         id: '',
         contactID: '',
@@ -23,5 +24,35 @@ class JobsMockImpl extends Jobs {
   }
 
   @override
-  Stream<JobModel> update(JobModel job, String userId) async* {}
+  Future<JobEntity> create(String userId, CreateJobData data) async {
+    return JobEntity(
+      reference: ReferenceEntity(id: data.id, path: 'path'),
+      userID: data.userID,
+      id: data.id,
+      contactID: data.contactID,
+      price: data.price,
+      createdAt: data.createdAt,
+      dueAt: data.dueAt,
+      images: data.images,
+      measurements: data.measurements,
+      completedPayment: data.completedPayment,
+      isComplete: data.isComplete,
+      name: data.name,
+      notes: data.notes,
+      payments: data.payments,
+      pendingPayment: data.pendingPayment,
+    );
+  }
+
+  @override
+  Future<bool> update(
+    String userId, {
+    required ReferenceEntity reference,
+    List<ImageModel>? images,
+    List<PaymentEntity>? payments,
+    bool? isComplete,
+    DateTime? dueAt,
+  }) async {
+    return true;
+  }
 }

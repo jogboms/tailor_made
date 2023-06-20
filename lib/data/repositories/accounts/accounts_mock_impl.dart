@@ -14,8 +14,8 @@ class AccountsMockImpl extends Accounts {
   }
 
   @override
-  Stream<User?> get onAuthStateChanged async* {
-    yield const MockUser();
+  Stream<String?> get onAuthStateChanged async* {
+    yield '1';
   }
 
   @override

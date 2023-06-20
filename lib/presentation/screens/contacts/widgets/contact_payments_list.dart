@@ -7,13 +7,13 @@ import '../../payments/widgets/payments_list.dart';
 class PaymentsListWidget extends StatelessWidget {
   const PaymentsListWidget({super.key, required this.jobs});
 
-  final List<JobModel> jobs;
+  final List<JobEntity> jobs;
 
   @override
   Widget build(BuildContext context) {
-    final List<PaymentModel> payments = jobs.fold<List<PaymentModel>>(
-      <PaymentModel>[],
-      (List<PaymentModel> acc, JobModel item) => acc..addAll(item.payments),
+    final List<PaymentEntity> payments = jobs.fold<List<PaymentEntity>>(
+      <PaymentEntity>[],
+      (List<PaymentEntity> acc, JobEntity item) => acc..addAll(item.payments),
     );
 
     if (payments.isEmpty) {

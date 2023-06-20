@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -11,7 +12,7 @@ import 'widgets/payment_grids.dart';
 class JobPage extends StatefulWidget {
   const JobPage({super.key, required this.job});
 
-  final JobModel job;
+  final JobEntity job;
 
   @override
   State<JobPage> createState() => _JobPageState();
@@ -26,7 +27,7 @@ class _JobPageState extends State<JobPage> {
       converter: (AppState store) => JobsViewModel(store, jobID: widget.job.id),
       builder: (BuildContext context, _, JobsViewModel vm) {
         // in the case of newly created jobs
-        final JobModel job = vm.selected ?? widget.job;
+        final JobEntity job = vm.selected ?? widget.job;
         final ContactModel? contact = vm.selectedContact;
         if (vm.isLoading || contact == null) {
           return const Center(child: LoadingSpinner());
@@ -63,7 +64,7 @@ class _JobPageState extends State<JobPage> {
                           child: Text('DUE DATE', style: theme.small.copyWith(color: Colors.black87)),
                         ),
                         AppClearButton(
-                          onPressed: job.isComplete ? null : _onSaveDate,
+                          onPressed: job.isComplete ? null : () => _onSaveDate(job),
                           child: Text('EXTEND DATE', style: theme.smallBtn),
                         ),
                         const SizedBox(width: 16.0),
@@ -97,14 +98,15 @@ class _JobPageState extends State<JobPage> {
             backgroundColor: job.isComplete ? Colors.white : kAccentColor,
             foregroundColor: job.isComplete ? kAccentColor : Colors.white,
             label: Text(job.isComplete ? 'Undo Completed' : 'Mark Completed'),
-            onPressed: onTapComplete,
+            onPressed: () => _onTapComplete(job),
           ),
         );
       },
     );
   }
 
-  void onTapComplete() async {
+  void _onTapComplete(JobEntity job) async {
+    final Registry registry = context.registry;
     final AppSnackBar snackBar = AppSnackBar.of(context);
     final bool? choice = await showChoiceDialog(context: context, message: 'Are you sure?');
     if (choice == null || choice == false) {
@@ -114,24 +116,30 @@ class _JobPageState extends State<JobPage> {
     snackBar.loading();
 
     try {
-      await widget.job.reference?.updateData(<String, bool>{'isComplete': !widget.job.isComplete});
+      await registry.get<Jobs>().update(
+            job.userID,
+            reference: job.reference,
+            isComplete: !job.isComplete,
+          );
       snackBar.hide();
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLog.e(e, stackTrace);
       snackBar.error(e.toString());
     }
   }
 
-  void _onSaveDate() async {
+  void _onSaveDate(JobEntity job) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: widget.job.dueAt,
-      firstDate: widget.job.dueAt.isAfter(DateTime.now()) ? DateTime.now() : widget.job.dueAt,
+      initialDate: job.dueAt,
+      firstDate: job.dueAt.isAfter(DateTime.now()) ? DateTime.now() : job.dueAt,
       lastDate: DateTime(2101),
     );
-    if (picked == null || picked == widget.job.dueAt) {
+    if (picked == null || picked == job.dueAt) {
       return;
     }
     if (context.mounted) {
+      final Registry registry = context.registry;
       final AppSnackBar snackBar = AppSnackBar.of(context);
       final bool? choice = await showChoiceDialog(context: context, message: 'Are you sure?');
       if (choice == null || choice == false) {
@@ -141,9 +149,14 @@ class _JobPageState extends State<JobPage> {
       snackBar.loading();
 
       try {
-        await widget.job.reference?.updateData(<String, String>{'dueAt': picked.toString()});
+        await registry.get<Jobs>().update(
+              job.userID,
+              reference: job.reference,
+              dueAt: picked,
+            );
         snackBar.hide();
-      } catch (e) {
+      } catch (e, stackTrace) {
+        AppLog.e(e, stackTrace);
         snackBar.error(e.toString());
       }
     }
@@ -153,7 +166,7 @@ class _JobPageState extends State<JobPage> {
 class _Header extends StatelessWidget {
   const _Header({required this.job});
 
-  final JobModel job;
+  final JobEntity job;
 
   @override
   Widget build(BuildContext context) {
@@ -202,7 +215,7 @@ class _Header extends StatelessWidget {
 class _AvatarAppBar extends StatelessWidget {
   const _AvatarAppBar({required this.job, required this.contact});
 
-  final JobModel job;
+  final JobEntity job;
   final ContactModel contact;
 
   @override
@@ -246,7 +259,7 @@ class _AvatarAppBar extends StatelessWidget {
 class _PaidBox extends StatelessWidget {
   const _PaidBox({required this.job});
 
-  final JobModel job;
+  final JobEntity job;
 
   @override
   Widget build(BuildContext context) {
@@ -280,7 +293,7 @@ class _PaidBox extends StatelessWidget {
 class _UnpaidBox extends StatelessWidget {
   const _UnpaidBox({required this.job});
 
-  final JobModel job;
+  final JobEntity job;
 
   @override
   Widget build(BuildContext context) {

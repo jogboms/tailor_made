@@ -5,7 +5,7 @@ import 'package:tailor_made/presentation.dart';
 class JobListItem extends StatelessWidget {
   const JobListItem({super.key, required this.job});
 
-  final JobModel job;
+  final JobEntity job;
 
   @override
   Widget build(BuildContext context) {

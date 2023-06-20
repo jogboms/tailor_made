@@ -16,11 +16,11 @@ class AuthBloc extends SimpleBloc<AppState> {
   @override
   Future<Action> middleware(DispatchFunction dispatcher, AppState state, Action action) async {
     if (action is _OnLoginAction) {
-      dispatcher(AccountAction.init(action.user.uid));
-      dispatcher(InitMeasuresAction(action.user.uid));
-      dispatcher(InitStatsAction(action.user.uid));
-      dispatcher(InitJobsAction(action.user.uid));
-      dispatcher(ContactsAction.init(action.user.uid));
+      dispatcher(AccountAction.init(action.user));
+      dispatcher(InitMeasuresAction(action.user));
+      dispatcher(InitStatsAction(action.user));
+      dispatcher(InitJobsAction(action.user));
+      dispatcher(ContactsAction.init(action.user));
     }
     return action;
   }
