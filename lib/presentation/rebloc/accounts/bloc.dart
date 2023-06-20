@@ -18,10 +18,10 @@ class AccountBloc extends SimpleBloc<AppState> {
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     MergeStream<WareContext<AppState>>(<Stream<WareContext<AppState>>>[
-      input.whereAction<InitAccountAction>().switchMap(_getAccount(accounts)),
-      input.whereAction<OnReadNotice>().switchMap(_readNotice(accounts)),
-      input.whereAction<OnSendRating>().switchMap(_sendRating(accounts)),
-      input.whereAction<OnPremiumSignUp>().switchMap(_signUp(accounts)),
+      input.whereAction<_InitAccountAction>().switchMap(_getAccount(accounts)),
+      input.whereAction<_OnReadNotice>().switchMap(_readNotice(accounts)),
+      input.whereAction<_OnSendRating>().switchMap(_sendRating(accounts)),
+      input.whereAction<_OnPremiumSignUp>().switchMap(_signUp(accounts)),
     ]).untilAction<OnDisposeAction>().listen((WareContext<AppState> context) => context.dispatcher(context.action));
 
     return input;
@@ -31,7 +31,7 @@ class AccountBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final AccountState account = state.account;
 
-    if (action is OnDataAction<AccountModel>) {
+    if (action is OnDataAction<AccountEntity>) {
       return state.copyWith(
         account: account.copyWith(
           account: action.payload,
@@ -40,7 +40,7 @@ class AccountBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is OnSkipedPremium) {
+    if (action is _OnSkipedPremium) {
       return state.copyWith(
         account: account.copyWith(hasSkipedPremium: true),
       );
@@ -52,8 +52,12 @@ class AccountBloc extends SimpleBloc<AppState> {
 
 Middleware _readNotice(Accounts accounts) {
   return (WareContext<AppState> context) async* {
-    await accounts.readNotice(
-      (context.action as OnReadNotice).payload!.copyWith(hasReadNotice: true),
+    final AccountEntity account = (context.action as _OnReadNotice).payload;
+    await accounts.updateAccount(
+      account.uid,
+      id: account.reference.id,
+      path: account.reference.path,
+      hasReadNotice: true,
     );
 
     yield context;
@@ -62,12 +66,15 @@ Middleware _readNotice(Accounts accounts) {
 
 Middleware _sendRating(Accounts accounts) {
   return (WareContext<AppState> context) async* {
-    final OnSendRating action = context.action as OnSendRating;
-    final AccountModel account = action.account!.copyWith(
+    final _OnSendRating action = context.action as _OnSendRating;
+    final AccountEntity account = action.account;
+    await accounts.updateAccount(
+      account.uid,
+      id: account.reference.id,
+      path: account.reference.path,
       hasSendRating: true,
       rating: action.rating,
     );
-    await accounts.sendRating(account);
 
     yield context;
   };
@@ -75,8 +82,8 @@ Middleware _sendRating(Accounts accounts) {
 
 Middleware _signUp(Accounts accounts) {
   return (WareContext<AppState> context) async* {
-    final AccountModel account = (context.action as OnPremiumSignUp).payload!.copyWith(
-          status: AccountModelStatus.pending,
+    final AccountEntity account = (context.action as _OnPremiumSignUp).payload.copyWith(
+          status: AccountStatus.pending,
           notice: context.state.settings.settings!.premiumNotice,
           hasReadNotice: false,
           hasPremiumEnabled: true,
@@ -88,10 +95,10 @@ Middleware _signUp(Accounts accounts) {
 }
 
 Middleware _getAccount(Accounts accounts) {
-  return (WareContext<AppState> context) {
-    return accounts
-        .getAccount((context.action as InitAccountAction).userId)
-        .map(OnDataAction<AccountModel>.new)
-        .map((OnDataAction<AccountModel> action) => context.copyWith(action));
+  return (WareContext<AppState> context) async* {
+    final AccountEntity? account = await accounts.getAccount((context.action as _InitAccountAction).userId);
+    if (account != null) {
+      yield context.copyWith(OnDataAction<AccountEntity>(account));
+    }
   };
 }

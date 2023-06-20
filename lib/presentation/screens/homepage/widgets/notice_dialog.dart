@@ -5,7 +5,7 @@ import 'package:tailor_made/presentation/theme.dart';
 class NoticeDialog extends StatelessWidget {
   const NoticeDialog({super.key, required this.account});
 
-  final AccountModel? account;
+  final AccountEntity? account;
 
   @override
   Widget build(BuildContext context) {

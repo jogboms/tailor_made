@@ -18,7 +18,7 @@ class TopButtonBar extends StatelessWidget {
     required this.onLogout,
   });
 
-  final AccountModel? account;
+  final AccountEntity account;
   final bool shouldSendRating;
   final VoidCallback onLogout;
 
@@ -44,20 +44,20 @@ class TopButtonBar extends StatelessWidget {
                 child: Stack(
                   fit: StackFit.expand,
                   children: <Widget>[
-                    if (account?.photoURL != null)
+                    if (account.photoURL case final String photoUrl)
                       CircleAvatar(
                         backgroundColor: Colors.white,
-                        backgroundImage: CachedNetworkImageProvider(account!.photoURL),
+                        backgroundImage: CachedNetworkImageProvider(photoUrl),
                       )
                     else
                       Icon(Icons.person, color: theme!.appBarTitle.color),
                     Align(
                       alignment: const Alignment(0.0, 2.25),
                       child:
-                          account!.hasPremiumEnabled ? const ImageIcon(AppImages.verified, color: kPrimaryColor) : null,
+                          account.hasPremiumEnabled ? const ImageIcon(AppImages.verified, color: kPrimaryColor) : null,
                     ),
                     Align(
-                      alignment: Alignment(1.25, account!.hasPremiumEnabled ? -1.25 : 1.25),
+                      alignment: Alignment(1.25, account.hasPremiumEnabled ? -1.25 : 1.25),
                       child: _shouldShowIndicator ? const Dots(color: kAccentColor) : null,
                     ),
                   ],
@@ -70,7 +70,7 @@ class TopButtonBar extends StatelessWidget {
     );
   }
 
-  bool get _shouldShowIndicator => !(account?.hasReadNotice ?? false) || shouldSendRating;
+  bool get _shouldShowIndicator => !(account.hasReadNotice ?? false) || shouldSendRating;
 
   VoidCallback _onTapAccount(BuildContext context) {
     final Registry registry = context.registry;
@@ -81,14 +81,14 @@ class TopButtonBar extends StatelessWidget {
         final int? rating = await showChildDialog<int>(context: context, child: const ReviewModal());
 
         if (rating != null) {
-          store.dispatch(OnSendRating(account, rating));
+          store.dispatch(AccountAction.sendRating(account, rating));
         }
         return;
       }
 
       if (_shouldShowIndicator) {
         await showChildDialog<dynamic>(context: context, child: NoticeDialog(account: account));
-        store.dispatch(OnReadNotice(account));
+        store.dispatch(AccountAction.readNotice(account));
         return;
       }
 
@@ -123,8 +123,13 @@ class TopButtonBar extends StatelessWidget {
         case AccountOptions.storename:
           final String? storeName = await registry.get<SharedCoordinator>().toStoreNameDialog(account);
 
-          if (storeName != null && storeName != account!.storeName) {
-            await account!.reference?.updateData(<String, String>{'storeName': storeName});
+          if (storeName != null && storeName != account.storeName) {
+            await registry.get<Accounts>().updateAccount(
+                  account.uid,
+                  id: account.reference.id,
+                  path: account.reference.path,
+                  storeName: storeName,
+                );
           }
 
           break;

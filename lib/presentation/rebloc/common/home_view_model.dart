@@ -14,7 +14,7 @@ class HomeViewModel extends Equatable {
             state.contacts.status == StateStatus.loading ||
             state.account.status == StateStatus.loading;
 
-  final AccountModel? account;
+  final AccountEntity? account;
 
   final List<ContactModel>? _contacts;
 
@@ -29,11 +29,11 @@ class HomeViewModel extends Equatable {
   final bool isLoading;
   final bool hasSkippedPremium;
 
-  bool get isDisabled => account != null && account!.status == AccountModelStatus.disabled;
+  bool get isDisabled => account != null && account!.status == AccountStatus.disabled;
 
-  bool get isWarning => account != null && account!.status == AccountModelStatus.warning;
+  bool get isWarning => account != null && account!.status == AccountStatus.warning;
 
-  bool get isPending => account != null && account!.status == AccountModelStatus.pending;
+  bool get isPending => account != null && account!.status == AccountStatus.pending;
 
   bool get shouldSendRating =>
       account != null && !account!.hasSendRating && (((contacts?.length ?? 0) >= 10) || ((jobs?.length ?? 0) >= 10));

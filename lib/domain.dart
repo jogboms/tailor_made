@@ -1,5 +1,4 @@
 export 'domain/entities.dart';
-export 'domain/models/account.dart';
 export 'domain/models/contact.dart';
 export 'domain/models/image.dart';
 export 'domain/models/job.dart';

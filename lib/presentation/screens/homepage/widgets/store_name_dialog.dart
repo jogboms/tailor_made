@@ -6,7 +6,7 @@ import 'package:tailor_made/presentation/widgets.dart';
 class StoreNameDialog extends StatelessWidget {
   const StoreNameDialog({super.key, required this.account});
 
-  final AccountModel? account;
+  final AccountEntity? account;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class StoreNameDialog extends StatelessWidget {
 class _Content extends StatelessWidget {
   _Content({required this.account}) : controller = TextEditingController(text: account.storeName);
 
-  final AccountModel account;
+  final AccountEntity account;
   final TextEditingController controller;
 
   @override

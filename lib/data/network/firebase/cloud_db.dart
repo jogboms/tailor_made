@@ -7,25 +7,27 @@ class CloudDb {
 
   final FirebaseFirestore _instance;
 
-  MapDocumentReference account(String? userId) => _instance.doc('accounts/$userId');
-
-  MapDocumentReference stats(String? userId) => _instance.doc('stats/$userId');
-
-  MapDocumentReference get settings => _instance.doc('settings/common');
-
-  MapCollectionReference measurements(String? userId) => _instance.collection('measurements/$userId/common');
-
-  MapCollectionReference get premium => _instance.collection('premium');
-
-  MapQuery gallery(String userId) => _instance.collection('gallery').where('userID', isEqualTo: userId);
-
-  MapQuery payments(String userId) => _instance.collection('payments').where('userID', isEqualTo: userId);
-
-  MapQuery contacts(String? userId) => _instance.collection('contacts').where('userID', isEqualTo: userId);
-
-  MapQuery jobs(String? userId) => _instance.collection('jobs').where('userID', isEqualTo: userId);
+  MapCollectionReference collection(String path) => _instance.collection(path);
 
   MapDocumentReference doc(String path) => _instance.doc(path);
+
+  MapDocumentReference account(String? userId) => doc('accounts/$userId');
+
+  MapDocumentReference stats(String? userId) => doc('stats/$userId');
+
+  MapDocumentReference get settings => doc('settings/common');
+
+  MapCollectionReference measurements(String? userId) => collection('measurements/$userId/common');
+
+  MapCollectionReference get premium => collection('premium');
+
+  MapQuery gallery(String userId) => collection('gallery').where('userID', isEqualTo: userId);
+
+  MapQuery payments(String userId) => collection('payments').where('userID', isEqualTo: userId);
+
+  MapQuery contacts(String? userId) => collection('contacts').where('userID', isEqualTo: userId);
+
+  MapQuery jobs(String? userId) => collection('jobs').where('userID', isEqualTo: userId);
 
   Future<void> batchAction(void Function(WriteBatch batch) action) {
     final WriteBatch batch = _instance.batch();
@@ -34,4 +36,16 @@ class CloudDb {
 
     return batch.commit();
   }
+}
+
+class CloudDbCollection {
+  const CloudDbCollection(this.db, this.path);
+
+  final CloudDb db;
+
+  final String path;
+
+  MapCollectionReference fetchAll() => db.collection(path);
+
+  MapDocumentReference fetchOne(String uuid) => db.doc('$path/$uuid');
 }

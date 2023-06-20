@@ -26,7 +26,7 @@ class ContactJobViewModel extends Equatable {
 
   String? contactID;
   String? jobID;
-  final AccountModel? account;
+  final AccountEntity? account;
 
   final List<JobModel>? _jobs;
 

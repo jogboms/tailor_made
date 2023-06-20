@@ -53,10 +53,11 @@ class SplashPage extends StatelessWidget {
               // TODO(Jogboms): move this out of here
               stream: context.registry.get<Accounts>().onAuthStateChanged,
               builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-                if (snapshot.hasData && snapshot.data != null && snapshot.data?.uid != null) {
+                final User? data = snapshot.data;
+                if (data != null) {
                   WidgetsBinding.instance.addPostFrameCallback(
                     (_) async {
-                      StoreProvider.of<AppState>(context).dispatch(OnLoginAction(snapshot.data));
+                      StoreProvider.of<AppState>(context).dispatch(AuthAction.login(data));
                       context.registry.get<SharedCoordinator>().toHome(isMock);
                     },
                   );

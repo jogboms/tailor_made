@@ -35,7 +35,7 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   final ContactModel? contact;
   final JobModel? job;
-  final AccountModel? account;
+  final AccountEntity? account;
 
   @override
   Widget build(BuildContext context) {

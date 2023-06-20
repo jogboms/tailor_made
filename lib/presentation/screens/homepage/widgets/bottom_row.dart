@@ -12,7 +12,7 @@ class BottomRowWidget extends StatelessWidget {
   });
 
   final StatsModel? stats;
-  final AccountModel? account;
+  final AccountEntity account;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class BottomRowWidget extends StatelessWidget {
                 icon: Icons.content_cut,
                 title: 'Measures',
                 subTitle: 'Custom',
-                onPressed: () => context.registry.get<MeasuresCoordinator>().toManageMeasures(account!.uid),
+                onPressed: () => context.registry.get<MeasuresCoordinator>().toManageMeasures(account.uid),
               ),
             ),
           ),

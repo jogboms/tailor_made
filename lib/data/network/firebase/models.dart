@@ -6,10 +6,10 @@ import 'package:tailor_made/domain.dart';
 class FireUser implements User {
   FireUser(this._reference);
 
-  final auth.User? _reference;
+  final auth.User _reference;
 
   @override
-  String? get uid => _reference?.uid;
+  String get uid => _reference.uid;
 }
 
 class FireStorage implements Storage {

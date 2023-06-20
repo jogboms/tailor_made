@@ -28,6 +28,6 @@ class MockMeasures extends Mock implements Measures {}
 
 class MockStats extends Mock implements Stats {}
 
-class FakeAccountModel extends Fake implements AccountModel {}
+class FakeAccountEntity extends Fake implements AccountEntity {}
 
 class FakeRoute extends Fake implements Route<dynamic> {}

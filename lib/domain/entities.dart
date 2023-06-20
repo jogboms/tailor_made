@@ -1,12 +1,15 @@
 import '../data/network/firebase/models.dart';
 
+export 'entities/account_entity.dart';
+export 'entities/reference_entity.dart';
+
 abstract class Snapshot {
   Map<String, dynamic>? get data;
   Reference get reference;
 }
 
 abstract class User {
-  String? get uid;
+  String get uid;
 }
 
 abstract class Storage {
