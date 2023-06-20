@@ -9,10 +9,10 @@ class SettingsViewModel extends Equatable {
         hasError = state.settings.status == StateStatus.failure,
         error = state.settings.error;
 
-  final SettingsModel? model;
+  final SettingEntity? model;
   final bool isLoading;
   final bool hasError;
-  final dynamic error;
+  final String? error;
 
   @override
   List<Object?> get props => <Object?>[model, isLoading, hasError, error];

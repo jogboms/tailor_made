@@ -11,11 +11,7 @@ class CloudDb {
 
   MapDocumentReference doc(String path) => _instance.doc(path);
 
-  MapDocumentReference account(String? userId) => doc('accounts/$userId');
-
   MapDocumentReference stats(String? userId) => doc('stats/$userId');
-
-  MapDocumentReference get settings => doc('settings/common');
 
   MapCollectionReference measurements(String? userId) => collection('measurements/$userId/common');
 

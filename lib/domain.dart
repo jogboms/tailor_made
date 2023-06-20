@@ -4,7 +4,6 @@ export 'domain/models/image.dart';
 export 'domain/models/job.dart';
 export 'domain/models/measure.dart';
 export 'domain/models/payment.dart';
-export 'domain/models/settings.dart';
 export 'domain/models/stats/stats.dart';
 export 'domain/models/stats/stats_item.dart';
 export 'domain/repositories/accounts.dart';

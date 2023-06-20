@@ -23,7 +23,7 @@ class HomeViewModel extends Equatable {
   final List<JobModel>? _jobs;
 
   final StatsModel? stats;
-  final SettingsModel? settings;
+  final SettingEntity? settings;
   final bool isLoading;
   final bool hasSkippedPremium;
 

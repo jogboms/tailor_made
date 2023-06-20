@@ -1,7 +1,7 @@
-import '../models/settings.dart';
+import '../entities/setting_entity.dart';
 
 abstract class Settings {
   const Settings();
 
-  Stream<SettingsModel> fetch();
+  Stream<SettingEntity> fetch();
 }
