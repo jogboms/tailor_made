@@ -1,46 +1,38 @@
 import * as admin from "firebase-admin";
-import { Change, EventContext, firestore } from "firebase-functions";
-import { isArray } from "util";
+import {Change, firestore} from "firebase-functions";
 
-async function asyncForEach(array, callback) {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array);
-  }
-}
+// async function asyncForEach<T>(array: T[], callback: (value: T, index: number, array: T[]) => void) {
+//   for (let index = 0; index < array.length; index++) {
+//     await callback(array[index], index, array);
+//   }
+// }
 
-async function _onContactStats(
-  change: Change<firestore.DocumentSnapshot>,
-  context: EventContext
-) {
-  const old_job = change.before.data();
+async function _onContactStats(change: Change<firestore.DocumentSnapshot>) {
+  const oldJob = change.before.data();
   const job = change.after.data();
   const db = admin.firestore();
 
-  let count = 0,
-    total = 0;
+  let count = 0;
+  let total = 0;
   // Added single/multiple new job
-  if (old_job === undefined) {
+  if (oldJob === undefined) {
     // Multiple
-    if (isArray(job)) {
+    if (Array.isArray(job)) {
       count = job.length;
-    }
-    // Single
-    else {
+    } else { // Single
       count = total = 1;
     }
-  }
-  // Removed multiple jobs
-  else if (isArray(old_job)) {
-    count = -job.filter(_ => _.isComplete === false).length;
-  }
-  // Toggled isComplete
-  else if (old_job.isComplete !== job.isComplete) {
+  } else if (Array.isArray(oldJob) && job) {
+    // Removed multiple jobs
+    count = -job.filter((_: any) => _.isComplete === false).length;
+  } else if (job && !Array.isArray(oldJob) && oldJob.isComplete !== job.isComplete) {
+    // Toggled isComplete
     count = job.isComplete ? -1 : 1;
   }
 
   // TODO
   // Multiple contacts (maybe)
-  if (isArray(job)) {
+  if (Array.isArray(job)) {
     // const batch = db.batch();
 
     // const start = async () => {
@@ -61,20 +53,24 @@ async function _onContactStats(
     // // Commit the batch
     // return batch.commit();
     return null;
-  }
-  // Single contact
-  else {
+  } else if (job) {// Single contact
     const contact = db.doc(`contacts/${job.contactID}`);
 
     const contactSnap = (await contact.get()).data();
 
+    if (!contactSnap) {
+      return;
+    }
+
     return contact.update({
       totalJobs: contactSnap.totalJobs + total,
-      pendingJobs: contactSnap.pendingJobs + count
+      pendingJobs: contactSnap.pendingJobs + count,
     });
+  } else {
+    return;
   }
 }
 
 export const onContactStats = firestore
-  .document("jobs/{jobId}")
-  .onWrite(_onContactStats);
+    .document("jobs/{jobId}")
+    .onWrite(_onContactStats);

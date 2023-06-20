@@ -1,33 +1,36 @@
-import { Change, EventContext, firestore } from "firebase-functions";
+import {Change, firestore} from "firebase-functions";
 
 async function _onJobPayments(
-  change: Change<firestore.DocumentSnapshot>,
-  context: EventContext
+    change: Change<firestore.DocumentSnapshot>
 ) {
   const job = change.after.data();
-  const old_job = change.before.data();
+  const oldJob = change.before.data();
 
   if (!change.after.exists) {
     return null;
   }
 
-  // Freshly created
-  if (!old_job) {
-    //
+  if (!job) {
+    return;
   }
-  // Nothing changed in payments
-  else if (job.payments.length === old_job.payments.length) return null;
+
+  // Freshly created
+  if (!oldJob) {
+    //
+  } else if (job.payments.length === oldJob.payments.length) { // Nothing changed in payments
+    return null;
+  }
 
   const completedPayment = job.payments.reduce(
-    (acc, cur) => acc + cur.price,
-    0
+      (acc: number, cur: any) => acc + cur.price,
+      0
   );
   return change.after.ref.update({
     completedPayment: completedPayment,
-    pendingPayment: job.price - completedPayment
+    pendingPayment: job.price - completedPayment,
   });
 }
 
 export const onJobPayments = firestore
-  .document("jobs/{jobId}")
-  .onWrite(_onJobPayments);
+    .document("jobs/{jobId}")
+    .onWrite(_onJobPayments);
