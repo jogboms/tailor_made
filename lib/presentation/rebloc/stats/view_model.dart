@@ -12,7 +12,7 @@ class StatsViewModel extends Equatable {
   final StatsModel? model;
   final bool isLoading;
   final bool hasError;
-  final dynamic error;
+  final String? error;
 
   @override
   List<Object?> get props => <Object?>[model, isLoading, hasError, error];

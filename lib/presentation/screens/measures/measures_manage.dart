@@ -50,7 +50,7 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> {
           return const Center(child: LoadingSpinner());
         }
 
-        if (vm.model == null || vm.model!.isEmpty) {
+        if (vm.model.isEmpty) {
           return const Center(child: EmptyResultView(message: 'No measurements available'));
         }
 
@@ -59,10 +59,10 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                for (int i = 0; i < vm.grouped!.length; i++)
+                for (int i = 0; i < vm.grouped.length; i++)
                   MeasureSlideBlock(
-                    title: vm.grouped!.keys.elementAt(i),
-                    measures: vm.grouped!.values.elementAt(i),
+                    title: vm.grouped.keys.elementAt(i),
+                    measures: vm.grouped.values.elementAt(i),
                     userId: vm.userId,
                   ),
                 const SizedBox(height: 72.0)

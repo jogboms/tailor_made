@@ -11,7 +11,7 @@ class BottomRowWidget extends StatelessWidget {
     required this.account,
   });
 
-  final StatsModel? stats;
+  final StatsModel stats;
   final AccountEntity account;
 
   @override
@@ -38,7 +38,7 @@ class BottomRowWidget extends StatelessWidget {
                 color: Colors.grey,
                 icon: Icons.event,
                 title: 'Tasks',
-                subTitle: '${stats!.jobs.pending} Pending',
+                subTitle: '${stats.jobs.pending} Pending',
                 onPressed: () => context.registry.get<TasksCoordinator>().toTasks(),
               ),
             ),

@@ -24,18 +24,18 @@ class MeasuresPage extends StatelessWidget {
       body: ViewModelSubscriber<AppState, MeasuresViewModel>(
         converter: MeasuresViewModel.new,
         builder: (BuildContext context, _, MeasuresViewModel vm) {
-          if (vm.model!.isEmpty) {
+          if (vm.model.isEmpty) {
             return const Center(
               child: EmptyResultView(message: 'No measurements available'),
             );
           }
 
           return ListView.separated(
-            itemCount: vm.model!.length,
+            itemCount: vm.model.length,
             shrinkWrap: true,
             padding: const EdgeInsets.only(bottom: 96.0),
             itemBuilder: (_, int index) {
-              final MeasureModel measure = vm.model![index];
+              final MeasureModel measure = vm.model[index];
               final double value = measurements![measure.id] ?? 0.0;
               return MeasureListItem(item: measure.copyWith(value: value));
             },

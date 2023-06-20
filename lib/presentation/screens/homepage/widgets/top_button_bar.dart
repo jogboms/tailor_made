@@ -70,7 +70,7 @@ class TopButtonBar extends StatelessWidget {
     );
   }
 
-  bool get _shouldShowIndicator => !(account.hasReadNotice ?? false) || shouldSendRating;
+  bool get _shouldShowIndicator => !account.hasReadNotice || shouldSendRating;
 
   VoidCallback _onTapAccount(BuildContext context) {
     final Registry registry = context.registry;

@@ -16,11 +16,11 @@ class SettingsBloc extends SimpleBloc<AppState> {
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     input
-        .whereAction<InitSettingsAction>()
+        .whereAction<_InitSettingsAction>()
         .switchMap(
           (WareContext<AppState> context) => settings
               .fetch()
-              .handleError((dynamic _) => context.dispatcher(const OnErrorSettingsAction()))
+              .handleError((dynamic _) => context.dispatcher(const SettingsAction.error()))
               .map(OnDataAction<SettingEntity>.new)
               .map((OnDataAction<SettingEntity> action) => context.copyWith(action)),
         )
@@ -43,7 +43,7 @@ class SettingsBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is OnErrorSettingsAction) {
+    if (action is _OnErrorSettingsAction) {
       return state.copyWith(
         settings: settings.copyWith(status: StateStatus.failure),
       );

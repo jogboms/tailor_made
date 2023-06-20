@@ -34,7 +34,7 @@ class ContactPage extends StatelessWidget {
               title: ContactAppBar(
                 userId: viewModel.userId,
                 contact: contact,
-                grouped: viewModel.measuresGrouped ?? <String, List<MeasureModel>>{},
+                grouped: viewModel.measuresGrouped,
               ),
               titleSpacing: 0.0,
               centerTitle: false,

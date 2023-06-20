@@ -50,15 +50,15 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             children: <Widget>[
               const AppBackButton(color: Colors.white),
               const Expanded(child: SizedBox()),
-              if (job != null)
+              if (job case final JobModel job)
                 IconButton(
                   icon: const Icon(Icons.work, color: Colors.white),
                   onPressed: () => context.registry.get<JobsCoordinator>().toJob(job),
                 ),
-              if (contact != null)
+              if (contact case final ContactModel contact)
                 IconButton(
                   icon: const Icon(Icons.person, color: Colors.white),
-                  onPressed: () => context.registry.get<ContactsCoordinator>().toContact(contact!),
+                  onPressed: () => context.registry.get<ContactsCoordinator>().toContact(contact),
                 ),
               if (account!.hasPremiumEnabled)
                 const IconButton(

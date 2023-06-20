@@ -9,7 +9,7 @@ enum _CreateOptions { contacts, jobs }
 class CreateButton extends StatefulWidget {
   const CreateButton({super.key, required this.userId, required this.contacts});
 
-  final List<ContactModel>? contacts;
+  final List<ContactModel> contacts;
   final String userId;
 
   @override
@@ -54,7 +54,7 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
     );
   }
 
-  VoidCallback _onTapCreate(List<ContactModel>? contacts) {
+  VoidCallback _onTapCreate(List<ContactModel> contacts) {
     return () async {
       final Registry registry = context.registry;
       final _CreateOptions? result = await showDialog<_CreateOptions>(

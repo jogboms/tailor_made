@@ -10,7 +10,7 @@ class PaymentGrids extends StatefulWidget {
       : gridSize = Size.square(gridSize ?? _kGridWidth);
 
   final Size gridSize;
-  final JobModel? job;
+  final JobModel job;
   final String userId;
 
   @override
@@ -23,7 +23,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
   @override
   void initState() {
     super.initState();
-    _firePayments = widget.job!.payments.map((PaymentModel payment) => _FirePayment()..payment = payment).toList();
+    _firePayments = widget.job.payments.map((PaymentModel payment) => _FirePayment()..payment = payment).toList();
   }
 
   @override
@@ -55,7 +55,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
             AppClearButton(
               child: Text('SHOW ALL', style: theme.smallBtn),
               onPressed: () {
-                context.registry.get<PaymentsCoordinator>().toPayments(widget.userId, widget.job!.payments.toList());
+                context.registry.get<PaymentsCoordinator>().toPayments(widget.userId, widget.job.payments.toList());
               },
             ),
             const SizedBox(width: 16.0),
@@ -79,7 +79,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
 
   void _onCreateNew() async {
     final Map<String, dynamic>? result =
-        await context.registry.get<PaymentsCoordinator>().toCreatePayment(widget.job!.pendingPayment);
+        await context.registry.get<PaymentsCoordinator>().toCreatePayment(widget.job.pendingPayment);
     if (result != null) {
       setState(() {
         _firePayments.add(_FirePayment());
@@ -90,15 +90,15 @@ class _PaymentGridsState extends State<PaymentGrids> {
           _firePayments.last.payment = PaymentModel(
             id: const Uuid().v4(),
             userID: widget.userId,
-            contactID: widget.job!.contactID!,
-            jobID: widget.job!.id,
+            contactID: widget.job.contactID!,
+            jobID: widget.job.id,
             price: result['price'] as double? ?? 0.0,
             notes: result['notes'] as String? ?? '',
             createdAt: DateTime.now(),
           );
         });
 
-        await widget.job!.reference?.updateData(<String, List<Map<String, dynamic>?>>{
+        await widget.job.reference?.updateData(<String, List<Map<String, dynamic>?>>{
           'payments': _firePayments.map((_FirePayment payment) => payment.payment!.toJson()).toList(),
         });
 

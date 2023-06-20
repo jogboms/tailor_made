@@ -130,7 +130,7 @@ class _Title extends StatelessWidget {
 class _Leading extends StatelessWidget {
   const _Leading({required this.contact});
 
-  final ContactModel? contact;
+  final ContactModel contact;
 
   @override
   Widget build(BuildContext context) {
@@ -145,8 +145,8 @@ class _Leading extends StatelessWidget {
           const Icon(Icons.arrow_back, color: Colors.white),
           const SizedBox(width: 4.0),
           Hero(
-            tag: contact!.id,
-            child: AppCircleAvatar(imageUrl: contact!.imageUrl, useAlt: true),
+            tag: contact.id,
+            child: AppCircleAvatar(imageUrl: contact.imageUrl, useAlt: true),
           ),
         ],
       ),

@@ -20,7 +20,7 @@ class AuthBloc extends SimpleBloc<AppState> {
       dispatcher(InitMeasuresAction(action.user.uid));
       dispatcher(InitStatsAction(action.user.uid));
       dispatcher(InitJobsAction(action.user.uid));
-      dispatcher(InitContactsAction(action.user.uid));
+      dispatcher(ContactsAction.init(action.user.uid));
     }
     return action;
   }
@@ -38,7 +38,7 @@ class AuthBloc extends SimpleBloc<AppState> {
   Future<Action> afterware(DispatchFunction dispatcher, AppState state, Action action) async {
     if (action is _OnLogoutAction) {
       await accounts.signOut();
-      dispatcher(const InitSettingsAction());
+      dispatcher(const SettingsAction.init());
     }
     return action;
   }

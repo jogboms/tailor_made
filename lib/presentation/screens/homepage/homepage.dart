@@ -84,8 +84,9 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AccountEntity? account = viewModel.account;
+    final StatsModel? stats = viewModel.stats;
 
-    if (viewModel.isLoading || account == null) {
+    if (viewModel.isLoading || account == null || stats == null) {
       return const LoadingSpinner();
     }
 
@@ -114,10 +115,10 @@ class _Body extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Expanded(flex: 12, child: HeaderWidget(account: account)),
-            StatsWidget(stats: viewModel.stats),
-            Expanded(flex: 2, child: TopRowWidget(stats: viewModel.stats)),
-            Expanded(flex: 2, child: MidRowWidget(userId: account.uid, stats: viewModel.stats)),
-            Expanded(flex: 2, child: BottomRowWidget(stats: viewModel.stats, account: account)),
+            StatsWidget(stats: stats),
+            Expanded(flex: 2, child: TopRowWidget(stats: stats)),
+            Expanded(flex: 2, child: MidRowWidget(userId: account.uid, stats: stats)),
+            Expanded(flex: 2, child: BottomRowWidget(stats: stats, account: account)),
             SizedBox(height: kButtonHeight + MediaQuery.of(context).padding.bottom),
           ],
         ),

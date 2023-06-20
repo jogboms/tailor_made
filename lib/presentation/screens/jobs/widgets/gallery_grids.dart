@@ -13,7 +13,7 @@ class GalleryGrids extends StatefulWidget {
       : gridSize = Size.square(gridSize ?? _kGridWidth);
 
   final Size gridSize;
-  final JobModel? job;
+  final JobModel job;
   final String userId;
 
   @override
@@ -26,7 +26,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
   @override
   void initState() {
     super.initState();
-    _fireImages = widget.job!.images.map((ImageModel img) => _FireImage()..image = img).toList();
+    _fireImages = widget.job.images.map((ImageModel img) => _FireImage()..image = img).toList();
   }
 
   @override
@@ -70,7 +70,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
             AppClearButton(
               child: Text('SHOW ALL', style: theme.smallBtn),
               onPressed: () {
-                context.registry.get<GalleryCoordinator>().toGallery(widget.userId, widget.job!.images.toList());
+                context.registry.get<GalleryCoordinator>().toGallery(widget.userId, widget.job.images.toList());
               },
             ),
             const SizedBox(width: 16.0),
@@ -113,15 +113,15 @@ class _GalleryGridsState extends State<GalleryGrids> {
         _fireImages.last.image = ImageModel(
           id: const Uuid().v4(),
           userID: widget.userId,
-          contactID: widget.job!.contactID!,
-          jobID: widget.job!.id,
+          contactID: widget.job.contactID!,
+          jobID: widget.job.id,
           src: imageUrl,
           path: ref.path,
           createdAt: DateTime.now(),
         );
       });
 
-      await widget.job!.reference?.updateData(
+      await widget.job.reference?.updateData(
         <String, List<Map<String, dynamic>?>>{
           'images': _fireImages
               .where((_FireImage img) => img.image != null)

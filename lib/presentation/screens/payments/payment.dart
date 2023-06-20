@@ -28,10 +28,11 @@ class PaymentPage extends StatelessWidget {
             backgroundColor: Colors.transparent,
             elevation: 0.0,
             actions: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.work, color: kTitleBaseColor),
-                onPressed: () => context.registry.get<JobsCoordinator>().toJob(vm.selectedJob),
-              ),
+              if (vm.selectedJob case final JobModel job)
+                IconButton(
+                  icon: const Icon(Icons.work, color: kTitleBaseColor),
+                  onPressed: () => context.registry.get<JobsCoordinator>().toJob(job),
+                ),
               if (vm.selectedContact case final ContactModel contact)
                 IconButton(
                   icon: const Icon(Icons.person, color: kTitleBaseColor),

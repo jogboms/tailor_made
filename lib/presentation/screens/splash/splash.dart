@@ -137,7 +137,7 @@ class _ContentState extends State<_Content> {
                                 'RETRY',
                                 style: ThemeProvider.of(context)!.button.copyWith(color: kTextBaseColor),
                               ),
-                              onPressed: () => dispatch(const InitSettingsAction()),
+                              onPressed: () => dispatch(const SettingsAction.init()),
                             ),
                           ],
                         ),

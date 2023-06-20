@@ -5,44 +5,41 @@ import 'package:tailor_made/presentation/rebloc.dart';
 
 class ContactsViewModel extends Equatable {
   ContactsViewModel(AppState state, {this.contactID})
-      : _model = state.contacts.contacts,
-        _searchResults = state.contacts.searchResults,
+      : _model = state.contacts.contacts ?? <ContactModel>[],
+        _searchResults = state.contacts.searchResults ?? <ContactModel>[],
         isSearching = state.contacts.isSearching,
         hasSortFn = state.contacts.hasSortFn,
-        measures = state.measures.grouped,
+        measuresGrouped = state.measures.grouped ?? <String, List<MeasureModel>>{},
         userId = state.account.account!.uid,
-        _jobs = state.jobs.jobs,
+        _jobs = state.jobs.jobs ?? <JobModel>[],
         sortFn = state.contacts.sortFn,
         isLoading = state.contacts.status == StateStatus.loading,
         hasError = state.contacts.status == StateStatus.failure,
         error = state.contacts.error;
 
-  List<ContactModel>? get contacts => isSearching ? searchResults : model;
+  List<ContactModel> get contacts => isSearching ? searchResults : model;
 
-  Map<String, List<MeasureModel>>? get measuresGrouped => measures;
+  final Map<String, List<MeasureModel>> measuresGrouped;
 
-  ContactModel? get selected => model?.firstWhereOrNull((_) => _.id == contactID);
+  ContactModel? get selected => model.firstWhereOrNull((_) => _.id == contactID);
 
-  List<JobModel> get selectedJobs =>
-      jobs?.where((JobModel job) => job.contactID == selected?.id).toList() ?? <JobModel>[];
+  List<JobModel> get selectedJobs => jobs.where((JobModel job) => job.contactID == selected?.id).toList();
 
   final String? contactID;
 
   final String userId;
 
-  final List<ContactModel>? _searchResults;
+  final List<ContactModel> _searchResults;
 
-  List<ContactModel>? get searchResults => _searchResults;
+  List<ContactModel> get searchResults => _searchResults;
 
-  final Map<String, List<MeasureModel>>? measures;
+  final List<JobModel> _jobs;
 
-  final List<JobModel>? _jobs;
+  List<JobModel> get jobs => _jobs;
 
-  List<JobModel>? get jobs => _jobs;
+  final List<ContactModel> _model;
 
-  final List<ContactModel>? _model;
-
-  List<ContactModel>? get model => _model;
+  List<ContactModel> get model => _model;
 
   final bool hasSortFn;
   final ContactsSortType sortFn;

@@ -32,7 +32,7 @@ class ContactsCoordinator extends CoordinatorBase {
     navigator?.push<void>(RouteTransitions.slideIn(const ContactsPage()));
   }
 
-  Future<ContactModel?>? toContactsList(List<ContactModel>? contacts) {
+  Future<ContactModel?>? toContactsList(List<ContactModel> contacts) {
     return navigator?.push<ContactModel>(RouteTransitions.fadeIn(ContactLists(contacts: contacts)));
   }
 

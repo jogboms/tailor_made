@@ -6,7 +6,7 @@ import 'package:tailor_made/presentation/utils.dart';
 class StatsWidget extends StatelessWidget {
   const StatsWidget({super.key, required this.stats});
 
-  final StatsModel? stats;
+  final StatsModel stats;
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +16,15 @@ class StatsWidget extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: _StatTile(title: 'Pending', count: stats!.jobs.pending.toString()),
+            child: _StatTile(title: 'Pending', count: stats.jobs.pending.toString()),
           ),
           const _Divider(),
           Expanded(
-            child: _StatTile(title: 'Received', count: AppMoney(stats!.payments.completed).formatted),
+            child: _StatTile(title: 'Received', count: AppMoney(stats.payments.completed).formatted),
           ),
           const _Divider(),
           Expanded(
-            child: _StatTile(title: 'Completed', count: stats!.jobs.completed.toString()),
+            child: _StatTile(title: 'Completed', count: stats.jobs.completed.toString()),
           ),
         ],
       ),

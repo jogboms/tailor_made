@@ -27,17 +27,17 @@ class _ContactsPageState extends State<ContactsPage> with DispatchProvider<AppSt
                   return const LoadingSpinner();
                 }
 
-                if (vm.contacts == null || vm.contacts!.isEmpty) {
+                if (vm.contacts.isEmpty) {
                   return const Center(
                     child: EmptyResultView(message: 'No contacts available'),
                   );
                 }
 
                 return ListView.separated(
-                  itemCount: vm.contacts!.length,
+                  itemCount: vm.contacts.length,
                   shrinkWrap: true,
                   padding: const EdgeInsets.only(bottom: 96.0),
-                  itemBuilder: (_, int index) => ContactsListItem(contact: vm.contacts![index]),
+                  itemBuilder: (_, int index) => ContactsListItem(contact: vm.contacts[index]),
                   separatorBuilder: (_, __) => const Divider(height: 0),
                 );
               },
@@ -89,7 +89,7 @@ class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
           ),
           ContactsFilterButton(
             vm: widget.vm,
-            onTapSort: (ContactsSortType type) => dispatchAction(SortContacts(type)),
+            onTapSort: (ContactsSortType type) => dispatchAction(ContactsAction.sort(type)),
           ),
         ],
       );
@@ -105,7 +105,7 @@ class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
         autofocus: true,
         decoration: InputDecoration(hintText: 'Search...', hintStyle: textStyle.copyWith(color: Colors.white)),
         style: textStyle.copyWith(color: Colors.white),
-        onChanged: (String term) => dispatchAction(SearchContactAction(term)),
+        onChanged: (String term) => dispatchAction(ContactsAction.search(term)),
       ),
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1.0),
@@ -120,7 +120,7 @@ class _AppBarState extends State<_AppBar> with DispatchProvider<AppState> {
   void _onTapSearch() => setState(() => _isSearching = true);
 
   void _handleSearchEnd() {
-    dispatchAction(const CancelSearchContactAction());
+    dispatchAction(const ContactsAction.searchCancel());
     setState(() => _isSearching = false);
   }
 }
