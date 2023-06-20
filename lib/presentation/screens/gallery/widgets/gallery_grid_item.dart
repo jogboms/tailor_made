@@ -5,7 +5,7 @@ import 'package:tailor_made/presentation.dart';
 class GalleryGridItem extends StatelessWidget {
   const GalleryGridItem({super.key, required this.image});
 
-  final ImageModel image;
+  final ImageEntity image;
 
   @override
   Widget build(BuildContext context) {

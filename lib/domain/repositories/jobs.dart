@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import '../entities.dart';
-import '../models/image.dart';
 
 abstract class Jobs {
   Stream<List<JobEntity>> fetchAll(String userId);
@@ -13,7 +12,7 @@ abstract class Jobs {
   Future<bool> update(
     String userId, {
     required ReferenceEntity reference,
-    List<ImageModel>? images,
+    List<ImageEntity>? images,
     List<PaymentEntity>? payments,
     bool? isComplete,
     DateTime? dueAt,

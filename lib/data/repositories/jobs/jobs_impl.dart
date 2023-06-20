@@ -7,6 +7,7 @@ import 'package:tailor_made/domain.dart';
 import '../../network/firebase.dart';
 import '../derive_list_from_data.dart';
 import '../derive_map_from_data.dart';
+import '../gallery/gallery_impl.dart';
 import '../payments/payments_impl.dart';
 
 class JobsImpl extends Jobs {
@@ -88,7 +89,7 @@ class JobsImpl extends Jobs {
   Future<bool> update(
     String userId, {
     required ReferenceEntity reference,
-    List<ImageModel>? images,
+    List<ImageEntity>? images,
     List<PaymentEntity>? payments,
     bool? isComplete,
     DateTime? dueAt,
@@ -113,13 +114,20 @@ JobEntity _deriveJobEntity(String id, String path, DynamicMap data) {
     reference: ReferenceEntity(id: id, path: path),
     id: data['id'] as String,
     userID: data['userID'] as String,
-    contactID: data['contactID'] as String?,
+    contactID: data['contactID'] as String,
     name: data['name'] as String,
     price: data['price'] as double,
     completedPayment: (data['completedPayment'] as num).toDouble(),
     pendingPayment: (data['pendingPayment'] as num).toDouble(),
     notes: data['notes'] as String? ?? '',
-    images: deriveListFromMap(data['images'], ImageModel.fromJson),
+    images: deriveListFromMap(
+      data['images'],
+      (Map<String, dynamic> data) => deriveImageEntity(
+        data['id'] as String,
+        null,
+        data,
+      ),
+    ),
     measurements: deriveMapFromMap(measurements, (dynamic value) => value as double? ?? 0.0),
     payments: deriveListFromMap(
       data['payments'],

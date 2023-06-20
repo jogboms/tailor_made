@@ -53,16 +53,21 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
     try {
       final String imageUrl = await ref.getDownloadURL();
       setState(() {
+        final String id = const Uuid().v4();
         fireImages.last
           ..isLoading = false
           ..isSucess = true
-          ..image = ImageModel(
+          ..image = ImageEntity(
+            reference: ReferenceEntity(
+              id: id,
+              path: id, // TODO
+            ),
             userID: widget.userId,
             contactID: contact!.id,
             jobID: job.id,
             src: imageUrl,
             path: ref.path,
-            id: const Uuid().v4(),
+            id: id,
             createdAt: DateTime.now(),
           );
       });
@@ -102,8 +107,8 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
 
       job = job.copyWith(
         pendingPayment: job.price,
-        images: List<ImageModel>.from(
-          fireImages.where((FireImage img) => img.image != null).map<ImageModel?>((FireImage img) => img.image),
+        images: List<ImageEntity>.from(
+          fireImages.where((FireImage img) => img.image != null).map<ImageEntity?>((FireImage img) => img.image),
         ),
         contactID: contact!.id,
       );
@@ -123,7 +128,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
 
 class FireImage {
   late Storage ref;
-  ImageModel? image;
+  ImageEntity? image;
   bool isLoading = true;
   bool isSucess = false;
 }

@@ -11,7 +11,7 @@ class CreateJobData with EquatableMixin {
     this.completedPayment = 0.0,
     this.pendingPayment = 0.0,
     this.notes = '',
-    this.images = const <ImageModel>[],
+    this.images = const <ImageEntity>[],
     this.measurements = const <String, double>{},
     this.payments = const <PaymentEntity>[],
     this.isComplete = false,
@@ -27,7 +27,7 @@ class CreateJobData with EquatableMixin {
   final double completedPayment;
   final double pendingPayment;
   final String notes;
-  final List<ImageModel> images;
+  final List<ImageEntity> images;
   final Map<String, double> measurements;
   final List<PaymentEntity> payments;
   final bool isComplete;
@@ -60,7 +60,7 @@ class CreateJobData with EquatableMixin {
     double? completedPayment,
     double? pendingPayment,
     String? notes,
-    List<ImageModel>? images,
+    List<ImageEntity>? images,
     Map<String, double>? measurements,
     List<PaymentEntity>? payments,
     bool? isComplete,

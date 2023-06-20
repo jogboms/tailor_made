@@ -26,7 +26,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
   @override
   void initState() {
     super.initState();
-    _fireImages = widget.job.images.map((ImageModel img) => _FireImage()..image = img).toList();
+    _fireImages = widget.job.images.map((ImageEntity img) => _FireImage()..image = img).toList();
   }
 
   @override
@@ -37,7 +37,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
       _fireImages.length,
       (int index) {
         final _FireImage fireImage = _fireImages[index];
-        final ImageModel? image = fireImage.image;
+        final ImageEntity? image = fireImage.image;
 
         if (image == null) {
           return const Center(widthFactor: 2.5, child: LoadingSpinner());
@@ -49,7 +49,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
           size: _kGridWidth,
           // Remove images from storage using path
           onTapDelete: fireImage.ref != null
-              ? (ImageModel image) => setState(() {
+              ? (ImageEntity image) => setState(() {
                     fireImage.ref!.delete();
                     _fireImages.removeAt(index);
                   })
@@ -110,10 +110,15 @@ class _GalleryGridsState extends State<GalleryGrids> {
       final String imageUrl = await ref.getDownloadURL();
 
       setState(() {
-        _fireImages.last.image = ImageModel(
-          id: const Uuid().v4(),
+        final String id = const Uuid().v4();
+        _fireImages.last.image = ImageEntity(
+          reference: ReferenceEntity(
+            id: id,
+            path: id, // TODO
+          ),
+          id: id,
           userID: widget.userId,
-          contactID: widget.job.contactID!,
+          contactID: widget.job.contactID,
           jobID: widget.job.id,
           src: imageUrl,
           path: ref.path,
@@ -123,7 +128,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
       await registry.get<Jobs>().update(
             widget.job.userID,
             reference: widget.job.reference,
-            images: _fireImages.map((_FireImage img) => img.image).whereType<ImageModel>().toList(growable: false),
+            images: _fireImages.map((_FireImage img) => img.image).whereType<ImageEntity>().toList(growable: false),
           );
       setState(() {
         _fireImages.last
@@ -163,7 +168,7 @@ const double _kGridWidth = 70.0;
 
 class _FireImage {
   Storage? ref;
-  ImageModel? image;
+  ImageEntity? image;
   bool isLoading = true;
   bool isSucess = false;
 }

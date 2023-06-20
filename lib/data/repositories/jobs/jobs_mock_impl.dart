@@ -29,7 +29,7 @@ class JobsMockImpl extends Jobs {
       reference: ReferenceEntity(id: data.id, path: 'path'),
       userID: data.userID,
       id: data.id,
-      contactID: data.contactID,
+      contactID: data.contactID!,
       price: data.price,
       createdAt: data.createdAt,
       dueAt: data.dueAt,
@@ -48,7 +48,7 @@ class JobsMockImpl extends Jobs {
   Future<bool> update(
     String userId, {
     required ReferenceEntity reference,
-    List<ImageModel>? images,
+    List<ImageEntity>? images,
     List<PaymentEntity>? payments,
     bool? isComplete,
     DateTime? dueAt,

@@ -1,6 +1,5 @@
 export 'domain/entities.dart';
 export 'domain/models/contact.dart';
-export 'domain/models/image.dart';
 export 'domain/models/measure.dart';
 export 'domain/models/stats/stats.dart';
 export 'domain/models/stats/stats_item.dart';

@@ -96,7 +96,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
             ),
             id: id,
             userID: widget.userId,
-            contactID: widget.job.contactID!,
+            contactID: widget.job.contactID,
             jobID: widget.job.id,
             price: result['price'] as double? ?? 0.0,
             notes: result['notes'] as String? ?? '',

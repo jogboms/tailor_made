@@ -161,7 +161,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
       fireImages.length,
       (int index) {
         final FireImage fireImage = fireImages[index];
-        final ImageModel? image = fireImage.image;
+        final ImageEntity? image = fireImage.image;
 
         if (image == null) {
           return const Center(widthFactor: 2.5, child: LoadingSpinner());
@@ -171,7 +171,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
           image: image,
           tag: '$image-$index',
           size: _kGridWidth,
-          onTapDelete: (ImageModel image) => setState(() {
+          onTapDelete: (ImageEntity image) => setState(() {
             fireImage.ref.delete();
             fireImages.removeAt(index);
           }),

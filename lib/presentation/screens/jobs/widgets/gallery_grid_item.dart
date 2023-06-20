@@ -9,9 +9,9 @@ class GalleryGridItem extends StatelessWidget {
       : size = Size.square(size ?? _kGridWidth);
 
   final String tag;
-  final ImageModel image;
+  final ImageEntity image;
   final Size size;
-  final ValueSetter<ImageModel>? onTapDelete;
+  final ValueSetter<ImageEntity>? onTapDelete;
 
   @override
   Widget build(BuildContext context) {

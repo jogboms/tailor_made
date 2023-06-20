@@ -12,7 +12,7 @@ class JobEntity with EquatableMixin {
     this.completedPayment = 0.0,
     this.pendingPayment = 0.0,
     this.notes = '',
-    this.images = const <ImageModel>[],
+    this.images = const <ImageEntity>[],
     this.measurements = const <String, double>{},
     this.payments = const <PaymentEntity>[],
     this.isComplete = false,
@@ -23,13 +23,13 @@ class JobEntity with EquatableMixin {
   final ReferenceEntity reference;
   final String id;
   final String userID;
-  final String? contactID;
+  final String contactID;
   final double price;
   final String name;
   final double completedPayment;
   final double pendingPayment;
   final String notes;
-  final List<ImageModel> images;
+  final List<ImageEntity> images;
   final Map<String, double> measurements;
   final List<PaymentEntity> payments;
   final bool isComplete;

@@ -11,9 +11,9 @@ class GalleryGridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<ImageModel> images = jobs.fold<List<ImageModel>>(
-      <ImageModel>[],
-      (List<ImageModel> acc, JobEntity item) => acc..addAll(item.images),
+    final List<ImageEntity> images = jobs.fold<List<ImageEntity>>(
+      <ImageEntity>[],
+      (List<ImageEntity> acc, JobEntity item) => acc..addAll(item.images),
     );
 
     if (images.isEmpty) {
