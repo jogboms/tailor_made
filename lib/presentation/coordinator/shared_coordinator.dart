@@ -19,7 +19,7 @@ class SharedCoordinator extends CoordinatorBase {
     );
   }
 
-  Future<String?>? toStoreNameDialog(AccountEntity? account) {
+  Future<String?>? toStoreNameDialog(AccountEntity account) {
     return navigator?.push<String>(RouteTransitions.fadeIn(StoreNameDialog(account: account)));
   }
 

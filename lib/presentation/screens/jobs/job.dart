@@ -280,7 +280,7 @@ class _PaidBox extends StatelessWidget {
 class _UnpaidBox extends StatelessWidget {
   const _UnpaidBox({required this.job});
 
-  final JobModel? job;
+  final JobModel job;
 
   @override
   Widget build(BuildContext context) {
@@ -295,7 +295,7 @@ class _UnpaidBox extends StatelessWidget {
               Icon(Icons.arrow_drop_down, color: Colors.red.shade600, size: 16.0),
               const SizedBox(width: 4.0),
               Text(
-                AppMoney(job!.pendingPayment).formatted,
+                AppMoney(job.pendingPayment).formatted,
                 style: theme.title.copyWith(letterSpacing: 1.25),
                 textAlign: TextAlign.center,
               ),

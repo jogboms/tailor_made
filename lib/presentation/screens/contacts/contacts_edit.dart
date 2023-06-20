@@ -42,13 +42,16 @@ class _ContactsEditPageState extends State<ContactsEditPage> {
     final ContactModel contact = widget.contact;
     final Contact? selectedContact = await _contactPicker.selectContact();
     final String? fullName = selectedContact?.fullName;
-    if (selectedContact == null || fullName == null) {
+    final String? phoneNumber = selectedContact?.phoneNumbers?.firstOrNull;
+
+    if (selectedContact == null || fullName == null || phoneNumber == null) {
       return;
     }
+
     _formKey.currentState?.updateContact(
       contact.copyWith(
         fullname: fullName,
-        phone: selectedContact.phoneNumbers?.firstOrNull,
+        phone: phoneNumber,
       ),
     );
   }

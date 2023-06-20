@@ -30,7 +30,35 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const CustomAppBar(title: Text('Measurements')),
-      body: _buildBody(),
+      body: ViewModelSubscriber<AppState, MeasuresViewModel>(
+        converter: MeasuresViewModel.new,
+        builder: (_, __, MeasuresViewModel vm) {
+          if (vm.isLoading) {
+            return const Center(child: LoadingSpinner());
+          }
+
+          if (vm.model.isEmpty) {
+            return const Center(child: EmptyResultView(message: 'No measurements available'));
+          }
+
+          return SafeArea(
+            top: false,
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  for (int i = 0; i < vm.grouped.length; i++)
+                    MeasureSlideBlock(
+                      title: vm.grouped.keys.elementAt(i),
+                      measures: vm.grouped.values.elementAt(i),
+                      userId: vm.userId,
+                    ),
+                  const SizedBox(height: 72.0)
+                ],
+              ),
+            ),
+          );
+        },
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add),
@@ -39,38 +67,6 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> {
         label: const Text('Add Group'),
         onPressed: () => context.registry.get<MeasuresCoordinator>().toCreateMeasures(widget.userId),
       ),
-    );
-  }
-
-  Widget _buildBody() {
-    return ViewModelSubscriber<AppState, MeasuresViewModel>(
-      converter: MeasuresViewModel.new,
-      builder: (_, __, MeasuresViewModel vm) {
-        if (vm.isLoading) {
-          return const Center(child: LoadingSpinner());
-        }
-
-        if (vm.model.isEmpty) {
-          return const Center(child: EmptyResultView(message: 'No measurements available'));
-        }
-
-        return SafeArea(
-          top: false,
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                for (int i = 0; i < vm.grouped.length; i++)
-                  MeasureSlideBlock(
-                    title: vm.grouped.keys.elementAt(i),
-                    measures: vm.grouped.values.elementAt(i),
-                    userId: vm.userId,
-                  ),
-                const SizedBox(height: 72.0)
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 }

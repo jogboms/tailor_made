@@ -17,7 +17,7 @@ class ContactMeasure extends StatefulWidget {
 class _ContactMeasureState extends State<ContactMeasure> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
-  late ContactModel contact = widget.contact;
+  late ContactModel _contact = widget.contact;
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +25,12 @@ class _ContactMeasureState extends State<ContactMeasure> {
       appBar: CustomAppBar(
         title: const Text('Measurements'),
         leading: AppBackButton(
-          onPop: contact.reference != null ? null : () => Navigator.pop<ContactModel>(context, contact),
+          onPop: _contact.reference != null ? null : () => Navigator.pop<ContactModel>(context, _contact),
         ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.remove_red_eye, color: kTitleBaseColor),
-            onPressed: () => context.registry.get<MeasuresCoordinator>().toMeasures(contact.measurements),
+            onPressed: () => context.registry.get<MeasuresCoordinator>().toMeasures(_contact.measurements),
           )
         ],
       ),
@@ -46,10 +46,10 @@ class _ContactMeasureState extends State<ContactMeasure> {
                 const FormSectionHeader(title: 'Measurements', trailing: 'Inches (In)'),
                 MeasureCreateItems(
                   grouped: widget.grouped,
-                  measurements: contact.measurements,
+                  measurements: _contact.measurements,
                   onSaved: (Map<String, double>? value) {
                     if (value != null) {
-                      contact = contact.copyWith(measurements: value);
+                      _contact = _contact.copyWith(measurements: value);
                     }
                   },
                 ),
@@ -80,9 +80,9 @@ class _ContactMeasureState extends State<ContactMeasure> {
 
     form.save();
 
-    final Reference? reference = contact.reference;
+    final Reference? reference = _contact.reference;
     if (reference == null) {
-      Navigator.of(context).pop<ContactModel>(contact);
+      Navigator.of(context).pop<ContactModel>(_contact);
       return;
     }
 
@@ -90,7 +90,7 @@ class _ContactMeasureState extends State<ContactMeasure> {
     try {
       // TODO(Jogboms): find a way to remove this from here
       // During contact creation
-      await reference.updateData(contact.toJson());
+      await reference.updateData(_contact.toJson());
       snackBar.success('Successfully Updated');
     } catch (e) {
       snackBar.error(e.toString());

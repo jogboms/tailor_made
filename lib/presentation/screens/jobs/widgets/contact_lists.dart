@@ -13,7 +13,7 @@ class ContactLists extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: Text('Select Client')),
-      body: (contacts.isEmpty)
+      body: contacts.isEmpty
           ? const Center(child: EmptyResultView(message: 'No contacts available'))
           : ListView.separated(
               itemCount: contacts.length,

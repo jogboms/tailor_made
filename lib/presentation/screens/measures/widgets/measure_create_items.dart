@@ -135,6 +135,13 @@ class _MeasureFieldState extends State<_MeasureField> {
   late final TextEditingController _controller = TextEditingController(text: widget.value);
 
   @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextField(
       controller: _controller,

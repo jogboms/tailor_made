@@ -6,9 +6,9 @@ import 'package:tailor_made/presentation.dart';
 import 'widgets/gallery_grid.dart';
 
 class GalleryPage extends StatelessWidget {
-  const GalleryPage({super.key, this.images, required this.userId});
+  const GalleryPage({super.key, this.images = const <ImageModel>[], required this.userId});
 
-  final List<ImageModel>? images;
+  final List<ImageModel> images;
   final String userId;
 
   @override
@@ -24,7 +24,7 @@ class GalleryPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text('Gallery', style: theme.appBarTitle),
-                if (images != null) Text('${images!.length} Photos', style: theme.xsmall),
+                if (images.isEmpty) Text('${images.length} Photos', style: theme.xsmall),
               ],
             ),
             backgroundColor: kAppBarBackgroundColor,
@@ -38,7 +38,7 @@ class GalleryPage extends StatelessWidget {
           ),
           Builder(
             builder: (BuildContext context) {
-              if (images case final List<ImageModel> images) {
+              if (images.isNotEmpty) {
                 return _Content(images: images);
               }
 

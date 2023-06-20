@@ -17,17 +17,17 @@ class CreateButton extends StatefulWidget {
 }
 
 class _CreateButtonState extends State<CreateButton> with SingleTickerProviderStateMixin {
-  late AnimationController controller;
+  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200))..repeat(reverse: true);
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200))..repeat(reverse: true);
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -42,7 +42,7 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
           onPressed: _onTapCreate(widget.contacts),
           shape: const RoundedRectangleBorder(),
           child: ScaleTransition(
-            scale: Tween<double>(begin: 0.95, end: 1.025).animate(controller),
+            scale: Tween<double>(begin: 0.95, end: 1.025).animate(_controller),
             alignment: FractionalOffset.center,
             child: Text(
               'TAP TO CREATE',

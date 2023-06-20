@@ -8,9 +8,9 @@ import 'package:tailor_made/presentation/widgets.dart';
 import 'widgets/measure_list_item.dart';
 
 class MeasuresPage extends StatelessWidget {
-  const MeasuresPage({super.key, this.measurements});
+  const MeasuresPage({super.key, required this.measurements});
 
-  final Map<String, double>? measurements;
+  final Map<String, double> measurements;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class MeasuresPage extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 96.0),
             itemBuilder: (_, int index) {
               final MeasureModel measure = vm.model[index];
-              final double value = measurements![measure.id] ?? 0.0;
+              final double value = measurements[measure.id] ?? 0.0;
               return MeasureListItem(item: measure.copyWith(value: value));
             },
             separatorBuilder: (_, __) => const Divider(),

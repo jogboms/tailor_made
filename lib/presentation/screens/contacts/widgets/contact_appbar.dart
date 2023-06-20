@@ -101,7 +101,7 @@ class _Icon extends StatelessWidget {
 class _Title extends StatelessWidget {
   const _Title({required this.contact});
 
-  final ContactModel? contact;
+  final ContactModel contact;
 
   @override
   Widget build(BuildContext context) {
@@ -111,13 +111,13 @@ class _Title extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          contact!.fullname,
+          contact.fullname,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: theme.title.copyWith(color: Colors.white),
         ),
         Text(
-          contact!.location!,
+          contact.location,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: theme.body1.copyWith(color: Colors.white),

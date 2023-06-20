@@ -85,12 +85,12 @@ class _Content extends StatefulWidget {
 }
 
 class _ContentState extends State<_Content> {
-  late bool isLoading;
+  late bool _isLoading;
 
   @override
   void initState() {
     super.initState();
-    isLoading = widget.isColdStart;
+    _isLoading = widget.isColdStart;
     if (widget.isColdStart) {
       _onLogin();
     }
@@ -103,7 +103,7 @@ class _ContentState extends State<_Content> {
       builder: (BuildContext context, DispatchFunction dispatch, SettingsViewModel vm) {
         return Stack(
           children: <Widget>[
-            if (!isLoading || !widget.isColdStart || vm.hasError)
+            if (!_isLoading || !widget.isColdStart || vm.hasError)
               const Center(
                 child: Image(
                   image: AppImages.logo,
@@ -117,7 +117,7 @@ class _ContentState extends State<_Content> {
               bottom: 124.0,
               child: Builder(
                 builder: (_) {
-                  if ((vm.isLoading && widget.isColdStart) || isLoading) {
+                  if ((vm.isLoading && widget.isColdStart) || _isLoading) {
                     return const LoadingSpinner();
                   }
 
@@ -167,7 +167,7 @@ class _ContentState extends State<_Content> {
   void _onLogin() async {
     final Accounts accounts = context.registry.get();
     try {
-      setState(() => isLoading = true);
+      setState(() => _isLoading = true);
       // TODO(Jogboms): move this out of here
       await accounts.signInWithGoogle();
     } catch (e) {
@@ -186,7 +186,7 @@ class _ContentState extends State<_Content> {
         return;
       }
 
-      setState(() => isLoading = false);
+      setState(() => _isLoading = false);
 
       AppSnackBar.of(context).error(e.toString());
     }

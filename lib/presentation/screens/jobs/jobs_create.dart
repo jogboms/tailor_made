@@ -30,17 +30,14 @@ class JobsCreatePage extends StatefulWidget {
 }
 
 class _JobsCreatePageState extends JobsCreateViewModel {
-  MoneyMaskedTextController controller = MoneyMaskedTextController(
+  final MoneyMaskedTextController _controller = MoneyMaskedTextController(
     decimalSeparator: '.',
     thousandSeparator: ',',
   );
-  final FocusNode _amountFocusNode = FocusNode();
-  final FocusNode _additionFocusNode = FocusNode();
 
   @override
   void dispose() {
-    _amountFocusNode.dispose();
-    _additionFocusNode.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -146,7 +143,6 @@ class _JobsCreatePageState extends JobsCreateViewModel {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: TextFormField(
-        focusNode: _additionFocusNode,
         keyboardType: TextInputType.text,
         style: ThemeProvider.of(context)!.title.copyWith(color: Colors.black),
         maxLines: 6,
@@ -231,7 +227,6 @@ class _JobsCreatePageState extends JobsCreateViewModel {
         decoration: const InputDecoration(isDense: true, hintText: 'Enter Style Name'),
         validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a name',
         onSaved: (String? value) => job = job.copyWith(name: value!.trim()),
-        onEditingComplete: () => FocusScope.of(context).requestFocus(_amountFocusNode),
       ),
     );
   }
@@ -240,15 +235,13 @@ class _JobsCreatePageState extends JobsCreateViewModel {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: TextFormField(
-        focusNode: _amountFocusNode,
-        controller: controller,
+        controller: _controller,
         textInputAction: TextInputAction.next,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         style: ThemeProvider.of(context)!.title.copyWith(color: Colors.black),
         decoration: const InputDecoration(isDense: true, hintText: 'Enter Amount'),
-        validator: (String? value) => (controller.numberValue > 0) ? null : 'Please input a price',
-        onSaved: (String? value) => job = job.copyWith(price: controller.numberValue),
-        onEditingComplete: () => FocusScope.of(context).requestFocus(_additionFocusNode),
+        validator: (String? value) => (_controller.numberValue > 0) ? null : 'Please input a price',
+        onSaved: (String? value) => job = job.copyWith(price: _controller.numberValue),
       ),
     );
   }

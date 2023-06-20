@@ -24,25 +24,19 @@ class ContactForm extends StatefulWidget {
 
 class ContactFormState extends State<ContactForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool isLoading = false;
-  late ContactModel contact = widget.contact;
+  bool _isLoading = false;
+  late ContactModel _contact = widget.contact;
   bool _autovalidate = false;
   Storage? _lastImgRef;
-  late final TextEditingController _fNController, _pNController, _lNController;
-
-  @override
-  void initState() {
-    super.initState();
-    _fNController = TextEditingController(text: contact.fullname);
-    _pNController = TextEditingController(text: contact.phone);
-    _lNController = TextEditingController(text: contact.location);
-  }
+  late final TextEditingController _fNController = TextEditingController(text: _contact.fullname);
+  late final TextEditingController _pNController = TextEditingController(text: _contact.phone);
+  late final TextEditingController _lNController = TextEditingController(text: _contact.location);
 
   @override
   void didUpdateWidget(covariant ContactForm oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.contact != widget.contact) {
-      contact = widget.contact;
+      _contact = widget.contact;
     }
   }
 
@@ -61,7 +55,7 @@ class ContactFormState extends State<ContactForm> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           const SizedBox(height: 32.0),
-          _Avatar(contact: contact, isLoading: isLoading, onTap: _handlePhotoButtonPressed),
+          _Avatar(contact: _contact, isLoading: _isLoading, onTap: _handlePhotoButtonPressed),
           const SizedBox(height: 16.0),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -76,7 +70,7 @@ class ContactFormState extends State<ContactForm> {
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(prefixIcon: Icon(Icons.person), labelText: 'Fullname'),
                     validator: InputValidator.tryAlpha(),
-                    onSaved: (String? fullname) => contact = contact.copyWith(fullname: fullname!.trim()),
+                    onSaved: (String? fullname) => _contact = _contact.copyWith(fullname: fullname!.trim()),
                   ),
                   const SizedBox(height: 4.0),
                   TextFormField(
@@ -85,7 +79,7 @@ class ContactFormState extends State<ContactForm> {
                     keyboardType: TextInputType.phone,
                     decoration: const InputDecoration(prefixIcon: Icon(Icons.phone), labelText: 'Phone'),
                     validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a value',
-                    onSaved: (String? phone) => contact = contact.copyWith(phone: phone!.trim()),
+                    onSaved: (String? phone) => _contact = _contact.copyWith(phone: phone!.trim()),
                   ),
                   const SizedBox(height: 4.0),
                   TextFormField(
@@ -93,7 +87,7 @@ class ContactFormState extends State<ContactForm> {
                     textInputAction: TextInputAction.done,
                     decoration: const InputDecoration(prefixIcon: Icon(Icons.location_city), labelText: 'Location'),
                     validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a value',
-                    onSaved: (String? location) => contact = contact.copyWith(location: location!.trim()),
+                    onSaved: (String? location) => _contact = _contact.copyWith(location: location!.trim()),
                     onFieldSubmitted: (String value) => _handleSubmit(),
                   ),
                   const SizedBox(height: 32.0),
@@ -118,7 +112,7 @@ class ContactFormState extends State<ContactForm> {
       AppSnackBar.of(context).error(AppStrings.fixErrors);
     } else {
       form.save();
-      widget.onHandleSubmit(contact);
+      widget.onHandleSubmit(_contact);
     }
   }
 
@@ -136,23 +130,23 @@ class ContactFormState extends State<ContactForm> {
     final Contacts contacts = registry.get();
     final Storage ref = contacts.createFile(File(imageFile.path), widget.userId)!;
 
-    setState(() => isLoading = true);
+    setState(() => _isLoading = true);
     try {
-      contact = contact.copyWith(imageUrl: await ref.getDownloadURL());
+      _contact = _contact.copyWith(imageUrl: await ref.getDownloadURL());
       if (mounted) {
         AppSnackBar.of(context).success('Upload Successful');
         setState(() {
           if (_lastImgRef != null) {
             _lastImgRef!.delete();
           }
-          isLoading = false;
+          _isLoading = false;
           _lastImgRef = ref;
         });
       }
     } catch (e) {
       if (mounted) {
         AppSnackBar.of(context).error('Please try again');
-        setState(() => isLoading = false);
+        setState(() => _isLoading = false);
       }
     }
   }
@@ -163,8 +157,8 @@ class ContactFormState extends State<ContactForm> {
     setState(() {
       reset();
       _fNController.text = contact.fullname;
-      _pNController.text = contact.phone ?? '';
-      _lNController.text = contact.location ?? '';
+      _pNController.text = contact.phone;
+      _lNController.text = contact.location;
     });
   }
 }

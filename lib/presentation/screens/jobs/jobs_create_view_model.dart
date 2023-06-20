@@ -9,11 +9,16 @@ import 'package:uuid/uuid.dart';
 import 'jobs_create.dart';
 
 abstract class JobsCreateViewModel extends State<JobsCreatePage> {
+  @protected
   List<FireImage> fireImages = <FireImage>[];
+  @protected
   late JobModel job;
+  @protected
   late ContactModel? contact;
+  @protected
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  @protected
   bool autovalidate = false;
 
   @override

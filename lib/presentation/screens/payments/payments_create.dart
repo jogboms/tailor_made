@@ -12,7 +12,7 @@ class PaymentsCreatePage extends StatefulWidget {
     required this.limit,
   });
 
-  final double? limit;
+  final double limit;
 
   @override
   State<PaymentsCreatePage> createState() => _PaymentsCreatePageState();
@@ -21,19 +21,16 @@ class PaymentsCreatePage extends StatefulWidget {
 class _PaymentsCreatePageState extends State<PaymentsCreatePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
-  double price = 0.0;
-  String notes = '';
-  MoneyMaskedTextController controller = MoneyMaskedTextController(
+  double _price = 0.0;
+  String _notes = '';
+  final MoneyMaskedTextController _controller = MoneyMaskedTextController(
     decimalSeparator: '.',
     thousandSeparator: ',',
   );
-  final FocusNode _amountFocusNode = FocusNode();
-  final FocusNode _additionFocusNode = FocusNode();
 
   @override
   void dispose() {
-    _amountFocusNode.dispose();
-    _additionFocusNode.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -83,8 +80,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: TextFormField(
-        focusNode: _amountFocusNode,
-        controller: controller,
+        controller: _controller,
         textInputAction: TextInputAction.next,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         decoration: const InputDecoration(
@@ -92,13 +88,12 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> {
           hintText: 'Enter Amount',
         ),
         validator: (String? value) {
-          if (controller.numberValue > widget.limit!) {
+          if (_controller.numberValue > widget.limit) {
             return '${AppMoney(widget.limit).formatted} is the remainder on this job.';
           }
-          return (controller.numberValue > 0) ? null : 'Please input a price';
+          return (_controller.numberValue > 0) ? null : 'Please input a price';
         },
-        onSaved: (String? value) => price = controller.numberValue,
-        onEditingComplete: () => FocusScope.of(context).requestFocus(_additionFocusNode),
+        onSaved: (String? value) => _price = _controller.numberValue,
       ),
     );
   }
@@ -107,14 +102,13 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: TextFormField(
-        focusNode: _additionFocusNode,
         keyboardType: TextInputType.text,
         maxLines: 6,
         decoration: const InputDecoration(
           isDense: true,
           hintText: 'Anything else to remember this payment by?',
         ),
-        onSaved: (String? value) => notes = value!.trim(),
+        onSaved: (String? value) => _notes = value!.trim(),
         onFieldSubmitted: (String value) => _handleSubmit(),
       ),
     );
@@ -133,7 +127,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> {
 
       Navigator.pop(
         context,
-        <String, Object>{'price': price, 'notes': notes},
+        <String, Object>{'price': _price, 'notes': _notes},
       );
     }
   }

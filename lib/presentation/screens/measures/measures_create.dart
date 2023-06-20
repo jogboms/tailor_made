@@ -17,16 +17,9 @@ class MeasuresCreate extends StatefulWidget {
 class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin<AppState> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
-  String? groupName, unitValue;
-  late List<MeasureModel> measures;
-
-  @override
-  void initState() {
-    super.initState();
-    measures = widget.measures ?? <MeasureModel>[];
-    groupName = widget.groupName ?? '';
-    unitValue = widget.unitValue ?? '';
-  }
+  late String? _groupName = widget.groupName ?? '';
+  late String? _unitValue = widget.unitValue ?? '';
+  late List<MeasureModel> _measures = widget.measures ?? <MeasureModel>[];
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +33,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
             child: TextFormField(
-              initialValue: groupName,
+              initialValue: _groupName,
               textCapitalization: TextCapitalization.words,
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.text,
@@ -49,7 +42,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
                 hintText: 'eg Blouse',
               ),
               validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a name',
-              onSaved: (String? value) => groupName = value!.trim(),
+              onSaved: (String? value) => _groupName = value!.trim(),
             ),
           ),
         );
@@ -59,23 +52,23 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
             child: TextFormField(
-              initialValue: unitValue,
+              initialValue: _unitValue,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                 isDense: true,
                 hintText: 'Unit (eg. In, cm)',
               ),
               validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a value',
-              onSaved: (String? value) => unitValue = value!.trim(),
+              onSaved: (String? value) => _unitValue = value!.trim(),
             ),
           ),
         );
 
-        if (measures.isNotEmpty) {
+        if (_measures.isNotEmpty) {
           children.add(const FormSectionHeader(title: 'Group Items'));
           children.add(
             _GroupItems(
-              measures: measures,
+              measures: _measures,
               onPressed: (MeasureModel measure) => _onTapDeleteItem(vm, measure),
             ),
           );
@@ -91,7 +84,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
             actions: <Widget>[
               AppClearButton(
                 color: Colors.black,
-                onPressed: measures.isEmpty ? null : () => _handleSubmit(vm),
+                onPressed: _measures.isEmpty ? null : () => _handleSubmit(vm),
                 child: const Text('SAVE'),
               )
             ],
@@ -149,14 +142,14 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
   void _handleAddItem() async {
     if (_isOkForm()) {
       final MeasureModel? measure =
-          await context.registry.get<MeasuresCoordinator>().toCreateMeasureItem(groupName, unitValue);
+          await context.registry.get<MeasuresCoordinator>().toCreateMeasureItem(_groupName, _unitValue);
 
       if (measure == null) {
         return;
       }
 
       setState(() {
-        measures = <MeasureModel>[measure, ...measures];
+        _measures = <MeasureModel>[measure, ..._measures];
       });
     }
   }
@@ -169,7 +162,9 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
         final NavigatorState navigator = Navigator.of(context);
         dispatchAction(const ToggleMeasuresLoading());
         // TODO(Jogboms): move this out of here
-        await context.registry.get<Measures>().create(measures, vm.userId, groupName: groupName, unitValue: unitValue);
+        await context.registry
+            .get<Measures>()
+            .create(_measures, vm.userId, groupName: _groupName, unitValue: _unitValue);
         snackBar.hide();
         navigator.pop();
       } catch (e) {
@@ -195,7 +190,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
 
   void _removeFromLocal(String id) {
     setState(() {
-      measures = measures..removeWhere((_) => _.id == id);
+      _measures = _measures..removeWhere((_) => _.id == id);
     });
   }
 }
@@ -203,14 +198,14 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
 class _GroupItems extends StatelessWidget {
   const _GroupItems({required this.measures, required this.onPressed});
 
-  final List<MeasureModel>? measures;
+  final List<MeasureModel> measures;
   final ValueSetter<MeasureModel> onPressed;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        for (MeasureModel measure in measures!)
+        for (MeasureModel measure in measures)
           ListTile(
             dense: true,
             title: Text(measure.name),

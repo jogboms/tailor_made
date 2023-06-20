@@ -48,10 +48,10 @@ class _ContactsPageState extends State<ContactsPage> with StoreDispatchMixin<App
             ),
           ),
           onWillPop: () async {
-            // if (_isSearching) {
-            //   _handleSearchEnd(vm)();
-            //   return false;
-            // }
+            if (vm.isSearching) {
+              dispatchAction(const ContactsAction.searchCancel());
+              return false;
+            }
             return true;
           },
         );

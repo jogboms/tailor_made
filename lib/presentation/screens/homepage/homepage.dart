@@ -104,7 +104,7 @@ class _Body extends StatelessWidget {
     if (viewModel.isWarning && viewModel.hasSkippedPremium == false) {
       return RateLimitPage(
         onSignUp: () => dispatch(AccountAction.premiumSignUp(account)),
-        onSkipedPremium: () => dispatch(const AccountAction.skippedPremium()),
+        onSkippedPremium: () => dispatch(const AccountAction.skippedPremium()),
       );
     }
 

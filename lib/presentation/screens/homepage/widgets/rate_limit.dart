@@ -3,9 +3,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tailor_made/presentation/theme.dart';
 
 class RateLimitPage extends StatelessWidget {
-  const RateLimitPage({super.key, required this.onSkipedPremium, required this.onSignUp});
+  const RateLimitPage({super.key, required this.onSkippedPremium, required this.onSignUp});
 
-  final VoidCallback onSkipedPremium;
+  final VoidCallback onSkippedPremium;
   final VoidCallback onSignUp;
 
   @override
@@ -37,7 +37,7 @@ class RateLimitPage extends StatelessWidget {
             style: TextButton.styleFrom(
               foregroundColor: Colors.grey.shade500,
             ),
-            onPressed: onSkipedPremium,
+            onPressed: onSkippedPremium,
             child: const Text('No, Skip now'),
           ),
           const SizedBox(height: 8.0),

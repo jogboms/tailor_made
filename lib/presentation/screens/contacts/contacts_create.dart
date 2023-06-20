@@ -18,15 +18,9 @@ class ContactsCreatePage extends StatefulWidget {
 
 class _ContactsCreatePageState extends State<ContactsCreatePage> {
   final GlobalKey<ContactFormState> _formKey = GlobalKey<ContactFormState>();
-  late ContactModel contact;
+  late ContactModel _contact = ContactModel.fromDefaults(userID: widget.userId);
 
   final FlutterContactPicker _contactPicker = FlutterContactPicker();
-
-  @override
-  void initState() {
-    super.initState();
-    contact = ContactModel.fromDefaults(userID: widget.userId);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +37,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
             converter: MeasuresViewModel.new,
             builder: (_, __, MeasuresViewModel vm) {
               return IconButton(
-                icon: Icon(Icons.content_cut, color: contact.measurements.isEmpty ? kAccentColor : kTitleBaseColor),
+                icon: Icon(Icons.content_cut, color: _contact.measurements.isEmpty ? kAccentColor : kTitleBaseColor),
                 onPressed: () => _handleSelectMeasure(vm),
               );
             },
@@ -52,7 +46,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
       ),
       body: ContactForm(
         key: _formKey,
-        contact: contact,
+        contact: _contact,
         onHandleSubmit: _handleSubmit,
         userId: widget.userId,
       ),
@@ -62,15 +56,16 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
   void _handleSelectContact() async {
     final Contact? selectedContact = await _contactPicker.selectContact();
     final String? fullName = selectedContact?.fullName;
+    final String? phoneNumber = selectedContact?.phoneNumbers?.firstOrNull;
 
-    if (selectedContact == null || fullName == null) {
+    if (selectedContact == null || fullName == null || phoneNumber == null) {
       return;
     }
 
     _formKey.currentState?.updateContact(
-      contact.copyWith(
+      _contact.copyWith(
         fullname: fullName,
-        phone: selectedContact.phoneNumbers?.first,
+        phone: phoneNumber,
       ),
     );
   }
@@ -108,7 +103,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
 
   void _handleSelectMeasure(MeasuresViewModel vm) async {
     final ContactModel? result = await context.registry.get<ContactsCoordinator>().toContactMeasure(
-          contact,
+          _contact,
           vm.grouped,
         );
     if (result == null) {
@@ -116,7 +111,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
     }
 
     setState(() {
-      contact = contact.copyWith(measurements: result.measurements);
+      _contact = _contact.copyWith(measurements: result.measurements);
     });
   }
 }

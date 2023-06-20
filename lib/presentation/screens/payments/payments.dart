@@ -6,9 +6,9 @@ import 'package:tailor_made/presentation.dart';
 import 'widgets/payments_list.dart';
 
 class PaymentsPage extends StatelessWidget {
-  const PaymentsPage({super.key, this.payments, required this.userId});
+  const PaymentsPage({super.key, this.payments = const <PaymentModel>[], required this.userId});
 
-  final List<PaymentModel>? payments;
+  final List<PaymentModel> payments;
   final String userId;
 
   @override
@@ -24,7 +24,7 @@ class PaymentsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text('Payments', style: theme.appBarTitle),
-                if (payments != null) Text('${payments!.length} Tickets', style: ThemeProvider.of(context)!.xsmall),
+                if (payments.isNotEmpty) Text('${payments.length} Tickets', style: ThemeProvider.of(context)!.xsmall),
               ],
             ),
             backgroundColor: kAppBarBackgroundColor,
@@ -38,7 +38,7 @@ class PaymentsPage extends StatelessWidget {
           ),
           Builder(
             builder: (BuildContext context) {
-              if (payments case final List<PaymentModel> payments) {
+              if (payments.isNotEmpty) {
                 return _Content(payments: payments);
               }
 

@@ -18,12 +18,12 @@ class PaymentsCoordinator extends CoordinatorBase {
   void toPayments(String userId, [List<PaymentModel>? payments]) {
     navigator?.push<void>(
       payments == null
-          ? RouteTransitions.slideIn(PaymentsPage(payments: payments, userId: userId))
+          ? RouteTransitions.slideIn(PaymentsPage(userId: userId))
           : RouteTransitions.slideIn(PaymentsPage(payments: payments, userId: userId), fullscreenDialog: true),
     );
   }
 
-  Future<Map<String, dynamic>?>? toCreatePayment(double? payment) {
+  Future<Map<String, dynamic>?>? toCreatePayment(double payment) {
     return navigator?.push<Map<String, dynamic>>(RouteTransitions.fadeIn(PaymentsCreatePage(limit: payment)));
   }
 }
