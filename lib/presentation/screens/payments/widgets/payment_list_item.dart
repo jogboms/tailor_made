@@ -15,7 +15,7 @@ class PaymentListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DateTime date = payment.createdAt;
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     return Material(
       child: InkWell(

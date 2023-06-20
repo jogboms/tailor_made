@@ -40,7 +40,7 @@ class AppClearButton extends StatelessWidget {
       color: backgroundColor,
       borderRadius: borderRadius ?? BorderRadius.zero,
       onPressed: onPressed,
-      child: DefaultTextStyle(style: ThemeProvider.of(context)!.button.copyWith(color: color), child: child),
+      child: DefaultTextStyle(style: ThemeProvider.of(context).button.copyWith(color: color), child: child),
     );
   }
 }

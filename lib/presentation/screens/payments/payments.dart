@@ -13,7 +13,7 @@ class PaymentsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     return Scaffold(
       body: CustomScrollView(
@@ -24,7 +24,7 @@ class PaymentsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text('Payments', style: theme.appBarTitle),
-                if (payments.isNotEmpty) Text('${payments.length} Tickets', style: ThemeProvider.of(context)!.xsmall),
+                if (payments.isNotEmpty) Text('${payments.length} Tickets', style: ThemeProvider.of(context).xsmall),
               ],
             ),
             backgroundColor: kAppBarBackgroundColor,

@@ -21,7 +21,7 @@ class TaskListItem extends StatelessWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(task.name, style: ThemeProvider.of(context)!.subhead1Bold),
+          Text(task.name, style: ThemeProvider.of(context).subhead1Bold),
           const SizedBox(height: 2.0),
           Row(
             children: <Widget>[

@@ -57,11 +57,11 @@ class PaymentPage extends StatelessWidget {
               if (date != null)
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text(date, style: ThemeProvider.of(context)!.body3Light, textAlign: TextAlign.justify),
+                  child: Text(date, style: ThemeProvider.of(context).body3Light, textAlign: TextAlign.justify),
                 ),
               Padding(
                 padding: const EdgeInsets.all(24.0),
-                child: Text(payment.notes, style: ThemeProvider.of(context)!.body3Light, textAlign: TextAlign.justify),
+                child: Text(payment.notes, style: ThemeProvider.of(context).body3Light, textAlign: TextAlign.justify),
               ),
             ],
           ),

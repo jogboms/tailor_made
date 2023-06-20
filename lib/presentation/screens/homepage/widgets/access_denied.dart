@@ -9,7 +9,7 @@ class AccessDeniedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle textTheme = ThemeProvider.of(context)!.subhead1;
+    final TextStyle textTheme = ThemeProvider.of(context).subhead1;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

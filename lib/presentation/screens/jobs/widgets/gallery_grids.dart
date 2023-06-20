@@ -31,7 +31,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     final List<Widget> imagesList = List<Widget>.generate(
       _fireImages.length,

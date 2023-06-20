@@ -12,7 +12,7 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     return AppStatusBar(
       child: Scaffold(
@@ -135,7 +135,7 @@ class _ContentState extends State<_Content> {
                               ),
                               child: Text(
                                 'RETRY',
-                                style: ThemeProvider.of(context)!.button.copyWith(color: kTextBaseColor),
+                                style: ThemeProvider.of(context).button.copyWith(color: kTextBaseColor),
                               ),
                               onPressed: () => dispatch(const SettingsAction.init()),
                             ),
@@ -151,7 +151,7 @@ class _ContentState extends State<_Content> {
                         backgroundColor: Colors.white,
                       ),
                       icon: const Image(image: AppImages.googleLogo, width: 24.0),
-                      label: Text('Continue with Google', style: ThemeProvider.of(context)!.bodyBold),
+                      label: Text('Continue with Google', style: ThemeProvider.of(context).bodyBold),
                       onPressed: _onLogin,
                     ),
                   );

@@ -45,7 +45,7 @@ class MeasureEditDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const SizedBox(height: 16.0),
-              Center(child: Text(title, style: ThemeProvider.of(context)!.smallLight)),
+              Center(child: Text(title, style: ThemeProvider.of(context).smallLight)),
               const SizedBox(height: 8.0),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),

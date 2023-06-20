@@ -154,11 +154,11 @@ class _Header extends StatelessWidget {
         children: <Widget>[
           Text(
             title.toUpperCase(),
-            style: ThemeProvider.of(context)!.smallLight,
+            style: ThemeProvider.of(context).smallLight,
           ),
           Text(
             trailing,
-            style: ThemeProvider.of(context)!.smallLight,
+            style: ThemeProvider.of(context).smallLight,
           ),
         ],
       ),

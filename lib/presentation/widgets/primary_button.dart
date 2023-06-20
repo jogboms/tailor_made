@@ -42,7 +42,7 @@ class PrimaryButton extends StatelessWidget {
           shape: shape as OutlinedBorder? ?? const StadiumBorder(),
         ),
         onPressed: onPressed,
-        child: DefaultTextStyle(style: ThemeProvider.of(context)!.button.copyWith(color: color), child: child),
+        child: DefaultTextStyle(style: ThemeProvider.of(context).button.copyWith(color: color), child: child),
       ),
     );
   }

@@ -65,14 +65,14 @@ class _AppBarState extends State<_AppBar> with StoreDispatchMixin<AppState> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider? theme = ThemeProvider.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     if (!_isSearching) {
       return CustomAppBar(
         title: const Text('Jobs'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search, color: theme!.appBarTitle.color),
+            icon: Icon(Icons.search, color: theme.appBarTitle.color),
             onPressed: _onTapSearch,
           ),
           JobsFilterButton(
@@ -83,7 +83,7 @@ class _AppBarState extends State<_AppBar> with StoreDispatchMixin<AppState> {
       );
     }
 
-    final TextStyle textStyle = theme!.subhead1Bold;
+    final TextStyle textStyle = theme.subhead1Bold;
 
     return AppBar(
       centerTitle: false,

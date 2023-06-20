@@ -21,7 +21,7 @@ class _ChoiceDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeProvider theme = ThemeProvider.of(context);
     return AlertDialog(
       title: title != null ? Text(title!) : null,
       content: Text(message),
