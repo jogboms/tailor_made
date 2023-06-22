@@ -10,7 +10,7 @@ class JobsViewModel extends Equatable {
         _searchResults = state.jobs.searchResults ?? <JobEntity>[],
         isSearching = state.jobs.isSearching,
         hasSortFn = state.jobs.hasSortFn,
-        measures = state.measures.grouped ?? <String, List<MeasureModel>>{},
+        measures = state.measures.grouped ?? <MeasureGroup, List<MeasureEntity>>{},
         userId = state.account.account!.uid,
         sortFn = state.jobs.sortFn,
         isLoading = state.jobs.status == StateStatus.loading,
@@ -42,7 +42,7 @@ class JobsViewModel extends Equatable {
 
   List<JobEntity> get searchResults => _searchResults;
 
-  final Map<String, List<MeasureModel>> measures;
+  final Map<MeasureGroup, List<MeasureEntity>> measures;
 
   final List<JobEntity> _model;
 

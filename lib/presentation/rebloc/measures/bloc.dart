@@ -28,11 +28,11 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final MeasuresState measures = state.measures;
 
-    if (action is OnDataAction<_Union<MeasureModel>>) {
+    if (action is OnDataAction<_Union<MeasureEntity>>) {
       return state.copyWith(
         measures: measures.copyWith(
-          measures: List<MeasureModel>.from(
-            action.payload.first..sort((MeasureModel a, MeasureModel b) => a.group.compareTo(b.group)),
+          measures: List<MeasureEntity>.from(
+            action.payload.first..sort((MeasureEntity a, MeasureEntity b) => a.group.compareTo(b.group)),
           ),
           grouped: action.payload.second,
           status: StateStatus.success,
@@ -50,11 +50,11 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   }
 }
 
-class _Union<T extends MeasureModel> {
+class _Union<T extends MeasureEntity> {
   const _Union(this.first, this.second);
 
   final List<T> first;
-  final Map<String, List<T>> second;
+  final Map<MeasureGroup, List<T>> second;
 
   @override
   String toString() => '_Union($first, $second)';
@@ -75,13 +75,16 @@ Middleware _onUpdateMeasure(Measures measures) {
 Middleware _onInitMeasure(Measures measures) {
   return (WareContext<AppState> context) {
     final String? userId = (context.action as InitMeasuresAction).userId;
-    return measures.fetchAll(userId).map((List<MeasureModel> measures) {
+    return measures.fetchAll(userId).map((List<MeasureEntity> measures) {
       if (measures.isEmpty) {
-        return UpdateMeasureAction(createDefaultMeasures(), userId);
+        return UpdateMeasureAction(BaseMeasureEntity.defaults, userId);
       }
 
-      return OnDataAction<_Union<MeasureModel>>(
-        _Union<MeasureModel>(measures, groupBy<MeasureModel>(measures, (MeasureModel measure) => measure.group)),
+      return OnDataAction<_Union<MeasureEntity>>(
+        _Union<MeasureEntity>(
+          measures,
+          groupBy<MeasureGroup, MeasureEntity>(measures, (MeasureEntity measure) => measure.group),
+        ),
       );
     }).map((Action action) => context.copyWith(action));
   };

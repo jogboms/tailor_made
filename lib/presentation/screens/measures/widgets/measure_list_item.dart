@@ -5,7 +5,7 @@ import 'package:tailor_made/presentation/theme.dart';
 class MeasureListItem extends StatelessWidget {
   const MeasureListItem({super.key, required this.item});
 
-  final MeasureModel item;
+  final MeasureEntity item;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,10 @@ class MeasureListItem extends StatelessWidget {
                     color: kAccentColor,
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  child: Text(item.group.toLowerCase(), style: theme.xsmall.copyWith(color: Colors.white)),
+                  child: Text(
+                    item.group.displayName.toLowerCase(),
+                    style: theme.xsmall.copyWith(color: Colors.white),
+                  ),
                 ),
               ],
             ),

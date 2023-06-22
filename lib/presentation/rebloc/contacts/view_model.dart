@@ -9,7 +9,7 @@ class ContactsViewModel extends Equatable {
         _searchResults = state.contacts.searchResults ?? <ContactEntity>[],
         isSearching = state.contacts.isSearching,
         hasSortFn = state.contacts.hasSortFn,
-        measuresGrouped = state.measures.grouped ?? <String, List<MeasureModel>>{},
+        measuresGrouped = state.measures.grouped ?? <MeasureGroup, List<MeasureEntity>>{},
         userId = state.account.account!.uid,
         _jobs = state.jobs.jobs ?? <JobEntity>[],
         sortFn = state.contacts.sortFn,
@@ -19,7 +19,7 @@ class ContactsViewModel extends Equatable {
 
   List<ContactEntity> get contacts => isSearching ? searchResults : model;
 
-  final Map<String, List<MeasureModel>> measuresGrouped;
+  final Map<MeasureGroup, List<MeasureEntity>> measuresGrouped;
 
   ContactEntity? get selected => model.firstWhereOrNull((_) => _.id == contactID);
 

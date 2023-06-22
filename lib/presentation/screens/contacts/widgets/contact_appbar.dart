@@ -12,7 +12,7 @@ class ContactAppBar extends StatefulWidget {
     required this.contact,
   });
 
-  final Map<String, List<MeasureModel>> grouped;
+  final Map<MeasureGroup, List<MeasureEntity>> grouped;
   final ContactEntity contact;
   final String userId;
 

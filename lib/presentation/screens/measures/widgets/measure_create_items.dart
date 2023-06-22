@@ -13,7 +13,7 @@ class MeasureCreateItems extends StatelessWidget {
     this.onChanged,
   });
 
-  final Map<String, List<MeasureModel>> grouped;
+  final Map<MeasureGroup, List<MeasureEntity>> grouped;
   final Map<String, double> measurements;
   final FormFieldSetter<Map<String, double>> onSaved;
   final ValueChanged<Map<String, double>>? onChanged;
@@ -31,9 +31,9 @@ class MeasureCreateItems extends StatelessWidget {
           children: <Widget>[
             for (int i = 0; i < grouped.length; i++)
               SlideDownItem(
-                title: grouped.keys.elementAt(i),
+                title: grouped.keys.elementAt(i).displayName,
                 body: _JobMeasureBlock(
-                  key: Key(grouped.keys.elementAt(i)),
+                  key: ValueKey<MeasureGroup>(grouped.keys.elementAt(i)),
                   measures: grouped.values.elementAt(i),
                   measurements: currentValue,
                   onChanged: ((String, double?) value) {
@@ -68,8 +68,8 @@ class _JobMeasureBlock extends StatelessWidget {
     required this.onChanged,
   });
 
-  final List<MeasureModel> measures;
-  final Map<String, double?> measurements;
+  final List<MeasureEntity> measures;
+  final Map<String, double> measurements;
   final ValueChanged<(String, double?)> onChanged;
 
   @override
@@ -80,7 +80,7 @@ class _JobMeasureBlock extends StatelessWidget {
       decoration: const BoxDecoration(border: Border(bottom: AppBorderSide())),
       child: Wrap(
         alignment: WrapAlignment.spaceBetween,
-        children: measures.map((MeasureModel measure) {
+        children: measures.map((MeasureEntity measure) {
           final int index = measures.indexOf(measure);
 
           final num? value1 = measurements.containsKey(measure.id) ? measurements[measure.id] : 0;

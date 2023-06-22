@@ -6,6 +6,8 @@ export 'entities/create_contact_data.dart';
 export 'entities/create_job_data.dart';
 export 'entities/image_entity.dart';
 export 'entities/job_entity.dart';
+export 'entities/measure_entity.dart';
+export 'entities/measure_group.dart';
 export 'entities/payment_entity.dart';
 export 'entities/reference_entity.dart';
 export 'entities/setting_entity.dart';

@@ -20,7 +20,11 @@ class MeasuresCoordinator extends CoordinatorBase {
     navigator?.push<void>(RouteTransitions.slideIn(MeasuresManagePage(userId: userId)));
   }
 
-  void toCreateMeasures([String? groupName, String? unitValue, List<MeasureModel>? measures]) {
+  void toCreateMeasures({
+    MeasureGroup? groupName,
+    String? unitValue,
+    List<MeasureEntity>? measures,
+  }) {
     navigator?.push<void>(
       RouteTransitions.slideIn(
         MeasuresCreate(groupName: groupName, unitValue: unitValue, measures: measures),
@@ -29,8 +33,11 @@ class MeasuresCoordinator extends CoordinatorBase {
     );
   }
 
-  Future<MeasureModel?>? toCreateMeasureItem([String? groupName, String? unitValue, List<MeasureModel>? measures]) {
-    return navigator?.push<MeasureModel>(
+  Future<DefaultMeasureEntity?>? toCreateMeasureItem({
+    MeasureGroup? groupName,
+    String? unitValue,
+  }) {
+    return navigator?.push<DefaultMeasureEntity>(
       RouteTransitions.fadeIn(MeasureCreateItem(groupName: groupName, unitValue: unitValue)),
     );
   }

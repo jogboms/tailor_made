@@ -35,7 +35,7 @@ class MeasuresPage extends StatelessWidget {
             shrinkWrap: true,
             padding: const EdgeInsets.only(bottom: 96.0),
             itemBuilder: (_, int index) {
-              final MeasureModel measure = vm.model[index];
+              final MeasureEntity measure = vm.model[index];
               final double value = measurements[measure.id] ?? 0.0;
               return MeasureListItem(item: measure.copyWith(value: value));
             },

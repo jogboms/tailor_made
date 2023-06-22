@@ -48,7 +48,7 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> {
                 children: <Widget>[
                   for (int i = 0; i < vm.grouped.length; i++)
                     MeasureSlideBlock(
-                      title: vm.grouped.keys.elementAt(i),
+                      groupName: vm.grouped.keys.elementAt(i),
                       measures: vm.grouped.values.elementAt(i),
                       userId: vm.userId,
                     ),
@@ -65,7 +65,7 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> {
         backgroundColor: kAccentColor,
         foregroundColor: Colors.white,
         label: const Text('Add Group'),
-        onPressed: () => context.registry.get<MeasuresCoordinator>().toCreateMeasures(widget.userId),
+        onPressed: () => context.registry.get<MeasuresCoordinator>().toCreateMeasures(),
       ),
     );
   }

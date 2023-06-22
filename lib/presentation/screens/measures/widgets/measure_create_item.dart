@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:uuid/uuid.dart';
 
 import 'measure_dialog.dart';
 
 class MeasureCreateItem extends StatelessWidget {
   const MeasureCreateItem({super.key, required this.groupName, required this.unitValue});
 
-  final String? groupName;
+  final MeasureGroup? groupName;
   final String? unitValue;
 
   @override
@@ -24,12 +23,10 @@ class MeasureCreateItem extends StatelessWidget {
       ),
       backgroundColor: Colors.black38,
       body: MeasureDialog(
-        measure: MeasureModel(
-          id: const Uuid().v4(),
+        measure: DefaultMeasureEntity(
           name: '',
-          group: groupName ?? '',
+          group: groupName ?? MeasureGroup.empty,
           unit: unitValue ?? '',
-          createdAt: DateTime.now(),
         ),
       ),
     );

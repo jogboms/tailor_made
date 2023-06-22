@@ -7,8 +7,9 @@ import 'package:tailor_made/presentation.dart';
 class MeasuresCreate extends StatefulWidget {
   const MeasuresCreate({super.key, this.measures, this.groupName, this.unitValue});
 
-  final List<MeasureModel>? measures;
-  final String? groupName, unitValue;
+  final List<BaseMeasureEntity>? measures;
+  final MeasureGroup? groupName;
+  final String? unitValue;
 
   @override
   State<MeasuresCreate> createState() => _MeasuresCreateState();
@@ -17,9 +18,9 @@ class MeasuresCreate extends StatefulWidget {
 class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin<AppState> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
-  late String? _groupName = widget.groupName ?? '';
+  late MeasureGroup _groupName = widget.groupName ?? MeasureGroup.empty;
   late String? _unitValue = widget.unitValue ?? '';
-  late List<MeasureModel> _measures = widget.measures ?? <MeasureModel>[];
+  late List<BaseMeasureEntity> _measures = widget.measures ?? <BaseMeasureEntity>[];
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
             child: TextFormField(
-              initialValue: _groupName,
+              initialValue: _groupName.displayName,
               textCapitalization: TextCapitalization.words,
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.text,
@@ -42,7 +43,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
                 hintText: 'eg Blouse',
               ),
               validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a name',
-              onSaved: (String? value) => _groupName = value!.trim(),
+              onSaved: (String? value) => _groupName = MeasureGroup.valueOf(value!.trim()),
             ),
           ),
         );
@@ -69,7 +70,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
           children.add(
             _GroupItems(
               measures: _measures,
-              onPressed: (MeasureModel measure) => _onTapDeleteItem(vm, measure),
+              onPressed: (BaseMeasureEntity measure) => _onTapDeleteItem(vm, measure),
             ),
           );
 
@@ -115,41 +116,43 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
     );
   }
 
-  void _onTapDeleteItem(MeasuresViewModel vm, MeasureModel measure) async {
+  void _onTapDeleteItem(MeasuresViewModel vm, BaseMeasureEntity measure) async {
+    final Registry registry = context.registry;
     final AppSnackBar snackBar = AppSnackBar.of(context);
     final bool? choice = await showChoiceDialog(context: context, message: 'Are you sure?');
     if (choice == null || choice == false) {
       return;
     }
-    final Reference? reference = measure.reference;
-    if (reference == null) {
-      _removeFromLocal(measure.id);
+    if (measure is DefaultMeasureEntity) {
+      _removeFromLocal(measure.localKey);
       return;
-    }
-
-    snackBar.loading();
-    try {
-      dispatchAction(const ToggleMeasuresLoading());
-      await reference.delete();
-      _removeFromLocal(measure.id);
-      snackBar.hide();
-    } catch (error, stackTrace) {
-      AppLog.e(error, stackTrace);
-      snackBar.error(error.toString());
+    } else if (measure is MeasureEntity) {
+      snackBar.loading();
+      try {
+        dispatchAction(const ToggleMeasuresLoading());
+        await registry.get<Measures>().deleteOne(measure.reference);
+        _removeFromLocal(measure.localKey);
+        snackBar.hide();
+      } catch (error, stackTrace) {
+        AppLog.e(error, stackTrace);
+        snackBar.error(error.toString());
+      }
     }
   }
 
   void _handleAddItem() async {
     if (_isOkForm()) {
-      final MeasureModel? measure =
-          await context.registry.get<MeasuresCoordinator>().toCreateMeasureItem(_groupName, _unitValue);
+      final DefaultMeasureEntity? measure = await context.registry.get<MeasuresCoordinator>().toCreateMeasureItem(
+            groupName: _groupName,
+            unitValue: _unitValue,
+          );
 
       if (measure == null) {
         return;
       }
 
       setState(() {
-        _measures = <MeasureModel>[measure, ..._measures];
+        _measures = <BaseMeasureEntity>[measure, ..._measures];
       });
     }
   }
@@ -167,8 +170,9 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
             .create(_measures, vm.userId, groupName: _groupName, unitValue: _unitValue);
         snackBar.hide();
         navigator.pop();
-      } catch (e) {
-        snackBar.error(e.toString());
+      } catch (error, stackTrace) {
+        AppLog.e(error, stackTrace);
+        snackBar.error(error.toString());
       }
     }
   }
@@ -188,9 +192,9 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
     return true;
   }
 
-  void _removeFromLocal(String id) {
+  void _removeFromLocal(String localKey) {
     setState(() {
-      _measures = _measures..removeWhere((_) => _.id == id);
+      _measures = _measures..removeWhere((_) => _.localKey == localKey);
     });
   }
 }
@@ -198,20 +202,20 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
 class _GroupItems extends StatelessWidget {
   const _GroupItems({required this.measures, required this.onPressed});
 
-  final List<MeasureModel> measures;
-  final ValueSetter<MeasureModel> onPressed;
+  final List<BaseMeasureEntity> measures;
+  final ValueSetter<BaseMeasureEntity> onPressed;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        for (MeasureModel measure in measures)
+        for (BaseMeasureEntity measure in measures)
           ListTile(
             dense: true,
             title: Text(measure.name),
             subtitle: Text(measure.unit),
             trailing: IconButton(
-              icon: Icon(measure.reference != null ? Icons.delete : Icons.remove_circle_outline),
+              icon: Icon(measure is MeasureEntity ? Icons.delete : Icons.remove_circle_outline),
               iconSize: 20.0,
               onPressed: () => onPressed(measure),
             ),
@@ -219,4 +223,8 @@ class _GroupItems extends StatelessWidget {
       ],
     );
   }
+}
+
+extension on BaseMeasureEntity {
+  String get localKey => '$name-$group';
 }

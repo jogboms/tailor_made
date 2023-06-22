@@ -7,7 +7,7 @@ import 'package:tailor_made/presentation/widgets.dart';
 class MeasureDialog extends StatefulWidget {
   const MeasureDialog({super.key, required this.measure});
 
-  final MeasureModel measure;
+  final DefaultMeasureEntity measure;
 
   @override
   State<MeasureDialog> createState() => _MeasureDialogState();
@@ -16,7 +16,7 @@ class MeasureDialog extends StatefulWidget {
 class _MeasureDialogState extends State<MeasureDialog> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
-  late MeasureModel _measure = widget.measure;
+  late DefaultMeasureEntity _measure = widget.measure;
 
   @override
   Widget build(BuildContext context) {
@@ -89,10 +89,9 @@ class _MeasureDialogState extends State<MeasureDialog> {
     }
     if (!form.validate()) {
       _autovalidate = true;
-      // widget.onHandleValidate();
     } else {
       form.save();
-      Navigator.pop<MeasureModel>(context, _measure);
+      Navigator.pop<DefaultMeasureEntity>(context, _measure);
     }
   }
 }

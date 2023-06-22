@@ -7,7 +7,7 @@ import '../../measures/widgets/measure_create_items.dart';
 class ContactMeasure extends StatefulWidget {
   const ContactMeasure({super.key, required this.grouped, required this.contact});
 
-  final Map<String, List<MeasureModel>> grouped;
+  final Map<MeasureGroup, List<MeasureEntity>> grouped;
   final ContactEntity? contact;
 
   @override

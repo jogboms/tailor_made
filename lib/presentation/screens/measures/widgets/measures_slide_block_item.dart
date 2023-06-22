@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/theme.dart';
+import 'package:tailor_made/presentation.dart';
 
-import '../../../widgets.dart';
 import 'measure_edit_dialog.dart';
 
 class MeasuresSlideBlockItem extends StatefulWidget {
   const MeasuresSlideBlockItem({super.key, required this.measure});
 
-  final MeasureModel measure;
+  final MeasureEntity measure;
 
   @override
   State<MeasuresSlideBlockItem> createState() => _MeasuresSlideBlockItemState();
@@ -40,7 +40,8 @@ class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
     }
   }
 
-  void _onTapEditItem(MeasureModel measure) async {
+  void _onTapEditItem(MeasureEntity measure) async {
+    final Registry registry = context.registry;
     final TextEditingController controller = TextEditingController(text: measure.name);
     final AppSnackBar snackBar = AppSnackBar.of(context);
 
@@ -63,12 +64,12 @@ class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
     }
 
     snackBar.loading();
-
     try {
-      await measure.reference?.updateData(<String, String>{'name': itemName});
+      await registry.get<Measures>().updateOne(measure.reference, name: itemName);
       snackBar.hide();
-    } catch (e) {
-      snackBar.error(e.toString());
+    } catch (error, stackTrace) {
+      AppLog.e(error, stackTrace);
+      snackBar.error(error.toString());
     }
   }
 }

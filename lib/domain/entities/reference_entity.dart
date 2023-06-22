@@ -8,7 +8,4 @@ class ReferenceEntity with EquatableMixin {
 
   @override
   List<Object> get props => <Object>[id, path];
-
-  @override
-  bool? get stringify => true;
 }
