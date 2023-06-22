@@ -21,8 +21,8 @@ class JobsCreatePage extends StatefulWidget {
     required this.userId,
   });
 
-  final ContactModel? contact;
-  final List<ContactModel> contacts;
+  final ContactEntity? contact;
+  final List<ContactEntity> contacts;
   final String userId;
 
   @override
@@ -45,7 +45,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
   Widget build(BuildContext context) {
     final ThemeProvider theme = ThemeProvider.of(context);
 
-    final ContactModel? contact = this.contact;
+    final ContactEntity? contact = this.contact;
 
     return Scaffold(
       appBar: contact != null

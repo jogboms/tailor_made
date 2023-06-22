@@ -7,7 +7,7 @@ import '../../contacts/widgets/contacts_list_item.dart';
 class ContactLists extends StatelessWidget {
   const ContactLists({super.key, required this.contacts});
 
-  final List<ContactModel> contacts;
+  final List<ContactEntity> contacts;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class ContactLists extends StatelessWidget {
               itemCount: contacts.length,
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
-                final ContactModel item = contacts[index];
+                final ContactEntity item = contacts[index];
                 return ContactsListItem(
                   contact: item,
                   showActions: false,

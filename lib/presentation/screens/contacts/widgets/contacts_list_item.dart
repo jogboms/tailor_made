@@ -6,7 +6,7 @@ import 'package:tailor_made/presentation.dart';
 class ContactsListItem extends StatelessWidget {
   const ContactsListItem({super.key, required this.contact, this.onTapContact, this.showActions = true});
 
-  final ContactModel contact;
+  final ContactEntity contact;
   final VoidCallback? onTapContact;
   final bool showActions;
 
@@ -44,7 +44,7 @@ class ContactsListItem extends StatelessWidget {
 class _Avatar extends StatelessWidget {
   const _Avatar({required this.contact});
 
-  final ContactModel contact;
+  final ContactEntity contact;
 
   @override
   Widget build(BuildContext context) {

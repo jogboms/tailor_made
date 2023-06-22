@@ -1,6 +1,8 @@
 import '../data/network/firebase/models.dart';
 
 export 'entities/account_entity.dart';
+export 'entities/contact_entity.dart';
+export 'entities/create_contact_data.dart';
 export 'entities/create_job_data.dart';
 export 'entities/image_entity.dart';
 export 'entities/job_entity.dart';
@@ -30,9 +32,6 @@ abstract class Reference {
 
   @Deprecated('refactor!')
   Future<void> delete();
-
-  @Deprecated('refactor!')
-  Future<void> setData(Map<String, dynamic> data, {bool merge = false});
 
   @Deprecated('refactor!')
   Future<void> updateData(Map<String, dynamic> data);

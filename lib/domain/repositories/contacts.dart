@@ -1,14 +1,23 @@
 import 'dart:io';
 
 import '../entities.dart';
-import '../models/contact.dart';
 
 abstract class Contacts {
-  Stream<List<ContactModel>> fetchAll(String? userId);
+  Stream<List<ContactEntity>> fetchAll(String? userId);
 
   Storage? createFile(File file, String userId);
 
-  Future<Reference?> fetch(ContactModel contact, String userId);
+  Future<Reference?> fetch(String userId, ContactEntity contact);
 
-  Stream<ContactModel> update(ContactModel contact, String userId);
+  Future<ContactEntity> create(String userId, CreateContactData data);
+
+  Future<bool> update(
+    String userId, {
+    required ReferenceEntity reference,
+    String? fullname,
+    String? phone,
+    String? location,
+    String? imageUrl,
+    Map<String, double>? measurements,
+  });
 }

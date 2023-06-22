@@ -28,7 +28,7 @@ class _JobPageState extends State<JobPage> {
       builder: (BuildContext context, _, JobsViewModel vm) {
         // in the case of newly created jobs
         final JobEntity job = vm.selected ?? widget.job;
-        final ContactModel? contact = vm.selectedContact;
+        final ContactEntity? contact = vm.selectedContact;
         if (vm.isLoading || contact == null) {
           return const Center(child: LoadingSpinner());
         }
@@ -216,7 +216,7 @@ class _AvatarAppBar extends StatelessWidget {
   const _AvatarAppBar({required this.job, required this.contact});
 
   final JobEntity job;
-  final ContactModel contact;
+  final ContactEntity contact;
 
   @override
   Widget build(BuildContext context) {

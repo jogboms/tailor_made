@@ -35,7 +35,7 @@ class GalleryView extends StatelessWidget {
 class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const _MyAppBar({this.contact, this.job, required this.account});
 
-  final ContactModel? contact;
+  final ContactEntity? contact;
   final JobEntity? job;
   final AccountEntity? account;
 
@@ -55,7 +55,7 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                   icon: const Icon(Icons.work, color: Colors.white),
                   onPressed: () => context.registry.get<JobsCoordinator>().toJob(job),
                 ),
-              if (contact case final ContactModel contact)
+              if (contact case final ContactEntity contact)
                 IconButton(
                   icon: const Icon(Icons.person, color: Colors.white),
                   onPressed: () => context.registry.get<ContactsCoordinator>().toContact(contact),

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tailor_made/domain.dart';
 
 import '../../network/firebase.dart';
@@ -26,13 +25,7 @@ class JobsImpl extends Jobs {
   Stream<List<JobEntity>> fetchAll(String userId) {
     return collection.fetchAll().where('userID', isEqualTo: userId).snapshots().map(
           (MapQuerySnapshot snapshot) => snapshot.docs
-              .map(
-                (QueryDocumentSnapshot<DynamicMap> snapshot) => _deriveJobEntity(
-                  snapshot.id,
-                  snapshot.reference.path,
-                  snapshot.data(),
-                ),
-              )
+              .map((MapQueryDocumentSnapshot doc) => _deriveJobEntity(doc.id, doc.reference.path, doc.data()))
               .toList(),
         );
   }
@@ -73,13 +66,7 @@ class JobsImpl extends Jobs {
 
     sub = ref
         .snapshots()
-        .map(
-          (DocumentSnapshot<DynamicMap> snapshot) => _deriveJobEntity(
-            snapshot.id,
-            snapshot.reference.path,
-            snapshot.data()!,
-          ),
-        )
+        .map((MapDocumentSnapshot doc) => _deriveJobEntity(doc.id, doc.reference.path, doc.data()!))
         .listen(listener);
 
     return completer.future;
@@ -105,10 +92,9 @@ class JobsImpl extends Jobs {
 }
 
 JobEntity _deriveJobEntity(String id, String path, DynamicMap data) {
-  Map<String, dynamic> measurements = data['measurements'] as Map<String, dynamic>? ?? <String, dynamic>{};
-  if (measurements.isNotEmpty) {
-    measurements = measurements..removeWhere((String key, dynamic value) => value == null);
-  }
+  final Map<String, dynamic> measurements = <String, dynamic>{
+    ...?((data['measurements'] as Map<String, dynamic>?)?..removeWhere((_, dynamic value) => value == null)),
+  };
 
   return JobEntity(
     reference: ReferenceEntity(id: id, path: path),

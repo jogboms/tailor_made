@@ -16,7 +16,7 @@ const List<String> _tabs = <String>['Jobs', 'Gallery', 'Payments'];
 class ContactPage extends StatelessWidget {
   const ContactPage({super.key, required this.contact});
 
-  final ContactModel contact;
+  final ContactEntity contact;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class ContactPage extends StatelessWidget {
       converter: (AppState state) => ContactsViewModel(state, contactID: contact.id),
       builder: (BuildContext context, DispatchFunction dispatch, ContactsViewModel viewModel) {
         // in the case of newly created contacts
-        final ContactModel contact = viewModel.selected ?? this.contact;
+        final ContactEntity contact = viewModel.selected ?? this.contact;
         return DefaultTabController(
           length: _tabs.length,
           child: Scaffold(

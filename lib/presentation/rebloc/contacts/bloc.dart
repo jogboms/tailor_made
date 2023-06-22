@@ -27,10 +27,10 @@ class ContactsBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final ContactsState contacts = state.contacts;
 
-    if (action is OnDataAction<List<ContactModel>>) {
+    if (action is OnDataAction<List<ContactEntity>>) {
       return state.copyWith(
         contacts: contacts.copyWith(
-          contacts: List<ContactModel>.of(action.payload..sort(_sort(contacts.sortFn))),
+          contacts: List<ContactEntity>.of(action.payload..sort(_sort(contacts.sortFn))),
           status: StateStatus.success,
         ),
       );
@@ -48,7 +48,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
     if (action is _SearchSuccessContactAction) {
       return state.copyWith(
         contacts: contacts.copyWith(
-          searchResults: List<ContactModel>.of(action.payload..sort(_sort(contacts.sortFn))),
+          searchResults: List<ContactEntity>.of(action.payload..sort(_sort(contacts.sortFn))),
           status: StateStatus.success,
         ),
       );
@@ -57,7 +57,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
     if (action is _SortContacts) {
       return state.copyWith(
         contacts: contacts.copyWith(
-          contacts: List<ContactModel>.of(contacts.contacts!.toList()..sort(_sort(action.payload))),
+          contacts: List<ContactEntity>.of(contacts.contacts!.toList()..sort(_sort(action.payload))),
           hasSortFn: action.payload != ContactsSortType.reset,
           sortFn: action.payload,
           status: StateStatus.success,
@@ -70,7 +70,7 @@ class ContactsBloc extends SimpleBloc<AppState> {
         contacts: contacts.copyWith(
           status: StateStatus.success,
           isSearching: false,
-          searchResults: List<ContactModel>.of(<ContactModel>[]),
+          searchResults: List<ContactEntity>.of(<ContactEntity>[]),
         ),
       );
     }
@@ -79,20 +79,20 @@ class ContactsBloc extends SimpleBloc<AppState> {
   }
 }
 
-Comparator<ContactModel> _sort(ContactsSortType sortType) {
+Comparator<ContactEntity> _sort(ContactsSortType sortType) {
   switch (sortType) {
     case ContactsSortType.jobs:
-      return (ContactModel a, ContactModel b) => b.totalJobs.compareTo(a.totalJobs);
+      return (ContactEntity a, ContactEntity b) => b.totalJobs.compareTo(a.totalJobs);
     case ContactsSortType.names:
-      return (ContactModel a, ContactModel b) => a.fullname.compareTo(b.fullname);
+      return (ContactEntity a, ContactEntity b) => a.fullname.compareTo(b.fullname);
     case ContactsSortType.completed:
-      return (ContactModel a, ContactModel b) => (b.totalJobs - b.pendingJobs).compareTo(a.totalJobs - a.pendingJobs);
+      return (ContactEntity a, ContactEntity b) => (b.totalJobs - b.pendingJobs).compareTo(a.totalJobs - a.pendingJobs);
     case ContactsSortType.pending:
-      return (ContactModel a, ContactModel b) => b.pendingJobs.compareTo(a.pendingJobs);
+      return (ContactEntity a, ContactEntity b) => b.pendingJobs.compareTo(a.pendingJobs);
     case ContactsSortType.recent:
-      return (ContactModel a, ContactModel b) => b.createdAt.compareTo(a.createdAt);
+      return (ContactEntity a, ContactEntity b) => b.createdAt.compareTo(a.createdAt);
     case ContactsSortType.reset:
-      return (ContactModel a, ContactModel b) => a.id.compareTo(b.id);
+      return (ContactEntity a, ContactEntity b) => a.id.compareTo(b.id);
   }
 }
 
@@ -100,8 +100,8 @@ Middleware _onAfterLogin(Contacts contacts) {
   return (WareContext<AppState> context) {
     return contacts
         .fetchAll((context.action as _InitContactsAction).userId)
-        .map(OnDataAction<List<ContactModel>>.new)
-        .map((OnDataAction<List<ContactModel>> action) => context.copyWith(action));
+        .map(OnDataAction<List<ContactEntity>>.new)
+        .map((OnDataAction<List<ContactEntity>> action) => context.copyWith(action));
   };
 }
 
@@ -115,7 +115,7 @@ Stream<WareContext<AppState>> _makeSearch(WareContext<AppState> context) {
       .map(
         (String text) => ContactsAction.searchSuccess(
           context.state.contacts.contacts!
-              .where((ContactModel contact) => contact.fullname.contains(RegExp(text, caseSensitive: false)))
+              .where((ContactEntity contact) => contact.fullname.contains(RegExp(text, caseSensitive: false)))
               .toList(),
         ),
       )

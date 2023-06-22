@@ -6,7 +6,7 @@ import 'package:tailor_made/presentation/rebloc.dart';
 class JobsViewModel extends Equatable {
   JobsViewModel(AppState state, {this.jobID})
       : _model = state.jobs.jobs ?? <JobEntity>[],
-        _contacts = state.contacts.contacts ?? <ContactModel>[],
+        _contacts = state.contacts.contacts ?? <ContactEntity>[],
         _searchResults = state.jobs.searchResults ?? <JobEntity>[],
         isSearching = state.jobs.isSearching,
         hasSortFn = state.jobs.hasSortFn,
@@ -26,7 +26,7 @@ class JobsViewModel extends Equatable {
 
   JobEntity? get selected => model.firstWhereOrNull((_) => _.id == jobID);
 
-  ContactModel? get selectedContact => contacts.firstWhereOrNull((_) => _.id == selected?.contactID);
+  ContactEntity? get selectedContact => contacts.firstWhereOrNull((_) => _.id == selected?.contactID);
 
   List<JobEntity> get selectedJobs => jobs.where((JobEntity job) => job.contactID == selected?.id).toList();
 
@@ -34,9 +34,9 @@ class JobsViewModel extends Equatable {
 
   final String userId;
 
-  final List<ContactModel> _contacts;
+  final List<ContactEntity> _contacts;
 
-  List<ContactModel> get contacts => _contacts;
+  List<ContactEntity> get contacts => _contacts;
 
   final List<JobEntity> _searchResults;
 

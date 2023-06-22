@@ -10,11 +10,13 @@ class MeasureCreateItems extends StatelessWidget {
     required this.grouped,
     required this.measurements,
     required this.onSaved,
+    this.onChanged,
   });
 
   final Map<String, List<MeasureModel>> grouped;
   final Map<String, double> measurements;
   final FormFieldSetter<Map<String, double>> onSaved;
+  final ValueChanged<Map<String, double>>? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,7 @@ class MeasureCreateItems extends StatelessWidget {
                   onChanged: ((String, double?) value) {
                     currentValue[value.$1] = value.$2 ?? 0.0;
                     field.didChange(currentValue);
+                    onChanged?.call(currentValue);
                   },
                 ),
               ),

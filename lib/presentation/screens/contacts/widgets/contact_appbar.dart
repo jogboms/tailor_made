@@ -13,7 +13,7 @@ class ContactAppBar extends StatefulWidget {
   });
 
   final Map<String, List<MeasureModel>> grouped;
-  final ContactModel contact;
+  final ContactEntity contact;
   final String userId;
 
   @override
@@ -25,7 +25,7 @@ class _ContactAppBarState extends State<ContactAppBar> {
     final Registry registry = context.registry;
     switch (choice) {
       case Choice.createJob:
-        registry.get<JobsCoordinator>().toCreateJob(widget.userId, <ContactModel>[], widget.contact);
+        registry.get<JobsCoordinator>().toCreateJob(widget.userId, <ContactEntity>[], widget.contact);
         break;
       case Choice.editMeasure:
         registry.get<ContactsCoordinator>().toContactMeasure(widget.contact, widget.grouped);
@@ -101,7 +101,7 @@ class _Icon extends StatelessWidget {
 class _Title extends StatelessWidget {
   const _Title({required this.contact});
 
-  final ContactModel contact;
+  final ContactEntity contact;
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +130,7 @@ class _Title extends StatelessWidget {
 class _Leading extends StatelessWidget {
   const _Leading({required this.contact});
 
-  final ContactModel contact;
+  final ContactEntity contact;
 
   @override
   Widget build(BuildContext context) {

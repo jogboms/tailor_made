@@ -14,8 +14,8 @@ class ContactForm extends StatefulWidget {
     required this.userId,
   });
 
-  final ValueSetter<ContactModel> onHandleSubmit;
-  final ContactModel contact;
+  final ValueSetter<CreateContactData> onHandleSubmit;
+  final CreateContactData contact;
   final String userId;
 
   @override
@@ -25,7 +25,7 @@ class ContactForm extends StatefulWidget {
 class ContactFormState extends State<ContactForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
-  late ContactModel _contact = widget.contact;
+  late CreateContactData _contact = widget.contact;
   bool _autovalidate = false;
   Storage? _lastImgRef;
   late final TextEditingController _fNController = TextEditingController(text: _contact.fullname);
@@ -55,7 +55,7 @@ class ContactFormState extends State<ContactForm> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           const SizedBox(height: 32.0),
-          _Avatar(contact: _contact, isLoading: _isLoading, onTap: _handlePhotoButtonPressed),
+          _Avatar(imageUrl: _contact.imageUrl, isLoading: _isLoading, onTap: _handlePhotoButtonPressed),
           const SizedBox(height: 16.0),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -153,7 +153,7 @@ class ContactFormState extends State<ContactForm> {
 
   void reset() => _formKey.currentState!.reset();
 
-  void updateContact(ContactModel contact) {
+  void updateContact(CreateContactData contact) {
     setState(() {
       reset();
       _fNController.text = contact.fullname;
@@ -165,12 +165,12 @@ class ContactFormState extends State<ContactForm> {
 
 class _Avatar extends StatelessWidget {
   const _Avatar({
-    required this.contact,
+    required this.imageUrl,
     required this.isLoading,
     required this.onTap,
   });
 
-  final ContactModel contact;
+  final String? imageUrl;
   final bool isLoading;
   final VoidCallback onTap;
 
@@ -193,9 +193,9 @@ class _Avatar extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
-                  if (contact.imageUrl != null)
+                  if (imageUrl != null)
                     CircleAvatar(
-                      backgroundImage: NetworkImage(contact.imageUrl!),
+                      backgroundImage: NetworkImage(imageUrl!),
                       backgroundColor: kPrimarySwatch.shade100,
                     ),
                   if (isLoading)

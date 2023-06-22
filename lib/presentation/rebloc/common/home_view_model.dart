@@ -5,7 +5,7 @@ import 'package:tailor_made/presentation/rebloc.dart';
 class HomeViewModel extends Equatable {
   HomeViewModel(AppState state)
       : account = state.account.account,
-        _contacts = state.contacts.contacts ?? <ContactModel>[],
+        _contacts = state.contacts.contacts ?? <ContactEntity>[],
         _jobs = state.jobs.jobs ?? <JobEntity>[],
         stats = state.stats.stats,
         settings = state.settings.settings,
@@ -16,9 +16,9 @@ class HomeViewModel extends Equatable {
 
   final AccountEntity? account;
 
-  final List<ContactModel> _contacts;
+  final List<ContactEntity> _contacts;
 
-  List<ContactModel> get contacts => _contacts;
+  List<ContactEntity> get contacts => _contacts;
 
   final List<JobEntity> _jobs;
 

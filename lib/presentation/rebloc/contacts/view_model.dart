@@ -5,8 +5,8 @@ import 'package:tailor_made/presentation/rebloc.dart';
 
 class ContactsViewModel extends Equatable {
   ContactsViewModel(AppState state, {this.contactID})
-      : _model = state.contacts.contacts ?? <ContactModel>[],
-        _searchResults = state.contacts.searchResults ?? <ContactModel>[],
+      : _model = state.contacts.contacts ?? <ContactEntity>[],
+        _searchResults = state.contacts.searchResults ?? <ContactEntity>[],
         isSearching = state.contacts.isSearching,
         hasSortFn = state.contacts.hasSortFn,
         measuresGrouped = state.measures.grouped ?? <String, List<MeasureModel>>{},
@@ -17,11 +17,11 @@ class ContactsViewModel extends Equatable {
         hasError = state.contacts.status == StateStatus.failure,
         error = state.contacts.error;
 
-  List<ContactModel> get contacts => isSearching ? searchResults : model;
+  List<ContactEntity> get contacts => isSearching ? searchResults : model;
 
   final Map<String, List<MeasureModel>> measuresGrouped;
 
-  ContactModel? get selected => model.firstWhereOrNull((_) => _.id == contactID);
+  ContactEntity? get selected => model.firstWhereOrNull((_) => _.id == contactID);
 
   List<JobEntity> get selectedJobs => jobs.where((JobEntity job) => job.contactID == selected?.id).toList();
 
@@ -29,17 +29,17 @@ class ContactsViewModel extends Equatable {
 
   final String userId;
 
-  final List<ContactModel> _searchResults;
+  final List<ContactEntity> _searchResults;
 
-  List<ContactModel> get searchResults => _searchResults;
+  List<ContactEntity> get searchResults => _searchResults;
 
   final List<JobEntity> _jobs;
 
   List<JobEntity> get jobs => _jobs;
 
-  final List<ContactModel> _model;
+  final List<ContactEntity> _model;
 
-  List<ContactModel> get model => _model;
+  List<ContactEntity> get model => _model;
 
   final bool hasSortFn;
   final ContactsSortType sortFn;

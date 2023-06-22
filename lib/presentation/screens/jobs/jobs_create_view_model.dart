@@ -14,7 +14,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
   @protected
   late CreateJobData job;
   @protected
-  late ContactModel? contact;
+  late ContactEntity? contact;
   @protected
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -77,7 +77,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
   }
 
   void onSelectContact() async {
-    final ContactModel? selectedContact =
+    final ContactEntity? selectedContact =
         await context.registry.get<ContactsCoordinator>().toContactsList(widget.contacts);
     if (selectedContact != null) {
       setState(() {
@@ -118,7 +118,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
         final Registry registry = context.registry;
         final JobEntity result = await registry.get<Jobs>().create(widget.userId, job);
         snackBar.hide();
-        registry.get<JobsCoordinator>().toJob(result);
+        registry.get<JobsCoordinator>().toJob(result, replace: true);
       } catch (e) {
         snackBar.error(e.toString());
       }

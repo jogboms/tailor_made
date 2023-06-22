@@ -33,7 +33,7 @@ class PaymentPage extends StatelessWidget {
                   icon: const Icon(Icons.work, color: kTitleBaseColor),
                   onPressed: () => context.registry.get<JobsCoordinator>().toJob(job),
                 ),
-              if (vm.selectedContact case final ContactModel contact)
+              if (vm.selectedContact case final ContactEntity contact)
                 IconButton(
                   icon: const Icon(Icons.person, color: kTitleBaseColor),
                   onPressed: () => context.registry.get<ContactsCoordinator>().toContact(contact),

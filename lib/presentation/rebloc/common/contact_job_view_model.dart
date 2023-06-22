@@ -8,11 +8,11 @@ class ContactJobViewModel extends Equatable {
     AppState state, {
     required this.contactID,
     required this.jobID,
-  })  : _contacts = state.contacts.contacts ?? <ContactModel>[],
+  })  : _contacts = state.contacts.contacts ?? <ContactEntity>[],
         _jobs = state.jobs.jobs ?? <JobEntity>[],
         account = state.account.account;
 
-  ContactModel? get selectedContact => _contacts.firstWhereOrNull((_) => _.id == contactID);
+  ContactEntity? get selectedContact => _contacts.firstWhereOrNull((_) => _.id == contactID);
 
   JobEntity? get selectedJob => _jobs.firstWhereOrNull((_) => _.id == jobID);
 
@@ -22,7 +22,7 @@ class ContactJobViewModel extends Equatable {
 
   final List<JobEntity> _jobs;
 
-  final List<ContactModel> _contacts;
+  final List<ContactEntity> _contacts;
 
   @override
   List<Object?> get props => <Object?>[account, _jobs, _contacts];

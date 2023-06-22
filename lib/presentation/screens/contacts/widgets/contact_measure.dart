@@ -8,7 +8,7 @@ class ContactMeasure extends StatefulWidget {
   const ContactMeasure({super.key, required this.grouped, required this.contact});
 
   final Map<String, List<MeasureModel>> grouped;
-  final ContactModel contact;
+  final ContactEntity? contact;
 
   @override
   State<ContactMeasure> createState() => _ContactMeasureState();
@@ -16,8 +16,8 @@ class ContactMeasure extends StatefulWidget {
 
 class _ContactMeasureState extends State<ContactMeasure> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late Map<String, double> _measurements = widget.contact?.measurements ?? <String, double>{};
   bool _autovalidate = false;
-  late ContactModel _contact = widget.contact;
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +25,12 @@ class _ContactMeasureState extends State<ContactMeasure> {
       appBar: CustomAppBar(
         title: const Text('Measurements'),
         leading: AppBackButton(
-          onPop: _contact.reference != null ? null : () => Navigator.pop<ContactModel>(context, _contact),
+          onPop: widget.contact != null ? null : () => Navigator.pop<Map<String, double>>(context, _measurements),
         ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.remove_red_eye, color: kTitleBaseColor),
-            onPressed: () => context.registry.get<MeasuresCoordinator>().toMeasures(_contact.measurements),
+            onPressed: () => context.registry.get<MeasuresCoordinator>().toMeasures(_measurements),
           )
         ],
       ),
@@ -46,11 +46,14 @@ class _ContactMeasureState extends State<ContactMeasure> {
                 const FormSectionHeader(title: 'Measurements', trailing: 'Inches (In)'),
                 MeasureCreateItems(
                   grouped: widget.grouped,
-                  measurements: _contact.measurements,
+                  measurements: _measurements,
                   onSaved: (Map<String, double>? value) {
                     if (value != null) {
-                      _contact = _contact.copyWith(measurements: value);
+                      _measurements = <String, double>{...value};
                     }
+                  },
+                  onChanged: (Map<String, double> value) {
+                    _measurements = <String, double>{...value};
                   },
                 ),
                 Padding(
@@ -80,17 +83,20 @@ class _ContactMeasureState extends State<ContactMeasure> {
 
     form.save();
 
-    final Reference? reference = _contact.reference;
-    if (reference == null) {
-      Navigator.of(context).pop<ContactModel>(_contact);
+    final ContactEntity? contact = widget.contact;
+    if (contact == null) {
+      Navigator.of(context).pop<Map<String, double>>(_measurements);
       return;
     }
 
     snackBar.loading();
     try {
-      // TODO(Jogboms): find a way to remove this from here
-      // During contact creation
-      await reference.updateData(_contact.toJson());
+      // TODO(Jogboms): move this out of here
+      await context.registry.get<Contacts>().update(
+            contact.userID,
+            reference: contact.reference,
+            measurements: _measurements,
+          );
       snackBar.success('Successfully Updated');
     } catch (e) {
       snackBar.error(e.toString());

@@ -21,7 +21,7 @@ class JobsCoordinator extends CoordinatorBase {
     navigator?.push<void>(RouteTransitions.slideIn(const JobsPage()));
   }
 
-  void toCreateJob(String userId, List<ContactModel> contacts, [ContactModel? contact]) {
+  void toCreateJob(String userId, List<ContactEntity> contacts, [ContactEntity? contact]) {
     navigator
         ?.push<void>(RouteTransitions.slideIn(JobsCreatePage(userId: userId, contacts: contacts, contact: contact)));
   }
