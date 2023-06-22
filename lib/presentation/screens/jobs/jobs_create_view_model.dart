@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/domain.dart';
@@ -31,8 +32,8 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
       contactID: contact?.id,
       measurements: contact?.measurements ?? <String, double>{},
       price: 0.0,
-      createdAt: DateTime.now(),
-      dueAt: DateTime.now().add(const Duration(days: 7)),
+      createdAt: clock.now(),
+      dueAt: clock.now().add(const Duration(days: 7)),
     );
   }
 
@@ -47,7 +48,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
       return;
     }
     // TODO(Jogboms): move this out of here
-    final Storage ref = registry.get<Jobs>().createFile(File(imageFile.path), widget.userId)!;
+    final FileStorageReference ref = registry.get<Jobs>().createFile(File(imageFile.path), widget.userId)!;
 
     setState(() => fireImages.add(FireImage()..ref = ref));
     try {
@@ -68,7 +69,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
             src: imageUrl,
             path: ref.path,
             id: id,
-            createdAt: DateTime.now(),
+            createdAt: clock.now(),
           );
       });
     } catch (e) {
@@ -127,7 +128,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
 }
 
 class FireImage {
-  late Storage ref;
+  late FileStorageReference ref;
   ImageEntity? image;
   bool isLoading = true;
   bool isSucess = false;

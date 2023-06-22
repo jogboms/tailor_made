@@ -118,7 +118,7 @@ class _Body extends StatelessWidget {
             StatsWidget(stats: stats),
             Expanded(flex: 2, child: TopRowWidget(stats: stats)),
             Expanded(flex: 2, child: MidRowWidget(userId: account.uid, stats: stats)),
-            Expanded(flex: 2, child: BottomRowWidget(stats: stats, account: account)),
+            Expanded(flex: 2, child: BottomRowWidget(stats: stats)),
             SizedBox(height: kButtonHeight + MediaQuery.of(context).padding.bottom),
           ],
         ),

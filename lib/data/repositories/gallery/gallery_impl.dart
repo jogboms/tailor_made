@@ -26,8 +26,8 @@ class GalleryImpl extends Gallery {
   }
 
   @override
-  FireStorage createFile(File file, String userId) {
-    return FireStorage(firebase.storage.createReferenceImage(userId)..putFile(file));
+  FireFileStorageReference createFile(File file, String userId) {
+    return FireFileStorageReference(firebase.storage.ref('$userId/references')..putFile(file));
   }
 }
 

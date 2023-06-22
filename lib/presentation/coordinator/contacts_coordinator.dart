@@ -24,10 +24,10 @@ class ContactsCoordinator extends CoordinatorBase {
     navigator?.push<void>(RouteTransitions.slideIn(ContactsEditPage(userId: userId, contact: contact)));
   }
 
-  Future<Map<String, double>?>? toContactMeasure(
-    ContactEntity? contact,
-    Map<MeasureGroup, List<MeasureEntity>> grouped,
-  ) {
+  Future<Map<String, double>?>? toContactMeasure({
+    required ContactEntity? contact,
+    required Map<MeasureGroup, List<MeasureEntity>> grouped,
+  }) {
     return navigator?.push<Map<String, double>>(
       RouteTransitions.slideIn(ContactMeasure(contact: contact, grouped: grouped)),
     );

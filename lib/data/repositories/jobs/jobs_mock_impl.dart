@@ -12,14 +12,14 @@ class JobsMockImpl extends Jobs {
         id: '',
         contactID: '',
         price: 10,
-        createdAt: DateTime.now(),
-        dueAt: DateTime.now().add(const Duration(days: 7)),
+        createdAt: clock.now(),
+        dueAt: clock.now().add(const Duration(days: 7)),
       ),
     ];
   }
 
   @override
-  Storage? createFile(File file, String userId) {
+  FileStorageReference? createFile(File file, String userId) {
     return null;
   }
 

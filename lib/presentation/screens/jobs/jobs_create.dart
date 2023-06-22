@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:intl/intl.dart';
@@ -203,7 +204,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
           final DateTime? picked = await showDatePicker(
             context: context,
             initialDate: job.dueAt,
-            firstDate: DateTime.now(),
+            firstDate: clock.now(),
             lastDate: DateTime(2101),
           );
           if (picked != null && picked != job.dueAt) {

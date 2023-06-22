@@ -37,7 +37,7 @@ class JobsPage extends StatelessWidget {
           ),
           onWillPop: () async {
             if (vm.isSearching) {
-              dispatcher(const CancelSearchJobAction());
+              dispatcher(const JobsAction.searchCancel());
               return false;
             }
             return true;
@@ -77,7 +77,7 @@ class _AppBarState extends State<_AppBar> with StoreDispatchMixin<AppState> {
           ),
           JobsFilterButton(
             vm: widget.vm,
-            onTapSort: (JobsSortType type) => dispatchAction(SortJobs(type)),
+            onTapSort: (JobsSortType type) => dispatchAction(JobsAction.sort(type)),
           ),
         ],
       );
@@ -93,7 +93,7 @@ class _AppBarState extends State<_AppBar> with StoreDispatchMixin<AppState> {
         autofocus: true,
         decoration: InputDecoration(hintText: 'Search...', hintStyle: textStyle.copyWith(color: Colors.white)),
         style: textStyle.copyWith(color: Colors.white),
-        onChanged: (String term) => dispatchAction(SearchJobAction(term)),
+        onChanged: (String term) => dispatchAction(JobsAction.search(term)),
       ),
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1.0),
@@ -108,7 +108,7 @@ class _AppBarState extends State<_AppBar> with StoreDispatchMixin<AppState> {
   void _onTapSearch() => setState(() => _isSearching = true);
 
   void _handleSearchEnd() {
-    dispatchAction(const CancelSearchJobAction());
+    dispatchAction(const JobsAction.searchCancel());
     setState(() => _isSearching = false);
   }
 }

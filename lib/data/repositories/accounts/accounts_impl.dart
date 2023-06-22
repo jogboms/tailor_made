@@ -18,7 +18,7 @@ class AccountsImpl extends Accounts {
   Future<void> signInWithGoogle() => firebase.auth.signInWithGoogle();
 
   @override
-  Stream<String?> get onAuthStateChanged => firebase.auth.onAuthStateChanged.map((FireUser? convert) => convert?.uid);
+  Stream<String?> get onAuthStateChanged => firebase.auth.onAuthStateChanged;
 
   @override
   Future<void> signOut() => firebase.auth.signOutWithGoogle();

@@ -16,8 +16,8 @@ class MeasuresCoordinator extends CoordinatorBase {
     navigator?.push<void>(RouteTransitions.slideIn(MeasuresPage(measurements: measures), fullscreenDialog: true));
   }
 
-  void toManageMeasures(String userId) {
-    navigator?.push<void>(RouteTransitions.slideIn(MeasuresManagePage(userId: userId)));
+  void toManageMeasures() {
+    navigator?.push<void>(RouteTransitions.slideIn(const MeasuresManagePage()));
   }
 
   void toCreateMeasures({
@@ -34,8 +34,8 @@ class MeasuresCoordinator extends CoordinatorBase {
   }
 
   Future<DefaultMeasureEntity?>? toCreateMeasureItem({
-    MeasureGroup? groupName,
-    String? unitValue,
+    required MeasureGroup groupName,
+    required String unitValue,
   }) {
     return navigator?.push<DefaultMeasureEntity>(
       RouteTransitions.fadeIn(MeasureCreateItem(groupName: groupName, unitValue: unitValue)),

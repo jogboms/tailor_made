@@ -94,7 +94,7 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
     snackBar.loading();
     try {
       // TODO(Jogboms): move this out of here
-      await registry.get<Measures>().delete(widget.measures, widget.userId);
+      await registry.get<Measures>().deleteGroup(widget.measures, widget.userId);
       snackBar.hide();
     } catch (e) {
       snackBar.error(e.toString());

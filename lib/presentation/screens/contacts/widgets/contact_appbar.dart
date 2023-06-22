@@ -28,7 +28,7 @@ class _ContactAppBarState extends State<ContactAppBar> {
         registry.get<JobsCoordinator>().toCreateJob(widget.userId, <ContactEntity>[], widget.contact);
         break;
       case Choice.editMeasure:
-        registry.get<ContactsCoordinator>().toContactMeasure(widget.contact, widget.grouped);
+        registry.get<ContactsCoordinator>().toContactMeasure(contact: widget.contact, grouped: widget.grouped);
         break;
       case Choice.editAccount:
         registry.get<ContactsCoordinator>().toContactEdit(widget.userId, widget.contact);

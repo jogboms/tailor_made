@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tailor_made/domain.dart';
@@ -103,7 +104,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
       return;
     }
     // TODO(Jogboms): move this out of here
-    final Storage ref = registry.get<Gallery>().createFile(File(imageFile.path), widget.userId)!;
+    final FileStorageReference ref = registry.get<Gallery>().createFile(File(imageFile.path), widget.userId)!;
 
     setState(() => _fireImages.add(_FireImage()..ref = ref));
     try {
@@ -122,7 +123,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
           jobID: widget.job.id,
           src: imageUrl,
           path: ref.path,
-          createdAt: DateTime.now(),
+          createdAt: clock.now(),
         );
       });
       await registry.get<Jobs>().update(
@@ -167,7 +168,7 @@ class _NewGrid extends StatelessWidget {
 const double _kGridWidth = 70.0;
 
 class _FireImage {
-  Storage? ref;
+  FileStorageReference? ref;
   ImageEntity? image;
   bool isLoading = true;
   bool isSucess = false;

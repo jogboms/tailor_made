@@ -5,14 +5,9 @@ import 'package:tailor_made/presentation.dart';
 import 'helpers.dart';
 
 class BottomRowWidget extends StatelessWidget {
-  const BottomRowWidget({
-    super.key,
-    required this.stats,
-    required this.account,
-  });
+  const BottomRowWidget({super.key, required this.stats});
 
   final StatsModel stats;
-  final AccountEntity account;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +23,7 @@ class BottomRowWidget extends StatelessWidget {
                 icon: Icons.content_cut,
                 title: 'Measures',
                 subTitle: 'Custom',
-                onPressed: () => context.registry.get<MeasuresCoordinator>().toManageMeasures(account.uid),
+                onPressed: () => context.registry.get<MeasuresCoordinator>().toManageMeasures(),
               ),
             ),
           ),

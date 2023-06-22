@@ -170,10 +170,15 @@ class _ContentState extends State<_Content> {
       setState(() => _isLoading = true);
       // TODO(Jogboms): move this out of here
       await accounts.signInWithGoogle();
-    } catch (e) {
+    } catch (error, stackTrace) {
+      AppLog.e(error, stackTrace);
+      if (!mounted) {
+        return;
+      }
+
       // TODO(Jogboms): move this out of here
       final Environment environment = context.registry.get();
-      final String message = AppStrings.genericError(e, environment.isDev)!;
+      final String message = AppStrings.genericError(error, environment.isDev)!;
 
       if (message.isNotEmpty) {
         AppSnackBar.of(context).error(message, duration: const Duration(milliseconds: 3500));
@@ -188,7 +193,7 @@ class _ContentState extends State<_Content> {
 
       setState(() => _isLoading = false);
 
-      AppSnackBar.of(context).error(e.toString());
+      AppSnackBar.of(context).error(error.toString());
     }
   }
 }

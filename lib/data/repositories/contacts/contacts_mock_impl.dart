@@ -15,18 +15,13 @@ class ContactsMockImpl extends Contacts {
         phone: '',
         location: '',
         imageUrl: '',
-        createdAt: DateTime.now(),
+        createdAt: clock.now(),
       ),
     ];
   }
 
   @override
-  Storage? createFile(File file, String userId) {
-    return null;
-  }
-
-  @override
-  Future<Reference?> fetch(String userId, ContactEntity contact) async {
+  FileStorageReference? createFile(File file, String userId) {
     return null;
   }
 
@@ -41,7 +36,7 @@ class ContactsMockImpl extends Contacts {
       phone: '',
       location: '',
       imageUrl: '',
-      createdAt: DateTime.now(),
+      createdAt: clock.now(),
     );
   }
 

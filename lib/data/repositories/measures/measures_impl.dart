@@ -18,8 +18,8 @@ class MeasuresImpl extends Measures {
   static const String collectionName = 'measures';
 
   @override
-  Stream<List<MeasureEntity>> fetchAll(String? userId) {
-    return collection.fetchAll().snapshots().map(
+  Stream<List<MeasureEntity>> fetchAll(String userId) {
+    return firebase.db.measurements(userId).snapshots().map(
           (MapQuerySnapshot snapshot) => snapshot.docs
               .map((MapQueryDocumentSnapshot doc) => _deriveMeasureEntity(doc.id, doc.reference.path, doc.data()))
               .toList(),
@@ -27,11 +27,11 @@ class MeasuresImpl extends Measures {
   }
 
   @override
-  Future<void> create(
+  Future<bool> create(
     List<BaseMeasureEntity> measures,
     String userId, {
-    required MeasureGroup? groupName,
-    required String? unitValue,
+    required MeasureGroup groupName,
+    required String unitValue,
   }) async {
     await firebase.db.batchAction((WriteBatch batch) {
       for (final BaseMeasureEntity measure in measures) {
@@ -39,7 +39,7 @@ class MeasuresImpl extends Measures {
           final ReferenceEntity reference = measure.reference;
           final MapDocumentReference ref = collection.db.doc(reference.path);
           batch.update(ref, <String, String?>{
-            'group': groupName?.displayName,
+            'group': groupName.displayName,
             'unit': unitValue,
           });
         } else if (measure is DefaultMeasureEntity) {
@@ -52,15 +52,17 @@ class MeasuresImpl extends Measures {
         }
       }
     });
+    return true;
   }
 
   @override
-  Future<void> delete(List<MeasureEntity> measures, String userId) async {
+  Future<bool> deleteGroup(List<MeasureEntity> measures, String userId) async {
     await firebase.db.batchAction((WriteBatch batch) {
       for (final MeasureEntity measure in measures) {
         batch.delete(firebase.db.measurements(userId).doc(measure.id));
       }
     });
+    return true;
   }
 
   @override
@@ -70,7 +72,7 @@ class MeasuresImpl extends Measures {
   }
 
   @override
-  Future<void> update(Iterable<BaseMeasureEntity> measures, String? userId) async {
+  Future<bool> update(Iterable<BaseMeasureEntity> measures, String userId) async {
     await firebase.db.batchAction((WriteBatch batch) {
       try {
         for (final BaseMeasureEntity measure in measures) {
@@ -91,6 +93,7 @@ class MeasuresImpl extends Measures {
         }
       } catch (_) {}
     });
+    return true;
   }
 
   @override
@@ -121,7 +124,7 @@ extension on MeasureEntity {
       'name': name,
       'value': value,
       'unit': unit,
-      'group': group,
+      'group': group.displayName,
       'createdAt': createdAt.toIso8601String(),
     };
   }
@@ -134,7 +137,7 @@ extension on DefaultMeasureEntity {
       'name': name,
       'value': value,
       'unit': unit,
-      'group': group,
+      'group': group.displayName,
       'createdAt': clock.now().toIso8601String(),
     };
   }

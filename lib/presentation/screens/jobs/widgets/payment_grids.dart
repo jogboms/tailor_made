@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
@@ -100,7 +101,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
             jobID: widget.job.id,
             price: result['price'] as double? ?? 0.0,
             notes: result['notes'] as String? ?? '',
-            createdAt: DateTime.now(),
+            createdAt: clock.now(),
           );
         });
 

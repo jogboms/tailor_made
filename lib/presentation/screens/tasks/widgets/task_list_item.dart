@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
@@ -46,7 +47,7 @@ class TaskListItem extends StatelessWidget {
   }
 
   Color get _iconColor {
-    final DateTime now = DateTime.now();
+    final DateTime now = clock.now();
     if (now.isAfter(task.dueAt)) {
       return Colors.redAccent.shade400;
     }

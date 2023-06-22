@@ -1,9 +1,10 @@
 import 'dart:io';
 
 import '../entities.dart';
+import 'file_storage_reference.dart';
 
 abstract class Gallery {
   Stream<List<ImageEntity>> fetchAll(String userId);
 
-  Storage? createFile(File file, String userId);
+  FileStorageReference? createFile(File file, String userId);
 }

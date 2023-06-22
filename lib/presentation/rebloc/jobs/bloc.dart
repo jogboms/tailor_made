@@ -16,8 +16,8 @@ class JobsBloc extends SimpleBloc<AppState> {
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     MergeStream<WareContext<AppState>>(<Stream<WareContext<AppState>>>[
-      input.whereAction<SearchJobAction>().switchMap(_makeSearch),
-      input.whereAction<InitJobsAction>().switchMap(_onAfterLogin(jobs)),
+      input.whereAction<_SearchJobAction>().switchMap(_makeSearch),
+      input.whereAction<_InitJobsAction>().switchMap(_onAfterLogin(jobs)),
     ]).untilAction<OnDisposeAction>().listen((WareContext<AppState> context) => context.dispatcher(context.action));
 
     return input;
@@ -36,7 +36,7 @@ class JobsBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is StartSearchJobAction) {
+    if (action is _StartSearchJobAction) {
       return state.copyWith(
         jobs: jobs.copyWith(
           status: StateStatus.loading,
@@ -45,7 +45,7 @@ class JobsBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is CancelSearchJobAction) {
+    if (action is _CancelSearchJobAction) {
       return state.copyWith(
         jobs: jobs.copyWith(
           status: StateStatus.success,
@@ -55,7 +55,7 @@ class JobsBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is SearchSuccessJobAction) {
+    if (action is _SearchSuccessJobAction) {
       return state.copyWith(
         jobs: jobs.copyWith(
           searchResults: List<JobEntity>.from(action.payload..sort(_sort(jobs.sortFn))),
@@ -64,7 +64,7 @@ class JobsBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is SortJobs) {
+    if (action is _SortJobs) {
       return state.copyWith(
         jobs: jobs.copyWith(
           jobs: List<JobEntity>.from(jobs.jobs!.toList()..sort(_sort(action.payload))),
@@ -105,27 +105,27 @@ Comparator<JobEntity> _sort(JobsSortType sortType) {
 }
 
 Stream<WareContext<AppState>> _makeSearch(WareContext<AppState> context) {
-  return Stream<String>.value((context.action as SearchJobAction).payload)
-      .doOnData((_) => context.dispatcher(const StartSearchJobAction()))
+  return Stream<String>.value((context.action as _SearchJobAction).payload)
+      .doOnData((_) => context.dispatcher(const JobsAction.searchStart()))
       .map<String>((String text) => text.trim())
       .distinct()
       .where((String text) => text.length > 1)
       .debounceTime(const Duration(milliseconds: 750))
       .map(
-        (String text) => SearchSuccessJobAction(
+        (String text) => JobsAction.searchSuccess(
           context.state.jobs.jobs!
               .where((JobEntity job) => job.name.contains(RegExp(text, caseSensitive: false)))
               .toList(),
         ),
       )
-      .takeWhile((SearchSuccessJobAction action) => action is! CancelSearchJobAction)
-      .map((SearchSuccessJobAction action) => context.copyWith(action));
+      .takeWhile((JobsAction action) => action is! _CancelSearchJobAction)
+      .map((JobsAction action) => context.copyWith(action));
 }
 
 Middleware _onAfterLogin(Jobs jobs) {
   return (WareContext<AppState> context) {
     return jobs
-        .fetchAll((context.action as InitJobsAction).userId)
+        .fetchAll((context.action as _InitJobsAction).userId)
         .map(OnDataAction<List<JobEntity>>.new)
         .map((OnDataAction<List<JobEntity>> action) => context.copyWith(action));
   };

@@ -3,6 +3,7 @@ export 'domain/models/stats/stats.dart';
 export 'domain/models/stats/stats_item.dart';
 export 'domain/repositories/accounts.dart';
 export 'domain/repositories/contacts.dart';
+export 'domain/repositories/file_storage_reference.dart';
 export 'domain/repositories/gallery.dart';
 export 'domain/repositories/jobs.dart';
 export 'domain/repositories/measures.dart';

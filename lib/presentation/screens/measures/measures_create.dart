@@ -19,7 +19,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
   late MeasureGroup _groupName = widget.groupName ?? MeasureGroup.empty;
-  late String? _unitValue = widget.unitValue ?? '';
+  late String _unitValue = widget.unitValue ?? '';
   late List<BaseMeasureEntity> _measures = widget.measures ?? <BaseMeasureEntity>[];
 
   @override
@@ -27,56 +27,6 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
     return ViewModelSubscriber<AppState, MeasuresViewModel>(
       converter: MeasuresViewModel.new,
       builder: (BuildContext context, _, MeasuresViewModel vm) {
-        final List<Widget> children = <Widget>[];
-
-        children.add(const FormSectionHeader(title: 'Group Name'));
-        children.add(
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-            child: TextFormField(
-              initialValue: _groupName.displayName,
-              textCapitalization: TextCapitalization.words,
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.text,
-              decoration: const InputDecoration(
-                isDense: true,
-                hintText: 'eg Blouse',
-              ),
-              validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a name',
-              onSaved: (String? value) => _groupName = MeasureGroup.valueOf(value!.trim()),
-            ),
-          ),
-        );
-
-        children.add(const FormSectionHeader(title: 'Group Unit'));
-        children.add(
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-            child: TextFormField(
-              initialValue: _unitValue,
-              keyboardType: TextInputType.text,
-              decoration: const InputDecoration(
-                isDense: true,
-                hintText: 'Unit (eg. In, cm)',
-              ),
-              validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a value',
-              onSaved: (String? value) => _unitValue = value!.trim(),
-            ),
-          ),
-        );
-
-        if (_measures.isNotEmpty) {
-          children.add(const FormSectionHeader(title: 'Group Items'));
-          children.add(
-            _GroupItems(
-              measures: _measures,
-              onPressed: (BaseMeasureEntity measure) => _onTapDeleteItem(vm, measure),
-            ),
-          );
-
-          children.add(const SizedBox(height: 84.0));
-        }
-
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: CustomAppBar(
@@ -98,7 +48,46 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
                 autovalidateMode: _autovalidate ? AutovalidateMode.always : AutovalidateMode.disabled,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: children,
+                  children: <Widget>[
+                    const FormSectionHeader(title: 'Group Name'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                      child: TextFormField(
+                        initialValue: _groupName.displayName,
+                        textCapitalization: TextCapitalization.words,
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.text,
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          hintText: 'eg Blouse',
+                        ),
+                        validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a name',
+                        onSaved: (String? value) => _groupName = MeasureGroup.valueOf(value!.trim()),
+                      ),
+                    ),
+                    const FormSectionHeader(title: 'Group Unit'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                      child: TextFormField(
+                        initialValue: _unitValue,
+                        keyboardType: TextInputType.text,
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          hintText: 'Unit (eg. In, cm)',
+                        ),
+                        validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a value',
+                        onSaved: (String? value) => _unitValue = value!.trim(),
+                      ),
+                    ),
+                    if (_measures.isNotEmpty) ...<Widget>[
+                      const FormSectionHeader(title: 'Group Items'),
+                      _GroupItems(
+                        measures: _measures,
+                        onPressed: (BaseMeasureEntity measure) => _onTapDeleteItem(vm, measure),
+                      ),
+                      const SizedBox(height: 84.0)
+                    ]
+                  ],
                 ),
               ),
             ),
@@ -123,13 +112,13 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
     if (choice == null || choice == false) {
       return;
     }
+
     if (measure is DefaultMeasureEntity) {
       _removeFromLocal(measure.localKey);
-      return;
     } else if (measure is MeasureEntity) {
       snackBar.loading();
       try {
-        dispatchAction(const ToggleMeasuresLoading());
+        dispatchAction(const MeasuresAction.toggle());
         await registry.get<Measures>().deleteOne(measure.reference);
         _removeFromLocal(measure.localKey);
         snackBar.hide();
@@ -163,11 +152,14 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
 
       try {
         final NavigatorState navigator = Navigator.of(context);
-        dispatchAction(const ToggleMeasuresLoading());
+        dispatchAction(const MeasuresAction.toggle());
         // TODO(Jogboms): move this out of here
-        await context.registry
-            .get<Measures>()
-            .create(_measures, vm.userId, groupName: _groupName, unitValue: _unitValue);
+        await context.registry.get<Measures>().create(
+              _measures,
+              vm.userId,
+              groupName: _groupName,
+              unitValue: _unitValue,
+            );
         snackBar.hide();
         navigator.pop();
       } catch (error, stackTrace) {

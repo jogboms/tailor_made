@@ -110,8 +110,8 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
 
   void _handleSelectMeasure(MeasuresViewModel vm) async {
     final Map<String, double>? result = await context.registry.get<ContactsCoordinator>().toContactMeasure(
-          null, //TODO
-          vm.grouped,
+          contact: null,
+          grouped: vm.grouped,
         );
     if (result == null) {
       return;

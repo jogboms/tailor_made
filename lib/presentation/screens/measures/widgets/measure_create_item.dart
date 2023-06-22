@@ -6,8 +6,8 @@ import 'measure_dialog.dart';
 class MeasureCreateItem extends StatelessWidget {
   const MeasureCreateItem({super.key, required this.groupName, required this.unitValue});
 
-  final MeasureGroup? groupName;
-  final String? unitValue;
+  final MeasureGroup groupName;
+  final String unitValue;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +25,8 @@ class MeasureCreateItem extends StatelessWidget {
       body: MeasureDialog(
         measure: DefaultMeasureEntity(
           name: '',
-          group: groupName ?? MeasureGroup.empty,
-          unit: unitValue ?? '',
+          group: groupName,
+          unit: unitValue,
         ),
       ),
     );

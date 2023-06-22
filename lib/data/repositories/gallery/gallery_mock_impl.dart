@@ -7,7 +7,7 @@ class GalleryMockImpl extends Gallery {
   Stream<List<ImageEntity>> fetchAll(String userId) async* {}
 
   @override
-  Storage? createFile(File file, String userId) {
+  FileStorageReference? createFile(File file, String userId) {
     return null;
   }
 }

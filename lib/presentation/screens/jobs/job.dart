@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rebloc/rebloc.dart';
@@ -132,7 +133,7 @@ class _JobPageState extends State<JobPage> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: job.dueAt,
-      firstDate: job.dueAt.isAfter(DateTime.now()) ? DateTime.now() : job.dueAt,
+      firstDate: job.dueAt.isAfter(clock.now()) ? clock.now() : job.dueAt,
       lastDate: DateTime(2101),
     );
     if (picked == null || picked == job.dueAt) {

@@ -27,7 +27,7 @@ class ContactFormState extends State<ContactForm> {
   bool _isLoading = false;
   late CreateContactData _contact = widget.contact;
   bool _autovalidate = false;
-  Storage? _lastImgRef;
+  FileStorageReference? _lastImgRef;
   late final TextEditingController _fNController = TextEditingController(text: _contact.fullname);
   late final TextEditingController _pNController = TextEditingController(text: _contact.phone);
   late final TextEditingController _lNController = TextEditingController(text: _contact.location);
@@ -128,7 +128,7 @@ class ContactFormState extends State<ContactForm> {
     }
     // TODO(Jogboms): move this out of here
     final Contacts contacts = registry.get();
-    final Storage ref = contacts.createFile(File(imageFile.path), widget.userId)!;
+    final FileStorageReference ref = contacts.createFile(File(imageFile.path), widget.userId)!;
 
     setState(() => _isLoading = true);
     try {

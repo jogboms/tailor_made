@@ -60,22 +60,16 @@ class MeasureEntity with EquatableMixin implements BaseMeasureEntity {
   List<Object> get props => <Object>[reference, id, name, value, unit, group, createdAt];
 
   MeasureEntity copyWith({
-    ReferenceEntity? reference,
-    String? id,
-    String? name,
     double? value,
-    String? unit,
-    MeasureGroup? group,
-    DateTime? createdAt,
   }) {
     return MeasureEntity(
-      reference: reference ?? this.reference,
-      id: id ?? this.id,
-      name: name ?? this.name,
+      reference: reference,
+      id: id,
+      name: name,
       value: value ?? this.value,
-      unit: unit ?? this.unit,
-      group: group ?? this.group,
-      createdAt: createdAt ?? this.createdAt,
+      unit: unit,
+      group: group,
+      createdAt: createdAt,
     );
   }
 }
@@ -101,15 +95,13 @@ class DefaultMeasureEntity with EquatableMixin implements BaseMeasureEntity {
 
   DefaultMeasureEntity copyWith({
     String? name,
-    double? value,
     String? unit,
-    MeasureGroup? group,
   }) {
     return DefaultMeasureEntity(
       name: name ?? this.name,
-      value: value ?? this.value,
+      value: value,
       unit: unit ?? this.unit,
-      group: group ?? this.group,
+      group: group,
     );
   }
 }

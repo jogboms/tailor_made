@@ -16,10 +16,10 @@ class StatsBloc extends SimpleBloc<AppState> {
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     input
-        .whereAction<InitStatsAction>()
+        .whereAction<_InitStatsAction>()
         .switchMap(
           (WareContext<AppState> context) => stats
-              .fetch((context.action as InitStatsAction).userId)
+              .fetch((context.action as _InitStatsAction).userId)
               .map(OnDataAction<StatsModel>.new)
               .map((OnDataAction<StatsModel> action) => context.copyWith(action)),
         )

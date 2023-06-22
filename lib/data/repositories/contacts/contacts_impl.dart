@@ -31,14 +31,8 @@ class ContactsImpl extends Contacts {
   }
 
   @override
-  FireStorage createFile(File file, String userId) {
-    return FireStorage(firebase.storage.createContactImage(userId)..putFile(file));
-  }
-
-  @override
-  Future<FireReference> fetch(String userId, ContactEntity contact) async {
-    final MapQuerySnapshot future = await firebase.db.contacts(userId).get();
-    return FireReference(future.docs.first.reference);
+  FireFileStorageReference createFile(File file, String userId) {
+    return FireFileStorageReference(firebase.storage.ref('$userId/contacts')..putFile(file));
   }
 
   @override

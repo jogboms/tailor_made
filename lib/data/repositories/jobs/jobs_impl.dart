@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:clock/clock.dart';
 import 'package:tailor_made/domain.dart';
 
 import '../../network/firebase.dart';
@@ -31,8 +32,8 @@ class JobsImpl extends Jobs {
   }
 
   @override
-  FireStorage createFile(File file, String userId) {
-    return FireStorage(firebase.storage.createReferenceImage(userId)..putFile(file));
+  FireFileStorageReference createFile(File file, String userId) {
+    return FireFileStorageReference(firebase.storage.ref('$userId/references')..putFile(file));
   }
 
   @override
@@ -125,6 +126,6 @@ JobEntity _deriveJobEntity(String id, String path, DynamicMap data) {
     ),
     isComplete: data['isComplete'] as bool,
     createdAt: DateTime.parse(data['createdAt'] as String),
-    dueAt: DateTime.tryParse((data['dueAt'] as String?) ?? '') ?? DateTime.now(),
+    dueAt: DateTime.tryParse((data['dueAt'] as String?) ?? '') ?? clock.now(),
   );
 }
