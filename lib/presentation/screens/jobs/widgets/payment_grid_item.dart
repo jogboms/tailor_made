@@ -1,30 +1,42 @@
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
-const double _kGridWidth = 120.0;
+import 'payment_grids_form_value.dart';
 
 class PaymentGridItem extends StatelessWidget {
-  PaymentGridItem({super.key, required this.payment, double? size}) : size = Size.square(size ?? _kGridWidth);
+  const PaymentGridItem({super.key, required this.value});
 
-  final PaymentEntity payment;
-  final Size size;
+  final PaymentGridsFormValue value;
+
+  static const double kGridWidth = 120.0;
 
   @override
   Widget build(BuildContext context) {
-    final DateTime date = payment.createdAt;
-    final String price = AppMoney(payment.price).formatted;
+    final PaymentGridsFormValue value = this.value;
+    final PaymentEntity? payment = switch (value) {
+      PaymentGridsCreateFormValue() => null,
+      PaymentGridsModifyFormValue() => value.data,
+    };
+    final ({DateTime createdAt, double price}) record = switch (value) {
+      PaymentGridsCreateFormValue() => (createdAt: clock.now(), price: value.data.price),
+      PaymentGridsModifyFormValue() => (createdAt: value.data.createdAt, price: value.data.price),
+    };
+
+    final DateTime date = record.createdAt;
+    final String price = AppMoney(record.price).formatted;
     final ThemeProvider theme = ThemeProvider.of(context);
 
     return Container(
-      width: size.width,
+      width: kGridWidth,
       margin: const EdgeInsets.only(right: 8.0),
       child: Material(
         elevation: 1.0,
         borderRadius: BorderRadius.circular(5.0),
-        color: kPrimaryColor,
+        color: payment != null ? kPrimaryColor : kHintColor,
         child: InkWell(
-          onTap: () => context.registry.get<PaymentsCoordinator>().toPayment(payment),
+          onTap: payment != null ? () => context.registry.get<PaymentsCoordinator>().toPayment(payment) : null,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
             child: Column(

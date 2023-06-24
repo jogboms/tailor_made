@@ -23,7 +23,7 @@ class PaymentsCoordinator extends CoordinatorBase {
     );
   }
 
-  Future<Map<String, dynamic>?>? toCreatePayment(double payment) {
-    return navigator?.push<Map<String, dynamic>>(RouteTransitions.fadeIn(PaymentsCreatePage(limit: payment)));
+  Future<({double price, String notes})?>? toCreatePayment(double payment) {
+    return navigator?.push<({double price, String notes})>(RouteTransitions.fadeIn(PaymentsCreatePage(limit: payment)));
   }
 }

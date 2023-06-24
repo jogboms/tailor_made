@@ -127,7 +127,7 @@ class _PaymentsCreatePageState extends State<PaymentsCreatePage> {
 
       Navigator.pop(
         context,
-        <String, Object>{'price': _price, 'notes': _notes},
+        (price: _price, notes: _notes),
       );
     }
   }

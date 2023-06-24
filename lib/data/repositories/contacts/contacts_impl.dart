@@ -108,8 +108,10 @@ ContactEntity _deriveContactEntity(String id, String path, DynamicMap data) {
     location: data['location'] as String,
     imageUrl: data['imageUrl'] as String?,
     createdAt: DateTime.parse(data['createdAt'] as String),
-    measurements: deriveMapFromMap(measurements, (dynamic value) => value as double? ?? 0.0),
-    totalJobs: data['totalJobs'] as int? ?? 0,
-    pendingJobs: data['pendingJobs'] as int? ?? 0,
+    measurements: deriveMapFromMap(measurements, (dynamic value) => _isA<double>(value) ?? 0.0),
+    totalJobs: _isA<int>(data['totalJobs']) ?? 0,
+    pendingJobs: _isA<int>(data['pendingJobs']) ?? 0,
   );
 }
+
+T? _isA<T>(Object? value) => value is T ? value : null;

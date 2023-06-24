@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:clock/clock.dart';
 import 'package:tailor_made/domain.dart';
 
 class JobsMockImpl extends Jobs {
@@ -49,7 +50,7 @@ class JobsMockImpl extends Jobs {
     String userId, {
     required ReferenceEntity reference,
     List<ImageEntity>? images,
-    List<PaymentEntity>? payments,
+    List<PaymentOperation>? payments,
     bool? isComplete,
     DateTime? dueAt,
   }) async {

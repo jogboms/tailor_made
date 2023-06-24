@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:clock/clock.dart';
 import 'package:tailor_made/domain.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../network/firebase.dart';
 import '../derive_list_from_data.dart';
@@ -54,8 +55,8 @@ class JobsImpl extends Jobs {
         'measurements': data.measurements,
         'payments': data.payments.map((_) => _.toJson()).toList(growable: false),
         'isComplete': data.isComplete,
-        'createdAt': data.createdAt.toUtc().toString(),
-        'dueAt': data.dueAt.toUtc().toString(),
+        'createdAt': data.createdAt.toIso8601String(),
+        'dueAt': data.dueAt.toIso8601String(),
       }),
     );
 
@@ -78,13 +79,25 @@ class JobsImpl extends Jobs {
     String userId, {
     required ReferenceEntity reference,
     List<ImageEntity>? images,
-    List<PaymentEntity>? payments,
+    List<PaymentOperation>? payments,
     bool? isComplete,
     DateTime? dueAt,
   }) async {
     await collection.fetchOne(reference.id).update(<String, Object?>{
       if (images != null) 'images': images.map((_) => _.toJson()).toList(growable: false),
-      if (payments != null) 'payments': payments.map((_) => _.toJson()).toList(growable: false),
+      if (payments != null)
+        'payments': payments
+            .map(
+              (PaymentOperation op) => switch (op) {
+                CreatePaymentOperation() => <String, Object>{
+                    'id': const Uuid().v4(),
+                    'createdAt': clock.now().toIso8601String(),
+                    ...op.data.toJson(),
+                  },
+                ModifyPaymentOperation() => op.data.toJson(),
+              },
+            )
+            .toList(growable: false),
       if (isComplete != null) 'isComplete': isComplete,
       if (dueAt != null) 'dueAt': dueAt.toUtc().toString(),
     });
@@ -128,4 +141,16 @@ JobEntity _deriveJobEntity(String id, String path, DynamicMap data) {
     createdAt: DateTime.parse(data['createdAt'] as String),
     dueAt: DateTime.tryParse((data['dueAt'] as String?) ?? '') ?? clock.now(),
   );
+}
+
+extension on CreatePaymentData {
+  Map<String, Object> toJson() {
+    return <String, Object>{
+      'userID': userID,
+      'contactID': contactID,
+      'jobID': jobID,
+      'price': price,
+      'notes': notes,
+    };
+  }
 }

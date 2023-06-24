@@ -14,7 +14,7 @@ abstract class Jobs {
     String userId, {
     required ReferenceEntity reference,
     List<ImageEntity>? images,
-    List<PaymentEntity>? payments,
+    List<PaymentOperation>? payments,
     bool? isComplete,
     DateTime? dueAt,
   });
