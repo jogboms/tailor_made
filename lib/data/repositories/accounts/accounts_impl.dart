@@ -40,7 +40,7 @@ class AccountsImpl extends Accounts {
       'hasReadNotice': account.hasReadNotice,
     };
     await collection.fetchOne(account.uid).set(data);
-    await firebase.db.premium.doc(account.uid).set(data);
+    await firebase.db.collection('premium').doc(account.uid).set(data);
     return account.uid;
   }
 

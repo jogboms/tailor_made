@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:clock/clock.dart';
 import 'package:tailor_made/domain.dart';
@@ -33,14 +32,9 @@ class JobsImpl extends Jobs {
   }
 
   @override
-  FireFileStorageReference createFile(File file, String userId) {
-    return FireFileStorageReference(firebase.storage.ref('$userId/references')..putFile(file));
-  }
-
-  @override
   Future<JobEntity> create(String userId, CreateJobData data) async {
     final Completer<JobEntity> completer = Completer<JobEntity>();
-    final MapDocumentReference ref = collection.db.doc('jobs/${data.id}');
+    final MapDocumentReference ref = collection.db.doc('$collectionName/${data.id}');
     unawaited(
       ref.set(<String, Object>{
         'id': data.id,
@@ -51,7 +45,18 @@ class JobsImpl extends Jobs {
         'completedPayment': data.completedPayment,
         'pendingPayment': data.pendingPayment,
         'notes': data.notes,
-        'images': data.images.map((_) => _.toJson()).toList(growable: false),
+        'images': data.images
+            .map(
+              (ImageOperation op) => switch (op) {
+                CreateImageOperation() => <String, Object>{
+                    'id': const Uuid().v4(),
+                    'createdAt': clock.now().toIso8601String(),
+                    ...op.data.toJson(),
+                  },
+                ModifyImageOperation() => op.data.toJson(),
+              },
+            )
+            .toList(growable: false),
         'measurements': data.measurements,
         'payments': data.payments.map((_) => _.toJson()).toList(growable: false),
         'isComplete': data.isComplete,
@@ -78,13 +83,25 @@ class JobsImpl extends Jobs {
   Future<bool> update(
     String userId, {
     required ReferenceEntity reference,
-    List<ImageEntity>? images,
+    List<ImageOperation>? images,
     List<PaymentOperation>? payments,
     bool? isComplete,
     DateTime? dueAt,
   }) async {
     await collection.fetchOne(reference.id).update(<String, Object?>{
-      if (images != null) 'images': images.map((_) => _.toJson()).toList(growable: false),
+      if (images != null)
+        'images': images
+            .map(
+              (ImageOperation op) => switch (op) {
+                CreateImageOperation() => <String, Object>{
+                    'id': const Uuid().v4(),
+                    'createdAt': clock.now().toIso8601String(),
+                    ...op.data.toJson(),
+                  },
+                ModifyImageOperation() => op.data.toJson(),
+              },
+            )
+            .toList(growable: false),
       if (payments != null)
         'payments': payments
             .map(
@@ -141,6 +158,18 @@ JobEntity _deriveJobEntity(String id, String path, DynamicMap data) {
     createdAt: DateTime.parse(data['createdAt'] as String),
     dueAt: DateTime.tryParse((data['dueAt'] as String?) ?? '') ?? clock.now(),
   );
+}
+
+extension on CreateImageData {
+  Map<String, Object> toJson() {
+    return <String, Object>{
+      'userID': userID,
+      'contactID': contactID,
+      'jobID': jobID,
+      'path': path,
+      'src': src,
+    };
+  }
 }
 
 extension on CreatePaymentData {

@@ -18,7 +18,13 @@ class GalleryGridItem extends StatelessWidget {
         ),
         child: Material(
           color: Colors.transparent,
-          child: InkWell(onTap: () => context.registry.get<GalleryCoordinator>().toImage(image)),
+          child: InkWell(
+            onTap: () => context.registry.get<GalleryCoordinator>().toImage(
+                  src: image.src,
+                  contactID: image.contactID,
+                  jobID: image.jobID,
+                ),
+          ),
         ),
       ),
     );

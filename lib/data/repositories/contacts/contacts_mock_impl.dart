@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:clock/clock.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:uuid/uuid.dart';
@@ -22,8 +20,13 @@ class ContactsMockImpl extends Contacts {
   }
 
   @override
-  FileStorageReference? createFile(File file, String userId) {
-    return null;
+  Future<ImageFileReference> createFile({required String path, required String userId}) async {
+    return (src: '', path: '');
+  }
+
+  @override
+  Future<bool> deleteFile({required ImageFileReference reference, required String userId}) async {
+    return true;
   }
 
   @override

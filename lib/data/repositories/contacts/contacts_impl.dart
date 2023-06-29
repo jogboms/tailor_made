@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:clock/clock.dart';
 import 'package:tailor_made/domain.dart';
@@ -22,7 +21,7 @@ class ContactsImpl extends Contacts {
 
   @override
   Stream<List<ContactEntity>> fetchAll(String? userId) {
-    return firebase.db.contacts(userId).snapshots().map(
+    return firebase.db.collection(collectionName).where('userID', isEqualTo: userId).snapshots().map(
           (MapQuerySnapshot snapshot) => snapshot.docs
               .where((MapQueryDocumentSnapshot doc) => doc.data().containsKey('fullname'))
               .map((MapQueryDocumentSnapshot doc) => _deriveContactEntity(doc.id, doc.reference.path, doc.data()))
@@ -31,15 +30,21 @@ class ContactsImpl extends Contacts {
   }
 
   @override
-  FireFileStorageReference createFile(File file, String userId) {
-    return FireFileStorageReference(firebase.storage.ref('$userId/contacts')..putFile(file));
+  Future<ImageFileReference> createFile({required String path, required String userId}) {
+    return firebase.storage.create('$userId/$collectionName', filePath: path);
+  }
+
+  @override
+  Future<bool> deleteFile({required ImageFileReference reference, required String userId}) async {
+    await firebase.storage.delete(src: reference.src);
+    return true;
   }
 
   @override
   Future<ContactEntity> create(String userId, CreateContactData data) async {
     final String id = const Uuid().v4();
     final Completer<ContactEntity> completer = Completer<ContactEntity>();
-    final MapDocumentReference ref = collection.db.doc('contacts/$id');
+    final MapDocumentReference ref = collection.db.doc('$collectionName/$id');
     unawaited(
       ref.set(<String, Object>{
         'id': id,

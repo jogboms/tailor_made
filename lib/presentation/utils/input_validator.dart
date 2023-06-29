@@ -92,9 +92,9 @@ class InputValidator {
     };
   }
 
-  static ValidatorFn<String, String?> tryString([String? error]) {
-    return (String value) {
-      if (value.isEmpty || value.trim().isEmpty) {
+  static ValidatorFn<String?, String?> tryString([String? error]) {
+    return (String? value) {
+      if (value == null || value.isEmpty || value.trim().isEmpty) {
         return error ?? 'Field is required.';
       }
       return null;

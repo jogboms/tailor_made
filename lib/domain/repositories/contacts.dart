@@ -1,12 +1,11 @@
-import 'dart:io';
-
 import '../entities.dart';
-import 'file_storage_reference.dart';
 
 abstract class Contacts {
   Stream<List<ContactEntity>> fetchAll(String? userId);
 
-  FileStorageReference? createFile(File file, String userId);
+  Future<ImageFileReference> createFile({required String path, required String userId});
+
+  Future<bool> deleteFile({required ImageFileReference reference, required String userId});
 
   Future<ContactEntity> create(String userId, CreateContactData data);
 

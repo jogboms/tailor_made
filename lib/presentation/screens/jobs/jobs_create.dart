@@ -12,6 +12,7 @@ import '../measures/widgets/measure_create_items.dart';
 import 'jobs_create_view_model.dart';
 import 'widgets/avatar_app_bar.dart';
 import 'widgets/gallery_grid_item.dart';
+import 'widgets/image_form_value.dart';
 import 'widgets/input_dropdown.dart';
 
 class JobsCreatePage extends StatefulWidget {
@@ -58,7 +59,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
               subtitle: Text('${contact.totalJobs} Jobs', style: theme.small),
               actions: widget.contacts.isNotEmpty
                   ? <Widget>[
-                      IconButton(icon: const Icon(Icons.people), onPressed: onSelectContact),
+                      IconButton(icon: const Icon(Icons.people), onPressed: handleSelectContact),
                     ]
                   : null,
             )
@@ -68,7 +69,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
           if (contact == null) {
             return Center(
               child: AppClearButton(
-                onPressed: onSelectContact,
+                onPressed: handleSelectContact,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
@@ -101,7 +102,22 @@ class _JobsCreatePageState extends JobsCreateViewModel {
                     const FormSectionHeader(title: 'Due Date'),
                     _buildDueDate(),
                     const FormSectionHeader(title: 'References'),
-                    _buildImageGrid(),
+                    Container(
+                      height: _kGridWidth + 8,
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: ListView(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        scrollDirection: Axis.horizontal,
+                        children: <Widget>[
+                          _NewGrid(onPressed: handlePhotoButtonPressed),
+                          for (final ImageFormValue value in images.reversed)
+                            GalleryGridItem.formValue(
+                              value: value,
+                              onTapDelete: handleDeleteImageItem,
+                            )
+                        ],
+                      ),
+                    ),
                     const FormSectionHeader(title: 'Measurements', trailing: 'Inches (In)'),
                     _buildMeasures(),
                     const FormSectionHeader(title: 'Additional Notes'),
@@ -153,43 +169,6 @@ class _JobsCreatePageState extends JobsCreateViewModel {
         ),
         onSaved: (String? value) => job = job.copyWith(notes: value!.trim()),
         onFieldSubmitted: (String value) => handleSubmit(),
-      ),
-    );
-  }
-
-  Widget _buildImageGrid() {
-    final List<Widget> imagesList = List<Widget>.generate(
-      fireImages.length,
-      (int index) {
-        final FireImage fireImage = fireImages[index];
-        final ImageEntity? image = fireImage.image;
-
-        if (image == null) {
-          return const Center(widthFactor: 2.5, child: LoadingSpinner());
-        }
-
-        return GalleryGridItem(
-          image: image,
-          tag: '$image-$index',
-          size: _kGridWidth,
-          onTapDelete: (ImageEntity image) => setState(() {
-            fireImage.ref.delete();
-            fireImages.removeAt(index);
-          }),
-        );
-      },
-    ).reversed.toList();
-
-    return Container(
-      height: _kGridWidth + 8,
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
-        scrollDirection: Axis.horizontal,
-        children: <Widget>[
-          _NewGrid(onPressed: handlePhotoButtonPressed),
-          ...imagesList,
-        ],
       ),
     );
   }

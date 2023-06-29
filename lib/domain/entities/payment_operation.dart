@@ -1,4 +1,5 @@
-import 'package:tailor_made/domain.dart';
+import 'create_payment_data.dart';
+import 'payment_entity.dart';
 
 sealed class PaymentOperation {}
 

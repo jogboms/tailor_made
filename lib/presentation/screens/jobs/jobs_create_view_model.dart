@@ -1,17 +1,17 @@
-import 'dart:io';
-
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:uuid/uuid.dart';
 
 import 'jobs_create.dart';
+import 'widgets/image_form_value.dart';
 
 abstract class JobsCreateViewModel extends State<JobsCreatePage> {
   @protected
-  List<FireImage> fireImages = <FireImage>[];
+  List<ImageFormValue> images = <ImageFormValue>[];
   @protected
   late CreateJobData job;
   @protected
@@ -47,37 +47,33 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
     if (imageFile == null) {
       return;
     }
-    // TODO(Jogboms): move this out of here
-    final FileStorageReference ref = registry.get<Jobs>().createFile(File(imageFile.path), widget.userId)!;
 
-    setState(() => fireImages.add(FireImage()..ref = ref));
     try {
-      final String imageUrl = await ref.getDownloadURL();
-      setState(() {
-        final String id = const Uuid().v4();
-        fireImages.last
-          ..isLoading = false
-          ..isSucess = true
-          ..image = ImageEntity(
-            reference: ReferenceEntity(
-              id: id,
-              path: id, // TODO
-            ),
-            userID: widget.userId,
-            contactID: contact!.id,
-            jobID: job.id,
-            src: imageUrl,
-            path: ref.path,
-            id: id,
-            createdAt: clock.now(),
+      // TODO(Jogboms): move this out of here
+      final ImageFileReference ref = await registry.get<Gallery>().createFile(
+            path: imageFile.path,
+            userId: widget.userId,
           );
+
+      setState(() {
+        images.add(
+          ImageCreateFormValue(
+            CreateImageData(
+              userID: widget.userId,
+              contactID: contact!.id,
+              jobID: job.id,
+              src: ref.src,
+              path: ref.path,
+            ),
+          ),
+        );
       });
-    } catch (e) {
-      setState(() => fireImages.last.isLoading = false);
+    } catch (error, stackTrace) {
+      AppLog.e(error, stackTrace);
     }
   }
 
-  void onSelectContact() async {
+  void handleSelectContact() async {
     final ContactEntity? selectedContact =
         await context.registry.get<ContactsCoordinator>().toContactsList(widget.contacts);
     if (selectedContact != null) {
@@ -87,6 +83,19 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
           contactID: contact?.id,
           measurements: contact?.measurements ?? <String, double>{},
         );
+      });
+    }
+  }
+
+  void handleDeleteImageItem(ImageFormValue value) async {
+    final ImageFileReference reference = switch (value) {
+      ImageCreateFormValue(:final CreateImageData data) => (src: data.src, path: data.path),
+      ImageModifyFormValue(:final ImageEntity data) => (src: data.src, path: data.path),
+    };
+    await context.registry.get<Gallery>().deleteFile(reference: reference, userId: widget.userId);
+    if (mounted) {
+      setState(() {
+        images.remove(value);
       });
     }
   }
@@ -108,9 +117,14 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
 
       job = job.copyWith(
         pendingPayment: job.price,
-        images: List<ImageEntity>.from(
-          fireImages.where((FireImage img) => img.image != null).map<ImageEntity?>((FireImage img) => img.image),
-        ),
+        images: images
+            .map(
+              (ImageFormValue input) => switch (input) {
+                ImageCreateFormValue() => CreateImageOperation(data: input.data),
+                ImageModifyFormValue() => ModifyImageOperation(data: input.data),
+              },
+            )
+            .toList(growable: false),
         contactID: contact!.id,
       );
 
@@ -125,11 +139,4 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
       }
     }
   }
-}
-
-class FireImage {
-  late FileStorageReference ref;
-  ImageEntity? image;
-  bool isLoading = true;
-  bool isSucess = false;
 }

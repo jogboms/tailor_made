@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,7 +26,6 @@ class ContactFormState extends State<ContactForm> {
   bool _isLoading = false;
   late CreateContactData _contact = widget.contact;
   bool _autovalidate = false;
-  FileStorageReference? _lastImgRef;
   late final TextEditingController _fNController = TextEditingController(text: _contact.fullname);
   late final TextEditingController _pNController = TextEditingController(text: _contact.phone);
   late final TextEditingController _lNController = TextEditingController(text: _contact.location);
@@ -78,7 +76,7 @@ class ContactFormState extends State<ContactForm> {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.phone,
                     decoration: const InputDecoration(prefixIcon: Icon(Icons.phone), labelText: 'Phone'),
-                    validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a value',
+                    validator: InputValidator.tryString('Please input a value'),
                     onSaved: (String? phone) => _contact = _contact.copyWith(phone: phone!.trim()),
                   ),
                   const SizedBox(height: 4.0),
@@ -86,7 +84,7 @@ class ContactFormState extends State<ContactForm> {
                     controller: _lNController,
                     textInputAction: TextInputAction.done,
                     decoration: const InputDecoration(prefixIcon: Icon(Icons.location_city), labelText: 'Location'),
-                    validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a value',
+                    validator: InputValidator.tryString('Please input a value'),
                     onSaved: (String? location) => _contact = _contact.copyWith(location: location!.trim()),
                     onFieldSubmitted: (String value) => _handleSubmit(),
                   ),
@@ -126,22 +124,17 @@ class ContactFormState extends State<ContactForm> {
     if (imageFile == null) {
       return;
     }
-    // TODO(Jogboms): move this out of here
     final Contacts contacts = registry.get();
-    final FileStorageReference ref = contacts.createFile(File(imageFile.path), widget.userId)!;
 
     setState(() => _isLoading = true);
     try {
-      _contact = _contact.copyWith(imageUrl: await ref.getDownloadURL());
+      // TODO(Jogboms): move this out of here
+      final ImageFileReference ref = await contacts.createFile(path: imageFile.path, userId: widget.userId);
+      _contact = _contact.copyWith(imageUrl: ref.src);
       if (mounted) {
         AppSnackBar.of(context).success('Upload Successful');
-        setState(() {
-          if (_lastImgRef != null) {
-            _lastImgRef!.delete();
-          }
-          _isLoading = false;
-          _lastImgRef = ref;
-        });
+        contacts.deleteFile(reference: ref, userId: widget.userId).ignore();
+        setState(() => _isLoading = false);
       }
     } catch (e) {
       if (mounted) {

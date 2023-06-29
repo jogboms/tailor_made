@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:tailor_made/domain.dart';
 
 import '../../network/firebase.dart';
@@ -26,8 +24,14 @@ class GalleryImpl extends Gallery {
   }
 
   @override
-  FireFileStorageReference createFile(File file, String userId) {
-    return FireFileStorageReference(firebase.storage.ref('$userId/references')..putFile(file));
+  Future<ImageFileReference> createFile({required String path, required String userId}) async {
+    return firebase.storage.create('$userId/references', filePath: path);
+  }
+
+  @override
+  Future<bool> deleteFile({required ImageFileReference reference, required String userId}) async {
+    await firebase.storage.delete(src: reference.src);
+    return true;
   }
 }
 

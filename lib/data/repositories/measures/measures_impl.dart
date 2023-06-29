@@ -15,7 +15,7 @@ class MeasuresImpl extends Measures {
   final bool isDev;
   final CloudDbCollection collection;
 
-  static const String collectionName = 'measures';
+  static const String collectionName = 'measurements';
 
   @override
   Stream<List<MeasureEntity>> fetchAll(String userId) {
@@ -33,22 +33,25 @@ class MeasuresImpl extends Measures {
     required MeasureGroup groupName,
     required String unitValue,
   }) async {
-    await firebase.db.batchAction((WriteBatch batch) {
+    await firebase.db.batchAction((_) {
       for (final BaseMeasureEntity measure in measures) {
-        if (measure is MeasureEntity) {
-          final ReferenceEntity reference = measure.reference;
-          final MapDocumentReference ref = collection.db.doc(reference.path);
-          batch.update(ref, <String, String?>{
-            'group': groupName.displayName,
-            'unit': unitValue,
-          });
-        } else if (measure is DefaultMeasureEntity) {
-          final String id = const Uuid().v4();
-          batch.set(
-            firebase.db.measurements(userId).doc(id),
-            measure.toJson(id),
-            SetOptions(merge: true),
-          );
+        switch (measure) {
+          case MeasureEntity():
+            final ReferenceEntity reference = measure.reference;
+            final MapDocumentReference ref = collection.db.doc(reference.path);
+            _.update(ref, <String, String?>{
+              'group': groupName.displayName,
+              'unit': unitValue,
+            });
+            break;
+          case DefaultMeasureEntity():
+            final String id = const Uuid().v4();
+            _.set(
+              firebase.db.measurements(userId).doc(id),
+              measure.toJson(id),
+              SetOptions(merge: true),
+            );
+            break;
         }
       }
     });
@@ -57,9 +60,9 @@ class MeasuresImpl extends Measures {
 
   @override
   Future<bool> deleteGroup(List<MeasureEntity> measures, String userId) async {
-    await firebase.db.batchAction((WriteBatch batch) {
+    await firebase.db.batchAction((_) {
       for (final MeasureEntity measure in measures) {
-        batch.delete(firebase.db.measurements(userId).doc(measure.id));
+        _.delete(firebase.db.measurements(userId).doc(measure.id));
       }
     });
     return true;
@@ -73,22 +76,25 @@ class MeasuresImpl extends Measures {
 
   @override
   Future<bool> update(Iterable<BaseMeasureEntity> measures, String userId) async {
-    await firebase.db.batchAction((WriteBatch batch) {
+    await firebase.db.batchAction((_) {
       try {
         for (final BaseMeasureEntity measure in measures) {
-          if (measure is MeasureEntity) {
-            batch.set(
-              firebase.db.measurements(userId).doc(measure.id),
-              measure.toJson(),
-              SetOptions(merge: true),
-            );
-          } else if (measure is DefaultMeasureEntity) {
-            final String id = const Uuid().v4();
-            batch.set(
-              firebase.db.measurements(userId).doc(id),
-              measure.toJson(id),
-              SetOptions(merge: true),
-            );
+          switch (measure) {
+            case MeasureEntity():
+              _.set(
+                firebase.db.measurements(userId).doc(measure.id),
+                measure.toJson(),
+                SetOptions(merge: true),
+              );
+              break;
+            case DefaultMeasureEntity():
+              final String id = const Uuid().v4();
+              _.set(
+                firebase.db.measurements(userId).doc(id),
+                measure.toJson(id),
+                SetOptions(merge: true),
+              );
+              break;
           }
         }
       } catch (_) {}
@@ -115,6 +121,10 @@ MeasureEntity _deriveMeasureEntity(String id, String path, DynamicMap data) {
     group: MeasureGroup.valueOf(data['group'] as String),
     createdAt: DateTime.parse(data['createdAt'] as String),
   );
+}
+
+extension on CloudDb {
+  MapCollectionReference measurements(String? userId) => collection('${MeasuresImpl.collectionName}/$userId/common');
 }
 
 extension on MeasureEntity {

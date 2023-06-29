@@ -16,7 +16,7 @@ class StatsImpl extends Stats {
   @override
   Stream<StatsModel> fetch(String? userId) {
     return firebase.db
-        .stats(userId)
+        .doc('stats/$userId')
         .snapshots()
         .map((MapDocumentSnapshot snapshot) => StatsModel.fromJson(snapshot.data()!));
   }

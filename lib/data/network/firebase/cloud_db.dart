@@ -11,16 +11,6 @@ class CloudDb {
 
   MapDocumentReference doc(String path) => _instance.doc(path);
 
-  MapDocumentReference stats(String? userId) => doc('stats/$userId');
-
-  MapCollectionReference measurements(String? userId) => collection('measurements/$userId/common');
-
-  MapCollectionReference get premium => collection('premium');
-
-  MapQuery gallery(String userId) => collection('gallery').where('userID', isEqualTo: userId);
-
-  MapQuery contacts(String? userId) => collection('contacts').where('userID', isEqualTo: userId);
-
   Future<void> batchAction(void Function(WriteBatch batch) action) {
     final WriteBatch batch = _instance.batch();
 

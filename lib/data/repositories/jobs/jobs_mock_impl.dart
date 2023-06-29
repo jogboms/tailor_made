@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:clock/clock.dart';
 import 'package:tailor_made/domain.dart';
+import 'package:uuid/uuid.dart';
 
 class JobsMockImpl extends Jobs {
   @override
@@ -20,11 +19,6 @@ class JobsMockImpl extends Jobs {
   }
 
   @override
-  FileStorageReference? createFile(File file, String userId) {
-    return null;
-  }
-
-  @override
   Future<JobEntity> create(String userId, CreateJobData data) async {
     return JobEntity(
       reference: ReferenceEntity(id: data.id, path: 'path'),
@@ -34,7 +28,13 @@ class JobsMockImpl extends Jobs {
       price: data.price,
       createdAt: data.createdAt,
       dueAt: data.dueAt,
-      images: data.images,
+      images: <ImageEntity>[
+        for (final ImageOperation op in data.images)
+          switch (op) {
+            CreateImageOperation() => op.data.toEntity(),
+            ModifyImageOperation() => op.data,
+          },
+      ],
       measurements: data.measurements,
       completedPayment: data.completedPayment,
       isComplete: data.isComplete,
@@ -49,11 +49,27 @@ class JobsMockImpl extends Jobs {
   Future<bool> update(
     String userId, {
     required ReferenceEntity reference,
-    List<ImageEntity>? images,
+    List<ImageOperation>? images,
     List<PaymentOperation>? payments,
     bool? isComplete,
     DateTime? dueAt,
   }) async {
     return true;
+  }
+}
+
+extension on CreateImageData {
+  ImageEntity toEntity() {
+    final String id = const Uuid().v4();
+    return ImageEntity(
+      reference: ReferenceEntity(id: id, path: path),
+      userID: userID,
+      contactID: contactID,
+      jobID: jobID,
+      src: src,
+      path: path,
+      id: id,
+      createdAt: clock.now(),
+    );
   }
 }

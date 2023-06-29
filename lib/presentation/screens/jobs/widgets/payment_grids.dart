@@ -17,14 +17,14 @@ class PaymentGrids extends StatefulWidget {
 }
 
 class _PaymentGridsState extends State<PaymentGrids> {
-  late final List<PaymentGridsFormValue> _firePayments = <PaymentGridsFormValue>[
+  late final List<PaymentGridsFormValue> _payments = <PaymentGridsFormValue>[
     ...widget.job.payments.map(PaymentGridsModifyFormValue.new),
   ];
 
   @override
   void didUpdateWidget(covariant PaymentGrids oldWidget) {
     if (widget.job.payments != oldWidget.job.payments) {
-      _firePayments
+      _payments
         ..clear()
         ..addAll(widget.job.payments.map(PaymentGridsModifyFormValue.new));
     }
@@ -62,7 +62,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
             scrollDirection: Axis.horizontal,
             children: <Widget>[
               _NewGrid(onPressed: _onCreateNew),
-              for (final PaymentGridsFormValue value in _firePayments.reversed) PaymentGridItem(value: value)
+              for (final PaymentGridsFormValue value in _payments.reversed) PaymentGridItem(value: value)
             ],
           ),
         ),
@@ -78,7 +78,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
     if (result != null) {
       try {
         setState(() {
-          _firePayments.add(
+          _payments.add(
             PaymentGridsCreateFormValue(
               CreatePaymentData(
                 userID: widget.userId,
@@ -94,7 +94,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
         await registry.get<Jobs>().update(
               widget.job.userID,
               reference: widget.job.reference,
-              payments: _firePayments
+              payments: _payments
                   .map(
                     (PaymentGridsFormValue input) => switch (input) {
                       PaymentGridsCreateFormValue() => CreatePaymentOperation(data: input.data),
