@@ -2,6 +2,7 @@ export 'domain/entities.dart';
 export 'domain/repositories/accounts.dart';
 export 'domain/repositories/contacts.dart';
 export 'domain/repositories/gallery.dart';
+export 'domain/repositories/image_storage.dart';
 export 'domain/repositories/jobs.dart';
 export 'domain/repositories/measures.dart';
 export 'domain/repositories/payments.dart';

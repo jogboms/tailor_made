@@ -20,6 +20,8 @@ class MockJobs extends Mock implements Jobs {}
 
 class MockGallery extends Mock implements Gallery {}
 
+class MockImageStorage extends Mock implements ImageStorage {}
+
 class MockSettings extends Mock implements Settings {}
 
 class MockPayments extends Mock implements Payments {}

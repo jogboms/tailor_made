@@ -79,7 +79,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
       ImageCreateFormValue(:final CreateImageData data) => (src: data.src, path: data.path),
       ImageModifyFormValue(:final ImageEntity data) => (src: data.src, path: data.path),
     };
-    await context.registry.get<Gallery>().deleteFile(reference: reference, userId: widget.userId);
+    await context.registry.get<ImageStorage>().delete(reference: reference, userId: widget.userId);
     if (mounted) {
       setState(() {
         _images.remove(value);
@@ -100,7 +100,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
 
     try {
       // TODO(Jogboms): move this out of here
-      final ImageFileReference ref = await registry.get<Gallery>().createFile(
+      final ImageFileReference ref = await registry.get<ImageStorage>().createReferenceImage(
             path: imageFile.path,
             userId: widget.userId,
           );

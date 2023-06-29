@@ -22,17 +22,6 @@ class GalleryImpl extends Gallery {
               .toList(),
         );
   }
-
-  @override
-  Future<ImageFileReference> createFile({required String path, required String userId}) async {
-    return firebase.storage.create('$userId/references', filePath: path);
-  }
-
-  @override
-  Future<bool> deleteFile({required ImageFileReference reference, required String userId}) async {
-    await firebase.storage.delete(src: reference.src);
-    return true;
-  }
 }
 
 ImageEntity deriveImageEntity(String id, String? path, DynamicMap data) {

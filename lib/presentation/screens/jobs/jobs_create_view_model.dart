@@ -50,7 +50,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
 
     try {
       // TODO(Jogboms): move this out of here
-      final ImageFileReference ref = await registry.get<Gallery>().createFile(
+      final ImageFileReference ref = await registry.get<ImageStorage>().createReferenceImage(
             path: imageFile.path,
             userId: widget.userId,
           );
@@ -92,7 +92,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
       ImageCreateFormValue(:final CreateImageData data) => (src: data.src, path: data.path),
       ImageModifyFormValue(:final ImageEntity data) => (src: data.src, path: data.path),
     };
-    await context.registry.get<Gallery>().deleteFile(reference: reference, userId: widget.userId);
+    await context.registry.get<ImageStorage>().delete(reference: reference, userId: widget.userId);
     if (mounted) {
       setState(() {
         images.remove(value);

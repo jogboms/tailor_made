@@ -20,16 +20,6 @@ class ContactsMockImpl extends Contacts {
   }
 
   @override
-  Future<ImageFileReference> createFile({required String path, required String userId}) async {
-    return (src: '', path: '');
-  }
-
-  @override
-  Future<bool> deleteFile({required ImageFileReference reference, required String userId}) async {
-    return true;
-  }
-
-  @override
   Future<ContactEntity> create(String userId, CreateContactData data) async {
     final String id = const Uuid().v4();
     return ContactEntity(

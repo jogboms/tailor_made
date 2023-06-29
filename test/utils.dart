@@ -12,6 +12,7 @@ class MockRepositories {
   final Contacts contacts = MockContacts();
   final Jobs jobs = MockJobs();
   final Gallery gallery = MockGallery();
+  final ImageStorage imageStorage = MockImageStorage();
   final Settings settings = MockSettings();
   final Payments payments = MockPayments();
   final Measures measures = MockMeasures();
@@ -22,6 +23,7 @@ class MockRepositories {
         contacts,
         jobs,
         gallery,
+        imageStorage,
         settings,
         payments,
         measures,
@@ -41,6 +43,7 @@ Registry createRegistry({
     ..set(mockRepositories.contacts)
     ..set(mockRepositories.jobs)
     ..set(mockRepositories.gallery)
+    ..set(mockRepositories.imageStorage)
     ..set(mockRepositories.settings)
     ..set(mockRepositories.payments)
     ..set(mockRepositories.measures)

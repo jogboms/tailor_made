@@ -30,17 +30,6 @@ class ContactsImpl extends Contacts {
   }
 
   @override
-  Future<ImageFileReference> createFile({required String path, required String userId}) {
-    return firebase.storage.create('$userId/$collectionName', filePath: path);
-  }
-
-  @override
-  Future<bool> deleteFile({required ImageFileReference reference, required String userId}) async {
-    await firebase.storage.delete(src: reference.src);
-    return true;
-  }
-
-  @override
   Future<ContactEntity> create(String userId, CreateContactData data) async {
     final String id = const Uuid().v4();
     final Completer<ContactEntity> completer = Completer<ContactEntity>();

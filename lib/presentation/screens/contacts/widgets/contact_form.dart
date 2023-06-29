@@ -26,6 +26,7 @@ class ContactFormState extends State<ContactForm> {
   bool _isLoading = false;
   late CreateContactData _contact = widget.contact;
   bool _autovalidate = false;
+  ImageFileReference? _previousImageFileRef;
   late final TextEditingController _fNController = TextEditingController(text: _contact.fullname);
   late final TextEditingController _pNController = TextEditingController(text: _contact.phone);
   late final TextEditingController _lNController = TextEditingController(text: _contact.location);
@@ -124,16 +125,19 @@ class ContactFormState extends State<ContactForm> {
     if (imageFile == null) {
       return;
     }
-    final Contacts contacts = registry.get();
+    final ImageStorage imageStorage = registry.get();
 
     setState(() => _isLoading = true);
     try {
       // TODO(Jogboms): move this out of here
-      final ImageFileReference ref = await contacts.createFile(path: imageFile.path, userId: widget.userId);
+      final ImageFileReference ref = await imageStorage.createContactImage(path: imageFile.path, userId: widget.userId);
       _contact = _contact.copyWith(imageUrl: ref.src);
       if (mounted) {
         AppSnackBar.of(context).success('Upload Successful');
-        contacts.deleteFile(reference: ref, userId: widget.userId).ignore();
+        if (_previousImageFileRef case final ImageFileReference ref) {
+          imageStorage.delete(reference: ref, userId: widget.userId).ignore();
+        }
+        _previousImageFileRef = ref;
         setState(() => _isLoading = false);
       }
     } catch (e) {
