@@ -14,3 +14,5 @@ export 'entities/payment_entity.dart';
 export 'entities/payment_operation.dart';
 export 'entities/reference_entity.dart';
 export 'entities/setting_entity.dart';
+export 'entities/stats_entity.dart';
+export 'entities/stats_item_entity.dart';

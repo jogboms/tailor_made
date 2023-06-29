@@ -1,6 +1,4 @@
 export 'domain/entities.dart';
-export 'domain/models/stats/stats.dart';
-export 'domain/models/stats/stats_item.dart';
 export 'domain/repositories/accounts.dart';
 export 'domain/repositories/contacts.dart';
 export 'domain/repositories/gallery.dart';

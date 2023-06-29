@@ -9,7 +9,7 @@ class StatsViewModel extends Equatable {
         hasError = state.stats.status == StateStatus.failure,
         error = state.stats.error;
 
-  final StatsModel? model;
+  final StatsEntity? model;
   final bool isLoading;
   final bool hasError;
   final String? error;

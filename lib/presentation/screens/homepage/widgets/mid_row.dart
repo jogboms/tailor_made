@@ -7,7 +7,7 @@ import 'helpers.dart';
 class MidRowWidget extends StatelessWidget {
   const MidRowWidget({super.key, required this.userId, required this.stats});
 
-  final StatsModel stats;
+  final StatsEntity stats;
   final String userId;
 
   @override

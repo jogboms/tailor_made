@@ -7,7 +7,7 @@ import 'helpers.dart';
 class TopRowWidget extends StatelessWidget {
   const TopRowWidget({super.key, required this.stats});
 
-  final StatsModel stats;
+  final StatsEntity stats;
 
   @override
   Widget build(BuildContext context) {

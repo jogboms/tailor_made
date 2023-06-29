@@ -6,7 +6,7 @@ import 'package:tailor_made/presentation/utils.dart';
 class StatsWidget extends StatelessWidget {
   const StatsWidget({super.key, required this.stats});
 
-  final StatsModel stats;
+  final StatsEntity stats;
 
   @override
   Widget build(BuildContext context) {

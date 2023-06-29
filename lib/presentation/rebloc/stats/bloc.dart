@@ -20,8 +20,8 @@ class StatsBloc extends SimpleBloc<AppState> {
         .switchMap(
           (WareContext<AppState> context) => stats
               .fetch((context.action as _InitStatsAction).userId)
-              .map(OnDataAction<StatsModel>.new)
-              .map((OnDataAction<StatsModel> action) => context.copyWith(action)),
+              .map(OnDataAction<StatsEntity>.new)
+              .map((OnDataAction<StatsEntity> action) => context.copyWith(action)),
         )
         .untilAction<OnDisposeAction>()
         .listen((WareContext<AppState> context) => context.dispatcher(context.action));
@@ -33,7 +33,7 @@ class StatsBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final StatsState stats = state.stats;
 
-    if (action is OnDataAction<StatsModel>) {
+    if (action is OnDataAction<StatsEntity>) {
       return state.copyWith(
         stats: stats.copyWith(
           stats: action.payload,

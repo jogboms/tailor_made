@@ -84,7 +84,7 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AccountEntity? account = viewModel.account;
-    final StatsModel? stats = viewModel.stats;
+    final StatsEntity? stats = viewModel.stats;
 
     if (viewModel.isLoading || account == null || stats == null) {
       return const LoadingSpinner();
