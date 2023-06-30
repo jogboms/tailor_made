@@ -9,7 +9,7 @@ class FormSectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle style = ThemeProvider.of(context).smallSemi;
+    final TextStyle style = Theme.of(context).smallSemi;
     return Container(
       color: Colors.grey[100]!.withOpacity(.4),
       margin: const EdgeInsets.only(top: 8.0),

@@ -65,7 +65,7 @@ class _AppBarState extends State<_AppBar> with StoreDispatchMixin<AppState> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeData theme = Theme.of(context);
 
     if (!_isSearching) {
       return CustomAppBar(

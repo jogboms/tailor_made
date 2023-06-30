@@ -51,9 +51,9 @@ class _StatTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Text(count, style: ThemeProvider.of(context).headline),
+        Text(count, style: Theme.of(context).headline),
         const SizedBox(height: 2.0),
-        Text(title, style: ThemeProvider.of(context).small),
+        Text(title, style: Theme.of(context).small),
       ],
     );
   }

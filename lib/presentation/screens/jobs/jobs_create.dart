@@ -45,7 +45,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeData theme = Theme.of(context);
 
     final ContactEntity? contact = this.contact;
 
@@ -161,7 +161,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: TextFormField(
         keyboardType: TextInputType.text,
-        style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
+        style: Theme.of(context).title.copyWith(color: Colors.black),
         maxLines: 6,
         decoration: const InputDecoration(
           isDense: true,
@@ -178,7 +178,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: InputDropdown(
         valueText: DateFormat.yMMMd().format(job.dueAt),
-        valueStyle: ThemeProvider.of(context).title.copyWith(color: Colors.black),
+        valueStyle: Theme.of(context).title.copyWith(color: Colors.black),
         onPressed: () async {
           final DateTime? picked = await showDatePicker(
             context: context,
@@ -203,7 +203,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
         textInputAction: TextInputAction.next,
         keyboardType: TextInputType.text,
         textCapitalization: TextCapitalization.words,
-        style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
+        style: Theme.of(context).title.copyWith(color: Colors.black),
         decoration: const InputDecoration(isDense: true, hintText: 'Enter Style Name'),
         validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a name',
         onSaved: (String? value) => job = job.copyWith(name: value!.trim()),
@@ -218,7 +218,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
         controller: _controller,
         textInputAction: TextInputAction.next,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
+        style: Theme.of(context).title.copyWith(color: Colors.black),
         decoration: const InputDecoration(isDense: true, hintText: 'Enter Amount'),
         validator: (String? value) => (_controller.numberValue > 0) ? null : 'Please input a price',
         onSaved: (String? value) => job = job.copyWith(price: _controller.numberValue),

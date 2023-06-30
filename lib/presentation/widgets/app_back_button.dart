@@ -15,7 +15,7 @@ class AppBackButton extends StatelessWidget {
       onPressed: onPop ?? () => Navigator.maybePop(context),
       child: Icon(
         Icons.arrow_back_ios,
-        color: color ?? ThemeProvider.of(context).appBarTitle.color,
+        color: color ?? Theme.of(context).appBarTitle.color,
         size: 18.0,
       ),
     );

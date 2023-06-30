@@ -149,7 +149,7 @@ class _MeasureFieldState extends State<_MeasureField> {
     return TextField(
       controller: _controller,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      style: ThemeProvider.of(context).headline,
+      style: Theme.of(context).headline,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.zero,
         labelText: widget.label,

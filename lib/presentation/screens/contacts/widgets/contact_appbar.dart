@@ -41,7 +41,7 @@ class _ContactAppBarState extends State<ContactAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle popTextStyle = ThemeProvider.of(context).body1;
+    final TextStyle popTextStyle = Theme.of(context).body1;
     return PreferredSize(
       preferredSize: const Size.fromHeight(kToolbarHeight),
       child: Row(
@@ -105,7 +105,7 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeData theme = Theme.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -39,7 +39,7 @@ class ContactPage extends StatelessWidget {
               titleSpacing: 0.0,
               centerTitle: false,
               bottom: TabBar(
-                labelStyle: ThemeProvider.of(context).body3Medium,
+                labelStyle: Theme.of(context).body3Medium,
                 tabs: _tabs.map((String tab) => Tab(child: Text(tab))).toList(),
               ),
               systemOverlayStyle: SystemUiOverlayStyle.light,

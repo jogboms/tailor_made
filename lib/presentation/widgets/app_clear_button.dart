@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:tailor_made/presentation/theme.dart';
 
 class AppClearButton extends StatelessWidget {
@@ -40,7 +41,7 @@ class AppClearButton extends StatelessWidget {
       color: backgroundColor,
       borderRadius: borderRadius ?? BorderRadius.zero,
       onPressed: onPressed,
-      child: DefaultTextStyle(style: ThemeProvider.of(context).button.copyWith(color: color), child: child),
+      child: DefaultTextStyle(style: Theme.of(context).button.copyWith(color: color), child: child),
     );
   }
 }

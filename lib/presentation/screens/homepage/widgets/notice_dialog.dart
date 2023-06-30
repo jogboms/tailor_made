@@ -9,7 +9,7 @@ class NoticeDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle textTheme = ThemeProvider.of(context).subhead1;
+    final TextStyle textTheme = Theme.of(context).subhead1;
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32.0),

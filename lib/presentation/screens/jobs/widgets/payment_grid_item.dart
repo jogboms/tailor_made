@@ -26,7 +26,7 @@ class PaymentGridItem extends StatelessWidget {
 
     final DateTime date = record.createdAt;
     final String price = AppMoney(record.price).formatted;
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeData theme = Theme.of(context);
 
     return Container(
       width: kGridWidth,

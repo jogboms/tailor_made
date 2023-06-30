@@ -81,7 +81,7 @@ class _Leading extends StatelessWidget {
         children: <Widget>[
           Icon(
             Icons.arrow_back,
-            color: iconColor ?? ThemeProvider.of(context).appBarTitle.color,
+            color: iconColor ?? Theme.of(context).appBarTitle.color,
           ),
           const SizedBox(width: 4.0),
           Hero(tag: tag, child: AppCircleAvatar(imageUrl: imageUrl)),

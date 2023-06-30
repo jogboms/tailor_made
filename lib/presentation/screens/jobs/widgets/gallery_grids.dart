@@ -34,7 +34,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeData theme = Theme.of(context);
 
     return Column(
       children: <Widget>[

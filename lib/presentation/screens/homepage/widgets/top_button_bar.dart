@@ -24,7 +24,7 @@ class TopButtonBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeData theme = Theme.of(context);
     return Align(
       alignment: Alignment.topRight,
       child: SafeArea(
@@ -96,7 +96,7 @@ class TopButtonBar extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Text('Select action', style: ThemeProvider.of(context).body3),
+            title: Text('Select action', style: Theme.of(context).body3),
             children: <Widget>[
               SimpleDialogOption(
                 onPressed: () {

@@ -66,7 +66,7 @@ class _ContentState extends State<_Content> {
               const SizedBox(height: 16.0),
               Text(
                 'Store Name',
-                style: ThemeProvider.of(context).title.copyWith(color: Colors.black38),
+                style: Theme.of(context).title.copyWith(color: Colors.black38),
               ),
               const SizedBox(height: 64.0),
               Padding(
@@ -75,7 +75,7 @@ class _ContentState extends State<_Content> {
                   keyboardType: TextInputType.text,
                   controller: _controller,
                   textAlign: TextAlign.center,
-                  style: ThemeProvider.of(context).title,
+                  style: Theme.of(context).title,
                   onSubmitted: (String value) => _handleSubmit(context),
                   decoration: const InputDecoration(isDense: true, hintText: 'Enter Store Name'),
                 ),

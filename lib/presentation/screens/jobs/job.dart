@@ -22,7 +22,7 @@ class JobPage extends StatefulWidget {
 class _JobPageState extends State<JobPage> {
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeData theme = Theme.of(context);
 
     return ViewModelSubscriber<AppState, JobsViewModel>(
       converter: (AppState store) => JobsViewModel(store, jobID: widget.job.id),
@@ -172,7 +172,7 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color textColor = Colors.grey.shade800;
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeData theme = Theme.of(context);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -224,7 +224,7 @@ class _AvatarAppBar extends StatelessWidget {
     final Color textColor = Colors.grey.shade800;
 
     final String date = AppDate(job.createdAt).formatted!;
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeData theme = Theme.of(context);
 
     return AvatarAppBar(
       tag: contact.createdAt.toString(),
@@ -264,7 +264,7 @@ class _PaidBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeData theme = Theme.of(context);
 
     return Expanded(
       child: Container(
@@ -298,7 +298,7 @@ class _UnpaidBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeData theme = Theme.of(context);
     return Expanded(
       child: Column(
         children: <Widget>[

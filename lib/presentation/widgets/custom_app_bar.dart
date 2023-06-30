@@ -30,7 +30,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle style = ThemeProvider.of(context).appBarTitle;
+    final TextStyle style = Theme.of(context).appBarTitle;
 
     return AppBar(
       systemOverlayStyle: brightness == Brightness.light ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,

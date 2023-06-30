@@ -19,7 +19,7 @@ class HeaderWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Text('Hello', style: ThemeProvider.of(context).display4Light.copyWith(letterSpacing: 2.5)),
+          Text('Hello', style: Theme.of(context).display4Light.copyWith(letterSpacing: 2.5)),
           Text(
             account.storeName.split(' ').first,
             style: const TextStyle(fontSize: 52.0, fontWeight: AppFontWeight.regular, height: 1.15),
@@ -29,7 +29,7 @@ class HeaderWidget extends StatelessWidget {
           ),
           Text(
             AppDate(clock.now(), day: 'EEEE', month: 'MMMM').formatted!,
-            style: ThemeProvider.of(context).body3.copyWith(height: 1.75),
+            style: Theme.of(context).body3.copyWith(height: 1.75),
           ),
         ],
       ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../theme.dart';
+import 'package:tailor_made/presentation/theme.dart';
 
 class SlideDownItem extends StatefulWidget {
   const SlideDownItem({
@@ -55,7 +54,7 @@ class _SliderHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeData theme = Theme.of(context);
 
     return Material(
       elevation: isExpanded ? 1.0 : 0.0,

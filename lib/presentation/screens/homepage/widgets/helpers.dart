@@ -96,7 +96,7 @@ class _TextTile extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(title, style: TextStyle(fontSize: small == true ? 15.0 : 16.0)),
-        if (subTitle != null) Text(subTitle!, style: ThemeProvider.of(context).small),
+        if (subTitle != null) Text(subTitle!, style: Theme.of(context).small),
       ],
     );
   }
