@@ -39,7 +39,6 @@ class MeasureEntity with EquatableMixin implements BaseMeasureEntity {
     required this.reference,
     required this.id,
     required this.name,
-    this.value = 0.0,
     this.unit = 'In',
     required this.group,
     required this.createdAt,
@@ -49,7 +48,6 @@ class MeasureEntity with EquatableMixin implements BaseMeasureEntity {
   final String id;
   @override
   final String name;
-  final double value;
   @override
   final String unit;
   @override
@@ -57,41 +55,25 @@ class MeasureEntity with EquatableMixin implements BaseMeasureEntity {
   final DateTime createdAt;
 
   @override
-  List<Object> get props => <Object>[reference, id, name, value, unit, group, createdAt];
-
-  MeasureEntity copyWith({
-    double? value,
-  }) {
-    return MeasureEntity(
-      reference: reference,
-      id: id,
-      name: name,
-      value: value ?? this.value,
-      unit: unit,
-      group: group,
-      createdAt: createdAt,
-    );
-  }
+  List<Object> get props => <Object>[reference, id, name, unit, group, createdAt];
 }
 
 class DefaultMeasureEntity with EquatableMixin implements BaseMeasureEntity {
   const DefaultMeasureEntity({
     required this.name,
-    this.value = 0.0,
     this.unit = 'In',
     required this.group,
   });
 
   @override
   final String name;
-  final double value;
   @override
   final String unit;
   @override
   final MeasureGroup group;
 
   @override
-  List<Object> get props => <Object>[name, value, unit, group];
+  List<Object> get props => <Object>[name, unit, group];
 
   DefaultMeasureEntity copyWith({
     String? name,
@@ -99,7 +81,6 @@ class DefaultMeasureEntity with EquatableMixin implements BaseMeasureEntity {
   }) {
     return DefaultMeasureEntity(
       name: name ?? this.name,
-      value: value,
       unit: unit ?? this.unit,
       group: group,
     );

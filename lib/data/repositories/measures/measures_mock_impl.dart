@@ -25,7 +25,6 @@ class MeasuresMockImpl extends Measures {
         id: '',
         name: 'Arm Hole',
         group: MeasureGroup.blouse,
-        value: 20,
         createdAt: clock.now(),
       ),
       MeasureEntity(
@@ -33,7 +32,6 @@ class MeasuresMockImpl extends Measures {
         id: '',
         name: 'Waist',
         group: MeasureGroup.blouse,
-        value: 10,
         createdAt: clock.now(),
       ),
     ];

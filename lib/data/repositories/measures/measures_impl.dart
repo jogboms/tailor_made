@@ -116,7 +116,6 @@ MeasureEntity _deriveMeasureEntity(String id, String path, DynamicMap data) {
     reference: ReferenceEntity(id: id, path: path),
     id: data['id'] as String,
     name: data['name'] as String,
-    value: data['value'] as double? ?? 0.0,
     unit: data['unit'] as String,
     group: MeasureGroup.valueOf(data['group'] as String),
     createdAt: DateTime.parse(data['createdAt'] as String),
@@ -132,7 +131,6 @@ extension on MeasureEntity {
     return <String, Object>{
       'id': id,
       'name': name,
-      'value': value,
       'unit': unit,
       'group': group.displayName,
       'createdAt': createdAt.toIso8601String(),
@@ -145,7 +143,6 @@ extension on DefaultMeasureEntity {
     return <String, Object>{
       'id': id,
       'name': name,
-      'value': value,
       'unit': unit,
       'group': group.displayName,
       'createdAt': clock.now().toIso8601String(),
