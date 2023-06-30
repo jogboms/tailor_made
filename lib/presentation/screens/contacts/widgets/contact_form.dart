@@ -173,37 +173,32 @@ class _Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final Color backgroundColor = colorScheme.primary;
+
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.all(4.0),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: AppColors.primary, width: 2.0),
+        border: Border.all(color: backgroundColor, width: 2.0),
       ),
-      child: DecoratedBox(
-        decoration: BoxDecoration(shape: BoxShape.circle, color: kPrimarySwatch.shade100),
-        child: Center(
-          child: GestureDetector(
-            onTap: onTap,
-            child: SizedBox.fromSize(
-              size: const Size.square(120.0),
-              child: Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  if (imageUrl != null)
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(imageUrl!),
-                      backgroundColor: kPrimarySwatch.shade100,
-                    ),
-                  if (isLoading)
-                    const LoadingSpinner()
-                  else
-                    const AppClearButton(
-                      onPressed: null,
-                      child: Icon(Icons.add_a_photo, color: Colors.white),
-                    ),
-                ],
-              ),
+      child: GestureDetector(
+        onTap: onTap,
+        child: DecoratedBox(
+          decoration: BoxDecoration(shape: BoxShape.circle, color: backgroundColor),
+          child: SizedBox.fromSize(
+            size: const Size.square(120.0),
+            child: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                if (imageUrl != null)
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(imageUrl!),
+                    backgroundColor: backgroundColor,
+                  ),
+                if (isLoading) const LoadingSpinner() else Icon(Icons.add_a_photo, color: colorScheme.onPrimary),
+              ],
             ),
           ),
         ),

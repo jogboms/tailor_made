@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/rebloc.dart';
+import 'package:tailor_made/presentation/utils.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
 import 'widgets/measure_list_item.dart';
@@ -16,10 +16,9 @@ class MeasuresPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black87),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        systemOverlayStyle: Theme.of(context).brightness.systemOverlayStyle,
       ),
       body: ViewModelSubscriber<AppState, MeasuresViewModel>(
         converter: MeasuresViewModel.new,

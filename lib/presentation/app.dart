@@ -51,42 +51,35 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return RegistryProvider(
       registry: widget.registry,
-      child: ThemeProvider(
-        child: StoreProvider<AppState>(
-          store: widget.store,
-          child: Builder(
-            builder: (BuildContext context) => _Banner(
-              key: Key(bannerMessage),
-              visible: !environment.isProduction,
-              message: bannerMessage,
-              child: MaterialApp(
-                debugShowCheckedModeBanner: false,
-                color: Colors.white,
+      child: StoreProvider<AppState>(
+        store: widget.store,
+        child: Builder(
+          builder: (BuildContext context) => _Banner(
+            key: Key(bannerMessage),
+            visible: !environment.isProduction,
+            message: bannerMessage,
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              color: Colors.white,
+              navigatorKey: widget.navigatorKey,
+              navigatorObservers: widget.navigatorObservers ?? <NavigatorObserver>[],
+              theme: themeBuilder(ThemeData.light()),
+              darkTheme: themeBuilder(ThemeData.dark()),
+              onGenerateTitle: (BuildContext context) => context.l10n.appName,
+              localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+                L10n.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: L10n.supportedLocales,
+              builder: (_, Widget? child) => SnackBarProvider(
                 navigatorKey: widget.navigatorKey,
-                navigatorObservers: widget.navigatorObservers ?? <NavigatorObserver>[],
-                theme: themeBuilder(ThemeData.light()),
-                darkTheme: themeBuilder(ThemeData.dark()),
-                onGenerateTitle: (BuildContext context) => context.l10n.appName,
-                localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-                  L10n.delegate,
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                ],
-                supportedLocales: L10n.supportedLocales,
-                builder: (_, Widget? child) => SnackBarProvider(
-                  navigatorKey: widget.navigatorKey,
-                  child: Builder(
-                    builder: (BuildContext context) {
-                      ScaleUtil.initialize(context: context, size: const Size(1080, 1920));
-                      return child!;
-                    },
-                  ),
-                ),
-                onGenerateRoute: (RouteSettings settings) => _PageRoute<Object>(
-                  builder: (_) => SplashPage(isColdStart: true, isMock: environment.isMock),
-                  settings: RouteSettings(name: AppRoutes.start, arguments: settings.arguments),
-                ),
+                child: child!,
+              ),
+              onGenerateRoute: (RouteSettings settings) => _PageRoute<Object>(
+                builder: (_) => SplashPage(isColdStart: true, isMock: environment.isMock),
+                settings: RouteSettings(name: AppRoutes.start, arguments: settings.arguments),
               ),
             ),
           ),

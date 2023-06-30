@@ -30,9 +30,9 @@ class HomePage extends StatelessWidget {
           body: Stack(
             fit: StackFit.expand,
             children: <Widget>[
-              const Opacity(
-                opacity: .5,
-                child: DecoratedBox(
+              Opacity(
+                opacity: Theme.of(context).brightness == Brightness.light ? .5 : .1,
+                child: const DecoratedBox(
                   decoration: BoxDecoration(
                     image: DecorationImage(image: AppImages.pattern, fit: BoxFit.cover),
                   ),
@@ -119,14 +119,14 @@ class _Body extends StatelessWidget {
             Expanded(flex: 2, child: TopRowWidget(stats: stats)),
             Expanded(flex: 2, child: MidRowWidget(userId: account.uid, stats: stats)),
             Expanded(flex: 2, child: BottomRowWidget(stats: stats)),
-            SizedBox(height: kButtonHeight + MediaQuery.of(context).padding.bottom),
+            SizedBox(height: Theme.of(context).buttonTheme.height + MediaQuery.of(context).padding.bottom),
           ],
         ),
         CreateButton(userId: account.uid, contacts: viewModel.contacts),
         TopButtonBar(
           account: account,
           shouldSendRating: viewModel.shouldSendRating,
-          onLogout: () async {
+          onLogout: () {
             dispatch(const AuthAction.logout());
             context.registry.get<SharedCoordinator>().toSplash(isMock);
           },

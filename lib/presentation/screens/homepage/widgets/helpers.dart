@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/presentation/theme.dart';
 
 class TMListTile extends StatelessWidget {
   const TMListTile({
@@ -61,7 +60,7 @@ class TMGridTile extends StatelessWidget {
 }
 
 class _CircleIcon extends StatelessWidget {
-  const _CircleIcon({required this.icon, this.color = AppColors.accent, this.small = false});
+  const _CircleIcon({required this.icon, required this.color, this.small = false});
 
   final IconData icon;
   final Color color;
@@ -75,7 +74,11 @@ class _CircleIcon extends StatelessWidget {
         child: CircleAvatar(
           backgroundColor: color,
           radius: small == true ? 14.0 : 20.0,
-          child: Icon(icon, size: small == true ? 14.0 : 20.0, color: Colors.white),
+          child: Icon(
+            icon,
+            size: small == true ? 14.0 : 20.0,
+            color: Colors.white,
+          ),
         ),
       ),
     );
@@ -96,7 +99,7 @@ class _TextTile extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(title, style: TextStyle(fontSize: small == true ? 15.0 : 16.0)),
-        if (subTitle != null) Text(subTitle!, style: ThemeProvider.of(context).small),
+        if (subTitle != null) Text(subTitle!, style: Theme.of(context).textTheme.bodySmall),
       ],
     );
   }

@@ -8,14 +8,6 @@ class ImageUtils {
 
   final String path;
 
-  Future<File> compress({int quality = 90, int percentage = 75}) {
-    return FlutterNativeImage.compressImage(
-      path,
-      quality: quality,
-      percentage: percentage,
-    );
-  }
-
   Future<File> resize({int width = 120}) async {
     final ImageProperties props = await FlutterNativeImage.getImageProperties(path);
     return FlutterNativeImage.compressImage(

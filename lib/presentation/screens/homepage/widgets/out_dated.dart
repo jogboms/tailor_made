@@ -9,13 +9,16 @@ class OutDatedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle textTheme = ThemeProvider.of(context).subhead1;
+    final ThemeData theme = Theme.of(context);
+    final TextStyle textTheme = theme.textTheme.bodyLarge!;
+    final ColorScheme colorScheme = theme.colorScheme;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SpinKitFadingCube(color: Colors.grey.shade300),
+          SpinKitFadingCube(color: colorScheme.outlineVariant),
           const SizedBox(height: 48.0),
           Text(
             'OUT OF DATE',
@@ -27,14 +30,14 @@ class OutDatedPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 64.0),
             child: Text(
               'It appears you are running an outdated version of the app.\n If this is not the case, please contact an Administrator.',
-              style: textTheme.copyWith(color: Colors.grey.shade700),
+              style: textTheme.copyWith(color: colorScheme.outline),
               textAlign: TextAlign.center,
             ),
           ),
           const SizedBox(height: 32.0),
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
-              backgroundColor: kAccentColor,
+              backgroundColor: colorScheme.secondary,
               shape: const StadiumBorder(),
             ),
             onPressed: onUpdate,

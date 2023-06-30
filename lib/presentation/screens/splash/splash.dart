@@ -12,7 +12,7 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeData theme = Theme.of(context);
 
     return AppStatusBar(
       child: Scaffold(
@@ -35,14 +35,14 @@ class SplashPage extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     context.l10n.appName,
-                    style: theme.display2Semi.copyWith(color: kTextBaseColor.withOpacity(.6)),
+                    style: theme.textTheme.headlineSmall?.copyWith(fontWeight: AppFontWeight.semibold),
                     textAlign: TextAlign.center,
                   ),
                   AppVersionBuilder(
                     valueBuilder: () => AppVersion.retrieve(isMock),
                     builder: (_, String? version, __) => Text(
                       'v$version',
-                      style: theme.small.copyWith(color: kTextBaseColor.withOpacity(.4), height: 1.5),
+                      style: theme.textTheme.bodySmall?.copyWith(height: 1.5),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -130,13 +130,7 @@ class _ContentState extends State<_Content> {
                             Text(vm.error.toString(), textAlign: TextAlign.center),
                             const SizedBox(height: 8.0),
                             ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                              ),
-                              child: Text(
-                                'RETRY',
-                                style: ThemeProvider.of(context).button.copyWith(color: kTextBaseColor),
-                              ),
+                              child: const Text('RETRY'),
                               onPressed: () => dispatch(const SettingsAction.init()),
                             ),
                           ],
@@ -151,7 +145,10 @@ class _ContentState extends State<_Content> {
                         backgroundColor: Colors.white,
                       ),
                       icon: const Image(image: AppImages.googleLogo, width: 24.0),
-                      label: Text('Continue with Google', style: ThemeProvider.of(context).bodyBold),
+                      label: Text(
+                        'Continue with Google',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: AppFontWeight.bold),
+                      ),
                       onPressed: _onLogin,
                     ),
                   );

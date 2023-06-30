@@ -11,15 +11,17 @@ class BottomRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return DecoratedBox(
-      decoration: const BoxDecoration(border: Border(bottom: AppBorderSide())),
+      decoration: BoxDecoration(border: Border(bottom: Divider.createBorderSide(context))),
       child: Row(
         children: <Widget>[
           Expanded(
             child: DecoratedBox(
-              decoration: const BoxDecoration(border: Border(right: AppBorderSide())),
+              decoration: BoxDecoration(border: Border(right: Divider.createBorderSide(context))),
               child: TMGridTile(
-                color: kPrimaryColor,
+                color: colorScheme.primary,
                 icon: Icons.content_cut,
                 title: 'Measures',
                 subTitle: 'Custom',
@@ -30,7 +32,7 @@ class BottomRowWidget extends StatelessWidget {
           Expanded(
             child: SizedBox(
               child: TMGridTile(
-                color: Colors.grey,
+                color: colorScheme.outline,
                 icon: Icons.event,
                 title: 'Tasks',
                 subTitle: '${stats.jobs.pending} Pending',

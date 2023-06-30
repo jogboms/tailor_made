@@ -10,13 +10,16 @@ class RateLimitPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle textTheme = ThemeProvider.of(context).subhead1;
+    final ThemeData theme = Theme.of(context);
+    final TextStyle textTheme = theme.textTheme.bodyLarge!;
+    final ColorScheme colorScheme = theme.colorScheme;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SpinKitFadingCube(color: Colors.grey.shade300),
+          SpinKitFadingCube(color: colorScheme.outlineVariant),
           const SizedBox(height: 48.0),
           Text(
             'USAGE POLICY',
@@ -28,14 +31,14 @@ class RateLimitPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 64.0),
             child: Text(
               'We noticed \n you really enjoy using our service. \n\n Would you mind \n paying a little token if you wish to extend beyond your usage limits?',
-              style: textTheme.copyWith(color: Colors.grey.shade700),
+              style: textTheme.copyWith(color: colorScheme.outline),
               textAlign: TextAlign.center,
             ),
           ),
           const SizedBox(height: 32.0),
           TextButton(
             style: TextButton.styleFrom(
-              foregroundColor: Colors.grey.shade500,
+              foregroundColor: colorScheme.outline,
             ),
             onPressed: onSkippedPremium,
             child: const Text('No, Skip now'),
@@ -43,7 +46,7 @@ class RateLimitPage extends StatelessWidget {
           const SizedBox(height: 8.0),
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
-              backgroundColor: kAccentColor,
+              backgroundColor: colorScheme.secondary,
               shape: const StadiumBorder(),
             ),
             onPressed: onSignUp,

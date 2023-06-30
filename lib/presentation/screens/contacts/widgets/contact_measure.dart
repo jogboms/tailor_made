@@ -29,7 +29,7 @@ class _ContactMeasureState extends State<ContactMeasure> {
         ),
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.remove_red_eye, color: kTitleBaseColor),
+            icon: const Icon(Icons.remove_red_eye),
             onPressed: () => context.registry.get<MeasuresCoordinator>().toMeasures(_measurements),
           )
         ],

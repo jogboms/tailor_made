@@ -33,7 +33,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeData theme = Theme.of(context);
 
     return Column(
       children: <Widget>[
@@ -42,10 +42,16 @@ class _PaymentGridsState extends State<PaymentGrids> {
           children: <Widget>[
             const SizedBox(width: 16.0),
             Expanded(
-              child: Text('PAYMENTS', style: theme.small.copyWith(color: Colors.black87)),
+              child: Text('PAYMENTS', style: theme.textTheme.bodySmall),
             ),
             AppClearButton(
-              child: Text('SHOW ALL', style: theme.smallBtn),
+              child: Text(
+                'SHOW ALL',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontWeight: AppFontWeight.medium,
+                  color: theme.colorScheme.secondary,
+                ),
+              ),
               onPressed: () => context.registry.get<PaymentsCoordinator>().toPayments(
                     widget.userId,
                     widget.job.payments.toList(),
@@ -117,19 +123,17 @@ class _NewGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       width: PaymentGridItem.kGridWidth,
       margin: const EdgeInsets.only(right: 8.0),
       child: Material(
         borderRadius: BorderRadius.circular(5.0),
-        color: Colors.grey[100],
+        color: colorScheme.outlineVariant,
         child: InkWell(
           onTap: onPressed,
-          child: Icon(
-            Icons.note_add,
-            size: 30.0,
-            color: kTextBaseColor.withOpacity(.35),
-          ),
+          child: const Icon(Icons.note_add),
         ),
       ),
     );

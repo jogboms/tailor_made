@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:tailor_made/presentation/theme.dart';
 
 class AppClearButton extends StatelessWidget {
@@ -6,7 +7,7 @@ class AppClearButton extends StatelessWidget {
     super.key,
     required this.child,
     required this.onPressed,
-    this.color = AppColors.primary,
+    this.color,
     this.backgroundColor,
     this.borderRadius,
     this.padding,
@@ -17,7 +18,7 @@ class AppClearButton extends StatelessWidget {
   final Widget child;
   final VoidCallback? onPressed;
   final EdgeInsets? padding;
-  final Color color;
+  final Color? color;
   final Color? backgroundColor;
   final bool useSafeArea;
   final BorderRadius? borderRadius;
@@ -25,14 +26,16 @@ class AppClearButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final num safeAreaBottom = MediaQuery.of(context).padding.bottom;
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+    final num safeAreaBottom = MediaQuery.paddingOf(context).bottom;
     final EdgeInsets localPadding = EdgeInsets.only(
       top: padding?.top ?? 16.0,
       bottom: (padding?.bottom ?? 16.0) + (useSafeArea ? safeAreaBottom : 0.0),
       left: padding?.left ?? 0.0,
       right: padding?.right ?? 0.0,
     );
-    final double height = (this.height ?? kButtonHeight) + (useSafeArea ? safeAreaBottom : 0);
+    final double height = (this.height ?? theme.buttonTheme.height) + (useSafeArea ? safeAreaBottom : 0);
 
     return CupertinoButton(
       padding: localPadding,
@@ -40,7 +43,13 @@ class AppClearButton extends StatelessWidget {
       color: backgroundColor,
       borderRadius: borderRadius ?? BorderRadius.zero,
       onPressed: onPressed,
-      child: DefaultTextStyle(style: ThemeProvider.of(context).button.copyWith(color: color), child: child),
+      child: DefaultTextStyle(
+        style: theme.textTheme.labelMedium!.copyWith(
+          fontWeight: AppFontWeight.semibold,
+          color: color ?? colorScheme.primary,
+        ),
+        child: child,
+      ),
     );
   }
 }

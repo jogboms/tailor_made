@@ -62,8 +62,6 @@ class GalleryGridItem extends StatelessWidget {
         width: size.width,
         margin: const EdgeInsets.only(right: 8.0),
         child: Material(
-          color: Colors.white,
-          elevation: 1.0,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
           child: Ink.image(
             image: NetworkImage(src),

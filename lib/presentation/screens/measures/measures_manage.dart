@@ -32,6 +32,7 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> {
             top: false,
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Container(
                     color: Theme.of(context).colorScheme.outlineVariant,

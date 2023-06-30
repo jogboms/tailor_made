@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../theme.dart';
+import 'package:tailor_made/presentation/theme.dart';
 
 class SlideDownItem extends StatefulWidget {
   const SlideDownItem({
@@ -55,7 +54,7 @@ class _SliderHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeData theme = Theme.of(context);
 
     return Material(
       elevation: isExpanded ? 1.0 : 0.0,
@@ -68,7 +67,7 @@ class _SliderHeader extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 16.0),
-                  child: Text(title, style: theme.title.copyWith(fontSize: 14.0)),
+                  child: Text(title, style: theme.textTheme.pageTitle.copyWith(fontSize: 14.0)),
                 ),
               ),
               Padding(

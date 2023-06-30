@@ -9,11 +9,13 @@ class GalleryGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Hero(
       tag: image.src,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: Colors.grey[200],
+          color: colorScheme.outlineVariant,
           image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image.src)),
         ),
         child: Material(

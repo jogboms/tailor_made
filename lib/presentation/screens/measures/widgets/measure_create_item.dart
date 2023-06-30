@@ -17,11 +17,11 @@ class MeasureCreateItem extends StatelessWidget {
         elevation: 0.0,
         automaticallyImplyLeading: false,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.white),
+          icon: const Icon(Icons.close),
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      backgroundColor: Colors.black38,
+      backgroundColor: Theme.of(context).colorScheme.scrim,
       body: MeasureDialog(
         measure: DefaultMeasureEntity(
           name: '',

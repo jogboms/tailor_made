@@ -12,13 +12,13 @@ class TopRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: const BoxDecoration(border: Border(bottom: AppBorderSide())),
+      decoration: BoxDecoration(border: Border(bottom: Divider.createBorderSide(context))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Expanded(
             child: DecoratedBox(
-              decoration: const BoxDecoration(border: Border(right: AppBorderSide())),
+              decoration: BoxDecoration(border: Border(right: Divider.createBorderSide(context))),
               child: TMGridTile(
                 icon: Icons.supervisor_account,
                 color: Colors.orangeAccent,

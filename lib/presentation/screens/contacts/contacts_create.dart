@@ -31,6 +31,8 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: CustomAppBar(
         title: const Text('Create Contact'),
@@ -44,7 +46,10 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
             converter: MeasuresViewModel.new,
             builder: (_, __, MeasuresViewModel vm) {
               return IconButton(
-                icon: Icon(Icons.content_cut, color: _contact.measurements.isEmpty ? kAccentColor : kTitleBaseColor),
+                icon: Icon(
+                  Icons.content_cut,
+                  color: _contact.measurements.isEmpty ? colorScheme.secondary : null,
+                ),
                 onPressed: () => _handleSelectMeasure(vm),
               );
             },

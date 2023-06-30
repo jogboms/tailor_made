@@ -45,7 +45,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context);
+    final ThemeData theme = Theme.of(context);
 
     final ContactEntity? contact = this.contact;
 
@@ -55,8 +55,14 @@ class _JobsCreatePageState extends JobsCreateViewModel {
               tag: contact.createdAt.toString(),
               imageUrl: contact.imageUrl,
               elevation: 1.0,
-              title: Text(contact.fullname, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.title),
-              subtitle: Text('${contact.totalJobs} Jobs', style: theme.small),
+              useSafeArea: true,
+              title: Text(
+                contact.fullname,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.pageTitle,
+              ),
+              subtitle: Text('${contact.totalJobs} Jobs', style: theme.textTheme.bodySmall),
               actions: widget.contacts.isNotEmpty
                   ? <Widget>[
                       IconButton(icon: const Icon(Icons.people), onPressed: handleSelectContact),
@@ -73,13 +79,9 @@ class _JobsCreatePageState extends JobsCreateViewModel {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    CircleAvatar(
-                      backgroundColor: Colors.grey.withOpacity(.2),
-                      radius: 50.0,
-                      child: const Icon(Icons.person_add, color: kTextBaseColor),
-                    ),
+                    const CircleAvatar(radius: 50.0, child: Icon(Icons.person_add)),
                     const SizedBox(height: 16.0),
-                    Text('SELECT A CLIENT', style: theme.small),
+                    Text('SELECT A CLIENT', style: theme.textTheme.bodySmall),
                   ],
                 ),
               ),
@@ -161,7 +163,6 @@ class _JobsCreatePageState extends JobsCreateViewModel {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: TextFormField(
         keyboardType: TextInputType.text,
-        style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
         maxLines: 6,
         decoration: const InputDecoration(
           isDense: true,
@@ -178,7 +179,6 @@ class _JobsCreatePageState extends JobsCreateViewModel {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: InputDropdown(
         valueText: DateFormat.yMMMd().format(job.dueAt),
-        valueStyle: ThemeProvider.of(context).title.copyWith(color: Colors.black),
         onPressed: () async {
           final DateTime? picked = await showDatePicker(
             context: context,
@@ -203,7 +203,6 @@ class _JobsCreatePageState extends JobsCreateViewModel {
         textInputAction: TextInputAction.next,
         keyboardType: TextInputType.text,
         textCapitalization: TextCapitalization.words,
-        style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
         decoration: const InputDecoration(isDense: true, hintText: 'Enter Style Name'),
         validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a name',
         onSaved: (String? value) => job = job.copyWith(name: value!.trim()),
@@ -218,7 +217,6 @@ class _JobsCreatePageState extends JobsCreateViewModel {
         controller: _controller,
         textInputAction: TextInputAction.next,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
         decoration: const InputDecoration(isDense: true, hintText: 'Enter Amount'),
         validator: (String? value) => (_controller.numberValue > 0) ? null : 'Please input a price',
         onSaved: (String? value) => job = job.copyWith(price: _controller.numberValue),
@@ -234,15 +232,17 @@ class _NewGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       width: _kGridWidth,
       margin: const EdgeInsets.only(right: 8.0),
       child: Material(
         borderRadius: BorderRadius.circular(5.0),
-        color: Colors.grey[100],
+        color: colorScheme.outlineVariant,
         child: InkWell(
           onTap: onPressed,
-          child: Icon(Icons.add_a_photo, size: 24.0, color: kTextBaseColor.withOpacity(.35)),
+          child: const Icon(Icons.add_a_photo),
         ),
       ),
     );
