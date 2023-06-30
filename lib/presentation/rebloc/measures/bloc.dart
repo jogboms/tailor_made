@@ -17,8 +17,8 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     MergeStream<WareContext<AppState>>(<Stream<WareContext<AppState>>>[
-      input.whereAction<UpdateMeasureAction>().switchMap(_onUpdateMeasure(measures)),
-      input.whereAction<InitMeasuresAction>().switchMap(_onInitMeasure(measures)),
+      input.whereAction<_UpdateMeasureAction>().switchMap(_onUpdateMeasure(measures)),
+      input.whereAction<_InitMeasuresAction>().switchMap(_onInitMeasure(measures)),
     ]).untilAction<OnDisposeAction>().listen((WareContext<AppState> context) => context.dispatcher(context.action));
 
     return input;
@@ -28,11 +28,11 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   AppState reducer(AppState state, Action action) {
     final MeasuresState measures = state.measures;
 
-    if (action is OnDataAction<_Union<MeasureModel>>) {
+    if (action is OnDataAction<_Union<MeasureEntity>>) {
       return state.copyWith(
         measures: measures.copyWith(
-          measures: List<MeasureModel>.from(
-            action.payload.first..sort((MeasureModel a, MeasureModel b) => a.group.compareTo(b.group)),
+          measures: List<MeasureEntity>.from(
+            action.payload.first..sort((MeasureEntity a, MeasureEntity b) => a.group.compareTo(b.group)),
           ),
           grouped: action.payload.second,
           status: StateStatus.success,
@@ -40,7 +40,7 @@ class MeasuresBloc extends SimpleBloc<AppState> {
       );
     }
 
-    if (action is ToggleMeasuresLoading || action is UpdateMeasureAction) {
+    if (action is _ToggleMeasuresLoading || action is _UpdateMeasureAction) {
       return state.copyWith(
         measures: measures.copyWith(status: StateStatus.loading),
       );
@@ -50,11 +50,11 @@ class MeasuresBloc extends SimpleBloc<AppState> {
   }
 }
 
-class _Union<T extends MeasureModel> {
+class _Union<T extends MeasureEntity> {
   const _Union(this.first, this.second);
 
   final List<T> first;
-  final Map<String, List<T>> second;
+  final Map<MeasureGroup, List<T>> second;
 
   @override
   String toString() => '_Union($first, $second)';
@@ -63,9 +63,9 @@ class _Union<T extends MeasureModel> {
 Middleware _onUpdateMeasure(Measures measures) {
   return (WareContext<AppState> context) async* {
     try {
-      final UpdateMeasureAction action = context.action as UpdateMeasureAction;
+      final _UpdateMeasureAction action = context.action as _UpdateMeasureAction;
       await measures.update(action.payload, action.userId);
-      yield context.copyWith(InitMeasuresAction(action.userId));
+      yield context.copyWith(MeasuresAction.init(action.userId));
     } catch (e) {
       yield context;
     }
@@ -74,14 +74,17 @@ Middleware _onUpdateMeasure(Measures measures) {
 
 Middleware _onInitMeasure(Measures measures) {
   return (WareContext<AppState> context) {
-    final String? userId = (context.action as InitMeasuresAction).userId;
-    return measures.fetchAll(userId).map((List<MeasureModel> measures) {
+    final String userId = (context.action as _InitMeasuresAction).userId;
+    return measures.fetchAll(userId).map((List<MeasureEntity> measures) {
       if (measures.isEmpty) {
-        return UpdateMeasureAction(createDefaultMeasures(), userId);
+        return _UpdateMeasureAction(BaseMeasureEntity.defaults, userId);
       }
 
-      return OnDataAction<_Union<MeasureModel>>(
-        _Union<MeasureModel>(measures, groupBy<MeasureModel>(measures, (MeasureModel measure) => measure.group)),
+      return OnDataAction<_Union<MeasureEntity>>(
+        _Union<MeasureEntity>(
+          measures,
+          groupBy<MeasureGroup, MeasureEntity>(measures, (MeasureEntity measure) => measure.group),
+        ),
       );
     }).map((Action action) => context.copyWith(action));
   };

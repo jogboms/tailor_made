@@ -1,12 +1,16 @@
-import 'dart:io';
-
 import '../entities.dart';
-import '../models/job.dart';
 
 abstract class Jobs {
-  Stream<List<JobModel>> fetchAll(String? userId);
+  Stream<List<JobEntity>> fetchAll(String userId);
 
-  Storage? createFile(File file, String userId);
+  Future<JobEntity> create(String userId, CreateJobData data);
 
-  Stream<JobModel> update(JobModel job, String userId);
+  Future<bool> update(
+    String userId, {
+    required ReferenceEntity reference,
+    List<ImageOperation>? images,
+    List<PaymentOperation>? payments,
+    bool? isComplete,
+    DateTime? dueAt,
+  });
 }

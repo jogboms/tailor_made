@@ -3,39 +3,27 @@ import 'package:equatable/equatable.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/rebloc.dart';
 
-// ignore: must_be_immutable
 class ContactJobViewModel extends Equatable {
-  ContactJobViewModel(AppState state)
-      : _contacts = state.contacts.contacts,
-        _jobs = state.jobs.jobs,
+  ContactJobViewModel(
+    AppState state, {
+    required this.contactID,
+    required this.jobID,
+  })  : _contacts = state.contacts.contacts ?? <ContactEntity>[],
+        _jobs = state.jobs.jobs ?? <JobEntity>[],
         account = state.account.account;
 
-  ContactModel? get selectedContact {
-    if (contactID != null) {
-      return contacts!.firstWhereOrNull((_) => _.id == contactID);
-    }
-    return null;
-  }
+  ContactEntity? get selectedContact => _contacts.firstWhereOrNull((_) => _.id == contactID);
 
-  JobModel? get selectedJob {
-    if (jobID != null) {
-      return jobs!.firstWhereOrNull((_) => _.id == jobID);
-    }
-    return null;
-  }
+  JobEntity? get selectedJob => _jobs.firstWhereOrNull((_) => _.id == jobID);
 
-  String? contactID;
-  String? jobID;
-  final AccountModel? account;
+  final String contactID;
+  final String jobID;
+  final AccountEntity? account;
 
-  final List<JobModel>? _jobs;
+  final List<JobEntity> _jobs;
 
-  List<JobModel>? get jobs => _jobs;
-
-  final List<ContactModel>? _contacts;
-
-  List<ContactModel>? get contacts => _contacts;
+  final List<ContactEntity> _contacts;
 
   @override
-  List<Object?> get props => <Object?>[account, jobs, contacts];
+  List<Object?> get props => <Object?>[account, _jobs, _contacts];
 }

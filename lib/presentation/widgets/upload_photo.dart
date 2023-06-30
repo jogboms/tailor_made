@@ -37,7 +37,7 @@ class UploadPhoto extends StatelessWidget {
               const SizedBox(height: 2.0),
               Text(
                 'Add\nPhoto',
-                style: ThemeProvider.of(context)!.button.copyWith(color: color),
+                style: ThemeProvider.of(context).button.copyWith(color: color),
                 textAlign: TextAlign.center,
               ),
             ],

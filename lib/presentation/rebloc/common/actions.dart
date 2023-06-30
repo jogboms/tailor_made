@@ -7,7 +7,6 @@ part 'actions.freezed.dart';
 class CommonAction with _$CommonAction, AppAction {
   const factory CommonAction.init() = OnInitAction;
   const factory CommonAction.dispose() = OnDisposeAction;
-  const factory CommonAction.noop() = VoidAction;
 }
 
 @freezed

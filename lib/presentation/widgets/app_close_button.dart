@@ -13,7 +13,7 @@ class AppCloseButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppClearButton(
       onPressed: onPop ?? () => Navigator.maybePop(context),
-      child: Icon(Icons.close, color: color ?? ThemeProvider.of(context)!.appBarTitle.color),
+      child: Icon(Icons.close, color: color ?? ThemeProvider.of(context).appBarTitle.color),
     );
   }
 }

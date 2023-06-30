@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
@@ -6,7 +7,7 @@ import 'package:timeago/timeago.dart' as time_ago;
 class TaskListItem extends StatelessWidget {
   const TaskListItem({super.key, required this.task});
 
-  final JobModel task;
+  final JobEntity task;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class TaskListItem extends StatelessWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(task.name, style: ThemeProvider.of(context)!.subhead1Bold),
+          Text(task.name, style: ThemeProvider.of(context).subhead1Bold),
           const SizedBox(height: 2.0),
           Row(
             children: <Widget>[
@@ -46,7 +47,7 @@ class TaskListItem extends StatelessWidget {
   }
 
   Color get _iconColor {
-    final DateTime now = DateTime.now();
+    final DateTime now = clock.now();
     if (now.isAfter(task.dueAt)) {
       return Colors.redAccent.shade400;
     }

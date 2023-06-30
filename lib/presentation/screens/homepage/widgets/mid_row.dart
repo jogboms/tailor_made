@@ -7,7 +7,7 @@ import 'helpers.dart';
 class MidRowWidget extends StatelessWidget {
   const MidRowWidget({super.key, required this.userId, required this.stats});
 
-  final StatsModel? stats;
+  final StatsEntity stats;
   final String userId;
 
   @override
@@ -23,7 +23,7 @@ class MidRowWidget extends StatelessWidget {
                 color: Colors.redAccent,
                 icon: Icons.attach_money,
                 title: 'Payments',
-                subTitle: '${AppMoney(stats!.payments.total).formatted} Total',
+                subTitle: '${AppMoney(stats.payments.total).formatted} Total',
                 onPressed: () => context.registry.get<PaymentsCoordinator>().toPayments(userId),
               ),
             ),
@@ -34,7 +34,7 @@ class MidRowWidget extends StatelessWidget {
                 color: Colors.blueAccent,
                 icon: Icons.image,
                 title: 'Gallery',
-                subTitle: '${stats!.gallery.total} Photos',
+                subTitle: '${stats.gallery.total} Photos',
                 onPressed: () => context.registry.get<GalleryCoordinator>().toGallery(userId),
               ),
             ),

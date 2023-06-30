@@ -1,18 +1,23 @@
 import '../entities.dart';
-import '../models/account.dart';
 
 abstract class Accounts {
   Future<void> signInWithGoogle();
 
-  Stream<User?> get onAuthStateChanged;
+  Stream<String?> get onAuthStateChanged;
 
   Future<void>? signOut();
 
-  Future<void> readNotice(AccountModel account);
+  Future<void> signUp(AccountEntity account);
 
-  Future<void> sendRating(AccountModel account);
+  Future<AccountEntity?> getAccount(String userId);
 
-  Future<void> signUp(AccountModel account);
-
-  Stream<AccountModel> getAccount(String? userId);
+  Future<bool> updateAccount(
+    String userId, {
+    required String id,
+    required String path,
+    String? storeName,
+    bool? hasSendRating,
+    int? rating,
+    bool? hasReadNotice,
+  });
 }

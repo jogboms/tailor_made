@@ -36,13 +36,13 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    widget.store.dispatch(const OnInitAction());
+    widget.store.dispatch(const CommonAction.init());
   }
 
   @override
   void dispose() {
     widget.store
-      ..dispatch(const OnDisposeAction())
+      ..dispatch(const CommonAction.dispose())
       ..dispose();
     super.dispose();
   }

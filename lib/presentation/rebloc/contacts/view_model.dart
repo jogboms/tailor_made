@@ -3,56 +3,43 @@ import 'package:equatable/equatable.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/rebloc.dart';
 
-// ignore: must_be_immutable
 class ContactsViewModel extends Equatable {
-  ContactsViewModel(AppState state)
-      : _model = state.contacts.contacts,
-        _searchResults = state.contacts.searchResults,
+  ContactsViewModel(AppState state, {this.contactID})
+      : _model = state.contacts.contacts ?? <ContactEntity>[],
+        _searchResults = state.contacts.searchResults ?? <ContactEntity>[],
         isSearching = state.contacts.isSearching,
         hasSortFn = state.contacts.hasSortFn,
-        measures = state.measures.grouped,
+        measuresGrouped = state.measures.grouped ?? <MeasureGroup, List<MeasureEntity>>{},
         userId = state.account.account!.uid,
-        _jobs = state.jobs.jobs,
+        _jobs = state.jobs.jobs ?? <JobEntity>[],
         sortFn = state.contacts.sortFn,
         isLoading = state.contacts.status == StateStatus.loading,
         hasError = state.contacts.status == StateStatus.failure,
         error = state.contacts.error;
 
-  List<ContactModel>? get contacts => isSearching ? searchResults : model;
+  List<ContactEntity> get contacts => isSearching ? searchResults : model;
 
-  Map<String, List<MeasureModel>>? get measuresGrouped => measures;
+  final Map<MeasureGroup, List<MeasureEntity>> measuresGrouped;
 
-  ContactModel? get selected {
-    if (contactID != null) {
-      return model!.firstWhereOrNull((_) => _.id == contactID);
-    }
-    return null;
-  }
+  ContactEntity? get selected => model.firstWhereOrNull((_) => _.id == contactID);
 
-  List<JobModel> get selectedJobs {
-    if (selected != null) {
-      return jobs!.where((JobModel job) => job.contactID == selected!.id).toList();
-    }
-    return <JobModel>[];
-  }
+  List<JobEntity> get selectedJobs => jobs.where((JobEntity job) => job.contactID == selected?.id).toList();
 
-  String? contactID;
+  final String? contactID;
 
   final String userId;
 
-  final List<ContactModel>? _searchResults;
+  final List<ContactEntity> _searchResults;
 
-  List<ContactModel>? get searchResults => _searchResults;
+  List<ContactEntity> get searchResults => _searchResults;
 
-  final Map<String, List<MeasureModel>>? measures;
+  final List<JobEntity> _jobs;
 
-  final List<JobModel>? _jobs;
+  List<JobEntity> get jobs => _jobs;
 
-  List<JobModel>? get jobs => _jobs;
+  final List<ContactEntity> _model;
 
-  final List<ContactModel>? _model;
-
-  List<ContactModel>? get model => _model;
+  List<ContactEntity> get model => _model;
 
   final bool hasSortFn;
   final ContactsSortType sortFn;

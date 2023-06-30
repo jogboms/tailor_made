@@ -7,7 +7,7 @@ import 'helpers.dart';
 class TopRowWidget extends StatelessWidget {
   const TopRowWidget({super.key, required this.stats});
 
-  final StatsModel? stats;
+  final StatsEntity stats;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class TopRowWidget extends StatelessWidget {
                 icon: Icons.supervisor_account,
                 color: Colors.orangeAccent,
                 title: 'Contacts',
-                subTitle: '${stats!.contacts.total} Contacts',
+                subTitle: '${stats.contacts.total} Contacts',
                 onPressed: () => context.registry.get<ContactsCoordinator>().toContacts(),
               ),
             ),
@@ -34,7 +34,7 @@ class TopRowWidget extends StatelessWidget {
                 icon: Icons.work,
                 color: Colors.greenAccent.shade400,
                 title: 'Jobs',
-                subTitle: '${stats!.jobs.total} Total',
+                subTitle: '${stats.jobs.total} Total',
                 onPressed: () => context.registry.get<JobsCoordinator>().toJobs(),
               ),
             ),

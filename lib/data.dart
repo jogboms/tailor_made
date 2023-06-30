@@ -5,6 +5,8 @@ export 'data/repositories/contacts/contacts_impl.dart';
 export 'data/repositories/contacts/contacts_mock_impl.dart';
 export 'data/repositories/gallery/gallery_impl.dart';
 export 'data/repositories/gallery/gallery_mock_impl.dart';
+export 'data/repositories/image_storage/image_storage_impl.dart';
+export 'data/repositories/image_storage/image_storage_mock_impl.dart';
 export 'data/repositories/jobs/jobs_impl.dart';
 export 'data/repositories/jobs/jobs_mock_impl.dart';
 export 'data/repositories/measures/measures_impl.dart';

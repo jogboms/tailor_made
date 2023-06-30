@@ -13,12 +13,12 @@ class MeasureSlideBlock extends StatefulWidget {
   const MeasureSlideBlock({
     super.key,
     required this.measures,
-    required this.title,
+    required this.groupName,
     required this.userId,
   });
 
-  final List<MeasureModel> measures;
-  final String title;
+  final List<MeasureEntity> measures;
+  final MeasureGroup groupName;
   final String userId;
 
   @override
@@ -29,10 +29,10 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
   @override
   Widget build(BuildContext context) {
     return SlideDownItem(
-      title: widget.title,
+      title: widget.groupName.displayName,
       body: Column(
         children: <Widget>[
-          for (MeasureModel measure in widget.measures) MeasuresSlideBlockItem(measure: measure),
+          for (MeasureEntity measure in widget.measures) MeasuresSlideBlockItem(measure: measure),
         ],
       ),
       onLongPress: () async {
@@ -76,9 +76,11 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
   }
 
   void _onTapEditBlock() {
-    context.registry
-        .get<MeasuresCoordinator>()
-        .toCreateMeasures(widget.title, widget.measures.first.unit, widget.measures);
+    context.registry.get<MeasuresCoordinator>().toCreateMeasures(
+          groupName: widget.groupName,
+          unitValue: widget.measures.first.unit,
+          measures: widget.measures,
+        );
   }
 
   void _onTapDeleteBlock() async {
@@ -92,7 +94,7 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
     snackBar.loading();
     try {
       // TODO(Jogboms): move this out of here
-      await registry.get<Measures>().delete(widget.measures, widget.userId);
+      await registry.get<Measures>().deleteGroup(widget.measures, widget.userId);
       snackBar.hide();
     } catch (e) {
       snackBar.error(e.toString());

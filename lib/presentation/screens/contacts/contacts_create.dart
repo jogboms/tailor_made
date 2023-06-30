@@ -4,6 +4,7 @@ import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:uuid/uuid.dart';
 
 import 'widgets/contact_form.dart';
 
@@ -18,15 +19,15 @@ class ContactsCreatePage extends StatefulWidget {
 
 class _ContactsCreatePageState extends State<ContactsCreatePage> {
   final GlobalKey<ContactFormState> _formKey = GlobalKey<ContactFormState>();
-  late ContactModel contact;
+  late final String id = const Uuid().v4();
+  late CreateContactData _contact = const CreateContactData(
+    fullname: '',
+    phone: '',
+    location: '',
+    imageUrl: null,
+  );
 
   final FlutterContactPicker _contactPicker = FlutterContactPicker();
-
-  @override
-  void initState() {
-    super.initState();
-    contact = ContactModel.fromDefaults(userID: widget.userId);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
             converter: MeasuresViewModel.new,
             builder: (_, __, MeasuresViewModel vm) {
               return IconButton(
-                icon: Icon(Icons.content_cut, color: contact.measurements.isEmpty ? kAccentColor : kTitleBaseColor),
+                icon: Icon(Icons.content_cut, color: _contact.measurements.isEmpty ? kAccentColor : kTitleBaseColor),
                 onPressed: () => _handleSelectMeasure(vm),
               );
             },
@@ -52,7 +53,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
       ),
       body: ContactForm(
         key: _formKey,
-        contact: contact,
+        contact: _contact,
         onHandleSubmit: _handleSubmit,
         userId: widget.userId,
       ),
@@ -62,28 +63,30 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
   void _handleSelectContact() async {
     final Contact? selectedContact = await _contactPicker.selectContact();
     final String? fullName = selectedContact?.fullName;
+    final String? phoneNumber = selectedContact?.phoneNumbers?.firstOrNull;
 
-    if (selectedContact == null || fullName == null) {
+    if (selectedContact == null || fullName == null || phoneNumber == null) {
       return;
     }
 
     _formKey.currentState?.updateContact(
-      contact.copyWith(
+      _contact.copyWith(
         fullname: fullName,
-        phone: selectedContact.phoneNumbers?.first,
+        phone: phoneNumber,
       ),
     );
   }
 
-  void _handleSubmit(ContactModel contact) async {
+  void _handleSubmit(CreateContactData contact) async {
     final AppSnackBar snackBar = AppSnackBar.of(context);
     if (contact.measurements.isEmpty) {
       snackBar.info(AppStrings.leavingEmptyMeasures);
       return;
     }
 
-    final Contacts contacts = context.registry.get();
-    final ContactsCoordinator contactsCoordinator = context.registry.get();
+    final Registry registry = context.registry;
+    final Contacts contacts = registry.get();
+    final ContactsCoordinator contactsCoordinator = registry.get();
     snackBar.loading();
 
     try {
@@ -95,11 +98,10 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
       );
 
       // TODO(Jogboms): move this out of here
-      contacts.update(contact, widget.userId).listen((ContactModel snap) async {
-        snackBar.success('Successfully Added');
+      final ContactEntity snap = await contacts.create(widget.userId, contact);
+      snackBar.success('Successfully Added');
 
-        contactsCoordinator.toContact(snap);
-      });
+      contactsCoordinator.toContact(snap, replace: true);
     } catch (error, stackTrace) {
       AppLog.e(error, stackTrace);
       snackBar.error(error.toString());
@@ -107,16 +109,16 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
   }
 
   void _handleSelectMeasure(MeasuresViewModel vm) async {
-    final ContactModel? result = await context.registry.get<ContactsCoordinator>().toContactMeasure(
-          contact,
-          vm.grouped ?? <String, List<MeasureModel>>{},
+    final Map<String, double>? result = await context.registry.get<ContactsCoordinator>().toContactMeasure(
+          contact: null,
+          grouped: vm.grouped,
         );
     if (result == null) {
       return;
     }
 
     setState(() {
-      contact = contact.copyWith(measurements: result.measurements);
+      _contact = _contact.copyWith(measurements: result);
     });
   }
 }

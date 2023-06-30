@@ -34,27 +34,24 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: Material(
         color: backgroundColor,
         elevation: elevation,
-        child: SafeArea(
-          bottom: false,
-          child: Row(
-            children: <Widget>[
-              _Leading(iconColor: iconColor, tag: tag, imageUrl: imageUrl),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    if (title != null) title!,
-                    if (subtitle != null) ...<Widget>[
-                      const SizedBox(height: 2.0),
-                      subtitle!,
-                    ],
+        child: Row(
+          children: <Widget>[
+            _Leading(iconColor: iconColor, tag: tag, imageUrl: imageUrl),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  if (title != null) title!,
+                  if (subtitle != null) ...<Widget>[
+                    const SizedBox(height: 2.0),
+                    subtitle!,
                   ],
-                ),
+                ],
               ),
-              if (actions != null) ...actions!
-            ],
-          ),
+            ),
+            if (actions != null) ...actions!
+          ],
         ),
       ),
     );
@@ -84,7 +81,7 @@ class _Leading extends StatelessWidget {
         children: <Widget>[
           Icon(
             Icons.arrow_back,
-            color: iconColor ?? ThemeProvider.of(context)!.appBarTitle.color,
+            color: iconColor ?? ThemeProvider.of(context).appBarTitle.color,
           ),
           const SizedBox(width: 4.0),
           Hero(tag: tag, child: AppCircleAvatar(imageUrl: imageUrl)),

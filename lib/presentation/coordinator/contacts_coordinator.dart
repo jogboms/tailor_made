@@ -14,26 +14,31 @@ import 'coordinator_base.dart';
 class ContactsCoordinator extends CoordinatorBase {
   const ContactsCoordinator(super.navigatorKey);
 
-  void toContact(ContactModel contact, {bool replace = false}) {
+  void toContact(ContactEntity contact, {bool replace = false}) {
     replace
         ? navigator?.pushReplacement<dynamic, dynamic>(RouteTransitions.slideIn(ContactPage(contact: contact)))
         : navigator?.push<void>(RouteTransitions.slideIn(ContactPage(contact: contact)));
   }
 
-  void toContactEdit(String userId, ContactModel contact) {
+  void toContactEdit(String userId, ContactEntity contact) {
     navigator?.push<void>(RouteTransitions.slideIn(ContactsEditPage(userId: userId, contact: contact)));
   }
 
-  Future<ContactModel?>? toContactMeasure(ContactModel contact, Map<String, List<MeasureModel>> grouped) {
-    return navigator?.push<ContactModel>(RouteTransitions.slideIn(ContactMeasure(contact: contact, grouped: grouped)));
+  Future<Map<String, double>?>? toContactMeasure({
+    required ContactEntity? contact,
+    required Map<MeasureGroup, List<MeasureEntity>> grouped,
+  }) {
+    return navigator?.push<Map<String, double>>(
+      RouteTransitions.slideIn(ContactMeasure(contact: contact, grouped: grouped)),
+    );
   }
 
   void toContacts() {
     navigator?.push<void>(RouteTransitions.slideIn(const ContactsPage()));
   }
 
-  Future<ContactModel?>? toContactsList(List<ContactModel>? contacts) {
-    return navigator?.push<ContactModel>(RouteTransitions.fadeIn(ContactLists(contacts: contacts)));
+  Future<ContactEntity?>? toContactsList(List<ContactEntity> contacts) {
+    return navigator?.push<ContactEntity>(RouteTransitions.fadeIn(ContactLists(contacts: contacts)));
   }
 
   void toCreateContact(String userId) {

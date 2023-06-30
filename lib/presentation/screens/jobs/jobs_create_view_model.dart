@@ -1,29 +1,39 @@
-import 'dart:io';
-
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:uuid/uuid.dart';
 
 import 'jobs_create.dart';
+import 'widgets/image_form_value.dart';
 
 abstract class JobsCreateViewModel extends State<JobsCreatePage> {
-  List<FireImage> fireImages = <FireImage>[];
-  late JobModel job;
-  late ContactModel? contact;
+  @protected
+  List<ImageFormValue> images = <ImageFormValue>[];
+  @protected
+  late CreateJobData job;
+  @protected
+  late ContactEntity? contact;
+  @protected
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  @protected
   bool autovalidate = false;
 
   @override
   void initState() {
     super.initState();
     contact = widget.contact;
-    job = JobModel.fromDefaults(
+    job = CreateJobData(
+      id: const Uuid().v4(),
       userID: widget.userId,
       contactID: contact?.id,
       measurements: contact?.measurements ?? <String, double>{},
+      price: 0.0,
+      createdAt: clock.now(),
+      dueAt: clock.now().add(const Duration(days: 7)),
     );
   }
 
@@ -37,33 +47,34 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
     if (imageFile == null) {
       return;
     }
-    // TODO(Jogboms): move this out of here
-    final Storage ref = registry.get<Jobs>().createFile(File(imageFile.path), widget.userId)!;
 
-    setState(() => fireImages.add(FireImage()..ref = ref));
     try {
-      final String imageUrl = await ref.getDownloadURL();
-      setState(() {
-        fireImages.last
-          ..isLoading = false
-          ..isSucess = true
-          ..image = ImageModel(
-            userID: widget.userId,
-            contactID: contact!.id,
-            jobID: job.id,
-            src: imageUrl,
-            path: ref.path,
-            id: const Uuid().v4(),
-            createdAt: DateTime.now(),
+      // TODO(Jogboms): move this out of here
+      final ImageFileReference ref = await registry.get<ImageStorage>().createReferenceImage(
+            path: imageFile.path,
+            userId: widget.userId,
           );
+
+      setState(() {
+        images.add(
+          ImageCreateFormValue(
+            CreateImageData(
+              userID: widget.userId,
+              contactID: contact!.id,
+              jobID: job.id,
+              src: ref.src,
+              path: ref.path,
+            ),
+          ),
+        );
       });
-    } catch (e) {
-      setState(() => fireImages.last.isLoading = false);
+    } catch (error, stackTrace) {
+      AppLog.e(error, stackTrace);
     }
   }
 
-  void onSelectContact() async {
-    final ContactModel? selectedContact =
+  void handleSelectContact() async {
+    final ContactEntity? selectedContact =
         await context.registry.get<ContactsCoordinator>().toContactsList(widget.contacts);
     if (selectedContact != null) {
       setState(() {
@@ -72,6 +83,19 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
           contactID: contact?.id,
           measurements: contact?.measurements ?? <String, double>{},
         );
+      });
+    }
+  }
+
+  void handleDeleteImageItem(ImageFormValue value) async {
+    final ImageFileReference reference = switch (value) {
+      ImageCreateFormValue(:final CreateImageData data) => (src: data.src, path: data.path),
+      ImageModifyFormValue(:final ImageEntity data) => (src: data.src, path: data.path),
+    };
+    await context.registry.get<ImageStorage>().delete(reference: reference, userId: widget.userId);
+    if (mounted) {
+      setState(() {
+        images.remove(value);
       });
     }
   }
@@ -93,28 +117,26 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
 
       job = job.copyWith(
         pendingPayment: job.price,
-        images: List<ImageModel>.from(
-          fireImages.where((FireImage img) => img.image != null).map<ImageModel?>((FireImage img) => img.image),
-        ),
+        images: images
+            .map(
+              (ImageFormValue input) => switch (input) {
+                ImageCreateFormValue() => CreateImageOperation(data: input.data),
+                ImageModifyFormValue() => ModifyImageOperation(data: input.data),
+              },
+            )
+            .toList(growable: false),
         contactID: contact!.id,
       );
 
       try {
         // TODO(Jogboms): move this out of here
-        context.registry.get<Jobs>().update(job, widget.userId).listen((JobModel snap) {
-          snackBar.hide();
-          context.registry.get<JobsCoordinator>().toJob(snap);
-        });
+        final Registry registry = context.registry;
+        final JobEntity result = await registry.get<Jobs>().create(widget.userId, job);
+        snackBar.hide();
+        registry.get<JobsCoordinator>().toJob(result, replace: true);
       } catch (e) {
         snackBar.error(e.toString());
       }
     }
   }
-}
-
-class FireImage {
-  late Storage ref;
-  ImageModel? image;
-  bool isLoading = true;
-  bool isSucess = false;
 }

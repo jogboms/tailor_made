@@ -1,6 +1,8 @@
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -11,25 +13,23 @@ import 'widgets/payment_grids.dart';
 class JobPage extends StatefulWidget {
   const JobPage({super.key, required this.job});
 
-  final JobModel? job;
+  final JobEntity job;
 
   @override
   State<JobPage> createState() => _JobPageState();
 }
 
 class _JobPageState extends State<JobPage> {
-  late JobModel? job = widget.job;
-
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider? theme = ThemeProvider.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     return ViewModelSubscriber<AppState, JobsViewModel>(
-      converter: (AppState store) => JobsViewModel(store)..jobID = widget.job!.id,
+      converter: (AppState store) => JobsViewModel(store, jobID: widget.job.id),
       builder: (BuildContext context, _, JobsViewModel vm) {
         // in the case of newly created jobs
-        job = vm.selected ?? widget.job;
-        final ContactModel? contact = vm.selectedContact;
+        final JobEntity job = vm.selected ?? widget.job;
+        final ContactEntity? contact = vm.selectedContact;
         if (vm.isLoading || contact == null) {
           return const Center(child: LoadingSpinner());
         }
@@ -62,10 +62,10 @@ class _JobPageState extends State<JobPage> {
                       children: <Widget>[
                         const SizedBox(width: 16.0),
                         Expanded(
-                          child: Text('DUE DATE', style: theme!.small.copyWith(color: Colors.black87)),
+                          child: Text('DUE DATE', style: theme.small.copyWith(color: Colors.black87)),
                         ),
                         AppClearButton(
-                          onPressed: job!.isComplete ? null : _onSaveDate,
+                          onPressed: job.isComplete ? null : () => _onSaveDate(job),
                           child: Text('EXTEND DATE', style: theme.smallBtn),
                         ),
                         const SizedBox(width: 16.0),
@@ -74,7 +74,7 @@ class _JobPageState extends State<JobPage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 16.0),
                       child: Text(
-                        AppDate(job!.dueAt, day: 'EEEE', month: 'MMMM', year: 'yyyy').formatted!,
+                        AppDate(job.dueAt, day: 'EEEE', month: 'MMMM', year: 'yyyy').formatted!,
                         style: theme.body3Medium,
                       ),
                     ),
@@ -85,7 +85,7 @@ class _JobPageState extends State<JobPage> {
                     const SizedBox(height: 32.0),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(job!.notes, style: theme.body3Light, textAlign: TextAlign.justify),
+                      child: Text(job.notes, style: theme.body3Light, textAlign: TextAlign.justify),
                     ),
                     const SizedBox(height: 48.0),
                   ],
@@ -95,18 +95,19 @@ class _JobPageState extends State<JobPage> {
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: FloatingActionButton.extended(
-            icon: Icon(job!.isComplete ? Icons.undo : Icons.check),
-            backgroundColor: job!.isComplete ? Colors.white : kAccentColor,
-            foregroundColor: job!.isComplete ? kAccentColor : Colors.white,
-            label: Text(job!.isComplete ? 'Undo Completed' : 'Mark Completed'),
-            onPressed: onTapComplete,
+            icon: Icon(job.isComplete ? Icons.undo : Icons.check),
+            backgroundColor: job.isComplete ? Colors.white : kAccentColor,
+            foregroundColor: job.isComplete ? kAccentColor : Colors.white,
+            label: Text(job.isComplete ? 'Undo Completed' : 'Mark Completed'),
+            onPressed: () => _onTapComplete(job),
           ),
         );
       },
     );
   }
 
-  void onTapComplete() async {
+  void _onTapComplete(JobEntity job) async {
+    final Registry registry = context.registry;
     final AppSnackBar snackBar = AppSnackBar.of(context);
     final bool? choice = await showChoiceDialog(context: context, message: 'Are you sure?');
     if (choice == null || choice == false) {
@@ -116,24 +117,30 @@ class _JobPageState extends State<JobPage> {
     snackBar.loading();
 
     try {
-      await job!.reference?.updateData(<String, bool>{'isComplete': !job!.isComplete});
+      await registry.get<Jobs>().update(
+            job.userID,
+            reference: job.reference,
+            isComplete: !job.isComplete,
+          );
       snackBar.hide();
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLog.e(e, stackTrace);
       snackBar.error(e.toString());
     }
   }
 
-  void _onSaveDate() async {
+  void _onSaveDate(JobEntity job) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: job!.dueAt,
-      firstDate: job!.dueAt.isAfter(DateTime.now()) ? DateTime.now() : job!.dueAt,
+      initialDate: job.dueAt,
+      firstDate: job.dueAt.isAfter(clock.now()) ? clock.now() : job.dueAt,
       lastDate: DateTime(2101),
     );
-    if (picked == null || picked == job!.dueAt) {
+    if (picked == null || picked == job.dueAt) {
       return;
     }
     if (context.mounted) {
+      final Registry registry = context.registry;
       final AppSnackBar snackBar = AppSnackBar.of(context);
       final bool? choice = await showChoiceDialog(context: context, message: 'Are you sure?');
       if (choice == null || choice == false) {
@@ -143,9 +150,14 @@ class _JobPageState extends State<JobPage> {
       snackBar.loading();
 
       try {
-        await job!.reference?.updateData(<String, String>{'dueAt': picked.toString()});
+        await registry.get<Jobs>().update(
+              job.userID,
+              reference: job.reference,
+              dueAt: picked,
+            );
         snackBar.hide();
-      } catch (e) {
+      } catch (e, stackTrace) {
+        AppLog.e(e, stackTrace);
         snackBar.error(e.toString());
       }
     }
@@ -155,12 +167,12 @@ class _JobPageState extends State<JobPage> {
 class _Header extends StatelessWidget {
   const _Header({required this.job});
 
-  final JobModel? job;
+  final JobEntity job;
 
   @override
   Widget build(BuildContext context) {
     final Color textColor = Colors.grey.shade800;
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -168,7 +180,7 @@ class _Header extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Text(
-            job!.name,
+            job.name,
             style: theme.title.copyWith(color: textColor),
             textAlign: TextAlign.center,
             maxLines: 2,
@@ -177,7 +189,7 @@ class _Header extends StatelessWidget {
         ),
         const SizedBox(height: 12.0),
         Text(
-          AppMoney(job!.price).formatted,
+          AppMoney(job.price).formatted,
           style: theme.display2Semi.copyWith(color: textColor, letterSpacing: 1.5),
           textAlign: TextAlign.center,
         ),
@@ -204,15 +216,15 @@ class _Header extends StatelessWidget {
 class _AvatarAppBar extends StatelessWidget {
   const _AvatarAppBar({required this.job, required this.contact});
 
-  final JobModel? job;
-  final ContactModel contact;
+  final JobEntity job;
+  final ContactEntity contact;
 
   @override
   Widget build(BuildContext context) {
     final Color textColor = Colors.grey.shade800;
 
-    final String date = AppDate(job!.createdAt).formatted!;
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final String date = AppDate(job.createdAt).formatted!;
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     return AvatarAppBar(
       tag: contact.createdAt.toString(),
@@ -234,10 +246,10 @@ class _AvatarAppBar extends StatelessWidget {
       actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.content_cut),
-          onPressed: () => context.registry.get<MeasuresCoordinator>().toMeasures(job!.measurements),
+          onPressed: () => context.registry.get<MeasuresCoordinator>().toMeasures(job.measurements),
         ),
         IconButton(
-          icon: Icon(Icons.check, color: job!.isComplete ? kPrimaryColor : kTextBaseColor),
+          icon: Icon(Icons.check, color: job.isComplete ? kPrimaryColor : kTextBaseColor),
           onPressed: null,
         ),
       ],
@@ -248,11 +260,11 @@ class _AvatarAppBar extends StatelessWidget {
 class _PaidBox extends StatelessWidget {
   const _PaidBox({required this.job});
 
-  final JobModel? job;
+  final JobEntity job;
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     return Expanded(
       child: Container(
@@ -266,7 +278,7 @@ class _PaidBox extends StatelessWidget {
                 Icon(Icons.arrow_drop_up, color: Colors.green.shade600, size: 16.0),
                 const SizedBox(width: 4.0),
                 Text(
-                  AppMoney(job!.completedPayment).formatted,
+                  AppMoney(job.completedPayment).formatted,
                   style: theme.title.copyWith(letterSpacing: 1.25),
                   textAlign: TextAlign.center,
                 ),
@@ -282,11 +294,11 @@ class _PaidBox extends StatelessWidget {
 class _UnpaidBox extends StatelessWidget {
   const _UnpaidBox({required this.job});
 
-  final JobModel? job;
+  final JobEntity job;
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeProvider theme = ThemeProvider.of(context);
     return Expanded(
       child: Column(
         children: <Widget>[
@@ -297,7 +309,7 @@ class _UnpaidBox extends StatelessWidget {
               Icon(Icons.arrow_drop_down, color: Colors.red.shade600, size: 16.0),
               const SizedBox(width: 4.0),
               Text(
-                AppMoney(job!.pendingPayment).formatted,
+                AppMoney(job.pendingPayment).formatted,
                 style: theme.title.copyWith(letterSpacing: 1.25),
                 textAlign: TextAlign.center,
               ),

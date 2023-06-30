@@ -11,7 +11,7 @@ class JobsFilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeProvider theme = ThemeProvider.of(context);
     final TextStyle optionTheme = theme.body1;
     return SizedBox.fromSize(
       size: const Size.square(48.0),

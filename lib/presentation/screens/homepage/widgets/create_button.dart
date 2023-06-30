@@ -9,7 +9,7 @@ enum _CreateOptions { contacts, jobs }
 class CreateButton extends StatefulWidget {
   const CreateButton({super.key, required this.userId, required this.contacts});
 
-  final List<ContactModel>? contacts;
+  final List<ContactEntity> contacts;
   final String userId;
 
   @override
@@ -17,17 +17,17 @@ class CreateButton extends StatefulWidget {
 }
 
 class _CreateButtonState extends State<CreateButton> with SingleTickerProviderStateMixin {
-  late AnimationController controller;
+  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200))..repeat(reverse: true);
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200))..repeat(reverse: true);
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -42,11 +42,11 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
           onPressed: _onTapCreate(widget.contacts),
           shape: const RoundedRectangleBorder(),
           child: ScaleTransition(
-            scale: Tween<double>(begin: 0.95, end: 1.025).animate(controller),
+            scale: Tween<double>(begin: 0.95, end: 1.025).animate(_controller),
             alignment: FractionalOffset.center,
             child: Text(
               'TAP TO CREATE',
-              style: ThemeProvider.of(context)!.body3Medium.copyWith(color: Colors.white, letterSpacing: 1.25),
+              style: ThemeProvider.of(context).body3Medium.copyWith(color: Colors.white, letterSpacing: 1.25),
             ),
           ),
         ),
@@ -54,14 +54,14 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
     );
   }
 
-  VoidCallback _onTapCreate(List<ContactModel>? contacts) {
+  VoidCallback _onTapCreate(List<ContactEntity> contacts) {
     return () async {
       final Registry registry = context.registry;
       final _CreateOptions? result = await showDialog<_CreateOptions>(
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Text('Select action', style: ThemeProvider.of(context)!.body3),
+            title: Text('Select action', style: ThemeProvider.of(context).body3),
             children: <Widget>[
               SimpleDialogOption(
                 onPressed: () => Navigator.pop(context, _CreateOptions.contacts),

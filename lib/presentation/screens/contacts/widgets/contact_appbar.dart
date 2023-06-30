@@ -12,8 +12,8 @@ class ContactAppBar extends StatefulWidget {
     required this.contact,
   });
 
-  final Map<String, List<MeasureModel>> grouped;
-  final ContactModel contact;
+  final Map<MeasureGroup, List<MeasureEntity>> grouped;
+  final ContactEntity contact;
   final String userId;
 
   @override
@@ -25,10 +25,10 @@ class _ContactAppBarState extends State<ContactAppBar> {
     final Registry registry = context.registry;
     switch (choice) {
       case Choice.createJob:
-        registry.get<JobsCoordinator>().toCreateJob(widget.userId, <ContactModel>[], widget.contact);
+        registry.get<JobsCoordinator>().toCreateJob(widget.userId, <ContactEntity>[], widget.contact);
         break;
       case Choice.editMeasure:
-        registry.get<ContactsCoordinator>().toContactMeasure(widget.contact, widget.grouped);
+        registry.get<ContactsCoordinator>().toContactMeasure(contact: widget.contact, grouped: widget.grouped);
         break;
       case Choice.editAccount:
         registry.get<ContactsCoordinator>().toContactEdit(widget.userId, widget.contact);
@@ -41,7 +41,7 @@ class _ContactAppBarState extends State<ContactAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle popTextStyle = ThemeProvider.of(context)!.body1;
+    final TextStyle popTextStyle = ThemeProvider.of(context).body1;
     return PreferredSize(
       preferredSize: const Size.fromHeight(kToolbarHeight),
       child: Row(
@@ -101,23 +101,23 @@ class _Icon extends StatelessWidget {
 class _Title extends StatelessWidget {
   const _Title({required this.contact});
 
-  final ContactModel? contact;
+  final ContactEntity contact;
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeProvider theme = ThemeProvider.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          contact!.fullname,
+          contact.fullname,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: theme.title.copyWith(color: Colors.white),
         ),
         Text(
-          contact!.location!,
+          contact.location,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: theme.body1.copyWith(color: Colors.white),
@@ -130,7 +130,7 @@ class _Title extends StatelessWidget {
 class _Leading extends StatelessWidget {
   const _Leading({required this.contact});
 
-  final ContactModel? contact;
+  final ContactEntity contact;
 
   @override
   Widget build(BuildContext context) {
@@ -145,8 +145,8 @@ class _Leading extends StatelessWidget {
           const Icon(Icons.arrow_back, color: Colors.white),
           const SizedBox(width: 4.0),
           Hero(
-            tag: contact!.id,
-            child: AppCircleAvatar(imageUrl: contact!.imageUrl, useAlt: true),
+            tag: contact.id,
+            child: AppCircleAvatar(imageUrl: contact.imageUrl, useAlt: true),
           ),
         ],
       ),

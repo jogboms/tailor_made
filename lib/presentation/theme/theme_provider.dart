@@ -85,7 +85,7 @@ class ThemeProvider extends InheritedWidget {
   TextStyle get _text24Style => appFontRegular(24.0);
   TextStyle get _text32Style => appFontRegular(32.0);
 
-  static ThemeProvider? of(BuildContext context) => context.dependOnInheritedWidgetOfExactType<ThemeProvider>();
+  static ThemeProvider of(BuildContext context) => context.dependOnInheritedWidgetOfExactType<ThemeProvider>()!;
 
   @override
   bool updateShouldNotify(ThemeProvider oldWidget) => false;

@@ -20,6 +20,8 @@ class MockJobs extends Mock implements Jobs {}
 
 class MockGallery extends Mock implements Gallery {}
 
+class MockImageStorage extends Mock implements ImageStorage {}
+
 class MockSettings extends Mock implements Settings {}
 
 class MockPayments extends Mock implements Payments {}
@@ -28,6 +30,6 @@ class MockMeasures extends Mock implements Measures {}
 
 class MockStats extends Mock implements Stats {}
 
-class FakeAccountModel extends Fake implements AccountModel {}
+class FakeAccountEntity extends Fake implements AccountEntity {}
 
 class FakeRoute extends Fake implements Route<dynamic> {}

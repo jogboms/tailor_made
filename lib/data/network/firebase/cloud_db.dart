@@ -7,23 +7,7 @@ class CloudDb {
 
   final FirebaseFirestore _instance;
 
-  MapDocumentReference account(String? userId) => _instance.doc('accounts/$userId');
-
-  MapDocumentReference stats(String? userId) => _instance.doc('stats/$userId');
-
-  MapDocumentReference get settings => _instance.doc('settings/common');
-
-  MapCollectionReference measurements(String? userId) => _instance.collection('measurements/$userId/common');
-
-  MapCollectionReference get premium => _instance.collection('premium');
-
-  MapQuery gallery(String userId) => _instance.collection('gallery').where('userID', isEqualTo: userId);
-
-  MapQuery payments(String userId) => _instance.collection('payments').where('userID', isEqualTo: userId);
-
-  MapQuery contacts(String? userId) => _instance.collection('contacts').where('userID', isEqualTo: userId);
-
-  MapQuery jobs(String? userId) => _instance.collection('jobs').where('userID', isEqualTo: userId);
+  MapCollectionReference collection(String path) => _instance.collection(path);
 
   MapDocumentReference doc(String path) => _instance.doc(path);
 
@@ -34,4 +18,16 @@ class CloudDb {
 
     return batch.commit();
   }
+}
+
+class CloudDbCollection {
+  const CloudDbCollection(this.db, this.path);
+
+  final CloudDb db;
+
+  final String path;
+
+  MapCollectionReference fetchAll() => db.collection(path);
+
+  MapDocumentReference fetchOne(String uuid) => db.doc('$path/$uuid');
 }

@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +12,7 @@ import '../measures/widgets/measure_create_items.dart';
 import 'jobs_create_view_model.dart';
 import 'widgets/avatar_app_bar.dart';
 import 'widgets/gallery_grid_item.dart';
+import 'widgets/image_form_value.dart';
 import 'widgets/input_dropdown.dart';
 
 class JobsCreatePage extends StatefulWidget {
@@ -21,8 +23,8 @@ class JobsCreatePage extends StatefulWidget {
     required this.userId,
   });
 
-  final ContactModel? contact;
-  final List<ContactModel>? contacts;
+  final ContactEntity? contact;
+  final List<ContactEntity> contacts;
   final String userId;
 
   @override
@@ -30,25 +32,22 @@ class JobsCreatePage extends StatefulWidget {
 }
 
 class _JobsCreatePageState extends JobsCreateViewModel {
-  MoneyMaskedTextController controller = MoneyMaskedTextController(
+  final MoneyMaskedTextController _controller = MoneyMaskedTextController(
     decimalSeparator: '.',
     thousandSeparator: ',',
   );
-  final FocusNode _amountFocusNode = FocusNode();
-  final FocusNode _additionFocusNode = FocusNode();
 
   @override
   void dispose() {
-    _amountFocusNode.dispose();
-    _additionFocusNode.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider? theme = ThemeProvider.of(context);
+    final ThemeProvider theme = ThemeProvider.of(context);
 
-    final ContactModel? contact = this.contact;
+    final ContactEntity? contact = this.contact;
 
     return Scaffold(
       appBar: contact != null
@@ -56,11 +55,11 @@ class _JobsCreatePageState extends JobsCreateViewModel {
               tag: contact.createdAt.toString(),
               imageUrl: contact.imageUrl,
               elevation: 1.0,
-              title: Text(contact.fullname, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme!.title),
+              title: Text(contact.fullname, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.title),
               subtitle: Text('${contact.totalJobs} Jobs', style: theme.small),
-              actions: widget.contacts!.isNotEmpty
+              actions: widget.contacts.isNotEmpty
                   ? <Widget>[
-                      IconButton(icon: const Icon(Icons.people), onPressed: onSelectContact),
+                      IconButton(icon: const Icon(Icons.people), onPressed: handleSelectContact),
                     ]
                   : null,
             )
@@ -70,7 +69,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
           if (contact == null) {
             return Center(
               child: AppClearButton(
-                onPressed: onSelectContact,
+                onPressed: handleSelectContact,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
@@ -80,7 +79,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
                       child: const Icon(Icons.person_add, color: kTextBaseColor),
                     ),
                     const SizedBox(height: 16.0),
-                    Text('SELECT A CLIENT', style: theme!.small),
+                    Text('SELECT A CLIENT', style: theme.small),
                   ],
                 ),
               ),
@@ -103,7 +102,22 @@ class _JobsCreatePageState extends JobsCreateViewModel {
                     const FormSectionHeader(title: 'Due Date'),
                     _buildDueDate(),
                     const FormSectionHeader(title: 'References'),
-                    _buildImageGrid(),
+                    Container(
+                      height: _kGridWidth + 8,
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: ListView(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        scrollDirection: Axis.horizontal,
+                        children: <Widget>[
+                          _NewGrid(onPressed: handlePhotoButtonPressed),
+                          for (final ImageFormValue value in images.reversed)
+                            GalleryGridItem.formValue(
+                              value: value,
+                              onTapDelete: handleDeleteImageItem,
+                            )
+                        ],
+                      ),
+                    ),
                     const FormSectionHeader(title: 'Measurements', trailing: 'Inches (In)'),
                     _buildMeasures(),
                     const FormSectionHeader(title: 'Additional Notes'),
@@ -130,7 +144,7 @@ class _JobsCreatePageState extends JobsCreateViewModel {
       converter: MeasuresViewModel.new,
       builder: (_, __, MeasuresViewModel vm) {
         return MeasureCreateItems(
-          grouped: vm.grouped ?? <String, List<MeasureModel>>{},
+          grouped: vm.grouped,
           measurements: job.measurements,
           onSaved: (Map<String, double>? value) {
             if (value != null) {
@@ -146,9 +160,8 @@ class _JobsCreatePageState extends JobsCreateViewModel {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: TextFormField(
-        focusNode: _additionFocusNode,
         keyboardType: TextInputType.text,
-        style: ThemeProvider.of(context)!.title.copyWith(color: Colors.black),
+        style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
         maxLines: 6,
         decoration: const InputDecoration(
           isDense: true,
@@ -160,54 +173,17 @@ class _JobsCreatePageState extends JobsCreateViewModel {
     );
   }
 
-  Widget _buildImageGrid() {
-    final List<Widget> imagesList = List<Widget>.generate(
-      fireImages.length,
-      (int index) {
-        final FireImage fireImage = fireImages[index];
-        final ImageModel? image = fireImage.image;
-
-        if (image == null) {
-          return const Center(widthFactor: 2.5, child: LoadingSpinner());
-        }
-
-        return GalleryGridItem(
-          image: image,
-          tag: '$image-$index',
-          size: _kGridWidth,
-          onTapDelete: (ImageModel image) => setState(() {
-            fireImage.ref.delete();
-            fireImages.removeAt(index);
-          }),
-        );
-      },
-    ).reversed.toList();
-
-    return Container(
-      height: _kGridWidth + 8,
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
-        scrollDirection: Axis.horizontal,
-        children: <Widget>[
-          _NewGrid(onPressed: handlePhotoButtonPressed),
-          ...imagesList,
-        ],
-      ),
-    );
-  }
-
   Widget _buildDueDate() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: InputDropdown(
         valueText: DateFormat.yMMMd().format(job.dueAt),
-        valueStyle: ThemeProvider.of(context)!.title.copyWith(color: Colors.black),
+        valueStyle: ThemeProvider.of(context).title.copyWith(color: Colors.black),
         onPressed: () async {
           final DateTime? picked = await showDatePicker(
             context: context,
             initialDate: job.dueAt,
-            firstDate: DateTime.now(),
+            firstDate: clock.now(),
             lastDate: DateTime(2101),
           );
           if (picked != null && picked != job.dueAt) {
@@ -227,11 +203,10 @@ class _JobsCreatePageState extends JobsCreateViewModel {
         textInputAction: TextInputAction.next,
         keyboardType: TextInputType.text,
         textCapitalization: TextCapitalization.words,
-        style: ThemeProvider.of(context)!.title.copyWith(color: Colors.black),
+        style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
         decoration: const InputDecoration(isDense: true, hintText: 'Enter Style Name'),
         validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a name',
         onSaved: (String? value) => job = job.copyWith(name: value!.trim()),
-        onEditingComplete: () => FocusScope.of(context).requestFocus(_amountFocusNode),
       ),
     );
   }
@@ -240,15 +215,13 @@ class _JobsCreatePageState extends JobsCreateViewModel {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: TextFormField(
-        focusNode: _amountFocusNode,
-        controller: controller,
+        controller: _controller,
         textInputAction: TextInputAction.next,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        style: ThemeProvider.of(context)!.title.copyWith(color: Colors.black),
+        style: ThemeProvider.of(context).title.copyWith(color: Colors.black),
         decoration: const InputDecoration(isDense: true, hintText: 'Enter Amount'),
-        validator: (String? value) => (controller.numberValue > 0) ? null : 'Please input a price',
-        onSaved: (String? value) => job = job.copyWith(price: controller.numberValue),
-        onEditingComplete: () => FocusScope.of(context).requestFocus(_additionFocusNode),
+        validator: (String? value) => (_controller.numberValue > 0) ? null : 'Please input a price',
+        onSaved: (String? value) => job = job.copyWith(price: _controller.numberValue),
       ),
     );
   }

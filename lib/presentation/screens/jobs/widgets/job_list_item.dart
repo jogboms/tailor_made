@@ -5,7 +5,7 @@ import 'package:tailor_made/presentation.dart';
 class JobListItem extends StatelessWidget {
   const JobListItem({super.key, required this.job});
 
-  final JobModel job;
+  final JobEntity job;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class JobListItem extends StatelessWidget {
     final String price = AppMoney(job.price).formatted;
     final String paid = AppMoney(job.completedPayment).formatted;
     final String owed = AppMoney(job.pendingPayment).formatted;
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     return Material(
       child: InkWell(

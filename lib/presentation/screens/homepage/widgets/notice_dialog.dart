@@ -5,11 +5,11 @@ import 'package:tailor_made/presentation/theme.dart';
 class NoticeDialog extends StatelessWidget {
   const NoticeDialog({super.key, required this.account});
 
-  final AccountModel? account;
+  final AccountEntity account;
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle textTheme = ThemeProvider.of(context)!.subhead1;
+    final TextStyle textTheme = ThemeProvider.of(context).subhead1;
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -32,7 +32,7 @@ class NoticeDialog extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
                 child: Text(
-                  account!.notice,
+                  account.notice,
                   style: textTheme.copyWith(color: Colors.grey.shade700),
                   textAlign: TextAlign.center,
                 ),

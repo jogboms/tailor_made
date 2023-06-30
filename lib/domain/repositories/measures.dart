@@ -1,16 +1,23 @@
-import '../models/measure.dart';
+import 'package:tailor_made/domain.dart';
 
 abstract class Measures {
-  Stream<List<MeasureModel>> fetchAll(String? userId);
+  Stream<List<MeasureEntity>> fetchAll(String userId);
 
-  Future<void>? create(
-    List<MeasureModel>? measures,
+  Future<bool> create(
+    List<BaseMeasureEntity> measures,
     String userId, {
-    required String? groupName,
-    required String? unitValue,
+    required MeasureGroup groupName,
+    required String unitValue,
   });
 
-  Future<void>? delete(List<MeasureModel> measures, String userId);
+  Future<bool> deleteGroup(List<MeasureEntity> measures, String userId);
 
-  Future<void>? update(List<MeasureModel> measures, String? userId);
+  Future<bool> deleteOne(ReferenceEntity reference);
+
+  Future<bool> update(Iterable<BaseMeasureEntity> measures, String userId);
+
+  Future<bool> updateOne(
+    ReferenceEntity reference, {
+    String? name,
+  });
 }

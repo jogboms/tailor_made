@@ -11,19 +11,19 @@ import 'coordinator_base.dart';
 class PaymentsCoordinator extends CoordinatorBase {
   const PaymentsCoordinator(super.navigatorKey);
 
-  void toPayment(PaymentModel? payment) {
+  void toPayment(PaymentEntity payment) {
     navigator?.push<void>(RouteTransitions.slideIn(PaymentPage(payment: payment), fullscreenDialog: true));
   }
 
-  void toPayments(String userId, [List<PaymentModel>? payments]) {
+  void toPayments(String userId, [List<PaymentEntity>? payments]) {
     navigator?.push<void>(
       payments == null
-          ? RouteTransitions.slideIn(PaymentsPage(payments: payments, userId: userId))
+          ? RouteTransitions.slideIn(PaymentsPage(userId: userId))
           : RouteTransitions.slideIn(PaymentsPage(payments: payments, userId: userId), fullscreenDialog: true),
     );
   }
 
-  Future<Map<String, dynamic>?>? toCreatePayment(double? payment) {
-    return navigator?.push<Map<String, dynamic>>(RouteTransitions.fadeIn(PaymentsCreatePage(limit: payment)));
+  Future<({double price, String notes})?>? toCreatePayment(double payment) {
+    return navigator?.push<({double price, String notes})>(RouteTransitions.fadeIn(PaymentsCreatePage(limit: payment)));
   }
 }

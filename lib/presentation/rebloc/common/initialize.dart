@@ -10,7 +10,7 @@ class InitializeBloc extends SimpleBloc<AppState> {
   @override
   Future<Action> middleware(DispatchFunction dispatcher, AppState state, Action action) async {
     if (action is OnInitAction) {
-      dispatcher(const InitSettingsAction());
+      dispatcher(const SettingsAction.init());
     }
     return action;
   }

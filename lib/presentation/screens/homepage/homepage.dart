@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rebloc/rebloc.dart';
+import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:version/version.dart';
 
@@ -82,7 +83,10 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (viewModel.isLoading) {
+    final AccountEntity? account = viewModel.account;
+    final StatsEntity? stats = viewModel.stats;
+
+    if (viewModel.isLoading || account == null || stats == null) {
       return const LoadingSpinner();
     }
 
@@ -91,7 +95,7 @@ class _Body extends StatelessWidget {
         onSendMail: () {
           email(
             'jeremiahogbomo@gmail.com',
-            '${context.l10n.appName} - Unwarranted%20Account%20Suspension%20%23${viewModel.account!.uid}',
+            '${context.l10n.appName} - Unwarranted%20Account%20Suspension%20%23${account.uid}',
           );
         },
       );
@@ -99,8 +103,8 @@ class _Body extends StatelessWidget {
 
     if (viewModel.isWarning && viewModel.hasSkippedPremium == false) {
       return RateLimitPage(
-        onSignUp: () => dispatch(OnPremiumSignUp(viewModel.account)),
-        onSkipedPremium: () => dispatch(const OnSkipedPremium()),
+        onSignUp: () => dispatch(AccountAction.premiumSignUp(account)),
+        onSkippedPremium: () => dispatch(const AccountAction.skippedPremium()),
       );
     }
 
@@ -110,20 +114,20 @@ class _Body extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Expanded(flex: 12, child: HeaderWidget(account: viewModel.account)),
-            StatsWidget(stats: viewModel.stats),
-            Expanded(flex: 2, child: TopRowWidget(stats: viewModel.stats)),
-            Expanded(flex: 2, child: MidRowWidget(userId: viewModel.account!.uid, stats: viewModel.stats)),
-            Expanded(flex: 2, child: BottomRowWidget(stats: viewModel.stats, account: viewModel.account)),
+            Expanded(flex: 12, child: HeaderWidget(account: account)),
+            StatsWidget(stats: stats),
+            Expanded(flex: 2, child: TopRowWidget(stats: stats)),
+            Expanded(flex: 2, child: MidRowWidget(userId: account.uid, stats: stats)),
+            Expanded(flex: 2, child: BottomRowWidget(stats: stats)),
             SizedBox(height: kButtonHeight + MediaQuery.of(context).padding.bottom),
           ],
         ),
-        CreateButton(userId: viewModel.account!.uid, contacts: viewModel.contacts),
+        CreateButton(userId: account.uid, contacts: viewModel.contacts),
         TopButtonBar(
-          account: viewModel.account,
+          account: account,
           shouldSendRating: viewModel.shouldSendRating,
           onLogout: () async {
-            dispatch(const OnLogoutAction());
+            dispatch(const AuthAction.logout());
             context.registry.get<SharedCoordinator>().toSplash(isMock);
           },
         ),

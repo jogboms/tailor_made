@@ -6,7 +6,7 @@ import 'package:tailor_made/presentation/widgets.dart';
 class StoreNameDialog extends StatelessWidget {
   const StoreNameDialog({super.key, required this.account});
 
-  final AccountModel? account;
+  final AccountEntity account;
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +18,29 @@ class StoreNameDialog extends StatelessWidget {
         leading: const AppCloseButton(color: Colors.white),
       ),
       backgroundColor: Colors.black38,
-      body: _Content(account: account!),
+      body: _Content(account: account),
     );
   }
 }
 
-class _Content extends StatelessWidget {
-  _Content({required this.account}) : controller = TextEditingController(text: account.storeName);
+class _Content extends StatefulWidget {
+  const _Content({required this.account});
 
-  final AccountModel account;
-  final TextEditingController controller;
+  final AccountEntity account;
+
+  @override
+  State<_Content> createState() => _ContentState();
+}
+
+class _ContentState extends State<_Content> {
+  late final TextEditingController _controller = TextEditingController(text: widget.account.storeName);
+
+  @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,16 +66,16 @@ class _Content extends StatelessWidget {
               const SizedBox(height: 16.0),
               Text(
                 'Store Name',
-                style: ThemeProvider.of(context)!.title.copyWith(color: Colors.black38),
+                style: ThemeProvider.of(context).title.copyWith(color: Colors.black38),
               ),
               const SizedBox(height: 64.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 4.0),
                 child: TextField(
                   keyboardType: TextInputType.text,
-                  controller: controller,
+                  controller: _controller,
                   textAlign: TextAlign.center,
-                  style: ThemeProvider.of(context)!.title,
+                  style: ThemeProvider.of(context).title,
                   onSubmitted: (String value) => _handleSubmit(context),
                   decoration: const InputDecoration(isDense: true, hintText: 'Enter Store Name'),
                 ),
@@ -76,7 +89,7 @@ class _Content extends StatelessWidget {
   }
 
   void _handleSubmit(BuildContext context) {
-    final String value = controller.text.trim();
+    final String value = _controller.text.trim();
     if (value.isEmpty) {
       return;
     }

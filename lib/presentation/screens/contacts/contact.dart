@@ -16,15 +16,15 @@ const List<String> _tabs = <String>['Jobs', 'Gallery', 'Payments'];
 class ContactPage extends StatelessWidget {
   const ContactPage({super.key, required this.contact});
 
-  final ContactModel contact;
+  final ContactEntity contact;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelSubscriber<AppState, ContactsViewModel>(
-      converter: (AppState state) => ContactsViewModel(state)..contactID = contact.id,
+      converter: (AppState state) => ContactsViewModel(state, contactID: contact.id),
       builder: (BuildContext context, DispatchFunction dispatch, ContactsViewModel viewModel) {
         // in the case of newly created contacts
-        final ContactModel contact = viewModel.selected ?? this.contact;
+        final ContactEntity contact = viewModel.selected ?? this.contact;
         return DefaultTabController(
           length: _tabs.length,
           child: Scaffold(
@@ -34,12 +34,12 @@ class ContactPage extends StatelessWidget {
               title: ContactAppBar(
                 userId: viewModel.userId,
                 contact: contact,
-                grouped: viewModel.measuresGrouped ?? <String, List<MeasureModel>>{},
+                grouped: viewModel.measuresGrouped,
               ),
               titleSpacing: 0.0,
               centerTitle: false,
               bottom: TabBar(
-                labelStyle: ThemeProvider.of(context)!.body3Medium,
+                labelStyle: ThemeProvider.of(context).body3Medium,
                 tabs: _tabs.map((String tab) => Tab(child: Text(tab))).toList(),
               ),
               systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -58,11 +58,11 @@ class ContactPage extends StatelessWidget {
                     ),
                     _TabView(
                       name: _tabs[1].toLowerCase(),
-                      child: GalleryGridWidget(contact: contact, jobs: viewModel.selectedJobs),
+                      child: GalleryGridWidget(jobs: viewModel.selectedJobs),
                     ),
                     _TabView(
                       name: _tabs[2].toLowerCase(),
-                      child: PaymentsListWidget(contact: contact, jobs: viewModel.selectedJobs),
+                      child: PaymentsListWidget(jobs: viewModel.selectedJobs),
                     ),
                   ],
                 );

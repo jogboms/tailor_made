@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,8 +13,8 @@ class ContactForm extends StatefulWidget {
     required this.userId,
   });
 
-  final ValueSetter<ContactModel> onHandleSubmit;
-  final ContactModel contact;
+  final ValueSetter<CreateContactData> onHandleSubmit;
+  final CreateContactData contact;
   final String userId;
 
   @override
@@ -24,25 +23,19 @@ class ContactForm extends StatefulWidget {
 
 class ContactFormState extends State<ContactForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool isLoading = false;
-  late ContactModel contact = widget.contact;
+  bool _isLoading = false;
+  late CreateContactData _contact = widget.contact;
   bool _autovalidate = false;
-  Storage? _lastImgRef;
-  late final TextEditingController _fNController, _pNController, _lNController;
-
-  @override
-  void initState() {
-    super.initState();
-    _fNController = TextEditingController(text: contact.fullname);
-    _pNController = TextEditingController(text: contact.phone);
-    _lNController = TextEditingController(text: contact.location);
-  }
+  ImageFileReference? _previousImageFileRef;
+  late final TextEditingController _fNController = TextEditingController(text: _contact.fullname);
+  late final TextEditingController _pNController = TextEditingController(text: _contact.phone);
+  late final TextEditingController _lNController = TextEditingController(text: _contact.location);
 
   @override
   void didUpdateWidget(covariant ContactForm oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.contact != widget.contact) {
-      contact = widget.contact;
+      _contact = widget.contact;
     }
   }
 
@@ -61,7 +54,7 @@ class ContactFormState extends State<ContactForm> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           const SizedBox(height: 32.0),
-          _Avatar(contact: contact, isLoading: isLoading, onTap: _handlePhotoButtonPressed),
+          _Avatar(imageUrl: _contact.imageUrl, isLoading: _isLoading, onTap: _handlePhotoButtonPressed),
           const SizedBox(height: 16.0),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -76,7 +69,7 @@ class ContactFormState extends State<ContactForm> {
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(prefixIcon: Icon(Icons.person), labelText: 'Fullname'),
                     validator: InputValidator.tryAlpha(),
-                    onSaved: (String? fullname) => contact = contact.copyWith(fullname: fullname!.trim()),
+                    onSaved: (String? fullname) => _contact = _contact.copyWith(fullname: fullname!.trim()),
                   ),
                   const SizedBox(height: 4.0),
                   TextFormField(
@@ -84,16 +77,16 @@ class ContactFormState extends State<ContactForm> {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.phone,
                     decoration: const InputDecoration(prefixIcon: Icon(Icons.phone), labelText: 'Phone'),
-                    validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a value',
-                    onSaved: (String? phone) => contact = contact.copyWith(phone: phone!.trim()),
+                    validator: InputValidator.tryString('Please input a value'),
+                    onSaved: (String? phone) => _contact = _contact.copyWith(phone: phone!.trim()),
                   ),
                   const SizedBox(height: 4.0),
                   TextFormField(
                     controller: _lNController,
                     textInputAction: TextInputAction.done,
                     decoration: const InputDecoration(prefixIcon: Icon(Icons.location_city), labelText: 'Location'),
-                    validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a value',
-                    onSaved: (String? location) => contact = contact.copyWith(location: location!.trim()),
+                    validator: InputValidator.tryString('Please input a value'),
+                    onSaved: (String? location) => _contact = _contact.copyWith(location: location!.trim()),
                     onFieldSubmitted: (String value) => _handleSubmit(),
                   ),
                   const SizedBox(height: 32.0),
@@ -118,7 +111,7 @@ class ContactFormState extends State<ContactForm> {
       AppSnackBar.of(context).error(AppStrings.fixErrors);
     } else {
       form.save();
-      widget.onHandleSubmit(contact);
+      widget.onHandleSubmit(_contact);
     }
   }
 
@@ -132,51 +125,49 @@ class ContactFormState extends State<ContactForm> {
     if (imageFile == null) {
       return;
     }
-    // TODO(Jogboms): move this out of here
-    final Contacts contacts = registry.get();
-    final Storage ref = contacts.createFile(File(imageFile.path), widget.userId)!;
+    final ImageStorage imageStorage = registry.get();
 
-    setState(() => isLoading = true);
+    setState(() => _isLoading = true);
     try {
-      contact = contact.copyWith(imageUrl: await ref.getDownloadURL());
+      // TODO(Jogboms): move this out of here
+      final ImageFileReference ref = await imageStorage.createContactImage(path: imageFile.path, userId: widget.userId);
+      _contact = _contact.copyWith(imageUrl: ref.src);
       if (mounted) {
         AppSnackBar.of(context).success('Upload Successful');
-        setState(() {
-          if (_lastImgRef != null) {
-            _lastImgRef!.delete();
-          }
-          isLoading = false;
-          _lastImgRef = ref;
-        });
+        if (_previousImageFileRef case final ImageFileReference ref) {
+          imageStorage.delete(reference: ref, userId: widget.userId).ignore();
+        }
+        _previousImageFileRef = ref;
+        setState(() => _isLoading = false);
       }
     } catch (e) {
       if (mounted) {
         AppSnackBar.of(context).error('Please try again');
-        setState(() => isLoading = false);
+        setState(() => _isLoading = false);
       }
     }
   }
 
   void reset() => _formKey.currentState!.reset();
 
-  void updateContact(ContactModel contact) {
+  void updateContact(CreateContactData contact) {
     setState(() {
       reset();
       _fNController.text = contact.fullname;
-      _pNController.text = contact.phone ?? '';
-      _lNController.text = contact.location ?? '';
+      _pNController.text = contact.phone;
+      _lNController.text = contact.location;
     });
   }
 }
 
 class _Avatar extends StatelessWidget {
   const _Avatar({
-    required this.contact,
+    required this.imageUrl,
     required this.isLoading,
     required this.onTap,
   });
 
-  final ContactModel contact;
+  final String? imageUrl;
   final bool isLoading;
   final VoidCallback onTap;
 
@@ -199,9 +190,9 @@ class _Avatar extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
-                  if (contact.imageUrl != null)
+                  if (imageUrl != null)
                     CircleAvatar(
-                      backgroundImage: NetworkImage(contact.imageUrl!),
+                      backgroundImage: NetworkImage(imageUrl!),
                       backgroundColor: kPrimarySwatch.shade100,
                     ),
                   if (isLoading)

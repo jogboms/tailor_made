@@ -12,7 +12,7 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     return AppStatusBar(
       child: Scaffold(
@@ -49,14 +49,15 @@ class SplashPage extends StatelessWidget {
                 ],
               ),
             ),
-            StreamBuilder<User?>(
+            StreamBuilder<String?>(
               // TODO(Jogboms): move this out of here
               stream: context.registry.get<Accounts>().onAuthStateChanged,
-              builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-                if (snapshot.hasData && snapshot.data != null && snapshot.data?.uid != null) {
+              builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+                final String? data = snapshot.data;
+                if (data != null) {
                   WidgetsBinding.instance.addPostFrameCallback(
                     (_) async {
-                      StoreProvider.of<AppState>(context).dispatch(OnLoginAction(snapshot.data));
+                      StoreProvider.of<AppState>(context).dispatch(AuthAction.login(data));
                       context.registry.get<SharedCoordinator>().toHome(isMock);
                     },
                   );
@@ -84,12 +85,12 @@ class _Content extends StatefulWidget {
 }
 
 class _ContentState extends State<_Content> {
-  late bool isLoading;
+  late bool _isLoading;
 
   @override
   void initState() {
     super.initState();
-    isLoading = widget.isColdStart;
+    _isLoading = widget.isColdStart;
     if (widget.isColdStart) {
       _onLogin();
     }
@@ -102,7 +103,7 @@ class _ContentState extends State<_Content> {
       builder: (BuildContext context, DispatchFunction dispatch, SettingsViewModel vm) {
         return Stack(
           children: <Widget>[
-            if (!isLoading || !widget.isColdStart || vm.hasError)
+            if (!_isLoading || !widget.isColdStart || vm.hasError)
               const Center(
                 child: Image(
                   image: AppImages.logo,
@@ -116,7 +117,7 @@ class _ContentState extends State<_Content> {
               bottom: 124.0,
               child: Builder(
                 builder: (_) {
-                  if ((vm.isLoading && widget.isColdStart) || isLoading) {
+                  if ((vm.isLoading && widget.isColdStart) || _isLoading) {
                     return const LoadingSpinner();
                   }
 
@@ -134,9 +135,9 @@ class _ContentState extends State<_Content> {
                               ),
                               child: Text(
                                 'RETRY',
-                                style: ThemeProvider.of(context)!.button.copyWith(color: kTextBaseColor),
+                                style: ThemeProvider.of(context).button.copyWith(color: kTextBaseColor),
                               ),
-                              onPressed: () => dispatch(const InitSettingsAction()),
+                              onPressed: () => dispatch(const SettingsAction.init()),
                             ),
                           ],
                         ),
@@ -150,7 +151,7 @@ class _ContentState extends State<_Content> {
                         backgroundColor: Colors.white,
                       ),
                       icon: const Image(image: AppImages.googleLogo, width: 24.0),
-                      label: Text('Continue with Google', style: ThemeProvider.of(context)!.bodyBold),
+                      label: Text('Continue with Google', style: ThemeProvider.of(context).bodyBold),
                       onPressed: _onLogin,
                     ),
                   );
@@ -166,13 +167,18 @@ class _ContentState extends State<_Content> {
   void _onLogin() async {
     final Accounts accounts = context.registry.get();
     try {
-      setState(() => isLoading = true);
+      setState(() => _isLoading = true);
       // TODO(Jogboms): move this out of here
       await accounts.signInWithGoogle();
-    } catch (e) {
+    } catch (error, stackTrace) {
+      AppLog.e(error, stackTrace);
+      if (!mounted) {
+        return;
+      }
+
       // TODO(Jogboms): move this out of here
       final Environment environment = context.registry.get();
-      final String message = AppStrings.genericError(e, environment.isDev)!;
+      final String message = AppStrings.genericError(error, environment.isDev)!;
 
       if (message.isNotEmpty) {
         AppSnackBar.of(context).error(message, duration: const Duration(milliseconds: 3500));
@@ -185,9 +191,9 @@ class _ContentState extends State<_Content> {
         return;
       }
 
-      setState(() => isLoading = false);
+      setState(() => _isLoading = false);
 
-      AppSnackBar.of(context).error(e.toString());
+      AppSnackBar.of(context).error(error.toString());
     }
   }
 }

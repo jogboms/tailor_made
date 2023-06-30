@@ -3,13 +3,14 @@ import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/theme.dart';
 
 class MeasureListItem extends StatelessWidget {
-  const MeasureListItem({super.key, required this.item});
+  const MeasureListItem({super.key, required this.item, required this.value});
 
-  final MeasureModel item;
+  final MeasureEntity item;
+  final double value;
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeProvider theme = ThemeProvider.of(context);
 
     return Container(
       color: Colors.grey[100]!.withOpacity(.5),
@@ -30,17 +31,20 @@ class MeasureListItem extends StatelessWidget {
                     color: kAccentColor,
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  child: Text(item.group.toLowerCase(), style: theme.xsmall.copyWith(color: Colors.white)),
+                  child: Text(
+                    item.group.displayName.toLowerCase(),
+                    style: theme.xsmall.copyWith(color: Colors.white),
+                  ),
                 ),
               ],
             ),
           ),
-          if (item.value > 0) ...<Widget>[
-            Text('${item.value} ', style: theme.subhead3.copyWith(color: kAccentColor)),
+          if (value > 0) ...<Widget>[
+            Text('$value ', style: theme.subhead3.copyWith(color: kAccentColor)),
             const SizedBox(width: 2.0),
             Text(item.unit, style: theme.small.copyWith(color: kTitleBaseColor)),
           ],
-          if (item.value == 0) Text('N/A', style: theme.smallLight.copyWith(color: kTitleBaseColor)),
+          if (value == 0) Text('N/A', style: theme.smallLight.copyWith(color: kTitleBaseColor)),
         ],
       ),
     );

@@ -43,7 +43,7 @@ class AppState with _$AppState {
       measures: null,
       grouped: null,
       status: StateStatus.loading,
-      hasSkipedPremium: false,
+      hasSkippedPremium: false,
       error: null,
     ),
     settings: SettingsState(

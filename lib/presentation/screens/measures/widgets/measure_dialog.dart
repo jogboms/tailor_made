@@ -7,29 +7,16 @@ import 'package:tailor_made/presentation/widgets.dart';
 class MeasureDialog extends StatefulWidget {
   const MeasureDialog({super.key, required this.measure});
 
-  final MeasureModel measure;
+  final DefaultMeasureEntity measure;
 
   @override
   State<MeasureDialog> createState() => _MeasureDialogState();
 }
 
 class _MeasureDialogState extends State<MeasureDialog> {
-  final FocusNode _unitNode = FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
-  late MeasureModel measure;
-
-  @override
-  void initState() {
-    super.initState();
-    measure = widget.measure;
-  }
-
-  @override
-  void dispose() {
-    _unitNode.dispose();
-    super.dispose();
-  }
+  late DefaultMeasureEntity _measure = widget.measure;
 
   @override
   Widget build(BuildContext context) {
@@ -59,20 +46,18 @@ class _MeasureDialogState extends State<MeasureDialog> {
                 TextFormField(
                   textCapitalization: TextCapitalization.words,
                   textInputAction: TextInputAction.next,
-                  onEditingComplete: () => FocusScope.of(context).requestFocus(_unitNode),
-                  onSaved: (String? value) => measure = measure.copyWith(name: value!.trim()),
+                  onSaved: (String? value) => _measure = _measure.copyWith(name: value!.trim()),
                   decoration: const InputDecoration(labelText: 'Name (eg. Length)'),
                   validator: InputValidator.tryAlpha(),
                 ),
                 const SizedBox(height: 4.0),
                 TextFormField(
                   initialValue: widget.measure.unit,
-                  focusNode: _unitNode,
                   textInputAction: TextInputAction.done,
                   decoration: const InputDecoration(labelText: 'Unit (eg. In, cm)'),
                   validator: InputValidator.tryAlpha(),
                   onFieldSubmitted: (String value) => _onSaved(),
-                  onSaved: (String? value) => measure = measure.copyWith(unit: value!.trim()),
+                  onSaved: (String? value) => _measure = _measure.copyWith(unit: value!.trim()),
                 ),
                 const SizedBox(height: 16.0),
                 Row(
@@ -104,10 +89,9 @@ class _MeasureDialogState extends State<MeasureDialog> {
     }
     if (!form.validate()) {
       _autovalidate = true;
-      // widget.onHandleValidate();
     } else {
       form.save();
-      Navigator.pop<MeasureModel>(context, measure);
+      Navigator.pop<DefaultMeasureEntity>(context, _measure);
     }
   }
 }

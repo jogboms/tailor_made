@@ -10,11 +10,11 @@ import 'coordinator_base.dart';
 class GalleryCoordinator extends CoordinatorBase {
   const GalleryCoordinator(super.navigatorKey);
 
-  void toImage(ImageModel? image) {
-    navigator?.push<void>(RouteTransitions.fadeIn(GalleryView(image: image)));
+  void toImage({required String src, required String contactID, required String jobID}) {
+    navigator?.push<void>(RouteTransitions.fadeIn(GalleryView(src: src, contactID: contactID, jobID: jobID)));
   }
 
-  void toGallery(String userId, [List<ImageModel>? images]) {
+  void toGallery(String userId, [List<ImageEntity>? images]) {
     navigator?.push<void>(
       images == null
           ? RouteTransitions.slideIn(GalleryPage(userId: userId))

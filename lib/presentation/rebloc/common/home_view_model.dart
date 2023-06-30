@@ -5,8 +5,8 @@ import 'package:tailor_made/presentation/rebloc.dart';
 class HomeViewModel extends Equatable {
   HomeViewModel(AppState state)
       : account = state.account.account,
-        _contacts = state.contacts.contacts,
-        _jobs = state.jobs.jobs,
+        _contacts = state.contacts.contacts ?? <ContactEntity>[],
+        _jobs = state.jobs.jobs ?? <JobEntity>[],
         stats = state.stats.stats,
         settings = state.settings.settings,
         hasSkippedPremium = state.account.hasSkipedPremium == true,
@@ -14,30 +14,28 @@ class HomeViewModel extends Equatable {
             state.contacts.status == StateStatus.loading ||
             state.account.status == StateStatus.loading;
 
-  final AccountModel? account;
+  final AccountEntity? account;
 
-  final List<ContactModel>? _contacts;
+  final List<ContactEntity> _contacts;
 
-  List<ContactModel>? get contacts => _contacts;
+  List<ContactEntity> get contacts => _contacts;
 
-  final List<JobModel>? _jobs;
+  final List<JobEntity> _jobs;
 
-  List<JobModel>? get jobs => _jobs;
-
-  final StatsModel? stats;
-  final SettingsModel? settings;
+  final StatsEntity? stats;
+  final SettingEntity? settings;
   final bool isLoading;
   final bool hasSkippedPremium;
 
-  bool get isDisabled => account != null && account!.status == AccountModelStatus.disabled;
+  bool get isDisabled => account != null && account!.status == AccountStatus.disabled;
 
-  bool get isWarning => account != null && account!.status == AccountModelStatus.warning;
+  bool get isWarning => account != null && account!.status == AccountStatus.warning;
 
-  bool get isPending => account != null && account!.status == AccountModelStatus.pending;
+  bool get isPending => account != null && account!.status == AccountStatus.pending;
 
   bool get shouldSendRating =>
-      account != null && !account!.hasSendRating && (((contacts?.length ?? 0) >= 10) || ((jobs?.length ?? 0) >= 10));
+      account != null && !account!.hasSendRating && (contacts.length >= 10 || _jobs.length >= 10);
 
   @override
-  List<Object?> get props => <Object?>[stats, settings, hasSkippedPremium, isLoading, account, contacts, jobs];
+  List<Object?> get props => <Object?>[stats, settings, hasSkippedPremium, isLoading, account, contacts, _jobs];
 }

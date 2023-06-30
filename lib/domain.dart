@@ -1,16 +1,8 @@
 export 'domain/entities.dart';
-export 'domain/models/account.dart';
-export 'domain/models/contact.dart';
-export 'domain/models/image.dart';
-export 'domain/models/job.dart';
-export 'domain/models/measure.dart';
-export 'domain/models/payment.dart';
-export 'domain/models/settings.dart';
-export 'domain/models/stats/stats.dart';
-export 'domain/models/stats/stats_item.dart';
 export 'domain/repositories/accounts.dart';
 export 'domain/repositories/contacts.dart';
 export 'domain/repositories/gallery.dart';
+export 'domain/repositories/image_storage.dart';
 export 'domain/repositories/jobs.dart';
 export 'domain/repositories/measures.dart';
 export 'domain/repositories/payments.dart';

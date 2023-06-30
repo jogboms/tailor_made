@@ -19,7 +19,7 @@ class TasksPage extends StatelessWidget {
           if (vm.isLoading) {
             return const LoadingSpinner();
           }
-          final List<JobModel> tasks = vm.tasks;
+          final List<JobEntity> tasks = vm.tasks;
 
           if (tasks.isEmpty) {
             return const Center(child: EmptyResultView(message: 'No tasks available'));
