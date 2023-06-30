@@ -144,22 +144,20 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+    final TextStyle textStyle = theme.textTheme.bodySmallLight;
+
     return Container(
-      color: Colors.grey[100]!.withOpacity(.4),
+      color: colorScheme.outlineVariant.withOpacity(.14),
       margin: const EdgeInsets.only(top: 8.0),
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       alignment: AlignmentDirectional.centerStart,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            title.toUpperCase(),
-            style: Theme.of(context).smallLight,
-          ),
-          Text(
-            trailing,
-            style: Theme.of(context).smallLight,
-          ),
+          Text(title.toUpperCase(), style: textStyle),
+          Text(trailing, style: textStyle),
         ],
       ),
     );

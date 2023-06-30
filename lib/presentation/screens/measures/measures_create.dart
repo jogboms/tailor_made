@@ -34,7 +34,6 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
             leading: const AppCloseButton(),
             actions: <Widget>[
               AppClearButton(
-                color: Colors.black,
                 onPressed: _measures.isEmpty ? null : () => _handleSubmit(vm),
                 child: const Text('SAVE'),
               )
@@ -95,8 +94,6 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: FloatingActionButton.extended(
             icon: const Icon(Icons.add_circle_outline),
-            backgroundColor: Colors.white,
-            foregroundColor: kAccentColor,
             label: const Text('Add Item'),
             onPressed: _handleAddItem,
           ),
@@ -208,7 +205,6 @@ class _GroupItems extends StatelessWidget {
             subtitle: Text(measure.unit),
             trailing: IconButton(
               icon: Icon(measure is MeasureEntity ? Icons.delete : Icons.remove_circle_outline),
-              iconSize: 20.0,
               onPressed: () => onPressed(measure),
             ),
           )

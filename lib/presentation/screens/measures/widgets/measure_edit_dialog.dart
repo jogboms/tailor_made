@@ -35,6 +35,9 @@ class MeasureEditDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+
     return Align(
       alignment: const FractionalOffset(0.0, 0.25),
       child: Padding(
@@ -45,7 +48,7 @@ class MeasureEditDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const SizedBox(height: 16.0),
-              Center(child: Text(title, style: Theme.of(context).smallLight)),
+              Center(child: Text(title, style: theme.textTheme.bodySmallLight)),
               const SizedBox(height: 8.0),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
@@ -55,7 +58,11 @@ class MeasureEditDialog extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  AppClearButton(onPressed: onCancel, color: Colors.grey.shade300, child: const Text('CANCEL')),
+                  AppClearButton(
+                    onPressed: onCancel,
+                    color: colorScheme.outline,
+                    child: const Text('CANCEL'),
+                  ),
                   const SizedBox(width: 16.0),
                   AppClearButton(onPressed: onDone, child: const Text('DONE')),
                   const SizedBox(width: 16.0),

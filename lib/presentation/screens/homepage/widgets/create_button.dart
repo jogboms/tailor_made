@@ -46,7 +46,7 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
             alignment: FractionalOffset.center,
             child: Text(
               'TAP TO CREATE',
-              style: Theme.of(context).body3Medium.copyWith(color: Colors.white, letterSpacing: 1.25),
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(letterSpacing: 1.25),
             ),
           ),
         ),
@@ -61,7 +61,7 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Text('Select action', style: Theme.of(context).body3),
+            title: Text('Select action', style: Theme.of(context).textTheme.labelLarge),
             children: <Widget>[
               SimpleDialogOption(
                 onPressed: () => Navigator.pop(context, _CreateOptions.contacts),

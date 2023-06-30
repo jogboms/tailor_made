@@ -11,9 +11,10 @@ class MeasureListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
 
     return Container(
-      color: Colors.grey[100]!.withOpacity(.5),
+      color: colorScheme.outlineVariant.withOpacity(.5),
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       margin: const EdgeInsets.symmetric(vertical: 1.0),
       child: Row(
@@ -23,28 +24,28 @@ class MeasureListItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(item.name, style: theme.body3),
+                Text(item.name, style: theme.textTheme.labelLarge),
                 const SizedBox(height: 4.0),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
                   decoration: BoxDecoration(
-                    color: kAccentColor,
+                    color: colorScheme.secondary,
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: Text(
                     item.group.displayName.toLowerCase(),
-                    style: theme.xsmall.copyWith(color: Colors.white),
+                    style: theme.textTheme.labelSmall?.copyWith(color: Colors.white),
                   ),
                 ),
               ],
             ),
           ),
           if (value > 0) ...<Widget>[
-            Text('$value ', style: theme.subhead3.copyWith(color: kAccentColor)),
+            Text('$value ', style: theme.textTheme.titleMedium?.copyWith(color: colorScheme.secondary)),
             const SizedBox(width: 2.0),
-            Text(item.unit, style: theme.small.copyWith(color: kTitleBaseColor)),
+            Text(item.unit, style: theme.textTheme.bodySmall),
           ],
-          if (value == 0) Text('N/A', style: theme.smallLight.copyWith(color: kTitleBaseColor)),
+          if (value == 0) Text('N/A', style: theme.textTheme.bodySmallLight),
         ],
       ),
     );

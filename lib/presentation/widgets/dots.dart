@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/presentation/theme.dart';
 
 class Dots extends StatelessWidget {
   const Dots({super.key, required this.color, this.size = 16.0, this.shape});
@@ -14,7 +13,14 @@ class Dots extends StatelessWidget {
       size: Size.square(size),
       child: Material(
         color: color,
-        shape: shape ?? const CircleBorder(side: AppBorderSide(width: 2.5, color: Colors.white)),
+        shape: shape ??
+            CircleBorder(
+              side: Divider.createBorderSide(
+                context,
+                width: size / 6.5,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
       ),
     );
   }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -13,8 +12,6 @@ class PaymentsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -23,18 +20,18 @@ class PaymentsPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('Payments', style: theme.appBarTitle),
-                if (payments.isNotEmpty) Text('${payments.length} Tickets', style: Theme.of(context).xsmall),
+                const Text('Payments'),
+                if (payments.isNotEmpty)
+                  Text(
+                    '${payments.length} Tickets',
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
               ],
             ),
-            backgroundColor: kAppBarBackgroundColor,
             automaticallyImplyLeading: false,
             leading: const AppBackButton(),
-            forceElevated: true,
-            elevation: 1.0,
             centerTitle: false,
             floating: true,
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
           ),
           Builder(
             builder: (BuildContext context) {

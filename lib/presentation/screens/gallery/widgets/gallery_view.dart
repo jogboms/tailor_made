@@ -26,7 +26,6 @@ class GalleryView extends StatelessWidget {
       ),
       builder: (_, __, ContactJobViewModel vm) {
         return Scaffold(
-          backgroundColor: Colors.black87,
           appBar: _MyAppBar(contact: vm.selectedContact, job: vm.selectedJob, account: vm.account),
           body: PhotoView(
             imageProvider: NetworkImage(src),
@@ -48,28 +47,30 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    const Color iconColor = Colors.white;
     return AppStatusBar(
+      brightness: Brightness.dark,
       child: DecoratedBox(
-        decoration: const BoxDecoration(color: Colors.black26),
+        decoration: BoxDecoration(color: Theme.of(context).colorScheme.shadow),
         child: SafeArea(
           bottom: false,
           child: Row(
             children: <Widget>[
-              const AppBackButton(color: Colors.white),
+              const AppBackButton(color: iconColor),
               const Expanded(child: SizedBox()),
               if (job case final JobEntity job)
                 IconButton(
-                  icon: const Icon(Icons.work, color: Colors.white),
+                  icon: const Icon(Icons.work, color: iconColor),
                   onPressed: () => context.registry.get<JobsCoordinator>().toJob(job),
                 ),
               if (contact case final ContactEntity contact)
                 IconButton(
-                  icon: const Icon(Icons.person, color: Colors.white),
+                  icon: const Icon(Icons.person, color: iconColor),
                   onPressed: () => context.registry.get<ContactsCoordinator>().toContact(contact),
                 ),
               if (account!.hasPremiumEnabled)
                 const IconButton(
-                  icon: Icon(Icons.share, color: Colors.white),
+                  icon: Icon(Icons.share, color: iconColor),
                   // TODO(Jogboms): Handle
                   onPressed: null,
                 ),

@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/rebloc.dart';
-import 'package:tailor_made/presentation/theme.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
 import '../jobs/widgets/jobs_list.dart';
@@ -20,6 +19,8 @@ class ContactPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return ViewModelSubscriber<AppState, ContactsViewModel>(
       converter: (AppState state) => ContactsViewModel(state, contactID: contact.id),
       builder: (BuildContext context, DispatchFunction dispatch, ContactsViewModel viewModel) {
@@ -29,7 +30,7 @@ class ContactPage extends StatelessWidget {
           length: _tabs.length,
           child: Scaffold(
             appBar: AppBar(
-              backgroundColor: kAccentColor,
+              backgroundColor: colorScheme.secondary,
               automaticallyImplyLeading: false,
               title: ContactAppBar(
                 userId: viewModel.userId,
@@ -39,7 +40,7 @@ class ContactPage extends StatelessWidget {
               titleSpacing: 0.0,
               centerTitle: false,
               bottom: TabBar(
-                labelStyle: Theme.of(context).body3Medium,
+                labelStyle: Theme.of(context).textTheme.labelLarge,
                 tabs: _tabs.map((String tab) => Tab(child: Text(tab))).toList(),
               ),
               systemOverlayStyle: SystemUiOverlayStyle.light,

@@ -11,15 +11,19 @@ class HeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
       padding: const EdgeInsets.fromLTRB(20.0, 35.0, 20.0, 40.0),
       width: double.infinity,
-      decoration: const BoxDecoration(border: Border(bottom: AppBorderSide())),
+      decoration: BoxDecoration(border: Border(bottom: Divider.createBorderSide(context))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Text('Hello', style: Theme.of(context).display4Light.copyWith(letterSpacing: 2.5)),
+          Text(
+            'Hello',
+            style: textTheme.headlineLarge?.copyWith(fontWeight: AppFontWeight.light, letterSpacing: 2.5),
+          ),
           Text(
             account.storeName.split(' ').first,
             style: const TextStyle(fontSize: 52.0, fontWeight: AppFontWeight.regular, height: 1.15),
@@ -29,7 +33,7 @@ class HeaderWidget extends StatelessWidget {
           ),
           Text(
             AppDate(clock.now(), day: 'EEEE', month: 'MMMM').formatted!,
-            style: Theme.of(context).body3.copyWith(height: 1.75),
+            style: textTheme.labelLarge?.copyWith(height: 1.75),
           ),
         ],
       ),

@@ -14,6 +14,7 @@ class JobListItem extends StatelessWidget {
     final String paid = AppMoney(job.completedPayment).formatted;
     final String owed = AppMoney(job.pendingPayment).formatted;
     final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
 
     return Material(
       child: InkWell(
@@ -25,17 +26,17 @@ class JobListItem extends StatelessWidget {
             children: <Widget>[
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
+                  color: colorScheme.outlineVariant,
                   borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                 child: Text.rich(
                   TextSpan(
                     children: <TextSpan>[
-                      TextSpan(text: '${date.day}\n', style: theme.display1),
+                      TextSpan(text: '${date.day}\n', style: theme.textTheme.titleLarge),
                       TextSpan(
                         text: AppStrings.monthsShort[date.month - 1].toUpperCase(),
-                        style: theme.small.copyWith(letterSpacing: 2.0),
+                        style: theme.textTheme.bodySmall?.copyWith(letterSpacing: 2.0),
                       ),
                     ],
                   ),
@@ -48,9 +49,9 @@ class JobListItem extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(job.name, style: theme.subhead3Semi),
+                    Text(job.name, style: theme.textTheme.titleMedium?.copyWith(fontWeight: AppFontWeight.semibold)),
                     const SizedBox(height: 2.0),
-                    Text(price, style: theme.body1),
+                    Text(price, style: theme.textTheme.bodyMedium),
                     const SizedBox(height: 2.0),
                     if (job.pendingPayment > 0)
                       Row(
@@ -72,12 +73,12 @@ class JobListItem extends StatelessWidget {
                           color: Colors.green.shade600,
                           borderRadius: BorderRadius.circular(10.0),
                         ),
-                        child: const Icon(Icons.attach_money, size: 12.0, color: Colors.white),
+                        child: const Icon(Icons.attach_money, size: 12.0),
                       ),
                   ],
                 ),
               ),
-              Icon(Icons.check, color: job.isComplete ? kPrimaryColor : kTextBaseColor),
+              Icon(Icons.check, color: job.isComplete ? colorScheme.primary : null),
             ],
           ),
         ),

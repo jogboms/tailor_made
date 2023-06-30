@@ -17,7 +17,6 @@ class LoadingSpinner extends StatelessWidget {
     return SizedBox.square(
       dimension: size,
       child: SpinKitFadingCube(
-        // color: color ?? kPrimaryColor,
         size: size,
         itemBuilder: (_, int i) {
           if (color != null) {

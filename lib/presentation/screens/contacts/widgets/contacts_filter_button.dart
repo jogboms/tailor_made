@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/presentation/rebloc.dart';
-import 'package:tailor_made/presentation/theme.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
 class ContactsFilterButton extends StatelessWidget {
@@ -12,50 +11,51 @@ class ContactsFilterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final TextStyle optionTheme = theme.body1;
+    final TextStyle optionTheme = theme.textTheme.bodyMedium!;
+    final ColorScheme colorScheme = theme.colorScheme;
     return SizedBox.fromSize(
       size: const Size.square(48.0),
       child: Stack(
         children: <Widget>[
           Positioned.fill(
             child: PopupMenuButton<ContactsSortType>(
-              icon: Icon(Icons.filter_list, color: theme.appBarTitle.color),
+              icon: const Icon(Icons.filter_list),
               onSelected: onTapSort,
               itemBuilder: (BuildContext context) {
                 return <_Option>[
                   _Option(
                     enabled: vm.sortFn != ContactsSortType.jobs,
-                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.jobs)),
+                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.jobs, colorScheme)),
                     text: 'Sort by Jobs',
                     type: ContactsSortType.jobs,
                   ),
                   _Option(
                     enabled: vm.sortFn != ContactsSortType.names,
-                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.names)),
+                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.names, colorScheme)),
                     text: 'Sort by Name',
                     type: ContactsSortType.names,
                   ),
                   _Option(
                     enabled: vm.sortFn != ContactsSortType.completed,
-                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.completed)),
+                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.completed, colorScheme)),
                     text: 'Sort by Completed',
                     type: ContactsSortType.completed,
                   ),
                   _Option(
                     enabled: vm.sortFn != ContactsSortType.pending,
-                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.pending)),
+                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.pending, colorScheme)),
                     text: 'Sort by Pending',
                     type: ContactsSortType.pending,
                   ),
                   _Option(
                     enabled: vm.sortFn != ContactsSortType.recent,
-                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.recent)),
+                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.recent, colorScheme)),
                     text: 'Sort by Recent',
                     type: ContactsSortType.recent,
                   ),
                   _Option(
                     enabled: vm.sortFn != ContactsSortType.reset,
-                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.reset)),
+                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.reset, colorScheme)),
                     text: 'No Sort',
                     type: ContactsSortType.reset,
                   ),
@@ -65,14 +65,15 @@ class ContactsFilterButton extends StatelessWidget {
           ),
           Align(
             alignment: const Alignment(0.75, -0.5),
-            child: vm.hasSortFn ? const Dots(color: kAccentColor) : null,
+            child: vm.hasSortFn ? Dots(color: colorScheme.secondary) : null,
           ),
         ],
       ),
     );
   }
 
-  Color _colorTestFn(ContactsSortType type) => vm.sortFn == type ? kAccentColor : Colors.black87;
+  Color? _colorTestFn(ContactsSortType type, ColorScheme colorScheme) =>
+      vm.sortFn == type ? colorScheme.secondary : null;
 }
 
 class _Option extends PopupMenuItem<ContactsSortType> {

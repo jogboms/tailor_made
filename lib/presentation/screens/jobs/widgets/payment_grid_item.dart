@@ -27,6 +27,10 @@ class PaymentGridItem extends StatelessWidget {
     final DateTime date = record.createdAt;
     final String price = AppMoney(record.price).formatted;
     final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+
+    final Color backgroundColor = payment != null ? colorScheme.primary : theme.hintColor;
+    final Color foregroundColor = colorScheme.onPrimary;
 
     return Container(
       width: kGridWidth,
@@ -34,7 +38,7 @@ class PaymentGridItem extends StatelessWidget {
       child: Material(
         elevation: 1.0,
         borderRadius: BorderRadius.circular(5.0),
-        color: payment != null ? kPrimaryColor : kHintColor,
+        color: backgroundColor,
         child: InkWell(
           onTap: payment != null ? () => context.registry.get<PaymentsCoordinator>().toPayment(payment) : null,
           child: Padding(
@@ -50,19 +54,21 @@ class PaymentGridItem extends StatelessWidget {
                       children: <TextSpan>[
                         TextSpan(
                           text: date.day.toString(),
-                          style: theme.subhead3.copyWith(fontWeight: AppFontWeight.medium, color: Colors.white),
+                          style: theme.textTheme.titleMedium
+                              ?.copyWith(fontWeight: AppFontWeight.medium, color: foregroundColor),
                         ),
                         const TextSpan(text: '\n'),
                         TextSpan(
                           text: '${AppStrings.monthsShort[date.month - 1].toUpperCase()}, ${date.year}',
-                          style: theme.xxsmall.copyWith(fontWeight: AppFontWeight.medium, color: Colors.white),
+                          style: theme.textTheme.labelSmall
+                              ?.copyWith(fontWeight: AppFontWeight.medium, color: foregroundColor),
                         ),
                       ],
                     ),
                     textAlign: TextAlign.right,
                   ),
                 ),
-                Text(price, style: theme.title.copyWith(color: Colors.white))
+                Text(price, style: theme.textTheme.pageTitle.copyWith(color: foregroundColor))
               ],
             ),
           ),

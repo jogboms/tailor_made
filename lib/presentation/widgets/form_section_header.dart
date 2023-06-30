@@ -9,17 +9,20 @@ class FormSectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle style = Theme.of(context).smallSemi;
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+    final TextStyle? textStyle = theme.textTheme.bodySmall?.copyWith(fontWeight: AppFontWeight.semibold);
+
     return Container(
-      color: Colors.grey[100]!.withOpacity(.4),
+      color: colorScheme.outlineVariant.withOpacity(.4),
       margin: const EdgeInsets.only(top: 8.0),
       padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
       alignment: AlignmentDirectional.centerStart,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(title.toUpperCase(), style: style),
-          Text(trailing ?? '', style: style),
+          Text(title.toUpperCase(), style: textStyle),
+          Text(trailing ?? '', style: textStyle),
         ],
       ),
     );

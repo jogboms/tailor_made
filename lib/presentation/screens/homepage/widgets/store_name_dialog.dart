@@ -15,9 +15,8 @@ class StoreNameDialog extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         automaticallyImplyLeading: false,
-        leading: const AppCloseButton(color: Colors.white),
+        leading: const AppCloseButton(),
       ),
-      backgroundColor: Colors.black38,
       body: _Content(account: account),
     );
   }
@@ -44,10 +43,11 @@ class _ContentState extends State<_Content> {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Material(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(5.0),
         child: SingleChildScrollView(
           child: Column(
@@ -55,18 +55,18 @@ class _ContentState extends State<_Content> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const SizedBox(height: 48.0),
-              const Center(
+              Center(
                 child: CircleAvatar(
-                  backgroundColor: kAccentColor,
-                  foregroundColor: Colors.white,
+                  backgroundColor: colorScheme.secondary,
+                  foregroundColor: colorScheme.onSecondary,
                   radius: 36.0,
-                  child: Icon(Icons.store, size: 50.0),
+                  child: const Icon(Icons.store, size: 50.0),
                 ),
               ),
               const SizedBox(height: 16.0),
               Text(
                 'Store Name',
-                style: Theme.of(context).title.copyWith(color: Colors.black38),
+                style: Theme.of(context).textTheme.pageTitle,
               ),
               const SizedBox(height: 64.0),
               Padding(
@@ -75,7 +75,7 @@ class _ContentState extends State<_Content> {
                   keyboardType: TextInputType.text,
                   controller: _controller,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).title,
+                  style: Theme.of(context).textTheme.pageTitle,
                   onSubmitted: (String value) => _handleSubmit(context),
                   decoration: const InputDecoration(isDense: true, hintText: 'Enter Store Name'),
                 ),

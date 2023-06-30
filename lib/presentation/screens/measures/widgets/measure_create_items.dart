@@ -77,7 +77,7 @@ class _JobMeasureBlock extends StatelessWidget {
     final int length = measures.length;
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(border: Border(bottom: AppBorderSide())),
+      decoration: BoxDecoration(border: Border(bottom: Divider.createBorderSide(context))),
       child: Wrap(
         alignment: WrapAlignment.spaceBetween,
         children: measures.map((MeasureEntity measure) {
@@ -94,10 +94,10 @@ class _JobMeasureBlock extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0),
                 decoration: BoxDecoration(
                   border: Border(
-                    bottom: AppBorderSide(
+                    bottom: Divider.createBorderSide(context).copyWith(
                       style: removeBorder ? BorderStyle.none : BorderStyle.solid,
                     ),
-                    right: AppBorderSide(
+                    right: Divider.createBorderSide(context).copyWith(
                       style: index.isEven ? BorderStyle.solid : BorderStyle.none,
                     ),
                   ),
@@ -149,7 +149,7 @@ class _MeasureFieldState extends State<_MeasureField> {
     return TextField(
       controller: _controller,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      style: Theme.of(context).headline,
+      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: AppFontWeight.medium),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.zero,
         labelText: widget.label,

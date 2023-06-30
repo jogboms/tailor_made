@@ -41,7 +41,7 @@ class _ContactAppBarState extends State<ContactAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle popTextStyle = Theme.of(context).body1;
+    final TextStyle popTextStyle = Theme.of(context).textTheme.bodyMedium!;
     return PreferredSize(
       preferredSize: const Size.fromHeight(kToolbarHeight),
       child: Row(
@@ -54,7 +54,7 @@ class _ContactAppBarState extends State<ContactAppBar> {
           ),
           _Icon(icon: Icons.call, onTap: () => call(widget.contact.phone)),
           PopupMenuButton<Choice>(
-            icon: const Icon(Icons.more_vert, color: Colors.white),
+            icon: const Icon(Icons.more_vert),
             onSelected: _selectChoice,
             itemBuilder: (_) {
               return <PopupMenuItem<Choice>>[
@@ -93,7 +93,7 @@ class _Icon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
-      child: InkResponse(onTap: onTap, radius: 20.0, child: Icon(icon, color: Colors.white)),
+      child: InkResponse(onTap: onTap, radius: 20.0, child: Icon(icon)),
     );
   }
 }
@@ -114,13 +114,13 @@ class _Title extends StatelessWidget {
           contact.fullname,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: theme.title.copyWith(color: Colors.white),
+          style: theme.textTheme.pageTitle,
         ),
         Text(
           contact.location,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: theme.body1.copyWith(color: Colors.white),
+          style: theme.textTheme.bodyMedium,
         ),
       ],
     );
@@ -142,7 +142,7 @@ class _Leading extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          const Icon(Icons.arrow_back, color: Colors.white),
+          const Icon(Icons.arrow_back),
           const SizedBox(width: 4.0),
           Hero(
             tag: contact.id,

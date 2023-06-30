@@ -17,6 +17,8 @@ class MeasuresSlideBlockItem extends StatefulWidget {
 class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return ListTile(
       dense: true,
       title: Text(widget.measure.name),
@@ -25,7 +27,7 @@ class _MeasuresSlideBlockItemState extends State<MeasuresSlideBlockItem> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           InkResponse(
-            child: Icon(Icons.settings, color: kPrimaryColor.withOpacity(.75)),
+            child: Icon(Icons.settings, color: colorScheme.primary.withOpacity(.75)),
             onTap: () => _onTapEditItem(widget.measure),
           ),
         ],

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/theme.dart';
 import 'package:tailor_made/presentation/utils.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
@@ -20,10 +19,11 @@ class _MeasureDialogState extends State<MeasureDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Material(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(5.0),
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -34,12 +34,12 @@ class _MeasureDialogState extends State<MeasureDialog> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 const SizedBox(height: 32.0),
-                const Center(
+                Center(
                   child: CircleAvatar(
-                    backgroundColor: kPrimaryColor,
-                    foregroundColor: Colors.white,
+                    backgroundColor: colorScheme.primary,
+                    foregroundColor: colorScheme.onPrimary,
                     radius: 36.0,
-                    child: Icon(Icons.content_cut, size: 50.0),
+                    child: const Icon(Icons.content_cut, size: 50.0),
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -65,7 +65,7 @@ class _MeasureDialogState extends State<MeasureDialog> {
                   children: <Widget>[
                     AppClearButton(
                       onPressed: () => Navigator.pop(context),
-                      color: Colors.grey,
+                      color: colorScheme.outline,
                       child: const Text('CANCEL'),
                     ),
                     const SizedBox(width: 16.0),

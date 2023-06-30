@@ -43,10 +43,16 @@ class _GalleryGridsState extends State<GalleryGrids> {
           children: <Widget>[
             const SizedBox(width: 16.0),
             Expanded(
-              child: Text('GALLERY', style: theme.small.copyWith(color: Colors.black87)),
+              child: Text('GALLERY', style: theme.textTheme.bodySmall),
             ),
             AppClearButton(
-              child: Text('SHOW ALL', style: theme.smallBtn),
+              child: Text(
+                'SHOW ALL',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontWeight: AppFontWeight.medium,
+                  color: theme.colorScheme.secondary,
+                ),
+              ),
               onPressed: () {
                 context.registry.get<GalleryCoordinator>().toGallery(widget.userId, widget.job.images.toList());
               },
@@ -144,15 +150,17 @@ class _NewGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       width: GalleryGridItem.kGridWidth,
       margin: const EdgeInsets.only(right: 8.0),
       child: Material(
         borderRadius: BorderRadius.circular(5.0),
-        color: Colors.grey[100],
+        color: colorScheme.outlineVariant,
         child: InkWell(
           onTap: onPressed,
-          child: Icon(Icons.add_a_photo, size: 24.0, color: kTextBaseColor.withOpacity(.35)),
+          child: const Icon(Icons.add_a_photo),
         ),
       ),
     );

@@ -1,6 +1,5 @@
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
@@ -23,6 +22,7 @@ class _JobPageState extends State<JobPage> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
 
     return ViewModelSubscriber<AppState, JobsViewModel>(
       converter: (AppState store) => JobsViewModel(store, jobID: widget.job.id),
@@ -45,9 +45,7 @@ class _JobPageState extends State<JobPage> {
                   elevation: 1.0,
                   automaticallyImplyLeading: false,
                   centerTitle: false,
-                  backgroundColor: Colors.white,
                   title: _AvatarAppBar(job: job, contact: contact),
-                  systemOverlayStyle: SystemUiOverlayStyle.dark,
                 ),
               ];
             },
@@ -62,11 +60,17 @@ class _JobPageState extends State<JobPage> {
                       children: <Widget>[
                         const SizedBox(width: 16.0),
                         Expanded(
-                          child: Text('DUE DATE', style: theme.small.copyWith(color: Colors.black87)),
+                          child: Text('DUE DATE', style: theme.textTheme.bodySmall),
                         ),
                         AppClearButton(
                           onPressed: job.isComplete ? null : () => _onSaveDate(job),
-                          child: Text('EXTEND DATE', style: theme.smallBtn),
+                          child: Text(
+                            'EXTEND DATE',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              fontWeight: AppFontWeight.medium,
+                              color: colorScheme.secondary,
+                            ),
+                          ),
                         ),
                         const SizedBox(width: 16.0),
                       ],
@@ -75,7 +79,7 @@ class _JobPageState extends State<JobPage> {
                       padding: const EdgeInsets.only(left: 16.0),
                       child: Text(
                         AppDate(job.dueAt, day: 'EEEE', month: 'MMMM', year: 'yyyy').formatted!,
-                        style: theme.body3Medium,
+                        style: theme.textTheme.labelLarge,
                       ),
                     ),
                     const SizedBox(height: 4.0),
@@ -85,7 +89,11 @@ class _JobPageState extends State<JobPage> {
                     const SizedBox(height: 32.0),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(job.notes, style: theme.body3Light, textAlign: TextAlign.justify),
+                      child: Text(
+                        job.notes,
+                        style: theme.textTheme.labelLarge?.copyWith(fontWeight: AppFontWeight.light),
+                        textAlign: TextAlign.justify,
+                      ),
                     ),
                     const SizedBox(height: 48.0),
                   ],
@@ -96,8 +104,8 @@ class _JobPageState extends State<JobPage> {
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: FloatingActionButton.extended(
             icon: Icon(job.isComplete ? Icons.undo : Icons.check),
-            backgroundColor: job.isComplete ? Colors.white : kAccentColor,
-            foregroundColor: job.isComplete ? kAccentColor : Colors.white,
+            backgroundColor: job.isComplete ? colorScheme.onSecondary : colorScheme.secondary,
+            foregroundColor: job.isComplete ? colorScheme.secondary : colorScheme.onSecondary,
             label: Text(job.isComplete ? 'Undo Completed' : 'Mark Completed'),
             onPressed: () => _onTapComplete(job),
           ),
@@ -171,7 +179,6 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color textColor = Colors.grey.shade800;
     final ThemeData theme = Theme.of(context);
 
     return Column(
@@ -181,7 +188,7 @@ class _Header extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Text(
             job.name,
-            style: theme.title.copyWith(color: textColor),
+            style: theme.textTheme.pageTitle,
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.fade,
@@ -190,14 +197,16 @@ class _Header extends StatelessWidget {
         const SizedBox(height: 12.0),
         Text(
           AppMoney(job.price).formatted,
-          style: theme.display2Semi.copyWith(color: textColor, letterSpacing: 1.5),
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: AppFontWeight.semibold,
+            letterSpacing: 1.5,
+          ),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24.0),
         Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            border: Border(top: AppBorderSide(), bottom: AppBorderSide()),
+          decoration: BoxDecoration(
+            border: Border.symmetric(horizontal: Divider.createBorderSide(context)),
           ),
           padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
           child: Row(
@@ -221,10 +230,10 @@ class _AvatarAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color textColor = Colors.grey.shade800;
-
     final String date = AppDate(job.createdAt).formatted!;
     final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+    final TextTheme textTheme = theme.textTheme;
 
     return AvatarAppBar(
       tag: contact.createdAt.toString(),
@@ -235,13 +244,12 @@ class _AvatarAppBar extends StatelessWidget {
           contact.fullname,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: theme.title,
+          style: textTheme.pageTitle,
         ),
       ),
-      iconColor: textColor,
       subtitle: Text(
         date,
-        style: theme.small.copyWith(color: textColor, fontWeight: FontWeight.w300),
+        style: textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w300),
       ),
       actions: <Widget>[
         IconButton(
@@ -249,7 +257,7 @@ class _AvatarAppBar extends StatelessWidget {
           onPressed: () => context.registry.get<MeasuresCoordinator>().toMeasures(job.measurements),
         ),
         IconButton(
-          icon: Icon(Icons.check, color: job.isComplete ? kPrimaryColor : kTextBaseColor),
+          icon: Icon(Icons.check, color: job.isComplete ? colorScheme.primary : null),
           onPressed: null,
         ),
       ],
@@ -268,10 +276,10 @@ class _PaidBox extends StatelessWidget {
 
     return Expanded(
       child: Container(
-        decoration: const BoxDecoration(border: Border(right: AppBorderSide())),
+        decoration: BoxDecoration(border: Border(right: Divider.createBorderSide(context))),
         child: Column(
           children: <Widget>[
-            Text('PAID', style: theme.xxsmall, textAlign: TextAlign.center),
+            Text('PAID', style: theme.textTheme.labelSmall, textAlign: TextAlign.center),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -279,7 +287,7 @@ class _PaidBox extends StatelessWidget {
                 const SizedBox(width: 4.0),
                 Text(
                   AppMoney(job.completedPayment).formatted,
-                  style: theme.title.copyWith(letterSpacing: 1.25),
+                  style: theme.textTheme.pageTitle.copyWith(letterSpacing: 1.25),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -302,7 +310,7 @@ class _UnpaidBox extends StatelessWidget {
     return Expanded(
       child: Column(
         children: <Widget>[
-          Text('UNPAID', style: theme.xxsmall, textAlign: TextAlign.center),
+          Text('UNPAID', style: theme.textTheme.labelSmall, textAlign: TextAlign.center),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -310,7 +318,7 @@ class _UnpaidBox extends StatelessWidget {
               const SizedBox(width: 4.0),
               Text(
                 AppMoney(job.pendingPayment).formatted,
-                style: theme.title.copyWith(letterSpacing: 1.25),
+                style: theme.textTheme.pageTitle.copyWith(letterSpacing: 1.25),
                 textAlign: TextAlign.center,
               ),
             ],

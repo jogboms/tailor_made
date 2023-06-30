@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:tailor_made/presentation/theme.dart';
 
 class AppCircleAvatar extends StatelessWidget {
   const AppCircleAvatar({super.key, this.radius, this.useAlt = false, this.imageUrl});
@@ -11,11 +10,14 @@ class AppCircleAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color iconColor = useAlt ? kPrimaryColor : Colors.white;
-    final Color backgroundColor = useAlt ? Colors.white : kPrimaryColor;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+    final Color iconColor = useAlt ? colorScheme.primary : colorScheme.onPrimary;
+    final Color backgroundColor = useAlt ? colorScheme.onPrimary : colorScheme.primary;
+
     return CircleAvatar(
       radius: radius,
-      backgroundColor: imageUrl != null ? Colors.grey.shade400 : backgroundColor,
+      backgroundColor: imageUrl != null ? colorScheme.outlineVariant : backgroundColor,
       backgroundImage: imageUrl != null ? CachedNetworkImageProvider(imageUrl!) : null,
       child: imageUrl != null ? null : Center(child: Icon(Icons.person_outline, color: iconColor)),
     );

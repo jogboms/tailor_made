@@ -77,14 +77,12 @@ class _AppBarState extends State<_AppBar> with StoreDispatchMixin<AppState> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-
     if (!_isSearching) {
       return CustomAppBar(
         title: const Text('Contacts'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search, color: theme.appBarTitle.color),
+            icon: const Icon(Icons.search),
             onPressed: _onTapSearch,
           ),
           ContactsFilterButton(
@@ -95,23 +93,20 @@ class _AppBarState extends State<_AppBar> with StoreDispatchMixin<AppState> {
       );
     }
 
-    final TextStyle textStyle = theme.subhead1Bold;
-
     return AppBar(
       centerTitle: false,
       elevation: 1.0,
-      leading: AppCloseButton(color: Colors.white, onPop: _handleSearchEnd),
+      leading: AppCloseButton(onPop: _handleSearchEnd),
       title: TextField(
         autofocus: true,
-        decoration: InputDecoration(hintText: 'Search...', hintStyle: textStyle.copyWith(color: Colors.white)),
-        style: textStyle.copyWith(color: Colors.white),
+        decoration: const InputDecoration(hintText: 'Search...'),
         onChanged: (String term) => dispatchAction(ContactsAction.search(term)),
       ),
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1.0),
         child: SizedBox(
           height: 1.0,
-          child: widget.vm.isLoading ? const LinearProgressIndicator(backgroundColor: Colors.white) : null,
+          child: widget.vm.isLoading ? const LinearProgressIndicator() : null,
         ),
       ),
     );

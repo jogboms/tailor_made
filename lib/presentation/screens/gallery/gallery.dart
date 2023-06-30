@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -23,18 +22,18 @@ class GalleryPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('Gallery', style: theme.appBarTitle),
-                if (images.isEmpty) Text('${images.length} Photos', style: theme.xsmall),
+                const Text('Gallery'),
+                if (images.isNotEmpty)
+                  Text(
+                    '${images.length} Photos',
+                    style: theme.textTheme.labelSmall,
+                  ),
               ],
             ),
-            backgroundColor: kAppBarBackgroundColor,
             automaticallyImplyLeading: false,
             leading: const AppBackButton(),
-            forceElevated: true,
-            elevation: 1.0,
             centerTitle: false,
             floating: true,
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
           ),
           Builder(
             builder: (BuildContext context) {

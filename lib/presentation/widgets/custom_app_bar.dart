@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:tailor_made/presentation/theme.dart';
 
+import '../utils.dart';
 import 'app_back_button.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -30,14 +29,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle style = Theme.of(context).appBarTitle;
-
     return AppBar(
-      systemOverlayStyle: brightness == Brightness.light ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
-      backgroundColor: Colors.white,
+      systemOverlayStyle: brightness?.systemOverlayStyle,
       automaticallyImplyLeading: useLeading,
-      leading: useLeading ? leading ?? AppBackButton(color: style.color) : null,
-      title: DefaultTextStyle(style: style, child: title),
+      leading: useLeading ? leading ?? const AppBackButton() : null,
+      title: title,
       elevation: elevation,
       centerTitle: false,
       actions: actions,

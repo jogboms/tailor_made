@@ -13,12 +13,12 @@ class MidRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: const BoxDecoration(border: Border(bottom: AppBorderSide())),
+      decoration: BoxDecoration(border: Border(bottom: Divider.createBorderSide(context))),
       child: Row(
         children: <Widget>[
           Expanded(
             child: DecoratedBox(
-              decoration: const BoxDecoration(border: Border(right: AppBorderSide())),
+              decoration: BoxDecoration(border: Border(right: Divider.createBorderSide(context))),
               child: TMGridTile(
                 color: Colors.redAccent,
                 icon: Icons.attach_money,

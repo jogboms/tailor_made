@@ -67,7 +67,7 @@ class _SliderHeader extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 16.0),
-                  child: Text(title, style: theme.title.copyWith(fontSize: 14.0)),
+                  child: Text(title, style: theme.textTheme.pageTitle.copyWith(fontSize: 14.0)),
                 ),
               ),
               Padding(

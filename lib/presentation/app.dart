@@ -75,12 +75,7 @@ class _AppState extends State<App> {
               supportedLocales: L10n.supportedLocales,
               builder: (_, Widget? child) => SnackBarProvider(
                 navigatorKey: widget.navigatorKey,
-                child: Builder(
-                  builder: (BuildContext context) {
-                    ScaleUtil.initialize(context: context, size: const Size(1080, 1920));
-                    return child!;
-                  },
-                ),
+                child: child!,
               ),
               onGenerateRoute: (RouteSettings settings) => _PageRoute<Object>(
                 builder: (_) => SplashPage(isColdStart: true, isMock: environment.isMock),

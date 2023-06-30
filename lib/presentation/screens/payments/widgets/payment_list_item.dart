@@ -16,6 +16,7 @@ class PaymentListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final DateTime date = payment.createdAt;
     final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
 
     return Material(
       child: InkWell(
@@ -34,11 +35,11 @@ class PaymentListItem extends StatelessWidget {
               Expanded(
                 child: Row(
                   children: <Widget>[
-                    const Dots(color: kAccentColor, size: 12),
+                    Dots(color: colorScheme.secondary, size: 12),
                     const SizedBox(width: 8.0),
                     Text(
                       AppMoney(payment.price).formatted,
-                      style: theme.title.copyWith(letterSpacing: 1.5),
+                      style: theme.textTheme.pageTitle.copyWith(letterSpacing: 1.5),
                     ),
                   ],
                 ),
@@ -46,11 +47,15 @@ class PaymentListItem extends StatelessWidget {
               Text.rich(
                 TextSpan(
                   children: <TextSpan>[
-                    TextSpan(text: date.day.toString(), style: theme.subhead3Semi.copyWith(color: kAccentColor)),
+                    TextSpan(
+                      text: date.day.toString(),
+                      style: theme.textTheme.titleMedium
+                          ?.copyWith(color: colorScheme.secondary, fontWeight: AppFontWeight.semibold),
+                    ),
                     const TextSpan(text: '\n'),
                     TextSpan(
                       text: '${AppStrings.monthsShort[date.month - 1].toUpperCase()}, ${date.year}',
-                      style: theme.smallMedium.copyWith(color: Colors.black54),
+                      style: theme.textTheme.bodySmallMedium,
                     ),
                   ],
                 ),
