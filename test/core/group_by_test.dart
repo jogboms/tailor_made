@@ -19,8 +19,8 @@ void main() {
       );
 
       expect(grouped.isNotEmpty, true);
-      expect(grouped['Blouse']!.length, 3);
-      expect(grouped['Trouser']!.length, 2);
+      expect(grouped[MeasureGroup.blouse]!.length, 3);
+      expect(grouped[MeasureGroup.trouser]!.length, 2);
     });
   });
 }
