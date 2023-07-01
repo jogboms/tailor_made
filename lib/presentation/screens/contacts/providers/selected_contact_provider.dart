@@ -9,13 +9,15 @@ part 'selected_contact_provider.g.dart';
 @Riverpod(dependencies: <Object>[account, jobs, contacts])
 Future<ContactState> selectedContact(SelectedContactRef ref, String id) async {
   final AccountEntity account = await ref.watch(accountProvider.future);
-  final List<ContactEntity> contacts = await ref.watch(contactsProvider.future);
+  final ContactEntity contact = await ref.watch(
+    contactsProvider.selectAsync((_) => _.firstWhere((_) => _.id == id)),
+  );
   final List<JobEntity> jobs = await ref.watch(
     jobsProvider.selectAsync((_) => _.where((_) => _.contactID == id).toList()),
   );
 
   return ContactState(
-    contact: contacts.firstWhere((_) => _.id == id),
+    contact: contact,
     jobs: jobs,
     userId: account.uid,
     measurements: <MeasureGroup, List<MeasureEntity>>{}, //todo

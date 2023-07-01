@@ -7,28 +7,17 @@ class JobsViewModel extends Equatable {
   JobsViewModel(AppState state, {this.jobID})
       : _model = state.jobs.jobs ?? <JobEntity>[],
         _contacts = state.contacts.contacts ?? <ContactEntity>[],
-        _searchResults = state.jobs.searchResults ?? <JobEntity>[],
-        isSearching = state.jobs.isSearching,
-        hasSortFn = state.jobs.hasSortFn,
-        measures = state.measures.grouped ?? <MeasureGroup, List<MeasureEntity>>{},
         userId = state.account.account!.uid,
-        sortFn = state.jobs.sortFn,
-        isLoading = state.jobs.status == StateStatus.loading,
-        hasError = state.jobs.status == StateStatus.failure,
-        error = state.jobs.error;
-
-  List<JobEntity> get jobs => isSearching ? searchResults : model;
+        isLoading = false;
 
   List<JobEntity> get tasks {
-    final List<JobEntity> tasks = model.where((JobEntity job) => !job.isComplete).toList();
+    final List<JobEntity> tasks = _model.where((JobEntity job) => !job.isComplete).toList();
     return tasks..sort((JobEntity a, JobEntity b) => a.dueAt.compareTo(b.dueAt));
   }
 
-  JobEntity? get selected => model.firstWhereOrNull((_) => _.id == jobID);
+  JobEntity? get selected => _model.firstWhereOrNull((_) => _.id == jobID);
 
-  ContactEntity? get selectedContact => contacts.firstWhereOrNull((_) => _.id == selected?.contactID);
-
-  List<JobEntity> get selectedJobs => jobs.where((JobEntity job) => job.contactID == selected?.id).toList();
+  ContactEntity? get selectedContact => _contacts.firstWhereOrNull((_) => _.id == selected?.contactID);
 
   final String? jobID;
 
@@ -36,26 +25,10 @@ class JobsViewModel extends Equatable {
 
   final List<ContactEntity> _contacts;
 
-  List<ContactEntity> get contacts => _contacts;
-
-  final List<JobEntity> _searchResults;
-
-  List<JobEntity> get searchResults => _searchResults;
-
-  final Map<MeasureGroup, List<MeasureEntity>> measures;
-
   final List<JobEntity> _model;
 
-  List<JobEntity> get model => _model;
-
-  final bool hasSortFn;
-  final JobsSortType sortFn;
   final bool isLoading;
-  final bool isSearching;
-  final bool hasError;
-  final String? error;
 
   @override
-  List<Object?> get props =>
-      <Object?>[model, hasSortFn, sortFn, userId, isSearching, searchResults, contacts, isLoading, hasError, error];
+  List<Object?> get props => <Object?>[_model, userId, _contacts, isLoading];
 }
