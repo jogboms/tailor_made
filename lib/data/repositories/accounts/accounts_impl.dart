@@ -45,6 +45,21 @@ class AccountsImpl extends Accounts {
   }
 
   @override
+  Future<AccountEntity> fetch() async {
+    final String? id = firebase.auth.getUser;
+    if (id == null) {
+      throw const AuthException.userNotFound();
+    }
+
+    final AccountEntity? account = await getAccount(id);
+    if (account == null) {
+      throw const AuthException.userNotFound();
+    }
+
+    return account;
+  }
+
+  @override
   Future<AccountEntity?> getAccount(String userId) async {
     final MapDocumentSnapshot doc = await collection.fetchOne(userId).get();
     if (!doc.exists) {

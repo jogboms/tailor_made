@@ -22,6 +22,9 @@ class AccountsMockImpl extends Accounts {
   }
 
   @override
+  Future<AccountEntity> fetch() async => (await getAccount('1'))!;
+
+  @override
   Future<AccountEntity?> getAccount(String userId) async {
     return const AccountEntity(
       reference: ReferenceEntity(id: 'id', path: 'path'),

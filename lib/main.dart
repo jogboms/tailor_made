@@ -74,6 +74,7 @@ void main(List<String> args) async {
     ..set<Payments>(repository.payments)
     ..set<Measures>(repository.measures)
     ..set<Stats>(repository.stats)
+    ..factory((RegistryFactory di) => FetchAccountUseCase(accounts: di()))
     ..set<ContactsCoordinator>(ContactsCoordinator(navigatorKey))
     ..set<GalleryCoordinator>(GalleryCoordinator(navigatorKey))
     ..set<SharedCoordinator>(SharedCoordinator(navigatorKey))

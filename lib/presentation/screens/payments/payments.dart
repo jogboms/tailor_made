@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
+import 'providers/payments_provider.dart';
 import 'widgets/payments_list.dart';
 
 class PaymentsPage extends StatelessWidget {
@@ -39,16 +41,16 @@ class PaymentsPage extends StatelessWidget {
                 return _Content(payments: payments);
               }
 
-              return StreamBuilder<List<PaymentEntity>>(
-                // TODO(Jogboms): move this out of here
-                stream: context.registry.get<Payments>().fetchAll(userId),
-                builder: (_, AsyncSnapshot<List<PaymentEntity>> snapshot) {
-                  final List<PaymentEntity>? data = snapshot.data;
-                  if (data == null) {
-                    return const SliverFillRemaining(child: LoadingSpinner());
-                  }
-                  return _Content(payments: data);
-                },
+              return Consumer(
+                builder: (_, WidgetRef ref, Widget? child) => ref.watch(paymentsProvider).when(
+                      skipLoadingOnReload: true,
+                      data: (List<PaymentEntity> data) => _Content(payments: data),
+                      error: (Object error, StackTrace stackTrace) => SliverFillRemaining(
+                        child: ErrorView(error, stackTrace),
+                      ),
+                      loading: () => child!,
+                    ),
+                child: const SliverFillRemaining(child: LoadingSpinner()),
               );
             },
           )

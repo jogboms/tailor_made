@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/screens/gallery/providers/gallery_provider.dart';
 
 import 'widgets/gallery_grid.dart';
 
@@ -41,16 +43,16 @@ class GalleryPage extends StatelessWidget {
                 return _Content(images: images);
               }
 
-              return StreamBuilder<List<ImageEntity>>(
-                // TODO(Jogboms): move this out of here
-                stream: context.registry.get<Gallery>().fetchAll(userId),
-                builder: (_, AsyncSnapshot<List<ImageEntity>> snapshot) {
-                  final List<ImageEntity>? data = snapshot.data;
-                  if (data == null) {
-                    return const SliverFillRemaining(child: LoadingSpinner());
-                  }
-                  return _Content(images: data);
-                },
+              return Consumer(
+                builder: (_, WidgetRef ref, Widget? child) => ref.watch(galleryProvider).when(
+                      skipLoadingOnReload: true,
+                      data: (List<ImageEntity> data) => _Content(images: data),
+                      error: (Object error, StackTrace stackTrace) => SliverFillRemaining(
+                        child: ErrorView(error, stackTrace),
+                      ),
+                      loading: () => child!,
+                    ),
+                child: const SliverFillRemaining(child: LoadingSpinner()),
               );
             },
           ),

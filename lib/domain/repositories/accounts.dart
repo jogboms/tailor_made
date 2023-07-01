@@ -9,6 +9,8 @@ abstract class Accounts {
 
   Future<void> signUp(AccountEntity account);
 
+  Future<AccountEntity> fetch();
+
   Future<AccountEntity?> getAccount(String userId);
 
   Future<bool> updateAccount(
