@@ -1,6 +1,6 @@
 import 'package:rebloc/rebloc.dart';
+import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
-import 'package:tailor_made/presentation/registry.dart';
 
 import 'accounts/bloc.dart';
 import 'app_state.dart';

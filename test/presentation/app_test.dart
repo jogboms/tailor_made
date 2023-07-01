@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:registry/registry.dart';
 import 'package:tailor_made/data.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:tailor_made/presentation/screens/homepage/homepage.dart';

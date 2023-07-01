@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:rebloc/rebloc.dart';
+import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 
 import 'constants.dart';

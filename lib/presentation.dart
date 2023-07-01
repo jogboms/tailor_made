@@ -4,6 +4,7 @@ export 'presentation/coordinator.dart';
 export 'presentation/mixins.dart';
 export 'presentation/rebloc.dart';
 export 'presentation/registry.dart';
+export 'presentation/state.dart';
 export 'presentation/theme.dart';
 export 'presentation/utils.dart';
 export 'presentation/widgets.dart';

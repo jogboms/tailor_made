@@ -3,6 +3,8 @@ import 'dart:async' as async;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:registry/registry.dart';
 import 'package:universal_io/io.dart' as io;
 
 import 'core.dart';
@@ -81,16 +83,21 @@ void main(List<String> args) async {
     ..set<TasksCoordinator>(TasksCoordinator(navigatorKey));
 
   runApp(
-    ErrorBoundary(
-      isReleaseMode: !environment.isDebugging,
-      errorViewBuilder: (_) => const AppCrashErrorView(),
-      onException: AppLog.e,
-      onCrash: errorReporter.reportCrash,
-      child: App(
-        registry: registry,
-        navigatorKey: navigatorKey,
-        store: storeFactory(registry),
-        navigatorObservers: <NavigatorObserver>[navigationObserver],
+    ProviderScope(
+      overrides: <Override>[
+        registryProvider.overrideWithValue(registry),
+      ],
+      child: ErrorBoundary(
+        isReleaseMode: !environment.isDebugging,
+        errorViewBuilder: (_) => const AppCrashErrorView(),
+        onException: AppLog.e,
+        onCrash: errorReporter.reportCrash,
+        child: App(
+          registry: registry,
+          navigatorKey: navigatorKey,
+          store: storeFactory(registry),
+          navigatorObservers: <NavigatorObserver>[navigationObserver],
+        ),
       ),
     ),
   );
