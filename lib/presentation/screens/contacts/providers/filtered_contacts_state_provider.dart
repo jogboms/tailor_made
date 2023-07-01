@@ -12,17 +12,15 @@ part 'filtered_contacts_state_provider.g.dart';
 
 @Riverpod(dependencies: <Object>[account, contacts, SearchContactQueryState, SearchContactSortState])
 Future<FilteredContactsState> filteredContacts(FilteredContactsRef ref) async {
-  final AccountEntity account = await ref.watch(accountProvider.future);
   final List<ContactEntity> items = await ref.watch(contactsProvider.future);
   final String query = ref.watch(searchContactQueryStateProvider).trim().toLowerCase();
   final ContactsSortType sortType = ref.watch(searchContactSortStateProvider);
 
   return FilteredContactsState(
-    userId: account.uid,
     contacts: items
         .where((ContactEntity element) {
           if (query.length > 1) {
-            return element.fullname.toLowerCase().contains(query);
+            return element.fullname.contains(RegExp(query, caseSensitive: false));
           }
 
           return true;
@@ -33,13 +31,12 @@ Future<FilteredContactsState> filteredContacts(FilteredContactsRef ref) async {
 }
 
 class FilteredContactsState with EquatableMixin {
-  const FilteredContactsState({required this.userId, required this.contacts});
+  const FilteredContactsState({required this.contacts});
 
-  final String userId;
   final List<ContactEntity> contacts;
 
   @override
-  List<Object> get props => <Object>[userId, contacts];
+  List<Object> get props => <Object>[contacts];
 }
 
 @riverpod
