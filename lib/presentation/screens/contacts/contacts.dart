@@ -59,7 +59,7 @@ class _ContactsPageState extends State<ContactsPage> {
           },
         );
       },
-      child: const LoadingSpinner(),
+      child: const Center(child: LoadingSpinner()),
     );
   }
 }

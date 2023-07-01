@@ -61,7 +61,7 @@ class JobsPage extends StatelessWidget {
           },
         );
       },
-      child: const LoadingSpinner(),
+      child: const Center(child: LoadingSpinner()),
     );
   }
 }
