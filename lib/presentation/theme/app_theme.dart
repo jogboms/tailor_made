@@ -71,6 +71,7 @@ ThemeData themeBuilder(
     appBarTheme: defaultTheme.appBarTheme.copyWith(
       backgroundColor: colorScheme.surface,
       foregroundColor: colorScheme.onSurface,
+      elevation: 1.0,
     ),
     textButtonTheme: TextButtonThemeData(style: buttonStyle),
     filledButtonTheme: FilledButtonThemeData(style: buttonStyle),
