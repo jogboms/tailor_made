@@ -240,7 +240,7 @@ class _AvatarAppBar extends StatelessWidget {
       tag: contact.createdAt.toString(),
       imageUrl: contact.imageUrl,
       title: GestureDetector(
-        onTap: () => context.registry.get<ContactsCoordinator>().toContact(contact),
+        onTap: () => context.registry.get<ContactsCoordinator>().toContact(contact.id),
         child: Text(
           contact.fullname,
           maxLines: 1,

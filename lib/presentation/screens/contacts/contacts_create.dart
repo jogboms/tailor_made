@@ -107,7 +107,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
       final ContactEntity snap = await contacts.create(widget.userId, contact);
       snackBar.success('Successfully Added');
 
-      contactsCoordinator.toContact(snap, replace: true);
+      contactsCoordinator.toContact(snap.id, replace: true);
     } catch (error, stackTrace) {
       AppLog.e(error, stackTrace);
       snackBar.error(error.toString());

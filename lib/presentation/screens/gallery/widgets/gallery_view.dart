@@ -26,7 +26,7 @@ class GalleryView extends StatelessWidget {
       ),
       builder: (_, __, ContactJobViewModel vm) {
         return Scaffold(
-          appBar: _MyAppBar(contact: vm.selectedContact, job: vm.selectedJob, account: vm.account),
+          appBar: _MyAppBar(contactId: vm.selectedContact?.id, job: vm.selectedJob, account: vm.account),
           body: PhotoView(
             imageProvider: NetworkImage(src),
             loadingBuilder: (_, __) => const LoadingSpinner(),
@@ -39,9 +39,9 @@ class GalleryView extends StatelessWidget {
 }
 
 class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const _MyAppBar({this.contact, this.job, required this.account});
+  const _MyAppBar({this.contactId, this.job, required this.account});
 
-  final ContactEntity? contact;
+  final String? contactId;
   final JobEntity? job;
   final AccountEntity? account;
 
@@ -63,10 +63,10 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                   icon: const Icon(Icons.work, color: iconColor),
                   onPressed: () => context.registry.get<JobsCoordinator>().toJob(job),
                 ),
-              if (contact case final ContactEntity contact)
+              if (contactId case final String contactId)
                 IconButton(
                   icon: const Icon(Icons.person, color: iconColor),
-                  onPressed: () => context.registry.get<ContactsCoordinator>().toContact(contact),
+                  onPressed: () => context.registry.get<ContactsCoordinator>().toContact(contactId),
                 ),
               if (account!.hasPremiumEnabled)
                 const IconButton(

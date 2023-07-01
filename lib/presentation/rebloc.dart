@@ -9,7 +9,6 @@ export 'rebloc/common/home_view_model.dart';
 export 'rebloc/common/middleware.dart';
 export 'rebloc/common/state_status.dart';
 export 'rebloc/contacts/bloc.dart';
-export 'rebloc/contacts/view_model.dart';
 export 'rebloc/extensions.dart';
 export 'rebloc/jobs/bloc.dart';
 export 'rebloc/jobs/view_model.dart';

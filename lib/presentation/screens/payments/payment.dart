@@ -32,10 +32,10 @@ class PaymentPage extends StatelessWidget {
                   icon: const Icon(Icons.work),
                   onPressed: () => context.registry.get<JobsCoordinator>().toJob(job),
                 ),
-              if (vm.selectedContact case final ContactEntity contact)
+              if (vm.selectedContact?.id case final String contactId)
                 IconButton(
                   icon: const Icon(Icons.person),
-                  onPressed: () => context.registry.get<ContactsCoordinator>().toContact(contact),
+                  onPressed: () => context.registry.get<ContactsCoordinator>().toContact(contactId),
                 ),
               if (vm.account!.hasPremiumEnabled)
                 const IconButton(

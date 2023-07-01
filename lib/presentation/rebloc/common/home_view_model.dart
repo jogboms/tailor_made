@@ -10,9 +10,7 @@ class HomeViewModel extends Equatable {
         stats = state.stats.stats,
         settings = state.settings.settings,
         hasSkippedPremium = state.account.hasSkipedPremium == true,
-        isLoading = state.stats.status == StateStatus.loading ||
-            state.contacts.status == StateStatus.loading ||
-            state.account.status == StateStatus.loading;
+        isLoading = state.stats.status == StateStatus.loading || state.account.status == StateStatus.loading;
 
   final AccountEntity? account;
 

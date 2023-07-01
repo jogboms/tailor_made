@@ -20,7 +20,7 @@ class ContactsListItem extends StatelessWidget {
     return ListTile(
       dense: true,
       contentPadding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-      onTap: onTapContact ?? () => context.registry.get<ContactsCoordinator>().toContact(contact),
+      onTap: onTapContact ?? () => context.registry.get<ContactsCoordinator>().toContact(contact.id),
       leading: _Avatar(contact: contact),
       title: Text(
         contact.fullname,
