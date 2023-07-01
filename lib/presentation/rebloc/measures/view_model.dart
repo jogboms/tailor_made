@@ -6,7 +6,7 @@ class MeasuresViewModel extends Equatable {
   MeasuresViewModel(AppState state)
       : _model = state.measures.measures ?? <MeasureEntity>[],
         grouped = state.measures.grouped ?? <MeasureGroup, List<MeasureEntity>>{},
-        userId = state.account.account!.uid,
+        userId = '1', //todo
         isLoading = state.measures.status == StateStatus.loading,
         hasError = state.measures.status == StateStatus.failure,
         error = state.measures.error;

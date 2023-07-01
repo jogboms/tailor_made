@@ -26,6 +26,7 @@ class HomeNotifier extends _$HomeNotifier {
     );
   }
 
+//todo: move to accountProvider
   void premiumSetup() async {
     final HomeState homeState = state.requireValue;
     await ref.read(registryProvider).get<Accounts>().signUp(
@@ -48,6 +49,7 @@ class HomeNotifier extends _$HomeNotifier {
     );
   }
 
+//todo: move to accountProvider
   void logout() async {
     await ref.read(registryProvider).get<Accounts>().signOut();
     ref.invalidate(accountProvider);

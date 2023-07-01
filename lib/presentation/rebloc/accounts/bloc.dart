@@ -18,31 +18,15 @@ class AccountBloc extends SimpleBloc<AppState> {
   @override
   Stream<WareContext<AppState>> applyMiddleware(Stream<WareContext<AppState>> input) {
     MergeStream<WareContext<AppState>>(<Stream<WareContext<AppState>>>[
-      input.whereAction<_InitAccountAction>().switchMap(_getAccount(accounts)),
       input.whereAction<_OnReadNotice>().switchMap(_readNotice(accounts)),
       input.whereAction<_OnSendRating>().switchMap(_sendRating(accounts)),
-    ]).untilAction<OnDisposeAction>().listen((WareContext<AppState> context) => context.dispatcher(context.action));
+    ]).listen((WareContext<AppState> context) => context.dispatcher(context.action));
 
     return input;
   }
-
-  @override
-  AppState reducer(AppState state, Action action) {
-    final AccountState account = state.account;
-
-    if (action is OnDataAction<AccountEntity>) {
-      return state.copyWith(
-        account: account.copyWith(
-          account: action.payload,
-          status: StateStatus.success,
-        ),
-      );
-    }
-
-    return state;
-  }
 }
 
+//todo: move to accountProvider
 Middleware _readNotice(Accounts accounts) {
   return (WareContext<AppState> context) async* {
     final AccountEntity account = (context.action as _OnReadNotice).payload;
@@ -57,6 +41,7 @@ Middleware _readNotice(Accounts accounts) {
   };
 }
 
+//todo: move to accountProvider
 Middleware _sendRating(Accounts accounts) {
   return (WareContext<AppState> context) async* {
     final _OnSendRating action = context.action as _OnSendRating;
@@ -70,14 +55,5 @@ Middleware _sendRating(Accounts accounts) {
     );
 
     yield context;
-  };
-}
-
-Middleware _getAccount(Accounts accounts) {
-  return (WareContext<AppState> context) async* {
-    final AccountEntity? account = await accounts.getAccount((context.action as _InitAccountAction).userId);
-    if (account != null) {
-      yield context.copyWith(OnDataAction<AccountEntity>(account));
-    }
   };
 }

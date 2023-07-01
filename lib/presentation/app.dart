@@ -35,16 +35,8 @@ class _AppState extends State<App> {
   late final String bannerMessage = environment.name.toUpperCase();
 
   @override
-  void initState() {
-    super.initState();
-    widget.store.dispatch(const CommonAction.init());
-  }
-
-  @override
   void dispose() {
-    widget.store
-      ..dispatch(const CommonAction.dispose())
-      ..dispose();
+    widget.store.dispose();
     super.dispose();
   }
 

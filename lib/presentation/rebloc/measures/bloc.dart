@@ -19,7 +19,7 @@ class MeasuresBloc extends SimpleBloc<AppState> {
     MergeStream<WareContext<AppState>>(<Stream<WareContext<AppState>>>[
       input.whereAction<_UpdateMeasureAction>().switchMap(_onUpdateMeasure(measures)),
       input.whereAction<_InitMeasuresAction>().switchMap(_onInitMeasure(measures)),
-    ]).untilAction<OnDisposeAction>().listen((WareContext<AppState> context) => context.dispatcher(context.action));
+    ]).listen((WareContext<AppState> context) => context.dispatcher(context.action));
 
     return input;
   }
@@ -77,7 +77,7 @@ Middleware _onInitMeasure(Measures measures) {
     final String userId = (context.action as _InitMeasuresAction).userId;
     return measures.fetchAll(userId).map((List<MeasureEntity> measures) {
       if (measures.isEmpty) {
-        return _UpdateMeasureAction(BaseMeasureEntity.defaults, userId);
+        return MeasuresAction.update(BaseMeasureEntity.defaults, userId);
       }
 
       return OnDataAction<_Union<MeasureEntity>>(
