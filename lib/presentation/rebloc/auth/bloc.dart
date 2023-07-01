@@ -19,8 +19,6 @@ class AuthBloc extends SimpleBloc<AppState> {
       dispatcher(AccountAction.init(action.user));
       dispatcher(MeasuresAction.init(action.user));
       dispatcher(StatsAction.init(action.user));
-      dispatcher(JobsAction.init(action.user));
-      dispatcher(ContactsAction.init(action.user));
     }
     return action;
   }
