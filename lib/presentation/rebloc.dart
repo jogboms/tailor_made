@@ -3,7 +3,6 @@ export 'rebloc/app_state.dart';
 export 'rebloc/auth/bloc.dart';
 export 'rebloc/common/actions.dart';
 export 'rebloc/common/app_action.dart';
-export 'rebloc/common/home_view_model.dart';
 export 'rebloc/common/middleware.dart';
 export 'rebloc/common/state_status.dart';
 export 'rebloc/contacts/bloc.dart';

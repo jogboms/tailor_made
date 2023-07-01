@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/screens/homepage/providers/home_notifier_provider.dart';
 import 'package:version/version.dart';
 
 import 'widgets/access_denied.dart';
@@ -60,10 +62,18 @@ class HomePage extends StatelessWidget {
 
                   return child!;
                 },
-                child: ViewModelSubscriber<AppState, HomeViewModel>(
-                  converter: HomeViewModel.new,
-                  builder: (_, DispatchFunction dispatch, HomeViewModel vm) =>
-                      _Body(viewModel: vm, dispatch: dispatch, isMock: isMock),
+                child: Consumer(
+                  builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(homeNotifierProvider).when(
+                        skipLoadingOnReload: true,
+                        data: (HomeState state) => _Body(
+                          state: state,
+                          notifier: ref.read(homeNotifierProvider.notifier),
+                          isMock: isMock,
+                        ),
+                        error: ErrorView.new,
+                        loading: () => child!,
+                      ),
+                  child: const Center(child: LoadingSpinner()),
                 ),
               ),
             ],
@@ -75,22 +85,18 @@ class HomePage extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({required this.dispatch, required this.viewModel, required this.isMock});
+  const _Body({required this.state, required this.notifier, required this.isMock});
 
-  final HomeViewModel viewModel;
-  final DispatchFunction dispatch;
+  final HomeState state;
+  final HomeNotifier notifier;
   final bool isMock;
 
   @override
   Widget build(BuildContext context) {
-    final AccountEntity? account = viewModel.account;
-    final StatsEntity? stats = viewModel.stats;
+    final AccountEntity account = state.account;
+    final StatsEntity stats = state.stats;
 
-    if (viewModel.isLoading || account == null || stats == null) {
-      return const LoadingSpinner();
-    }
-
-    if (viewModel.isDisabled) {
+    if (state.isDisabled) {
       return AccessDeniedPage(
         onSendMail: () {
           email(
@@ -101,10 +107,10 @@ class _Body extends StatelessWidget {
       );
     }
 
-    if (viewModel.isWarning && viewModel.hasSkippedPremium == false) {
+    if (state.isWarning && state.hasSkippedPremium == false) {
       return RateLimitPage(
-        onSignUp: () => dispatch(AccountAction.premiumSignUp(account)),
-        onSkippedPremium: () => dispatch(const AccountAction.skippedPremium()),
+        onSignUp: notifier.premiumSetup,
+        onSkippedPremium: notifier.skippedPremium,
       );
     }
 
@@ -122,12 +128,12 @@ class _Body extends StatelessWidget {
             SizedBox(height: Theme.of(context).buttonTheme.height + MediaQuery.of(context).padding.bottom),
           ],
         ),
-        CreateButton(userId: account.uid, contacts: viewModel.contacts),
+        CreateButton(userId: account.uid, contacts: state.contacts),
         TopButtonBar(
           account: account,
-          shouldSendRating: viewModel.shouldSendRating,
+          shouldSendRating: state.shouldSendRating,
           onLogout: () {
-            dispatch(const AuthAction.logout());
+            notifier.logout();
             context.registry.get<SharedCoordinator>().toSplash(isMock);
           },
         ),

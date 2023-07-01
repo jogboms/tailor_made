@@ -21,7 +21,6 @@ class AccountBloc extends SimpleBloc<AppState> {
       input.whereAction<_InitAccountAction>().switchMap(_getAccount(accounts)),
       input.whereAction<_OnReadNotice>().switchMap(_readNotice(accounts)),
       input.whereAction<_OnSendRating>().switchMap(_sendRating(accounts)),
-      input.whereAction<_OnPremiumSignUp>().switchMap(_signUp(accounts)),
     ]).untilAction<OnDisposeAction>().listen((WareContext<AppState> context) => context.dispatcher(context.action));
 
     return input;
@@ -37,12 +36,6 @@ class AccountBloc extends SimpleBloc<AppState> {
           account: action.payload,
           status: StateStatus.success,
         ),
-      );
-    }
-
-    if (action is _OnSkipedPremium) {
-      return state.copyWith(
-        account: account.copyWith(hasSkipedPremium: true),
       );
     }
 
@@ -75,20 +68,6 @@ Middleware _sendRating(Accounts accounts) {
       hasSendRating: true,
       rating: action.rating,
     );
-
-    yield context;
-  };
-}
-
-Middleware _signUp(Accounts accounts) {
-  return (WareContext<AppState> context) async* {
-    final AccountEntity account = (context.action as _OnPremiumSignUp).payload.copyWith(
-          status: AccountStatus.pending,
-          notice: context.state.settings.settings!.premiumNotice,
-          hasReadNotice: false,
-          hasPremiumEnabled: true,
-        );
-    await accounts.signUp(account);
 
     yield context;
   };
