@@ -1,33 +1,28 @@
-import 'package:registry/registry.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:tailor_made/domain.dart';
 
 import '../../../state.dart';
 
 part 'home_notifier_provider.g.dart';
 
-@Riverpod(dependencies: <Object>[registry, account, contacts, jobs])
+@Riverpod(dependencies: <Object>[registry, account, contacts, jobs, settings, stats])
 class HomeNotifier extends _$HomeNotifier {
   @override
   Stream<HomeState> build() async* {
-    final Registry registry = ref.read(registryProvider);
     final AccountEntity account = await ref.watch(accountProvider.future);
     final List<ContactEntity> contacts = await ref.watch(contactsProvider.future);
     final List<JobEntity> jobs = await ref.watch(jobsProvider.future);
+    final SettingEntity settings = await ref.watch(settingsProvider.future);
+    final StatsEntity stats = await ref.watch(statsProvider.future);
 
-    yield* CombineLatestStream.combine2(
-      registry.get<Stats>().fetch(account.uid), //todo
-      registry.get<Settings>().fetch(), //todo
-      (StatsEntity stats, SettingEntity settings) => HomeState(
-        account: account,
-        contacts: contacts,
-        jobs: jobs,
-        isLoading: false,
-        stats: stats,
-        settings: settings,
-        hasSkippedPremium: false,
-      ),
+    yield HomeState(
+      account: account,
+      contacts: contacts,
+      jobs: jobs,
+      isLoading: false,
+      stats: stats,
+      settings: settings,
+      hasSkippedPremium: false,
     );
   }
 
@@ -41,6 +36,7 @@ class HomeNotifier extends _$HomeNotifier {
             hasPremiumEnabled: true,
           ),
         );
+    ref.invalidate(accountProvider);
     ref.invalidateSelf();
   }
 
@@ -54,7 +50,7 @@ class HomeNotifier extends _$HomeNotifier {
 
   void logout() async {
     await ref.read(registryProvider).get<Accounts>().signOut();
-    ref.invalidateSelf();
+    ref.invalidate(accountProvider);
   }
 }
 

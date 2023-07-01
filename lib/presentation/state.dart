@@ -3,4 +3,6 @@ export 'state/contacts_provider.dart';
 export 'state/jobs_provider.dart';
 export 'state/registry_provider.dart';
 export 'state/selected_contact_job_provider.dart';
+export 'state/settings_provider.dart';
 export 'state/state_notifier_mixin.dart';
+export 'state/stats_provider.dart';

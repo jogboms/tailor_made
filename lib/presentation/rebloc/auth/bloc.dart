@@ -18,26 +18,17 @@ class AuthBloc extends SimpleBloc<AppState> {
     if (action is _OnLoginAction) {
       dispatcher(AccountAction.init(action.user));
       dispatcher(MeasuresAction.init(action.user));
-      dispatcher(StatsAction.init(action.user));
     }
     return action;
   }
 
   @override
   AppState reducer(AppState state, Action action) {
-    if (action is _OnLogoutAction) {
-      return AppState.initialState;
-    }
-
     return state;
   }
 
   @override
   Future<Action> afterware(DispatchFunction dispatcher, AppState state, Action action) async {
-    if (action is _OnLogoutAction) {
-      await accounts.signOut();
-      dispatcher(const SettingsAction.init());
-    }
     return action;
   }
 }

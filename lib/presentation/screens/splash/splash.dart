@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
@@ -98,66 +99,66 @@ class _ContentState extends State<_Content> {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelSubscriber<AppState, SettingsViewModel>(
-      converter: SettingsViewModel.new,
-      builder: (BuildContext context, DispatchFunction dispatch, SettingsViewModel vm) {
-        return Stack(
-          children: <Widget>[
-            if (!_isLoading || !widget.isColdStart || vm.hasError)
-              const Center(
-                child: Image(
-                  image: AppImages.logo,
-                  width: 148.0,
-                  color: Colors.white30,
-                  colorBlendMode: BlendMode.saturation,
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(settingsProvider).when(
+            data: (SettingEntity data) {
+              return Stack(
+                children: <Widget>[
+                  if (!_isLoading || !widget.isColdStart)
+                    const Center(
+                      child: Image(
+                        image: AppImages.logo,
+                        width: 148.0,
+                        color: Colors.white30,
+                        colorBlendMode: BlendMode.saturation,
+                      ),
+                    ),
+                  Positioned.fill(
+                    top: null,
+                    bottom: 124.0,
+                    child: Builder(
+                      builder: (_) {
+                        if ((widget.isColdStart) || _isLoading) {
+                          return const LoadingSpinner();
+                        }
+
+                        return Center(
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                            ),
+                            icon: const Image(image: AppImages.googleLogo, width: 24.0),
+                            label: Text(
+                              'Continue with Google',
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: AppFontWeight.bold),
+                            ),
+                            onPressed: _onLogin,
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              );
+            },
+            error: (Object error, _) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 48.0, vertical: 16.0),
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    Text(error.toString(), textAlign: TextAlign.center),
+                    const SizedBox(height: 8.0),
+                    ElevatedButton(
+                      child: const Text('RETRY'),
+                      onPressed: () => ref.invalidate(settingsProvider),
+                    ),
+                  ],
                 ),
               ),
-            Positioned.fill(
-              top: null,
-              bottom: 124.0,
-              child: Builder(
-                builder: (_) {
-                  if ((vm.isLoading && widget.isColdStart) || _isLoading) {
-                    return const LoadingSpinner();
-                  }
-
-                  if (vm.hasError) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 48.0, vertical: 16.0),
-                      child: Center(
-                        child: Column(
-                          children: <Widget>[
-                            Text(vm.error.toString(), textAlign: TextAlign.center),
-                            const SizedBox(height: 8.0),
-                            ElevatedButton(
-                              child: const Text('RETRY'),
-                              onPressed: () => dispatch(const SettingsAction.init()),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-
-                  return Center(
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                      ),
-                      icon: const Image(image: AppImages.googleLogo, width: 24.0),
-                      label: Text(
-                        'Continue with Google',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: AppFontWeight.bold),
-                      ),
-                      onPressed: _onLogin,
-                    ),
-                  );
-                },
-              ),
-            )
-          ],
-        );
-      },
+            ),
+            loading: () => child!,
+          ),
+      child: const LoadingSpinner(),
     );
   }
 

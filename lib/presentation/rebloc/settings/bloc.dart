@@ -32,23 +32,6 @@ class SettingsBloc extends SimpleBloc<AppState> {
 
   @override
   AppState reducer(AppState state, Action action) {
-    final SettingsState settings = state.settings;
-
-    if (action is OnDataAction<SettingEntity>) {
-      return state.copyWith(
-        settings: settings.copyWith(
-          settings: action.payload,
-          status: StateStatus.success,
-        ),
-      );
-    }
-
-    if (action is _OnErrorSettingsAction) {
-      return state.copyWith(
-        settings: settings.copyWith(status: StateStatus.failure),
-      );
-    }
-
     return state;
   }
 }

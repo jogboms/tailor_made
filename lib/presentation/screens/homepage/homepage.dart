@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:tailor_made/presentation/screens/homepage/providers/home_notifier_provider.dart';
@@ -40,41 +39,40 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              AppVersionBuilder(
-                valueBuilder: () => AppVersion.retrieve(isMock),
-                builder: (BuildContext context, String? appVersion, Widget? child) {
-                  if (appVersion == null) {
-                    return child!;
-                  }
+              Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(homeNotifierProvider).when(
+                      skipLoadingOnReload: true,
+                      data: (HomeState state) => AppVersionBuilder(
+                        valueBuilder: () => AppVersion.retrieve(isMock),
+                        builder: (BuildContext context, String? appVersion, Widget? child) {
+                          if (appVersion == null) {
+                            return child!;
+                          }
 
-                  final Version currentVersion = Version.parse(appVersion);
-                  final AppState state = StoreProvider.of<AppState>(context).states.valueWrapper!.value;
-                  final Version latestVersion = Version.parse(state.settings.settings?.versionName ?? '1.0.0');
+                          final Version currentVersion = Version.parse(appVersion);
+                          final Version latestVersion = Version.parse(state.settings.versionName);
 
-                  if (latestVersion > currentVersion) {
-                    return OutDatedPage(
-                      onUpdate: () {
-                        // TODO(Jogboms): take note for apple if that ever happens
-                        open('https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade');
-                      },
-                    );
-                  }
+                          if (latestVersion > currentVersion) {
+                            return OutDatedPage(
+                              onUpdate: () {
+                                // TODO(Jogboms): take note for apple if that ever happens
+                                open('https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade');
+                              },
+                            );
+                          }
 
-                  return child!;
-                },
-                child: Consumer(
-                  builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(homeNotifierProvider).when(
-                        skipLoadingOnReload: true,
-                        data: (HomeState state) => _Body(
+                          return child!;
+                        },
+                        child: _Body(
                           state: state,
                           notifier: ref.read(homeNotifierProvider.notifier),
                           isMock: isMock,
                         ),
-                        error: ErrorView.new,
-                        loading: () => child!,
                       ),
-                  child: const Center(child: LoadingSpinner()),
-                ),
+                      error: ErrorView.new,
+                      loading: () => child!,
+                    ),
+                child: const Center(child: LoadingSpinner()),
               ),
             ],
           ),
