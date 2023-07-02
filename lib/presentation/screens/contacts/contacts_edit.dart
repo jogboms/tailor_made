@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/registry.dart';
 
+import '../../registry.dart';
+import '../../state.dart';
 import '../../widgets.dart';
 import 'widgets/contact_form.dart';
 
 class ContactsEditPage extends StatefulWidget {
-  const ContactsEditPage({super.key, required this.contact, required this.userId});
+  const ContactsEditPage({super.key, required this.contact});
 
   final ContactEntity contact;
-  final String userId;
 
   @override
   State<ContactsEditPage> createState() => _ContactsEditPageState();
@@ -36,11 +37,19 @@ class _ContactsEditPageState extends State<ContactsEditPage> {
           IconButton(icon: const Icon(Icons.contacts), onPressed: _handleSelectContact),
         ],
       ),
-      body: ContactForm(
-        key: _formKey,
-        contact: _contact,
-        onHandleSubmit: _handleSubmit,
-        userId: widget.userId,
+      body: Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(accountProvider).when(
+              skipLoadingOnReload: true,
+              data: (AccountEntity data) => ContactForm(
+                key: _formKey,
+                contact: _contact,
+                onHandleSubmit: (CreateContactData contact) => _handleSubmit(contact, data.uid),
+                userId: data.uid,
+              ),
+              error: ErrorView.new,
+              loading: () => child!,
+            ),
+        child: const Center(child: LoadingSpinner()),
       ),
     );
   }
@@ -63,13 +72,13 @@ class _ContactsEditPageState extends State<ContactsEditPage> {
     );
   }
 
-  void _handleSubmit(CreateContactData contact) async {
+  void _handleSubmit(CreateContactData contact, String userId) async {
     final AppSnackBar snackBar = AppSnackBar.of(context)..loading();
 
     try {
       // TODO(Jogboms): move this out of here
       await context.registry.get<Contacts>().update(
-            widget.userId,
+            userId,
             reference: widget.contact.reference,
             fullname: contact.fullname,
             phone: contact.phone,

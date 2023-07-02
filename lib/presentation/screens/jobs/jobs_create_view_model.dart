@@ -7,29 +7,34 @@ import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:uuid/uuid.dart';
 
-import 'jobs_create.dart';
 import 'widgets/image_form_value.dart';
 
-abstract class JobsCreateViewModel extends State<JobsCreatePage> {
+@optionalTypeArgs
+mixin JobsCreateViewModel<T extends StatefulWidget> on State<T> {
   @protected
-  List<ImageFormValue> images = <ImageFormValue>[];
+  final List<ImageFormValue> images = <ImageFormValue>[];
   @protected
   late CreateJobData job;
   @protected
   late ContactEntity? contact;
   @protected
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
   @protected
   bool autovalidate = false;
+
+  @protected
+  String get userId;
+
+  @protected
+  ContactEntity? get defaultContact;
 
   @override
   void initState() {
     super.initState();
-    contact = widget.contact;
+    contact = defaultContact;
     job = CreateJobData(
       id: const Uuid().v4(),
-      userID: widget.userId,
+      userID: userId,
       contactID: contact?.id,
       measurements: contact?.measurements ?? <String, double>{},
       price: 0.0,
@@ -53,14 +58,14 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
       // TODO(Jogboms): move this out of here
       final ImageFileReference ref = await registry.get<ImageStorage>().createReferenceImage(
             path: imageFile.path,
-            userId: widget.userId,
+            userId: userId,
           );
 
       setState(() {
         images.add(
           ImageCreateFormValue(
             CreateImageData(
-              userID: widget.userId,
+              userID: userId,
               contactID: contact!.id,
               jobID: job.id,
               src: ref.src,
@@ -74,9 +79,8 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
     }
   }
 
-  void handleSelectContact() async {
-    final ContactEntity? selectedContact =
-        await context.registry.get<ContactsCoordinator>().toContactsList(widget.contacts);
+  void handleSelectContact(List<ContactEntity> contacts) async {
+    final ContactEntity? selectedContact = await context.registry.get<ContactsCoordinator>().toContactsList(contacts);
     if (selectedContact != null) {
       setState(() {
         contact = selectedContact;
@@ -93,7 +97,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
       ImageCreateFormValue(:final CreateImageData data) => (src: data.src, path: data.path),
       ImageModifyFormValue(:final ImageEntity data) => (src: data.src, path: data.path),
     };
-    await context.registry.get<ImageStorage>().delete(reference: reference, userId: widget.userId);
+    await context.registry.get<ImageStorage>().delete(reference: reference, userId: userId);
     if (mounted) {
       setState(() {
         images.remove(value);
@@ -132,7 +136,7 @@ abstract class JobsCreateViewModel extends State<JobsCreatePage> {
       try {
         // TODO(Jogboms): move this out of here
         final Registry registry = context.registry;
-        final JobEntity result = await registry.get<Jobs>().create(widget.userId, job);
+        final JobEntity result = await registry.get<Jobs>().create(userId, job);
         snackBar.hide();
         registry.get<JobsCoordinator>().toJob(result, replace: true);
       } catch (e) {

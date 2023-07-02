@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tailor_made/domain.dart';
 
@@ -20,7 +21,6 @@ class HomeNotifier extends _$HomeNotifier {
       account: account,
       contacts: contacts,
       jobs: jobs,
-      isLoading: false,
       stats: stats,
       settings: settings,
       hasSkippedPremium: false,
@@ -43,16 +43,16 @@ class HomeState with EquatableMixin {
     required this.jobs,
     required this.stats,
     required this.settings,
-    required this.isLoading,
     required this.hasSkippedPremium,
   });
 
   final AccountEntity account;
+  @visibleForTesting
   final List<ContactEntity> contacts;
+  @visibleForTesting
   final List<JobEntity> jobs;
   final StatsEntity stats;
   final SettingEntity settings;
-  final bool isLoading;
   final bool hasSkippedPremium;
 
   bool get isDisabled => account.status == AccountStatus.disabled;
@@ -64,7 +64,7 @@ class HomeState with EquatableMixin {
   bool get shouldSendRating => !account.hasSendRating && (contacts.length >= 10 || jobs.length >= 10);
 
   @override
-  List<Object> get props => <Object>[account, contacts, jobs, stats, settings, isLoading, hasSkippedPremium];
+  List<Object> get props => <Object>[account, contacts, jobs, stats, settings, hasSkippedPremium];
 
   HomeState copyWith({
     bool? hasSkippedPremium,
@@ -75,7 +75,6 @@ class HomeState with EquatableMixin {
       jobs: jobs,
       stats: stats,
       settings: settings,
-      isLoading: isLoading,
       hasSkippedPremium: hasSkippedPremium ?? this.hasSkippedPremium,
     );
   }

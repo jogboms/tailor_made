@@ -129,7 +129,7 @@ class _Body extends StatelessWidget {
             SizedBox(height: Theme.of(context).buttonTheme.height + MediaQuery.of(context).padding.bottom),
           ],
         ),
-        CreateButton(userId: account.uid, contacts: state.contacts),
+        const CreateButton(),
         TopButtonBar(
           account: account,
           shouldSendRating: state.shouldSendRating,

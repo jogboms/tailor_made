@@ -8,14 +8,12 @@ enum Choice { createJob, editMeasure, editAccount, sendText }
 class ContactAppBar extends StatefulWidget {
   const ContactAppBar({
     super.key,
-    required this.userId,
     required this.grouped,
     required this.contact,
   });
 
   final Map<MeasureGroup, List<MeasureEntity>> grouped;
   final ContactEntity contact;
-  final String userId;
 
   @override
   State<ContactAppBar> createState() => _ContactAppBarState();
@@ -26,13 +24,13 @@ class _ContactAppBarState extends State<ContactAppBar> {
     final Registry registry = context.registry;
     switch (choice) {
       case Choice.createJob:
-        registry.get<JobsCoordinator>().toCreateJob(widget.userId, <ContactEntity>[], widget.contact);
+        registry.get<JobsCoordinator>().toCreateJob(widget.contact.id);
         break;
       case Choice.editMeasure:
         registry.get<ContactsCoordinator>().toContactMeasure(contact: widget.contact, grouped: widget.grouped);
         break;
       case Choice.editAccount:
-        registry.get<ContactsCoordinator>().toContactEdit(widget.userId, widget.contact);
+        registry.get<ContactsCoordinator>().toContactEdit(widget.contact);
         break;
       case Choice.sendText:
         sms(widget.contact.phone);

@@ -20,8 +20,8 @@ class ContactsCoordinator extends CoordinatorBase {
         : navigator?.push<void>(RouteTransitions.slideIn(ContactPage(id: id)));
   }
 
-  void toContactEdit(String userId, ContactEntity contact) {
-    navigator?.push<void>(RouteTransitions.slideIn(ContactsEditPage(userId: userId, contact: contact)));
+  void toContactEdit(ContactEntity contact) {
+    navigator?.push<void>(RouteTransitions.slideIn(ContactsEditPage(contact: contact)));
   }
 
   Future<Map<String, double>?>? toContactMeasure({
@@ -41,7 +41,7 @@ class ContactsCoordinator extends CoordinatorBase {
     return navigator?.push<ContactEntity>(RouteTransitions.fadeIn(ContactLists(contacts: contacts)));
   }
 
-  void toCreateContact(String userId) {
-    navigator?.push<void>(RouteTransitions.slideIn(ContactsCreatePage(userId: userId)));
+  void toCreateContact() {
+    navigator?.push<void>(RouteTransitions.slideIn(const ContactsCreatePage()));
   }
 }

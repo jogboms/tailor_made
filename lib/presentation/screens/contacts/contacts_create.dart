@@ -5,14 +5,11 @@ import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
-import 'package:uuid/uuid.dart';
 
 import 'widgets/contact_form.dart';
 
 class ContactsCreatePage extends StatefulWidget {
-  const ContactsCreatePage({super.key, required this.userId});
-
-  final String userId;
+  const ContactsCreatePage({super.key});
 
   @override
   State<ContactsCreatePage> createState() => _ContactsCreatePageState();
@@ -20,7 +17,6 @@ class ContactsCreatePage extends StatefulWidget {
 
 class _ContactsCreatePageState extends State<ContactsCreatePage> {
   final GlobalKey<ContactFormState> _formKey = GlobalKey<ContactFormState>();
-  late final String id = const Uuid().v4();
   late CreateContactData _contact = const CreateContactData(
     fullname: '',
     phone: '',
@@ -60,11 +56,19 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
           ),
         ],
       ),
-      body: ContactForm(
-        key: _formKey,
-        contact: _contact,
-        onHandleSubmit: _handleSubmit,
-        userId: widget.userId,
+      body: Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(accountProvider).when(
+              skipLoadingOnReload: true,
+              data: (AccountEntity data) => ContactForm(
+                key: _formKey,
+                contact: _contact,
+                onHandleSubmit: (CreateContactData contact) => _handleSubmit(contact, data.uid),
+                userId: data.uid,
+              ),
+              error: ErrorView.new,
+              loading: () => child!,
+            ),
+        child: const Center(child: LoadingSpinner()),
       ),
     );
   }
@@ -86,7 +90,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
     );
   }
 
-  void _handleSubmit(CreateContactData contact) async {
+  void _handleSubmit(CreateContactData contact, String userId) async {
     final AppSnackBar snackBar = AppSnackBar.of(context);
     if (contact.measurements.isEmpty) {
       snackBar.info(AppStrings.leavingEmptyMeasures);
@@ -107,7 +111,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
       );
 
       // TODO(Jogboms): move this out of here
-      final ContactEntity snap = await contacts.create(widget.userId, contact);
+      final ContactEntity snap = await contacts.create(userId, contact);
       snackBar.success('Successfully Added');
 
       contactsCoordinator.toContact(snap.id, replace: true);

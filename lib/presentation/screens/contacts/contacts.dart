@@ -44,9 +44,7 @@ class _ContactsPageState extends State<ContactsPage> {
             ),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.person_add),
-              onPressed: () => context.registry.get<ContactsCoordinator>().toCreateContact(
-                    ref.read(accountProvider).requireValue.uid, //todo: remove
-                  ),
+              onPressed: () => context.registry.get<ContactsCoordinator>().toCreateContact(),
             ),
           ),
           onWillPop: () async {

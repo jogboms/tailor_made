@@ -6,9 +6,8 @@ import '../../../state.dart';
 
 part 'selected_contact_provider.g.dart';
 
-@Riverpod(dependencies: <Object>[account, jobs, contacts, measurements])
+@Riverpod(dependencies: <Object>[jobs, contacts, measurements])
 Future<ContactState> selectedContact(SelectedContactRef ref, String id) async {
-  final AccountEntity account = await ref.watch(accountProvider.future);
   final ContactEntity contact = await ref.watch(
     contactsProvider.selectAsync((_) => _.firstWhere((_) => _.id == id)),
   );
@@ -20,7 +19,6 @@ Future<ContactState> selectedContact(SelectedContactRef ref, String id) async {
   return ContactState(
     contact: contact,
     jobs: jobs,
-    userId: account.uid,
     measurements: measurements.grouped,
   );
 }
@@ -29,15 +27,13 @@ class ContactState with EquatableMixin {
   const ContactState({
     required this.contact,
     required this.jobs,
-    required this.userId,
     required this.measurements,
   });
 
   final ContactEntity contact;
   final List<JobEntity> jobs;
-  final String userId;
   final Map<MeasureGroup, List<MeasureEntity>> measurements;
 
   @override
-  List<Object?> get props => <Object?>[contact, userId, jobs, measurements];
+  List<Object?> get props => <Object?>[contact, jobs, measurements];
 }

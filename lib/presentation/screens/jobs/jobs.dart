@@ -45,10 +45,7 @@ class JobsPage extends StatelessWidget {
             ),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.library_add),
-              onPressed: () => context.registry.get<JobsCoordinator>().toCreateJob(
-                    ref.read(accountProvider).requireValue.uid, //todo: remove
-                    ref.read(contactsProvider).requireValue, //todo: remove
-                  ),
+              onPressed: () => context.registry.get<JobsCoordinator>().toCreateJob(null),
             ),
           ),
           onWillPop: () async {

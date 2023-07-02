@@ -31,7 +31,6 @@ class ContactPage extends StatelessWidget {
             title: ref.watch(selectedContactProvider(id)).maybeWhen(
                   skipLoadingOnReload: true,
                   data: (ContactState data) => ContactAppBar(
-                    userId: data.userId,
                     contact: data.contact,
                     grouped: data.measurements,
                   ),
