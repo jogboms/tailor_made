@@ -1,5 +1,6 @@
 export 'state/account_notifier_provider.dart';
 export 'state/account_provider.dart';
+export 'state/auth_state_notifier_provider.dart';
 export 'state/contacts_provider.dart';
 export 'state/jobs_provider.dart';
 export 'state/measurements_provider.dart';

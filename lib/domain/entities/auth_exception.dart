@@ -1,4 +1,4 @@
-abstract class AuthException {
+sealed class AuthException {
   const factory AuthException.unknown(Exception exception) = AuthExceptionUnknown;
 
   const factory AuthException.canceled() = AuthExceptionCanceled;

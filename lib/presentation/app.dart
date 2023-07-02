@@ -58,7 +58,7 @@ class _AppState extends State<App> {
             child: child!,
           ),
           onGenerateRoute: (RouteSettings settings) => _PageRoute<Object>(
-            builder: (_) => SplashPage(isColdStart: true, isMock: environment.isMock),
+            builder: (_) => const SplashPage(isColdStart: true),
             settings: RouteSettings(name: AppRoutes.start, arguments: settings.arguments),
           ),
         ),

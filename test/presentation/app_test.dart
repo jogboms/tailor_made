@@ -23,7 +23,7 @@ void main() {
         navigatorKey: navigatorKey,
       );
 
-      when(mockRepositories.accounts.signInWithGoogle).thenAnswer((_) async {});
+      when(mockRepositories.accounts.signIn).thenAnswer((_) async {});
       when(() => mockRepositories.accounts.onAuthStateChanged).thenAnswer((_) => Stream<String?>.value('1'));
       when(() => mockRepositories.accounts.getAccount(any())).thenAnswer((_) => AccountsMockImpl().getAccount('1'));
       when(mockRepositories.settings.fetch).thenAnswer((_) => SettingsMockImpl().fetch());

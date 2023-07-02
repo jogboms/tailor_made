@@ -18,7 +18,7 @@ class StatsWidget extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: _StatTile(title: 'Pending', count: stats.jobs.pending.toString()),
+            child: _StatTile(title: 'Pending', count: stats.jobs.pending.toInt().toString()),
           ),
           const _VerticalDivider(),
           Expanded(
@@ -26,7 +26,7 @@ class StatsWidget extends StatelessWidget {
           ),
           const _VerticalDivider(),
           Expanded(
-            child: _StatTile(title: 'Completed', count: stats.jobs.completed.toString()),
+            child: _StatTile(title: 'Completed', count: stats.jobs.completed.toInt().toString()),
           ),
         ],
       ),
@@ -43,7 +43,7 @@ class _VerticalDivider extends StatelessWidget {
     return Container(
       color: dividerTheme.color,
       width: dividerTheme.thickness,
-      height: _kStatGridsHeight,
+      height: 40.0,
     );
   }
 }
@@ -56,14 +56,14 @@ class _StatTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     return Column(
       children: <Widget>[
-        Text(count, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: AppFontWeight.medium)),
+        Text(count, style: textTheme.titleLarge?.copyWith(fontWeight: AppFontWeight.medium)),
         const SizedBox(height: 2.0),
-        Text(title, style: Theme.of(context).textTheme.bodySmall),
+        Text(title, style: textTheme.bodySmall),
       ],
     );
   }
 }
-
-const double _kStatGridsHeight = 40.0;

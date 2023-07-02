@@ -15,7 +15,7 @@ class AccountsImpl extends Accounts {
   static const String collectionName = 'accounts';
 
   @override
-  Future<void> signInWithGoogle() => firebase.auth.signInWithGoogle();
+  Future<void> signIn() => firebase.auth.signInWithGoogle();
 
   @override
   Stream<String?> get onAuthStateChanged => firebase.auth.onAuthStateChanged;

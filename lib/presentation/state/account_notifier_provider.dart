@@ -12,6 +12,17 @@ class AccountNotifier extends _$AccountNotifier {
   @override
   Future<AccountEntity> build() async => ref.watch(accountProvider.future);
 
+  void updateStoreName(String name) async {
+    final AccountEntity account = state.requireValue;
+    await ref.read(registryProvider).get<Accounts>().updateAccount(
+          account.uid,
+          id: account.reference.id,
+          path: account.reference.path,
+          storeName: name,
+        );
+    ref.invalidate(accountProvider);
+  }
+
   void readNotice() async {
     final AccountEntity account = state.requireValue;
     await ref.read(registryProvider).get<Accounts>().updateAccount(
@@ -37,7 +48,6 @@ class AccountNotifier extends _$AccountNotifier {
 
   void premiumSetup() async {
     final SettingEntity settings = await ref.watch(settingsProvider.future);
-
     await ref.read(registryProvider).get<Accounts>().signUp(
           state.requireValue.copyWith(
             status: AccountStatus.pending,
@@ -46,11 +56,6 @@ class AccountNotifier extends _$AccountNotifier {
             hasPremiumEnabled: true,
           ),
         );
-    ref.invalidate(accountProvider);
-  }
-
-  void logout() async {
-    await ref.read(registryProvider).get<Accounts>().signOut();
     ref.invalidate(accountProvider);
   }
 }

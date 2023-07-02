@@ -43,7 +43,11 @@ class TopButtonBar extends StatelessWidget {
               ),
               child: Consumer(
                 builder: (BuildContext context, WidgetRef ref, _) => GestureDetector(
-                  onTap: _onTapAccount(context, ref.read(accountNotifierProvider.notifier)),
+                  onTap: _onTapAccount(
+                    context,
+                    accountNotifier: ref.read(accountNotifierProvider.notifier),
+                    authStateNotifier: ref.read(authStateNotifierProvider.notifier),
+                  ),
                   child: Stack(
                     fit: StackFit.expand,
                     children: <Widget>[
@@ -76,7 +80,11 @@ class TopButtonBar extends StatelessWidget {
 
   bool get _shouldShowIndicator => !account.hasReadNotice || shouldSendRating;
 
-  VoidCallback _onTapAccount(BuildContext context, AccountNotifier notifier) {
+  VoidCallback _onTapAccount(
+    BuildContext context, {
+    required AccountNotifier accountNotifier,
+    required AuthStateNotifier authStateNotifier,
+  }) {
     final Registry registry = context.registry;
 
     return () async {
@@ -84,14 +92,14 @@ class TopButtonBar extends StatelessWidget {
         final int? rating = await showChildDialog<int>(context: context, child: const ReviewModal());
 
         if (rating != null) {
-          notifier.sendRating(rating);
+          accountNotifier.sendRating(rating);
         }
         return;
       }
 
       if (_shouldShowIndicator) {
         await showChildDialog<dynamic>(context: context, child: NoticeDialog(account: account));
-        notifier.readNotice();
+        accountNotifier.readNotice();
         return;
       }
 
@@ -133,12 +141,7 @@ class TopButtonBar extends StatelessWidget {
           final String? storeName = await registry.get<SharedCoordinator>().toStoreNameDialog(account);
 
           if (storeName != null && storeName != account.storeName) {
-            await registry.get<Accounts>().updateAccount(
-                  account.uid,
-                  id: account.reference.id,
-                  path: account.reference.path,
-                  storeName: storeName,
-                );
+            accountNotifier.updateStoreName(storeName);
           }
 
           break;
@@ -148,6 +151,7 @@ class TopButtonBar extends StatelessWidget {
             final bool? response = await showChoiceDialog(context: context, message: 'You are about to logout.');
 
             if (response == true) {
+              authStateNotifier.signOut();
               onLogout();
             }
           }

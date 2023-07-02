@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tailor_made/domain.dart';
 
@@ -35,7 +36,7 @@ class HomeNotifier extends _$HomeNotifier {
   }
 }
 
-class HomeState {
+class HomeState with EquatableMixin {
   const HomeState({
     required this.account,
     required this.contacts,
@@ -62,22 +63,19 @@ class HomeState {
 
   bool get shouldSendRating => !account.hasSendRating && (contacts.length >= 10 || jobs.length >= 10);
 
+  @override
+  List<Object> get props => <Object>[account, contacts, jobs, stats, settings, isLoading, hasSkippedPremium];
+
   HomeState copyWith({
-    AccountEntity? account,
-    List<ContactEntity>? contacts,
-    List<JobEntity>? jobs,
-    StatsEntity? stats,
-    SettingEntity? settings,
-    bool? isLoading,
     bool? hasSkippedPremium,
   }) {
     return HomeState(
-      account: account ?? this.account,
-      contacts: contacts ?? this.contacts,
-      jobs: jobs ?? this.jobs,
-      stats: stats ?? this.stats,
-      settings: settings ?? this.settings,
-      isLoading: isLoading ?? this.isLoading,
+      account: account,
+      contacts: contacts,
+      jobs: jobs,
+      stats: stats,
+      settings: settings,
+      isLoading: isLoading,
       hasSkippedPremium: hasSkippedPremium ?? this.hasSkippedPremium,
     );
   }

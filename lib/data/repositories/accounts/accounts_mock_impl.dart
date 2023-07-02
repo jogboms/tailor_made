@@ -2,7 +2,7 @@ import 'package:tailor_made/domain.dart';
 
 class AccountsMockImpl extends Accounts {
   @override
-  Future<void> signInWithGoogle() async {
+  Future<void> signIn() async {
     return;
   }
 

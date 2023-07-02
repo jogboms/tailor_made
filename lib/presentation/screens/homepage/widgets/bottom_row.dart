@@ -35,7 +35,7 @@ class BottomRowWidget extends StatelessWidget {
                 color: colorScheme.outline,
                 icon: Icons.event,
                 title: 'Tasks',
-                subTitle: '${stats.jobs.pending} Pending',
+                subTitle: '${stats.jobs.pending.toInt()} Pending',
                 onPressed: () => context.registry.get<TasksCoordinator>().toTasks(),
               ),
             ),

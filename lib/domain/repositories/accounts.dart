@@ -1,7 +1,7 @@
 import '../entities.dart';
 
 abstract class Accounts {
-  Future<void> signInWithGoogle();
+  Future<void> signIn();
 
   Stream<String?> get onAuthStateChanged;
 

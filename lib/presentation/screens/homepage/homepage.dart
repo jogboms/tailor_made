@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
-import 'package:tailor_made/presentation/screens/homepage/providers/home_notifier_provider.dart';
 import 'package:version/version.dart';
 
+import 'providers/home_notifier_provider.dart';
 import 'widgets/access_denied.dart';
 import 'widgets/bottom_row.dart';
 import 'widgets/create_button.dart';
@@ -17,9 +18,7 @@ import 'widgets/top_button_bar.dart';
 import 'widgets/top_row.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.isMock});
-
-  final bool isMock;
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +42,7 @@ class HomePage extends StatelessWidget {
                 builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(homeNotifierProvider).when(
                       skipLoadingOnReload: true,
                       data: (HomeState state) => AppVersionBuilder(
-                        valueBuilder: () => AppVersion.retrieve(isMock),
+                        valueBuilder: () => AppVersion.retrieve(environment.isMock),
                         builder: (BuildContext context, String? appVersion, Widget? child) {
                           if (appVersion == null) {
                             return child!;
@@ -67,7 +66,6 @@ class HomePage extends StatelessWidget {
                           state: state,
                           homeNotifier: ref.read(homeNotifierProvider.notifier),
                           accountNotifier: ref.read(accountNotifierProvider.notifier),
-                          isMock: isMock,
                         ),
                       ),
                       error: ErrorView.new,
@@ -88,13 +86,11 @@ class _Body extends StatelessWidget {
     required this.state,
     required this.homeNotifier,
     required this.accountNotifier,
-    required this.isMock,
   });
 
   final HomeState state;
   final HomeNotifier homeNotifier;
   final AccountNotifier accountNotifier;
-  final bool isMock;
 
   @override
   Widget build(BuildContext context) {
@@ -137,10 +133,7 @@ class _Body extends StatelessWidget {
         TopButtonBar(
           account: account,
           shouldSendRating: state.shouldSendRating,
-          onLogout: () {
-            accountNotifier.logout();
-            context.registry.get<SharedCoordinator>().toSplash(isMock);
-          },
+          onLogout: () => context.registry.get<SharedCoordinator>().toSplash(),
         ),
       ],
     );

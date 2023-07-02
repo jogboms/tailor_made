@@ -75,6 +75,8 @@ void main(List<String> args) async {
     ..set<Measures>(repository.measures)
     ..set<Stats>(repository.stats)
     ..factory((RegistryFactory di) => FetchAccountUseCase(accounts: di()))
+    ..factory((RegistryFactory di) => SignInUseCase(accounts: di()))
+    ..factory((RegistryFactory di) => SignOutUseCase(accounts: di()))
     ..set<ContactsCoordinator>(ContactsCoordinator(navigatorKey))
     ..set<GalleryCoordinator>(GalleryCoordinator(navigatorKey))
     ..set<SharedCoordinator>(SharedCoordinator(navigatorKey))
