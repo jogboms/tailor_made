@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:rebloc/rebloc.dart';
 import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 
 import 'constants.dart';
-import 'rebloc.dart';
 import 'registry.dart';
 import 'screens/splash/splash.dart';
 import 'theme.dart';
@@ -17,13 +15,11 @@ class App extends StatefulWidget {
     super.key,
     required this.registry,
     required this.navigatorKey,
-    required this.store,
     this.navigatorObservers,
   });
 
   final Registry registry;
   final GlobalKey<NavigatorState> navigatorKey;
-  final Store<AppState> store;
   final List<NavigatorObserver>? navigatorObservers;
 
   @override
@@ -35,46 +31,35 @@ class _AppState extends State<App> {
   late final String bannerMessage = environment.name.toUpperCase();
 
   @override
-  void dispose() {
-    widget.store.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return RegistryProvider(
       registry: widget.registry,
-      child: StoreProvider<AppState>(
-        store: widget.store,
-        child: Builder(
-          builder: (BuildContext context) => _Banner(
-            key: Key(bannerMessage),
-            visible: !environment.isProduction,
-            message: bannerMessage,
-            child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              color: Colors.white,
-              navigatorKey: widget.navigatorKey,
-              navigatorObservers: widget.navigatorObservers ?? <NavigatorObserver>[],
-              theme: themeBuilder(ThemeData.light()),
-              darkTheme: themeBuilder(ThemeData.dark()),
-              onGenerateTitle: (BuildContext context) => context.l10n.appName,
-              localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-                L10n.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: L10n.supportedLocales,
-              builder: (_, Widget? child) => SnackBarProvider(
-                navigatorKey: widget.navigatorKey,
-                child: child!,
-              ),
-              onGenerateRoute: (RouteSettings settings) => _PageRoute<Object>(
-                builder: (_) => SplashPage(isColdStart: true, isMock: environment.isMock),
-                settings: RouteSettings(name: AppRoutes.start, arguments: settings.arguments),
-              ),
-            ),
+      child: _Banner(
+        key: Key(bannerMessage),
+        visible: !environment.isProduction,
+        message: bannerMessage,
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          color: Colors.white,
+          navigatorKey: widget.navigatorKey,
+          navigatorObservers: widget.navigatorObservers ?? <NavigatorObserver>[],
+          theme: themeBuilder(ThemeData.light()),
+          darkTheme: themeBuilder(ThemeData.dark()),
+          onGenerateTitle: (BuildContext context) => context.l10n.appName,
+          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+            L10n.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: L10n.supportedLocales,
+          builder: (_, Widget? child) => SnackBarProvider(
+            navigatorKey: widget.navigatorKey,
+            child: child!,
+          ),
+          onGenerateRoute: (RouteSettings settings) => _PageRoute<Object>(
+            builder: (_) => SplashPage(isColdStart: true, isMock: environment.isMock),
+            settings: RouteSettings(name: AppRoutes.start, arguments: settings.arguments),
           ),
         ),
       ),

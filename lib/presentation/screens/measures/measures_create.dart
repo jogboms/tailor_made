@@ -16,7 +16,7 @@ class MeasuresCreate extends StatefulWidget {
   State<MeasuresCreate> createState() => _MeasuresCreateState();
 }
 
-class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin<AppState> {
+class _MeasuresCreateState extends State<MeasuresCreate> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
   late MeasureGroup _groupName = widget.groupName ?? MeasureGroup.empty;

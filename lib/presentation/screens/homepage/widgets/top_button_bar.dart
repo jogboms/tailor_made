@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:rebloc/rebloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:registry/registry.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
@@ -41,28 +41,30 @@ class TopButtonBar extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: colorScheme.primary.withOpacity(.5), width: 1.5),
               ),
-              child: GestureDetector(
-                onTap: _onTapAccount(context),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: <Widget>[
-                    if (account.photoURL case final String photoUrl)
-                      CircleAvatar(
-                        backgroundImage: CachedNetworkImageProvider(photoUrl),
-                      )
-                    else
-                      const Icon(Icons.person),
-                    Align(
-                      alignment: const Alignment(0.0, 2.25),
-                      child: account.hasPremiumEnabled
-                          ? ImageIcon(AppImages.verified, color: colorScheme.primary) //
-                          : null,
-                    ),
-                    Align(
-                      alignment: Alignment(1.25, account.hasPremiumEnabled ? -1.25 : 1.25),
-                      child: _shouldShowIndicator ? Dots(color: colorScheme.secondary) : null,
-                    ),
-                  ],
+              child: Consumer(
+                builder: (BuildContext context, WidgetRef ref, _) => GestureDetector(
+                  onTap: _onTapAccount(context, ref.read(accountNotifierProvider.notifier)),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: <Widget>[
+                      if (account.photoURL case final String photoUrl)
+                        CircleAvatar(
+                          backgroundImage: CachedNetworkImageProvider(photoUrl),
+                        )
+                      else
+                        const Icon(Icons.person),
+                      Align(
+                        alignment: const Alignment(0.0, 2.25),
+                        child: account.hasPremiumEnabled
+                            ? ImageIcon(AppImages.verified, color: colorScheme.primary) //
+                            : null,
+                      ),
+                      Align(
+                        alignment: Alignment(1.25, account.hasPremiumEnabled ? -1.25 : 1.25),
+                        child: _shouldShowIndicator ? Dots(color: colorScheme.secondary) : null,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -74,23 +76,22 @@ class TopButtonBar extends StatelessWidget {
 
   bool get _shouldShowIndicator => !account.hasReadNotice || shouldSendRating;
 
-  VoidCallback _onTapAccount(BuildContext context) {
+  VoidCallback _onTapAccount(BuildContext context, AccountNotifier notifier) {
     final Registry registry = context.registry;
 
     return () async {
-      final Store<AppState> store = StoreProvider.of<AppState>(context);
       if (shouldSendRating) {
         final int? rating = await showChildDialog<int>(context: context, child: const ReviewModal());
 
         if (rating != null) {
-          store.dispatch(AccountAction.sendRating(account, rating));
+          notifier.sendRating(rating);
         }
         return;
       }
 
       if (_shouldShowIndicator) {
         await showChildDialog<dynamic>(context: context, child: NoticeDialog(account: account));
-        store.dispatch(AccountAction.readNotice(account));
+        notifier.readNotice();
         return;
       }
 

@@ -26,33 +26,12 @@ class HomeNotifier extends _$HomeNotifier {
     );
   }
 
-//todo: move to accountProvider
-  void premiumSetup() async {
-    final HomeState homeState = state.requireValue;
-    await ref.read(registryProvider).get<Accounts>().signUp(
-          homeState.account.copyWith(
-            status: AccountStatus.pending,
-            notice: homeState.settings.premiumNotice,
-            hasReadNotice: false,
-            hasPremiumEnabled: true,
-          ),
-        );
-    ref.invalidate(accountProvider);
-    ref.invalidateSelf();
-  }
-
   void skippedPremium() {
     state = AsyncValue<HomeState>.data(
       state.requireValue.copyWith(
         hasSkippedPremium: true,
       ),
     );
-  }
-
-//todo: move to accountProvider
-  void logout() async {
-    await ref.read(registryProvider).get<Accounts>().signOut();
-    ref.invalidate(accountProvider);
   }
 }
 

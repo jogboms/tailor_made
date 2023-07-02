@@ -36,7 +36,6 @@ void main() {
         App(
           registry: registry,
           navigatorKey: navigatorKey,
-          store: storeFactory(registry),
           navigatorObservers: <NavigatorObserver>[mockObserver],
         ),
       );

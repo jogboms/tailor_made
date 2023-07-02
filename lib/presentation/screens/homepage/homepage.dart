@@ -65,7 +65,8 @@ class HomePage extends StatelessWidget {
                         },
                         child: _Body(
                           state: state,
-                          notifier: ref.read(homeNotifierProvider.notifier),
+                          homeNotifier: ref.read(homeNotifierProvider.notifier),
+                          accountNotifier: ref.read(accountNotifierProvider.notifier),
                           isMock: isMock,
                         ),
                       ),
@@ -83,10 +84,16 @@ class HomePage extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({required this.state, required this.notifier, required this.isMock});
+  const _Body({
+    required this.state,
+    required this.homeNotifier,
+    required this.accountNotifier,
+    required this.isMock,
+  });
 
   final HomeState state;
-  final HomeNotifier notifier;
+  final HomeNotifier homeNotifier;
+  final AccountNotifier accountNotifier;
   final bool isMock;
 
   @override
@@ -107,8 +114,8 @@ class _Body extends StatelessWidget {
 
     if (state.isWarning && state.hasSkippedPremium == false) {
       return RateLimitPage(
-        onSignUp: notifier.premiumSetup,
-        onSkippedPremium: notifier.skippedPremium,
+        onSignUp: accountNotifier.premiumSetup,
+        onSkippedPremium: homeNotifier.skippedPremium,
       );
     }
 
@@ -131,7 +138,7 @@ class _Body extends StatelessWidget {
           account: account,
           shouldSendRating: state.shouldSendRating,
           onLogout: () {
-            notifier.logout();
+            accountNotifier.logout();
             context.registry.get<SharedCoordinator>().toSplash(isMock);
           },
         ),

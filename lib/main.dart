@@ -96,7 +96,6 @@ void main(List<String> args) async {
         child: App(
           registry: registry,
           navigatorKey: navigatorKey,
-          store: storeFactory(registry),
           navigatorObservers: <NavigatorObserver>[navigationObserver],
         ),
       ),

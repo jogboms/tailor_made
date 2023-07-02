@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/presentation/rebloc.dart';
 import 'package:tailor_made/presentation/widgets.dart';
+
+import '../../../utils.dart';
 
 class ContactsFilterButton extends StatelessWidget {
   const ContactsFilterButton({super.key, required this.sortType, required this.onTapSort});

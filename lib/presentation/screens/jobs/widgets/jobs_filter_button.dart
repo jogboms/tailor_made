@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/presentation/rebloc.dart';
 import 'package:tailor_made/presentation/widgets.dart';
+
+import '../../../utils.dart';
 
 class JobsFilterButton extends StatelessWidget {
   const JobsFilterButton({super.key, required this.sortType, required this.onTapSort});

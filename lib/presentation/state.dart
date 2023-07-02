@@ -1,3 +1,4 @@
+export 'state/account_notifier_provider.dart';
 export 'state/account_provider.dart';
 export 'state/contacts_provider.dart';
 export 'state/jobs_provider.dart';
