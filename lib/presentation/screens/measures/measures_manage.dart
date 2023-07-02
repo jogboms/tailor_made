@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rebloc/rebloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/presentation.dart';
 
 import 'widgets/measures_slide_block.dart';
@@ -17,40 +17,41 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const CustomAppBar(title: Text('Measurements')),
-      body: ViewModelSubscriber<AppState, MeasuresViewModel>(
-        converter: MeasuresViewModel.new,
-        builder: (_, __, MeasuresViewModel vm) {
-          if (vm.isLoading) {
-            return const Center(child: LoadingSpinner());
-          }
+      body: Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(measurementsProvider).when(
+              skipLoadingOnReload: true,
+              data: (MeasurementsState state) {
+                if (state.measures.isEmpty) {
+                  return const Center(child: EmptyResultView(message: 'No measurements available'));
+                }
 
-          if (vm.model.isEmpty) {
-            return const Center(child: EmptyResultView(message: 'No measurements available'));
-          }
-
-          return SafeArea(
-            top: false,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Container(
-                    color: Theme.of(context).colorScheme.outlineVariant,
-                    padding: const EdgeInsets.all(16),
-                    child: const Text('Long-Press on any group to see more actions.'),
-                  ),
-                  for (int i = 0; i < vm.grouped.length; i++)
-                    MeasureSlideBlock(
-                      groupName: vm.grouped.keys.elementAt(i),
-                      measures: vm.grouped.values.elementAt(i),
-                      userId: vm.userId,
+                return SafeArea(
+                  top: false,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Container(
+                          color: Theme.of(context).colorScheme.outlineVariant,
+                          padding: const EdgeInsets.all(16),
+                          child: const Text('Long-Press on any group to see more actions.'),
+                        ),
+                        for (int i = 0; i < state.grouped.length; i++)
+                          MeasureSlideBlock(
+                            groupName: state.grouped.keys.elementAt(i),
+                            measures: state.grouped.values.elementAt(i),
+                            userId: state.userId,
+                          ),
+                        const SizedBox(height: 72.0)
+                      ],
                     ),
-                  const SizedBox(height: 72.0)
-                ],
-              ),
+                  ),
+                );
+              },
+              error: ErrorView.new,
+              loading: () => child!,
             ),
-          );
-        },
+        child: const Center(child: LoadingSpinner()),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(

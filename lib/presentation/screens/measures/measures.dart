@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rebloc/rebloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/rebloc.dart';
-import 'package:tailor_made/presentation/utils.dart';
-import 'package:tailor_made/presentation/widgets.dart';
+import 'package:tailor_made/presentation.dart';
 
 import 'widgets/measure_list_item.dart';
 
@@ -20,26 +18,31 @@ class MeasuresPage extends StatelessWidget {
         elevation: 0.0,
         systemOverlayStyle: Theme.of(context).brightness.systemOverlayStyle,
       ),
-      body: ViewModelSubscriber<AppState, MeasuresViewModel>(
-        converter: MeasuresViewModel.new,
-        builder: (BuildContext context, _, MeasuresViewModel vm) {
-          if (vm.model.isEmpty) {
-            return const Center(
-              child: EmptyResultView(message: 'No measurements available'),
-            );
-          }
+      body: Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(measurementsProvider).when(
+              skipLoadingOnReload: true,
+              data: (MeasurementsState state) {
+                if (state.measures.isEmpty) {
+                  return const Center(
+                    child: EmptyResultView(message: 'No measurements available'),
+                  );
+                }
 
-          return ListView.separated(
-            itemCount: vm.model.length,
-            shrinkWrap: true,
-            padding: const EdgeInsets.only(bottom: 96.0),
-            itemBuilder: (_, int index) {
-              final MeasureEntity measure = vm.model[index];
-              return MeasureListItem(item: measure, value: measurements[measure.id] ?? 0.0);
-            },
-            separatorBuilder: (_, __) => const Divider(),
-          );
-        },
+                return ListView.separated(
+                  itemCount: state.measures.length,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(bottom: 96.0),
+                  itemBuilder: (_, int index) {
+                    final MeasureEntity measure = state.measures[index];
+                    return MeasureListItem(item: measure, value: measurements[measure.id] ?? 0.0);
+                  },
+                  separatorBuilder: (_, __) => const Divider(),
+                );
+              },
+              error: ErrorView.new,
+              loading: () => child!,
+            ),
+        child: const Center(child: LoadingSpinner()),
       ),
     );
   }

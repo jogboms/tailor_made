@@ -6,7 +6,7 @@ import '../../../state.dart';
 
 part 'selected_contact_provider.g.dart';
 
-@Riverpod(dependencies: <Object>[account, jobs, contacts])
+@Riverpod(dependencies: <Object>[account, jobs, contacts, measurements])
 Future<ContactState> selectedContact(SelectedContactRef ref, String id) async {
   final AccountEntity account = await ref.watch(accountProvider.future);
   final ContactEntity contact = await ref.watch(
@@ -15,12 +15,13 @@ Future<ContactState> selectedContact(SelectedContactRef ref, String id) async {
   final List<JobEntity> jobs = await ref.watch(
     jobsProvider.selectAsync((_) => _.where((_) => _.contactID == id).toList()),
   );
+  final MeasurementsState measurements = await ref.watch(measurementsProvider.future);
 
   return ContactState(
     contact: contact,
     jobs: jobs,
     userId: account.uid,
-    measurements: <MeasureGroup, List<MeasureEntity>>{}, //todo
+    measurements: measurements.grouped,
   );
 }
 

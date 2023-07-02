@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
@@ -57,10 +56,7 @@ class SplashPage extends StatelessWidget {
                 final String? data = snapshot.data;
                 if (data != null) {
                   WidgetsBinding.instance.addPostFrameCallback(
-                    (_) async {
-                      StoreProvider.of<AppState>(context).dispatch(AuthAction.login(data));
-                      context.registry.get<SharedCoordinator>().toHome(isMock);
-                    },
+                    (_) async => context.registry.get<SharedCoordinator>().toHome(isMock),
                   );
 
                   return const SizedBox();

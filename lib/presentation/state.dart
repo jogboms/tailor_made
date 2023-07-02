@@ -1,6 +1,7 @@
 export 'state/account_provider.dart';
 export 'state/contacts_provider.dart';
 export 'state/jobs_provider.dart';
+export 'state/measurements_provider.dart';
 export 'state/registry_provider.dart';
 export 'state/selected_contact_job_provider.dart';
 export 'state/settings_provider.dart';

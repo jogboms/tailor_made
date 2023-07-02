@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
-import 'package:rebloc/rebloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
@@ -43,17 +43,20 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
             color: context.theme.primaryColor,
             onPressed: _handleSelectContact,
           ),
-          ViewModelSubscriber<AppState, MeasuresViewModel>(
-            converter: MeasuresViewModel.new,
-            builder: (_, __, MeasuresViewModel vm) {
-              return IconButton(
-                icon: Icon(
-                  Icons.content_cut,
-                  color: _contact.measurements.isEmpty ? colorScheme.secondary : null,
+          Consumer(
+            builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(measurementsProvider).when(
+                  skipLoadingOnReload: true,
+                  data: (MeasurementsState state) => IconButton(
+                    icon: Icon(
+                      Icons.content_cut,
+                      color: _contact.measurements.isEmpty ? colorScheme.secondary : null,
+                    ),
+                    onPressed: () => _handleSelectMeasure(state.grouped),
+                  ),
+                  error: ErrorView.new,
+                  loading: () => child!,
                 ),
-                onPressed: () => _handleSelectMeasure(vm),
-              );
-            },
+            child: const Center(child: LoadingSpinner()),
           ),
         ],
       ),
@@ -114,10 +117,10 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
     }
   }
 
-  void _handleSelectMeasure(MeasuresViewModel vm) async {
+  void _handleSelectMeasure(Map<MeasureGroup, List<MeasureEntity>> grouped) async {
     final Map<String, double>? result = await context.registry.get<ContactsCoordinator>().toContactMeasure(
           contact: null,
-          grouped: vm.grouped,
+          grouped: grouped,
         );
     if (result == null) {
       return;

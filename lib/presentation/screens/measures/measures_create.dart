@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rebloc/rebloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
@@ -25,85 +25,88 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelSubscriber<AppState, MeasuresViewModel>(
-      converter: MeasuresViewModel.new,
-      builder: (BuildContext context, _, MeasuresViewModel vm) {
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: CustomAppBar(
-            title: const Text(''),
-            leading: const AppCloseButton(),
-            actions: <Widget>[
-              AppClearButton(
-                onPressed: _measures.isEmpty ? null : () => _handleSubmit(vm),
-                child: const Text('SAVE'),
-              )
-            ],
-          ),
-          body: SafeArea(
-            top: false,
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                autovalidateMode: _autovalidate ? AutovalidateMode.always : AutovalidateMode.disabled,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    const FormSectionHeader(title: 'Group Name'),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-                      child: TextFormField(
-                        initialValue: _groupName.displayName,
-                        textCapitalization: TextCapitalization.words,
-                        textInputAction: TextInputAction.next,
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                          isDense: true,
-                          hintText: 'eg Blouse',
-                        ),
-                        validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a name',
-                        onSaved: (String? value) => _groupName = MeasureGroup.valueOf(value!.trim()),
-                      ),
-                    ),
-                    const FormSectionHeader(title: 'Group Unit'),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-                      child: TextFormField(
-                        initialValue: _unitValue,
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                          isDense: true,
-                          hintText: 'Unit (eg. In, cm)',
-                        ),
-                        validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a value',
-                        onSaved: (String? value) => _unitValue = value!.trim(),
-                      ),
-                    ),
-                    if (_measures.isNotEmpty) ...<Widget>[
-                      const FormSectionHeader(title: 'Group Items'),
-                      _GroupItems(
-                        measures: _measures,
-                        onPressed: (BaseMeasureEntity measure) => _onTapDeleteItem(vm, measure),
-                      ),
-                      const SizedBox(height: 84.0)
-                    ]
-                  ],
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: CustomAppBar(
+        title: const Text(''),
+        leading: const AppCloseButton(),
+        actions: <Widget>[
+          Consumer(
+            builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(accountProvider).when(
+                  skipLoadingOnReload: true,
+                  data: (_) => AppClearButton(
+                    onPressed: _measures.isEmpty ? null : () => _handleSubmit(_.uid),
+                    child: const Text('SAVE'),
+                  ),
+                  error: ErrorView.new,
+                  loading: () => child!,
                 ),
-              ),
+            child: const Center(child: LoadingSpinner()),
+          ),
+        ],
+      ),
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            autovalidateMode: _autovalidate ? AutovalidateMode.always : AutovalidateMode.disabled,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                const FormSectionHeader(title: 'Group Name'),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                  child: TextFormField(
+                    initialValue: _groupName.displayName,
+                    textCapitalization: TextCapitalization.words,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      hintText: 'eg Blouse',
+                    ),
+                    validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a name',
+                    onSaved: (String? value) => _groupName = MeasureGroup.valueOf(value!.trim()),
+                  ),
+                ),
+                const FormSectionHeader(title: 'Group Unit'),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                  child: TextFormField(
+                    initialValue: _unitValue,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      hintText: 'Unit (eg. In, cm)',
+                    ),
+                    validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a value',
+                    onSaved: (String? value) => _unitValue = value!.trim(),
+                  ),
+                ),
+                if (_measures.isNotEmpty) ...<Widget>[
+                  const FormSectionHeader(title: 'Group Items'),
+                  _GroupItems(
+                    measures: _measures,
+                    onPressed: _onTapDeleteItem,
+                  ),
+                  const SizedBox(height: 84.0)
+                ]
+              ],
             ),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: FloatingActionButton.extended(
-            icon: const Icon(Icons.add_circle_outline),
-            label: const Text('Add Item'),
-            onPressed: _handleAddItem,
-          ),
-        );
-      },
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        icon: const Icon(Icons.add_circle_outline),
+        label: const Text('Add Item'),
+        onPressed: _handleAddItem,
+      ),
     );
   }
 
-  void _onTapDeleteItem(MeasuresViewModel vm, BaseMeasureEntity measure) async {
+  void _onTapDeleteItem(BaseMeasureEntity measure) async {
     final Registry registry = context.registry;
     final AppSnackBar snackBar = AppSnackBar.of(context);
     final bool? choice = await showChoiceDialog(context: context, message: 'Are you sure?');
@@ -116,7 +119,6 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
     } else if (measure is MeasureEntity) {
       snackBar.loading();
       try {
-        dispatchAction(const MeasuresAction.toggle());
         await registry.get<Measures>().deleteOne(measure.reference);
         _removeFromLocal(measure.localKey);
         snackBar.hide();
@@ -144,17 +146,16 @@ class _MeasuresCreateState extends State<MeasuresCreate> with StoreDispatchMixin
     }
   }
 
-  void _handleSubmit(MeasuresViewModel vm) async {
+  void _handleSubmit(String userId) async {
     if (_isOkForm()) {
       final AppSnackBar snackBar = AppSnackBar.of(context)..loading();
 
       try {
         final NavigatorState navigator = Navigator.of(context);
-        dispatchAction(const MeasuresAction.toggle());
         // TODO(Jogboms): move this out of here
         await context.registry.get<Measures>().create(
               _measures,
-              vm.userId,
+              userId,
               groupName: _groupName,
               unitValue: _unitValue,
             );

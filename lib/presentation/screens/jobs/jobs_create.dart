@@ -1,13 +1,13 @@
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/rebloc.dart';
 import 'package:tailor_made/presentation/theme.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
+import '../../state.dart';
 import '../measures/widgets/measure_create_items.dart';
 import 'jobs_create_view_model.dart';
 import 'widgets/avatar_app_bar.dart';
@@ -142,19 +142,22 @@ class _JobsCreatePageState extends JobsCreateViewModel {
   }
 
   Widget _buildMeasures() {
-    return ViewModelSubscriber<AppState, MeasuresViewModel>(
-      converter: MeasuresViewModel.new,
-      builder: (_, __, MeasuresViewModel vm) {
-        return MeasureCreateItems(
-          grouped: vm.grouped,
-          measurements: job.measurements,
-          onSaved: (Map<String, double>? value) {
-            if (value != null) {
-              job = job.copyWith(measurements: value);
-            }
-          },
-        );
-      },
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(measurementsProvider).when(
+            skipLoadingOnReload: true,
+            data: (MeasurementsState state) => MeasureCreateItems(
+              grouped: state.grouped,
+              measurements: job.measurements,
+              onSaved: (Map<String, double>? value) {
+                if (value != null) {
+                  job = job.copyWith(measurements: value);
+                }
+              },
+            ),
+            error: ErrorView.new,
+            loading: () => child!,
+          ),
+      child: const Center(child: LoadingSpinner()),
     );
   }
 
