@@ -18,6 +18,44 @@ TailorMade is what actually started out as an experiment with [Flutter](https://
 
 > For a full description of OSS used, see pubspec.yaml
 
+## Getting Started
+
+After cloning,
+
+### FVM setup
+
+Install `fvm` if not already installed.
+
+```bash
+dart pub global activate fvm
+```
+
+Install local `flutter` version.
+
+```bash
+fvm install
+```
+
+### Install, L10n & Riverpod code generation
+
+```bash
+fvm flutter pub get 
+fvm flutter pub run build_runner build
+```
+
+## Running
+
+There are three (3) available environments:
+- `mock`: Demo mode with non-persistent data
+- `dev`: Development mode connected to firebase dev instance
+- `prod`: Production mode connected to firebase production instance
+
+To run in `mock` mode,
+
+```bash
+fvm flutter run --flavor mock --dart-define=env.mode=mock
+```
+
 ## UI Shots
 
 <div style="text-align: center">
@@ -101,5 +139,6 @@ TailorMade is what actually started out as an experiment with [Flutter](https://
   </table>
 </div>
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+## License
+
+MIT License
