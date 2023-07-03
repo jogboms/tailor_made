@@ -12,9 +12,9 @@ import 'coordinator_base.dart';
 class SharedCoordinator extends CoordinatorBase {
   const SharedCoordinator(super.navigatorKey);
 
-  void toHome(bool isMock) {
+  void toHome() {
     navigator?.pushAndRemoveUntil<void>(
-      RouteTransitions.fadeIn(HomePage(isMock: isMock)),
+      RouteTransitions.fadeIn(const HomePage()),
       (Route<void> route) => false,
     );
   }
@@ -23,9 +23,9 @@ class SharedCoordinator extends CoordinatorBase {
     return navigator?.push<String>(RouteTransitions.fadeIn(StoreNameDialog(account: account)));
   }
 
-  void toSplash(bool isMock) {
+  void toSplash() {
     navigator?.pushAndRemoveUntil<void>(
-      RouteTransitions.fadeIn(SplashPage(isColdStart: false, isMock: isMock), name: AppRoutes.start),
+      RouteTransitions.fadeIn(const SplashPage(isColdStart: false), name: AppRoutes.start),
       (Route<void> route) => false,
     );
   }

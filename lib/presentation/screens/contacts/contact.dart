@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:rebloc/rebloc.dart';
-import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/rebloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
 import '../jobs/widgets/jobs_list.dart';
+import 'providers/selected_contact_provider.dart';
 import 'widgets/contact_appbar.dart';
 import 'widgets/contact_gallery_grid.dart';
 import 'widgets/contact_payments_list.dart';
@@ -13,65 +12,62 @@ import 'widgets/contact_payments_list.dart';
 const List<String> _tabs = <String>['Jobs', 'Gallery', 'Payments'];
 
 class ContactPage extends StatelessWidget {
-  const ContactPage({super.key, required this.contact});
+  const ContactPage({super.key, required this.id});
 
-  final ContactEntity contact;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
 
-    return ViewModelSubscriber<AppState, ContactsViewModel>(
-      converter: (AppState state) => ContactsViewModel(state, contactID: contact.id),
-      builder: (BuildContext context, DispatchFunction dispatch, ContactsViewModel viewModel) {
-        // in the case of newly created contacts
-        final ContactEntity contact = viewModel.selected ?? this.contact;
-        return DefaultTabController(
-          length: _tabs.length,
-          child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: colorScheme.secondary,
-              automaticallyImplyLeading: false,
-              title: ContactAppBar(
-                userId: viewModel.userId,
-                contact: contact,
-                grouped: viewModel.measuresGrouped,
-              ),
-              titleSpacing: 0.0,
-              centerTitle: false,
-              bottom: TabBar(
-                labelStyle: Theme.of(context).textTheme.labelLarge,
-                tabs: _tabs.map((String tab) => Tab(child: Text(tab))).toList(),
-              ),
-              systemOverlayStyle: SystemUiOverlayStyle.light,
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) => DefaultTabController(
+        length: _tabs.length,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: colorScheme.secondary,
+            automaticallyImplyLeading: false,
+            title: ref.watch(selectedContactProvider(id)).maybeWhen(
+                  skipLoadingOnReload: true,
+                  data: (ContactState data) => ContactAppBar(
+                    contact: data.contact,
+                    grouped: data.measurements,
+                  ),
+                  orElse: () => const SizedBox.shrink(),
+                ),
+            titleSpacing: 0.0,
+            centerTitle: false,
+            bottom: TabBar(
+              labelStyle: theme.textTheme.labelLarge,
+              tabs: _tabs.map((String tab) => Tab(child: Text(tab))).toList(),
             ),
-            body: Builder(
-              builder: (BuildContext context) {
-                if (viewModel.isLoading) {
-                  return const Center(child: LoadingSpinner());
-                }
-
-                return TabBarView(
+            systemOverlayStyle: SystemUiOverlayStyle.light,
+          ),
+          body: ref.watch(selectedContactProvider(id)).when(
+                skipLoadingOnReload: true,
+                data: (ContactState data) => TabBarView(
                   children: <Widget>[
                     _TabView(
                       name: _tabs[0].toLowerCase(),
-                      child: JobList(jobs: viewModel.selectedJobs),
+                      child: JobList(jobs: data.jobs),
                     ),
                     _TabView(
                       name: _tabs[1].toLowerCase(),
-                      child: GalleryGridWidget(jobs: viewModel.selectedJobs),
+                      child: GalleryGridWidget(jobs: data.jobs),
                     ),
                     _TabView(
                       name: _tabs[2].toLowerCase(),
-                      child: PaymentsListWidget(jobs: viewModel.selectedJobs),
+                      child: PaymentsListWidget(jobs: data.jobs),
                     ),
                   ],
-                );
-              },
-            ),
-          ),
-        );
-      },
+                ),
+                error: ErrorView.new,
+                loading: () => child!,
+              ),
+        ),
+      ),
+      child: const Center(child: LoadingSpinner()),
     );
   }
 }

@@ -1,4 +1,5 @@
 export 'entities/account_entity.dart';
+export 'entities/auth_exception.dart';
 export 'entities/contact_entity.dart';
 export 'entities/create_contact_data.dart';
 export 'entities/create_image_data.dart';

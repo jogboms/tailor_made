@@ -1,10 +1,12 @@
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
-import 'package:rebloc/rebloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
+import 'providers/selected_job_provider.dart';
 import 'widgets/avatar_app_bar.dart';
 import 'widgets/gallery_grids.dart';
 import 'widgets/payment_grids.dart';
@@ -24,93 +26,91 @@ class _JobPageState extends State<JobPage> {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
 
-    return ViewModelSubscriber<AppState, JobsViewModel>(
-      converter: (AppState store) => JobsViewModel(store, jobID: widget.job.id),
-      builder: (BuildContext context, _, JobsViewModel vm) {
-        // in the case of newly created jobs
-        final JobEntity job = vm.selected ?? widget.job;
-        final ContactEntity? contact = vm.selectedContact;
-        if (vm.isLoading || contact == null) {
-          return const Center(child: LoadingSpinner());
-        }
-        return Scaffold(
-          body: NestedScrollView(
-            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                SliverAppBar(
-                  expandedHeight: 250.0,
-                  flexibleSpace: FlexibleSpaceBar(background: _Header(job: job)),
-                  pinned: true,
-                  titleSpacing: 0.0,
-                  elevation: 1.0,
-                  automaticallyImplyLeading: false,
-                  centerTitle: false,
-                  title: _AvatarAppBar(job: job, contact: contact),
-                ),
-              ];
-            },
-            body: SafeArea(
-              top: false,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        const SizedBox(width: 16.0),
-                        Expanded(
-                          child: Text('DUE DATE', style: theme.textTheme.bodySmall),
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) =>
+          ref.watch(selectedJobProvider(widget.job.id)).when(
+                skipLoadingOnReload: true,
+                data: (JobState state) => Scaffold(
+                  body: NestedScrollView(
+                    headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                      return <Widget>[
+                        SliverAppBar(
+                          expandedHeight: 250.0,
+                          flexibleSpace: FlexibleSpaceBar(background: _Header(job: state.job)),
+                          pinned: true,
+                          titleSpacing: 0.0,
+                          elevation: 1.0,
+                          automaticallyImplyLeading: false,
+                          centerTitle: false,
+                          title: _AvatarAppBar(job: state.job, contact: state.contact),
                         ),
-                        AppClearButton(
-                          onPressed: job.isComplete ? null : () => _onSaveDate(job),
-                          child: Text(
-                            'EXTEND DATE',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              fontWeight: AppFontWeight.medium,
-                              color: colorScheme.secondary,
+                      ];
+                    },
+                    body: SafeArea(
+                      top: false,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                const SizedBox(width: 16.0),
+                                Expanded(
+                                  child: Text('DUE DATE', style: theme.textTheme.bodySmall),
+                                ),
+                                AppClearButton(
+                                  onPressed: state.job.isComplete ? null : () => _onSaveDate(state.job),
+                                  child: Text(
+                                    'EXTEND DATE',
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      fontWeight: AppFontWeight.medium,
+                                      color: colorScheme.secondary,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 16.0),
+                              ],
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 16.0),
+                              child: Text(
+                                AppDate(state.job.dueAt, day: 'EEEE', month: 'MMMM', year: 'yyyy').formatted!,
+                                style: theme.textTheme.labelLarge,
+                              ),
+                            ),
+                            const SizedBox(height: 4.0),
+                            GalleryGrids(job: state.job, userId: state.userId),
+                            const SizedBox(height: 4.0),
+                            PaymentGrids(job: state.job, userId: state.userId),
+                            const SizedBox(height: 32.0),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Text(
+                                state.job.notes,
+                                style: theme.textTheme.labelLarge?.copyWith(fontWeight: AppFontWeight.light),
+                                textAlign: TextAlign.justify,
+                              ),
+                            ),
+                            const SizedBox(height: 48.0),
+                          ],
                         ),
-                        const SizedBox(width: 16.0),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: Text(
-                        AppDate(job.dueAt, day: 'EEEE', month: 'MMMM', year: 'yyyy').formatted!,
-                        style: theme.textTheme.labelLarge,
                       ),
                     ),
-                    const SizedBox(height: 4.0),
-                    GalleryGrids(job: job, userId: vm.userId),
-                    const SizedBox(height: 4.0),
-                    PaymentGrids(job: job, userId: vm.userId),
-                    const SizedBox(height: 32.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        job.notes,
-                        style: theme.textTheme.labelLarge?.copyWith(fontWeight: AppFontWeight.light),
-                        textAlign: TextAlign.justify,
-                      ),
-                    ),
-                    const SizedBox(height: 48.0),
-                  ],
+                  ),
+                  floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+                  floatingActionButton: FloatingActionButton.extended(
+                    icon: Icon(state.job.isComplete ? Icons.undo : Icons.check),
+                    backgroundColor: state.job.isComplete ? colorScheme.onSecondary : colorScheme.secondary,
+                    foregroundColor: state.job.isComplete ? colorScheme.secondary : colorScheme.onSecondary,
+                    label: Text(state.job.isComplete ? 'Undo Completed' : 'Mark Completed'),
+                    onPressed: () => _onTapComplete(state.job),
+                  ),
                 ),
+                error: ErrorView.new,
+                loading: () => child!,
               ),
-            ),
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: FloatingActionButton.extended(
-            icon: Icon(job.isComplete ? Icons.undo : Icons.check),
-            backgroundColor: job.isComplete ? colorScheme.onSecondary : colorScheme.secondary,
-            foregroundColor: job.isComplete ? colorScheme.secondary : colorScheme.onSecondary,
-            label: Text(job.isComplete ? 'Undo Completed' : 'Mark Completed'),
-            onPressed: () => _onTapComplete(job),
-          ),
-        );
-      },
+      child: const Center(child: LoadingSpinner()),
     );
   }
 
@@ -239,7 +239,7 @@ class _AvatarAppBar extends StatelessWidget {
       tag: contact.createdAt.toString(),
       imageUrl: contact.imageUrl,
       title: GestureDetector(
-        onTap: () => context.registry.get<ContactsCoordinator>().toContact(contact),
+        onTap: () => context.registry.get<ContactsCoordinator>().toContact(contact.id),
         child: Text(
           contact.fullname,
           maxLines: 1,

@@ -14,14 +14,14 @@ import 'coordinator_base.dart';
 class ContactsCoordinator extends CoordinatorBase {
   const ContactsCoordinator(super.navigatorKey);
 
-  void toContact(ContactEntity contact, {bool replace = false}) {
+  void toContact(String id, {bool replace = false}) {
     replace
-        ? navigator?.pushReplacement<dynamic, dynamic>(RouteTransitions.slideIn(ContactPage(contact: contact)))
-        : navigator?.push<void>(RouteTransitions.slideIn(ContactPage(contact: contact)));
+        ? navigator?.pushReplacement<dynamic, dynamic>(RouteTransitions.slideIn(ContactPage(id: id)))
+        : navigator?.push<void>(RouteTransitions.slideIn(ContactPage(id: id)));
   }
 
-  void toContactEdit(String userId, ContactEntity contact) {
-    navigator?.push<void>(RouteTransitions.slideIn(ContactsEditPage(userId: userId, contact: contact)));
+  void toContactEdit(ContactEntity contact) {
+    navigator?.push<void>(RouteTransitions.slideIn(ContactsEditPage(contact: contact)));
   }
 
   Future<Map<String, double>?>? toContactMeasure({
@@ -41,7 +41,7 @@ class ContactsCoordinator extends CoordinatorBase {
     return navigator?.push<ContactEntity>(RouteTransitions.fadeIn(ContactLists(contacts: contacts)));
   }
 
-  void toCreateContact(String userId) {
-    navigator?.push<void>(RouteTransitions.slideIn(ContactsCreatePage(userId: userId)));
+  void toCreateContact() {
+    navigator?.push<void>(RouteTransitions.slideIn(const ContactsCreatePage()));
   }
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:rebloc/rebloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:version/version.dart';
 
+import 'providers/home_notifier_provider.dart';
 import 'widgets/access_denied.dart';
 import 'widgets/bottom_row.dart';
 import 'widgets/create_button.dart';
@@ -16,9 +18,7 @@ import 'widgets/top_button_bar.dart';
 import 'widgets/top_row.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.isMock});
-
-  final bool isMock;
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,33 +38,40 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              AppVersionBuilder(
-                valueBuilder: () => AppVersion.retrieve(isMock),
-                builder: (BuildContext context, String? appVersion, Widget? child) {
-                  if (appVersion == null) {
-                    return child!;
-                  }
+              Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(homeNotifierProvider).when(
+                      skipLoadingOnReload: true,
+                      data: (HomeState state) => AppVersionBuilder(
+                        valueBuilder: () => AppVersion.retrieve(environment.isMock),
+                        builder: (BuildContext context, String? appVersion, Widget? child) {
+                          if (appVersion == null) {
+                            return child!;
+                          }
 
-                  final Version currentVersion = Version.parse(appVersion);
-                  final AppState state = StoreProvider.of<AppState>(context).states.valueWrapper!.value;
-                  final Version latestVersion = Version.parse(state.settings.settings?.versionName ?? '1.0.0');
+                          final Version currentVersion = Version.parse(appVersion);
+                          final Version latestVersion = Version.parse(state.settings.versionName);
 
-                  if (latestVersion > currentVersion) {
-                    return OutDatedPage(
-                      onUpdate: () {
-                        // TODO(Jogboms): take note for apple if that ever happens
-                        open('https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade');
-                      },
-                    );
-                  }
+                          if (latestVersion > currentVersion) {
+                            return OutDatedPage(
+                              onUpdate: () {
+                                // TODO(Jogboms): take note for apple if that ever happens
+                                open('https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade');
+                              },
+                            );
+                          }
 
-                  return child!;
-                },
-                child: ViewModelSubscriber<AppState, HomeViewModel>(
-                  converter: HomeViewModel.new,
-                  builder: (_, DispatchFunction dispatch, HomeViewModel vm) =>
-                      _Body(viewModel: vm, dispatch: dispatch, isMock: isMock),
-                ),
+                          return child!;
+                        },
+                        child: _Body(
+                          state: state,
+                          homeNotifier: ref.read(homeNotifierProvider.notifier),
+                          accountNotifier: ref.read(accountNotifierProvider.notifier),
+                        ),
+                      ),
+                      error: ErrorView.new,
+                      loading: () => child!,
+                    ),
+                child: const Center(child: LoadingSpinner()),
               ),
             ],
           ),
@@ -75,22 +82,22 @@ class HomePage extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({required this.dispatch, required this.viewModel, required this.isMock});
+  const _Body({
+    required this.state,
+    required this.homeNotifier,
+    required this.accountNotifier,
+  });
 
-  final HomeViewModel viewModel;
-  final DispatchFunction dispatch;
-  final bool isMock;
+  final HomeState state;
+  final HomeNotifier homeNotifier;
+  final AccountNotifier accountNotifier;
 
   @override
   Widget build(BuildContext context) {
-    final AccountEntity? account = viewModel.account;
-    final StatsEntity? stats = viewModel.stats;
+    final AccountEntity account = state.account;
+    final StatsEntity stats = state.stats;
 
-    if (viewModel.isLoading || account == null || stats == null) {
-      return const LoadingSpinner();
-    }
-
-    if (viewModel.isDisabled) {
+    if (state.isDisabled) {
       return AccessDeniedPage(
         onSendMail: () {
           email(
@@ -101,10 +108,10 @@ class _Body extends StatelessWidget {
       );
     }
 
-    if (viewModel.isWarning && viewModel.hasSkippedPremium == false) {
+    if (state.isWarning && state.hasSkippedPremium == false) {
       return RateLimitPage(
-        onSignUp: () => dispatch(AccountAction.premiumSignUp(account)),
-        onSkippedPremium: () => dispatch(const AccountAction.skippedPremium()),
+        onSignUp: accountNotifier.premiumSetup,
+        onSkippedPremium: homeNotifier.skippedPremium,
       );
     }
 
@@ -122,14 +129,11 @@ class _Body extends StatelessWidget {
             SizedBox(height: Theme.of(context).buttonTheme.height + MediaQuery.of(context).padding.bottom),
           ],
         ),
-        CreateButton(userId: account.uid, contacts: viewModel.contacts),
+        const CreateButton(),
         TopButtonBar(
           account: account,
-          shouldSendRating: viewModel.shouldSendRating,
-          onLogout: () {
-            dispatch(const AuthAction.logout());
-            context.registry.get<SharedCoordinator>().toSplash(isMock);
-          },
+          shouldSendRating: state.shouldSendRating,
+          onLogout: () => context.registry.get<SharedCoordinator>().toSplash(),
         ),
       ],
     );

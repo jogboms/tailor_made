@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:rebloc/rebloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/presentation.dart';
 
+import 'providers/filtered_jobs_state_provider.dart';
 import 'widgets/jobs_filter_button.dart';
 import 'widgets/jobs_list.dart';
 
@@ -10,61 +11,87 @@ class JobsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelSubscriber<AppState, JobsViewModel>(
-      converter: JobsViewModel.new,
-      builder: (BuildContext context, DispatchFunction dispatcher, JobsViewModel vm) {
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+        final AsyncValue<FilteredJobsState> filteredJobs = ref.watch(filteredJobsProvider);
+
         return WillPopScope(
           child: Scaffold(
-            appBar: _AppBar(vm: vm),
+            appBar: _AppBar(loading: filteredJobs.isLoading),
             body: Builder(
               builder: (BuildContext context) {
-                if (vm.isLoading && !vm.isSearching) {
-                  return const LoadingSpinner();
-                }
+                return filteredJobs.when(
+                  skipLoadingOnReload: true,
+                  data: (FilteredJobsState state) {
+                    if (state.jobs.isEmpty) {
+                      return const Center(
+                        child: EmptyResultView(message: 'No jobs available'),
+                      );
+                    }
 
-                return SafeArea(
-                  top: false,
-                  child: CustomScrollView(
-                    slivers: <Widget>[JobList(jobs: vm.jobs)],
-                  ),
+                    return SafeArea(
+                      top: false,
+                      child: CustomScrollView(
+                        slivers: <Widget>[
+                          JobList(jobs: state.jobs),
+                        ],
+                      ),
+                    );
+                  },
+                  error: ErrorView.new,
+                  loading: () => child!,
                 );
               },
             ),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.library_add),
-              onPressed: () => context.registry.get<JobsCoordinator>().toCreateJob(vm.userId, vm.contacts),
+              onPressed: () => context.registry.get<JobsCoordinator>().toCreateJob(null),
             ),
           ),
           onWillPop: () async {
-            if (vm.isSearching) {
-              dispatcher(const JobsAction.searchCancel());
+            final SearchJobQueryState queryState = ref.read(searchJobQueryStateProvider.notifier);
+            if (queryState.isSearching) {
+              queryState.setState('');
               return false;
             }
             return true;
           },
         );
       },
+      child: const Center(child: LoadingSpinner()),
     );
   }
 }
 
-class _AppBar extends StatefulWidget implements PreferredSizeWidget {
-  const _AppBar({required this.vm});
+class _AppBar extends ConsumerStatefulWidget implements PreferredSizeWidget {
+  const _AppBar({required this.loading});
 
-  final JobsViewModel vm;
+  final bool loading;
 
   @override
-  State<_AppBar> createState() => _AppBarState();
+  ConsumerState<_AppBar> createState() => _AppBarState();
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class _AppBarState extends State<_AppBar> with StoreDispatchMixin<AppState> {
+class _AppBarState extends ConsumerState<_AppBar> {
+  late final SearchJobQueryState _queryProvider = ref.read(searchJobQueryStateProvider.notifier);
+  late final SearchJobSortState _sortProvider = ref.read(searchJobSortStateProvider.notifier);
+  late final TextEditingController _controller = TextEditingController(text: _queryProvider.currentState);
   bool _isSearching = false;
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<String>(searchJobQueryStateProvider, (_, String next) {
+      if (_controller.text != next) {
+        _controller.value = TextEditingValue(
+          text: next,
+          selection: TextSelection.collapsed(offset: next.length, affinity: TextAffinity.upstream),
+        );
+      }
+    });
+
     if (!_isSearching) {
       return CustomAppBar(
         title: const Text('Jobs'),
@@ -74,27 +101,26 @@ class _AppBarState extends State<_AppBar> with StoreDispatchMixin<AppState> {
             onPressed: _onTapSearch,
           ),
           JobsFilterButton(
-            vm: widget.vm,
-            onTapSort: (JobsSortType type) => dispatchAction(JobsAction.sort(type)),
+            sortType: ref.watch(searchJobSortStateProvider),
+            onTapSort: _sortProvider.setState,
           ),
         ],
       );
     }
 
     return AppBar(
-      centerTitle: false,
-      elevation: 1.0,
       leading: AppCloseButton(onPop: _handleSearchEnd),
       title: TextField(
+        controller: _controller,
         autofocus: true,
         decoration: const InputDecoration(hintText: 'Search...'),
-        onChanged: (String term) => dispatchAction(JobsAction.search(term)),
+        onChanged: _queryProvider.setState,
       ),
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1.0),
         child: SizedBox(
           height: 1.0,
-          child: widget.vm.isLoading ? const LinearProgressIndicator() : null,
+          child: widget.loading ? const LinearProgressIndicator() : null,
         ),
       ),
     );
@@ -103,7 +129,7 @@ class _AppBarState extends State<_AppBar> with StoreDispatchMixin<AppState> {
   void _onTapSearch() => setState(() => _isSearching = true);
 
   void _handleSearchEnd() {
-    dispatchAction(const JobsAction.searchCancel());
+    _queryProvider.setState('');
     setState(() => _isSearching = false);
   }
 }

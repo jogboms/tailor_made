@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/presentation/rebloc.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
-class JobsFilterButton extends StatelessWidget {
-  const JobsFilterButton({super.key, required this.vm, required this.onTapSort});
+import '../../../utils.dart';
 
-  final JobsViewModel vm;
+class JobsFilterButton extends StatelessWidget {
+  const JobsFilterButton({super.key, required this.sortType, required this.onTapSort});
+
+  final JobsSortType sortType;
   final ValueSetter<JobsSortType> onTapSort;
 
   @override
@@ -26,43 +27,43 @@ class JobsFilterButton extends StatelessWidget {
                   _Option(
                     text: 'Sort by Active',
                     type: JobsSortType.active,
-                    enabled: vm.sortFn != JobsSortType.active,
+                    enabled: sortType != JobsSortType.active,
                     style: optionTheme.copyWith(color: _colorTestFn(JobsSortType.active, colorScheme)),
                   ),
                   _Option(
                     text: 'Sort by Name',
                     type: JobsSortType.names,
-                    enabled: vm.sortFn != JobsSortType.names,
+                    enabled: sortType != JobsSortType.names,
                     style: optionTheme.copyWith(color: _colorTestFn(JobsSortType.names, colorScheme)),
                   ),
                   _Option(
                     text: 'Sort by Owed',
                     type: JobsSortType.owed,
-                    enabled: vm.sortFn != JobsSortType.owed,
+                    enabled: sortType != JobsSortType.owed,
                     style: optionTheme.copyWith(color: _colorTestFn(JobsSortType.owed, colorScheme)),
                   ),
                   _Option(
                     text: 'Sort by Payments',
                     type: JobsSortType.payments,
-                    enabled: vm.sortFn != JobsSortType.payments,
+                    enabled: sortType != JobsSortType.payments,
                     style: optionTheme.copyWith(color: _colorTestFn(JobsSortType.payments, colorScheme)),
                   ),
                   _Option(
                     text: 'Sort by Price',
                     type: JobsSortType.price,
-                    enabled: vm.sortFn != JobsSortType.price,
+                    enabled: sortType != JobsSortType.price,
                     style: optionTheme.copyWith(color: _colorTestFn(JobsSortType.price, colorScheme)),
                   ),
                   _Option(
                     text: 'Sort by Recent',
                     type: JobsSortType.recent,
-                    enabled: vm.sortFn != JobsSortType.recent,
+                    enabled: sortType != JobsSortType.recent,
                     style: optionTheme.copyWith(color: _colorTestFn(JobsSortType.recent, colorScheme)),
                   ),
                   _Option(
                     text: 'No Sort',
                     type: JobsSortType.reset,
-                    enabled: vm.sortFn != JobsSortType.reset,
+                    enabled: sortType != JobsSortType.reset,
                     style: optionTheme.copyWith(color: _colorTestFn(JobsSortType.reset, colorScheme)),
                   ),
                 ];
@@ -71,14 +72,14 @@ class JobsFilterButton extends StatelessWidget {
           ),
           Align(
             alignment: const Alignment(0.75, -0.5),
-            child: vm.hasSortFn ? Dots(color: colorScheme.secondary) : null,
+            child: sortType != JobsSortType.reset ? Dots(color: colorScheme.secondary) : null,
           ),
         ],
       ),
     );
   }
 
-  Color? _colorTestFn(JobsSortType type, ColorScheme colorScheme) => vm.sortFn == type ? colorScheme.secondary : null;
+  Color? _colorTestFn(JobsSortType type, ColorScheme colorScheme) => sortType == type ? colorScheme.secondary : null;
 }
 
 class _Option extends PopupMenuItem<JobsSortType> {

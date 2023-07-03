@@ -1,13 +1,14 @@
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/rebloc.dart';
+import 'package:tailor_made/presentation/screens/contacts/providers/selected_contact_provider.dart';
 import 'package:tailor_made/presentation/theme.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
+import '../../state.dart';
 import '../measures/widgets/measure_create_items.dart';
 import 'jobs_create_view_model.dart';
 import 'widgets/avatar_app_bar.dart';
@@ -15,27 +16,71 @@ import 'widgets/gallery_grid_item.dart';
 import 'widgets/image_form_value.dart';
 import 'widgets/input_dropdown.dart';
 
-class JobsCreatePage extends StatefulWidget {
+class JobsCreatePage extends StatelessWidget {
   const JobsCreatePage({
     super.key,
+    required this.contactId,
+  });
+
+  static const Key dataViewKey = Key('dataViewKey');
+
+  final String? contactId;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+        final String? userId = ref.watch(accountProvider).valueOrNull?.uid;
+        if (userId == null) {
+          return const Scaffold(
+            body: Center(
+              child: LoadingSpinner(),
+            ),
+          );
+        }
+
+        final ContactEntity? contact;
+        if (contactId case final String contactId) {
+          contact = ref.watch(selectedContactProvider(contactId)).valueOrNull?.contact;
+        } else {
+          contact = null;
+        }
+
+        return _DataView(
+          key: dataViewKey,
+          contact: contact,
+          userId: userId,
+        );
+      },
+    );
+  }
+}
+
+class _DataView extends StatefulWidget {
+  const _DataView({
+    super.key,
     this.contact,
-    required this.contacts,
     required this.userId,
   });
 
   final ContactEntity? contact;
-  final List<ContactEntity> contacts;
   final String userId;
 
   @override
-  State<JobsCreatePage> createState() => _JobsCreatePageState();
+  State<_DataView> createState() => _DataViewState();
 }
 
-class _JobsCreatePageState extends JobsCreateViewModel {
+class _DataViewState extends State<_DataView> with JobsCreateViewModel {
   final MoneyMaskedTextController _controller = MoneyMaskedTextController(
     decimalSeparator: '.',
     thousandSeparator: ',',
   );
+
+  @override
+  ContactEntity? get defaultContact => widget.contact;
+
+  @override
+  String get userId => widget.userId;
 
   @override
   void dispose() {
@@ -63,27 +108,38 @@ class _JobsCreatePageState extends JobsCreateViewModel {
                 style: theme.textTheme.pageTitle,
               ),
               subtitle: Text('${contact.totalJobs} Jobs', style: theme.textTheme.bodySmall),
-              actions: widget.contacts.isNotEmpty
-                  ? <Widget>[
-                      IconButton(icon: const Icon(Icons.people), onPressed: handleSelectContact),
-                    ]
-                  : null,
+              actions: <Widget>[
+                Consumer(
+                  builder: (BuildContext context, WidgetRef ref, _) => ref.watch(contactsProvider).maybeWhen(
+                        data: (List<ContactEntity> data) => IconButton(
+                          icon: const Icon(Icons.people),
+                          onPressed: () => handleSelectContact(data),
+                        ),
+                        orElse: () => const SizedBox.shrink(),
+                      ),
+                ),
+              ],
             )
           : CustomAppBar.empty,
       body: Builder(
         builder: (BuildContext context) {
           if (contact == null) {
             return Center(
-              child: AppClearButton(
-                onPressed: handleSelectContact,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    const CircleAvatar(radius: 50.0, child: Icon(Icons.person_add)),
-                    const SizedBox(height: 16.0),
-                    Text('SELECT A CLIENT', style: theme.textTheme.bodySmall),
-                  ],
-                ),
+              child: Consumer(
+                builder: (BuildContext context, WidgetRef ref, _) => ref.watch(contactsProvider).maybeWhen(
+                      data: (List<ContactEntity> data) => AppClearButton(
+                        onPressed: () => handleSelectContact(data),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            const CircleAvatar(radius: 50.0, child: Icon(Icons.person_add)),
+                            const SizedBox(height: 16.0),
+                            Text('SELECT A CLIENT', style: theme.textTheme.bodySmall),
+                          ],
+                        ),
+                      ),
+                      orElse: () => const LoadingSpinner(),
+                    ),
               ),
             );
           }
@@ -142,19 +198,22 @@ class _JobsCreatePageState extends JobsCreateViewModel {
   }
 
   Widget _buildMeasures() {
-    return ViewModelSubscriber<AppState, MeasuresViewModel>(
-      converter: MeasuresViewModel.new,
-      builder: (_, __, MeasuresViewModel vm) {
-        return MeasureCreateItems(
-          grouped: vm.grouped,
-          measurements: job.measurements,
-          onSaved: (Map<String, double>? value) {
-            if (value != null) {
-              job = job.copyWith(measurements: value);
-            }
-          },
-        );
-      },
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(measurementsProvider).when(
+            skipLoadingOnReload: true,
+            data: (MeasurementsState state) => MeasureCreateItems(
+              grouped: state.grouped,
+              measurements: job.measurements,
+              onSaved: (Map<String, double>? value) {
+                if (value != null) {
+                  job = job.copyWith(measurements: value);
+                }
+              },
+            ),
+            error: ErrorView.new,
+            loading: () => child!,
+          ),
+      child: const Center(child: LoadingSpinner()),
     );
   }
 

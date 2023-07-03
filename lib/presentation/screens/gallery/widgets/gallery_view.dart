@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:rebloc/rebloc.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -18,32 +18,33 @@ class GalleryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelSubscriber<AppState, ContactJobViewModel>(
-      converter: (AppState store) => ContactJobViewModel(
-        store,
-        contactID: contactID,
-        jobID: jobID,
-      ),
-      builder: (_, __, ContactJobViewModel vm) {
-        return Scaffold(
-          appBar: _MyAppBar(contact: vm.selectedContact, job: vm.selectedJob, account: vm.account),
-          body: PhotoView(
-            imageProvider: NetworkImage(src),
-            loadingBuilder: (_, __) => const LoadingSpinner(),
-            heroAttributes: PhotoViewHeroAttributes(tag: src),
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) => ref
+          .watch(selectedContactJobProvider(contactId: contactID, jobId: jobID))
+          .when(
+            skipLoadingOnReload: true,
+            data: (ContactJobState state) => Scaffold(
+              appBar: _MyAppBar(contactId: state.selectedContact.id, job: state.selectedJob, account: state.account),
+              body: PhotoView(
+                imageProvider: NetworkImage(src),
+                loadingBuilder: (_, __) => const LoadingSpinner(),
+                heroAttributes: PhotoViewHeroAttributes(tag: src),
+              ),
+            ),
+            error: ErrorView.new,
+            loading: () => child!,
           ),
-        );
-      },
+      child: const Center(child: LoadingSpinner()),
     );
   }
 }
 
 class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const _MyAppBar({this.contact, this.job, required this.account});
+  const _MyAppBar({required this.contactId, required this.job, required this.account});
 
-  final ContactEntity? contact;
-  final JobEntity? job;
-  final AccountEntity? account;
+  final String contactId;
+  final JobEntity job;
+  final AccountEntity account;
 
   @override
   Widget build(BuildContext context) {
@@ -58,17 +59,15 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             children: <Widget>[
               const AppBackButton(color: iconColor),
               const Expanded(child: SizedBox()),
-              if (job case final JobEntity job)
-                IconButton(
-                  icon: const Icon(Icons.work, color: iconColor),
-                  onPressed: () => context.registry.get<JobsCoordinator>().toJob(job),
-                ),
-              if (contact case final ContactEntity contact)
-                IconButton(
-                  icon: const Icon(Icons.person, color: iconColor),
-                  onPressed: () => context.registry.get<ContactsCoordinator>().toContact(contact),
-                ),
-              if (account!.hasPremiumEnabled)
+              IconButton(
+                icon: const Icon(Icons.work, color: iconColor),
+                onPressed: () => context.registry.get<JobsCoordinator>().toJob(job),
+              ),
+              IconButton(
+                icon: const Icon(Icons.person, color: iconColor),
+                onPressed: () => context.registry.get<ContactsCoordinator>().toContact(contactId),
+              ),
+              if (account.hasPremiumEnabled)
                 const IconButton(
                   icon: Icon(Icons.share, color: iconColor),
                   // TODO(Jogboms): Handle

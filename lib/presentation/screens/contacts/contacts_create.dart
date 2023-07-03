@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
-import 'package:rebloc/rebloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
-import 'package:uuid/uuid.dart';
 
 import 'widgets/contact_form.dart';
 
 class ContactsCreatePage extends StatefulWidget {
-  const ContactsCreatePage({super.key, required this.userId});
-
-  final String userId;
+  const ContactsCreatePage({super.key});
 
   @override
   State<ContactsCreatePage> createState() => _ContactsCreatePageState();
@@ -19,7 +17,6 @@ class ContactsCreatePage extends StatefulWidget {
 
 class _ContactsCreatePageState extends State<ContactsCreatePage> {
   final GlobalKey<ContactFormState> _formKey = GlobalKey<ContactFormState>();
-  late final String id = const Uuid().v4();
   late CreateContactData _contact = const CreateContactData(
     fullname: '',
     phone: '',
@@ -42,25 +39,36 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
             color: context.theme.primaryColor,
             onPressed: _handleSelectContact,
           ),
-          ViewModelSubscriber<AppState, MeasuresViewModel>(
-            converter: MeasuresViewModel.new,
-            builder: (_, __, MeasuresViewModel vm) {
-              return IconButton(
-                icon: Icon(
-                  Icons.content_cut,
-                  color: _contact.measurements.isEmpty ? colorScheme.secondary : null,
+          Consumer(
+            builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(measurementsProvider).when(
+                  skipLoadingOnReload: true,
+                  data: (MeasurementsState state) => IconButton(
+                    icon: Icon(
+                      Icons.content_cut,
+                      color: _contact.measurements.isEmpty ? colorScheme.secondary : null,
+                    ),
+                    onPressed: () => _handleSelectMeasure(state.grouped),
+                  ),
+                  error: ErrorView.new,
+                  loading: () => child!,
                 ),
-                onPressed: () => _handleSelectMeasure(vm),
-              );
-            },
+            child: const Center(child: LoadingSpinner()),
           ),
         ],
       ),
-      body: ContactForm(
-        key: _formKey,
-        contact: _contact,
-        onHandleSubmit: _handleSubmit,
-        userId: widget.userId,
+      body: Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(accountProvider).when(
+              skipLoadingOnReload: true,
+              data: (AccountEntity data) => ContactForm(
+                key: _formKey,
+                contact: _contact,
+                onHandleSubmit: (CreateContactData contact) => _handleSubmit(contact, data.uid),
+                userId: data.uid,
+              ),
+              error: ErrorView.new,
+              loading: () => child!,
+            ),
+        child: const Center(child: LoadingSpinner()),
       ),
     );
   }
@@ -82,7 +90,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
     );
   }
 
-  void _handleSubmit(CreateContactData contact) async {
+  void _handleSubmit(CreateContactData contact, String userId) async {
     final AppSnackBar snackBar = AppSnackBar.of(context);
     if (contact.measurements.isEmpty) {
       snackBar.info(AppStrings.leavingEmptyMeasures);
@@ -103,20 +111,20 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
       );
 
       // TODO(Jogboms): move this out of here
-      final ContactEntity snap = await contacts.create(widget.userId, contact);
+      final ContactEntity snap = await contacts.create(userId, contact);
       snackBar.success('Successfully Added');
 
-      contactsCoordinator.toContact(snap, replace: true);
+      contactsCoordinator.toContact(snap.id, replace: true);
     } catch (error, stackTrace) {
       AppLog.e(error, stackTrace);
       snackBar.error(error.toString());
     }
   }
 
-  void _handleSelectMeasure(MeasuresViewModel vm) async {
+  void _handleSelectMeasure(Map<MeasureGroup, List<MeasureEntity>> grouped) async {
     final Map<String, double>? result = await context.registry.get<ContactsCoordinator>().toContactMeasure(
           contact: null,
-          grouped: vm.grouped,
+          grouped: grouped,
         );
     if (result == null) {
       return;

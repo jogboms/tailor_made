@@ -14,22 +14,9 @@
 
 ---
 
-TailorMade is what actually started out as an experiment with [Flutter](https://flutter.io/), [~flutter_redux~](https://github.com/brianegan/flutter_redux) [ReBLoC](https://github.com/redbrogdon/rebloc) and [Firebase Cloud Functions](https://github.com/flutter/plugins/tree/master/packages/cloud_functions) but instead turned out to be a valuable tool for managing a Fashion designer's daily routine. It is clean, easy on the eyes and overall has a very smooth feel. It also handles offline use cases with Firebase Cloud. Logo, Design & Concept by Me.
+TailorMade is what actually started out as an experiment with [Flutter](https://flutter.io/) and [Firebase Cloud Functions](https://github.com/flutter/plugins/tree/master/packages/cloud_functions) but instead turned out to be a valuable tool for managing a Fashion designer's daily routine. It is clean, easy on the eyes and overall has a very smooth feel. It also handles offline use cases with Firebase Cloud. Logo, Design & Concept by Me.
 
-## Tools
-
-- Firebase Auth
-- Firebase Cloud Firestore
-- Firebase Cloud Functions
-- Firebase Storage
-- Google SignIn
-- RxDart
-- ReBLoC
-- Built Value & Collection
-- Equatable
-- Injector
-
-For a full description of OSS used, see pubspec.yaml
+> For a full description of OSS used, see pubspec.yaml
 
 ## UI Shots
 

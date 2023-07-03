@@ -12,5 +12,6 @@
   "bannedUserMessage": "This account has been disabled by administration",
   "loadingMessage": "Loading...",
   "tryAgainMessage": "Do try again after some time",
-  "popupBlockedByBrowserMessage": "The auto-login popup was blocked by your browser. Try the continue button"
+  "popupBlockedByBrowserMessage": "The auto-login popup was blocked by your browser. Try the continue button",
+  "continueWithGoogle": "Continue with Google"
 }

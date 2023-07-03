@@ -8,3 +8,6 @@ export 'domain/repositories/measures.dart';
 export 'domain/repositories/payments.dart';
 export 'domain/repositories/settings.dart';
 export 'domain/repositories/stats.dart';
+export 'domain/use_cases/fetch_account_use_case.dart';
+export 'domain/use_cases/sign_in_use_case.dart';
+export 'domain/use_cases/sign_out_use_case.dart';

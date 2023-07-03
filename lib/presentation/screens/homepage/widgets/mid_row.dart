@@ -34,7 +34,7 @@ class MidRowWidget extends StatelessWidget {
                 color: Colors.blueAccent,
                 icon: Icons.image,
                 title: 'Gallery',
-                subTitle: '${stats.gallery.total} Photos',
+                subTitle: '${stats.gallery.total.toInt()} Photos',
                 onPressed: () => context.registry.get<GalleryCoordinator>().toGallery(userId),
               ),
             ),

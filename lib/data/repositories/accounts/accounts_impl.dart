@@ -15,7 +15,7 @@ class AccountsImpl extends Accounts {
   static const String collectionName = 'accounts';
 
   @override
-  Future<void> signInWithGoogle() => firebase.auth.signInWithGoogle();
+  Future<void> signIn() => firebase.auth.signInWithGoogle();
 
   @override
   Stream<String?> get onAuthStateChanged => firebase.auth.onAuthStateChanged;
@@ -42,6 +42,21 @@ class AccountsImpl extends Accounts {
     await collection.fetchOne(account.uid).set(data);
     await firebase.db.collection('premium').doc(account.uid).set(data);
     return account.uid;
+  }
+
+  @override
+  Future<AccountEntity> fetch() async {
+    final String? id = firebase.auth.getUser;
+    if (id == null) {
+      throw const AuthException.userNotFound();
+    }
+
+    final AccountEntity? account = await getAccount(id);
+    if (account == null) {
+      throw const AuthException.userNotFound();
+    }
+
+    return account;
   }
 
   @override

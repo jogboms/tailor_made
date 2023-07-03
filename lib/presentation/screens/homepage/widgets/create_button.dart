@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/domain.dart';
+import 'package:registry/registry.dart';
 import 'package:tailor_made/presentation.dart';
 
 import 'helpers.dart';
@@ -7,10 +7,7 @@ import 'helpers.dart';
 enum _CreateOptions { contacts, jobs }
 
 class CreateButton extends StatefulWidget {
-  const CreateButton({super.key, required this.userId, required this.contacts});
-
-  final List<ContactEntity> contacts;
-  final String userId;
+  const CreateButton({super.key});
 
   @override
   State<CreateButton> createState() => _CreateButtonState();
@@ -39,7 +36,7 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
         width: double.infinity,
         child: PrimaryButton(
           useSafeArea: true,
-          onPressed: _onTapCreate(widget.contacts),
+          onPressed: _onTapCreate,
           shape: const RoundedRectangleBorder(),
           child: ScaleTransition(
             scale: Tween<double>(begin: 0.95, end: 1.025).animate(_controller),
@@ -54,40 +51,38 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
     );
   }
 
-  VoidCallback _onTapCreate(List<ContactEntity> contacts) {
-    return () async {
-      final Registry registry = context.registry;
-      final _CreateOptions? result = await showDialog<_CreateOptions>(
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            title: Text('Select action', style: Theme.of(context).textTheme.labelLarge),
-            children: <Widget>[
-              SimpleDialogOption(
-                onPressed: () => Navigator.pop(context, _CreateOptions.contacts),
-                child: const TMListTile(color: Colors.orangeAccent, icon: Icons.supervisor_account, title: 'Contact'),
-              ),
-              SimpleDialogOption(
-                onPressed: () => Navigator.pop(context, _CreateOptions.jobs),
-                child: TMListTile(color: Colors.greenAccent.shade400, icon: Icons.attach_money, title: 'Job'),
-              ),
-            ],
-          );
-        },
-      );
+  void _onTapCreate() async {
+    final Registry registry = context.registry;
+    final _CreateOptions? result = await showDialog<_CreateOptions>(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text('Select action', style: Theme.of(context).textTheme.labelLarge),
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () => Navigator.pop(context, _CreateOptions.contacts),
+              child: const TMListTile(color: Colors.orangeAccent, icon: Icons.supervisor_account, title: 'Contact'),
+            ),
+            SimpleDialogOption(
+              onPressed: () => Navigator.pop(context, _CreateOptions.jobs),
+              child: TMListTile(color: Colors.greenAccent.shade400, icon: Icons.attach_money, title: 'Job'),
+            ),
+          ],
+        );
+      },
+    );
 
-      if (result == null) {
-        return;
-      }
+    if (result == null) {
+      return;
+    }
 
-      switch (result) {
-        case _CreateOptions.contacts:
-          registry.get<ContactsCoordinator>().toCreateContact(widget.userId);
-          break;
-        case _CreateOptions.jobs:
-          registry.get<JobsCoordinator>().toCreateJob(widget.userId, contacts);
-          break;
-      }
-    };
+    switch (result) {
+      case _CreateOptions.contacts:
+        registry.get<ContactsCoordinator>().toCreateContact();
+        break;
+      case _CreateOptions.jobs:
+        registry.get<JobsCoordinator>().toCreateJob(null);
+        break;
+    }
   }
 }

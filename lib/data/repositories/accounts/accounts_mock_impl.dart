@@ -2,7 +2,7 @@ import 'package:tailor_made/domain.dart';
 
 class AccountsMockImpl extends Accounts {
   @override
-  Future<void> signInWithGoogle() async {
+  Future<void> signIn() async {
     return;
   }
 
@@ -20,6 +20,9 @@ class AccountsMockImpl extends Accounts {
   Future<void> signUp(AccountEntity account) async {
     return;
   }
+
+  @override
+  Future<AccountEntity> fetch() async => (await getAccount('1'))!;
 
   @override
   Future<AccountEntity?> getAccount(String userId) async {

@@ -20,6 +20,8 @@ analyzer:
     unused_result: error
     unused_shown_name: error
     invalid_annotation_target: ignore
+  plugins:
+    - custom_lint
   language:
     strict-casts: true
     strict-raw-types: true
