@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 class JobListItem extends StatelessWidget {
   const JobListItem({super.key, required this.job});
@@ -18,7 +19,7 @@ class JobListItem extends StatelessWidget {
 
     return Material(
       child: InkWell(
-        onTap: () => context.registry.get<JobsCoordinator>().toJob(job),
+        onTap: () => context.router.toJob(job),
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Row(

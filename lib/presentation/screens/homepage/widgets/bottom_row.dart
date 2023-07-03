@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 import 'helpers.dart';
 
@@ -25,7 +25,7 @@ class BottomRowWidget extends StatelessWidget {
                 icon: Icons.content_cut,
                 title: 'Measures',
                 subTitle: 'Custom',
-                onPressed: () => context.registry.get<MeasuresCoordinator>().toManageMeasures(),
+                onPressed: () => context.router.toManageMeasures(),
               ),
             ),
           ),
@@ -36,7 +36,7 @@ class BottomRowWidget extends StatelessWidget {
                 icon: Icons.event,
                 title: 'Tasks',
                 subTitle: '${stats.jobs.pending.toInt()} Pending',
-                onPressed: () => context.registry.get<TasksCoordinator>().toTasks(),
+                onPressed: () => context.router.toTasks(),
               ),
             ),
           ),

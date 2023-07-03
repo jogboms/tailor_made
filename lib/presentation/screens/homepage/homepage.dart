@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 import 'package:version/version.dart';
 
 import 'providers/home_notifier_provider.dart';
@@ -133,7 +134,7 @@ class _Body extends StatelessWidget {
         TopButtonBar(
           account: account,
           shouldSendRating: state.shouldSendRating,
-          onLogout: () => context.registry.get<SharedCoordinator>().toSplash(),
+          onLogout: () => context.router.toSplash(),
         ),
       ],
     );

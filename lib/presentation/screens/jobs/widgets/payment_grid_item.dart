@@ -2,6 +2,7 @@ import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 import 'payment_grids_form_value.dart';
 
@@ -40,7 +41,7 @@ class PaymentGridItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(5.0),
         color: backgroundColor,
         child: InkWell(
-          onTap: payment != null ? () => context.registry.get<PaymentsCoordinator>().toPayment(payment) : null,
+          onTap: payment != null ? () => context.router.toPayment(payment) : null,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
             child: Column(

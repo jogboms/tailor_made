@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:registry/registry.dart';
 import 'package:tailor_made/presentation.dart';
 
+import '../../../routing.dart';
 import 'helpers.dart';
 
 enum _CreateOptions { contacts, jobs }
@@ -52,7 +52,7 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
   }
 
   void _onTapCreate() async {
-    final Registry registry = context.registry;
+    final AppRouter router = context.router;
     final _CreateOptions? result = await showDialog<_CreateOptions>(
       context: context,
       builder: (BuildContext context) {
@@ -78,10 +78,10 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
 
     switch (result) {
       case _CreateOptions.contacts:
-        registry.get<ContactsCoordinator>().toCreateContact();
+        router.toCreateContact();
         break;
       case _CreateOptions.jobs:
-        registry.get<JobsCoordinator>().toCreateJob(null);
+        router.toCreateJob(null);
         break;
     }
   }

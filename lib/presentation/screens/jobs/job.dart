@@ -5,6 +5,7 @@ import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 import 'providers/selected_job_provider.dart';
 import 'widgets/avatar_app_bar.dart';
@@ -239,7 +240,7 @@ class _AvatarAppBar extends StatelessWidget {
       tag: contact.createdAt.toString(),
       imageUrl: contact.imageUrl,
       title: GestureDetector(
-        onTap: () => context.registry.get<ContactsCoordinator>().toContact(contact.id),
+        onTap: () => context.router.toContact(contact.id),
         child: Text(
           contact.fullname,
           maxLines: 1,
@@ -254,7 +255,7 @@ class _AvatarAppBar extends StatelessWidget {
       actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.content_cut),
-          onPressed: () => context.registry.get<MeasuresCoordinator>().toMeasures(job.measurements),
+          onPressed: () => context.router.toMeasures(job.measurements),
         ),
         IconButton(
           icon: Icon(Icons.check, color: job.isComplete ? colorScheme.primary : null),

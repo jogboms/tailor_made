@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/constants.dart';
+import 'package:tailor_made/presentation/routing.dart';
 import 'package:tailor_made/presentation/theme.dart';
 import 'package:tailor_made/presentation/utils.dart';
 import 'package:tailor_made/presentation/widgets.dart';
-
-import '../payment.dart';
 
 class PaymentListItem extends StatelessWidget {
   const PaymentListItem({super.key, required this.payment});
@@ -20,14 +19,7 @@ class PaymentListItem extends StatelessWidget {
 
     return Material(
       child: InkWell(
-        onTap: () {
-          Navigator.of(context).push<void>(
-            RouteTransitions.slideIn(
-              PaymentPage(payment: payment),
-              fullscreenDialog: true,
-            ),
-          );
-        },
+        onTap: () => context.router.toPayment(payment),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(

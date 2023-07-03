@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 import 'providers/filtered_jobs_state_provider.dart';
 import 'widgets/jobs_filter_button.dart';
@@ -45,7 +46,7 @@ class JobsPage extends StatelessWidget {
             ),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.library_add),
-              onPressed: () => context.registry.get<JobsCoordinator>().toCreateJob(null),
+              onPressed: () => context.router.toCreateJob(null),
             ),
           ),
           onWillPop: () async {

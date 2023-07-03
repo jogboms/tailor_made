@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 import '../../measures/widgets/measure_create_items.dart';
 
@@ -30,7 +31,7 @@ class _ContactMeasureState extends State<ContactMeasure> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.remove_red_eye),
-            onPressed: () => context.registry.get<MeasuresCoordinator>().toMeasures(_measurements),
+            onPressed: () => context.router.toMeasures(_measurements),
           )
         ],
       ),

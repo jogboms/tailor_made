@@ -3,6 +3,7 @@ import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 import 'payment_grid_item.dart';
 import 'payment_grids_form_value.dart';
@@ -53,10 +54,10 @@ class _PaymentGridsState extends State<PaymentGrids> {
                   color: theme.colorScheme.secondary,
                 ),
               ),
-              onPressed: () => context.registry.get<PaymentsCoordinator>().toPayments(
-                    widget.userId,
-                    widget.job.payments.toList(),
-                  ),
+              onPressed: () => context.router.toPayments(
+                widget.userId,
+                widget.job.payments.toList(),
+              ),
             ),
             const SizedBox(width: 16.0),
           ],
@@ -79,9 +80,9 @@ class _PaymentGridsState extends State<PaymentGrids> {
 
   void _onCreateNew() async {
     final Registry registry = context.registry;
-    final ({double price, String notes})? result = await registry.get<PaymentsCoordinator>().toCreatePayment(
-          widget.job.pendingPayment,
-        );
+    final ({double price, String notes})? result = await context.router.toCreatePayment(
+      widget.job.pendingPayment,
+    );
     if (result != null) {
       try {
         setState(() {

@@ -1,15 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:registry/registry.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 import '../widgets/notice_dialog.dart';
 import '../widgets/review_modal.dart';
 import 'helpers.dart';
 
-enum AccountOptions { logout, storename }
+enum AccountOptions { logout, storeName }
 
 class TopButtonBar extends StatelessWidget {
   const TopButtonBar({
@@ -85,7 +85,7 @@ class TopButtonBar extends StatelessWidget {
     required AccountNotifier accountNotifier,
     required AuthStateNotifier authStateNotifier,
   }) {
-    final Registry registry = context.registry;
+    final AppRouter router = context.router;
 
     return () async {
       if (shouldSendRating) {
@@ -112,15 +112,11 @@ class TopButtonBar extends StatelessWidget {
             title: Text('Select action', style: Theme.of(context).textTheme.labelLarge),
             children: <Widget>[
               SimpleDialogOption(
-                onPressed: () {
-                  Navigator.pop(context, AccountOptions.storename);
-                },
+                onPressed: () => Navigator.pop(context, AccountOptions.storeName),
                 child: TMListTile(color: colorScheme.secondary, icon: Icons.store, title: 'Store'),
               ),
               SimpleDialogOption(
-                onPressed: () {
-                  Navigator.pop(context, AccountOptions.logout);
-                },
+                onPressed: () => Navigator.pop(context, AccountOptions.logout),
                 child: TMListTile(
                   color: colorScheme.outlineVariant,
                   icon: Icons.power_settings_new,
@@ -137,8 +133,8 @@ class TopButtonBar extends StatelessWidget {
       }
 
       switch (result) {
-        case AccountOptions.storename:
-          final String? storeName = await registry.get<SharedCoordinator>().toStoreNameDialog(account);
+        case AccountOptions.storeName:
+          final String? storeName = await router.toStoreNameDialog(account);
 
           if (storeName != null && storeName != account.storeName) {
             accountNotifier.updateStoreName(storeName);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 import 'providers/filtered_contacts_state_provider.dart';
 import 'widgets/contacts_filter_button.dart';
@@ -44,7 +45,7 @@ class _ContactsPageState extends State<ContactsPage> {
             ),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.person_add),
-              onPressed: () => context.registry.get<ContactsCoordinator>().toCreateContact(),
+              onPressed: () => context.router.toCreateContact(),
             ),
           ),
           onWillPop: () async {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 import 'image_form_value.dart';
 
@@ -67,11 +67,11 @@ class GalleryGridItem extends StatelessWidget {
             image: NetworkImage(src),
             fit: BoxFit.cover,
             child: InkWell(
-              onTap: () => context.registry.get<GalleryCoordinator>().toImage(
-                    src: src,
-                    contactID: contactID,
-                    jobID: jobID,
-                  ),
+              onTap: () => context.router.toGalleryImage(
+                src: src,
+                contactID: contactID,
+                jobID: jobID,
+              ),
               child: onTapDelete != null
                   ? Align(
                       alignment: Alignment.topRight,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 import 'widgets/measures_slide_block.dart';
 
@@ -57,7 +58,7 @@ class _MeasuresManagePageState extends State<MeasuresManagePage> {
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add),
         label: const Text('Add Group'),
-        onPressed: () => context.registry.get<MeasuresCoordinator>().toCreateMeasures(),
+        onPressed: () => context.router.toCreateMeasures(),
       ),
     );
   }

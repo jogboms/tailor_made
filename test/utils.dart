@@ -36,10 +36,8 @@ class MockRepositories {
 final MockRepositories mockRepositories = MockRepositories();
 
 Registry createRegistry({
-  GlobalKey<NavigatorState>? navigatorKey,
   Environment environment = Environment.testing,
 }) {
-  navigatorKey ??= GlobalKey<NavigatorState>();
   return Registry()
     ..set(mockRepositories.accounts)
     ..set(mockRepositories.contacts)
@@ -53,14 +51,7 @@ Registry createRegistry({
     ..set(environment)
     ..factory((RegistryFactory di) => FetchAccountUseCase(accounts: di()))
     ..factory((RegistryFactory di) => SignInUseCase(accounts: di()))
-    ..factory((RegistryFactory di) => SignOutUseCase(accounts: di()))
-    ..set(ContactsCoordinator(navigatorKey))
-    ..set(GalleryCoordinator(navigatorKey))
-    ..set(SharedCoordinator(navigatorKey))
-    ..set(JobsCoordinator(navigatorKey))
-    ..set(MeasuresCoordinator(navigatorKey))
-    ..set(PaymentsCoordinator(navigatorKey))
-    ..set(TasksCoordinator(navigatorKey));
+    ..factory((RegistryFactory di) => SignOutUseCase(accounts: di()));
 }
 
 Widget createApp({
@@ -68,11 +59,9 @@ Widget createApp({
   Registry? registry,
   List<Override>? overrides,
   List<NavigatorObserver>? observers,
-  GlobalKey<NavigatorState>? navigatorKey,
   bool includeMaterial = true,
 }) {
   registry ??= createRegistry();
-  navigatorKey ??= GlobalKey<NavigatorState>();
 
   return ProviderScope(
     overrides: <Override>[
@@ -81,7 +70,6 @@ Widget createApp({
     ],
     child: App(
       registry: registry,
-      navigatorKey: navigatorKey,
       navigatorObservers: observers,
       home: includeMaterial ? Material(child: home) : home,
     ),

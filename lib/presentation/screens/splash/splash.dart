@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/core.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 import '../../constants.dart';
-import '../../coordinator.dart';
-import '../../registry.dart';
 import '../../state.dart';
 import '../../theme.dart';
 import '../../utils.dart';
@@ -139,7 +138,7 @@ class OnboardingDataViewState extends ConsumerState<_DataView> {
         snackBar.error(message);
       }
     } else if (state == AuthState.complete) {
-      context.registry.get<SharedCoordinator>().toHome();
+      context.router.toHome();
     }
   }
 }

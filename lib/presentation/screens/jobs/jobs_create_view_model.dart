@@ -7,6 +7,7 @@ import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../routing.dart';
 import 'widgets/image_form_value.dart';
 
 @optionalTypeArgs
@@ -80,7 +81,7 @@ mixin JobsCreateViewModel<T extends StatefulWidget> on State<T> {
   }
 
   void handleSelectContact(List<ContactEntity> contacts) async {
-    final ContactEntity? selectedContact = await context.registry.get<ContactsCoordinator>().toContactsList(contacts);
+    final ContactEntity? selectedContact = await context.router.toContactsList(contacts);
     if (selectedContact != null) {
       setState(() {
         contact = selectedContact;
@@ -136,9 +137,10 @@ mixin JobsCreateViewModel<T extends StatefulWidget> on State<T> {
       try {
         // TODO(Jogboms): move this out of here
         final Registry registry = context.registry;
+        final AppRouter router = context.router;
         final JobEntity result = await registry.get<Jobs>().create(userId, job);
         snackBar.hide();
-        registry.get<JobsCoordinator>().toJob(result, replace: true);
+        router.toJob(result, replace: true);
       } catch (e) {
         snackBar.error(e.toString());
       }
