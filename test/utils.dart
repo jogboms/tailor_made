@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart' as mt;
 import 'package:registry/registry.dart';
@@ -50,6 +51,9 @@ Registry createRegistry({
     ..set(mockRepositories.measures)
     ..set(mockRepositories.stats)
     ..set(environment)
+    ..factory((RegistryFactory di) => FetchAccountUseCase(accounts: di()))
+    ..factory((RegistryFactory di) => SignInUseCase(accounts: di()))
+    ..factory((RegistryFactory di) => SignOutUseCase(accounts: di()))
     ..set(ContactsCoordinator(navigatorKey))
     ..set(GalleryCoordinator(navigatorKey))
     ..set(SharedCoordinator(navigatorKey))
@@ -57,6 +61,31 @@ Registry createRegistry({
     ..set(MeasuresCoordinator(navigatorKey))
     ..set(PaymentsCoordinator(navigatorKey))
     ..set(TasksCoordinator(navigatorKey));
+}
+
+Widget createApp({
+  Widget? home,
+  Registry? registry,
+  List<Override>? overrides,
+  List<NavigatorObserver>? observers,
+  GlobalKey<NavigatorState>? navigatorKey,
+  bool includeMaterial = true,
+}) {
+  registry ??= createRegistry();
+  navigatorKey ??= GlobalKey<NavigatorState>();
+
+  return ProviderScope(
+    overrides: <Override>[
+      registryProvider.overrideWithValue(registry),
+      ...?overrides,
+    ],
+    child: App(
+      registry: registry,
+      navigatorKey: navigatorKey,
+      navigatorObservers: observers,
+      home: includeMaterial ? Material(child: home) : home,
+    ),
+  );
 }
 
 extension WidgetTesterExtensions on WidgetTester {

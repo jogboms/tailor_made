@@ -15,11 +15,13 @@ class App extends StatefulWidget {
     super.key,
     required this.registry,
     required this.navigatorKey,
+    this.home,
     this.navigatorObservers,
   });
 
   final Registry registry;
   final GlobalKey<NavigatorState> navigatorKey;
+  final Widget? home;
   final List<NavigatorObserver>? navigatorObservers;
 
   @override
@@ -58,7 +60,7 @@ class _AppState extends State<App> {
             child: child!,
           ),
           onGenerateRoute: (RouteSettings settings) => _PageRoute<Object>(
-            builder: (_) => const SplashPage(isColdStart: true),
+            builder: (_) => widget.home ?? const SplashPage(isColdStart: true),
             settings: RouteSettings(name: AppRoutes.start, arguments: settings.arguments),
           ),
         ),
