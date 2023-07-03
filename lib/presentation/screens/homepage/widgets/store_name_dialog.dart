@@ -11,6 +11,7 @@ class StoreNameDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black26,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,

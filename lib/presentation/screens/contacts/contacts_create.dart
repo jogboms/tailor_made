@@ -6,6 +6,7 @@ import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
+import '../../routing.dart';
 import 'widgets/contact_form.dart';
 
 class ContactsCreatePage extends StatefulWidget {
@@ -99,7 +100,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
 
     final Registry registry = context.registry;
     final Contacts contacts = registry.get();
-    final ContactsCoordinator contactsCoordinator = registry.get();
+    final AppRouter router = context.router;
     snackBar.loading();
 
     try {
@@ -114,7 +115,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
       final ContactEntity snap = await contacts.create(userId, contact);
       snackBar.success('Successfully Added');
 
-      contactsCoordinator.toContact(snap.id, replace: true);
+      router.toContact(snap.id, replace: true);
     } catch (error, stackTrace) {
       AppLog.e(error, stackTrace);
       snackBar.error(error.toString());
@@ -122,10 +123,10 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
   }
 
   void _handleSelectMeasure(Map<MeasureGroup, List<MeasureEntity>> grouped) async {
-    final Map<String, double>? result = await context.registry.get<ContactsCoordinator>().toContactMeasure(
-          contact: null,
-          grouped: grouped,
-        );
+    final Map<String, double>? result = await context.router.toContactMeasure(
+      contact: null,
+      grouped: grouped,
+    );
     if (result == null) {
       return;
     }

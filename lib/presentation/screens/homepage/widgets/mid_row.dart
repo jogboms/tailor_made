@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 import 'helpers.dart';
 
@@ -24,7 +25,7 @@ class MidRowWidget extends StatelessWidget {
                 icon: Icons.attach_money,
                 title: 'Payments',
                 subTitle: '${AppMoney(stats.payments.total).formatted} Total',
-                onPressed: () => context.registry.get<PaymentsCoordinator>().toPayments(userId),
+                onPressed: () => context.router.toPayments(userId),
               ),
             ),
           ),
@@ -35,7 +36,7 @@ class MidRowWidget extends StatelessWidget {
                 icon: Icons.image,
                 title: 'Gallery',
                 subTitle: '${stats.gallery.total.toInt()} Photos',
-                onPressed: () => context.registry.get<GalleryCoordinator>().toGallery(userId),
+                onPressed: () => context.router.toGallery(userId),
               ),
             ),
           ),

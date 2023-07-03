@@ -3,8 +3,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 
-import 'constants.dart';
 import 'registry.dart';
+import 'routing.dart';
 import 'screens/splash/splash.dart';
 import 'theme.dart';
 import 'utils.dart';
@@ -14,13 +14,11 @@ class App extends StatefulWidget {
   const App({
     super.key,
     required this.registry,
-    required this.navigatorKey,
     this.home,
     this.navigatorObservers,
   });
 
   final Registry registry;
-  final GlobalKey<NavigatorState> navigatorKey;
   final Widget? home;
   final List<NavigatorObserver>? navigatorObservers;
 
@@ -29,21 +27,23 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  late final Environment environment = widget.registry.get();
-  late final String bannerMessage = environment.name.toUpperCase();
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
+  late final Environment _environment = widget.registry.get();
+  late final String _bannerMessage = _environment.name.toUpperCase();
 
   @override
   Widget build(BuildContext context) {
     return RegistryProvider(
       registry: widget.registry,
       child: _Banner(
-        key: Key(bannerMessage),
-        visible: !environment.isProduction,
-        message: bannerMessage,
+        key: Key(_bannerMessage),
+        visible: !_environment.isProduction,
+        message: _bannerMessage,
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           color: Colors.white,
-          navigatorKey: widget.navigatorKey,
+          navigatorKey: _navigatorKey,
           navigatorObservers: widget.navigatorObservers ?? <NavigatorObserver>[],
           theme: themeBuilder(ThemeData.light()),
           darkTheme: themeBuilder(ThemeData.dark()),
@@ -56,7 +56,7 @@ class _AppState extends State<App> {
           ],
           supportedLocales: L10n.supportedLocales,
           builder: (_, Widget? child) => SnackBarProvider(
-            navigatorKey: widget.navigatorKey,
+            navigatorKey: _navigatorKey,
             child: child!,
           ),
           onGenerateRoute: (RouteSettings settings) => _PageRoute<Object>(

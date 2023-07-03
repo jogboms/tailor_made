@@ -62,7 +62,6 @@ void main(List<String> args) async {
     onLog: (Object? message) => debugPrint(message?.toString()),
   );
 
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final Registry registry = Registry()
     ..set<Environment>(environment)
     ..set<Accounts>(repository.accounts)
@@ -76,14 +75,7 @@ void main(List<String> args) async {
     ..set<Stats>(repository.stats)
     ..factory((RegistryFactory di) => FetchAccountUseCase(accounts: di()))
     ..factory((RegistryFactory di) => SignInUseCase(accounts: di()))
-    ..factory((RegistryFactory di) => SignOutUseCase(accounts: di()))
-    ..set<ContactsCoordinator>(ContactsCoordinator(navigatorKey))
-    ..set<GalleryCoordinator>(GalleryCoordinator(navigatorKey))
-    ..set<SharedCoordinator>(SharedCoordinator(navigatorKey))
-    ..set<JobsCoordinator>(JobsCoordinator(navigatorKey))
-    ..set<MeasuresCoordinator>(MeasuresCoordinator(navigatorKey))
-    ..set<PaymentsCoordinator>(PaymentsCoordinator(navigatorKey))
-    ..set<TasksCoordinator>(TasksCoordinator(navigatorKey));
+    ..factory((RegistryFactory di) => SignOutUseCase(accounts: di()));
 
   runApp(
     ProviderScope(
@@ -97,7 +89,6 @@ void main(List<String> args) async {
         onCrash: errorReporter.reportCrash,
         child: App(
           registry: registry,
-          navigatorKey: navigatorKey,
           navigatorObservers: <NavigatorObserver>[navigationObserver],
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 class MeasuresCreate extends StatefulWidget {
   const MeasuresCreate({super.key, this.measures, this.groupName, this.unitValue});
@@ -131,10 +132,10 @@ class _MeasuresCreateState extends State<MeasuresCreate> {
 
   void _handleAddItem() async {
     if (_isOkForm()) {
-      final DefaultMeasureEntity? measure = await context.registry.get<MeasuresCoordinator>().toCreateMeasureItem(
-            groupName: _groupName,
-            unitValue: _unitValue,
-          );
+      final DefaultMeasureEntity? measure = await context.router.toCreateMeasureItem(
+        groupName: _groupName,
+        unitValue: _unitValue,
+      );
 
       if (measure == null) {
         return;

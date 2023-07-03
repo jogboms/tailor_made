@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 class GalleryView extends StatelessWidget {
   const GalleryView({
@@ -61,11 +62,11 @@ class _MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               const Expanded(child: SizedBox()),
               IconButton(
                 icon: const Icon(Icons.work, color: iconColor),
-                onPressed: () => context.registry.get<JobsCoordinator>().toJob(job),
+                onPressed: () => context.router.toJob(job),
               ),
               IconButton(
                 icon: const Icon(Icons.person, color: iconColor),
-                onPressed: () => context.registry.get<ContactsCoordinator>().toContact(contactId),
+                onPressed: () => context.router.toContact(contactId),
               ),
               if (account.hasPremiumEnabled)
                 const IconButton(

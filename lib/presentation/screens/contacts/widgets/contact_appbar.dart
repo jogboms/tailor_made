@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:registry/registry.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 enum Choice { createJob, editMeasure, editAccount, sendText }
 
@@ -21,16 +21,16 @@ class ContactAppBar extends StatefulWidget {
 
 class _ContactAppBarState extends State<ContactAppBar> {
   void _selectChoice(Choice choice) {
-    final Registry registry = context.registry;
+    final AppRouter router = context.router;
     switch (choice) {
       case Choice.createJob:
-        registry.get<JobsCoordinator>().toCreateJob(widget.contact.id);
+        router.toCreateJob(widget.contact.id);
         break;
       case Choice.editMeasure:
-        registry.get<ContactsCoordinator>().toContactMeasure(contact: widget.contact, grouped: widget.grouped);
+        router.toContactMeasure(contact: widget.contact, grouped: widget.grouped);
         break;
       case Choice.editAccount:
-        registry.get<ContactsCoordinator>().toContactEdit(widget.contact);
+        router.toContactEdit(widget.contact);
         break;
       case Choice.sendText:
         sms(widget.contact.phone);
@@ -49,7 +49,7 @@ class _ContactAppBarState extends State<ContactAppBar> {
           Expanded(child: _Title(contact: widget.contact)),
           _Icon(
             icon: Icons.content_cut,
-            onTap: () => context.registry.get<MeasuresCoordinator>().toMeasures(widget.contact.measurements),
+            onTap: () => context.router.toMeasures(widget.contact.measurements),
           ),
           _Icon(icon: Icons.call, onTap: () => call(widget.contact.phone)),
           PopupMenuButton<Choice>(

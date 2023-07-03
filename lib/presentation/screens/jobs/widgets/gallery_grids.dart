@@ -4,6 +4,7 @@ import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 import 'gallery_grid_item.dart';
 import 'image_form_value.dart';
@@ -55,7 +56,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
                 ),
               ),
               onPressed: () {
-                context.registry.get<GalleryCoordinator>().toGallery(widget.userId, widget.job.images.toList());
+                context.router.toGallery(widget.userId, widget.job.images.toList());
               },
             ),
             const SizedBox(width: 16.0),

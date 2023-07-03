@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:registry/registry.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/screens/homepage/homepage.dart';
 import 'package:tailor_made/presentation/screens/splash/splash.dart';
@@ -32,11 +31,7 @@ void main() {
     });
 
     testWidgets('shows SplashPage and navigates HomePage', (WidgetTester tester) async {
-      final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
       final NavigatorObserver mockObserver = MockNavigatorObserver();
-      final Registry registry = createRegistry(
-        navigatorKey: navigatorKey,
-      );
 
       when(mockRepositories.accounts.signIn).thenAnswer((_) async {});
       when(() => mockRepositories.accounts.onAuthStateChanged).thenAnswer((_) => Stream<String?>.value('1'));
@@ -44,8 +39,7 @@ void main() {
 
       await tester.pumpWidget(
         createApp(
-          registry: registry,
-          navigatorKey: navigatorKey,
+          registry: createRegistry(),
           observers: <NavigatorObserver>[mockObserver],
           includeMaterial: false,
         ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:registry/registry.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
 import '../widgets/slide_down_item.dart';
 import 'measures_slide_block_item.dart';
@@ -77,11 +78,11 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
   }
 
   void _onTapEditBlock() {
-    context.registry.get<MeasuresCoordinator>().toCreateMeasures(
-          groupName: widget.groupName,
-          unitValue: widget.measures.first.unit,
-          measures: widget.measures,
-        );
+    context.router.toCreateMeasures(
+      groupName: widget.groupName,
+      unitValue: widget.measures.first.unit,
+      measures: widget.measures,
+    );
   }
 
   void _onTapDeleteBlock() async {
