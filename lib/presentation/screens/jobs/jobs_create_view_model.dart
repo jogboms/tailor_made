@@ -44,8 +44,7 @@ mixin JobsCreateViewModel<T extends StatefulWidget> on State<T> {
     );
   }
 
-  void handlePhotoButtonPressed() async {
-    final Registry registry = context.registry;
+  void handlePhotoButtonPressed(ImageStorageProvider storage) async {
     final ImageSource? source = await showImageChoiceDialog(context: context);
     if (source == null) {
       return;
@@ -56,11 +55,10 @@ mixin JobsCreateViewModel<T extends StatefulWidget> on State<T> {
     }
 
     try {
-      // TODO(Jogboms): move this out of here
-      final ImageFileReference ref = await registry.get<ImageStorage>().createReferenceImage(
-            path: imageFile.path,
-            userId: userId,
-          );
+      final ImageFileReference ref = await storage.create(
+        CreateImageType.reference,
+        path: imageFile.path,
+      );
 
       setState(() {
         images.add(
@@ -93,12 +91,12 @@ mixin JobsCreateViewModel<T extends StatefulWidget> on State<T> {
     }
   }
 
-  void handleDeleteImageItem(ImageFormValue value) async {
+  void handleDeleteImageItem(ImageStorageProvider storage, ImageFormValue value) async {
     final ImageFileReference reference = switch (value) {
       ImageCreateFormValue(:final CreateImageData data) => (src: data.src, path: data.path),
       ImageModifyFormValue(:final ImageEntity data) => (src: data.src, path: data.path),
     };
-    await context.registry.get<ImageStorage>().delete(reference: reference, userId: userId);
+    await storage.delete(reference);
     if (mounted) {
       setState(() {
         images.remove(value);

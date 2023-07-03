@@ -10,7 +10,7 @@ import '../../../utils.dart';
 
 part 'filtered_contacts_state_provider.g.dart';
 
-@Riverpod(dependencies: <Object>[account, contacts, SearchContactQueryState, SearchContactSortState])
+@Riverpod(dependencies: <Object>[contacts])
 Future<FilteredContactsState> filteredContacts(FilteredContactsRef ref) async {
   final List<ContactEntity> items = await ref.watch(contactsProvider.future);
   final String query = ref.watch(searchContactQueryStateProvider).trim().toLowerCase();
@@ -44,7 +44,7 @@ class SearchContactQueryState extends _$SearchContactQueryState with StateNotifi
   @override
   String build() => '';
 
-  bool get isSearching => state.length > 1;
+  bool isSearching() => state.length > 1;
 }
 
 @riverpod

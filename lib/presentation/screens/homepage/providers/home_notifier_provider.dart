@@ -7,7 +7,7 @@ import '../../../state.dart';
 
 part 'home_notifier_provider.g.dart';
 
-@Riverpod(dependencies: <Object>[registry, account, contacts, jobs, settings, stats])
+@Riverpod(dependencies: <Object>[account, contacts, jobs, settings, stats])
 class HomeNotifier extends _$HomeNotifier {
   @override
   Stream<HomeState> build() async* {

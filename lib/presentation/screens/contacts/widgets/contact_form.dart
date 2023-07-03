@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:registry/registry.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
@@ -11,12 +11,10 @@ class ContactForm extends StatefulWidget {
     super.key,
     required this.contact,
     required this.onHandleSubmit,
-    required this.userId,
   });
 
   final ValueSetter<CreateContactData> onHandleSubmit;
   final CreateContactData contact;
-  final String userId;
 
   @override
   ContactFormState createState() => ContactFormState();
@@ -55,7 +53,13 @@ class ContactFormState extends State<ContactForm> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           const SizedBox(height: 32.0),
-          _Avatar(imageUrl: _contact.imageUrl, isLoading: _isLoading, onTap: _handlePhotoButtonPressed),
+          Consumer(
+            builder: (BuildContext context, WidgetRef ref, _) => _Avatar(
+              imageUrl: _contact.imageUrl,
+              isLoading: _isLoading,
+              onTap: () => _handlePhotoButtonPressed(ref.read(imageStorageProvider)),
+            ),
+          ),
           const SizedBox(height: 16.0),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -116,8 +120,7 @@ class ContactFormState extends State<ContactForm> {
     }
   }
 
-  Future<void> _handlePhotoButtonPressed() async {
-    final Registry registry = context.registry;
+  Future<void> _handlePhotoButtonPressed(ImageStorageProvider storage) async {
     final ImageSource? source = await showImageChoiceDialog(context: context);
     if (source == null) {
       return;
@@ -126,17 +129,16 @@ class ContactFormState extends State<ContactForm> {
     if (imageFile == null) {
       return;
     }
-    final ImageStorage imageStorage = registry.get();
 
     setState(() => _isLoading = true);
     try {
       // TODO(Jogboms): move this out of here
-      final ImageFileReference ref = await imageStorage.createContactImage(path: imageFile.path, userId: widget.userId);
+      final ImageFileReference ref = await storage.create(CreateImageType.contact, path: imageFile.path);
       _contact = _contact.copyWith(imageUrl: ref.src);
       if (mounted) {
         AppSnackBar.of(context).success('Upload Successful');
-        if (_previousImageFileRef case final ImageFileReference ref) {
-          imageStorage.delete(reference: ref, userId: widget.userId).ignore();
+        if (_previousImageFileRef case final ImageFileReference reference) {
+          storage.delete(reference).ignore();
         }
         _previousImageFileRef = ref;
         setState(() => _isLoading = false);

@@ -50,6 +50,7 @@ class JobsCreatePage extends StatelessWidget {
           key: dataViewKey,
           contact: contact,
           userId: userId,
+          storage: ref.read(imageStorageProvider),
         );
       },
     );
@@ -61,10 +62,12 @@ class _DataView extends StatefulWidget {
     super.key,
     this.contact,
     required this.userId,
+    required this.storage,
   });
 
   final ContactEntity? contact;
   final String userId;
+  final ImageStorageProvider storage;
 
   @override
   State<_DataView> createState() => _DataViewState();
@@ -167,11 +170,11 @@ class _DataViewState extends State<_DataView> with JobsCreateViewModel {
                         padding: const EdgeInsets.symmetric(vertical: 4.0),
                         scrollDirection: Axis.horizontal,
                         children: <Widget>[
-                          _NewGrid(onPressed: handlePhotoButtonPressed),
+                          _NewGrid(onPressed: () => handlePhotoButtonPressed(widget.storage)),
                           for (final ImageFormValue value in images.reversed)
                             GalleryGridItem.formValue(
                               value: value,
-                              onTapDelete: handleDeleteImageItem,
+                              onTapDelete: (ImageFormValue value) => handleDeleteImageItem(widget.storage, value),
                             )
                         ],
                       ),

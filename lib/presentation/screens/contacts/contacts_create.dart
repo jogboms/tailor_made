@@ -64,7 +64,6 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
                 key: _formKey,
                 contact: _contact,
                 onHandleSubmit: (CreateContactData contact) => _handleSubmit(contact, data.uid),
-                userId: data.uid,
               ),
               error: ErrorView.new,
               loading: () => child!,
