@@ -1,13 +1,13 @@
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../routing.dart';
+import 'providers/job_provider.dart';
 import 'widgets/image_form_value.dart';
 
 @optionalTypeArgs
@@ -104,7 +104,7 @@ mixin JobsCreateViewModel<T extends StatefulWidget> on State<T> {
     }
   }
 
-  void handleSubmit() async {
+  void handleSubmit(JobProvider jobProvider) async {
     final FormState? form = formKey.currentState;
     if (form == null) {
       return;
@@ -114,12 +114,16 @@ mixin JobsCreateViewModel<T extends StatefulWidget> on State<T> {
     if (!form.validate()) {
       autovalidate = true;
       snackBar.info(AppStrings.fixErrors);
-    } else {
-      form.save();
+      return;
+    }
 
-      snackBar.loading();
+    form.save();
+    snackBar.loading();
 
+    final AppRouter router = context.router;
+    try {
       job = job.copyWith(
+        contactID: contact!.id,
         pendingPayment: job.price,
         images: images
             .map(
@@ -129,19 +133,13 @@ mixin JobsCreateViewModel<T extends StatefulWidget> on State<T> {
               },
             )
             .toList(growable: false),
-        contactID: contact!.id,
       );
-
-      try {
-        // TODO(Jogboms): move this out of here
-        final Registry registry = context.registry;
-        final AppRouter router = context.router;
-        final JobEntity result = await registry.get<Jobs>().create(userId, job);
-        snackBar.hide();
-        router.toJob(result, replace: true);
-      } catch (e) {
-        snackBar.error(e.toString());
-      }
+      final JobEntity result = await jobProvider.create(job: job);
+      snackBar.success('Successfully Added');
+      router.toJob(result, replace: true);
+    } catch (error, stackTrace) {
+      AppLog.e(error, stackTrace);
+      snackBar.error(error.toString());
     }
   }
 }

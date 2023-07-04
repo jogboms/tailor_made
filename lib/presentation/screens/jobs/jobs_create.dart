@@ -11,6 +11,7 @@ import 'package:tailor_made/presentation/widgets.dart';
 import '../../state.dart';
 import '../measures/widgets/measure_create_items.dart';
 import 'jobs_create_view_model.dart';
+import 'providers/job_provider.dart' hide job;
 import 'widgets/avatar_app_bar.dart';
 import 'widgets/gallery_grid_item.dart';
 import 'widgets/image_form_value.dart';
@@ -153,44 +154,110 @@ class _DataViewState extends State<_DataView> with JobsCreateViewModel {
               child: Form(
                 key: formKey,
                 autovalidateMode: AutovalidateMode.always,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    const FormSectionHeader(title: 'Style Name'),
-                    _buildEnterName(),
-                    const FormSectionHeader(title: 'Payment', trailing: 'Naira (₦)'),
-                    _buildEnterAmount(),
-                    const FormSectionHeader(title: 'Due Date'),
-                    _buildDueDate(),
-                    const FormSectionHeader(title: 'References'),
-                    Container(
-                      height: _kGridWidth + 8,
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: ListView(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        scrollDirection: Axis.horizontal,
-                        children: <Widget>[
-                          _NewGrid(onPressed: () => handlePhotoButtonPressed(widget.storage)),
-                          for (final ImageFormValue value in images.reversed)
-                            GalleryGridItem.formValue(
-                              value: value,
-                              onTapDelete: (ImageFormValue value) => handleDeleteImageItem(widget.storage, value),
-                            )
-                        ],
+                child: Consumer(
+                  builder: (BuildContext context, WidgetRef ref, Widget? child) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      const FormSectionHeader(title: 'Style Name'),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                        child: TextFormField(
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.text,
+                          textCapitalization: TextCapitalization.words,
+                          decoration: const InputDecoration(isDense: true, hintText: 'Enter Style Name'),
+                          validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a name',
+                          onSaved: (String? value) => job = job.copyWith(name: value!.trim()),
+                        ),
                       ),
-                    ),
-                    const FormSectionHeader(title: 'Measurements', trailing: 'Inches (In)'),
-                    _buildMeasures(),
-                    const FormSectionHeader(title: 'Additional Notes'),
-                    _buildAdditional(),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 82.0),
-                      child: PrimaryButton(
-                        onPressed: handleSubmit,
-                        child: const Text('FINISH'),
+                      const FormSectionHeader(title: 'Payment', trailing: 'Naira (₦)'),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                        child: TextFormField(
+                          controller: _controller,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                          decoration: const InputDecoration(isDense: true, hintText: 'Enter Amount'),
+                          validator: (String? value) => (_controller.numberValue > 0) ? null : 'Please input a price',
+                          onSaved: (String? value) => job = job.copyWith(price: _controller.numberValue),
+                        ),
                       ),
-                    ),
-                  ],
+                      const FormSectionHeader(title: 'Due Date'),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                        child: InputDropdown(
+                          valueText: DateFormat.yMMMd().format(job.dueAt),
+                          onPressed: () async {
+                            final DateTime? picked = await showDatePicker(
+                              context: context,
+                              initialDate: job.dueAt,
+                              firstDate: clock.now(),
+                              lastDate: DateTime(2101),
+                            );
+                            if (picked != null && picked != job.dueAt) {
+                              setState(() {
+                                job = job.copyWith(dueAt: picked);
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                      const FormSectionHeader(title: 'References'),
+                      Container(
+                        height: _NewGrid._kGridWidth + 8,
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: ListView(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          scrollDirection: Axis.horizontal,
+                          children: <Widget>[
+                            _NewGrid(onPressed: () => handlePhotoButtonPressed(widget.storage)),
+                            for (final ImageFormValue value in images.reversed)
+                              GalleryGridItem.formValue(
+                                value: value,
+                                onTapDelete: (ImageFormValue value) => handleDeleteImageItem(widget.storage, value),
+                              )
+                          ],
+                        ),
+                      ),
+                      const FormSectionHeader(title: 'Measurements', trailing: 'Inches (In)'),
+                      ref.watch(measurementsProvider).when(
+                            skipLoadingOnReload: true,
+                            data: (MeasurementsState state) => MeasureCreateItems(
+                              grouped: state.grouped,
+                              measurements: job.measurements,
+                              onSaved: (Map<String, double>? value) {
+                                if (value != null) {
+                                  job = job.copyWith(measurements: value);
+                                }
+                              },
+                            ),
+                            error: ErrorView.new,
+                            loading: () => child!,
+                          ),
+                      const FormSectionHeader(title: 'Additional Notes'),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          maxLines: 6,
+                          decoration: const InputDecoration(
+                            isDense: true,
+                            hintText: 'Fabric color, size, special requirements...',
+                          ),
+                          onSaved: (String? value) => job = job.copyWith(notes: value!.trim()),
+                          onFieldSubmitted: (String value) => handleSubmit(ref.read(jobProvider)),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 82.0),
+                        child: PrimaryButton(
+                          onPressed: () => handleSubmit(ref.read(jobProvider)),
+                          child: const Text('FINISH'),
+                        ),
+                      ),
+                    ],
+                  ),
+                  child: const Center(child: LoadingSpinner()),
                 ),
               ),
             ),
@@ -199,96 +266,12 @@ class _DataViewState extends State<_DataView> with JobsCreateViewModel {
       ),
     );
   }
-
-  Widget _buildMeasures() {
-    return Consumer(
-      builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(measurementsProvider).when(
-            skipLoadingOnReload: true,
-            data: (MeasurementsState state) => MeasureCreateItems(
-              grouped: state.grouped,
-              measurements: job.measurements,
-              onSaved: (Map<String, double>? value) {
-                if (value != null) {
-                  job = job.copyWith(measurements: value);
-                }
-              },
-            ),
-            error: ErrorView.new,
-            loading: () => child!,
-          ),
-      child: const Center(child: LoadingSpinner()),
-    );
-  }
-
-  Widget _buildAdditional() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-      child: TextFormField(
-        keyboardType: TextInputType.text,
-        maxLines: 6,
-        decoration: const InputDecoration(
-          isDense: true,
-          hintText: 'Fabric color, size, special requirements...',
-        ),
-        onSaved: (String? value) => job = job.copyWith(notes: value!.trim()),
-        onFieldSubmitted: (String value) => handleSubmit(),
-      ),
-    );
-  }
-
-  Widget _buildDueDate() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-      child: InputDropdown(
-        valueText: DateFormat.yMMMd().format(job.dueAt),
-        onPressed: () async {
-          final DateTime? picked = await showDatePicker(
-            context: context,
-            initialDate: job.dueAt,
-            firstDate: clock.now(),
-            lastDate: DateTime(2101),
-          );
-          if (picked != null && picked != job.dueAt) {
-            setState(() {
-              job = job.copyWith(dueAt: picked);
-            });
-          }
-        },
-      ),
-    );
-  }
-
-  Widget _buildEnterName() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-      child: TextFormField(
-        textInputAction: TextInputAction.next,
-        keyboardType: TextInputType.text,
-        textCapitalization: TextCapitalization.words,
-        decoration: const InputDecoration(isDense: true, hintText: 'Enter Style Name'),
-        validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a name',
-        onSaved: (String? value) => job = job.copyWith(name: value!.trim()),
-      ),
-    );
-  }
-
-  Widget _buildEnterAmount() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-      child: TextFormField(
-        controller: _controller,
-        textInputAction: TextInputAction.next,
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        decoration: const InputDecoration(isDense: true, hintText: 'Enter Amount'),
-        validator: (String? value) => (_controller.numberValue > 0) ? null : 'Please input a price',
-        onSaved: (String? value) => job = job.copyWith(price: _controller.numberValue),
-      ),
-    );
-  }
 }
 
 class _NewGrid extends StatelessWidget {
   const _NewGrid({required this.onPressed});
+
+  static const double _kGridWidth = 85.0;
 
   final VoidCallback onPressed;
 
@@ -310,5 +293,3 @@ class _NewGrid extends StatelessWidget {
     );
   }
 }
-
-const double _kGridWidth = 85.0;

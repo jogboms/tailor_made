@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:registry/registry.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:tailor_made/presentation/routing.dart';
 
+import '../providers/job_provider.dart';
 import 'payment_grid_item.dart';
 import 'payment_grids_form_value.dart';
 
@@ -69,7 +70,11 @@ class _PaymentGridsState extends State<PaymentGrids> {
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             scrollDirection: Axis.horizontal,
             children: <Widget>[
-              _NewGrid(onPressed: _onCreateNew),
+              Consumer(
+                builder: (BuildContext context, WidgetRef ref, _) => _NewGrid(
+                  onPressed: () => _onCreateNew(ref.read(jobProvider)),
+                ),
+              ),
               for (final PaymentGridsFormValue value in _payments.reversed) PaymentGridItem(value: value)
             ],
           ),
@@ -78,8 +83,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
     );
   }
 
-  void _onCreateNew() async {
-    final Registry registry = context.registry;
+  void _onCreateNew(JobProvider jobProvider) async {
     final ({double price, String notes})? result = await context.router.toCreatePayment(
       widget.job.pendingPayment,
     );
@@ -99,18 +103,7 @@ class _PaymentGridsState extends State<PaymentGrids> {
           );
         });
 
-        await registry.get<Jobs>().update(
-              widget.job.userID,
-              reference: widget.job.reference,
-              payments: _payments
-                  .map(
-                    (PaymentGridsFormValue input) => switch (input) {
-                      PaymentGridsCreateFormValue() => CreatePaymentOperation(data: input.data),
-                      PaymentGridsModifyFormValue() => ModifyPaymentOperation(data: input.data),
-                    },
-                  )
-                  .toList(growable: false),
-            );
+        await jobProvider.modifyPayments(reference: widget.job.reference, payments: _payments);
       } catch (error, stackTrace) {
         AppLog.e(error, stackTrace);
       }

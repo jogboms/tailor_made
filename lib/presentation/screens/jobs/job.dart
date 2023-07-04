@@ -1,12 +1,12 @@
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:tailor_made/presentation/routing.dart';
 
+import 'providers/job_provider.dart';
 import 'providers/selected_job_provider.dart';
 import 'widgets/avatar_app_bar.dart';
 import 'widgets/gallery_grids.dart';
@@ -61,7 +61,12 @@ class _JobPageState extends State<JobPage> {
                                   child: Text('DUE DATE', style: theme.textTheme.bodySmall),
                                 ),
                                 AppClearButton(
-                                  onPressed: state.job.isComplete ? null : () => _onSaveDate(state.job),
+                                  onPressed: state.job.isComplete
+                                      ? null
+                                      : () => _onSaveDate(
+                                            ref.read(jobProvider),
+                                            state.job,
+                                          ),
                                   child: Text(
                                     'EXTEND DATE',
                                     style: theme.textTheme.bodySmall?.copyWith(
@@ -105,7 +110,7 @@ class _JobPageState extends State<JobPage> {
                     backgroundColor: state.job.isComplete ? colorScheme.onSecondary : colorScheme.secondary,
                     foregroundColor: state.job.isComplete ? colorScheme.secondary : colorScheme.onSecondary,
                     label: Text(state.job.isComplete ? 'Undo Completed' : 'Mark Completed'),
-                    onPressed: () => _onTapComplete(state.job),
+                    onPressed: () => _onTapComplete(ref.read(jobProvider), state.job),
                   ),
                 ),
                 error: ErrorView.new,
@@ -115,8 +120,7 @@ class _JobPageState extends State<JobPage> {
     );
   }
 
-  void _onTapComplete(JobEntity job) async {
-    final Registry registry = context.registry;
+  void _onTapComplete(JobProvider jobProvider, JobEntity job) async {
     final AppSnackBar snackBar = AppSnackBar.of(context);
     final bool? choice = await showChoiceDialog(context: context, message: 'Are you sure?');
     if (choice == null || choice == false) {
@@ -126,11 +130,7 @@ class _JobPageState extends State<JobPage> {
     snackBar.loading();
 
     try {
-      await registry.get<Jobs>().update(
-            job.userID,
-            reference: job.reference,
-            isComplete: !job.isComplete,
-          );
+      await jobProvider.complete(reference: job.reference, complete: !job.isComplete);
       snackBar.hide();
     } catch (e, stackTrace) {
       AppLog.e(e, stackTrace);
@@ -138,7 +138,7 @@ class _JobPageState extends State<JobPage> {
     }
   }
 
-  void _onSaveDate(JobEntity job) async {
+  void _onSaveDate(JobProvider jobProvider, JobEntity job) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: job.dueAt,
@@ -149,7 +149,6 @@ class _JobPageState extends State<JobPage> {
       return;
     }
     if (context.mounted) {
-      final Registry registry = context.registry;
       final AppSnackBar snackBar = AppSnackBar.of(context);
       final bool? choice = await showChoiceDialog(context: context, message: 'Are you sure?');
       if (choice == null || choice == false) {
@@ -159,15 +158,11 @@ class _JobPageState extends State<JobPage> {
       snackBar.loading();
 
       try {
-        await registry.get<Jobs>().update(
-              job.userID,
-              reference: job.reference,
-              dueAt: picked,
-            );
+        await jobProvider.changeDueAt(reference: job.reference, dueAt: picked);
         snackBar.hide();
-      } catch (e, stackTrace) {
-        AppLog.e(e, stackTrace);
-        snackBar.error(e.toString());
+      } catch (error, stackTrace) {
+        AppLog.e(error, stackTrace);
+        snackBar.error(error.toString());
       }
     }
   }

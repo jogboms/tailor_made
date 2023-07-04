@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:tailor_made/presentation/routing.dart';
 
+import '../providers/job_provider.dart';
 import 'gallery_grid_item.dart';
 import 'image_form_value.dart';
 
@@ -74,7 +74,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
-                  _NewGrid(onPressed: () => _handlePhotoButtonPressed(storage)),
+                  _NewGrid(onPressed: () => _handlePhotoButtonPressed(ref.read(jobProvider), storage)),
                   for (final ImageFormValue value in _images.reversed)
                     GalleryGridItem.formValue(
                       value: value,
@@ -102,8 +102,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
     }
   }
 
-  void _handlePhotoButtonPressed(ImageStorageProvider storage) async {
-    final Registry registry = context.registry;
+  void _handlePhotoButtonPressed(JobProvider jobProvider, ImageStorageProvider storage) async {
     final ImageSource? source = await showImageChoiceDialog(context: context);
     if (source == null) {
       return;
@@ -133,19 +132,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
         );
       });
 
-      // TODO(Jogboms): move this out of here
-      await registry.get<Jobs>().update(
-            widget.job.userID,
-            reference: widget.job.reference,
-            images: _images
-                .map(
-                  (ImageFormValue input) => switch (input) {
-                    ImageCreateFormValue() => CreateImageOperation(data: input.data),
-                    ImageModifyFormValue() => ModifyImageOperation(data: input.data),
-                  },
-                )
-                .toList(growable: false),
-          );
+      await jobProvider.modifyGallery(reference: widget.job.reference, images: _images);
     } catch (error, stackTrace) {
       AppLog.e(error, stackTrace);
     }

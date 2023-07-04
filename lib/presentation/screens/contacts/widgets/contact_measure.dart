@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:tailor_made/presentation/routing.dart';
 
 import '../../measures/widgets/measure_create_items.dart';
+import '../providers/contact_provider.dart';
 
 class ContactMeasure extends StatefulWidget {
   const ContactMeasure({super.key, required this.grouped, required this.contact});
@@ -57,9 +59,14 @@ class _ContactMeasureState extends State<ContactMeasure> {
                     _measurements = <String, double>{...value};
                   },
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
-                  child: PrimaryButton(onPressed: _handleSubmit, child: const Text('FINISH')),
+                Consumer(
+                  builder: (BuildContext context, WidgetRef ref, _) => Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
+                    child: PrimaryButton(
+                      onPressed: () => _handleSubmit(ref.read(contactProvider)),
+                      child: const Text('FINISH'),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 32.0),
               ],
@@ -70,7 +77,7 @@ class _ContactMeasureState extends State<ContactMeasure> {
     );
   }
 
-  void _handleSubmit() async {
+  void _handleSubmit(ContactProvider contactProvider) async {
     final FormState? form = _formKey.currentState;
     if (form == null) {
       return;
@@ -92,12 +99,7 @@ class _ContactMeasureState extends State<ContactMeasure> {
 
     snackBar.loading();
     try {
-      // TODO(Jogboms): move this out of here
-      await context.registry.get<Contacts>().update(
-            contact.userID,
-            reference: contact.reference,
-            measurements: _measurements,
-          );
+      await contactProvider.modifyMeasurements(reference: contact.reference, measurements: _measurements);
       snackBar.success('Successfully Updated');
     } catch (e) {
       snackBar.error(e.toString());
