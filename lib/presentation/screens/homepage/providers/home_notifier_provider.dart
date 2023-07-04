@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tailor_made/domain.dart';
 
@@ -19,10 +18,9 @@ class HomeNotifier extends _$HomeNotifier {
 
     yield HomeState(
       account: account,
-      contacts: contacts,
-      jobs: jobs,
       stats: stats,
       settings: settings,
+      shouldSendRating: !account.hasSendRating && (contacts.length >= 10 || jobs.length >= 10),
       hasSkippedPremium: false,
     );
   }
@@ -39,20 +37,16 @@ class HomeNotifier extends _$HomeNotifier {
 class HomeState with EquatableMixin {
   const HomeState({
     required this.account,
-    required this.contacts,
-    required this.jobs,
     required this.stats,
     required this.settings,
+    required this.shouldSendRating,
     required this.hasSkippedPremium,
   });
 
   final AccountEntity account;
-  @visibleForTesting
-  final List<ContactEntity> contacts;
-  @visibleForTesting
-  final List<JobEntity> jobs;
   final StatsEntity stats;
   final SettingEntity settings;
+  final bool shouldSendRating;
   final bool hasSkippedPremium;
 
   bool get isDisabled => account.status == AccountStatus.disabled;
@@ -61,20 +55,17 @@ class HomeState with EquatableMixin {
 
   bool get isPending => account.status == AccountStatus.pending;
 
-  bool get shouldSendRating => !account.hasSendRating && (contacts.length >= 10 || jobs.length >= 10);
-
   @override
-  List<Object> get props => <Object>[account, contacts, jobs, stats, settings, hasSkippedPremium];
+  List<Object> get props => <Object>[account, stats, settings, shouldSendRating, hasSkippedPremium];
 
   HomeState copyWith({
     bool? hasSkippedPremium,
   }) {
     return HomeState(
       account: account,
-      contacts: contacts,
-      jobs: jobs,
       stats: stats,
       settings: settings,
+      shouldSendRating: shouldSendRating,
       hasSkippedPremium: hasSkippedPremium ?? this.hasSkippedPremium,
     );
   }

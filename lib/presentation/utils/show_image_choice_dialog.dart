@@ -11,11 +11,11 @@ Future<ImageSource?> showImageChoiceDialog({required BuildContext context}) => s
         children: <Widget>[
           SimpleDialogOption(
             onPressed: () => Navigator.pop(context, ImageSource.camera),
-            child: const Padding(padding: EdgeInsets.all(8.0), child: Text('Camera')),
+            child: const Text('Camera'),
           ),
           SimpleDialogOption(
             onPressed: () => Navigator.pop(context, ImageSource.gallery),
-            child: const Padding(padding: EdgeInsets.all(8.0), child: Text('Gallery')),
+            child: const Text('Gallery'),
           ),
         ],
       ),

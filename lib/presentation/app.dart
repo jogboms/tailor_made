@@ -3,7 +3,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 
-import 'registry.dart';
 import 'routing.dart';
 import 'screens/splash/splash.dart';
 import 'theme.dart';
@@ -34,35 +33,32 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return RegistryProvider(
-      registry: widget.registry,
-      child: _Banner(
-        key: Key(_bannerMessage),
-        visible: !_environment.isProduction,
-        message: _bannerMessage,
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          color: Colors.white,
+    return _Banner(
+      key: Key(_bannerMessage),
+      visible: !_environment.isProduction,
+      message: _bannerMessage,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        color: Colors.white,
+        navigatorKey: _navigatorKey,
+        navigatorObservers: widget.navigatorObservers ?? <NavigatorObserver>[],
+        theme: themeBuilder(ThemeData.light()),
+        darkTheme: themeBuilder(ThemeData.dark()),
+        onGenerateTitle: (BuildContext context) => context.l10n.appName,
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          L10n.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: L10n.supportedLocales,
+        builder: (_, Widget? child) => SnackBarProvider(
           navigatorKey: _navigatorKey,
-          navigatorObservers: widget.navigatorObservers ?? <NavigatorObserver>[],
-          theme: themeBuilder(ThemeData.light()),
-          darkTheme: themeBuilder(ThemeData.dark()),
-          onGenerateTitle: (BuildContext context) => context.l10n.appName,
-          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-            L10n.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: L10n.supportedLocales,
-          builder: (_, Widget? child) => SnackBarProvider(
-            navigatorKey: _navigatorKey,
-            child: child!,
-          ),
-          onGenerateRoute: (RouteSettings settings) => _PageRoute<Object>(
-            builder: (_) => widget.home ?? const SplashPage(isColdStart: true),
-            settings: RouteSettings(name: AppRoutes.start, arguments: settings.arguments),
-          ),
+          child: child!,
+        ),
+        onGenerateRoute: (RouteSettings settings) => _PageRoute<Object>(
+          builder: (_) => widget.home ?? const SplashPage(isColdStart: true),
+          settings: RouteSettings(name: AppRoutes.start, arguments: settings.arguments),
         ),
       ),
     );

@@ -1,37 +1,24 @@
-import 'dart:async' show Future;
-
 import 'package:flutter/material.dart';
-import 'package:tailor_made/presentation/utils.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
 import '../../../theme.dart';
 
-Future<String?> showEditDialog({
-  required BuildContext context,
-  required List<Widget> children,
-  required String title,
-  required VoidCallback onDone,
-  required VoidCallback onCancel,
-}) {
-  return showChildDialog<String>(
-    context: context,
-    child: MeasureEditDialog(title: title, onDone: onDone, onCancel: onCancel, children: children),
-  );
-}
-
-class MeasureEditDialog extends StatelessWidget {
+class MeasureEditDialog extends StatefulWidget {
   const MeasureEditDialog({
     super.key,
     required this.title,
-    required this.children,
-    required this.onDone,
-    required this.onCancel,
+    required this.value,
   });
 
   final String title;
-  final List<Widget> children;
-  final VoidCallback onDone;
-  final VoidCallback onCancel;
+  final String value;
+
+  @override
+  State<MeasureEditDialog> createState() => _MeasureEditDialogState();
+}
+
+class _MeasureEditDialogState extends State<MeasureEditDialog> {
+  late final TextEditingController _controller = TextEditingController(text: widget.value);
 
   @override
   Widget build(BuildContext context) {
@@ -48,23 +35,27 @@ class MeasureEditDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const SizedBox(height: 16.0),
-              Center(child: Text(title, style: theme.textTheme.bodySmallLight)),
+              Center(child: Text(widget.title, style: theme.textTheme.bodySmallLight)),
               const SizedBox(height: 8.0),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-                child: Column(children: children),
+                child: TextField(
+                  textCapitalization: TextCapitalization.words,
+                  controller: _controller,
+                  onSubmitted: (_) => _handleSubmit(),
+                ),
               ),
               const SizedBox(height: 4.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   AppClearButton(
-                    onPressed: onCancel,
+                    onPressed: Navigator.of(context).pop,
                     color: colorScheme.outline,
                     child: const Text('CANCEL'),
                   ),
                   const SizedBox(width: 16.0),
-                  AppClearButton(onPressed: onDone, child: const Text('DONE')),
+                  AppClearButton(onPressed: _handleSubmit, child: const Text('DONE')),
                   const SizedBox(width: 16.0),
                 ],
               ),
@@ -74,5 +65,12 @@ class MeasureEditDialog extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _handleSubmit() {
+    final String newValue = _controller.text.trim();
+    if (newValue.length > 1) {
+      Navigator.of(context).pop(newValue);
+    }
   }
 }

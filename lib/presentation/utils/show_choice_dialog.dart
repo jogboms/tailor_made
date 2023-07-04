@@ -27,11 +27,11 @@ class _ChoiceDialog extends StatelessWidget {
       content: Text(message),
       titleTextStyle: theme.textTheme.pageTitle.copyWith(color: theme.colorScheme.primary),
       contentTextStyle: theme.textTheme.bodyLarge?.copyWith(height: 1.5, fontWeight: AppFontWeight.semibold),
-      contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
+      contentPadding: const EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 0.0),
       elevation: 2,
       actions: <Widget>[
         AppClearButton(
-          color: theme.hintColor,
+          color: theme.colorScheme.outline,
           child: const Text('Close'),
           onPressed: () => Navigator.pop(context, false),
         ),
