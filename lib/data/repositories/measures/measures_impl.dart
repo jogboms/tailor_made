@@ -30,8 +30,8 @@ class MeasuresImpl extends Measures {
   Future<bool> create(
     List<BaseMeasureEntity> measures,
     String userId, {
-    required MeasureGroup groupName,
-    required String unitValue,
+    required MeasureGroup group,
+    required String unit,
   }) async {
     await firebase.db.batchAction((_) {
       for (final BaseMeasureEntity measure in measures) {
@@ -40,8 +40,8 @@ class MeasuresImpl extends Measures {
             final ReferenceEntity reference = measure.reference;
             final MapDocumentReference ref = collection.db.doc(reference.path);
             _.update(ref, <String, String?>{
-              'group': groupName.displayName,
-              'unit': unitValue,
+              'group': group.displayName,
+              'unit': unit,
             });
             break;
           case DefaultMeasureEntity():

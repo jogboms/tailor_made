@@ -4,9 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 
-import '../../registry.dart';
-import '../../state.dart';
 import '../../widgets.dart';
+import 'providers/contact_provider.dart';
 import 'widgets/contact_form.dart';
 
 class ContactsEditPage extends StatefulWidget {
@@ -38,55 +37,36 @@ class _ContactsEditPageState extends State<ContactsEditPage> {
         ],
       ),
       body: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(accountProvider).when(
-              skipLoadingOnReload: true,
-              data: (AccountEntity data) => ContactForm(
-                key: _formKey,
-                contact: _contact,
-                onHandleSubmit: (CreateContactData contact) => _handleSubmit(contact, data.uid),
-                userId: data.uid,
-              ),
-              error: ErrorView.new,
-              loading: () => child!,
-            ),
-        child: const Center(child: LoadingSpinner()),
+        builder: (BuildContext context, WidgetRef ref, _) => ContactForm(
+          key: _formKey,
+          contact: _contact,
+          onHandleSubmit: (CreateContactData contact) => _handleSubmit(ref.read(contactProvider), contact),
+        ),
       ),
     );
   }
 
   void _handleSelectContact() async {
-    final CreateContactData contact = _contact;
     final Contact? selectedContact = await _contactPicker.selectContact();
     final String? fullName = selectedContact?.fullName;
     final String? phoneNumber = selectedContact?.phoneNumbers?.firstOrNull;
-
     if (selectedContact == null || fullName == null || phoneNumber == null) {
       return;
     }
 
     _formKey.currentState?.updateContact(
-      contact.copyWith(
+      _contact.copyWith(
         fullname: fullName,
         phone: phoneNumber,
       ),
     );
   }
 
-  void _handleSubmit(CreateContactData contact, String userId) async {
+  void _handleSubmit(ContactProvider contactProvider, CreateContactData contact) async {
     final AppSnackBar snackBar = AppSnackBar.of(context)..loading();
 
     try {
-      // TODO(Jogboms): move this out of here
-      await context.registry.get<Contacts>().update(
-            userId,
-            reference: widget.contact.reference,
-            fullname: contact.fullname,
-            phone: contact.phone,
-            location: contact.location,
-            imageUrl: contact.imageUrl,
-            measurements: contact.measurements,
-          );
-
+      await contactProvider.update(reference: widget.contact.reference, contact: contact);
       snackBar.success('Successfully Updated');
     } catch (error, stackTrace) {
       AppLog.e(error, stackTrace);

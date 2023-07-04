@@ -6,8 +6,8 @@ class MeasuresMockImpl extends Measures {
   Future<bool> create(
     List<BaseMeasureEntity> measures,
     String userId, {
-    required MeasureGroup groupName,
-    required String unitValue,
+    required MeasureGroup group,
+    required String unit,
   }) async =>
       true;
 

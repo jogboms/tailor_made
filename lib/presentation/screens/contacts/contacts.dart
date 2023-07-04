@@ -50,7 +50,7 @@ class _ContactsPageState extends State<ContactsPage> {
           ),
           onWillPop: () async {
             final SearchContactQueryState queryState = ref.read(searchContactQueryStateProvider.notifier);
-            if (queryState.isSearching) {
+            if (queryState.isSearching()) {
               queryState.setState('');
               return false;
             }

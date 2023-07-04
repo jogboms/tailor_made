@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 import 'package:tailor_made/presentation/routing.dart';
 
+import '../providers/job_provider.dart';
 import 'gallery_grid_item.dart';
 import 'image_form_value.dart';
 
@@ -62,32 +63,38 @@ class _GalleryGridsState extends State<GalleryGrids> {
             const SizedBox(width: 16.0),
           ],
         ),
-        Container(
-          height: GalleryGridItem.kGridWidth + 8,
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: ListView(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            scrollDirection: Axis.horizontal,
-            children: <Widget>[
-              _NewGrid(onPressed: _handlePhotoButtonPressed),
-              for (final ImageFormValue value in _images.reversed)
-                GalleryGridItem.formValue(
-                  value: value,
-                  onTapDelete: _handleDeleteItem,
-                )
-            ],
-          ),
+        Consumer(
+          builder: (BuildContext context, WidgetRef ref, _) {
+            final ImageStorageProvider storage = ref.read(imageStorageProvider);
+
+            return Container(
+              height: GalleryGridItem.kGridWidth + 8,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: ListView(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                scrollDirection: Axis.horizontal,
+                children: <Widget>[
+                  _NewGrid(onPressed: () => _handlePhotoButtonPressed(ref.read(jobProvider), storage)),
+                  for (final ImageFormValue value in _images.reversed)
+                    GalleryGridItem.formValue(
+                      value: value,
+                      onTapDelete: (ImageFormValue value) => _handleDeleteItem(storage, value),
+                    )
+                ],
+              ),
+            );
+          },
         ),
       ],
     );
   }
 
-  void _handleDeleteItem(ImageFormValue value) async {
+  void _handleDeleteItem(ImageStorageProvider storage, ImageFormValue value) async {
     final ImageFileReference reference = switch (value) {
       ImageCreateFormValue(:final CreateImageData data) => (src: data.src, path: data.path),
       ImageModifyFormValue(:final ImageEntity data) => (src: data.src, path: data.path),
     };
-    await context.registry.get<ImageStorage>().delete(reference: reference, userId: widget.userId);
+    await storage.delete(reference);
     if (mounted) {
       setState(() {
         _images.remove(value);
@@ -95,8 +102,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
     }
   }
 
-  void _handlePhotoButtonPressed() async {
-    final Registry registry = context.registry;
+  void _handlePhotoButtonPressed(JobProvider jobProvider, ImageStorageProvider storage) async {
     final ImageSource? source = await showImageChoiceDialog(context: context);
     if (source == null) {
       return;
@@ -107,11 +113,10 @@ class _GalleryGridsState extends State<GalleryGrids> {
     }
 
     try {
-      // TODO(Jogboms): move this out of here
-      final ImageFileReference ref = await registry.get<ImageStorage>().createReferenceImage(
-            path: imageFile.path,
-            userId: widget.userId,
-          );
+      final ImageFileReference ref = await storage.create(
+        CreateImageType.reference,
+        path: imageFile.path,
+      );
 
       setState(() {
         _images.add(
@@ -127,18 +132,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
         );
       });
 
-      await registry.get<Jobs>().update(
-            widget.job.userID,
-            reference: widget.job.reference,
-            images: _images
-                .map(
-                  (ImageFormValue input) => switch (input) {
-                    ImageCreateFormValue() => CreateImageOperation(data: input.data),
-                    ImageModifyFormValue() => ModifyImageOperation(data: input.data),
-                  },
-                )
-                .toList(growable: false),
-          );
+      await jobProvider.modifyGallery(reference: widget.job.reference, images: _images);
     } catch (error, stackTrace) {
       AppLog.e(error, stackTrace);
     }

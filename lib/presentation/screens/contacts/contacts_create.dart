@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
 import '../../routing.dart';
+import 'providers/contact_provider.dart';
 import 'widgets/contact_form.dart';
 
 class ContactsCreatePage extends StatefulWidget {
@@ -58,18 +58,11 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
         ],
       ),
       body: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(accountProvider).when(
-              skipLoadingOnReload: true,
-              data: (AccountEntity data) => ContactForm(
-                key: _formKey,
-                contact: _contact,
-                onHandleSubmit: (CreateContactData contact) => _handleSubmit(contact, data.uid),
-                userId: data.uid,
-              ),
-              error: ErrorView.new,
-              loading: () => child!,
-            ),
-        child: const Center(child: LoadingSpinner()),
+        builder: (BuildContext context, WidgetRef ref, _) => ContactForm(
+          key: _formKey,
+          contact: _contact,
+          onHandleSubmit: (CreateContactData contact) => _handleSubmit(ref.read(contactProvider), contact),
+        ),
       ),
     );
   }
@@ -78,7 +71,6 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
     final Contact? selectedContact = await _contactPicker.selectContact();
     final String? fullName = selectedContact?.fullName;
     final String? phoneNumber = selectedContact?.phoneNumbers?.firstOrNull;
-
     if (selectedContact == null || fullName == null || phoneNumber == null) {
       return;
     }
@@ -91,18 +83,16 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
     );
   }
 
-  void _handleSubmit(CreateContactData contact, String userId) async {
+  void _handleSubmit(ContactProvider contactProvider, CreateContactData contact) async {
     final AppSnackBar snackBar = AppSnackBar.of(context);
     if (contact.measurements.isEmpty) {
       snackBar.info(AppStrings.leavingEmptyMeasures);
       return;
     }
 
-    final Registry registry = context.registry;
-    final Contacts contacts = registry.get();
-    final AppRouter router = context.router;
     snackBar.loading();
 
+    final AppRouter router = context.router;
     try {
       contact = contact.copyWith(
         fullname: contact.fullname,
@@ -110,12 +100,9 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
         imageUrl: contact.imageUrl,
         location: contact.location,
       );
-
-      // TODO(Jogboms): move this out of here
-      final ContactEntity snap = await contacts.create(userId, contact);
+      final ContactEntity result = await contactProvider.create(contact: contact);
       snackBar.success('Successfully Added');
-
-      router.toContact(snap.id, replace: true);
+      router.toContact(result.id, replace: true);
     } catch (error, stackTrace) {
       AppLog.e(error, stackTrace);
       snackBar.error(error.toString());

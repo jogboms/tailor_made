@@ -11,7 +11,7 @@ import 'state_notifier_mixin.dart';
 
 part 'auth_state_notifier_provider.g.dart';
 
-@Riverpod(dependencies: <Object>[registry, account])
+@Riverpod(dependencies: <Object>[registry])
 class AuthStateNotifier extends _$AuthStateNotifier with StateNotifierMixin {
   @override
   AuthState build() => AuthState.idle;

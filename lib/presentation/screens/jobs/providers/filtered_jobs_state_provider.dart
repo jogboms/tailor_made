@@ -10,7 +10,7 @@ import '../../../utils.dart';
 
 part 'filtered_jobs_state_provider.g.dart';
 
-@Riverpod(dependencies: <Object>[account, jobs, SearchJobQueryState, SearchJobSortState])
+@Riverpod(dependencies: <Object>[jobs])
 Future<FilteredJobsState> filteredJobs(FilteredJobsRef ref) async {
   final List<JobEntity> items = await ref.watch(jobsProvider.future);
   final String query = ref.watch(searchJobQueryStateProvider).trim().toLowerCase();
@@ -44,7 +44,7 @@ class SearchJobQueryState extends _$SearchJobQueryState with StateNotifierMixin 
   @override
   String build() => '';
 
-  bool get isSearching => state.length > 1;
+  bool isSearching() => state.length > 1;
 }
 
 @riverpod

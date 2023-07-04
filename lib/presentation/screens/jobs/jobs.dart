@@ -51,7 +51,7 @@ class JobsPage extends StatelessWidget {
           ),
           onWillPop: () async {
             final SearchJobQueryState queryState = ref.read(searchJobQueryStateProvider.notifier);
-            if (queryState.isSearching) {
+            if (queryState.isSearching()) {
               queryState.setState('');
               return false;
             }

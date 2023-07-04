@@ -6,8 +6,8 @@ abstract class Measures {
   Future<bool> create(
     List<BaseMeasureEntity> measures,
     String userId, {
-    required MeasureGroup groupName,
-    required String unitValue,
+    required MeasureGroup group,
+    required String unit,
   });
 
   Future<bool> deleteGroup(List<MeasureEntity> measures, String userId);
