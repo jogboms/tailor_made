@@ -7,11 +7,202 @@
   "crashViewBugMessage1": "You just found a bug, no need to panic, we have logged the issue and would provide a resolution as soon as possible",
   "crashViewBugMessage2": "If there's more to it, you could also file a personal complaint with our customer service representative",
   "successfulMessage": "Successful",
-  "genericErrorMessage": "An error occurred",
+  "successfullyAddedMessage": "Successfully Added",
+  "successfullyUpdatedMessage": "Successfully Updated",
+  "uploadSuccessfulMessage": "Upload Successful",
+  "genericErrorMessage": "An error occurred. Do try again",
   "failedSignInMessage": "Failed to sign in. Do try again",
   "bannedUserMessage": "This account has been disabled by administration",
+  "fixFormErrors": "Please fix the errors in red before submitting",
+  "emptyMeasuresFormError": "Leaving Measurements empty? Click on Scissors button.",
   "loadingMessage": "Loading...",
   "tryAgainMessage": "Do try again after some time",
   "popupBlockedByBrowserMessage": "The auto-login popup was blocked by your browser. Try the continue button",
-  "continueWithGoogle": "Continue with Google"
+  "continueWithGoogle": "Continue with Google",
+  "exitConfirmationMessage": "Continue with Exit?",
+  "helloMessage": "Hello",
+  "tapToCreateCaption": "TAP TO CREATE",
+  "selectActionTitle": "Select action",
+  "storeLabel": "Store",
+  "storeNameLabel": "Store Name",
+  "storeNamePlaceholder": "Enter Store Name",
+  "logoutLabel": "Logout",
+  "logoutConfirmationMessage": "You are about to logout.",
+  "customCaption": "Custom",
+  "pendingCaption": "Pending",
+  "receivedCaption": "Received",
+  "completedCaption": "Completed",
+  "reviewMessage": "Can you rate the experience so far?",
+  "outOfDateTitle": "OUT OF DATE",
+  "outOfDateMessage": "It appears you are running an outdated version of the app.\\n If this is not the case, please contact an Administrator.",
+  "outOfDateUpdateCaption": "Get Update",
+  "accessDeniedTitle": "ACCESS DENIED",
+  "accessDeniedMessage": "Do not be alarmed. \\n We just need your attention. \\n\\n It is possible you have violated one or a couple of our usage policy?.\\n If this is not the case, please contact an Administrator.",
+  "accessDeniedSendMailCaption": "Send a mail",
+  "usagePolicyTitle": "USAGE POLICY",
+  "usagePolicyMessage": "We noticed \\n you really enjoy using our service. \\n\\n Would you mind \\n paying a little token if you wish to extend beyond your usage limits?",
+  "usagePolicyNoCaption": "No, Skip now",
+  "usagePolicyYesCaption": "Yes, Sign me up!",
+  "selectClientMessage": "Select Client",
+  "noJobsAvailableMessage": "No jobs available",
+  "noContactsAvailableMessage": "No contacts available",
+  "noTasksAvailableMessage": "No tasks available",
+  "noImagesAvailableMessage": "No images available",
+  "noPaymentsAvailableMessage": "No payments available",
+  "noMeasurementsAvailableMessage": "No measurements available",
+  "accountPageTitle": "Account",
+  "jobPageTitle": "Job",
+  "jobsPageTitle": "Jobs",
+  "paymentsPageTitle": "Payments",
+  "galleryPageTitle": "Gallery",
+  "contactPageTitle": "Contact",
+  "contactsPageTitle": "Contacts",
+  "measurementsPageTitle": "Measurements",
+  "createJobPageTitle": "Create Job",
+  "editJobPageTitle": "Edit Job",
+  "createContactPageTitle": "Create Contact",
+  "editContactPageTitle": "Edit Contact",
+  "createPaymentPageTitle": "Create Payment",
+  "paymentPageTitle": "Payment",
+  "additionalNotesLabel": "Additional Notes",
+  "amountPlaceholder": "Enter Amount",
+  "styleNamePlaceholder": "Enter Style Name",
+  "additionalNotesPlaceholder": "Anything else to remember this payment by?",
+  "additionalMeasurementNotesPlaceholder": "Fabric color, size, special requirements...",
+  "currencyCaption": "{currencyName} ({currencySymbol})",
+  "@currencyCaption": {
+    "placeholders": {
+      "currencyName": {
+        "type": "String"
+      },
+      "currencySymbol": {
+        "type": "String"
+      }
+    }
+  },
+  "tasksPageTitle": "Tasks",
+  "showAllCaption": "SHOW ALL",
+  "sortByActiveCaption": "Sort by Active",
+  "sortByNameCaption": "Sort by Name",
+  "sortByOwedCaption": "Sort by Owed",
+  "sortByPaymentsCaption": "Sort by Payments",
+  "sortByPriceCaption": "Sort by Price",
+  "sortByRecentCaption": "Sort by Recent",
+  "sortByJobsCaption": "Sort by Jobs",
+  "sortByCompletedCaption": "Sort by Completed",
+  "sortByPendingCaption": "Sort by Pending",
+  "newJobCaption": "New Job",
+  "textMessageCaption": "Text Message",
+  "editMeasurementsCaption": "Edit Measurements",
+  "editAccountCaption": "Edit Account",
+  "noSortCaption": "No Sort",
+  "markCompletedCaption": "Mark Completed",
+  "undoCompletedCaption": "Undo Completed",
+  "referencesLabel": "References",
+  "fullnameLabel": "Fullname",
+  "phoneLabel": "Phone",
+  "locationLabel": "Location",
+  "measurementLabel": "Inches (In)",
+  "selectClientCaption": "SELECT A CLIENT",
+  "measurementItemNamePageTitle": "ITEM NAME",
+  "measurementItemNameLabel": "Name (eg. Length)",
+  "measurementGroupNameLabel": "Group Name",
+  "measurementGroupNamePlaceholder": "eg Blouse",
+  "measurementGroupUnitLabel": "Group Unit",
+  "measurementGroupUnitPlaceholder": "Unit (eg. In, cm)",
+  "measurementGroupItemsLabel": "Group Items",
+  "measurementUnavailableCaption": "N/A",
+  "addMeasurementItemCaption": "Add Item",
+  "addMeasurementGroupCaption": "Add Group",
+  "measurementGroupInfoMessage": "Long-Press on any group to see more actions.",
+  "deleteMeasurementPageTitle": "Delete measurement",
+  "submitCaption": "SUBMIT",
+  "finishCaption": "FINISH",
+  "saveCaption": "SAVE",
+  "cancelCaption": "CANCEL",
+  "doneCaption": "DONE",
+  "editCaption": "Edit",
+  "deleteCaption": "Delete",
+  "styleNameCaption": "Style Name",
+  "dueDateCaption": "Due Date",
+  "extendDateCaption": "EXTEND DATE",
+  "paidCaption": "PAID",
+  "unpaidCaption": "UNPAID",
+  "confirmationMessage": "Are you sure?",
+  "inputValueMessage": "Please input a value",
+  "inputNameMessage": "Please input a name",
+  "inputPriceMessage": "Please input a price",
+  "searchPlaceholder": "Search...",
+  "amountRemainderMessage": "{howMany} is the remainder on this job.",
+  "@amountRemainderMessage": {
+    "placeholders": {
+      "howMany": {
+        "type": "String"
+      }
+    }
+  },
+  "contactsCaption": "{howMany} Contact{howMany, plural, =1{} other{s}}",
+  "@contactsCaption": {
+    "placeholders": {
+      "howMany": {
+        "type": "int"
+      }
+    }
+  },
+  "jobsCaption": "{howMany} Job{howMany, plural, =1{} other{s}}",
+  "@jobsCaption": {
+    "placeholders": {
+      "howMany": {
+        "type": "int"
+      }
+    }
+  },
+  "photosCaption": "{howMany} Photo{howMany, plural, =1{} other{s}}",
+  "@photosCaption": {
+    "placeholders": {
+      "howMany": {
+        "type": "int"
+      }
+    }
+  },
+  "paymentsCaption": "{amount} Total",
+  "@paymentsCaption": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "tasksCaption": "{howMany} Pending",
+  "@tasksCaption": {
+    "placeholders": {
+      "howMany": {
+        "type": "int"
+      }
+    }
+  },
+  "ticketsCaption": "{howMany} Ticket{howMany, plural, =1{} other{s}}",
+  "@ticketsCaption": {
+    "placeholders": {
+      "howMany": {
+        "type": "int"
+      }
+    }
+  },
+  "pendingJobCaption": "{howMany} pending job{howMany, plural, =1{} other{s}}",
+  "@pendingJobCaption": {
+    "placeholders": {
+      "howMany": {
+        "type": "int"
+      }
+    }
+  },
+  "completedJobCaption": "{howMany, plural, =0{no} =1{1} other{{howMany}}} completed job{howMany, plural, =1{} other{s}}",
+  "@completedJobCaption": {
+    "placeholders": {
+      "howMany": {
+        "type": "int"
+      }
+    }
+  }
 }

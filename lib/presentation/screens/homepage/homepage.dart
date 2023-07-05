@@ -23,8 +23,12 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return WillPopScope(
-      onWillPop: () => showChoiceDialog(context: context, message: 'Continue with Exit?').then((bool? value) => value!),
+      onWillPop: () => showChoiceDialog(context: context, message: l10n.exitConfirmationMessage).then(
+        (bool? value) => value!,
+      ),
       child: AppStatusBar(
         child: Scaffold(
           resizeToAvoidBottomInset: false,

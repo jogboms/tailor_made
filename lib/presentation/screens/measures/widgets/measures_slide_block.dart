@@ -31,6 +31,8 @@ class MeasureSlideBlock extends StatefulWidget {
 class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, _) => SlideDownItem(
         title: widget.groupName.displayName,
@@ -39,7 +41,7 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
             for (MeasureEntity measure in widget.measures)
               MeasuresSlideBlockItem(
                 measure: measure,
-                onTap: () => _onTapEditItem(ref.read(measurementProvider), measure),
+                onTap: () => _onTapEditItem(l10n, ref.read(measurementProvider), measure),
               ),
           ],
         ),
@@ -50,11 +52,11 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
               children: <Widget>[
                 SimpleDialogOption(
                   onPressed: () => Navigator.pop(context, _ActionChoice.edit),
-                  child: const Text('Edit'),
+                  child: Text(l10n.editCaption),
                 ),
                 SimpleDialogOption(
                   onPressed: () => Navigator.pop(context, _ActionChoice.delete),
-                  child: const Text('Delete'),
+                  child: Text(l10n.deleteCaption),
                 ),
               ],
             ),
@@ -64,7 +66,7 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
             case _ActionChoice.edit:
               _onTapEditBlock();
             case _ActionChoice.delete:
-              _onTapDeleteBlock(ref.read(measurementProvider));
+              _onTapDeleteBlock(l10n, ref.read(measurementProvider));
             case null:
               return;
           }
@@ -81,12 +83,12 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
     );
   }
 
-  void _onTapDeleteBlock(MeasurementProvider measurementProvider) async {
+  void _onTapDeleteBlock(L10n l10n, MeasurementProvider measurementProvider) async {
     final AppSnackBar snackBar = AppSnackBar.of(context);
     final bool? choice = await showChoiceDialog(
       context: context,
-      title: 'Delete measurement',
-      message: 'Are you sure?',
+      title: l10n.deleteMeasurementPageTitle,
+      message: l10n.confirmationMessage,
     );
     if (choice == null || choice == false) {
       return;
@@ -101,12 +103,12 @@ class _MeasureSlideBlockState extends State<MeasureSlideBlock> {
     }
   }
 
-  void _onTapEditItem(MeasurementProvider measurementProvider, MeasureEntity measure) async {
+  void _onTapEditItem(L10n l10n, MeasurementProvider measurementProvider, MeasureEntity measure) async {
     final AppSnackBar snackBar = AppSnackBar.of(context);
     final String? itemName = await showChildDialog<String>(
       context: context,
       child: MeasureEditDialog(
-        title: 'ITEM NAME',
+        title: l10n.measurementItemNamePageTitle,
         value: measure.name,
       ),
     );

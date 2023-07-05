@@ -8,7 +8,7 @@ import '../widgets/payment_grids_form_value.dart';
 
 part 'job_provider.g.dart';
 
-@riverpod
+@Riverpod(dependencies: <Object>[account, registry])
 JobProvider job(JobRef ref) {
   return JobProvider(
     fetchAccount: () => ref.read(accountProvider.future),

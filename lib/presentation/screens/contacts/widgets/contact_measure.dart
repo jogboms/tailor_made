@@ -24,9 +24,11 @@ class _ContactMeasureState extends State<ContactMeasure> {
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return Scaffold(
       appBar: CustomAppBar(
-        title: const Text('Measurements'),
+        title: Text(l10n.measurementsPageTitle),
         leading: AppBackButton(
           onPop: widget.contact != null ? null : () => Navigator.pop<Map<String, double>>(context, _measurements),
         ),
@@ -46,7 +48,7 @@ class _ContactMeasureState extends State<ContactMeasure> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                const FormSectionHeader(title: 'Measurements', trailing: 'Inches (In)'),
+                FormSectionHeader(title: l10n.measurementsPageTitle, trailing: l10n.measurementLabel),
                 MeasureCreateItems(
                   grouped: widget.grouped,
                   measurements: _measurements,
@@ -63,8 +65,8 @@ class _ContactMeasureState extends State<ContactMeasure> {
                   builder: (BuildContext context, WidgetRef ref, _) => Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 50.0),
                     child: PrimaryButton(
-                      onPressed: () => _handleSubmit(ref.read(contactProvider)),
-                      child: const Text('FINISH'),
+                      onPressed: () => _handleSubmit(l10n, ref.read(contactProvider)),
+                      child: Text(l10n.finishCaption),
                     ),
                   ),
                 ),
@@ -77,7 +79,7 @@ class _ContactMeasureState extends State<ContactMeasure> {
     );
   }
 
-  void _handleSubmit(ContactProvider contactProvider) async {
+  void _handleSubmit(L10n l10n, ContactProvider contactProvider) async {
     final FormState? form = _formKey.currentState;
     if (form == null) {
       return;
@@ -85,7 +87,7 @@ class _ContactMeasureState extends State<ContactMeasure> {
     final AppSnackBar snackBar = AppSnackBar.of(context);
     if (!form.validate()) {
       _autovalidate = true;
-      snackBar.info(AppStrings.fixErrors);
+      snackBar.info(l10n.fixFormErrors);
       return;
     }
 
@@ -100,7 +102,7 @@ class _ContactMeasureState extends State<ContactMeasure> {
     snackBar.loading();
     try {
       await contactProvider.modifyMeasurements(reference: contact.reference, measurements: _measurements);
-      snackBar.success('Successfully Updated');
+      snackBar.success(l10n.successfullyUpdatedMessage);
     } catch (e) {
       snackBar.error(e.toString());
     }

@@ -38,6 +38,7 @@ class _GalleryGridsState extends State<GalleryGrids> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final L10n l10n = context.l10n;
 
     return Column(
       children: <Widget>[
@@ -46,11 +47,11 @@ class _GalleryGridsState extends State<GalleryGrids> {
           children: <Widget>[
             const SizedBox(width: 16.0),
             Expanded(
-              child: Text('GALLERY', style: theme.textTheme.bodySmall),
+              child: Text(l10n.galleryPageTitle.toUpperCase(), style: theme.textTheme.bodySmall),
             ),
             AppClearButton(
               child: Text(
-                'SHOW ALL',
+                l10n.showAllCaption,
                 style: theme.textTheme.bodySmall?.copyWith(
                   fontWeight: AppFontWeight.medium,
                   color: theme.colorScheme.secondary,

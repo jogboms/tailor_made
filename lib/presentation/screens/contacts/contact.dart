@@ -3,13 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
+import '../../utils.dart';
 import '../jobs/widgets/jobs_list.dart';
 import 'providers/selected_contact_provider.dart';
 import 'widgets/contact_appbar.dart';
 import 'widgets/contact_gallery_grid.dart';
 import 'widgets/contact_payments_list.dart';
-
-const List<String> _tabs = <String>['Jobs', 'Gallery', 'Payments'];
 
 class ContactPage extends StatelessWidget {
   const ContactPage({super.key, required this.id});
@@ -20,10 +19,13 @@ class ContactPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
+    final L10n l10n = context.l10n;
+
+    final List<String> tabs = <String>[l10n.jobsPageTitle, l10n.galleryPageTitle, l10n.paymentsPageTitle];
 
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) => DefaultTabController(
-        length: _tabs.length,
+        length: tabs.length,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: colorScheme.secondary,
@@ -40,7 +42,7 @@ class ContactPage extends StatelessWidget {
             centerTitle: false,
             bottom: TabBar(
               labelStyle: theme.textTheme.labelLarge,
-              tabs: _tabs.map((String tab) => Tab(child: Text(tab))).toList(),
+              tabs: tabs.map((String tab) => Tab(child: Text(tab))).toList(),
             ),
             systemOverlayStyle: SystemUiOverlayStyle.light,
           ),
@@ -49,15 +51,15 @@ class ContactPage extends StatelessWidget {
                 data: (ContactState data) => TabBarView(
                   children: <Widget>[
                     _TabView(
-                      name: _tabs[0].toLowerCase(),
+                      name: tabs[0].toLowerCase(),
                       child: JobList(jobs: data.jobs),
                     ),
                     _TabView(
-                      name: _tabs[1].toLowerCase(),
+                      name: tabs[1].toLowerCase(),
                       child: GalleryGridWidget(jobs: data.jobs),
                     ),
                     _TabView(
-                      name: _tabs[2].toLowerCase(),
+                      name: tabs[2].toLowerCase(),
                       child: PaymentsListWidget(jobs: data.jobs),
                     ),
                   ],

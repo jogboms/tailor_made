@@ -30,6 +30,8 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: SizedBox(
@@ -42,7 +44,7 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
             scale: Tween<double>(begin: 0.95, end: 1.025).animate(_controller),
             alignment: FractionalOffset.center,
             child: Text(
-              'TAP TO CREATE',
+              l10n.tapToCreateCaption,
               style: Theme.of(context).textTheme.labelLarge?.copyWith(letterSpacing: 1.25),
             ),
           ),
@@ -56,16 +58,26 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
     final _CreateOptions? result = await showDialog<_CreateOptions>(
       context: context,
       builder: (BuildContext context) {
+        final L10n l10n = context.l10n;
+
         return SimpleDialog(
-          title: Text('Select action', style: Theme.of(context).textTheme.labelLarge),
+          title: Text(l10n.selectActionTitle, style: Theme.of(context).textTheme.labelLarge),
           children: <Widget>[
             SimpleDialogOption(
               onPressed: () => Navigator.pop(context, _CreateOptions.contacts),
-              child: const TMListTile(color: Colors.orangeAccent, icon: Icons.supervisor_account, title: 'Contact'),
+              child: TMListTile(
+                color: Colors.orangeAccent,
+                icon: Icons.supervisor_account,
+                title: l10n.contactPageTitle,
+              ),
             ),
             SimpleDialogOption(
               onPressed: () => Navigator.pop(context, _CreateOptions.jobs),
-              child: TMListTile(color: Colors.greenAccent.shade400, icon: Icons.attach_money, title: 'Job'),
+              child: TMListTile(
+                color: Colors.greenAccent.shade400,
+                icon: Icons.attach_money,
+                title: l10n.jobPageTitle,
+              ),
             ),
           ],
         );

@@ -20,6 +20,7 @@ class _MeasureDialogState extends State<MeasureDialog> {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final L10n l10n = context.l10n;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -47,14 +48,14 @@ class _MeasureDialogState extends State<MeasureDialog> {
                   textCapitalization: TextCapitalization.words,
                   textInputAction: TextInputAction.next,
                   onSaved: (String? value) => _measure = _measure.copyWith(name: value!.trim()),
-                  decoration: const InputDecoration(labelText: 'Name (eg. Length)'),
+                  decoration: InputDecoration(labelText: l10n.measurementItemNameLabel),
                   validator: InputValidator.tryAlpha(),
                 ),
                 const SizedBox(height: 4.0),
                 TextFormField(
                   initialValue: widget.measure.unit,
                   textInputAction: TextInputAction.done,
-                  decoration: const InputDecoration(labelText: 'Unit (eg. In, cm)'),
+                  decoration: InputDecoration(labelText: l10n.measurementGroupUnitPlaceholder),
                   validator: InputValidator.tryAlpha(),
                   onFieldSubmitted: (String value) => _onSaved(),
                   onSaved: (String? value) => _measure = _measure.copyWith(unit: value!.trim()),
@@ -66,10 +67,10 @@ class _MeasureDialogState extends State<MeasureDialog> {
                     AppClearButton(
                       onPressed: () => Navigator.pop(context),
                       color: colorScheme.outline,
-                      child: const Text('CANCEL'),
+                      child: Text(l10n.cancelCaption),
                     ),
                     const SizedBox(width: 16.0),
-                    AppClearButton(onPressed: _onSaved, child: const Text('DONE')),
+                    AppClearButton(onPressed: _onSaved, child: Text(l10n.doneCaption)),
                     const SizedBox(width: 16.0),
                   ],
                 ),

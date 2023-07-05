@@ -14,6 +14,8 @@ class JobsFilterButton extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final TextStyle optionTheme = theme.textTheme.bodyMedium!;
     final ColorScheme colorScheme = theme.colorScheme;
+    final L10n l10n = context.l10n;
+
     return SizedBox.fromSize(
       size: const Size.square(48.0),
       child: Stack(
@@ -22,52 +24,15 @@ class JobsFilterButton extends StatelessWidget {
             child: PopupMenuButton<JobsSortType>(
               icon: const Icon(Icons.filter_list),
               onSelected: onTapSort,
-              itemBuilder: (BuildContext context) {
-                return <_Option>[
+              itemBuilder: (BuildContext context) => <_Option>[
+                for (final JobsSortType option in JobsSortType.values)
                   _Option(
-                    text: 'Sort by Active',
-                    type: JobsSortType.active,
-                    enabled: sortType != JobsSortType.active,
-                    style: optionTheme.copyWith(color: _colorTestFn(JobsSortType.active, colorScheme)),
+                    text: option.caption(l10n),
+                    type: option,
+                    enabled: sortType != option,
+                    style: optionTheme.copyWith(color: _colorTestFn(option, colorScheme)),
                   ),
-                  _Option(
-                    text: 'Sort by Name',
-                    type: JobsSortType.names,
-                    enabled: sortType != JobsSortType.names,
-                    style: optionTheme.copyWith(color: _colorTestFn(JobsSortType.names, colorScheme)),
-                  ),
-                  _Option(
-                    text: 'Sort by Owed',
-                    type: JobsSortType.owed,
-                    enabled: sortType != JobsSortType.owed,
-                    style: optionTheme.copyWith(color: _colorTestFn(JobsSortType.owed, colorScheme)),
-                  ),
-                  _Option(
-                    text: 'Sort by Payments',
-                    type: JobsSortType.payments,
-                    enabled: sortType != JobsSortType.payments,
-                    style: optionTheme.copyWith(color: _colorTestFn(JobsSortType.payments, colorScheme)),
-                  ),
-                  _Option(
-                    text: 'Sort by Price',
-                    type: JobsSortType.price,
-                    enabled: sortType != JobsSortType.price,
-                    style: optionTheme.copyWith(color: _colorTestFn(JobsSortType.price, colorScheme)),
-                  ),
-                  _Option(
-                    text: 'Sort by Recent',
-                    type: JobsSortType.recent,
-                    enabled: sortType != JobsSortType.recent,
-                    style: optionTheme.copyWith(color: _colorTestFn(JobsSortType.recent, colorScheme)),
-                  ),
-                  _Option(
-                    text: 'No Sort',
-                    type: JobsSortType.reset,
-                    enabled: sortType != JobsSortType.reset,
-                    style: optionTheme.copyWith(color: _colorTestFn(JobsSortType.reset, colorScheme)),
-                  ),
-                ];
-              },
+              ],
             ),
           ),
           Align(
@@ -96,4 +61,18 @@ class _Option extends PopupMenuItem<JobsSortType> {
   final String text;
   final JobsSortType type;
   final TextStyle style;
+}
+
+extension on JobsSortType {
+  String caption(L10n l10n) {
+    return switch (this) {
+      JobsSortType.recent => l10n.sortByActiveCaption,
+      JobsSortType.active => l10n.sortByNameCaption,
+      JobsSortType.names => l10n.sortByOwedCaption,
+      JobsSortType.owed => l10n.sortByPaymentsCaption,
+      JobsSortType.payments => l10n.sortByPriceCaption,
+      JobsSortType.price => l10n.sortByRecentCaption,
+      JobsSortType.reset => l10n.noSortCaption,
+    };
+  }
 }

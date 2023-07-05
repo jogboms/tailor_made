@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../../utils.dart';
+
 class ReviewModal extends StatelessWidget {
   const ReviewModal({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return Center(
       child: Material(
         animationDuration: const Duration(seconds: 5),
@@ -14,7 +18,7 @@ class ReviewModal extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              const Text('Can you rate the experience so far?', textAlign: TextAlign.center),
+              Text(l10n.reviewMessage, textAlign: TextAlign.center),
               const SizedBox(height: 24.0),
               Row(
                 mainAxisSize: MainAxisSize.min,

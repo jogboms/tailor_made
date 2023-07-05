@@ -29,6 +29,7 @@ class PaymentGridItem extends StatelessWidget {
     final String price = AppMoney(record.price).formatted;
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
+    final L10n l10n = context.l10n;
 
     final Color backgroundColor = payment != null ? colorScheme.primary : theme.hintColor;
     final Color foregroundColor = colorScheme.onPrimary;
@@ -60,7 +61,7 @@ class PaymentGridItem extends StatelessWidget {
                         ),
                         const TextSpan(text: '\n'),
                         TextSpan(
-                          text: '${AppStrings.monthsShort[date.month - 1].toUpperCase()}, ${date.year}',
+                          text: '${l10n.monthsShortNames[date.month - 1].toUpperCase()}, ${date.year}',
                           style: theme.textTheme.labelSmall
                               ?.copyWith(fontWeight: AppFontWeight.medium, color: foregroundColor),
                         ),

@@ -3,6 +3,8 @@ import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/theme.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
+import '../../../utils.dart';
+
 class StoreNameDialog extends StatelessWidget {
   const StoreNameDialog({super.key, required this.account});
 
@@ -45,6 +47,7 @@ class _ContentState extends State<_Content> {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final L10n l10n = context.l10n;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -66,7 +69,7 @@ class _ContentState extends State<_Content> {
               ),
               const SizedBox(height: 16.0),
               Text(
-                'Store Name',
+                l10n.storeNameLabel,
                 style: Theme.of(context).textTheme.pageTitle,
               ),
               const SizedBox(height: 64.0),
@@ -78,7 +81,7 @@ class _ContentState extends State<_Content> {
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.pageTitle,
                   onSubmitted: (String value) => _handleSubmit(context),
-                  decoration: const InputDecoration(isDense: true, hintText: 'Enter Store Name'),
+                  decoration: InputDecoration(isDense: true, hintText: l10n.styleNamePlaceholder),
                 ),
               ),
               const SizedBox(height: 64.0),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
+import '../../../utils.dart';
 import '../../payments/widgets/payments_list.dart';
 
 class PaymentsListWidget extends StatelessWidget {
@@ -17,7 +18,7 @@ class PaymentsListWidget extends StatelessWidget {
     );
 
     if (payments.isEmpty) {
-      return const SliverFillRemaining(child: EmptyResultView(message: 'No payments available'));
+      return SliverFillRemaining(child: EmptyResultView(message: context.l10n.noPaymentsAvailableMessage));
     }
 
     return SliverPadding(

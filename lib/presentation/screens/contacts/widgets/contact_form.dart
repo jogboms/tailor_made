@@ -48,6 +48,8 @@ class ContactFormState extends State<ContactForm> {
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -57,7 +59,7 @@ class ContactFormState extends State<ContactForm> {
             builder: (BuildContext context, WidgetRef ref, _) => _Avatar(
               imageUrl: _contact.imageUrl,
               isLoading: _isLoading,
-              onTap: () => _handlePhotoButtonPressed(ref.read(imageStorageProvider)),
+              onTap: () => _handlePhotoButtonPressed(l10n, ref.read(imageStorageProvider)),
             ),
           ),
           const SizedBox(height: 16.0),
@@ -72,7 +74,7 @@ class ContactFormState extends State<ContactForm> {
                   TextFormField(
                     controller: _fNController,
                     textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(prefixIcon: Icon(Icons.person), labelText: 'Fullname'),
+                    decoration: InputDecoration(prefixIcon: const Icon(Icons.person), labelText: l10n.fullnameLabel),
                     validator: InputValidator.tryAlpha(),
                     onSaved: (String? fullname) => _contact = _contact.copyWith(fullname: fullname!.trim()),
                   ),
@@ -81,21 +83,22 @@ class ContactFormState extends State<ContactForm> {
                     controller: _pNController,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.phone,
-                    decoration: const InputDecoration(prefixIcon: Icon(Icons.phone), labelText: 'Phone'),
-                    validator: InputValidator.tryString('Please input a value'),
+                    decoration: InputDecoration(prefixIcon: const Icon(Icons.phone), labelText: l10n.phoneLabel),
+                    validator: InputValidator.tryString(l10n.inputValueMessage),
                     onSaved: (String? phone) => _contact = _contact.copyWith(phone: phone!.trim()),
                   ),
                   const SizedBox(height: 4.0),
                   TextFormField(
                     controller: _lNController,
                     textInputAction: TextInputAction.done,
-                    decoration: const InputDecoration(prefixIcon: Icon(Icons.location_city), labelText: 'Location'),
-                    validator: InputValidator.tryString('Please input a value'),
+                    decoration:
+                        InputDecoration(prefixIcon: const Icon(Icons.location_city), labelText: l10n.locationLabel),
+                    validator: InputValidator.tryString(l10n.inputValueMessage),
                     onSaved: (String? location) => _contact = _contact.copyWith(location: location!.trim()),
-                    onFieldSubmitted: (String value) => _handleSubmit(),
+                    onFieldSubmitted: (String value) => _handleSubmit(l10n),
                   ),
                   const SizedBox(height: 32.0),
-                  PrimaryButton(onPressed: _handleSubmit, child: const Text('SUBMIT')),
+                  PrimaryButton(onPressed: () => _handleSubmit(l10n), child: Text(l10n.submitCaption)),
                   const SizedBox(height: 32.0),
                 ],
               ),
@@ -106,21 +109,22 @@ class ContactFormState extends State<ContactForm> {
     );
   }
 
-  void _handleSubmit() async {
+  void _handleSubmit(L10n l10n) async {
     final FormState? form = _formKey.currentState;
     if (form == null) {
       return;
     }
     if (!form.validate()) {
       _autovalidate = true;
-      AppSnackBar.of(context).error(AppStrings.fixErrors);
+      AppSnackBar.of(context).error(l10n.fixFormErrors);
     } else {
       form.save();
       widget.onHandleSubmit(_contact);
     }
   }
 
-  Future<void> _handlePhotoButtonPressed(ImageStorageProvider storage) async {
+  Future<void> _handlePhotoButtonPressed(L10n l10n, ImageStorageProvider storage) async {
+    final AppSnackBar snackBar = AppSnackBar.of(context);
     final ImageSource? source = await showImageChoiceDialog(context: context);
     if (source == null) {
       return;
@@ -131,12 +135,13 @@ class ContactFormState extends State<ContactForm> {
     }
 
     setState(() => _isLoading = true);
+
     try {
       // TODO(Jogboms): move this out of here
       final ImageFileReference ref = await storage.create(CreateImageType.contact, path: imageFile.path);
       _contact = _contact.copyWith(imageUrl: ref.src);
       if (mounted) {
-        AppSnackBar.of(context).success('Upload Successful');
+        snackBar.success(l10n.uploadSuccessfulMessage);
         if (_previousImageFileRef case final ImageFileReference reference) {
           storage.delete(reference).ignore();
         }
@@ -145,7 +150,7 @@ class ContactFormState extends State<ContactForm> {
       }
     } catch (e) {
       if (mounted) {
-        AppSnackBar.of(context).error('Please try again');
+        snackBar.error(l10n.genericErrorMessage);
         setState(() => _isLoading = false);
       }
     }

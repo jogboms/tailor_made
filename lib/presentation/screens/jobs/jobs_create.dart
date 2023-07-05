@@ -6,15 +6,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/routing.dart';
-import 'package:tailor_made/presentation/screens/contacts/providers/selected_contact_provider.dart';
-import 'package:tailor_made/presentation/theme.dart';
-import 'package:tailor_made/presentation/widgets.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../constants.dart';
+import '../../routing.dart';
 import '../../state.dart';
+import '../../theme.dart';
 import '../../utils.dart';
+import '../../widgets.dart';
+import '../contacts/providers/selected_contact_provider.dart';
 import '../measures/widgets/measure_create_items.dart';
 import 'providers/job_provider.dart' hide job;
 import 'widgets/avatar_app_bar.dart';
@@ -107,6 +106,7 @@ class _DataViewState extends State<_DataView> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final L10n l10n = context.l10n;
 
     final ContactEntity? contact = _contact;
 
@@ -123,7 +123,7 @@ class _DataViewState extends State<_DataView> {
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.pageTitle,
               ),
-              subtitle: Text('${contact.totalJobs} Jobs', style: theme.textTheme.bodySmall),
+              subtitle: Text(l10n.jobsCaption(contact.totalJobs), style: theme.textTheme.bodySmall),
               actions: <Widget>[
                 Consumer(
                   builder: (BuildContext context, WidgetRef ref, _) => ref.watch(contactsProvider).maybeWhen(
@@ -150,7 +150,7 @@ class _DataViewState extends State<_DataView> {
                           children: <Widget>[
                             const CircleAvatar(radius: 50.0, child: Icon(Icons.person_add)),
                             const SizedBox(height: 16.0),
-                            Text('SELECT A CLIENT', style: theme.textTheme.bodySmall),
+                            Text(l10n.selectClientCaption, style: theme.textTheme.bodySmall),
                           ],
                         ),
                       ),
@@ -170,31 +170,32 @@ class _DataViewState extends State<_DataView> {
                   builder: (BuildContext context, WidgetRef ref, Widget? child) => Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      const FormSectionHeader(title: 'Style Name'),
+                      FormSectionHeader(title: l10n.styleNameCaption),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                         child: TextFormField(
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.words,
-                          decoration: const InputDecoration(isDense: true, hintText: 'Enter Style Name'),
-                          validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a name',
+                          decoration: InputDecoration(isDense: true, hintText: l10n.styleNamePlaceholder),
+                          validator: (String? value) => (value!.isNotEmpty) ? null : l10n.inputNameMessage,
                           onSaved: (String? value) => _job = _job.copyWith(name: value!.trim()),
                         ),
                       ),
-                      const FormSectionHeader(title: 'Payment', trailing: 'Naira (₦)'),
+                      // TODO(jogboms): fix currency
+                      FormSectionHeader(title: l10n.paymentPageTitle, trailing: l10n.currencyCaption('Naira', '₦')),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                         child: TextFormField(
                           controller: _controller,
                           textInputAction: TextInputAction.next,
                           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                          decoration: const InputDecoration(isDense: true, hintText: 'Enter Amount'),
-                          validator: (String? value) => (_controller.numberValue > 0) ? null : 'Please input a price',
+                          decoration: InputDecoration(isDense: true, hintText: l10n.amountPlaceholder),
+                          validator: (String? value) => (_controller.numberValue > 0) ? null : l10n.inputPriceMessage,
                           onSaved: (String? value) => _job = _job.copyWith(price: _controller.numberValue),
                         ),
                       ),
-                      const FormSectionHeader(title: 'Due Date'),
+                      FormSectionHeader(title: l10n.dueDateCaption),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                         child: InputDropdown(
@@ -214,7 +215,7 @@ class _DataViewState extends State<_DataView> {
                           },
                         ),
                       ),
-                      const FormSectionHeader(title: 'References'),
+                      FormSectionHeader(title: l10n.referencesLabel),
                       Container(
                         height: _NewGrid._kGridWidth + 8,
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -231,7 +232,7 @@ class _DataViewState extends State<_DataView> {
                           ],
                         ),
                       ),
-                      const FormSectionHeader(title: 'Measurements', trailing: 'Inches (In)'),
+                      FormSectionHeader(title: l10n.measurementsPageTitle, trailing: l10n.measurementLabel),
                       ref.watch(measurementsProvider).when(
                             skipLoadingOnReload: true,
                             data: (MeasurementsState state) => MeasureCreateItems(
@@ -246,25 +247,25 @@ class _DataViewState extends State<_DataView> {
                             error: ErrorView.new,
                             loading: () => child!,
                           ),
-                      const FormSectionHeader(title: 'Additional Notes'),
+                      FormSectionHeader(title: l10n.additionalNotesLabel),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                         child: TextFormField(
                           keyboardType: TextInputType.text,
                           maxLines: 6,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             isDense: true,
-                            hintText: 'Fabric color, size, special requirements...',
+                            hintText: l10n.additionalMeasurementNotesPlaceholder,
                           ),
                           onSaved: (String? value) => _job = _job.copyWith(notes: value!.trim()),
-                          onFieldSubmitted: (String value) => _handleSubmit(ref.read(jobProvider)),
+                          onFieldSubmitted: (String value) => _handleSubmit(l10n, ref.read(jobProvider)),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 82.0),
                         child: PrimaryButton(
-                          onPressed: () => _handleSubmit(ref.read(jobProvider)),
-                          child: const Text('FINISH'),
+                          onPressed: () => _handleSubmit(l10n, ref.read(jobProvider)),
+                          child: Text(l10n.finishCaption),
                         ),
                       ),
                     ],
@@ -339,7 +340,7 @@ class _DataViewState extends State<_DataView> {
     }
   }
 
-  void _handleSubmit(JobProvider jobProvider) async {
+  void _handleSubmit(L10n l10n, JobProvider jobProvider) async {
     final FormState? form = _formKey.currentState;
     if (form == null) {
       return;
@@ -347,7 +348,7 @@ class _DataViewState extends State<_DataView> {
 
     final AppSnackBar snackBar = AppSnackBar.of(context);
     if (!form.validate()) {
-      snackBar.info(AppStrings.fixErrors);
+      snackBar.info(l10n.fixFormErrors);
       return;
     }
 
@@ -369,7 +370,7 @@ class _DataViewState extends State<_DataView> {
             .toList(growable: false),
       );
       final JobEntity result = await jobProvider.create(job: _job);
-      snackBar.success('Successfully Added');
+      snackBar.success(l10n.successfullyAddedMessage);
       router.toJob(result, replace: true);
     } catch (error, stackTrace) {
       AppLog.e(error, stackTrace);

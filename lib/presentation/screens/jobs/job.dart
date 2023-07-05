@@ -26,6 +26,7 @@ class _JobPageState extends State<JobPage> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
+    final L10n l10n = context.l10n;
 
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) =>
@@ -58,17 +59,14 @@ class _JobPageState extends State<JobPage> {
                               children: <Widget>[
                                 const SizedBox(width: 16.0),
                                 Expanded(
-                                  child: Text('DUE DATE', style: theme.textTheme.bodySmall),
+                                  child: Text(l10n.dueDateCaption.toUpperCase(), style: theme.textTheme.bodySmall),
                                 ),
                                 AppClearButton(
                                   onPressed: state.job.isComplete
                                       ? null
-                                      : () => _onSaveDate(
-                                            ref.read(jobProvider),
-                                            state.job,
-                                          ),
+                                      : () => _onSaveDate(l10n, ref.read(jobProvider), state.job),
                                   child: Text(
-                                    'EXTEND DATE',
+                                    l10n.extendDateCaption,
                                     style: theme.textTheme.bodySmall?.copyWith(
                                       fontWeight: AppFontWeight.medium,
                                       color: colorScheme.secondary,
@@ -109,8 +107,8 @@ class _JobPageState extends State<JobPage> {
                     icon: Icon(state.job.isComplete ? Icons.undo : Icons.check),
                     backgroundColor: state.job.isComplete ? colorScheme.onSecondary : colorScheme.secondary,
                     foregroundColor: state.job.isComplete ? colorScheme.secondary : colorScheme.onSecondary,
-                    label: Text(state.job.isComplete ? 'Undo Completed' : 'Mark Completed'),
-                    onPressed: () => _onTapComplete(ref.read(jobProvider), state.job),
+                    label: Text(state.job.isComplete ? l10n.undoCompletedCaption : l10n.markCompletedCaption),
+                    onPressed: () => _onTapComplete(l10n, ref.read(jobProvider), state.job),
                   ),
                 ),
                 error: ErrorView.new,
@@ -120,9 +118,9 @@ class _JobPageState extends State<JobPage> {
     );
   }
 
-  void _onTapComplete(JobProvider jobProvider, JobEntity job) async {
+  void _onTapComplete(L10n l10n, JobProvider jobProvider, JobEntity job) async {
     final AppSnackBar snackBar = AppSnackBar.of(context);
-    final bool? choice = await showChoiceDialog(context: context, message: 'Are you sure?');
+    final bool? choice = await showChoiceDialog(context: context, message: l10n.confirmationMessage);
     if (choice == null || choice == false) {
       return;
     }
@@ -138,7 +136,7 @@ class _JobPageState extends State<JobPage> {
     }
   }
 
-  void _onSaveDate(JobProvider jobProvider, JobEntity job) async {
+  void _onSaveDate(L10n l10n, JobProvider jobProvider, JobEntity job) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: job.dueAt,
@@ -150,7 +148,7 @@ class _JobPageState extends State<JobPage> {
     }
     if (context.mounted) {
       final AppSnackBar snackBar = AppSnackBar.of(context);
-      final bool? choice = await showChoiceDialog(context: context, message: 'Are you sure?');
+      final bool? choice = await showChoiceDialog(context: context, message: l10n.confirmationMessage);
       if (choice == null || choice == false) {
         return;
       }
@@ -269,13 +267,14 @@ class _PaidBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final L10n l10n = context.l10n;
 
     return Expanded(
       child: Container(
         decoration: BoxDecoration(border: Border(right: Divider.createBorderSide(context))),
         child: Column(
           children: <Widget>[
-            Text('PAID', style: theme.textTheme.labelSmall, textAlign: TextAlign.center),
+            Text(l10n.paidCaption, style: theme.textTheme.labelSmall, textAlign: TextAlign.center),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -303,10 +302,12 @@ class _UnpaidBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final L10n l10n = context.l10n;
+
     return Expanded(
       child: Column(
         children: <Widget>[
-          Text('UNPAID', style: theme.textTheme.labelSmall, textAlign: TextAlign.center),
+          Text(l10n.unpaidCaption, style: theme.textTheme.labelSmall, textAlign: TextAlign.center),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

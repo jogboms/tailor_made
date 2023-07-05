@@ -13,6 +13,8 @@ class MidRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return DecoratedBox(
       decoration: BoxDecoration(border: Border(bottom: Divider.createBorderSide(context))),
       child: Row(
@@ -23,8 +25,8 @@ class MidRowWidget extends StatelessWidget {
               child: TMGridTile(
                 color: Colors.redAccent,
                 icon: Icons.attach_money,
-                title: 'Payments',
-                subTitle: '${AppMoney(stats.payments.total).formatted} Total',
+                title: l10n.paymentPageTitle,
+                subTitle: l10n.paymentsCaption(AppMoney(stats.payments.total).formatted),
                 onPressed: () => context.router.toPayments(userId),
               ),
             ),
@@ -34,8 +36,8 @@ class MidRowWidget extends StatelessWidget {
               child: TMGridTile(
                 color: Colors.blueAccent,
                 icon: Icons.image,
-                title: 'Gallery',
-                subTitle: '${stats.gallery.total.toInt()} Photos',
+                title: l10n.galleryPageTitle,
+                subTitle: l10n.photosCaption(stats.gallery.total.toInt()),
                 onPressed: () => context.router.toGallery(userId),
               ),
             ),

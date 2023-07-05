@@ -12,6 +12,8 @@ class MeasuresPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -23,8 +25,8 @@ class MeasuresPage extends StatelessWidget {
               skipLoadingOnReload: true,
               data: (MeasurementsState state) {
                 if (state.measures.isEmpty) {
-                  return const Center(
-                    child: EmptyResultView(message: 'No measurements available'),
+                  return Center(
+                    child: EmptyResultView(message: l10n.noMeasurementsAvailableMessage),
                   );
                 }
 

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tailor_made/presentation/theme.dart';
 
+import '../../../utils.dart';
+
 class RateLimitPage extends StatelessWidget {
   const RateLimitPage({super.key, required this.onSkippedPremium, required this.onSignUp});
 
@@ -13,6 +15,7 @@ class RateLimitPage extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final TextStyle textTheme = theme.textTheme.bodyLarge!;
     final ColorScheme colorScheme = theme.colorScheme;
+    final L10n l10n = context.l10n;
 
     return Center(
       child: Column(
@@ -22,7 +25,7 @@ class RateLimitPage extends StatelessWidget {
           SpinKitFadingCube(color: colorScheme.outlineVariant),
           const SizedBox(height: 48.0),
           Text(
-            'USAGE POLICY',
+            l10n.usagePolicyTitle,
             style: textTheme.copyWith(color: Colors.black87, fontWeight: AppFontWeight.bold),
             textAlign: TextAlign.center,
           ),
@@ -30,7 +33,7 @@ class RateLimitPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 64.0),
             child: Text(
-              'We noticed \n you really enjoy using our service. \n\n Would you mind \n paying a little token if you wish to extend beyond your usage limits?',
+              l10n.usagePolicyMessage,
               style: textTheme.copyWith(color: colorScheme.outline),
               textAlign: TextAlign.center,
             ),
@@ -41,7 +44,7 @@ class RateLimitPage extends StatelessWidget {
               foregroundColor: colorScheme.outline,
             ),
             onPressed: onSkippedPremium,
-            child: const Text('No, Skip now'),
+            child: Text(l10n.usagePolicyNoCaption),
           ),
           const SizedBox(height: 8.0),
           ElevatedButton.icon(
@@ -51,7 +54,7 @@ class RateLimitPage extends StatelessWidget {
             ),
             onPressed: onSignUp,
             icon: const Icon(Icons.done),
-            label: const Text('Yes, Sign me up!'),
+            label: Text(l10n.usagePolicyYesCaption),
           ),
         ],
       ),

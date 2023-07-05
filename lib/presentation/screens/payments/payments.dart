@@ -14,6 +14,8 @@ class PaymentsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -22,10 +24,10 @@ class PaymentsPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text('Payments'),
+                Text(l10n.paymentsPageTitle),
                 if (payments.isNotEmpty)
                   Text(
-                    '${payments.length} Tickets',
+                    l10n.ticketsCaption(payments.length),
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
               ],
@@ -68,8 +70,8 @@ class _Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (payments.isEmpty) {
-      return const SliverFillRemaining(
-        child: EmptyResultView(message: 'No payments available'),
+      return SliverFillRemaining(
+        child: EmptyResultView(message: context.l10n.noPaymentsAvailableMessage),
       );
     }
 

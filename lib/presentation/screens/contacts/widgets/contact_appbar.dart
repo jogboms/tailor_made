@@ -41,6 +41,8 @@ class _ContactAppBarState extends State<ContactAppBar> {
   @override
   Widget build(BuildContext context) {
     final TextStyle popTextStyle = Theme.of(context).textTheme.bodyMedium!;
+    final L10n l10n = context.l10n;
+
     return PreferredSize(
       preferredSize: const Size.fromHeight(kToolbarHeight),
       child: Row(
@@ -55,26 +57,13 @@ class _ContactAppBarState extends State<ContactAppBar> {
           PopupMenuButton<Choice>(
             icon: const Icon(Icons.more_vert),
             onSelected: _selectChoice,
-            itemBuilder: (_) {
-              return <PopupMenuItem<Choice>>[
+            itemBuilder: (_) => <PopupMenuItem<Choice>>[
+              for (final Choice item in Choice.values)
                 PopupMenuItem<Choice>(
-                  value: Choice.createJob,
-                  child: Text('New Job', style: popTextStyle),
+                  value: item,
+                  child: Text(item.caption(l10n), style: popTextStyle),
                 ),
-                PopupMenuItem<Choice>(
-                  value: Choice.sendText,
-                  child: Text('Text Message', style: popTextStyle),
-                ),
-                PopupMenuItem<Choice>(
-                  value: Choice.editMeasure,
-                  child: Text('Edit Measurements', style: popTextStyle),
-                ),
-                PopupMenuItem<Choice>(
-                  value: Choice.editAccount,
-                  child: Text('Edit Account', style: popTextStyle),
-                ),
-              ];
-            },
+            ],
           ),
         ],
       ),
@@ -152,4 +141,13 @@ class _Leading extends StatelessWidget {
       onPressed: () => Navigator.maybePop(context),
     );
   }
+}
+
+extension on Choice {
+  String caption(L10n l10n) => switch (this) {
+        Choice.createJob => l10n.newJobCaption,
+        Choice.editMeasure => l10n.textMessageCaption,
+        Choice.editAccount => l10n.editMeasurementsCaption,
+        Choice.sendText => l10n.editAccountCaption,
+      };
 }

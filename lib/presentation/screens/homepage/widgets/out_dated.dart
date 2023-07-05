@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tailor_made/presentation/theme.dart';
 
+import '../../../utils.dart';
+
 class OutDatedPage extends StatelessWidget {
   const OutDatedPage({super.key, required this.onUpdate});
 
@@ -12,6 +14,7 @@ class OutDatedPage extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final TextStyle textTheme = theme.textTheme.bodyLarge!;
     final ColorScheme colorScheme = theme.colorScheme;
+    final L10n l10n = context.l10n;
 
     return Center(
       child: Column(
@@ -21,7 +24,7 @@ class OutDatedPage extends StatelessWidget {
           SpinKitFadingCube(color: colorScheme.outlineVariant),
           const SizedBox(height: 48.0),
           Text(
-            'OUT OF DATE',
+            l10n.outOfDateTitle,
             style: textTheme.copyWith(color: Colors.black87, fontWeight: AppFontWeight.bold),
             textAlign: TextAlign.center,
           ),
@@ -29,7 +32,7 @@ class OutDatedPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 64.0),
             child: Text(
-              'It appears you are running an outdated version of the app.\n If this is not the case, please contact an Administrator.',
+              l10n.outOfDateMessage,
               style: textTheme.copyWith(color: colorScheme.outline),
               textAlign: TextAlign.center,
             ),
@@ -42,7 +45,7 @@ class OutDatedPage extends StatelessWidget {
             ),
             onPressed: onUpdate,
             icon: const Icon(Icons.get_app),
-            label: const Text('Get Update'),
+            label: Text(l10n.outOfDateUpdateCaption),
           ),
         ],
       ),

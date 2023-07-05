@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/theme.dart';
 
+import '../../../utils.dart';
+
 class MeasureListItem extends StatelessWidget {
   const MeasureListItem({super.key, required this.item, required this.value});
 
@@ -12,6 +14,7 @@ class MeasureListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
+    final L10n l10n = context.l10n;
 
     return Container(
       color: colorScheme.outlineVariant.withOpacity(.5),
@@ -45,7 +48,7 @@ class MeasureListItem extends StatelessWidget {
             const SizedBox(width: 2.0),
             Text(item.unit, style: theme.textTheme.bodySmall),
           ],
-          if (value == 0) Text('N/A', style: theme.textTheme.bodySmallLight),
+          if (value == 0) Text(l10n.measurementUnavailableCaption, style: theme.textTheme.bodySmallLight),
         ],
       ),
     );
