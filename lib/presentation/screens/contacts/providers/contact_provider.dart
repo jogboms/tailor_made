@@ -6,7 +6,7 @@ import '../../../state.dart';
 
 part 'contact_provider.g.dart';
 
-@riverpod
+@Riverpod(dependencies: <Object>[account, registry])
 ContactProvider contact(ContactRef ref) {
   return ContactProvider(
     fetchAccount: () => ref.read(accountProvider.future),

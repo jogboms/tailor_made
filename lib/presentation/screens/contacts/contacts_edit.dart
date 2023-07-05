@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 
+import '../../utils.dart';
 import '../../widgets.dart';
 import 'providers/contact_provider.dart';
 import 'widgets/contact_form.dart';
@@ -29,9 +30,11 @@ class _ContactsEditPageState extends State<ContactsEditPage> {
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return Scaffold(
       appBar: CustomAppBar(
-        title: const Text('Edit Contact'),
+        title: Text(l10n.editContactPageTitle),
         actions: <Widget>[
           IconButton(icon: const Icon(Icons.contacts), onPressed: _handleSelectContact),
         ],
@@ -40,7 +43,7 @@ class _ContactsEditPageState extends State<ContactsEditPage> {
         builder: (BuildContext context, WidgetRef ref, _) => ContactForm(
           key: _formKey,
           contact: _contact,
-          onHandleSubmit: (CreateContactData contact) => _handleSubmit(ref.read(contactProvider), contact),
+          onHandleSubmit: (CreateContactData contact) => _handleSubmit(l10n, ref.read(contactProvider), contact),
         ),
       ),
     );
@@ -62,12 +65,12 @@ class _ContactsEditPageState extends State<ContactsEditPage> {
     );
   }
 
-  void _handleSubmit(ContactProvider contactProvider, CreateContactData contact) async {
+  void _handleSubmit(L10n l10n, ContactProvider contactProvider, CreateContactData contact) async {
     final AppSnackBar snackBar = AppSnackBar.of(context)..loading();
 
     try {
       await contactProvider.update(reference: widget.contact.reference, contact: contact);
-      snackBar.success('Successfully Updated');
+      snackBar.success(l10n.successfullyUpdatedMessage);
     } catch (error, stackTrace) {
       AppLog.e(error, stackTrace);
       snackBar.error(error.toString());

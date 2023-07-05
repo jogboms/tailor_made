@@ -13,8 +13,8 @@ class PaymentList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (payments.isEmpty) {
-      return const SliverFillRemaining(
-        child: EmptyResultView(message: 'No payments available'),
+      return SliverFillRemaining(
+        child: EmptyResultView(message: context.l10n.noPaymentsAvailableMessage),
       );
     }
 

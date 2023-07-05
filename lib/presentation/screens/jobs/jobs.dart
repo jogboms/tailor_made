@@ -12,6 +12,8 @@ class JobsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
         final AsyncValue<FilteredJobsState> filteredJobs = ref.watch(filteredJobsProvider);
@@ -25,8 +27,8 @@ class JobsPage extends StatelessWidget {
                   skipLoadingOnReload: true,
                   data: (FilteredJobsState state) {
                     if (state.jobs.isEmpty) {
-                      return const Center(
-                        child: EmptyResultView(message: 'No jobs available'),
+                      return Center(
+                        child: EmptyResultView(message: l10n.noJobsAvailableMessage),
                       );
                     }
 
@@ -84,6 +86,8 @@ class _AppBarState extends ConsumerState<_AppBar> {
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     ref.listen<String>(searchJobQueryStateProvider, (_, String next) {
       if (_controller.text != next) {
         _controller.value = TextEditingValue(
@@ -95,7 +99,7 @@ class _AppBarState extends ConsumerState<_AppBar> {
 
     if (!_isSearching) {
       return CustomAppBar(
-        title: const Text('Jobs'),
+        title: Text(l10n.jobsPageTitle),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.search),
@@ -114,7 +118,7 @@ class _AppBarState extends ConsumerState<_AppBar> {
       title: TextField(
         controller: _controller,
         autofocus: true,
-        decoration: const InputDecoration(hintText: 'Search...'),
+        decoration: InputDecoration(hintText: l10n.searchPlaceholder),
         onChanged: _queryProvider.setState,
       ),
       bottom: PreferredSize(

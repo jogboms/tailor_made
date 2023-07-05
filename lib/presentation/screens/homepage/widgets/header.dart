@@ -12,6 +12,8 @@ class HeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final L10n l10n = context.l10n;
+
     return Container(
       padding: const EdgeInsets.fromLTRB(20.0, 35.0, 20.0, 40.0),
       width: double.infinity,
@@ -21,15 +23,18 @@ class HeaderWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Text(
-            'Hello',
+            l10n.helloMessage,
             style: textTheme.headlineLarge?.copyWith(fontWeight: AppFontWeight.light, letterSpacing: 2.5),
           ),
-          Text(
-            account.storeName.split(' ').first,
-            style: const TextStyle(fontSize: 52.0, fontWeight: AppFontWeight.regular, height: 1.15),
-            maxLines: 1,
-            overflow: TextOverflow.fade,
-            softWrap: false,
+          Padding(
+            padding: const EdgeInsets.only(right: 24.0),
+            child: Text(
+              account.storeName,
+              style: const TextStyle(fontSize: 52.0, fontWeight: AppFontWeight.regular, height: 1.15),
+              maxLines: 2,
+              overflow: TextOverflow.fade,
+              softWrap: false,
+            ),
           ),
           Text(
             AppDate(clock.now(), day: 'EEEE', month: 'MMMM').formatted!,

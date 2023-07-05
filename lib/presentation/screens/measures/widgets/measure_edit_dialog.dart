@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
 import '../../../theme.dart';
+import '../../../utils.dart';
 
 class MeasureEditDialog extends StatefulWidget {
   const MeasureEditDialog({
@@ -24,6 +25,7 @@ class _MeasureEditDialogState extends State<MeasureEditDialog> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
+    final L10n l10n = context.l10n;
 
     return Align(
       alignment: const FractionalOffset(0.0, 0.25),
@@ -52,10 +54,10 @@ class _MeasureEditDialogState extends State<MeasureEditDialog> {
                   AppClearButton(
                     onPressed: Navigator.of(context).pop,
                     color: colorScheme.outline,
-                    child: const Text('CANCEL'),
+                    child: Text(l10n.cancelCaption),
                   ),
                   const SizedBox(width: 16.0),
-                  AppClearButton(onPressed: _handleSubmit, child: const Text('DONE')),
+                  AppClearButton(onPressed: _handleSubmit, child: Text(l10n.doneCaption)),
                   const SizedBox(width: 16.0),
                 ],
               ),

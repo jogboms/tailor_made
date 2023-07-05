@@ -15,6 +15,7 @@ class GalleryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final L10n l10n = context.l10n;
 
     return Scaffold(
       body: CustomScrollView(
@@ -24,10 +25,10 @@ class GalleryPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text('Gallery'),
+                Text(l10n.galleryPageTitle),
                 if (images.isNotEmpty)
                   Text(
-                    '${images.length} Photos',
+                    l10n.photosCaption(images.length),
                     style: theme.textTheme.labelSmall,
                   ),
               ],
@@ -70,7 +71,7 @@ class _Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (images.isEmpty) {
-      return const SliverFillRemaining(child: EmptyResultView(message: 'No images available'));
+      return SliverFillRemaining(child: EmptyResultView(message: context.l10n.noImagesAvailableMessage));
     }
 
     return SliverPadding(

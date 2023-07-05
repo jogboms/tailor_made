@@ -30,10 +30,11 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final L10n l10n = context.l10n;
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: const Text('Create Contact'),
+        title: Text(l10n.createContactPageTitle),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.contacts),
@@ -61,7 +62,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
         builder: (BuildContext context, WidgetRef ref, _) => ContactForm(
           key: _formKey,
           contact: _contact,
-          onHandleSubmit: (CreateContactData contact) => _handleSubmit(ref.read(contactProvider), contact),
+          onHandleSubmit: (CreateContactData contact) => _handleSubmit(l10n, ref.read(contactProvider), contact),
         ),
       ),
     );
@@ -83,10 +84,10 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
     );
   }
 
-  void _handleSubmit(ContactProvider contactProvider, CreateContactData contact) async {
+  void _handleSubmit(L10n l10n, ContactProvider contactProvider, CreateContactData contact) async {
     final AppSnackBar snackBar = AppSnackBar.of(context);
     if (contact.measurements.isEmpty) {
-      snackBar.info(AppStrings.leavingEmptyMeasures);
+      snackBar.info(l10n.emptyMeasuresFormError);
       return;
     }
 
@@ -101,7 +102,7 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
         location: contact.location,
       );
       final ContactEntity result = await contactProvider.create(contact: contact);
-      snackBar.success('Successfully Added');
+      snackBar.success(l10n.successfullyAddedMessage);
       router.toContact(result.id, replace: true);
     } catch (error, stackTrace) {
       AppLog.e(error, stackTrace);

@@ -85,6 +85,7 @@ class TopButtonBar extends StatelessWidget {
     required AccountNotifier accountNotifier,
     required AuthStateNotifier authStateNotifier,
   }) {
+    final L10n l10n = context.l10n;
     final AppRouter router = context.router;
 
     return () async {
@@ -109,18 +110,18 @@ class TopButtonBar extends StatelessWidget {
           final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
           return SimpleDialog(
-            title: Text('Select action', style: Theme.of(context).textTheme.labelLarge),
+            title: Text(l10n.selectActionTitle, style: Theme.of(context).textTheme.labelLarge),
             children: <Widget>[
               SimpleDialogOption(
                 onPressed: () => Navigator.pop(context, AccountOptions.storeName),
-                child: TMListTile(color: colorScheme.secondary, icon: Icons.store, title: 'Store'),
+                child: TMListTile(color: colorScheme.secondary, icon: Icons.store, title: l10n.storeLabel),
               ),
               SimpleDialogOption(
                 onPressed: () => Navigator.pop(context, AccountOptions.logout),
                 child: TMListTile(
                   color: colorScheme.outlineVariant,
                   icon: Icons.power_settings_new,
-                  title: 'Logout',
+                  title: l10n.logoutLabel,
                 ),
               ),
             ],
@@ -144,7 +145,7 @@ class TopButtonBar extends StatelessWidget {
 
         case AccountOptions.logout:
           if (context.mounted) {
-            final bool? response = await showChoiceDialog(context: context, message: 'You are about to logout.');
+            final bool? response = await showChoiceDialog(context: context, message: l10n.logoutConfirmationMessage);
 
             if (response == true) {
               authStateNotifier.signOut();

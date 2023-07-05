@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/constants.dart';
 import 'package:tailor_made/presentation/routing.dart';
 import 'package:tailor_made/presentation/theme.dart';
 import 'package:tailor_made/presentation/utils.dart';
@@ -16,6 +15,7 @@ class PaymentListItem extends StatelessWidget {
     final DateTime date = payment.createdAt;
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
+    final L10n l10n = context.l10n;
 
     return Material(
       child: InkWell(
@@ -46,7 +46,7 @@ class PaymentListItem extends StatelessWidget {
                     ),
                     const TextSpan(text: '\n'),
                     TextSpan(
-                      text: '${AppStrings.monthsShort[date.month - 1].toUpperCase()}, ${date.year}',
+                      text: '${l10n.monthsShortNames[date.month - 1].toUpperCase()}, ${date.year}',
                       style: theme.textTheme.bodySmallMedium,
                     ),
                   ],

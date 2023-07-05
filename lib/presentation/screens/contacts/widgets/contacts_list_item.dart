@@ -15,6 +15,7 @@ class ContactsListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
+    final L10n l10n = context.l10n;
 
     final int pending = contact.pendingJobs;
 
@@ -30,7 +31,7 @@ class ContactsListItem extends StatelessWidget {
         style: theme.textTheme.titleMedium?.copyWith(fontWeight: AppFontWeight.semibold),
       ),
       subtitle: Text(
-        pending >= 1 ? '$pending pending' : "${contact.totalJobs > 0 ? contact.totalJobs : 'none'} completed",
+        pending >= 1 ? l10n.pendingJobCaption(pending) : l10n.completedJobCaption(contact.totalJobs),
         style: theme.textTheme.labelLarge?.copyWith(color: colorScheme.outline),
       ),
       trailing: showActions

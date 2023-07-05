@@ -16,6 +16,7 @@ class JobListItem extends StatelessWidget {
     final String owed = AppMoney(job.pendingPayment).formatted;
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
+    final L10n l10n = context.l10n;
 
     return Material(
       child: InkWell(
@@ -36,7 +37,7 @@ class JobListItem extends StatelessWidget {
                     children: <TextSpan>[
                       TextSpan(text: '${date.day}\n', style: theme.textTheme.titleLarge),
                       TextSpan(
-                        text: AppStrings.monthsShort[date.month - 1].toUpperCase(),
+                        text: l10n.monthsShortNames[date.month - 1].toUpperCase(),
                         style: theme.textTheme.bodySmall?.copyWith(letterSpacing: 2.0),
                       ),
                     ],

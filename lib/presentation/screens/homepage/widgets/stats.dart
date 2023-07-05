@@ -10,6 +10,8 @@ class StatsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       decoration: BoxDecoration(
@@ -18,15 +20,15 @@ class StatsWidget extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: _StatTile(title: 'Pending', count: stats.jobs.pending.toInt().toString()),
+            child: _StatTile(title: l10n.pendingCaption, count: stats.jobs.pending.toInt().toString()),
           ),
           const _VerticalDivider(),
           Expanded(
-            child: _StatTile(title: 'Received', count: AppMoney(stats.payments.completed).formatted),
+            child: _StatTile(title: l10n.receivedCaption, count: AppMoney(stats.payments.completed).formatted),
           ),
           const _VerticalDivider(),
           Expanded(
-            child: _StatTile(title: 'Completed', count: stats.jobs.completed.toInt().toString()),
+            child: _StatTile(title: l10n.completedCaption, count: stats.jobs.completed.toInt().toString()),
           ),
         ],
       ),

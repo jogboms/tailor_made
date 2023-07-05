@@ -27,6 +27,8 @@ class _MeasuresCreateState extends State<MeasuresCreate> {
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
@@ -36,7 +38,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> {
           Consumer(
             builder: (BuildContext context, WidgetRef ref, Widget? child) => AppClearButton(
               onPressed: _measures.isEmpty ? null : () => _handleSubmit(ref.read(measurementProvider)),
-              child: const Text('SAVE'),
+              child: Text(l10n.saveCaption),
             ),
           ),
         ],
@@ -51,7 +53,7 @@ class _MeasuresCreateState extends State<MeasuresCreate> {
               builder: (BuildContext context, WidgetRef ref, _) => Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  const FormSectionHeader(title: 'Group Name'),
+                  FormSectionHeader(title: l10n.measurementGroupNameLabel),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                     child: TextFormField(
@@ -59,33 +61,37 @@ class _MeasuresCreateState extends State<MeasuresCreate> {
                       textCapitalization: TextCapitalization.words,
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         isDense: true,
-                        hintText: 'eg Blouse',
+                        hintText: l10n.measurementGroupNamePlaceholder,
                       ),
-                      validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a name',
+                      validator: (String? value) => (value!.isNotEmpty) ? null : l10n.inputNameMessage,
                       onSaved: (String? value) => _groupName = MeasureGroup.valueOf(value!.trim()),
                     ),
                   ),
-                  const FormSectionHeader(title: 'Group Unit'),
+                  FormSectionHeader(title: l10n.measurementGroupUnitLabel),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                     child: TextFormField(
                       initialValue: _unitValue,
                       keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         isDense: true,
-                        hintText: 'Unit (eg. In, cm)',
+                        hintText: l10n.measurementGroupUnitPlaceholder,
                       ),
-                      validator: (String? value) => (value!.isNotEmpty) ? null : 'Please input a value',
+                      validator: (String? value) => (value!.isNotEmpty) ? null : l10n.inputValueMessage,
                       onSaved: (String? value) => _unitValue = value!.trim(),
                     ),
                   ),
                   if (_measures.isNotEmpty) ...<Widget>[
-                    const FormSectionHeader(title: 'Group Items'),
+                    FormSectionHeader(title: l10n.measurementGroupItemsLabel),
                     _GroupItems(
                       measures: _measures,
-                      onPressed: (BaseMeasureEntity value) => _onTapDeleteItem(ref.read(measurementProvider), value),
+                      onPressed: (BaseMeasureEntity value) => _onTapDeleteItem(
+                        l10n,
+                        ref.read(measurementProvider),
+                        value,
+                      ),
                     ),
                     const SizedBox(height: 84.0)
                   ]
@@ -98,15 +104,15 @@ class _MeasuresCreateState extends State<MeasuresCreate> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add_circle_outline),
-        label: const Text('Add Item'),
+        label: Text(l10n.addMeasurementItemCaption),
         onPressed: _handleAddItem,
       ),
     );
   }
 
-  void _onTapDeleteItem(MeasurementProvider measurementProvider, BaseMeasureEntity measure) async {
+  void _onTapDeleteItem(L10n l10n, MeasurementProvider measurementProvider, BaseMeasureEntity measure) async {
     final AppSnackBar snackBar = AppSnackBar.of(context);
-    final bool? choice = await showChoiceDialog(context: context, message: 'Are you sure?');
+    final bool? choice = await showChoiceDialog(context: context, message: l10n.confirmationMessage);
     if (choice == null || choice == false) {
       return;
     }

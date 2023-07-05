@@ -14,6 +14,8 @@ class ContactsFilterButton extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final TextStyle optionTheme = theme.textTheme.bodyMedium!;
     final ColorScheme colorScheme = theme.colorScheme;
+    final L10n l10n = context.l10n;
+
     return SizedBox.fromSize(
       size: const Size.square(48.0),
       child: Stack(
@@ -22,46 +24,15 @@ class ContactsFilterButton extends StatelessWidget {
             child: PopupMenuButton<ContactsSortType>(
               icon: const Icon(Icons.filter_list),
               onSelected: onTapSort,
-              itemBuilder: (BuildContext context) {
-                return <_Option>[
+              itemBuilder: (BuildContext context) => <_Option>[
+                for (final ContactsSortType item in ContactsSortType.values)
                   _Option(
-                    enabled: sortType != ContactsSortType.jobs,
-                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.jobs, colorScheme)),
-                    text: 'Sort by Jobs',
-                    type: ContactsSortType.jobs,
+                    enabled: sortType != item,
+                    style: optionTheme.copyWith(color: _colorTestFn(item, colorScheme)),
+                    text: item.caption(l10n),
+                    type: item,
                   ),
-                  _Option(
-                    enabled: sortType != ContactsSortType.names,
-                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.names, colorScheme)),
-                    text: 'Sort by Name',
-                    type: ContactsSortType.names,
-                  ),
-                  _Option(
-                    enabled: sortType != ContactsSortType.completed,
-                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.completed, colorScheme)),
-                    text: 'Sort by Completed',
-                    type: ContactsSortType.completed,
-                  ),
-                  _Option(
-                    enabled: sortType != ContactsSortType.pending,
-                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.pending, colorScheme)),
-                    text: 'Sort by Pending',
-                    type: ContactsSortType.pending,
-                  ),
-                  _Option(
-                    enabled: sortType != ContactsSortType.recent,
-                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.recent, colorScheme)),
-                    text: 'Sort by Recent',
-                    type: ContactsSortType.recent,
-                  ),
-                  _Option(
-                    enabled: sortType != ContactsSortType.reset,
-                    style: optionTheme.copyWith(color: _colorTestFn(ContactsSortType.reset, colorScheme)),
-                    text: 'No Sort',
-                    type: ContactsSortType.reset,
-                  ),
-                ];
-              },
+              ],
             ),
           ),
           Align(
@@ -88,4 +59,15 @@ class _Option extends PopupMenuItem<ContactsSortType> {
   final String text;
   final ContactsSortType type;
   final TextStyle style;
+}
+
+extension on ContactsSortType {
+  String caption(L10n l10n) => switch (this) {
+        ContactsSortType.recent => l10n.sortByJobsCaption,
+        ContactsSortType.jobs => l10n.sortByNameCaption,
+        ContactsSortType.completed => l10n.sortByCompletedCaption,
+        ContactsSortType.pending => l10n.sortByPendingCaption,
+        ContactsSortType.names => l10n.sortByRecentCaption,
+        ContactsSortType.reset => l10n.noSortCaption,
+      };
 }

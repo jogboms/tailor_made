@@ -6,7 +6,7 @@ import '../../../state.dart';
 
 part 'measurement_provider.g.dart';
 
-@riverpod
+@Riverpod(dependencies: <Object>[account, registry])
 MeasurementProvider measurement(MeasurementRef ref) {
   return MeasurementProvider(
     fetchAccount: () => ref.read(accountProvider.future),

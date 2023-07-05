@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
+import 'package:tailor_made/presentation/utils.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
 import '../../gallery/widgets/gallery_grid.dart';
@@ -17,7 +18,7 @@ class GalleryGridWidget extends StatelessWidget {
     );
 
     if (images.isEmpty) {
-      return const SliverFillRemaining(child: EmptyResultView(message: 'No images available'));
+      return SliverFillRemaining(child: EmptyResultView(message: context.l10n.noImagesAvailableMessage));
     }
 
     return GalleryGrid(images: images.toList());

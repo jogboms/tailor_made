@@ -7,7 +7,7 @@ import 'registry_provider.dart';
 
 part 'image_storage_provider.g.dart';
 
-@Riverpod(dependencies: <Object>[])
+@Riverpod(dependencies: <Object>[account, registry])
 ImageStorageProvider imageStorage(ImageStorageRef ref) {
   return ImageStorageProvider(
     fetchAccount: () => ref.read(accountProvider.future),
