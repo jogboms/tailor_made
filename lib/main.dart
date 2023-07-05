@@ -3,6 +3,8 @@ import 'dart:async' as async;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:registry/registry.dart';
 import 'package:universal_io/io.dart' as io;
 
 import 'core.dart';
@@ -60,36 +62,35 @@ void main(List<String> args) async {
     onLog: (Object? message) => debugPrint(message?.toString()),
   );
 
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final Registry registry = Registry()
     ..set<Environment>(environment)
     ..set<Accounts>(repository.accounts)
     ..set<Contacts>(repository.contacts)
     ..set<Jobs>(repository.jobs)
     ..set<Gallery>(repository.gallery)
+    ..set<ImageStorage>(repository.imageStorage)
     ..set<Settings>(repository.settings)
     ..set<Payments>(repository.payments)
     ..set<Measures>(repository.measures)
     ..set<Stats>(repository.stats)
-    ..set<ContactsCoordinator>(ContactsCoordinator(navigatorKey))
-    ..set<GalleryCoordinator>(GalleryCoordinator(navigatorKey))
-    ..set<SharedCoordinator>(SharedCoordinator(navigatorKey))
-    ..set<JobsCoordinator>(JobsCoordinator(navigatorKey))
-    ..set<MeasuresCoordinator>(MeasuresCoordinator(navigatorKey))
-    ..set<PaymentsCoordinator>(PaymentsCoordinator(navigatorKey))
-    ..set<TasksCoordinator>(TasksCoordinator(navigatorKey));
+    ..factory((RegistryFactory di) => FetchAccountUseCase(accounts: di()))
+    ..factory((RegistryFactory di) => SignInUseCase(accounts: di()))
+    ..factory((RegistryFactory di) => SignOutUseCase(accounts: di()));
 
   runApp(
-    ErrorBoundary(
-      isReleaseMode: !environment.isDebugging,
-      errorViewBuilder: (_) => const AppCrashErrorView(),
-      onException: AppLog.e,
-      onCrash: errorReporter.reportCrash,
-      child: App(
-        registry: registry,
-        navigatorKey: navigatorKey,
-        store: storeFactory(registry),
-        navigatorObservers: <NavigatorObserver>[navigationObserver],
+    ProviderScope(
+      overrides: <Override>[
+        registryProvider.overrideWithValue(registry),
+      ],
+      child: ErrorBoundary(
+        isReleaseMode: !environment.isDebugging,
+        errorViewBuilder: (_) => const AppCrashErrorView(),
+        onException: AppLog.e,
+        onCrash: errorReporter.reportCrash,
+        child: App(
+          registry: registry,
+          navigatorObservers: <NavigatorObserver>[navigationObserver],
+        ),
       ),
     ),
   );
@@ -101,6 +102,7 @@ class _Repository {
         contacts = ContactsImpl(firebase: firebase, isDev: isDev),
         jobs = JobsImpl(firebase: firebase, isDev: isDev),
         gallery = GalleryImpl(firebase: firebase, isDev: isDev),
+        imageStorage = ImageStorageImpl(firebase: firebase, isDev: isDev),
         settings = SettingsImpl(firebase: firebase, isDev: isDev),
         payments = PaymentsImpl(firebase: firebase, isDev: isDev),
         measures = MeasuresImpl(firebase: firebase, isDev: isDev),
@@ -111,6 +113,7 @@ class _Repository {
         contacts = ContactsMockImpl(),
         jobs = JobsMockImpl(),
         gallery = GalleryMockImpl(),
+        imageStorage = ImageStorageMockImpl(),
         settings = SettingsMockImpl(),
         payments = PaymentsMockImpl(),
         measures = MeasuresMockImpl(),
@@ -120,6 +123,7 @@ class _Repository {
   final Contacts contacts;
   final Jobs jobs;
   final Gallery gallery;
+  final ImageStorage imageStorage;
   final Settings settings;
   final Payments payments;
   final Measures measures;

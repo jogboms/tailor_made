@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/presentation/theme.dart';
 
 class EmptyResultView extends StatelessWidget {
   const EmptyResultView({super.key, this.message = 'No results'});
@@ -8,15 +7,17 @@ class EmptyResultView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+
     return Opacity(
       opacity: .5,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const Icon(Icons.equalizer, color: kPrimaryColor, size: 36.0),
+          Icon(Icons.equalizer, color: colorScheme.primary, size: 36.0),
           const SizedBox(height: 8.0),
-          Text(message, style: theme.small.copyWith(fontWeight: FontWeight.w600))
+          Text(message, style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600))
         ],
       ),
     );

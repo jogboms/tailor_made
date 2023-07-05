@@ -2,12 +2,12 @@ import 'package:tailor_made/domain.dart';
 
 class StatsMockImpl extends Stats {
   @override
-  Stream<StatsModel> fetch(String? userId) async* {
-    yield const StatsModel(
-      contacts: StatsItemModel(),
-      gallery: StatsItemModel(),
-      jobs: StatsItemModel(),
-      payments: StatsItemModel(),
+  Stream<StatsEntity> fetch(String userId) async* {
+    yield const StatsEntity(
+      contacts: StatsItemEntity(),
+      gallery: StatsItemEntity(),
+      jobs: StatsItemEntity(),
+      payments: StatsItemEntity(),
     );
   }
 }

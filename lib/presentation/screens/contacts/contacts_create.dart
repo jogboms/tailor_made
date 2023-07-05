@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
-import 'package:rebloc/rebloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
+import '../../routing.dart';
+import 'providers/contact_provider.dart';
 import 'widgets/contact_form.dart';
 
 class ContactsCreatePage extends StatefulWidget {
-  const ContactsCreatePage({super.key, required this.userId});
-
-  final String userId;
+  const ContactsCreatePage({super.key});
 
   @override
   State<ContactsCreatePage> createState() => _ContactsCreatePageState();
@@ -18,43 +18,52 @@ class ContactsCreatePage extends StatefulWidget {
 
 class _ContactsCreatePageState extends State<ContactsCreatePage> {
   final GlobalKey<ContactFormState> _formKey = GlobalKey<ContactFormState>();
-  late ContactModel contact;
+  late CreateContactData _contact = const CreateContactData(
+    fullname: '',
+    phone: '',
+    location: '',
+    imageUrl: null,
+  );
 
   final FlutterContactPicker _contactPicker = FlutterContactPicker();
 
   @override
-  void initState() {
-    super.initState();
-    contact = ContactModel.fromDefaults(userID: widget.userId);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final L10n l10n = context.l10n;
+
     return Scaffold(
       appBar: CustomAppBar(
-        title: const Text('Create Contact'),
+        title: Text(l10n.createContactPageTitle),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.contacts),
             color: context.theme.primaryColor,
             onPressed: _handleSelectContact,
           ),
-          ViewModelSubscriber<AppState, MeasuresViewModel>(
-            converter: MeasuresViewModel.new,
-            builder: (_, __, MeasuresViewModel vm) {
-              return IconButton(
-                icon: Icon(Icons.content_cut, color: contact.measurements.isEmpty ? kAccentColor : kTitleBaseColor),
-                onPressed: () => _handleSelectMeasure(vm),
-              );
-            },
+          Consumer(
+            builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(measurementsProvider).when(
+                  skipLoadingOnReload: true,
+                  data: (MeasurementsState state) => IconButton(
+                    icon: Icon(
+                      Icons.content_cut,
+                      color: _contact.measurements.isEmpty ? colorScheme.secondary : null,
+                    ),
+                    onPressed: () => _handleSelectMeasure(state.grouped),
+                  ),
+                  error: ErrorView.new,
+                  loading: () => child!,
+                ),
+            child: const Center(child: LoadingSpinner()),
           ),
         ],
       ),
-      body: ContactForm(
-        key: _formKey,
-        contact: contact,
-        onHandleSubmit: _handleSubmit,
-        userId: widget.userId,
+      body: Consumer(
+        builder: (BuildContext context, WidgetRef ref, _) => ContactForm(
+          key: _formKey,
+          contact: _contact,
+          onHandleSubmit: (CreateContactData contact) => _handleSubmit(l10n, ref.read(contactProvider), contact),
+        ),
       ),
     );
   }
@@ -62,30 +71,29 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
   void _handleSelectContact() async {
     final Contact? selectedContact = await _contactPicker.selectContact();
     final String? fullName = selectedContact?.fullName;
-
-    if (selectedContact == null || fullName == null) {
+    final String? phoneNumber = selectedContact?.phoneNumbers?.firstOrNull;
+    if (selectedContact == null || fullName == null || phoneNumber == null) {
       return;
     }
 
     _formKey.currentState?.updateContact(
-      contact.copyWith(
+      _contact.copyWith(
         fullname: fullName,
-        phone: selectedContact.phoneNumbers?.first,
+        phone: phoneNumber,
       ),
     );
   }
 
-  void _handleSubmit(ContactModel contact) async {
+  void _handleSubmit(L10n l10n, ContactProvider contactProvider, CreateContactData contact) async {
     final AppSnackBar snackBar = AppSnackBar.of(context);
     if (contact.measurements.isEmpty) {
-      snackBar.info(AppStrings.leavingEmptyMeasures);
+      snackBar.info(l10n.emptyMeasuresFormError);
       return;
     }
 
-    final Contacts contacts = context.registry.get();
-    final ContactsCoordinator contactsCoordinator = context.registry.get();
     snackBar.loading();
 
+    final AppRouter router = context.router;
     try {
       contact = contact.copyWith(
         fullname: contact.fullname,
@@ -93,30 +101,26 @@ class _ContactsCreatePageState extends State<ContactsCreatePage> {
         imageUrl: contact.imageUrl,
         location: contact.location,
       );
-
-      // TODO(Jogboms): move this out of here
-      contacts.update(contact, widget.userId).listen((ContactModel snap) async {
-        snackBar.success('Successfully Added');
-
-        contactsCoordinator.toContact(snap);
-      });
+      final ContactEntity result = await contactProvider.create(contact: contact);
+      snackBar.success(l10n.successfullyAddedMessage);
+      router.toContact(result.id, replace: true);
     } catch (error, stackTrace) {
       AppLog.e(error, stackTrace);
       snackBar.error(error.toString());
     }
   }
 
-  void _handleSelectMeasure(MeasuresViewModel vm) async {
-    final ContactModel? result = await context.registry.get<ContactsCoordinator>().toContactMeasure(
-          contact,
-          vm.grouped ?? <String, List<MeasureModel>>{},
-        );
+  void _handleSelectMeasure(Map<MeasureGroup, List<MeasureEntity>> grouped) async {
+    final Map<String, double>? result = await context.router.toContactMeasure(
+      contact: null,
+      grouped: grouped,
+    );
     if (result == null) {
       return;
     }
 
     setState(() {
-      contact = contact.copyWith(measurements: result.measurements);
+      _contact = _contact.copyWith(measurements: result);
     });
   }
 }

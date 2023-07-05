@@ -1,31 +1,38 @@
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 import 'package:timeago/timeago.dart' as time_ago;
 
 class TaskListItem extends StatelessWidget {
   const TaskListItem({super.key, required this.task});
 
-  final JobModel task;
+  final JobEntity task;
+
+  static const int _kDayLimit = 5;
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final AppColorTheme appColorTheme = theme.appTheme.color;
+
     return ListTile(
       dense: true,
       contentPadding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-      leading: const CircleAvatar(
+      leading: CircleAvatar(
         backgroundColor: Colors.transparent,
-        child: Icon(Icons.event, color: kHintColor),
+        child: Icon(Icons.event, color: theme.hintColor),
       ),
-      trailing: Icon(Icons.timelapse, color: _iconColor),
+      trailing: Icon(Icons.timelapse, color: _iconColor(appColorTheme)),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(task.name, style: ThemeProvider.of(context)!.subhead1Bold),
+          Text(task.name, style: theme.textTheme.bodyLarge?.copyWith(fontWeight: AppFontWeight.bold)),
           const SizedBox(height: 2.0),
           Row(
             children: <Widget>[
-              const Icon(Icons.arrow_downward, color: Colors.green, size: 11.0),
+              Icon(Icons.arrow_downward, color: appColorTheme.success, size: 11.0),
               const SizedBox(width: 2.0),
               Text(
                 AppDate(task.dueAt, day: 'EEEE', month: 'MMMM', year: 'yyyy').formatted!,
@@ -36,28 +43,26 @@ class TaskListItem extends StatelessWidget {
       ),
       subtitle: Row(
         children: <Widget>[
-          const Icon(Icons.arrow_downward, color: Colors.red, size: 11.0),
+          Icon(Icons.arrow_downward, color: appColorTheme.danger, size: 11.0),
           const SizedBox(width: 2.0),
           Text(time_ago.format(task.dueAt, allowFromNow: true)),
         ],
       ),
-      onTap: () => context.registry.get<JobsCoordinator>().toJob(task),
+      onTap: () => context.router.toJob(task),
     );
   }
 
-  Color get _iconColor {
-    final DateTime now = DateTime.now();
+  Color _iconColor(AppColorTheme appColorTheme) {
+    final DateTime now = clock.now();
     if (now.isAfter(task.dueAt)) {
-      return Colors.redAccent.shade400;
+      return appColorTheme.danger;
     }
 
     final int diff = task.dueAt.difference(now).inDays;
     if (diff >= 0 && diff < _kDayLimit) {
-      return Colors.orangeAccent.shade400;
+      return appColorTheme.warning;
     }
 
-    return Colors.greenAccent.shade400;
+    return appColorTheme.success;
   }
 }
-
-const int _kDayLimit = 5;

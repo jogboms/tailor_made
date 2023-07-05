@@ -2,8 +2,8 @@ import 'package:tailor_made/domain.dart';
 
 class SettingsMockImpl extends Settings {
   @override
-  Stream<SettingsModel> fetch() async* {
-    yield const SettingsModel(
+  Stream<SettingEntity> fetch() async* {
+    yield const SettingEntity(
       premiumNotice: 'Hey Premium',
       versionName: '1.0',
     );

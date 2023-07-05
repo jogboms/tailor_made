@@ -1,21 +1,18 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-
-import '../../../theme.dart';
+import 'package:tailor_made/presentation/theme.dart';
 
 class SlideDownItem extends StatefulWidget {
   const SlideDownItem({
     super.key,
-    this.title,
-    this.body,
+    required this.title,
+    required this.body,
     this.isExpanded = false,
     this.onLongPress,
   });
 
   final bool isExpanded;
-  final String? title;
-  final Widget? body;
+  final String title;
+  final Widget body;
   final VoidCallback? onLongPress;
 
   @override
@@ -23,16 +20,7 @@ class SlideDownItem extends StatefulWidget {
 }
 
 class _SlideDownItemState extends State<SlideDownItem> {
-  int? id;
-  bool? isExpanded;
-
-  @override
-  void initState() {
-    super.initState();
-    final Random rand = Random();
-    id = rand.nextInt(100);
-    isExpanded = widget.isExpanded;
-  }
+  late bool _isExpanded = widget.isExpanded;
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +29,11 @@ class _SlideDownItemState extends State<SlideDownItem> {
       children: <Widget>[
         _SliderHeader(
           title: widget.title,
-          isExpanded: isExpanded,
+          isExpanded: _isExpanded,
           onLongPress: widget.onLongPress,
-          onExpand: () => setState(() => isExpanded = !isExpanded!),
+          onExpand: () => setState(() => _isExpanded = !_isExpanded),
         ),
-        _SlideBody(isExpanded: isExpanded, child: widget.body),
+        _SlideBody(isExpanded: _isExpanded, child: widget.body),
       ],
     );
   }
@@ -53,23 +41,23 @@ class _SlideDownItemState extends State<SlideDownItem> {
 
 class _SliderHeader extends StatelessWidget {
   const _SliderHeader({
-    required this.isExpanded,
+    this.isExpanded = false,
     required this.title,
     required this.onExpand,
     required this.onLongPress,
   });
 
-  final String? title;
-  final bool? isExpanded;
+  final String title;
+  final bool isExpanded;
   final VoidCallback onExpand;
   final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeData theme = Theme.of(context);
 
     return Material(
-      elevation: isExpanded! ? 1.0 : 0.0,
+      elevation: isExpanded ? 1.0 : 0.0,
       child: GestureDetector(
         onLongPress: onLongPress ?? () {},
         child: InkWell(
@@ -79,12 +67,12 @@ class _SliderHeader extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 16.0),
-                  child: Text(title!, style: theme.title.copyWith(fontSize: 14.0)),
+                  child: Text(title, style: theme.textTheme.pageTitle.copyWith(fontSize: 14.0)),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 16.0),
-                child: Icon(isExpanded! ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+                child: Icon(isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down),
               ),
             ],
           ),
@@ -97,16 +85,16 @@ class _SliderHeader extends StatelessWidget {
 class _SlideBody extends StatelessWidget {
   const _SlideBody({required this.child, required this.isExpanded});
 
-  final Widget? child;
-  final bool? isExpanded;
+  final Widget child;
+  final bool isExpanded;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
       firstChild: const SizedBox(width: double.infinity),
-      secondChild: child!,
+      secondChild: child,
       sizeCurve: Curves.decelerate,
-      crossFadeState: isExpanded! ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      crossFadeState: isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
       duration: const Duration(milliseconds: 250),
     );
   }

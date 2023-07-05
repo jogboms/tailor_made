@@ -1,21 +1,14 @@
 import 'package:tailor_made/domain.dart';
 
-class MockUser implements User {
-  const MockUser([this.uid = '1']);
-
-  @override
-  final String uid;
-}
-
 class AccountsMockImpl extends Accounts {
   @override
-  Future<void> signInWithGoogle() async {
+  Future<void> signIn() async {
     return;
   }
 
   @override
-  Stream<User?> get onAuthStateChanged async* {
-    yield const MockUser();
+  Stream<String?> get onAuthStateChanged async* {
+    yield '1';
   }
 
   @override
@@ -24,29 +17,23 @@ class AccountsMockImpl extends Accounts {
   }
 
   @override
-  Future<void> readNotice(AccountModel account) async {
+  Future<void> signUp(AccountEntity account) async {
     return;
   }
 
   @override
-  Future<void> sendRating(AccountModel account) async {
-    return;
-  }
+  Future<AccountEntity> fetch() async => (await getAccount('1'))!;
 
   @override
-  Future<void> signUp(AccountModel account) async {
-    return;
-  }
-
-  @override
-  Stream<AccountModel> getAccount(String? userId) async* {
-    yield const AccountModel(
+  Future<AccountEntity?> getAccount(String userId) async {
+    return const AccountEntity(
+      reference: ReferenceEntity(id: 'id', path: 'path'),
       uid: '1',
       notice: 'Hello',
       phoneNumber: 123456789,
       email: 'jeremiah@gmail.com',
       displayName: 'Jogboms',
-      status: AccountModelStatus.enabled,
+      status: AccountStatus.enabled,
       rating: 5,
       hasPremiumEnabled: true,
       hasReadNotice: false,
@@ -54,5 +41,18 @@ class AccountsMockImpl extends Accounts {
       photoURL: 'https://secure.gravatar.com/avatar/96b338e14ff9d18b1b2d6e5dc279a710',
       storeName: 'Jogboms',
     );
+  }
+
+  @override
+  Future<bool> updateAccount(
+    String userId, {
+    required String id,
+    required String path,
+    String? storeName,
+    bool? hasSendRating,
+    int? rating,
+    bool? hasReadNotice,
+  }) async {
+    return true;
   }
 }

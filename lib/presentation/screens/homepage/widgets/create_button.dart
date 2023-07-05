@@ -1,52 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
 
+import '../../../routing.dart';
 import 'helpers.dart';
 
 enum _CreateOptions { contacts, jobs }
 
 class CreateButton extends StatefulWidget {
-  const CreateButton({super.key, required this.userId, required this.contacts});
-
-  final List<ContactModel>? contacts;
-  final String userId;
+  const CreateButton({super.key});
 
   @override
   State<CreateButton> createState() => _CreateButtonState();
 }
 
 class _CreateButtonState extends State<CreateButton> with SingleTickerProviderStateMixin {
-  late AnimationController controller;
+  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200))..repeat(reverse: true);
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200))..repeat(reverse: true);
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: SizedBox(
         width: double.infinity,
         child: PrimaryButton(
           useSafeArea: true,
-          onPressed: _onTapCreate(widget.contacts),
+          onPressed: _onTapCreate,
           shape: const RoundedRectangleBorder(),
           child: ScaleTransition(
-            scale: Tween<double>(begin: 0.95, end: 1.025).animate(controller),
+            scale: Tween<double>(begin: 0.95, end: 1.025).animate(_controller),
             alignment: FractionalOffset.center,
             child: Text(
-              'TAP TO CREATE',
-              style: ThemeProvider.of(context)!.body3Medium.copyWith(color: Colors.white, letterSpacing: 1.25),
+              l10n.tapToCreateCaption,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(letterSpacing: 1.25),
             ),
           ),
         ),
@@ -54,40 +53,48 @@ class _CreateButtonState extends State<CreateButton> with SingleTickerProviderSt
     );
   }
 
-  VoidCallback _onTapCreate(List<ContactModel>? contacts) {
-    return () async {
-      final Registry registry = context.registry;
-      final _CreateOptions? result = await showDialog<_CreateOptions>(
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            title: Text('Select action', style: ThemeProvider.of(context)!.body3),
-            children: <Widget>[
-              SimpleDialogOption(
-                onPressed: () => Navigator.pop(context, _CreateOptions.contacts),
-                child: const TMListTile(color: Colors.orangeAccent, icon: Icons.supervisor_account, title: 'Contact'),
-              ),
-              SimpleDialogOption(
-                onPressed: () => Navigator.pop(context, _CreateOptions.jobs),
-                child: TMListTile(color: Colors.greenAccent.shade400, icon: Icons.attach_money, title: 'Job'),
-              ),
-            ],
-          );
-        },
-      );
+  void _onTapCreate() async {
+    final AppRouter router = context.router;
+    final _CreateOptions? result = await showDialog<_CreateOptions>(
+      context: context,
+      builder: (BuildContext context) {
+        final L10n l10n = context.l10n;
 
-      if (result == null) {
-        return;
-      }
+        return SimpleDialog(
+          title: Text(l10n.selectActionTitle, style: Theme.of(context).textTheme.labelLarge),
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () => Navigator.pop(context, _CreateOptions.contacts),
+              child: TMListTile(
+                color: Colors.orangeAccent,
+                icon: Icons.supervisor_account,
+                title: l10n.contactPageTitle,
+              ),
+            ),
+            SimpleDialogOption(
+              onPressed: () => Navigator.pop(context, _CreateOptions.jobs),
+              child: TMListTile(
+                color: Colors.greenAccent.shade400,
+                icon: Icons.attach_money,
+                title: l10n.jobPageTitle,
+              ),
+            ),
+          ],
+        );
+      },
+    );
 
-      switch (result) {
-        case _CreateOptions.contacts:
-          registry.get<ContactsCoordinator>().toCreateContact(widget.userId);
-          break;
-        case _CreateOptions.jobs:
-          registry.get<JobsCoordinator>().toCreateJob(widget.userId, contacts);
-          break;
-      }
-    };
+    if (result == null) {
+      return;
+    }
+
+    switch (result) {
+      case _CreateOptions.contacts:
+        router.toCreateContact();
+        break;
+      case _CreateOptions.jobs:
+        router.toCreateJob(null);
+        break;
+    }
   }
 }

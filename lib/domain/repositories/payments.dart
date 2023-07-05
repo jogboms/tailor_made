@@ -1,5 +1,5 @@
-import '../models/payment.dart';
+import '../entities/payment_entity.dart';
 
 abstract class Payments {
-  Stream<List<PaymentModel>> fetchAll(String userId);
+  Stream<List<PaymentEntity>> fetchAll(String userId);
 }

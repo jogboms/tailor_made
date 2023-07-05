@@ -1,5 +1,5 @@
-import '../models/stats/stats.dart';
+import '../entities.dart';
 
 abstract class Stats {
-  Stream<StatsModel> fetch(String? userId);
+  Stream<StatsEntity> fetch(String userId);
 }

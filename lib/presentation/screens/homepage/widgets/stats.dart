@@ -6,25 +6,29 @@ import 'package:tailor_made/presentation/utils.dart';
 class StatsWidget extends StatelessWidget {
   const StatsWidget({super.key, required this.stats});
 
-  final StatsModel? stats;
+  final StatsEntity stats;
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-      decoration: const BoxDecoration(border: Border(bottom: AppBorderSide())),
+      decoration: BoxDecoration(
+        border: Border(bottom: Divider.createBorderSide(context)),
+      ),
       child: Row(
         children: <Widget>[
           Expanded(
-            child: _StatTile(title: 'Pending', count: stats!.jobs.pending.toString()),
+            child: _StatTile(title: l10n.pendingCaption, count: stats.jobs.pending.toInt().toString()),
           ),
-          const _Divider(),
+          const _VerticalDivider(),
           Expanded(
-            child: _StatTile(title: 'Received', count: AppMoney(stats!.payments.completed).formatted),
+            child: _StatTile(title: l10n.receivedCaption, count: AppMoney(stats.payments.completed).formatted),
           ),
-          const _Divider(),
+          const _VerticalDivider(),
           Expanded(
-            child: _StatTile(title: 'Completed', count: stats!.jobs.completed.toString()),
+            child: _StatTile(title: l10n.completedCaption, count: stats.jobs.completed.toInt().toString()),
           ),
         ],
       ),
@@ -32,12 +36,17 @@ class StatsWidget extends StatelessWidget {
   }
 }
 
-class _Divider extends StatelessWidget {
-  const _Divider();
+class _VerticalDivider extends StatelessWidget {
+  const _VerticalDivider();
 
   @override
   Widget build(BuildContext context) {
-    return Container(color: kBorderSideColor, width: 1.0, height: _kStatGridsHeight);
+    final DividerThemeData dividerTheme = DividerTheme.of(context);
+    return Container(
+      color: dividerTheme.color,
+      width: dividerTheme.thickness,
+      height: 40.0,
+    );
   }
 }
 
@@ -49,14 +58,14 @@ class _StatTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     return Column(
       children: <Widget>[
-        Text(count, style: ThemeProvider.of(context)!.headline),
+        Text(count, style: textTheme.titleLarge?.copyWith(fontWeight: AppFontWeight.medium)),
         const SizedBox(height: 2.0),
-        Text(title, style: ThemeProvider.of(context)!.small),
+        Text(title, style: textTheme.bodySmall),
       ],
     );
   }
 }
-
-const double _kStatGridsHeight = 40.0;

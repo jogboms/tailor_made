@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../theme.dart';
 import '../../../utils.dart';
 import '../../../widgets.dart';
 
@@ -11,34 +10,33 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.imageUrl,
     this.useAlt = false,
     this.title,
-    this.backgroundColor = Colors.white,
     this.elevation = 0.0,
     this.actions,
-    this.iconColor,
     this.subtitle,
+    this.useSafeArea = false,
   });
 
   final String tag;
   final String? imageUrl;
   final Widget? title;
   final Widget? subtitle;
-  final Color? iconColor;
-  final Color backgroundColor;
   final double elevation;
   final bool useAlt;
   final List<Widget>? actions;
+  final bool useSafeArea;
 
   @override
   Widget build(BuildContext context) {
     return AppStatusBar(
       child: Material(
-        color: backgroundColor,
+        type: MaterialType.transparency,
         elevation: elevation,
         child: SafeArea(
+          top: useSafeArea,
           bottom: false,
           child: Row(
             children: <Widget>[
-              _Leading(iconColor: iconColor, tag: tag, imageUrl: imageUrl),
+              _Leading(tag: tag, imageUrl: imageUrl),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -65,9 +63,8 @@ class AvatarAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class _Leading extends StatelessWidget {
-  const _Leading({required this.iconColor, required this.tag, required this.imageUrl});
+  const _Leading({required this.tag, required this.imageUrl});
 
-  final Color? iconColor;
   final String tag;
   final String? imageUrl;
 
@@ -82,10 +79,7 @@ class _Leading extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Icon(
-            Icons.arrow_back,
-            color: iconColor ?? ThemeProvider.of(context)!.appBarTitle.color,
-          ),
+          const Icon(Icons.arrow_back),
           const SizedBox(width: 4.0),
           Hero(tag: tag, child: AppCircleAvatar(imageUrl: imageUrl)),
         ],

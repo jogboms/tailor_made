@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tailor_made/presentation/theme.dart';
 
+import '../../../utils.dart';
+
 class AccessDeniedPage extends StatelessWidget {
   const AccessDeniedPage({super.key, required this.onSendMail});
 
@@ -9,16 +11,20 @@ class AccessDeniedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle textTheme = ThemeProvider.of(context)!.subhead1;
+    final ThemeData theme = Theme.of(context);
+    final TextStyle textTheme = theme.textTheme.bodyLarge!;
+    final ColorScheme colorScheme = theme.colorScheme;
+    final L10n l10n = context.l10n;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SpinKitFadingCube(color: Colors.grey.shade300),
+          SpinKitFadingCube(color: colorScheme.outlineVariant),
           const SizedBox(height: 48.0),
           Text(
-            'ACCESS DENIED',
+            l10n.accessDeniedTitle,
             style: textTheme.copyWith(color: Colors.black87, fontWeight: AppFontWeight.bold),
             textAlign: TextAlign.center,
           ),
@@ -26,20 +32,20 @@ class AccessDeniedPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 64.0),
             child: Text(
-              'Do not be alarmed. \n We just need your attention. \n\n It is possible you have violated one or a couple of our usage policy?.\n If this is not the case, please contact an Administrator.',
-              style: textTheme.copyWith(color: Colors.grey.shade700),
+              l10n.accessDeniedMessage,
+              style: textTheme.copyWith(color: colorScheme.outline),
               textAlign: TextAlign.center,
             ),
           ),
           const SizedBox(height: 32.0),
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
-              backgroundColor: kAccentColor,
+              backgroundColor: colorScheme.secondary,
               shape: const StadiumBorder(),
             ),
             onPressed: onSendMail,
             icon: const Icon(Icons.mail),
-            label: const Text('Send a mail'),
+            label: Text(l10n.accessDeniedSendMailCaption),
           ),
         ],
       ),

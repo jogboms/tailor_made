@@ -7,6 +7,7 @@ export 'widgets/app_icon.dart';
 export 'widgets/custom_app_bar.dart';
 export 'widgets/dots.dart';
 export 'widgets/empty_result_view.dart';
+export 'widgets/error_view.dart';
 export 'widgets/form_section_header.dart';
 export 'widgets/loading_spinner.dart';
 export 'widgets/primary_button.dart';

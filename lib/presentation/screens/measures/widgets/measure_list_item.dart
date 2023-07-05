@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation/theme.dart';
 
-class MeasureListItem extends StatelessWidget {
-  const MeasureListItem({super.key, required this.item});
+import '../../../utils.dart';
 
-  final MeasureModel item;
+class MeasureListItem extends StatelessWidget {
+  const MeasureListItem({super.key, required this.item, required this.value});
+
+  final MeasureEntity item;
+  final double value;
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+    final L10n l10n = context.l10n;
 
     return Container(
-      color: Colors.grey[100]!.withOpacity(.5),
+      color: colorScheme.outlineVariant.withOpacity(.5),
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       margin: const EdgeInsets.symmetric(vertical: 1.0),
       child: Row(
@@ -22,25 +27,28 @@ class MeasureListItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(item.name, style: theme.body3),
+                Text(item.name, style: theme.textTheme.labelLarge),
                 const SizedBox(height: 4.0),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
                   decoration: BoxDecoration(
-                    color: kAccentColor,
+                    color: colorScheme.secondary,
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  child: Text(item.group.toLowerCase(), style: theme.xsmall.copyWith(color: Colors.white)),
+                  child: Text(
+                    item.group.displayName.toLowerCase(),
+                    style: theme.textTheme.labelSmall?.copyWith(color: Colors.white),
+                  ),
                 ),
               ],
             ),
           ),
-          if (item.value > 0) ...<Widget>[
-            Text('${item.value} ', style: theme.subhead3.copyWith(color: kAccentColor)),
+          if (value > 0) ...<Widget>[
+            Text('$value ', style: theme.textTheme.titleMedium?.copyWith(color: colorScheme.secondary)),
             const SizedBox(width: 2.0),
-            Text(item.unit, style: theme.small.copyWith(color: kTitleBaseColor)),
+            Text(item.unit, style: theme.textTheme.bodySmall),
           ],
-          if (item.value == 0) Text('N/A', style: theme.smallLight.copyWith(color: kTitleBaseColor)),
+          if (value == 0) Text(l10n.measurementUnavailableCaption, style: theme.textTheme.bodySmallLight),
         ],
       ),
     );

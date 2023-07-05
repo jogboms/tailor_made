@@ -10,11 +10,13 @@ class MeasureCreateItems extends StatelessWidget {
     required this.grouped,
     required this.measurements,
     required this.onSaved,
+    this.onChanged,
   });
 
-  final Map<String, List<MeasureModel>> grouped;
+  final Map<MeasureGroup, List<MeasureEntity>> grouped;
   final Map<String, double> measurements;
   final FormFieldSetter<Map<String, double>> onSaved;
+  final ValueChanged<Map<String, double>>? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +31,15 @@ class MeasureCreateItems extends StatelessWidget {
           children: <Widget>[
             for (int i = 0; i < grouped.length; i++)
               SlideDownItem(
-                title: grouped.keys.elementAt(i),
+                title: grouped.keys.elementAt(i).displayName,
                 body: _JobMeasureBlock(
-                  key: Key(grouped.keys.elementAt(i)),
+                  key: ValueKey<MeasureGroup>(grouped.keys.elementAt(i)),
                   measures: grouped.values.elementAt(i),
                   measurements: currentValue,
                   onChanged: ((String, double?) value) {
                     currentValue[value.$1] = value.$2 ?? 0.0;
                     field.didChange(currentValue);
+                    onChanged?.call(currentValue);
                   },
                 ),
               ),
@@ -65,8 +68,8 @@ class _JobMeasureBlock extends StatelessWidget {
     required this.onChanged,
   });
 
-  final List<MeasureModel> measures;
-  final Map<String, double?> measurements;
+  final List<MeasureEntity> measures;
+  final Map<String, double> measurements;
   final ValueChanged<(String, double?)> onChanged;
 
   @override
@@ -74,10 +77,10 @@ class _JobMeasureBlock extends StatelessWidget {
     final int length = measures.length;
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(border: Border(bottom: AppBorderSide())),
+      decoration: BoxDecoration(border: Border(bottom: Divider.createBorderSide(context))),
       child: Wrap(
         alignment: WrapAlignment.spaceBetween,
-        children: measures.map((MeasureModel measure) {
+        children: measures.map((MeasureEntity measure) {
           final int index = measures.indexOf(measure);
 
           final num? value1 = measurements.containsKey(measure.id) ? measurements[measure.id] : 0;
@@ -91,10 +94,10 @@ class _JobMeasureBlock extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0),
                 decoration: BoxDecoration(
                   border: Border(
-                    bottom: AppBorderSide(
+                    bottom: Divider.createBorderSide(context).copyWith(
                       style: removeBorder ? BorderStyle.none : BorderStyle.solid,
                     ),
-                    right: AppBorderSide(
+                    right: Divider.createBorderSide(context).copyWith(
                       style: index.isEven ? BorderStyle.solid : BorderStyle.none,
                     ),
                   ),
@@ -135,11 +138,18 @@ class _MeasureFieldState extends State<_MeasureField> {
   late final TextEditingController _controller = TextEditingController(text: widget.value);
 
   @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextField(
       controller: _controller,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      style: ThemeProvider.of(context)!.headline,
+      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: AppFontWeight.medium),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.zero,
         labelText: widget.label,

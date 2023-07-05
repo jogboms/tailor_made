@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'exception.dart';
-import 'models.dart';
 
 class Auth {
   Auth(this._auth, this._googleSignIn);
@@ -11,9 +10,9 @@ class Auth {
   final FirebaseAuth _auth;
   final GoogleSignIn _googleSignIn;
 
-  FireUser? get getUser => _mapFirebaseUserToUser(_auth.currentUser);
+  String? get getUser => _mapFirebaseUserToUser(_auth.currentUser);
 
-  Stream<FireUser?> get onAuthStateChanged => _auth.authStateChanges().map(_mapFirebaseUserToUser);
+  Stream<String?> get onAuthStateChanged => _auth.authStateChanges().map(_mapFirebaseUserToUser);
 
   Future<String> signInWithGoogle() async {
     try {
@@ -90,10 +89,10 @@ class Auth {
     await _googleSignIn.signOut();
   }
 
-  FireUser? _mapFirebaseUserToUser(User? user) {
+  String? _mapFirebaseUserToUser(User? user) {
     if (user == null) {
       return null;
     }
-    return FireUser(user);
+    return user.uid;
   }
 }

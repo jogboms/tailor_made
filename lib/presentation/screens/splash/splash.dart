@@ -1,193 +1,163 @@
 import 'package:flutter/material.dart';
-import 'package:rebloc/rebloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/core.dart';
-import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
-class SplashPage extends StatelessWidget {
-  const SplashPage({super.key, required this.isColdStart, required this.isMock});
+import '../../constants.dart';
+import '../../state.dart';
+import '../../theme.dart';
+import '../../utils.dart';
+import '../../widgets.dart';
+
+class SplashPage extends StatefulWidget {
+  const SplashPage({super.key, required this.isColdStart});
 
   final bool isColdStart;
-  final bool isMock;
+
+  @override
+  State<SplashPage> createState() => SplashPageState();
+}
+
+@visibleForTesting
+class SplashPageState extends State<SplashPage> {
+  static const Key dataViewKey = Key('dataViewKey');
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeData theme = Theme.of(context);
 
-    return AppStatusBar(
-      child: Scaffold(
-        body: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            const Opacity(
-              opacity: .5,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  image: DecorationImage(image: AppImages.pattern, fit: BoxFit.cover),
-                ),
+    return Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          const Opacity(
+            opacity: .5,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                image: DecorationImage(image: AppImages.pattern, fit: BoxFit.cover),
               ),
             ),
-            Positioned.fill(
-              top: null,
-              bottom: 32.0,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    context.l10n.appName,
-                    style: theme.display2Semi.copyWith(color: kTextBaseColor.withOpacity(.6)),
+          ),
+          Positioned.fill(
+            bottom: MediaQuery.paddingOf(context).bottom + 16.0,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: _DataView(
+                    key: dataViewKey,
+                    isColdStart: widget.isColdStart,
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                Text(
+                  context.l10n.appName,
+                  style: theme.textTheme.headlineSmall?.copyWith(fontWeight: AppFontWeight.semibold),
+                  textAlign: TextAlign.center,
+                ),
+                AppVersionBuilder(
+                  valueBuilder: () => AppVersion.retrieve(environment.isMock),
+                  builder: (_, String? version, __) => Text(
+                    'v$version',
+                    style: theme.textTheme.bodySmall?.copyWith(height: 1.5),
                     textAlign: TextAlign.center,
                   ),
-                  AppVersionBuilder(
-                    valueBuilder: () => AppVersion.retrieve(isMock),
-                    builder: (_, String? version, __) => Text(
-                      'v$version',
-                      style: theme.small.copyWith(color: kTextBaseColor.withOpacity(.4), height: 1.5),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            StreamBuilder<User?>(
-              // TODO(Jogboms): move this out of here
-              stream: context.registry.get<Accounts>().onAuthStateChanged,
-              builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-                if (snapshot.hasData && snapshot.data != null && snapshot.data?.uid != null) {
-                  WidgetsBinding.instance.addPostFrameCallback(
-                    (_) async {
-                      StoreProvider.of<AppState>(context).dispatch(OnLoginAction(snapshot.data));
-                      context.registry.get<SharedCoordinator>().toHome(isMock);
-                    },
-                  );
-
-                  return const SizedBox();
-                }
-
-                return _Content(isColdStart: isColdStart);
-              },
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _Content extends StatefulWidget {
-  const _Content({required this.isColdStart});
+class _DataView extends ConsumerStatefulWidget {
+  const _DataView({super.key, required this.isColdStart});
 
   final bool isColdStart;
 
   @override
-  State<_Content> createState() => _ContentState();
+  ConsumerState<_DataView> createState() => OnboardingDataViewState();
 }
 
-class _ContentState extends State<_Content> {
-  late bool isLoading;
+@visibleForTesting
+class OnboardingDataViewState extends ConsumerState<_DataView> {
+  static const Key signInButtonKey = Key('signInButtonKey');
+  late final AuthStateNotifier auth = ref.read(authStateNotifierProvider.notifier);
 
   @override
   void initState() {
     super.initState();
-    isLoading = widget.isColdStart;
+
     if (widget.isColdStart) {
-      _onLogin();
+      Future<void>.microtask(auth.signIn);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelSubscriber<AppState, SettingsViewModel>(
-      converter: SettingsViewModel.new,
-      builder: (BuildContext context, DispatchFunction dispatch, SettingsViewModel vm) {
-        return Stack(
-          children: <Widget>[
-            if (!isLoading || !widget.isColdStart || vm.hasError)
-              const Center(
-                child: Image(
-                  image: AppImages.logo,
-                  width: 148.0,
-                  color: Colors.white30,
-                  colorBlendMode: BlendMode.saturation,
+    ref.listen<AuthState>(authStateNotifierProvider, _authStateListener);
+
+    return AnimatedSwitcher(
+      duration: kThemeAnimationDuration,
+      child: ref.watch(authStateNotifierProvider) == AuthState.loading
+          ? const Center(child: LoadingSpinner())
+          : Stack(
+              children: <Widget>[
+                const Center(
+                  child: Image(
+                    image: AppImages.logo,
+                    width: 148.0,
+                    color: Colors.white30,
+                    colorBlendMode: BlendMode.saturation,
+                  ),
                 ),
-              ),
-            Positioned.fill(
-              top: null,
-              bottom: 124.0,
-              child: Builder(
-                builder: (_) {
-                  if ((vm.isLoading && widget.isColdStart) || isLoading) {
-                    return const LoadingSpinner();
-                  }
-
-                  if (vm.hasError) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 48.0, vertical: 16.0),
-                      child: Center(
-                        child: Column(
-                          children: <Widget>[
-                            Text(vm.error.toString(), textAlign: TextAlign.center),
-                            const SizedBox(height: 8.0),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                              ),
-                              child: Text(
-                                'RETRY',
-                                style: ThemeProvider.of(context)!.button.copyWith(color: kTextBaseColor),
-                              ),
-                              onPressed: () => dispatch(const InitSettingsAction()),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-
-                  return Center(
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                      ),
-                      icon: const Image(image: AppImages.googleLogo, width: 24.0),
-                      label: Text('Continue with Google', style: ThemeProvider.of(context)!.bodyBold),
-                      onPressed: _onLogin,
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ElevatedButton.icon(
+                    key: signInButtonKey,
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+                    icon: const Image(image: AppImages.googleLogo, width: 24.0),
+                    label: Text(
+                      context.l10n.continueWithGoogle,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: AppFontWeight.bold),
                     ),
-                  );
-                },
-              ),
-            )
-          ],
-        );
-      },
+                    onPressed: auth.signIn,
+                  ),
+                ),
+              ],
+            ),
     );
   }
 
-  void _onLogin() async {
-    final Accounts accounts = context.registry.get();
-    try {
-      setState(() => isLoading = true);
-      // TODO(Jogboms): move this out of here
-      await accounts.signInWithGoogle();
-    } catch (e) {
-      // TODO(Jogboms): move this out of here
-      final Environment environment = context.registry.get();
-      final String message = AppStrings.genericError(e, environment.isDev)!;
-
-      if (message.isNotEmpty) {
-        AppSnackBar.of(context).error(message, duration: const Duration(milliseconds: 3500));
+  void _authStateListener(AuthState? _, AuthState state) {
+    if (state is AuthErrorState) {
+      final AppSnackBar snackBar = context.snackBar;
+      final String message = state.toPrettyMessage(context.l10n, environment.isProduction);
+      if (state.reason != AuthErrorStateReason.popupBlockedByBrowser) {
+        snackBar.error(message);
       }
+    } else if (state == AuthState.complete) {
+      context.router.toHome();
+    }
+  }
+}
 
-      // TODO(Jogboms): move this out of here
-      await accounts.signOut();
-
-      if (!mounted) {
-        return;
-      }
-
-      setState(() => isLoading = false);
-
-      AppSnackBar.of(context).error(e.toString());
+extension on AuthErrorState {
+  String toPrettyMessage(L10n l10n, bool isProduction) {
+    switch (reason) {
+      case AuthErrorStateReason.message:
+        return isProduction ? l10n.genericErrorMessage : error;
+      case AuthErrorStateReason.tooManyRequests:
+        return l10n.tryAgainMessage;
+      case AuthErrorStateReason.userDisabled:
+        return l10n.bannedUserMessage;
+      case AuthErrorStateReason.failed:
+        return l10n.failedSignInMessage;
+      case AuthErrorStateReason.networkUnavailable:
+        return l10n.tryAgainMessage;
+      case AuthErrorStateReason.popupBlockedByBrowser:
+        return l10n.popupBlockedByBrowserMessage;
     }
   }
 }

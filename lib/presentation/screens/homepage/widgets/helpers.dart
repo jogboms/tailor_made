@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:tailor_made/presentation/theme.dart';
 
 class TMListTile extends StatelessWidget {
-  const TMListTile({super.key, this.icon, this.color, this.title, this.onPressed});
+  const TMListTile({
+    super.key,
+    required this.icon,
+    required this.color,
+    required this.title,
+    this.onPressed,
+  });
 
-  final IconData? icon;
-  final Color? color;
-  final String? title;
+  final IconData icon;
+  final Color color;
+  final String title;
   final VoidCallback? onPressed;
 
   @override
@@ -21,12 +26,19 @@ class TMListTile extends StatelessWidget {
 }
 
 class TMGridTile extends StatelessWidget {
-  const TMGridTile({super.key, this.icon, this.color, this.title, this.subTitle, this.onPressed});
+  const TMGridTile({
+    super.key,
+    required this.icon,
+    required this.color,
+    required this.title,
+    required this.subTitle,
+    this.onPressed,
+  });
 
-  final IconData? icon;
-  final Color? color;
-  final String? title;
-  final String? subTitle;
+  final IconData icon;
+  final Color color;
+  final String title;
+  final String subTitle;
   final VoidCallback? onPressed;
 
   @override
@@ -34,7 +46,7 @@ class TMGridTile extends StatelessWidget {
     return TextButton(
       style: TextButton.styleFrom(
         padding: const EdgeInsets.only(left: 20.0),
-        surfaceTintColor: color!.withOpacity(.25),
+        surfaceTintColor: color.withOpacity(.25),
       ),
       onPressed: onPressed,
       child: Row(
@@ -48,10 +60,10 @@ class TMGridTile extends StatelessWidget {
 }
 
 class _CircleIcon extends StatelessWidget {
-  const _CircleIcon({this.icon, this.color = AppColors.accent, this.small = false});
+  const _CircleIcon({required this.icon, required this.color, this.small = false});
 
-  final IconData? icon;
-  final Color? color;
+  final IconData icon;
+  final Color color;
   final bool small;
 
   @override
@@ -62,7 +74,11 @@ class _CircleIcon extends StatelessWidget {
         child: CircleAvatar(
           backgroundColor: color,
           radius: small == true ? 14.0 : 20.0,
-          child: Icon(icon, size: small == true ? 14.0 : 20.0, color: Colors.white),
+          child: Icon(
+            icon,
+            size: small == true ? 14.0 : 20.0,
+            color: Colors.white,
+          ),
         ),
       ),
     );
@@ -70,9 +86,9 @@ class _CircleIcon extends StatelessWidget {
 }
 
 class _TextTile extends StatelessWidget {
-  const _TextTile({this.title, this.subTitle, this.small = false});
+  const _TextTile({required this.title, this.subTitle, this.small = false});
 
-  final String? title;
+  final String title;
   final String? subTitle;
   final bool small;
 
@@ -82,8 +98,8 @@ class _TextTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(title!, style: TextStyle(fontSize: small == true ? 15.0 : 16.0)),
-        if (subTitle != null) Text(subTitle!, style: ThemeProvider.of(context)!.small),
+        Text(title, style: TextStyle(fontSize: small == true ? 15.0 : 16.0)),
+        if (subTitle != null) Text(subTitle!, style: Theme.of(context).textTheme.bodySmall),
       ],
     );
   }

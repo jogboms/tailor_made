@@ -1,42 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/theme.dart';
 import 'package:tailor_made/presentation/utils.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
 class MeasureDialog extends StatefulWidget {
   const MeasureDialog({super.key, required this.measure});
 
-  final MeasureModel measure;
+  final DefaultMeasureEntity measure;
 
   @override
   State<MeasureDialog> createState() => _MeasureDialogState();
 }
 
 class _MeasureDialogState extends State<MeasureDialog> {
-  final FocusNode _unitNode = FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
-  late MeasureModel measure;
-
-  @override
-  void initState() {
-    super.initState();
-    measure = widget.measure;
-  }
-
-  @override
-  void dispose() {
-    _unitNode.dispose();
-    super.dispose();
-  }
+  late DefaultMeasureEntity _measure = widget.measure;
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final L10n l10n = context.l10n;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Material(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(5.0),
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -47,32 +35,30 @@ class _MeasureDialogState extends State<MeasureDialog> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 const SizedBox(height: 32.0),
-                const Center(
+                Center(
                   child: CircleAvatar(
-                    backgroundColor: kPrimaryColor,
-                    foregroundColor: Colors.white,
+                    backgroundColor: colorScheme.primary,
+                    foregroundColor: colorScheme.onPrimary,
                     radius: 36.0,
-                    child: Icon(Icons.content_cut, size: 50.0),
+                    child: const Icon(Icons.content_cut, size: 50.0),
                   ),
                 ),
                 const SizedBox(height: 16.0),
                 TextFormField(
                   textCapitalization: TextCapitalization.words,
                   textInputAction: TextInputAction.next,
-                  onEditingComplete: () => FocusScope.of(context).requestFocus(_unitNode),
-                  onSaved: (String? value) => measure = measure.copyWith(name: value!.trim()),
-                  decoration: const InputDecoration(labelText: 'Name (eg. Length)'),
+                  onSaved: (String? value) => _measure = _measure.copyWith(name: value!.trim()),
+                  decoration: InputDecoration(labelText: l10n.measurementItemNameLabel),
                   validator: InputValidator.tryAlpha(),
                 ),
                 const SizedBox(height: 4.0),
                 TextFormField(
                   initialValue: widget.measure.unit,
-                  focusNode: _unitNode,
                   textInputAction: TextInputAction.done,
-                  decoration: const InputDecoration(labelText: 'Unit (eg. In, cm)'),
+                  decoration: InputDecoration(labelText: l10n.measurementGroupUnitPlaceholder),
                   validator: InputValidator.tryAlpha(),
                   onFieldSubmitted: (String value) => _onSaved(),
-                  onSaved: (String? value) => measure = measure.copyWith(unit: value!.trim()),
+                  onSaved: (String? value) => _measure = _measure.copyWith(unit: value!.trim()),
                 ),
                 const SizedBox(height: 16.0),
                 Row(
@@ -80,11 +66,11 @@ class _MeasureDialogState extends State<MeasureDialog> {
                   children: <Widget>[
                     AppClearButton(
                       onPressed: () => Navigator.pop(context),
-                      color: Colors.grey,
-                      child: const Text('CANCEL'),
+                      color: colorScheme.outline,
+                      child: Text(l10n.cancelCaption),
                     ),
                     const SizedBox(width: 16.0),
-                    AppClearButton(onPressed: _onSaved, child: const Text('DONE')),
+                    AppClearButton(onPressed: _onSaved, child: Text(l10n.doneCaption)),
                     const SizedBox(width: 16.0),
                   ],
                 ),
@@ -104,10 +90,9 @@ class _MeasureDialogState extends State<MeasureDialog> {
     }
     if (!form.validate()) {
       _autovalidate = true;
-      // widget.onHandleValidate();
     } else {
       form.save();
-      Navigator.pop<MeasureModel>(context, measure);
+      Navigator.pop<DefaultMeasureEntity>(context, _measure);
     }
   }
 }

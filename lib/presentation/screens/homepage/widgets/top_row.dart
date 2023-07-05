@@ -1,30 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
+import '../../../utils.dart';
 import 'helpers.dart';
 
 class TopRowWidget extends StatelessWidget {
   const TopRowWidget({super.key, required this.stats});
 
-  final StatsModel? stats;
+  final StatsEntity stats;
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return DecoratedBox(
-      decoration: const BoxDecoration(border: Border(bottom: AppBorderSide())),
+      decoration: BoxDecoration(border: Border(bottom: Divider.createBorderSide(context))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Expanded(
             child: DecoratedBox(
-              decoration: const BoxDecoration(border: Border(right: AppBorderSide())),
+              decoration: BoxDecoration(border: Border(right: Divider.createBorderSide(context))),
               child: TMGridTile(
                 icon: Icons.supervisor_account,
                 color: Colors.orangeAccent,
-                title: 'Contacts',
-                subTitle: '${stats!.contacts.total} Contacts',
-                onPressed: () => context.registry.get<ContactsCoordinator>().toContacts(),
+                title: l10n.contactsPageTitle,
+                subTitle: l10n.contactsCaption(stats.contacts.total.toInt()),
+                onPressed: () => context.router.toContacts(),
               ),
             ),
           ),
@@ -33,9 +36,9 @@ class TopRowWidget extends StatelessWidget {
               child: TMGridTile(
                 icon: Icons.work,
                 color: Colors.greenAccent.shade400,
-                title: 'Jobs',
-                subTitle: '${stats!.jobs.total} Total',
-                onPressed: () => context.registry.get<JobsCoordinator>().toJobs(),
+                title: l10n.jobsPageTitle,
+                subTitle: l10n.jobsCaption(stats.jobs.total.toInt()),
+                onPressed: () => context.router.toJobs(),
               ),
             ),
           ),

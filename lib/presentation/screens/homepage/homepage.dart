@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:rebloc/rebloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tailor_made/core.dart';
+import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/routing.dart';
 import 'package:version/version.dart';
 
+import 'providers/home_notifier_provider.dart';
 import 'widgets/access_denied.dart';
 import 'widgets/bottom_row.dart';
 import 'widgets/create_button.dart';
@@ -15,55 +19,64 @@ import 'widgets/top_button_bar.dart';
 import 'widgets/top_row.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.isMock});
-
-  final bool isMock;
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final L10n l10n = context.l10n;
+
     return WillPopScope(
-      onWillPop: () => showChoiceDialog(context: context, message: 'Continue with Exit?').then((bool? value) => value!),
+      onWillPop: () => showChoiceDialog(context: context, message: l10n.exitConfirmationMessage).then(
+        (bool? value) => value!,
+      ),
       child: AppStatusBar(
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           body: Stack(
             fit: StackFit.expand,
             children: <Widget>[
-              const Opacity(
-                opacity: .5,
-                child: DecoratedBox(
+              Opacity(
+                opacity: Theme.of(context).brightness == Brightness.light ? .5 : .1,
+                child: const DecoratedBox(
                   decoration: BoxDecoration(
                     image: DecorationImage(image: AppImages.pattern, fit: BoxFit.cover),
                   ),
                 ),
               ),
-              AppVersionBuilder(
-                valueBuilder: () => AppVersion.retrieve(isMock),
-                builder: (BuildContext context, String? appVersion, Widget? child) {
-                  if (appVersion == null) {
-                    return child!;
-                  }
+              Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) => ref.watch(homeNotifierProvider).when(
+                      skipLoadingOnReload: true,
+                      data: (HomeState state) => AppVersionBuilder(
+                        valueBuilder: () => AppVersion.retrieve(environment.isMock),
+                        builder: (BuildContext context, String? appVersion, Widget? child) {
+                          if (appVersion == null) {
+                            return child!;
+                          }
 
-                  final Version currentVersion = Version.parse(appVersion);
-                  final AppState state = StoreProvider.of<AppState>(context).states.valueWrapper!.value;
-                  final Version latestVersion = Version.parse(state.settings.settings?.versionName ?? '1.0.0');
+                          final Version currentVersion = Version.parse(appVersion);
+                          final Version latestVersion = Version.parse(state.settings.versionName);
 
-                  if (latestVersion > currentVersion) {
-                    return OutDatedPage(
-                      onUpdate: () {
-                        // TODO(Jogboms): take note for apple if that ever happens
-                        open('https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade');
-                      },
-                    );
-                  }
+                          if (latestVersion > currentVersion) {
+                            return OutDatedPage(
+                              onUpdate: () {
+                                // TODO(Jogboms): take note for apple if that ever happens
+                                open('https://play.google.com/store/apps/details?id=io.github.jogboms.tailormade');
+                              },
+                            );
+                          }
 
-                  return child!;
-                },
-                child: ViewModelSubscriber<AppState, HomeViewModel>(
-                  converter: HomeViewModel.new,
-                  builder: (_, DispatchFunction dispatch, HomeViewModel vm) =>
-                      _Body(viewModel: vm, dispatch: dispatch, isMock: isMock),
-                ),
+                          return child!;
+                        },
+                        child: _Body(
+                          state: state,
+                          homeNotifier: ref.read(homeNotifierProvider.notifier),
+                          accountNotifier: ref.read(accountNotifierProvider.notifier),
+                        ),
+                      ),
+                      error: ErrorView.new,
+                      loading: () => child!,
+                    ),
+                child: const Center(child: LoadingSpinner()),
               ),
             ],
           ),
@@ -74,33 +87,36 @@ class HomePage extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({required this.dispatch, required this.viewModel, required this.isMock});
+  const _Body({
+    required this.state,
+    required this.homeNotifier,
+    required this.accountNotifier,
+  });
 
-  final HomeViewModel viewModel;
-  final DispatchFunction dispatch;
-  final bool isMock;
+  final HomeState state;
+  final HomeNotifier homeNotifier;
+  final AccountNotifier accountNotifier;
 
   @override
   Widget build(BuildContext context) {
-    if (viewModel.isLoading) {
-      return const LoadingSpinner();
-    }
+    final AccountEntity account = state.account;
+    final StatsEntity stats = state.stats;
 
-    if (viewModel.isDisabled) {
+    if (state.isDisabled) {
       return AccessDeniedPage(
         onSendMail: () {
           email(
             'jeremiahogbomo@gmail.com',
-            '${context.l10n.appName} - Unwarranted%20Account%20Suspension%20%23${viewModel.account!.uid}',
+            '${context.l10n.appName} - Unwarranted%20Account%20Suspension%20%23${account.uid}',
           );
         },
       );
     }
 
-    if (viewModel.isWarning && viewModel.hasSkippedPremium == false) {
+    if (state.isWarning && state.hasSkippedPremium == false) {
       return RateLimitPage(
-        onSignUp: () => dispatch(OnPremiumSignUp(viewModel.account)),
-        onSkipedPremium: () => dispatch(const OnSkipedPremium()),
+        onSignUp: accountNotifier.premiumSetup,
+        onSkippedPremium: homeNotifier.skippedPremium,
       );
     }
 
@@ -110,22 +126,19 @@ class _Body extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Expanded(flex: 12, child: HeaderWidget(account: viewModel.account)),
-            StatsWidget(stats: viewModel.stats),
-            Expanded(flex: 2, child: TopRowWidget(stats: viewModel.stats)),
-            Expanded(flex: 2, child: MidRowWidget(userId: viewModel.account!.uid, stats: viewModel.stats)),
-            Expanded(flex: 2, child: BottomRowWidget(stats: viewModel.stats, account: viewModel.account)),
-            SizedBox(height: kButtonHeight + MediaQuery.of(context).padding.bottom),
+            Expanded(flex: 12, child: HeaderWidget(account: account)),
+            StatsWidget(stats: stats),
+            Expanded(flex: 2, child: TopRowWidget(stats: stats)),
+            Expanded(flex: 2, child: MidRowWidget(userId: account.uid, stats: stats)),
+            Expanded(flex: 2, child: BottomRowWidget(stats: stats)),
+            SizedBox(height: Theme.of(context).buttonTheme.height + MediaQuery.of(context).padding.bottom),
           ],
         ),
-        CreateButton(userId: viewModel.account!.uid, contacts: viewModel.contacts),
+        const CreateButton(),
         TopButtonBar(
-          account: viewModel.account,
-          shouldSendRating: viewModel.shouldSendRating,
-          onLogout: () async {
-            dispatch(const OnLogoutAction());
-            context.registry.get<SharedCoordinator>().toSplash(isMock);
-          },
+          account: account,
+          shouldSendRating: state.shouldSendRating,
+          onLogout: () => context.router.toSplash(),
         ),
       ],
     );

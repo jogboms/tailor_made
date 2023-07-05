@@ -1,32 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:tailor_made/presentation/constants.dart';
+import 'package:tailor_made/presentation/routing.dart';
 import 'package:tailor_made/presentation/theme.dart';
 import 'package:tailor_made/presentation/utils.dart';
 import 'package:tailor_made/presentation/widgets.dart';
 
-import '../payment.dart';
-
 class PaymentListItem extends StatelessWidget {
-  const PaymentListItem({super.key, this.payment});
+  const PaymentListItem({super.key, required this.payment});
 
-  final PaymentModel? payment;
+  final PaymentEntity payment;
 
   @override
   Widget build(BuildContext context) {
-    final DateTime date = payment!.createdAt;
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final DateTime date = payment.createdAt;
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+    final L10n l10n = context.l10n;
 
     return Material(
       child: InkWell(
-        onTap: () {
-          Navigator.of(context).push<void>(
-            RouteTransitions.slideIn(
-              PaymentPage(payment: payment),
-              fullscreenDialog: true,
-            ),
-          );
-        },
+        onTap: () => context.router.toPayment(payment),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
@@ -34,11 +27,11 @@ class PaymentListItem extends StatelessWidget {
               Expanded(
                 child: Row(
                   children: <Widget>[
-                    const Dots(color: kAccentColor, size: 12),
+                    Dots(color: colorScheme.secondary, size: 12),
                     const SizedBox(width: 8.0),
                     Text(
-                      AppMoney(payment!.price).formatted,
-                      style: theme.title.copyWith(letterSpacing: 1.5),
+                      AppMoney(payment.price).formatted,
+                      style: theme.textTheme.pageTitle.copyWith(letterSpacing: 1.5),
                     ),
                   ],
                 ),
@@ -46,11 +39,15 @@ class PaymentListItem extends StatelessWidget {
               Text.rich(
                 TextSpan(
                   children: <TextSpan>[
-                    TextSpan(text: date.day.toString(), style: theme.subhead3Semi.copyWith(color: kAccentColor)),
+                    TextSpan(
+                      text: date.day.toString(),
+                      style: theme.textTheme.titleMedium
+                          ?.copyWith(color: colorScheme.secondary, fontWeight: AppFontWeight.semibold),
+                    ),
                     const TextSpan(text: '\n'),
                     TextSpan(
-                      text: '${AppStrings.monthsShort[date.month - 1].toUpperCase()}, ${date.year}',
-                      style: theme.smallMedium.copyWith(color: Colors.black54),
+                      text: '${l10n.monthsShortNames[date.month - 1].toUpperCase()}, ${date.year}',
+                      style: theme.textTheme.bodySmallMedium,
                     ),
                   ],
                 ),

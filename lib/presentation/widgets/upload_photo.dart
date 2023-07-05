@@ -16,16 +16,18 @@ class UploadPhoto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color color = AppColors.primary;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+    final Color color = colorScheme.primary;
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
         height: size.height,
         width: size.width,
         decoration: BoxDecoration(
-          color: AppColors.primary.withOpacity(.2),
+          color: colorScheme.primary.withOpacity(.2),
           borderRadius: BorderRadius.circular(4.0),
-          border: Border.all(color: AppColors.primary),
+          border: Border.all(color: colorScheme.primary),
         ),
         child: TouchableOpacity(
           padding: const EdgeInsets.all(8.0),
@@ -33,11 +35,14 @@ class UploadPhoto extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              const Icon(Icons.add_circle, color: color),
+              Icon(Icons.add_circle, color: color),
               const SizedBox(height: 2.0),
               Text(
                 'Add\nPhoto',
-                style: ThemeProvider.of(context)!.button.copyWith(color: color),
+                style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                      fontWeight: AppFontWeight.semibold,
+                      color: color,
+                    ),
                 textAlign: TextAlign.center,
               ),
             ],

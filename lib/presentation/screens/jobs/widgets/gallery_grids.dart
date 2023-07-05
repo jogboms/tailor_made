@@ -1,19 +1,19 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
-import 'package:uuid/uuid.dart';
+import 'package:tailor_made/presentation/routing.dart';
 
+import '../providers/job_provider.dart';
 import 'gallery_grid_item.dart';
+import 'image_form_value.dart';
 
 class GalleryGrids extends StatefulWidget {
-  GalleryGrids({super.key, double? gridSize, required this.job, required this.userId})
-      : gridSize = Size.square(gridSize ?? _kGridWidth);
+  const GalleryGrids({super.key, required this.job, required this.userId});
 
-  final Size gridSize;
-  final JobModel? job;
+  final JobEntity job;
   final String userId;
 
   @override
@@ -21,42 +21,24 @@ class GalleryGrids extends StatefulWidget {
 }
 
 class _GalleryGridsState extends State<GalleryGrids> {
-  List<_FireImage> _fireImages = <_FireImage>[];
+  late final List<ImageFormValue> _images = <ImageFormValue>[
+    ...widget.job.images.map(ImageModifyFormValue.new),
+  ];
 
   @override
-  void initState() {
-    super.initState();
-    _fireImages = widget.job!.images.map((ImageModel img) => _FireImage()..image = img).toList();
+  void didUpdateWidget(covariant GalleryGrids oldWidget) {
+    if (widget.job.images != oldWidget.job.images) {
+      _images
+        ..clear()
+        ..addAll(widget.job.images.map(ImageModifyFormValue.new));
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context)!;
-
-    final List<Widget> imagesList = List<Widget>.generate(
-      _fireImages.length,
-      (int index) {
-        final _FireImage fireImage = _fireImages[index];
-        final ImageModel? image = fireImage.image;
-
-        if (image == null) {
-          return const Center(widthFactor: 2.5, child: LoadingSpinner());
-        }
-
-        return GalleryGridItem(
-          image: image,
-          tag: '$image-$index',
-          size: _kGridWidth,
-          // Remove images from storage using path
-          onTapDelete: fireImage.ref != null
-              ? (ImageModel image) => setState(() {
-                    fireImage.ref!.delete();
-                    _fireImages.removeAt(index);
-                  })
-              : null,
-        );
-      },
-    ).reversed.toList();
+    final ThemeData theme = Theme.of(context);
+    final L10n l10n = context.l10n;
 
     return Column(
       children: <Widget>[
@@ -65,35 +47,63 @@ class _GalleryGridsState extends State<GalleryGrids> {
           children: <Widget>[
             const SizedBox(width: 16.0),
             Expanded(
-              child: Text('GALLERY', style: theme.small.copyWith(color: Colors.black87)),
+              child: Text(l10n.galleryPageTitle.toUpperCase(), style: theme.textTheme.bodySmall),
             ),
             AppClearButton(
-              child: Text('SHOW ALL', style: theme.smallBtn),
+              child: Text(
+                l10n.showAllCaption,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontWeight: AppFontWeight.medium,
+                  color: theme.colorScheme.secondary,
+                ),
+              ),
               onPressed: () {
-                context.registry.get<GalleryCoordinator>().toGallery(widget.userId, widget.job!.images.toList());
+                context.router.toGallery(widget.userId, widget.job.images.toList());
               },
             ),
             const SizedBox(width: 16.0),
           ],
         ),
-        Container(
-          height: widget.gridSize.width + 8,
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: ListView(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            scrollDirection: Axis.horizontal,
-            children: <Widget>[
-              _NewGrid(gridSize: widget.gridSize, onPressed: _handlePhotoButtonPressed),
-              ...imagesList,
-            ],
-          ),
+        Consumer(
+          builder: (BuildContext context, WidgetRef ref, _) {
+            final ImageStorageProvider storage = ref.read(imageStorageProvider);
+
+            return Container(
+              height: GalleryGridItem.kGridWidth + 8,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: ListView(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                scrollDirection: Axis.horizontal,
+                children: <Widget>[
+                  _NewGrid(onPressed: () => _handlePhotoButtonPressed(ref.read(jobProvider), storage)),
+                  for (final ImageFormValue value in _images.reversed)
+                    GalleryGridItem.formValue(
+                      value: value,
+                      onTapDelete: (ImageFormValue value) => _handleDeleteItem(storage, value),
+                    )
+                ],
+              ),
+            );
+          },
         ),
       ],
     );
   }
 
-  void _handlePhotoButtonPressed() async {
-    final Registry registry = context.registry;
+  void _handleDeleteItem(ImageStorageProvider storage, ImageFormValue value) async {
+    final ImageFileReference reference = switch (value) {
+      ImageCreateFormValue(:final CreateImageData data) => (src: data.src, path: data.path),
+      ImageModifyFormValue(:final ImageEntity data) => (src: data.src, path: data.path),
+    };
+    await storage.delete(reference);
+    if (mounted) {
+      setState(() {
+        _images.remove(value);
+      });
+    }
+  }
+
+  void _handlePhotoButtonPressed(JobProvider jobProvider, ImageStorageProvider storage) async {
     final ImageSource? source = await showImageChoiceDialog(context: context);
     if (source == null) {
       return;
@@ -102,73 +112,54 @@ class _GalleryGridsState extends State<GalleryGrids> {
     if (imageFile == null) {
       return;
     }
-    // TODO(Jogboms): move this out of here
-    final Storage ref = registry.get<Gallery>().createFile(File(imageFile.path), widget.userId)!;
 
-    setState(() => _fireImages.add(_FireImage()..ref = ref));
     try {
-      final String imageUrl = await ref.getDownloadURL();
-
-      setState(() {
-        _fireImages.last.image = ImageModel(
-          id: const Uuid().v4(),
-          userID: widget.userId,
-          contactID: widget.job!.contactID!,
-          jobID: widget.job!.id,
-          src: imageUrl,
-          path: ref.path,
-          createdAt: DateTime.now(),
-        );
-      });
-
-      await widget.job!.reference?.updateData(
-        <String, List<Map<String, dynamic>?>>{
-          'images': _fireImages
-              .where((_FireImage img) => img.image != null)
-              .map((_FireImage img) => img.image!.toJson())
-              .toList(),
-        },
+      final ImageFileReference ref = await storage.create(
+        CreateImageType.reference,
+        path: imageFile.path,
       );
 
       setState(() {
-        _fireImages.last
-          ..isLoading = false
-          ..isSucess = true;
+        _images.add(
+          ImageCreateFormValue(
+            CreateImageData(
+              userID: widget.userId,
+              contactID: widget.job.contactID,
+              jobID: widget.job.id,
+              src: ref.src,
+              path: ref.path,
+            ),
+          ),
+        );
       });
-    } catch (e) {
-      setState(() => _fireImages.last.isLoading = false);
+
+      await jobProvider.modifyGallery(reference: widget.job.reference, images: _images);
+    } catch (error, stackTrace) {
+      AppLog.e(error, stackTrace);
     }
   }
 }
 
 class _NewGrid extends StatelessWidget {
-  const _NewGrid({required this.gridSize, required this.onPressed});
+  const _NewGrid({required this.onPressed});
 
-  final Size gridSize;
   final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Container(
-      width: gridSize.width,
+      width: GalleryGridItem.kGridWidth,
       margin: const EdgeInsets.only(right: 8.0),
       child: Material(
         borderRadius: BorderRadius.circular(5.0),
-        color: Colors.grey[100],
+        color: colorScheme.outlineVariant,
         child: InkWell(
           onTap: onPressed,
-          child: Icon(Icons.add_a_photo, size: 24.0, color: kTextBaseColor.withOpacity(.35)),
+          child: const Icon(Icons.add_a_photo),
         ),
       ),
     );
   }
-}
-
-const double _kGridWidth = 70.0;
-
-class _FireImage {
-  Storage? ref;
-  ImageModel? image;
-  bool isLoading = true;
-  bool isSucess = false;
 }

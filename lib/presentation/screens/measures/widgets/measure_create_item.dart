@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tailor_made/domain.dart';
-import 'package:uuid/uuid.dart';
 
 import 'measure_dialog.dart';
 
 class MeasureCreateItem extends StatelessWidget {
   const MeasureCreateItem({super.key, required this.groupName, required this.unitValue});
 
-  final String? groupName;
-  final String? unitValue;
+  final MeasureGroup groupName;
+  final String unitValue;
 
   @override
   Widget build(BuildContext context) {
@@ -18,18 +17,16 @@ class MeasureCreateItem extends StatelessWidget {
         elevation: 0.0,
         automaticallyImplyLeading: false,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.white),
+          icon: const Icon(Icons.close),
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      backgroundColor: Colors.black38,
+      backgroundColor: Theme.of(context).colorScheme.scrim,
       body: MeasureDialog(
-        measure: MeasureModel(
-          id: const Uuid().v4(),
+        measure: DefaultMeasureEntity(
           name: '',
-          group: groupName ?? '',
-          unit: unitValue ?? '',
-          createdAt: DateTime.now(),
+          group: groupName,
+          unit: unitValue,
         ),
       ),
     );

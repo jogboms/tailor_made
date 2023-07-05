@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
+import 'package:tailor_made/presentation/screens/gallery/providers/gallery_provider.dart';
 
 import 'widgets/gallery_grid.dart';
 
 class GalleryPage extends StatelessWidget {
-  const GalleryPage({super.key, this.images, required this.userId});
+  const GalleryPage({super.key, this.images = const <ImageEntity>[], required this.userId});
 
-  final List<ImageModel>? images;
+  final List<ImageEntity> images;
   final String userId;
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider theme = ThemeProvider.of(context)!;
+    final ThemeData theme = Theme.of(context);
+    final L10n l10n = context.l10n;
 
     return Scaffold(
       body: CustomScrollView(
@@ -23,34 +25,36 @@ class GalleryPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('Gallery', style: theme.appBarTitle),
-                if (images != null) Text('${images!.length} Photos', style: theme.xsmall),
+                Text(l10n.galleryPageTitle),
+                if (images.isNotEmpty)
+                  Text(
+                    l10n.photosCaption(images.length),
+                    style: theme.textTheme.labelSmall,
+                  ),
               ],
             ),
-            backgroundColor: kAppBarBackgroundColor,
             automaticallyImplyLeading: false,
             leading: const AppBackButton(),
-            forceElevated: true,
-            elevation: 1.0,
             centerTitle: false,
             floating: true,
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
           ),
           Builder(
             builder: (BuildContext context) {
-              if (images == null) {
-                return StreamBuilder<List<ImageModel?>>(
-                  // TODO(Jogboms): move this out of here
-                  stream: context.registry.get<Gallery>().fetchAll(userId),
-                  builder: (_, AsyncSnapshot<List<ImageModel?>> snapshot) {
-                    if (!snapshot.hasData) {
-                      return const SliverFillRemaining(child: LoadingSpinner());
-                    }
-                    return _Content(images: snapshot.data);
-                  },
-                );
+              if (images.isNotEmpty) {
+                return _Content(images: images);
               }
-              return _Content(images: images);
+
+              return Consumer(
+                builder: (_, WidgetRef ref, Widget? child) => ref.watch(galleryProvider).when(
+                      skipLoadingOnReload: true,
+                      data: (List<ImageEntity> data) => _Content(images: data),
+                      error: (Object error, StackTrace stackTrace) => SliverFillRemaining(
+                        child: ErrorView(error, stackTrace),
+                      ),
+                      loading: () => child!,
+                    ),
+                child: const SliverFillRemaining(child: LoadingSpinner()),
+              );
             },
           ),
         ],
@@ -62,12 +66,12 @@ class GalleryPage extends StatelessWidget {
 class _Content extends StatelessWidget {
   const _Content({required this.images});
 
-  final List<ImageModel?>? images;
+  final List<ImageEntity> images;
 
   @override
   Widget build(BuildContext context) {
-    if (images!.isEmpty) {
-      return const SliverFillRemaining(child: EmptyResultView(message: 'No images available'));
+    if (images.isEmpty) {
+      return SliverFillRemaining(child: EmptyResultView(message: context.l10n.noImagesAvailableMessage));
     }
 
     return SliverPadding(

@@ -1,6 +1,8 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart' as mt;
+import 'package:registry/registry.dart';
 import 'package:tailor_made/core.dart';
 import 'package:tailor_made/domain.dart';
 import 'package:tailor_made/presentation.dart';
@@ -12,6 +14,7 @@ class MockRepositories {
   final Contacts contacts = MockContacts();
   final Jobs jobs = MockJobs();
   final Gallery gallery = MockGallery();
+  final ImageStorage imageStorage = MockImageStorage();
   final Settings settings = MockSettings();
   final Payments payments = MockPayments();
   final Measures measures = MockMeasures();
@@ -22,6 +25,7 @@ class MockRepositories {
         contacts,
         jobs,
         gallery,
+        imageStorage,
         settings,
         payments,
         measures,
@@ -32,27 +36,44 @@ class MockRepositories {
 final MockRepositories mockRepositories = MockRepositories();
 
 Registry createRegistry({
-  GlobalKey<NavigatorState>? navigatorKey,
   Environment environment = Environment.testing,
 }) {
-  navigatorKey ??= GlobalKey<NavigatorState>();
   return Registry()
     ..set(mockRepositories.accounts)
     ..set(mockRepositories.contacts)
     ..set(mockRepositories.jobs)
     ..set(mockRepositories.gallery)
+    ..set(mockRepositories.imageStorage)
     ..set(mockRepositories.settings)
     ..set(mockRepositories.payments)
     ..set(mockRepositories.measures)
     ..set(mockRepositories.stats)
     ..set(environment)
-    ..set(ContactsCoordinator(navigatorKey))
-    ..set(GalleryCoordinator(navigatorKey))
-    ..set(SharedCoordinator(navigatorKey))
-    ..set(JobsCoordinator(navigatorKey))
-    ..set(MeasuresCoordinator(navigatorKey))
-    ..set(PaymentsCoordinator(navigatorKey))
-    ..set(TasksCoordinator(navigatorKey));
+    ..factory((RegistryFactory di) => FetchAccountUseCase(accounts: di()))
+    ..factory((RegistryFactory di) => SignInUseCase(accounts: di()))
+    ..factory((RegistryFactory di) => SignOutUseCase(accounts: di()));
+}
+
+Widget createApp({
+  Widget? home,
+  Registry? registry,
+  List<Override>? overrides,
+  List<NavigatorObserver>? observers,
+  bool includeMaterial = true,
+}) {
+  registry ??= createRegistry();
+
+  return ProviderScope(
+    overrides: <Override>[
+      registryProvider.overrideWithValue(registry),
+      ...?overrides,
+    ],
+    child: App(
+      registry: registry,
+      navigatorObservers: observers,
+      home: includeMaterial ? Material(child: home) : home,
+    ),
+  );
 }
 
 extension WidgetTesterExtensions on WidgetTester {
